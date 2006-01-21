@@ -1,0 +1,26 @@
+
+CURRENTLY WORKING ON
+
+- devising a strategy to put ecc information on the same media as the image,
+  using the left-over space for error correction information (within the
+  bounds of meaningful redundancies, of course).
+
+
+TODO  (in no particular order)
+
+- introduce multi threading for multicore processor support
+
+- add real UDF parsing to udf.c 
+  (currently only the backward compatibility ISO structures are used)
+
+- Provide a deep verify method which calculates and tests the error
+  syndrome for each image byte.
+
+- Optimize the decoding (fixing) part
+
+- Graceful handling of situations where the SCSI/IDE bus 
+  becomes temporarily unavailable (does this happen on ATAPI at all?)
+
+- See if we can support the graphical GNU Installer 
+
+- Add support for .h2i files

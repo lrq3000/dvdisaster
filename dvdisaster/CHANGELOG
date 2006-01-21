@@ -1,0 +1,251 @@
+
+0.65: 14-01-2006
+	- Czech translation by Lubos Stanek
+	- made invocation of external HTML viewer more flexible and robust
+	- started support for big endian archs (NOT completed yet!)
+	- modularized scsi and codec interface for easier future expansion
+	- made --random-errors use the internal random number generator
+	  and allow for independent selection of number of roots/erasures
+	- Error correction files can be larger than 2GB on FAT file systems
+	- changed medium fingerprint sector from 257 to 16 (ISO file system root block)
+	- Windows binaries are now shipped with Gtk+2.6 libraries
+	- CRC information is calculated and cached when reading the image
+	  so that we do not need to re-read the image in a subsequent create operation.
+	- tinkered with speed curve algorithm to get smoother lines
+	- made sector color markers during linear read more understandable (hopefully)
+	- configure will now correctly honor $LDFLAGS from the user environment
+	- added Gtk+ library localization files to Windows distribution
+	  (thanks to J. Meyer for reporting this problem!)
+	- fixed bug in the Errors/Ecc block graph which would make it scale incorrectly
+	  if uncorrectable errors are encountered (this was just a rendering problem
+	  with no influence on the actual error correction)
+	- added gdk pixbuf check to configure (thanks to W. Wershofen for noting this!)
+	- better error diagnosis for invalid ecc files (thanks to Lubos for noting this!)
+	- modified code to compile cleanly under gcc 4.02
+
+0.64.2: 01-11-2005
+	- fixed crash when using -u in command line mode
+	- changed packaging system to allow different package and version numbering systems
+	  Current naming scheme is:
+	  . package name = package directory    = 0.xx[.y]
+	  . version name (as advertised in GUI) = 0.xx[ (pl y)]
+	- fixed img file permissions for Linux version
+	- drive selection wasn't remembered between sessions under
+	  Gtk+-2.4 and higher: fixed
+	- Manual/Homepage fixed for some MSIE glitches
+
+0.64.1: 23-10-2005
+	- fixed bug which activated automatic ecc file generation in scan mode
+	- fixed crash at startup when linked against Gtk+ 2.6
+	  (Thanks to Radu M. and Richard B. for noting this!)
+
+0.64: 18-10-2005
+	- reworked console and logging output:
+	  Got rid of \b usage in locale files, 
+	  making gawk filtering of diagnostic warning obsolete.
+	  More removal of read and CRC error reporting in GUI mode as buffering 
+	  them may result in going out of memory in worst case situations.
+	  Use the program in command line mode and apply file 
+          redirection if you still wish to see these messages.
+	- fixed a glitch in the linear read/scanning GUI 
+	  which prevented small unreadable areas to stay 
+	  marked red in the spiral 
+	- fixed bug which did not install the CREDITS.* files
+	- fixed configure to use the --prefix settings properly 
+	  (thanks to Daniel Baumann for pointing this out)
+	- added de/en/it man pages supplied by Daniel Baumann
+	- fixed non-working --spinup-delay command line arg
+        - added configurable --docsubdir at request of Daniel
+	- Changed linear reading strategy
+	  . Sector skipping after a read error is now done in all passes, 
+	    not just the first one (the previous behaviour turned out as 
+	    an arbitrary design decision which did not really make sense)
+	  . Re-reading passes are carried out in 16 sector chunks, too
+	- provided workaround for detecting CD media on Teac slimline
+	  drives (and possibly others) caused by silly firmware answers
+	- provided workaround for read errors which are reported
+	  as something else by sloppy firmware
+	- added debugging functions --random-image and --random-seed for creating
+	  images with "random" numbers. Images created with --random-seed n are
+	  bitwise mirrors of those created with --random-seed -n.
+	- hunted down some memory leaks
+	- turned warning dialogs into modal dialogs
+	- fixed some minor redraw flaws in adaptive read mode
+	- fixed automatic file removal bug when in FAT32 mode 
+	  (thanks to Peter H., Walter G and Stephan J. for noting this)
+	- fixed error handling in GUI mode: in some rare error situations,
+	  it would not bring up the intended error dialog, but either
+	  continue quietly or terminate the whole program.
+	- fixed empty drive pop down menu after changing drives in the system
+	  or sharing a dvdisaster installation between different Windows installations
+	- started support for parsing ISO file system structures
+	- added some recent drives to the drive data base
+	- rewrote the drive spinup code
+	- added function for automatically creating the .ecc file after
+	  successfully reading an image
+	- documentation partially rewritten
+	- added some code to make sure that the "read adaptive" spiral fits into the window
+	- removed flicker in the "read adaptive" mode text output 
+
+0.63: 01-08-2005
+	- added adaptive read strategy (thanks to Harald Bögeholz
+	  for the suggestion; see also the CREDITS file)
+	- added --fill-unreadble option for better compatibility with
+	  other tools (e.g. h2cdimage from c't magazine)
+	- cut down information written to the log window in GUI mode 
+	  as that could use up significant amounts of memory in worst 
+          case scenarios. Use command line mode if you are still interested
+	  in these messages.
+	- fixed code for clean compile with gcc 4.0.1
+	- added auto-suffix option for automatically adding .img/.ecc to files
+	  given without an extension (thanks to Marcus for the suggestion!)
+	- changed function test prototype in bash based configure from
+	  char* to char to work around misdetection of gcc's builtin gettext()
+	  (thanks to Heinz R. for pointing this out)
+	- fixed crash in About requester when LANG environment was not set
+	  (thanks to Andreas for the patch!) 
+
+0.62: 03-07-2005
+	- added correct return codes to indicate whether reading
+	  succeeded or found bad sectors in command line mode
+	- added experimental support for splitting image files into 2GB chunks
+	  (mainly for use with VFAT an Win9x; avoid this mode if you can)
+	- added compare function to graphical user interface
+	- fixed 'make install' (thanks to Andreas for noting the problems)
+	- fixed german umlaut glitch in the foot line (thanks to GoldenFingaz
+	  for pointing this out)
+	- relaxed handling of image size mismatches
+	
+0.61: 24-04-2005
+	- added preferences dialog
+	- decoupled command line settings from GUI settings so that
+	  command line arguments will not be remembered across sessions
+	  and GUI settings will not be used in command line mode.
+	- more image size detection fine tuning (this becomes a running gag, huh?)
+	- added --speed-warning option (thanks to Richard B. for the suggestion!)
+	- added --spinup-delay option
+	- removed startup-related downspike in the speed graph
+
+0.60: 09-04-2005
+	- first release with graphical user interface
+	- tinkered again with image size detection
+	- added debugging function for zeroing out the "unreadable sector"
+	  markers (thanks to Marcus J. for the suggestion!)
+	- made configure more compatible with autoconf behaviour 
+	  (thanks to Andreas for pointing out the differences!)
+
+0.55: 20-02-2005
+	- added Italian translation from Andrea Polverini (polve@polve.com)
+	- improved media type detection
+	- upward compatibility with the improved media footprint calculation
+	  from upcoming version 0.60
+
+0.54: 01-01-2005
+	- Switched from Cygwin/cygwin1.dll to Mingw/msvcrt.dll,
+	  with some additional functionality taken over by glib2.
+	  This may cause some short-time inconvenience (please report
+	  all different behaviour relative to 0.53.1!),
+	  but will pay off in later versions. 
+	- Some code reorganization.
+	- Shortened the version number scheme to major.minor
+	- Removed visualization via gnuplot. Visualization will be
+	  re-introduced in version 0.60; please use version 0.53.1
+	  for visualization if needed.
+	- Reworked compilation instructions in documentation.
+
+0.53.1: 27-12-2004
+	- encrypted discs will be rejected before any actual reading
+	  is attempted (avoids confusing error messages when running into
+	  the encrypted area).
+
+0.53.0: 23-12-2004
+	- introduction of GNU gettext
+	- German localization
+	- Makefile will automatically collect .c files
+	- Preparation for multiple codecs
+	- fixed incorrect media size calculation for +RW images
+	- fixed installation procedure (thanks to Kay D. !)
+
+0.52.1: 04-12-2004
+	- Fixed the handling of truncated image files (thanks to Harald B.!)
+	- Better diagnosis of images which are longer than supposed
+	  (should never happen, but one never knows)
+
+0.52.0: 28-11-2004
+	- codec speedups and user selectable redundancy settings
+
+0.51.1: 13-11-2004
+	- fixed bug which prevented dvdisaster from working
+	  under Windows XP without Cygwin being installed
+	  (thanks to Andrea and Harald B. for reporting this!)
+	- removed unnecessary open with write permission 
+	  within --test action
+	- Besides bringing scanning speed to a screeching halt on
+	  slow systems, calculation of the image md5sum during
+	  the --scan option wasn't very useful -- removed it.
+	- repaired a glitch which would derail the codec when
+	  fixing a truncated image
+	- added --dao option
+	- added a test predicting a TAO medium when fixing a
+	  damaged image
+	
+0.51.0: 06-11-2004
+	- added experimental ASPI support for Cygwin version
+	- added alternative "-end" syntax for specifying the sector range
+	- added -j/--jump option
+	- fixed minor bug which made -t option fail reading the CRC data
+	  on very small media images
+	
+0.50.0: 01-10-2004
+	- Experimental Cygwin support.
+	- Rewrote SCSI layer for portability.
+	- Introduced ./configure mechanism.
+	- Dropped --direct option for portability reasons.
+	- Changed behaviour of continuing the reading of incomplete images;
+	  if the image size is smaller than the medium size, reading will
+	  now continue at the last read sector. Previous versions would have
+	  tried all unread sectors before.
+	- Fixed a bug which would not fill in the missing sector markers
+	  on a sequence of non overlapping read intervals (such as doing
+	  -r0-100000; -r110000-media_end; the range 100001-109999 would
+	  have been simply zeroed out in previous versions).
+
+0.42.2: 23-09-2004
+	- changed the --fix semantics so that sectors with wrong CRC sums 
+	  will automatically be fixed (previous versions would just report
+	  them as bad when using the -t option)
+	- made --fix more verbose about CRC errors
+
+0.42.1: 11-09-2004
+	- unrolled the inner codec loop; optimized some C expressions within
+	- code cleanup in the encoder
+
+0.42.0: (no public release)
+	- changed the caching and code generation strategy in the RS encoder
+	- added program version information in the ecc file header
+	- updated the --print option to show the new header information
+	- made --fix option reject .ecc files from future program versions
+
+0.41.2: 05-09-2004
+	- some speed optimizations in the encoder
+	- the --direct option now actually works 
+	- removed the #ifdef DEBUG clutter in ecc-rs01.c
+	- added the --byteset debugging function
+
+	NOTE: Debugging functions are intentionally undocumented and unsupported.
+
+0.41.1: 31-08-2004
+	- added CRC32 checksum for each image block in the .ecc file
+
+0.41.0: 28-08-2004 (no public release)
+	- Replaced the matrix-based codec with one using polynomials.
+
+0.40.8: 24-08-2004 (no public release)
+	- removed unused div_tab[] from ecc-rs01.c (which was incorrectly initialized anyways)
+	- fixed md5sum miscompare in print.c	
+	- added the --random-errors debugging function
+
+	NOTE: Debugging functions are intentionally undocumented and unsupported.
+
+0.40.7:	22-08-2004
+	First public release

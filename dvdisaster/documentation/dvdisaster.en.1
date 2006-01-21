@@ -1,0 +1,128 @@
+.TH DVDISASTER 1 "2005-11-25" "0.64.2" "protection for CD/DVD media"
+
+.SH NAME
+DVDISASTER \- data loss/scratch/aging protection for CD/DVD media
+
+.SH SYNOPSIS
+.B dvdisaster
+.RB [\| \-r \||\| \-c \||\| \-f \||\| \-s \||\| \-t \||\| \-u \|]
+.RB [\| \-d
+.IR device \|]
+.RB [\| \-p
+.IR prefix \|]
+.RB [\| \-i
+.IR image \|]
+.RB [\| \-e
+.IR eccifle \|]
+.RB [\| \-j
+.IR n \|]
+.RB [\| -n
+.IR n% \|]
+.RB [\| \-\-adaptive-read \|]
+.RB [\| \-\-auto-suffix \|]
+.RB [\| \-\-cache-size
+.IR n \|]
+.RB [\| \-\-dao \|]
+.RB [\| \-\-fill-unreadable
+.IR n \|]
+.RB [\| \-\-speed-warning
+.IR n \|]
+.RB [\| \-\-spinup\-dalay
+.IR n \|]
+.RB [\| \-\-split\-files \|]
+.RB [\| \-\-keep-style \|]
+
+.SH DESCRIPTION
+.B DVDISASTER
+provides a margin of safety against data loss on CD and DVD media caused by
+scratches or aging media. It creates error correction data which is used to
+recover unreadable sectors if the disc becomes damaged at a later time.
+.PP
+
+.SH OPTIONS
+Common usage examples:
+.TP
+.B \-r, \-\-read
+Read the medium image to hard disc. Use -rn-m to read a certain sector range,
+e.g. -r100-200.
+.TP
+.B \-c, \-\-create
+Create .ecc information for the medium image.
+.TP
+.B \-f, \-\-fix
+Try to fix medium image using .ecc information.
+.TP
+.B \-s, \-\-scan
+Scan the medium for read errors.
+.TP
+.B \-t, \-\-test
+Test integrity of the .img and .ecc files.
+.TP
+.B \-u, \-\-unlink
+Delete .img files (when other actions complete).
+.PP
+
+Drive and file specification:
+.TP
+.B \-d, \-\-device device
+read from given device (default: /dev/cdrom).
+.TP
+.B \-p, \-\-prefix prefix
+prefix of .img/.ecc file (default: medium.* ).
+.TP
+.B \-i, \-\-image imagefile
+name of image file (default: medium.img).
+.TP
+.B \-e, \-\-ecc eccfile
+name of parity file (default: medium.ecc).
+.PP
+
+Tweaking options (see manual before using!):
+.TP
+.B \-j, \-\-jump n
+jump n sectors forward after a read error (default: 16).
+.TP
+.B \-n, \-\-redundancy n%
+sets redundancy for error correction (default: 14.3%).
+.TP
+.B \-\-adaptive-read
+use optimized strategy for reading damaged media.
+.TP
+.B \-\-auto-suffix
+automatically add .img and .ecc file suffixes.
+.TP
+.B \-\-cache-size n
+image cache size in MB during -c mode (default: 32MB).
+.TP
+.B \-\-dao
+assume DAO disc; do not trim image end.
+.TP
+.B \-\-fill-unreadable n
+fill unreadable sectors with byte n
+.TP
+.B \-\-speed-warning n
+print warning if speed changes by more than n percent.
+.TP
+.B \-\-spinup-delay n
+wait n seconds for drive to spin up.
+.TP
+.B \-\-split-files
+split image into files <= 2GB.
+.PP
+
+Graphical user interface options:
+.TP
+.B \-\-keep-style
+do not override the style settings.
+
+.SH SEE ALSO
+.B Documentation
+DVDISASTER is documented by its own manual, installed in
+.IR /usr/share/doc/dvdisaster-doc
+
+.SH AUTHOR
+DVDISASTER was written by Carsten Gnoerlich <carsten@dvdisaster.com>.
+.PP
+This manual page was written by Daniel Baumann
+<daniel.baumann@panthera-systems.net>, for the Debian project (but may be used
+by others).

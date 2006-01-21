@@ -1,0 +1,32 @@
+
+Installation instructions / Installationshinweise
+-------------------------------------------------
+
+Complete installation instructions are contained in the user manual
+in documentation/en/download2.html.
+
+Vollständige Installationshinweise befinden sich im Benutzerhandbuch
+in documentation/de/download2.html.
+
+
+For the very impatient:
+-----------------------
+
+Unpack the archive, cd into the directory, type './configure; make':
+
+tar xzf dvdisaster-0.50.0.tgz
+cd dvdisaster-0.50.0
+./configure
+make
+./dvdisaster
+
+Working with the program from the current directory is okay.
+
+
+Optionally, install the program 
+(do ./configure --help for changing the installation locations)
+
+make install
+
+
+Enjoy using dvdisaster!

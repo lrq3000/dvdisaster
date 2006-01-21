@@ -1,0 +1,42 @@
+This directory tree contains dvdisaster,
+a tool providing additional ECC protection for optical media.
+
+This version of dvdisaster supports the Linux 
+and Windows 2000/XP platforms on x86 compatible hardware. 
+
+
+Roadmap of contained files
+--------------------------
+
+See the file INSTALL on bringing up dvdisaster.
+
+This software is distributed under the GNU General Public License,
+which is contained in the file COPYING.
+
+See CHANGELOG for a description of recent changes in this software.
+
+Even a relatively small project like dvdisaster could not come to life
+without the help of other people. See the file CREDITS for details.
+
+Some open tasks and notes about future work are contained in TODO.
+
+The md5.* files come from the 2.4.20 Linux kernel distribution and
+have been adapted to the needed functionality for this project.
+See the notes in md5.c for more information.
+
+There are other files contained in the top-level directory whose
+use is limited to the build process.
+
+
+Roadmap of contained subdirectories
+-----------------------------------
+
+The directory "documentation" contains a copy of the project
+home page, which doubles as user manual and project documentation. 
+
+Scripts needed for configuring and building dvdisaster are 
+located in the "scripts" directory.
+
+
+
+

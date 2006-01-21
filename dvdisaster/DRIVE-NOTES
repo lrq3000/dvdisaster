@@ -1,0 +1,53 @@
+
+Unfortunately, the MMC3 SCSI spec is fuzzy on some aspects.
+As a result, some functionalities are implemented differently
+across various drives. dvdisaster tries to overcome these
+differences by employing heuristics and a drive data base.
+
+When dvdisaster is using information from the drive data base,
+it appends [Note n] to the drive identification string, as in
+
+  Device: /dev/hdc, ATAPI DVD+RW 8X4X12 B2K7 [Note 1]
+
+See the following list for an explanation of these notes
+and what the effect of the drive data base entry is.
+
+If you have a drive which is not in this list, but behaves similar
+to one already listed, please give me its identification string
+(as in the Device: line above) to have it added to the drive data base.
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Topic a) Medium capacity related entries
+
+DVD+RW media have two interesting sizes:
+The user area (= the number of sectors used/written so far)
+and the maximum possible medium capacity.
+Unfortunately, drive manufactures have not standardized on
+how to retrieve these values (dvdisaster needs the user area size).
+
+[Note 1] - use READ DVD STRUCTURE
+
+Known drives in this category:
+
+- BenQ DRW800A
+- NEC ND-2500A
+
+[Note 2] - use READ CAPACITY 
+
+Known drives in this category:
+
+- Pioneer DVD-ROM DVD-105F
+- Pioneer DVD-ROM DVD-304
+
+
+[Note 3] - use READ DVD STRUCTURE;
+	 - does not report errors reading from the de-icing zone
+
+These drives make the internal size heuristics fail 
+since they do not report an error when reading past the end of the user area. 
+
+Known drives in this category:
+
+- LG GSA-4163B
+- Plextor PX-716A

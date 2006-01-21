@@ -1,0 +1,131 @@
+.TH DVDISASTER 1 "2005-11-25" "0.64.2" "Schutz f\[:u]r CD/DVD Medien"
+
+.SH NAME
+DVDISASTER \- Schutz f\[:u]r CD/DVD Medien gegen Datenverlust durch Alterung
+oder Kratzer
+
+.SH SYNTAX
+.B dvdisaster
+.RB [\| \-r \||\| \-c \||\| \-f \||\| \-s \||\| \-t \||\| \-u \|]
+.RB [\| \-d
+.IR device \|]
+.RB [\| \-p
+.IR prefix \|]
+.RB [\| \-i
+.IR image \|]
+.RB [\| \-e
+.IR eccifle \|]
+.RB [\| \-j
+.IR n \|]
+.RB [\| -n
+.IR n% \|]
+.RB [\| \-\-adaptive-read \|]
+.RB [\| \-\-auto-suffix \|]
+.RB [\| \-\-cache-size
+.IR n \|]
+.RB [\| \-\-dao \|]
+.RB [\| \-\-fill-unreadable
+.IR n \|]
+.RB [\| \-\-speed-warning
+.IR n \|]
+.RB [\| \-\-spinup\-dalay
+.IR n \|]
+.RB [\| \-\-split\-files \|]
+.RB [\| \-\-keep-style \|]
+
+.SH BESCHREIBUNG
+.B DVDISASTER
+erzeugt einen Sicherheitspuffer gegen Datenverluste, die auf CD- und
+DVD-Datentr\[:a]gern durch Alterung oder Kratzer entstehen. Es erzeugt
+Fehlerkorrekturdaten, um bei nachfolgenden Datentr\[:a]ger-Problemen unlesbare
+Sektoren zu rekonstruieren.
+.PP
+
+.SH OPTIONEN
+Allgemeine Anwendungsbeispiele:
+.TP
+.B \-r, \-\-read
+Datentr\[:a]ger-Abbild auf Festplatte einlesen. -rn-m liest einen Bereich von
+Sektoren, z.B. -r100-200.
+.TP
+.B \-c, \-\-create
+Erzeugt .ecc - Datei f\[:u]r das Abbild.
+.TP
+.B \-f, \-\-fix
+Versucht das Abbild mit Hilfe der .ecc - Datei zu reparieren.
+.TP
+.B \-s, \-\-scan
+Untersucht den Datentr\[:a]ger auf Lesefehler.
+.TP
+.B \-t, \-\-test
+Pr\[:u]ft die Struktur der .img und .ecc - Dateien.
+.TP
+.B \-u, \-\-unlink
+L\[:o]scht .img - Dateien nach Beenden der vorherigen Aktionen.
+.PP
+
+Laufwerks- und Dateinamen:
+.TP
+.B \-d, \-\-device device
+Von diesem Laufwerk lesen (Standard: /dev/cdrom).
+.TP
+.B \-p, \-\-prefix prefix
+Anfang der .img/.ecc - Dateien (Standard: medium.* ).
+.TP
+.B \-i, \-\-image imagefile
+Name der Abbild - Datei (Standard: medium.img).
+.TP
+.B \-e, \-\-ecc eccfile
+Name der Fehlerkorrektur-Datei (Standard: medium.ecc).
+.PP
+
+Feineinstellung (Beachten Sie die Hinweise in der Dokumentation!):
+.TP
+.B \-j, \-\-jump n
+\[:u]berspringe n Sektoren nach einem Lesefehler (Standard: 16).
+.TP
+.B \-n, \-\-redundancy n%
+Redundanz der Fehlerkorrektur (Standard: 14.3%).
+.TP
+.B \-\-adaptive-read
+verwende optimierte Lesestrategie f\[:u]r defekte Datentr\[:a]ger.
+.TP
+.B \-\-auto-suffix
+automatisches Anf\[:u]gen der .img- und .ecc-Dateiendungen.
+.TP
+.B \-\-cache-size n
+Zwischenspeicher in MB bei .ecc-Datei-Erzeugung - (Standard: 32MB).
+.TP
+.B \-\-dao
+unterstelle DAO; Abbild am Ende nicht k\[:u]rzen.
+.TP
+.B \-\-fill-unreadable n
+f\[:u]lle unlesbare Sektoren mit Byte n.
+.TP
+.B \-\-speed-warning n
+warnt bei Geschwindigkeits\[:a]nderung um mehr als n Prozent.
+.TP
+.B \-\-spinup-delay n
+gibt dem Laufwerk n Sekunden Zeit zum Hochlaufen.
+.TP
+.B \-\-split-files
+Abbild in mehrere Dateien <= 2GB aufteilen.
+.PP
+
+Einstellungen f\[:u]r die graphische Benutzeroberfl\[:a]che:
+.TP
+.B \-\-keep-style
+Style-Einstellungen nicht \[:u]berschreiben.
+
+.SH SIEHE AUCH
+.B Dokumentation
+DVDISASTER ist in seinem eigenen Handbuch dokumentiert, welches in
+.IR /usr/share/doc/dvdisaster-doc
+installiert ist.
+
+.SH AUTHOR
+DVDISASTER wurde von Carsten Gnoerlich <carsten@dvdisaster.com> geschrieben.
+.PP
+Diese Hilfeseite wurde von Daniel Baumann <daniel.baumann@panthera-systems.net>
+f\[:u]r das Debian Projekt geschrieben (kann aber auch von Anderen verwendet
+werden).

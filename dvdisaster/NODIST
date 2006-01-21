@@ -1,0 +1,8 @@
+NODIST
+PRIVATE
+THESE_ARE_THE_DEVEL_SOURCES
+documentation/images/*.png
+documentation/pngpack.log
+documentation/screenshots
+rs02*
+ecc-rs02.c

@@ -1,0 +1,8 @@
+# This file must be copied into your home directory
+# to have any effect.
+
+*.jpg -k 'b'
+*.png -k 'b'
+*.ppm -k 'b'
+*.fig -k 'b'
+*.ico -k 'b'
