@@ -1,7 +1,7 @@
 #! /bin/bash
 
 #  dvdisaster: Homepage generation script
-#  Copyright (C) 2004,2005 Carsten Gnörlich
+#  Copyright (C) 2004-2006 Carsten Gnörlich
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -64,16 +64,11 @@ function begin()
 
    eval "${section}_contents_${lang} $file_prefix title ignore $lang"
 
-   case $lang in
-     cs) begin_cs ;;
-     *) encoding="ISO-8859-1" ;;
-   esac
-
    if test -e $file; then rm -f $file; fi
    cat >> $file <<EOF
 <html>
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=$encoding">
+  <meta http-equiv="content-type" content="text/html; charset=$trans_encoding">
   <title>${title}</title>
   <style type="text/css">
 <!--
@@ -112,51 +107,62 @@ function heading()
    file=${file_prefix}.html
 
    cat >> $file <<EOF
-<table width="100%">
+<table width="100%" cellpadding="0" border="0">
  <tr>
    <td align="left">
       <font size="+3"><b>$project_title</b></font>
 EOF
 
-  case $lang in
-    cs) heading_version_cs ;;
-    de) echo "<i>Version $cooked_version</i>" >>$file ;;
-    *)  echo "<i>Version $cooked_version</i>" >>$file ;;
-  esac
-      
+      echo "<i>$trans_version $cooked_version</i>" >>$file
+
+      if [ $major_mode == "local" ]; then
+        echo "</td><td align=\"right\"><font size="+3">&nbsp;</font><a href=\"http://developer.berlios.de/projects/dvdisaster/$lang/\">$trans_to_internet</a>" >>$file
+      fi
    cat >> $file <<EOF
    </td>
  </tr>
 </table>
 
 <table width="100%" cellpadding="0" border="0">
- <tr bgcolor="#000000"><td colspan="2" width="100%"><img width=1 height=1 alt=""></td></tr>
- <tr>
 EOF
+  if [ $major_mode != "local" ]; then
+    echo "<tr bgcolor=\"#000000\"><td colspan=\"2\" width=\"100%\"><img width=1 height=1 alt=\"\"></td></tr>" >> $file
+  fi
+
+  echo "<tr>" >> $file
 
   case $lang in
-    cs) heading_cs ;;
-
-    de) if [ $major_mode == "local" ]
-           then echo "   <td align=\"left\"><a href=\"http://www.dvdisaster.de\">Zur Internet-Version</a></td>" >> $file
-           else echo "   <td align=\"left\"><a href=\"http://developer.berlios.de/projects/dvdisaster/\">Übersicht (auf BerliOS)</a></td>" >> $file
+    cs) if [ $major_mode != "local" ]
+           then 
+             echo "   <td align=\"left\"><a href=\"http://developer.berlios.de/projects/dvdisaster/\">$trans_to_hoster</a></td>" >> $file
+             echo "<td align=\"right\">" >>$file
+             echo "&#268;esky &nbsp;&nbsp;&nbsp;" >>$file
+	     echo "<a href=\"../de/$file\" title=\"Deutsche Sprache\">Deutsch</a> &nbsp;&nbsp;&nbsp;" >>$file
+	     echo "<a href=\"../en/$file\" title=\"English language\">English</a>" >>$file
+             echo "</td>" >>$file
         fi
-        echo "<td align=\"right\">" >>$file
-        echo "<a href=\"../cs/$file\">&#268;esky</a> &nbsp;&nbsp;&nbsp;" >>$file
-	echo "Deutsch &nbsp;&nbsp;&nbsp;" >>$file
-	echo "<a href=\"../en/$file\">English</a>" >>$file
-        echo "</td>" >>$file
 	;;
 
-    *)  if [ $major_mode == "local" ]
-           then echo "   <td align=\"left\"><a href=\"http://www.dvdisaster.com\">To the Internet version</a></td>" >> $file
-           else echo "   <td align=\"left\"><a href=\"http://developer.berlios.de/projects/dvdisaster/\">Summary (at BerliOS)</a></td>" >> $file
+    de) if [ $major_mode != "local" ]
+           then 
+             echo "   <td align=\"left\"><a href=\"http://developer.berlios.de/projects/dvdisaster/\">$trans_to_hoster</a></td>" >> $file
+             echo "<td align=\"right\">" >>$file
+             echo "<a href=\"../cs/$file\">&#268;esky</a> &nbsp;&nbsp;&nbsp;" >>$file
+	     echo "Deutsch &nbsp;&nbsp;&nbsp;" >>$file
+	     echo "<a href=\"../en/$file\">English</a>" >>$file
+             echo "</td>" >>$file
         fi
-        echo "<td align=\"right\">" >>$file
-        echo "<a href=\"../cs/$file\">&#268;esky</a> &nbsp;&nbsp;&nbsp;" >>$file
-	echo "<a href=\"../de/$file\">Deutsch</a> &nbsp;&nbsp;&nbsp;" >>$file
-	echo "English" >>$file
-        echo "</td>" >>$file
+	;;
+
+    *)  if [ $major_mode != "local" ]
+           then 
+             echo "   <td align=\"left\"><a href=\"http://developer.berlios.de/projects/dvdisaster/\">$trans_to_hoster</a></td>" >> $file
+             echo "<td align=\"right\">" >>$file
+             echo "<a href=\"../cs/$file\">&#268;esky</a> &nbsp;&nbsp;&nbsp;" >>$file
+	     echo "<a href=\"../de/$file\">Deutsch</a> &nbsp;&nbsp;&nbsp;" >>$file
+	     echo "English" >>$file
+             echo "</td>" >>$file
+        fi
         ;;
    esac
 
@@ -185,15 +191,6 @@ function footer()
 
    file=${file_prefix}.html
 
-   case $lang in
-     cs) msg="$trans_fdl_cs"
-         copyright="$trans_copyright_cs" ;;
-     de) msg="$trans_fdl_de"
-         copyright="$trans_copyright_de" ;;
-     *)  msg="$trans_fdl_en"
-         copyright="$trans_copyright_en" ;;
-   esac
-
    echo >> $file 
 
    cat >> $file <<EOF
@@ -203,8 +200,8 @@ function footer()
  <tr>
   <td align="center">
    <font size="-1">
-    <i> $copyright<br>
-        $msg
+    <i> $trans_copyright<br>
+        $trans_fdl
     </i>
    </font>
   </td>
@@ -231,15 +228,6 @@ function contents()
 
    file=${file_prefix}.html
 
-   case $lang in
-   cs) contents_cs ;;
-   de) label="Inhalt" 
-       hosting="Diese Seiten liegen auf" 
-       ;;
-   *)  label="Contents" 
-       hosting="Hosted by";;
-   esac
-
 # The Navigation and Contents field are nested tables.
 
 cat >>$file <<EOF
@@ -247,7 +235,7 @@ cat >>$file <<EOF
  <tr>
   <td $IDXCOLOR valign="top" width="20%">
     <table width="100%" cellpadding="10"><tr><td>
-      <font size="-1"><b>$label</b></font>
+      <font size="-1"><b>$trans_contents</b></font>
       <table width="100%" cellpadding="0" cellspacing="0">
          <tr bgcolor="#000000" height=1><td width="100%" height=1><img width=1 height=1 alt=""></td></tr>
       </table><p>
@@ -321,7 +309,7 @@ cat >> $file <<EOF
  </tr>
  <tr valign="bottom">
    <td $IDXCOLOR align="center">
-    <font size="-2">$hosting</font><br>
+    <font size="-2">$trans_hosting</font><br>
       <a href="http://developer.berlios.de" title="BerliOS Developer"> 
         <img src="http://developer.berlios.de/bslogo.php?group_id=2105" 
              width="124px" height="32px" border="0" alt="BerliOS Developer Logo">
@@ -368,12 +356,6 @@ function create_inline()
 
    file=${prefix}${page}.html
 
-   case $lang in
-     cs) create_inline_cs ;;
-     de) back="Zurück" ;;
-     *)  back="Back" ;;
-   esac
-
    # Now create the real page
 
    begin    ${prefix} $lang $page
@@ -381,7 +363,7 @@ function create_inline()
 
    echo "<table width=\"70%\" align=\"center\">" >> $file
    eval "${prefix}${page}${lang} $file"
-   echo "<tr><td><pre> </pre><a href=\"$backlink\">$back $backlink_text</a></tr></td>" >> $file    
+   echo "<tr><td><pre> </pre><a href=\"$backlink\">$trans_back $backlink_text</a></tr></td>" >> $file    
    echo "</table>" >> $file
 
    footer   ${prefix} $lang $page
@@ -429,6 +411,8 @@ SECTIONS="index example download syntax qa background imprint"
 
 # German translation
 
+dictionary_de
+
 for sect in $SECTIONS; do
   link_title=error
   eval "${sect}_contents_de ignore link ignore de"
@@ -447,6 +431,8 @@ create_subpages imprint de "0"
 
 # English translation
 
+dictionary_en
+
 for sect in $SECTIONS; do
   link_title=error
   eval "${sect}_contents_en ignore link ignore en"
@@ -464,6 +450,8 @@ create_subpages background en "0 10 30 40 50 60"
 create_subpages imprint en "0"
 
 # Czech translation
+
+dictionary_cs
 
 for sect in $SECTIONS; do
   link_title=error

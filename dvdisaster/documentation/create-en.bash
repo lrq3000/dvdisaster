@@ -20,8 +20,23 @@
 
 # ----- Translations for phrases used in create.bash
 
-trans_fdl_en="Verbatim copying and distribution of this entire article is permitted in any medium, provided this notice is preserved."
-trans_copyright_en="Copyright 2004-2006 Carsten Gnörlich."
+function dictionary_en()
+{  trans_encoding="ISO-8859-1"
+
+   trans_version="Version"
+
+   trans_to_internet="To the Internet version"
+   trans_to_hoster="Summary (at BerliOS)"
+
+   trans_back="Back"
+
+   trans_contents="Contents"
+   trans_hosting="Hosted by"
+
+   trans_fdl="Verbatim copying and distribution of this entire article is permitted in any medium, provided this notice is preserved."
+   trans_copyright="Copyright 2004-2006 Carsten Gnörlich."
+}
+
 
 # ----- These are the "inlined" html pages.
 

@@ -22,8 +22,22 @@
 
 # ----- Translations for phrases used in create.bash
 
-trans_fdl_cs="Doslovné kopírování a distribuce celého tohoto článku jsou pro jakékoli médium povoleny za předpokladu, že tato poznámka zůstane zachována."
-trans_copyright_cs="Autorská práva 2004-2006 Carsten Gnörlich, k překladu 2006 Luboš Staněk."
+function dictionary_cs()
+{  trans_encoding="UTF-8"
+
+   trans_version="verze"
+
+   trans_to_internet="Na Internetovou verzi"
+   trans_to_hoster="Přehled (na BerliOS)"
+
+   trans_back="Zpět"
+
+   trans_contents="Obsah"
+   trans_hosting="Hostováno pod"
+
+   trans_fdl="Doslovné kopírování a distribuce celého tohoto článku jsou pro jakékoli médium povoleny za předpokladu, že tato poznámka zůstane zachována."
+   trans_copyright="Autorská práva 2004-2006 Carsten Gnörlich, k překladu 2006 Luboš Staněk."
+}
 
 # ----- These are the "inlined" html pages.
 
@@ -2838,36 +2852,3 @@ function imprint0cs()
 EOF
 }
 
-function contents_cs()
-{
-   label="Obsah" ;
-   hosting="Hostováno pod" ;
-}
-
-function heading_cs()
-{
-  if [ $major_mode == "local" ]
-    then echo "   <td align=\"left\"><a href=\"http://www.dvdisaster.com\">Na Internetovou verzi</a></td>" >> $file
-    else echo "   <td align=\"left\"><a href=\"http://developer.berlios.de/projects/dvdisaster/\">Přehled (na BerliOS)</a></td>" >> $file
-  fi
-  echo "<td align=\"right\">" >>$file
-  echo "Česky &nbsp;&nbsp;&nbsp;" >>$file
-  echo "<a href=\"../de/$file\" title=\"Deutsche sprache\">Deutsch</a> &nbsp;&nbsp;&nbsp;" >>$file
-  echo "<a href=\"../en/$file\" title=\"English language\">English</a>" >>$file
-  echo "</td>" >>$file
-}
-
-function heading_version_cs()
-{
-  echo "<i>verze $cooked_version</i>" >>$file
-}
-
-function begin_cs()
-{
-  encoding="UTF-8"
-}
-
-function create_inline_cs()
-{
-  back="Zpět"
-}

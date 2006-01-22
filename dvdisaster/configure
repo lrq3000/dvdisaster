@@ -21,9 +21,9 @@ fi
 
 PACKAGE dvdisaster 0.65
 
-DEFINE_STRING RELEASE_STATUS "-"
-#DEFINE_STRING RELEASE_STATUS "\(pre-1\)"
-#DEFINE_STRING RELEASE_STATUS "\(rc4\)"
+#DEFINE_STRING RELEASE_STATUS "-"
+DEFINE_STRING RELEASE_STATUS "\(devel-1\)"
+#DEFINE_STRING RELEASE_STATUS "\(rc-1\)"
 
 # Check for some essential tools.
 
@@ -42,6 +42,7 @@ GET_DOCDIR /usr/share/doc
 GET_DIR "$PKGNAME" docsub "Documentation sub"\
         "       put documentation into this subdirectory\n                        under \$DOCDIR "
 GET_LOCALEDIR /usr/share/locale
+GET_BUILDROOT
 
 # Look for required libraries
 
@@ -221,6 +222,15 @@ if test -n "$LDFLAGS"; then
   echo "* have been included into the configuration."
   echo "* It is recommended not to specify additional \$LDFLAGS,"
   echo "* but feel free to continue at your own risk."
+  echo
+fi
+
+if test -n "$BUILDROOT"; then
+  echo "* Note that installation will be done relative to"
+  echo "* \$BUILDROOT=$BUILDROOT."
+  echo "* This is okay if you want to create packages like rpm or"
+  echo "* debian archives."
+  echo "* Normal installs will be broken by setting --buildroot." 
   echo
 fi
 

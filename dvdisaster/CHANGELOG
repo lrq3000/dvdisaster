@@ -1,3 +1,12 @@
+0.65 (devel-1) 22-01-2006
+	- fixed several places in Makefile to handle source tree from CVS properly
+	- reorganized documentation scripts to better separate HTML markup
+          from translated phrases (dictionary_xx functions)
+	- removed language selection from online manual
+	- separated documentation image archives by language
+	- fixed crash when documentation was not properly installed
+	- added --buildroot option to configure
+	  (thanks to D. Baumann and V. Kuhlmann for explaining the need for this!)
 
 0.65: 14-01-2006
 	- Czech translation by Lubos Stanek

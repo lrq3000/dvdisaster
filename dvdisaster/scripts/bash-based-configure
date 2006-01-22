@@ -36,6 +36,7 @@
 #			override the default setting.
 # GET_MANDIR default	Where to install our man pages. The --mandir option will
 #			override the default setting.
+# GET_BUILDROOT		Temporary build directory for creating packages
 # GET_DIR default name ... Creates a --namedir option for querying misc directories 
 # REQUIRE_X11 with-Xt	Require the X11 library and friends, if with-Xt is given.
 # REQUIRE_XPM		Require the Xpm library
@@ -59,7 +60,7 @@
 # WITH_OPTION name default  adds -DWITH_OPTION_VALUE for -with-option=value args
 #			    to CFG_WITH_OPTIONS,
 
-CONFIGURE_VERSION="0.50"
+CONFIGURE_VERSION="0.51"
 
 echo "Bash based configure V$CONFIGURE_VERSION"
 echo
@@ -175,6 +176,9 @@ do
   -localedir=* | --localedir=*)
     cfg_localedir=$cfg_optarg ;;
   
+  -buildroot=* | --buildroot=*)
+    cfg_buildroot=$cfg_optarg ;;
+
   -*dir=* | --*dir=*)
     eval `echo "$cfg_opt" | sed -e 's/[-]*/cfg_/' ` ;;
 
@@ -558,6 +562,25 @@ function GET_MANDIR()
 
    echo "Man page directory: " $MANDIR
    echo "CFG_MANDIR = $MANDIR" >> Makefile.config
+}
+
+# Preset the build root directory
+
+function GET_BUILDROOT() 
+{  local default="$1"
+
+   if test -n "$cfg_help_mode"; then
+     echo " --buildroot=DIR        install everything relative to given directory"
+     echo "                        ONLY for creating packages, NOT for direct installation!"
+     return 0
+   fi
+
+   BUILDROOT="$cfg_buildroot"
+   if test -z "$BUILDROOT"; then
+        echo "Build root: none (this is what you normally want)"
+   else echo "Build root: " $BUILDROOT
+   fi
+   echo "CFG_BUILDROOT = $BUILDROOT" >> Makefile.config
 }
 
 # Query a misc directory.

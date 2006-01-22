@@ -20,8 +20,23 @@
 
 # ----- Translations for phrases used in create.bash
 
-trans_fdl_de="Die unveränderte Wiedergabe und Verteilung dieses gesamten Textes in beliebiger Form ist gestattet, sofern dieser Hinweis erhalten bleibt."
-trans_copyright_de="Copyright 2004-2006 Carsten Gnörlich."
+function dictionary_de()
+{  trans_encoding="ISO-8859-1"
+
+   trans_version="Version"
+
+   trans_to_internet="Zur Internet-Version"
+   trans_to_hoster="Übersicht (auf BerliOS)"
+
+   trans_back="Zurück"
+
+   trans_contents="Inhalt"
+   trans_hosting="Diese Seiten liegen auf"
+
+   trans_fdl="Die unveränderte Wiedergabe und Verteilung dieses gesamten Textes in beliebiger Form ist gestattet, sofern dieser Hinweis erhalten bleibt."
+   trans_copyright="Copyright 2004-2006 Carsten Gnörlich."
+}
+
 
 # ----- These are the "inlined" html pages.
 

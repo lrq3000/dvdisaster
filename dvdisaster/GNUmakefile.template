@@ -16,6 +16,7 @@ MANDIR = $(CFG_MANDIR)
 DOCDIR = $(CFG_DOCDIR)
 DOCSUBDIR = $(CFG_DOCDIR)/$(CFG_DOCSUBDIR)
 LOCALEDIR = $(CFG_LOCALEDIR)
+BUILDROOT = $(CFG_BUILDROOT)
 
 INTL_INCL   = $(CFG_INTL_INCL)
 INTL_LFLAGS = $(CFG_INTL_LFLAGS)
@@ -105,16 +106,26 @@ documentation/images/open-img.png:
         else \
 	  $(MAKE) --no-print-directory -C tools; \
 	  echo -n "Unpacking images (may take a while) ... "; \
-	  cd documentation/images; $(SRCDIR)/tools/pngpack ../images.pngpack >../pngpack.log; \
-	  echo "done"; \
+	  cd documentation/images; \
+	  $(SRCDIR)/tools/pngpack ../images-common.pngpack >../pngpack.log; \
+	  $(SRCDIR)/tools/pngpack ../images-cs.pngpack >>../pngpack.log; echo -n "cs "; \
+	  $(SRCDIR)/tools/pngpack ../images-de.pngpack >>../pngpack.log; echo -n "de ";\
+	  $(SRCDIR)/tools/pngpack ../images-en.pngpack >>../pngpack.log; echo -n "en "; \
+	  echo "- done"; \
         fi
 
 images: documentation/images/open-img.png
 
 pack-images: tools/pngpack
 	@echo -n "Packing images (may take a while) ... "
-	@cd documentation/images; $(SRCDIR)/tools/pngpack ../images.pngpack *.png >../pngpack.log;
-	@echo "done"
+	@cd documentation/images; $(SRCDIR)/tools/pngpack ../images-common.pngpack open-*.png >../pngpack.log;
+	@cd documentation/images; $(SRCDIR)/tools/pngpack ../images-cs.pngpack *-cs.png >>../pngpack.log;
+	@echo -n "cs ";
+	@cd documentation/images; $(SRCDIR)/tools/pngpack ../images-de.pngpack *-de.png >>../pngpack.log;
+	@echo -n "de ";
+	@cd documentation/images; $(SRCDIR)/tools/pngpack ../images-en.pngpack *-en.png >>../pngpack.log;
+	@echo -n "en ";
+	@echo "- done"
 
 tools/pngpack: tools/pngpack.c
 	@$(MAKE) --no-print-directory -C tools
@@ -135,6 +146,7 @@ show:
 	@echo "LOCALEDIR    = " $(LOCALEDIR)
 	@echo "DOCDIR       = " $(DOCDIR)
 	@echo "DOCSUBDIR    = " $(DOCSUBDIR)
+	@echo "BUILDROOT    = " $(BUILDROOT)
 	@echo
 	@echo "INTL_INCL    = " $(INTL_INCL)
 	@echo "INTL_LFLAGS  = " $(INTL_LFLAGS)
@@ -164,41 +176,42 @@ show:
 
 install: dvdisaster html
 	@echo "Installing package..."
-	install -d $(BINDIR)
-	install dvdisaster$(EXE_SUFFIX) $(BINDIR)
-	install -d $(DOCSUBDIR)
-	install -m 644 CHANGELOG $(DOCSUBDIR)
-	install -m 644 COPYING $(DOCSUBDIR)
-	install -m 644 CREDITS* $(DOCSUBDIR)
-	install -m 644 TODO $(DOCSUBDIR)
-	install -d $(DOCSUBDIR)/cs
-	cd documentation; install -m 644 cs/* $(DOCSUBDIR)/cs
-	install -d $(DOCSUBDIR)/de
-	cd documentation; install -m 644 de/* $(DOCSUBDIR)/de
-	install -d $(DOCSUBDIR)/en
-	cd documentation; install -m 644 en/* $(DOCSUBDIR)/en
-	install -d $(DOCSUBDIR)/images
-	cd documentation; install -m 644 images/* $(DOCSUBDIR)/images
-	install -d $(MANDIR)/man1
-	install -d $(MANDIR)/cs/man1
-	install -d $(MANDIR)/de/man1
-	install -d $(MANDIR)/it/man1
+	install -d $(BUILDROOT)$(BINDIR)
+	install dvdisaster$(EXE_SUFFIX) $(BUILDROOT)$(BINDIR)
+	install -d $(BUILDROOT)$(DOCSUBDIR)
+	install -m 644 CHANGELOG $(BUILDROOT)$(DOCSUBDIR)
+	install -m 644 COPYING $(BUILDROOT)$(DOCSUBDIR)
+	install -m 644 CREDITS* $(BUILDROOT)$(DOCSUBDIR)
+	install -m 644 TODO $(BUILDROOT)$(DOCSUBDIR)
+	install -d $(BUILDROOT)$(DOCSUBDIR)/cs
+	cd documentation; install -m 644 cs/* $(BUILDROOT)$(DOCSUBDIR)/cs
+	install -d $(BUILDROOT)$(DOCSUBDIR)/de
+	cd documentation; install -m 644 de/* $(BUILDROOT)$(DOCSUBDIR)/de
+	install -d $(BUILDROOT)$(DOCSUBDIR)/en
+	cd documentation; install -m 644 en/* $(BUILDROOT)$(DOCSUBDIR)/en
+	install -d $(BUILDROOT)$(DOCSUBDIR)/images
+	cd documentation; install -m 644 images/*.png $(BUILDROOT)$(DOCSUBDIR)/images
+	cd documentation; install -m 644 images/*.jpg $(BUILDROOT)$(DOCSUBDIR)/images
+	install -d $(BUILDROOT)$(MANDIR)/man1
+	install -d $(BUILDROOT)$(MANDIR)/cs/man1
+	install -d $(BUILDROOT)$(MANDIR)/de/man1
+	install -d $(BUILDROOT)$(MANDIR)/it/man1
 	cd documentation; \
 	  ESCAPED_DOCSUBDIR=`echo $(DOCSUBDIR) | sed -e 's/\//\\\\\//g'`; \
 	  sed "s/%docdir%/$$ESCAPED_DOCSUBDIR\/en/" <dvdisaster.en.1 >dvdisaster.updated; \
-	  install -m 644 dvdisaster.updated $(MANDIR)/man1/dvdisaster.1; \
+	  install -m 644 dvdisaster.updated $(BUILDROOT)$(MANDIR)/man1/dvdisaster.1; \
 	  sed "s/%docdir%/$$ESCAPED_DOCSUBDIR\/cs/" <dvdisaster.cs.1 >dvdisaster.updated; \
-	  install -m 644 dvdisaster.updated $(MANDIR)/cs/man1/dvdisaster.1; \
+	  install -m 644 dvdisaster.updated $(BUILDROOT)$(MANDIR)/cs/man1/dvdisaster.1; \
 	  sed "s/%docdir%/$$ESCAPED_DOCSUBDIR\/de/" <dvdisaster.de.1 >dvdisaster.updated; \
-	  install -m 644 dvdisaster.updated $(MANDIR)/de/man1/dvdisaster.1; \
+	  install -m 644 dvdisaster.updated $(BUILDROOT)$(MANDIR)/de/man1/dvdisaster.1; \
 	  sed "s/%docdir%/$$ESCAPED_DOCSUBDIR\/it/" <dvdisaster.it.1 >dvdisaster.updated; \
-	  install -m 644 dvdisaster.updated $(MANDIR)/it/man1/dvdisaster.1; \
+	  install -m 644 dvdisaster.updated $(BUILDROOT)$(MANDIR)/it/man1/dvdisaster.1; \
 	  rm dvdisaster.updated
 	if echo $(WITH_OPTIONS) | grep -q "NLS_YES"; then \
 	  cd locale; \
 	  for i in ??; do\
-	    install -d $(LOCALEDIR)/$$i/LC_MESSAGES; \
-	    install -m 644 $$i/LC_MESSAGES/dvdisaster.mo $(LOCALEDIR)/$$i/LC_MESSAGES; \
+	    install -d $(BUILDROOT)$(LOCALEDIR)/$$i/LC_MESSAGES; \
+	    install -m 644 $$i/LC_MESSAGES/dvdisaster.mo $(BUILDROOT)$(LOCALEDIR)/$$i/LC_MESSAGES; \
 	  done \
 	fi
 
@@ -226,7 +239,7 @@ clean:
 	@find . -name \*\~ -print | xargs rm -f;
 	@find . -name \*.mo -print | xargs rm -f;
 	@rm -rf documentation/cs documentation/de documentation/en
-#	@if test -e THESE_ARE_THE_DEVEL_SOURCES; then rm -f documentation/images.pngpack; fi
+#	@if test -e THESE_ARE_THE_DEVEL_SOURCES; then rm -f documentation/images*.pngpack; fi
 	@rm -f documentation/pngpack.log
 	@rm -f version.h
 	@if test -e tools/Makefile.config; then $(MAKE) --no-print-directory -C tools clean; fi
@@ -242,13 +255,10 @@ www-images:
 	@cd documentation ; ./create.bash www $(VERSION) ; \
 	tar czf ../../www.tgz cs de en images
 
-documentation/images.pngpack:
-	cd documentation/images; ../../tools/pngpack ../images.pngpack *.png
-
 srcdist: pack-images clean distclean 
 	@cd .. ; tar -c -j -X $(PKGNAME)/NODIST -f $(PKGNAME).tar.bz2 $(PKGNAME)
 	@cd .. ; gpg --default-key 091ad320 --detach-sign --armor $(PKGNAME).tar.bz2
-	@rm -f documentation/images.pngpack
+	@rm -f documentation/images-*.pngpack
 
 bindist: dvdisaster html pack-images
 	@mkdir $(PKGNAME)
@@ -258,7 +268,7 @@ bindist: dvdisaster html pack-images
 	@mkdir $(PKGNAME)/documentation/images
 	@cp documentation/images/*.jpg $(PKGNAME)/documentation/images
 	@cp tools/pngpack.exe $(PKGNAME)/documentation/images
-	@mv documentation/images.pngpack $(PKGNAME)/documentation/images
+	@mv documentation/images-*.pngpack $(PKGNAME)/documentation/images
 	@(cd $(PKGNAME); tar xzf ../../pango-subdirs.tgz)
 	@cp $(GTK_BINDIR)/libglib*.dll $(PKGNAME)
 	@cp $(GTK_BINDIR)/iconv.dll $(PKGNAME)

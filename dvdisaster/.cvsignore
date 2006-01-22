@@ -1,3 +1,4 @@
 PRIVATE
+scripts/check.bash
 rs02*
 ecc-rs02.c

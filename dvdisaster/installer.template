@@ -4,7 +4,7 @@
 [Setup]
 AppName=dvdisaster
 AppVerName=dvdisaster-%version%
-DefaultDirName={pf}\dvdisaster-%version%
+DefaultDirName={pf}\dvdisaster
 DefaultGroupName=dvdisaster
 UninstallDisplayIcon={app}\dvdisaster.exe
 Compression=lzma
@@ -56,7 +56,10 @@ Name: "{group}\Uninstall"; Filename: "{uninstallexe}"
 Name: "{userdesktop}\dvdisaster"; Filename: "{app}\dvdisaster-win.exe"; WorkingDir: "{app}"
 
 [Run]
-Filename: "{app}\documentation\images\pngpack.exe"; Parameters: "images.pngpack"; Flags: runhidden 
+Filename: "{app}\documentation\images\pngpack.exe"; Parameters: "images-common.pngpack"; Flags: runhidden 
+Filename: "{app}\documentation\images\pngpack.exe"; Parameters: "images-cs.pngpack"; Flags: runhidden 
+Filename: "{app}\documentation\images\pngpack.exe"; Parameters: "images-de.pngpack"; Flags: runhidden 
+Filename: "{app}\documentation\images\pngpack.exe"; Parameters: "images-en.pngpack"; Flags: runhidden 
 
 [UninstallDelete]
 Type: files; Name:"{app}\.dvdisaster"

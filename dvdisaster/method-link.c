@@ -3,8 +3,6 @@
 void BindMethods(void)
 {
    void register_rs01(void);
-   void register_rs02(void);
 
    register_rs01();
-   register_rs02();
 }

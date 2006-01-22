@@ -306,29 +306,34 @@ static void try_browser(browser_info *bi)
 void ShowHTML(char *target)
 {  browser_info *bi = g_malloc0(sizeof(browser_info));
    struct stat mystat;
-   char index_path[strlen(Closure->docDir)+80];
    const char *lang;
 
    /* If no target is given, select between translations of the manual. */
 
    if(!target)
-   {  lang = g_getenv("LANG");
-      
-      if(!strncmp(lang, "cs", 2)) 
-	   sprintf(index_path,"%s/cs/index.html",Closure->docDir); 
-      else if(!strncmp(lang, "de", 2)) 
-	   sprintf(index_path,"%s/de/index.html",Closure->docDir); 
-      else sprintf(index_path,"%s/en/index.html",Closure->docDir); 
-      
-      target = index_path;
-
-      if(stat(target, &mystat) == -1)
-      {  CreateMessage(_("Documentation file\n%s\nnot found.\n"), GTK_MESSAGE_ERROR, target);
+   { 
+      if(!Closure->docDir)
+      {  CreateMessage(_("Documentation not installed."), GTK_MESSAGE_ERROR);
          g_free(bi);
          return;
       }
+
+      lang = g_getenv("LANG");
       
-      bi->url = g_strdup(target);
+      if(!strncmp(lang, "cs", 2)) 
+	   target = g_strdup_printf("%s/cs/index.html",Closure->docDir); 
+      else if(!strncmp(lang, "de", 2)) 
+	   target = g_strdup_printf("%s/de/index.html",Closure->docDir); 
+      else target = g_strdup_printf("%s/en/index.html",Closure->docDir); 
+      
+      if(stat(target, &mystat) == -1)
+      {  CreateMessage(_("Documentation file\n%s\nnot found.\n"), GTK_MESSAGE_ERROR, target);
+         g_free(bi);
+	 g_free(target);
+         return;
+      }
+      
+      bi->url = target;
    }
    else bi->url = target;
 

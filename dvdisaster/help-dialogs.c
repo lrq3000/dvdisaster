@@ -151,7 +151,7 @@ GtkWidget* ShowTextfile(char *title, char *explanation, char *file,
 	   && !(path = find_file(file, &size, (char*)g_getenv("LANG")))
 	   && !(path = find_file(file, &size, "en"))
          )
-      {  char *trans = _("File\n%s\nnot present");
+      {  char *trans = _utf("File\n%s\nnot present");
       
 	 buf = g_strdup_printf(trans, file);
 	 size = strlen(buf);
