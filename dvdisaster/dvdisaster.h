@@ -100,6 +100,7 @@
 typedef struct _GlobalClosure
 {  int version;         /* Integer number representing current program version */
    char *cookedVersion; /* version string formatted for GUI use */
+   gint8 releaseFlags;  /* flags marking release status */
    char *device;        /* currently selected device to read from */
    GPtrArray *deviceNames;  /* List of drive names */
    GPtrArray *deviceNodes;  /* List of device nodes (C: or /dev/foo) */
@@ -207,7 +208,7 @@ typedef struct _GlobalClosure
    gint      lastPercentPlotted;
    gint      percent; 
 
-   /*** Widgets for the reading/scanning action */
+   /*** Widgets for the linear reading/scanning action */
 
    GtkWidget *readLinearHeadline;
    GtkWidget *readLinearDrawingArea;
@@ -218,6 +219,8 @@ typedef struct _GlobalClosure
    GtkWidget *readLinearErrors;
    GtkWidget *readLinearFootline;
    GtkWidget *readLinearFootlineBox;
+   int    checkCrc;               /* these are passed between threads and */
+   gint64 crcErrors, readErrors;  /* must therefore be global */
 
    /*** Widgets for the adaptive reading action */
 
@@ -288,12 +291,14 @@ typedef struct _EccInfo
                               /* the volume label and creation time stamps. */
                               /* Versions upto 0.64 used sector 257, */
                               /* but that was not a wise choice for CD media.*/
-                      
+
+#define MFLAG_DEVEL (1<<0)    /* for methodFlags[3] */
+#define MFLAG_RC    (1<<1)                      
 
 typedef struct _EccHeader
 {  gint8 cookie[12];           /* "*dvdisaster*" */
    gint8 method[4];            /* e.g. "RS01" */
-   gint8 methodFlags[4];       /* for free use by the respective methods */
+   gint8 methodFlags[4];       /* 0-2 for free use by the respective methods; 3 see above */
    guint8 mediumFP[16];        /* fingerprint of FOOTPRINT SECTOR */ 
    guint8 mediumSum[16];       /* complete md5sum of whole medium */
    guint8 eccSum[16];          /* md5sum of ecc code section of .ecc file */
@@ -672,7 +677,7 @@ void ResetLinearReadWindow();
 void CreateLinearReadWindow(GtkWidget*);
 
 void InitializeCurve(int, gint64, gint64, gint64);
-void AddCurveValues(int, double, gint64, int);
+void AddCurveValues(int, double, int);
 
 /***
  *** random.c

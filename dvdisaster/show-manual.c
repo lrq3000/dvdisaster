@@ -253,6 +253,8 @@ static gboolean browser_timeout_func(gpointer data)
       {  gtk_widget_destroy(bi->msg);
          bi->msg = NULL;
       }
+      if(bi->url) g_free(bi->url);
+      g_free(bi);
       return FALSE;
    }
 

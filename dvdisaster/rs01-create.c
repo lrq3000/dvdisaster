@@ -311,6 +311,7 @@ void RS01Create(Method *self)
    memcpy(ei->eh->cookie, "*dvdisaster*", 12);
    memcpy(ei->eh->method, "RS01", 4);
    ei->eh->methodFlags[0] = 1;
+   ei->eh->methodFlags[3] = Closure->releaseFlags;
    gint64_to_uchar(ei->eh->sectors, ii->sectors);
    ei->eh->dataBytes       = ndata;
    ei->eh->eccBytes        = nroots;

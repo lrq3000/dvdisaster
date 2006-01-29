@@ -164,8 +164,7 @@ EccInfo* OpenEccFile(int mode)
 	  Stop(_("Invalid or damaged ecc file"));
        }
 
-       if(   ei->eh->methodFlags[0] != 1 || ei->eh->methodFlags[1] 
-          || ei->eh->methodFlags[2] || ei->eh->methodFlags[3])
+       if(ei->eh->methodFlags[0] != 1 || ei->eh->methodFlags[1] || ei->eh->methodFlags[2])
        {  FreeEccInfo(ei);
 	  Stop(_("\nEcc file has been created with version 0.40.7.\n"
 		 "Please use version 0.41.1 or higher to create the .ecc files.\n"

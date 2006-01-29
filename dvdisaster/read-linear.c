@@ -26,18 +26,20 @@
 //#define DEBUG 1
 
 /***
- *** Local data package used during reading
+ *** Local data package used during reading 
  ***/
 
 typedef struct
 {  LargeFile *image;
-   DeviceHandle *dh;
+   struct _DeviceHandle *dh;
+   EccInfo *ei;
+   char *msg;
    unsigned char *bufbase;
    GTimer *speedTimer,*readTimer;
    int unreportedError;
    int earlyTermination;
    int scanMode;
-   gint64 readOK, readErrors;
+   gint64 readOK;
 } read_closure;
 
 static void cleanup(gpointer data)
@@ -47,20 +49,22 @@ static void cleanup(gpointer data)
    int scan_mode = rc->scanMode;
 
    if(rc->dh)
-     full_read = (rc->readOK == rc->dh->sectors);
+     full_read = (rc->readOK == rc->dh->sectors && !Closure->crcErrors);
 
    Closure->cleanupProc = NULL;
 
    if(Closure->guiMode)
    {  if(rc->unreportedError)
          SwitchAndSetFootline(Closure->readLinearNotebook, 1, Closure->readLinearFootline, 
-			      _("<span color=\"red\">Aborted by unrecoverable error.</span> %lld sectors read, %lld sectors unreadable/skipped so far."),rc->readOK,rc->readErrors); 
+			      _("<span color=\"red\">Aborted by unrecoverable error.</span> %lld sectors read, %lld sectors unreadable/skipped so far."),rc->readOK,Closure->readErrors); 
    }
 
    if(rc->image)   
      if(!LargeClose(rc->image))
        Stop(_("Error closing image file:\n%s"), strerror(errno));
    if(rc->dh)      CloseDevice(rc->dh);
+   if(rc->ei)      FreeEccInfo(rc->ei);
+   if(rc->msg)     g_free(rc->msg);
    if(rc->bufbase) g_free(rc->bufbase);
    if(rc->speedTimer) g_timer_destroy(rc->speedTimer);
    if(rc->readTimer)  g_timer_destroy(rc->readTimer);
@@ -80,6 +84,9 @@ static void cleanup(gpointer data)
        AllowActions(TRUE);
 
    if(!full_read && Closure->crcCache)
+     ClearCrcCache();
+
+   if(scan_mode)   /* we haven't created an image, so throw away the crc sums */
      ClearCrcCache();
 
    g_thread_exit(0);
@@ -107,7 +114,8 @@ void ReadMediumLinear(gpointer data)
    double last_speed = -1.0;
    int first_speed_value = TRUE;
    int rereading = 0;
-   gint previous_errors = 0;
+   gint previous_read_errors = 0;
+   gint previous_crc_errors = 0;
    unsigned char *buf = NULL;
    char *t;
    int status,n;
@@ -176,7 +184,24 @@ void ReadMediumLinear(gpointer data)
 
    rc->dh = OpenAndQueryDevice(Closure->device);
    sectors = rc->dh->sectors;
-   rc->readErrors = rc->readOK = 0;
+   Closure->readErrors = Closure->crcErrors = rc->readOK = 0;
+
+   /*** See if the current ecc file belongs to the medium */
+
+   rc->ei = OpenEccFile(READABLE_ECC | PRINT_MODE);
+   if(rc->ei) /* Compare the footprint sectors */
+   {  struct MD5Context md5ctxt;
+      guint8 footprint[16];
+
+      status = ReadSectors(rc->dh, buf, rc->ei->eh->fpSector, 1);
+
+      MD5Init(&md5ctxt);
+      MD5Update(&md5ctxt, buf, 2048);
+      MD5Final(footprint, &md5ctxt);
+
+      if(!status && !memcmp(footprint, rc->ei->eh->mediumFP, 16))
+	Closure->checkCrc = TRUE;
+   }
 
    /*** See if user wants to limit the read range. */
 
@@ -207,20 +232,28 @@ void ReadMediumLinear(gpointer data)
    /*** See if we already have an image file. */
 
    if(scan_mode)  /* don't care if in scan mode */
-   {  char *t = _("Scanning medium for read errors.");
+   {  
+      rc->msg = g_strdup(_("Scanning medium for read errors."));
 
-      PrintLog("%s\n",t);
+      PrintLog("%s\n", rc->msg);
       if(Closure->guiMode)
-         SetLabelText(GTK_LABEL(Closure->readLinearHeadline), 
-		      "<big>%s</big>\n<i>%s</i>",t,rc->dh->mediumDescr);
+      {  if(Closure->checkCrc)
+	   SetLabelText(GTK_LABEL(Closure->readLinearHeadline), 
+			"<big>%s</big>\n<i>- %s -</i>", rc->msg,
+			_("Reading CRC information from ecc file"));
 
+         else
+	   SetLabelText(GTK_LABEL(Closure->readLinearHeadline), 
+			"<big>%s</big>\n<i>%s</i>", rc->msg, rc->dh->mediumDescr);
+      }
       read_marker = 0;
    } 
    else          
    { 
 reopen_image:
      if(!LargeStat(Closure->imageName, &image_size))
-     {  char *t = _("Reading new medium image.");
+     {  
+        rc->msg = g_strdup(_("Reading new medium image."));
 
         /* Start with a fresh file. */
 
@@ -229,14 +262,22 @@ reopen_image:
 
         PrintLog(_("Creating new %s image.\n"),Closure->imageName);
 	if(Closure->guiMode)
-	  SetLabelText(GTK_LABEL(Closure->readLinearHeadline),
-		       "<big>%s</big>\n<i>%s</i>",t,rc->dh->mediumDescr);
+	{  if(Closure->checkCrc)
+	     SetLabelText(GTK_LABEL(Closure->readLinearHeadline),
+			  "<big>%s</big>\n<i>%s</i>", rc->msg,
+			  _("Reading CRC information from ecc file"));
+	   else
+	     SetLabelText(GTK_LABEL(Closure->readLinearHeadline),
+			  "<big>%s</big>\n<i>%s</i>", rc->msg, rc->dh->mediumDescr);
+	}
         rereading = 0;
 	read_marker = 0;
      }
      else
      {  char *t = _("Completing existing medium image.");
         int unknown_footprint = FALSE;
+
+	Closure->checkCrc = 0; /* does not make sense here */
 
         /* Use the existing file as a starting point.
 	   Set the read_marker at the end of the file
@@ -324,20 +365,61 @@ reopen_image:
       }
    }
 
-   /*** If a full image read is attempted,
-	the image CRC32 and md5sum are calculated on the fly.
-        Allocate the necessary memory. */
+   /*** Memory for the CRC32 sums is needed in two cases: */
+
+   /* a) a full image read is attempted, and the image CRC32 
+         and md5sum are calculated on the fly. */
 
    if(   !scan_mode && !rereading && start == 0 && end == sectors-1)
    {  Closure->crcCache = g_try_malloc(sizeof(guint32) * sectors);
 
-      if(!Closure->crcCache)  /* forget it, not enough memory */
-      {  Closure->crcCache = NULL;
-      }
-      else
-         Closure->crcImageName = g_strdup(Closure->imageName);
+      if(Closure->crcCache)
+	Closure->crcImageName = g_strdup(Closure->imageName);
 
       MD5Init(&md5ctxt);
+   }
+
+   /* b) we have a suitable ecc file and compare CRC32sum against
+         it while reading */
+
+   if(Closure->checkCrc)
+   {  gint64 crc_sectors = rc->ei->sectors;
+
+      if(sectors > crc_sectors)  /* Allows completion of crc info */
+	crc_sectors = sectors;   /* when image contains additional sectors */
+
+      Closure->crcCache = g_try_malloc(sizeof(guint32) * crc_sectors);
+
+      if(!Closure->crcCache)
+      {  Closure->checkCrc = FALSE;
+      }
+      else
+      {  guint32 *cache = Closure->crcCache;
+         int i=0;
+
+	 if(!LargeSeek(rc->ei->file, (gint64)sizeof(EccHeader)))
+	   Stop(_("Failed skipping the ecc header: %s"),strerror(errno));
+
+	 PrintLog("%s ...",_("Reading CRC information from ecc file"));
+
+	 while(i<crc_sectors)
+	 {  int n = i+512<crc_sectors ? 512 : crc_sectors - i;
+
+	    if(LargeRead(rc->ei->file, cache, 4*n) != 4*n)
+	      Stop(_("Error reading CRC information: %s"), strerror(errno));
+
+	    cache += n;
+	    i+=n;
+	 }
+
+         PrintLog(_("done.\n"));
+
+	 if(Closure->guiMode)
+	   SetLabelText(GTK_LABEL(Closure->readLinearHeadline),
+			"<big>%s</big>\n<i>%s</i>", rc->msg, rc->dh->mediumDescr);
+
+	 MD5Init(&md5ctxt);
+      }
    }
 
    /*** Prepare the speed timing */
@@ -366,7 +448,7 @@ reopen_image:
       {
 	SwitchAndSetFootline(Closure->readLinearNotebook, 1, Closure->readLinearFootline, 
 			     _("<span color=\"red\">Aborted by user request!</span> %lld sectors read, %lld sectors unreadable/skipped so far."),
-			     rc->readOK,rc->readErrors); 
+			     rc->readOK,Closure->readErrors); 
 	rc->unreportedError = FALSE;  /* suppress respective error message */
         goto terminate;
       }
@@ -461,7 +543,7 @@ printf("Sector %lld: reading %2d sectors\n",s,nsectors);
 	 if(!answer)
 	 {  SwitchAndSetFootline(Closure->readLinearNotebook, 1, Closure->readLinearFootline, 
 				_("<span color=\"red\">Aborted by user request!</span> %lld sectors read, %lld sectors unreadable/skipped so far."),
-				 rc->readOK,rc->readErrors); 
+				 rc->readOK,Closure->readErrors); 
 	    rc->unreportedError = FALSE;  /* suppress respective error message */
 	    goto terminate;
 	 }
@@ -474,7 +556,7 @@ printf("Sector %lld: reading %2d sectors\n",s,nsectors);
 
 	 /* Disable on the fly checksum calculation */
 
-	 if(Closure->crcCache)
+	 if(Closure->crcCache && !Closure->checkCrc)
 	   ClearCrcCache();
 
 	 /* Determine number of sectors to skip forward. 
@@ -521,7 +603,7 @@ printf("Sector %lld: filling %d sectors\n",s,nfill);
 	 {  PrintCLIorLabel(Closure->status,
 			    _("Sector %lld: %s Skipping %d sectors.\n"),
 			    s, GetLastSenseString(FALSE), nfill-1);  
-	    rc->readErrors+=nfill; 
+	    Closure->readErrors+=nfill; 
 	    s+=nfill-nsectors;   /* nsectors will be added again after the goto */
 	    goto step_counter;
 	 }
@@ -542,12 +624,12 @@ printf("Sector %lld: filling %d sectors\n",s,nfill);
 			       _("Sector %lld: %s\n"),
 			       s, GetLastSenseString(FALSE));  
 	       if(s >= sectors - 2) tao_tail++;
-	       rc->readErrors++;
+	       Closure->readErrors++;
 	    }
 	 }
       }
       else
-      {
+      { int i;
 	/*** Store sector(s) in the image file */
 
 	rc->readOK += nsectors;
@@ -565,24 +647,41 @@ printf("Sector %lld: writing %2d sectors\n",s,nsectors);
 	     Stop(_("Failed writing to sector %lld in image [%s]: %s"),
 		  s, "store", strerror(errno));
 
-	   if(Closure->crcCache)  /* On-the-fly CRC/MD5 calculation */
-	   {  int i;
+	   /* On-the-fly CRC/MD5 calculation */
 
-	      for(i=0; i<nsectors; i++)
+	   if(!Closure->checkCrc && Closure->crcCache)  
+	   {  for(i=0; i<nsectors; i++)
 		Closure->crcCache[s+i] = Crc32(buf+2048*i, 2048);
 
 	      MD5Update(&md5ctxt, buf, 2048*nsectors);
 	   }
 	}
+
+	/* On-the-fly CRC testing */         
+
+	if(Closure->checkCrc)
+	  for(i=0; i<nsectors; i++)
+	  {  guint32 crc = Crc32(buf+2048*i, 2048);
+
+	     if(s+i < rc->ei->sectors)
+	     {  if(Closure->crcCache[s+i] != crc)
+	        {  PrintCLI(_("* CRC error, sector: %lld\n"), (long long int)s+i);
+		   Closure->crcErrors++;
+		}
+	     }
+	     else Closure->crcCache[s+i] = crc; /* add CRCsums for additional sectors */
+
+	     MD5Update(&md5ctxt, buf+2048*i, 2048);
+	  }
       }
 
       /*** Step the progress counter */
 
 step_counter:
-      if(Closure->guiMode && last_errors_printed != rc->readErrors)
+      if(Closure->guiMode && last_errors_printed != Closure->readErrors)
       {  SetLabelText(GTK_LABEL(Closure->readLinearErrors), 
-		      _("Unreadable / skipped sectors: %lld"), rc->readErrors);
-	 last_errors_printed = rc->readErrors;
+		      _("Unreadable / skipped sectors: %lld"), Closure->readErrors);
+	 last_errors_printed = Closure->readErrors;
       }
 
       s += nsectors;
@@ -594,15 +693,18 @@ step_counter:
 
 	 if(rc->readOK <= last_read_ok)  /* anything read since last sample? */
 	 {  speed = 0.0;                 /* nothing read */
-	    if(rc->readErrors-previous_errors > 0)
+	    if(Closure->readErrors-previous_read_errors > 0)
 	         color = 2;
+	    else if(Closure->crcErrors-previous_crc_errors > 0)
+	         color = 4;
 	    else color = Closure->additionalSpiralColor;
 
 	    if(Closure->guiMode)
-	      AddCurveValues(percent, speed, rc->readErrors, color);
+	       AddCurveValues(percent, speed, color);
 	    last_percent    = percent;
 	    last_speed      = speed;
-	    previous_errors = rc->readErrors;
+	    previous_read_errors = Closure->readErrors;
+	    previous_crc_errors  = Closure->crcErrors;
 	    last_read_ok    = rc->readOK;
 	 }
 	 else
@@ -610,30 +712,33 @@ step_counter:
 	    double elapsed = g_timer_elapsed(rc->speedTimer, &ignore);
 	    double kb_sec  = kb_read / elapsed;
 
-	    if(rc->readErrors-previous_errors > 0)
+	    if(Closure->readErrors-previous_read_errors > 0)
 	         color = 2;
+	    else if(Closure->crcErrors-previous_crc_errors > 0)
+	         color = 4;
 	    else color = 1;
 
 	    if(first_speed_value)
 	    {   speed = kb_sec / rc->dh->singleRate;
 
 	        if(Closure->guiMode)
-		{  AddCurveValues(last_percent, speed, rc->readErrors, color);
-		   AddCurveValues(percent, speed, rc->readErrors, color);
+		{  AddCurveValues(last_percent, speed, color);
+		   AddCurveValues(percent, speed, color);
 		}
 
 		first_speed_value = FALSE;
-		last_percent    = percent;
-		last_speed      = speed;
-		previous_errors = rc->readErrors;
-		last_read_ok    = rc->readOK;
+		last_percent      = percent;
+		last_speed        = speed;
+		previous_read_errors = Closure->readErrors;
+		previous_crc_errors  = Closure->crcErrors;
+		last_read_ok      = rc->readOK;
 	    }
 	    else
 	    {  speed = (speed + kb_sec / rc->dh->singleRate) / 2.0;
 	       if(speed>99.9) speed=99.9;
 
 	       if(Closure->guiMode)
-		 AddCurveValues(percent, speed, rc->readErrors, color);
+		 AddCurveValues(percent, speed, color);
 	       if(Closure->speedWarning && last_speed > 0.5)
 	       {  double delta = speed - last_speed;
 		  double abs_delta = fabs(delta);
@@ -652,7 +757,8 @@ step_counter:
 
 	       last_percent    = percent;
 	       last_speed      = speed;
-	       previous_errors = rc->readErrors;
+	       previous_read_errors = Closure->readErrors;
+	       previous_crc_errors = Closure->crcErrors;
 	       last_read_ok    = rc->readOK;
 	       g_timer_start(rc->speedTimer);
 	    }
@@ -660,13 +766,33 @@ step_counter:
       }
    }
 
+   if(Closure->crcCache)
+     MD5Final(Closure->md5Cache, &md5ctxt);
+
    if(rereading)
-   {  if(!rc->readErrors) t = g_strdup_printf(_("%lld sectors read.     "),rc->readOK);
-      else                t = g_strdup_printf(_("%lld sectors read; %lld unreadable sectors."),rc->readOK,rc->readErrors);
+   {  if(!Closure->readErrors) t = g_strdup_printf(_("%lld sectors read.     "),rc->readOK);
+      else                t = g_strdup_printf(_("%lld sectors read; %lld unreadable sectors."),rc->readOK,Closure->readErrors);
    }
    else
-   {  if(!rc->readErrors) t = g_strdup_printf(_("All sectors successfully read."));
-      else                t = g_strdup_printf(_("%lld unreadable sectors."),rc->readErrors);
+   {  if(!Closure->readErrors && !Closure->crcErrors) 
+      {  
+	 if(Closure->checkCrc && rc->ei)
+	 {  
+	    if(rc->dh->sectors != rc->ei->sectors)
+	      t = g_strdup_printf(_("All sectors successfully read, but wrong image length (%lld sectors difference)"), rc->dh->sectors - rc->ei->sectors);
+	    else if(memcmp(rc->ei->eh->mediumSum, Closure->md5Cache, 16))
+	      t = g_strdup_printf(_("All sectors successfully read, but wrong image checksum."));
+	    else t = g_strdup_printf(_("All sectors successfully read. Checksums match."));
+	 }
+	 else t = g_strdup_printf(_("All sectors successfully read."));
+      }
+      else 
+      {  if(Closure->readErrors && !Closure->crcErrors)
+	      t = g_strdup_printf(_("%lld unreadable sectors."),Closure->readErrors);
+         else if(!Closure->readErrors && Closure->crcErrors)
+	      t = g_strdup_printf(_("%lld CRC errors."),Closure->crcErrors);
+	 else t = g_strdup_printf(_("%lld CRC errors, %lld unreadable sectors."),Closure->crcErrors, Closure->readErrors);
+      }
    }
    PrintLog("\n%s\n",t);
    if(Closure->guiMode)
@@ -679,7 +805,7 @@ step_counter:
 
    PrintTimeToLog(rc->readTimer, "for reading/scanning.\n");
 
-   if(rc->dh->subType != DVD && tao_tail && tao_tail == rc->readErrors && !Closure->noTruncate)
+   if(rc->dh->subType != DVD && tao_tail && tao_tail == Closure->readErrors && !Closure->noTruncate)
    {  int answer;
    
       if(Closure->guiMode)
@@ -702,15 +828,12 @@ step_counter:
         if(!LargeTruncate(rc->image, (gint64)(2048*sectors)))
 	  Stop(_("Could not truncate %s: %s\n"),Closure->imageName,strerror(errno));
    }
-   else if(rc->readErrors) exitCode = EXIT_FAILURE;
+   else if(Closure->readErrors) exitCode = EXIT_FAILURE;
 
    /*** Close and clean up */
 
    rc->unreportedError = FALSE;
    rc->earlyTermination = FALSE;
-
-   if(Closure->crcCache)
-     MD5Final(Closure->md5Cache, &md5ctxt);
 
 terminate:
    cleanup((gpointer)rc);

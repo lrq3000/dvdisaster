@@ -94,7 +94,7 @@ char* DefaultDevice()
    }
 
    if(cd_dvd_drives > 0)
-     return picked;
+     return g_strdup(picked);
 
    return g_strdup("No_Drive_found");
 }
@@ -108,7 +108,10 @@ void CloseDevice(DeviceHandle *dh)
   if(!dh->aspiUsed)             /* SPTI cleanup */
   {  CloseHandle(dh->fd);
   }
-
+  if(dh->mediumDescr) 
+     g_free(dh->mediumDescr);
+  if(dh->isoInfo)
+    FreeIsoInfo(dh->isoInfo);
   g_free(dh->device);
   g_free(dh);
 }
@@ -560,7 +563,8 @@ DeviceHandle* open_spti_device(char *device)
                        NULL, OPEN_EXISTING, 0, NULL );
 
    if(dh->fd == INVALID_HANDLE_VALUE)  /* Might be Win9x or missing priviledges */
-   {  g_free(dh);
+   {  g_free(dh->device);
+      g_free(dh);
       return NULL;
    }
 

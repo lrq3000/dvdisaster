@@ -373,7 +373,6 @@ die unter /dev aufgeführt sind.
 Eine flexiblere Auswahl wird in einer der nächsten Versionen eingeführt.
 <p>
 
-
 <b>2. Wählen Sie eine Abbild-Datei aus.</b><p>
 
 Ein Klick auf das 
@@ -485,6 +484,12 @@ in das Sie die CD oder DVD eingelegt haben.</b><p>
 Unter Linux sind momentan nur diejenigen Laufwerke verfügbar,
 die unter /dev aufgeführt sind.
 Eine flexiblere Auswahl wird in der nächsten Version eingeführt.<p>
+
+Der Prüfvorgang benötigt nicht zwingend eine 
+Fehlerkorrektur-Datei, kann aber die darin
+enthaltenen Informationen nutzen. 
+Wenn Sie für den Datenträger eine passende Fehlerkorrektur-Datei besitzen,
+geben Sie ihren Namen vor dem Prüfen ein.<p>
 
 <b>2. Beginnen Sie mit der Überprüfung.</b><p>
 
@@ -1081,9 +1086,9 @@ function download10de()
 <h3>Systemanforderungen</h3>
 
 <ul>
- <li><b>x86-kompatible</b> Hardware in der <b>32bit</b>-Betriebsart;<br>
-     unter Linux ist ein Übersetzen als <b>64bit</b>-Anwendung möglich, aber noch weitgehend ungetestet.<p></li>
- <li>ein aktuelles CD- oder DVD-Laufwerk mit ATAPI- oder SCSI-Schnittstelle<p></li>
+ <li><b>x86-kompatible</b> Hardware in der <b>32bit</b>-Betriebsart
+  (64-bit Unterstützung siehe unten),<p></li>
+ <li>ein aktuelles CD- oder DVD-Laufwerk mit ATAPI- oder SCSI-Schnittstelle,<p></li>
  <li>mindestens P4 mit 2Ghz oder vergleichbare Rechenleistung<p></b>
 </ul>
 
@@ -1093,7 +1098,7 @@ function download10de()
  <li><b>FreeBSD</b> ab Version <b>6.0</b><br> 
      (für ATAPI-Laufwerke muß der Kernel neu übersetzt werden)<p>
  </li>
- <li><b>Linux</b> ab Kernel <b>2.6.7</b><br> 
+ <li><b>Linux</b> ab Kernel <b>2.6.7</b>, 64bit möglich<br> 
      (Kernel >= 2.4.20 sind möglich, aber nicht empfohlen!)<p>
  </li>
  <li><b>Windows</b> <b>2000</b> oder <b>XP</b><br>
@@ -1449,6 +1454,12 @@ Leseposition: 100.0% ( 2.4x)<br>
 
 Die Beschreibung des Lesefehlers (hier: "Medium Error; ...") kann 
 je nach verwendeter Laufwerks-Firmware auch anders lauten.<p>
+
+Falls eine passende Fehlerkorrektur-Datei für den Datenträger verfügbar ist,
+geben Sie ihren Namen mit der <a href="syntax90.html#image">-e - Option</a>
+zusammen mit -s an. Dies bewirkt einen zusätzlichen Vergleich des Abbildes
+mit den Prüfsummen aus der Fehlerkorrektur-Datei.<p>
+
 
 <table width=100%><tr><td bgcolor=#000000 width=2><img width=1 height=1 alt=""></td><td>
 Sobald Lesefehler auf dem Datenträger auftreten, müssen Sie

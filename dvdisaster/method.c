@@ -137,7 +137,7 @@ EccHeader* FindHeaderInImage(char *filename)
 
 	 if(   !memcmp(buf, Closure->deadSector, 2048)
 	       || !memcmp(buf+2048, Closure->deadSector, 2048))
-	 {  printf("header at %lld: read error\n", pos);
+	 {  printf("header at %lld: read error\n", (long long int)pos);
 	    goto check_next;
 	 }
 
@@ -147,7 +147,7 @@ EccHeader* FindHeaderInImage(char *filename)
 	 {  guint32 recorded_crc = eh->selfCRC;
  	    guint32 real_crc;
 
-	    printf("header found at %lld\n",pos);
+	    printf("header found at %lld\n", (long long int)pos);
 
 	    eh->selfCRC = 0x4c5047;
 	    real_crc = Crc32((unsigned char*)eh, sizeof(EccHeader));

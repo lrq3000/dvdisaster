@@ -158,12 +158,12 @@ static void pop_interval(read_closure *rc)
 void print_intervals(read_closure *rc)
 {  int i;
 
-   printf("%lld Intervals:\n", rc->n_intervals);
+   printf("%lld Intervals:\n", (long long int)rc->n_intervals);
    for(i=0; i<rc->n_intervals; i++)
      printf("%7lld [%7lld..%7lld]\n",
-	    rc->intervals[2*i+1], 
-	    rc->intervals[2*i], 
-	    rc->intervals[2*i]+rc->intervals[2*i+1]-1);
+	    (long long int)rc->intervals[2*i+1], 
+	    (long long int)rc->intervals[2*i], 
+	    (long long int)rc->intervals[2*i]+rc->intervals[2*i+1]-1);
 }
 
 /***

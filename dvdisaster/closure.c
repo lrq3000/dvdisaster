@@ -284,20 +284,23 @@ int exitCode = EXIT_SUCCESS;
 
 void InitClosure()
 {  int v1,v2,v3,dots=0;
-   char *pl,*v,version[strlen(VERSION)+1];
+   char *v,version[strlen(VERSION)+1];
 
    Closure = g_malloc0(sizeof(GlobalClosure));
 
    /* Give versions with patch levels a nicer formatting */
 
-   strcpy(version,VERSION);
-   pl = strstr(version,"pl");
-
-   if(!pl) Closure->cookedVersion = g_strdup(VERSION);
-   else
-   {  *pl++=0;
-       Closure->cookedVersion = g_strdup_printf("%s (p%s)",version,pl);
+   if(!strcmp(RELEASE_STATUS, "patch"))
+     Closure->cookedVersion = g_strdup_printf("%s (pl%s)",VERSION,RELEASE_MICRO);
+   else if(!strcmp(RELEASE_STATUS, "devel"))
+   { Closure->releaseFlags = MFLAG_DEVEL;
+     Closure->cookedVersion = g_strdup_printf("%s (devel-%s)",VERSION,RELEASE_MICRO);
    }
+   else if(!strcmp(RELEASE_STATUS, "rc"))
+   { Closure->releaseFlags = MFLAG_RC;
+     Closure->cookedVersion = g_strdup_printf("%s (rc-%s)",VERSION,RELEASE_MICRO);
+   }
+   else Closure->cookedVersion = g_strdup(VERSION);
 
    /* Replace the dot with a locale-resistant separator */
 
@@ -310,14 +313,19 @@ void InitClosure()
 
    if(dots == 1) 
    {  v1 = v2 = v3 = 0;
-      sscanf(version,"%dx%dpl%d",&v1,&v2,&v3);
+      sscanf(version,"%dx%d",&v1,&v2);
    }
    else 
    {  g_printf("Error: malformed version number %s\n",VERSION);
       exit(EXIT_FAILURE);
    }
 
+   v3 = atoi(RELEASE_MICRO);
    Closure->version = 10000*v1 + 100*v2 + v3;
+
+#if 0
+   printf("Version %s; %d; Flags %d\n", Closure->cookedVersion, Closure->version, Closure->releaseFlags);
+#endif
 
    /* Fill in other closure defaults */
 

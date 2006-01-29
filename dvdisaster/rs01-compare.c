@@ -531,15 +531,30 @@ void RS01Compare(Method *self)
          int pl    = eh->creatorVersion%100;
 
          if(eh->creatorVersion%100)        
-	 {  PrintLog(eh->creatorVersion < 6000 ? _("created by dvdisaster-%d.%d.%d.\n")
-		                               : _("created by dvdisaster-%d.%dpl%d.\n"), 
-		     major, minor, pl);
+	 {  char *format, *color_format = NULL;
+
+	    if(eh->creatorVersion < 6000) format = "%s-%d.%d.%d";
+	    else if(eh->creatorVersion <= 6500) format = "%s-%d.%d (pl%d)";
+	    else
+	    {  if(eh->methodFlags[3] & MFLAG_DEVEL) 
+	       {  format = "%s-%d.%d (devel-%d)";
+		  color_format = "%s-%d.%d <span color=\"red\">(devel-%d)</span>";
+	       }
+	       else if(eh->methodFlags[3] & MFLAG_RC) 
+	       {  format = "%s-%d.%d (rc-%d)";
+	          color_format = "%s-%d.%d <span color=\"red\">(rc-%d)</span>";
+	       }
+	       else format = "%s-%d.%d (pl%d)";
+	    }
+	    PrintLog(format, _("created by dvdisaster"), major, minor, pl);
+	    PrintLog("\n");
+
+	    if(!color_format) color_format = format;
 
 	    if(Closure->guiMode)
 	      SwitchAndSetFootline(wl->cmpEccNotebook, 1,
 				   wl->cmpEccCreatedBy, 
-				   eh->creatorVersion < 6000 ? "dvdisaster-%d.%d.%d"
-				                             : "dvdisaster-%d.%d (pl%d)",
+				   color_format, "dvdisaster",
 				   major, minor, pl);
 	 }
 	 else

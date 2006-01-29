@@ -152,7 +152,7 @@ typedef struct _drive_database
  * It contains info about the opened device and the inserted medium
  */
 
-typedef struct _device_handle
+typedef struct _DeviceHandle
 {
 #ifdef SYS_LINUX
    int fd;                    /* device file descriptor */
@@ -171,7 +171,7 @@ typedef struct _device_handle
    char vendor[34];           /* vendor and product info only */
    int category;
    DriveDatabase *db;         /* see drive database above */
-   int (*read)(struct _device_handle*, unsigned char*, int, int);
+   int (*read)(struct _DeviceHandle*, unsigned char*, int, int);
    Sense sense;               /* sense data from last operation */
    gint64 userAreaSize;        /* size of user area according to DVD Info struct */
    int sessions;

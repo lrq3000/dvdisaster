@@ -345,9 +345,13 @@ void CreateMainWindow(int *argc, char ***argv)
 
     /*** Open the main window */
 
+    g_snprintf(title, 80, "dvdisaster-%s", Closure->cookedVersion);
+
+#if 0
     if(strlen(RELEASE_STATUS) > 1)
          g_snprintf(title, 80, "dvdisaster-%s %s", VERSION, RELEASE_STATUS);
     else g_snprintf(title, 80, "dvdisaster-%s", Closure->cookedVersion); 
+#endif
 
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(window), title);

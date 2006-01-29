@@ -25,7 +25,7 @@
  *** Spiral drawing and updating
  ***/
 
-static gint64 readable, correctable, missing;
+static long long int readable, correctable, missing;
 static int percent;
 static GdkColor *footer_color;
 

@@ -488,6 +488,11 @@ The Linux version currently only provides those drives for selection
 which are contained in the /dev directory. A more flexible selection
 scheme will be introduced in the next program version.<p>
 
+Scanning does not necessarily need an error correction file, 
+but it can take advantage of some information from it.
+If a suitable error correction file is available for your medium,
+enter its file name before the scan.<p>
+
 <b>2. Start the medium scan.</b><p>
 
 Click on the "Scan" button <font color="red">(2)</font>
@@ -1067,9 +1072,9 @@ function download10en()
 <h3>System requirements</h3>
 
 <ul>
- <li><b>x86 compatible</b> hardware in <b>32bit</b> mode;<br>
-     compiling as a <b>64bit</b> application under Linux is possible, but mainly untested.<p></li>
- <li>an up-to-date CD or DVD drive with ATAPI or SCSI interface<p></li>
+ <li><b>x86 compatible</b> hardware in <b>32bit</b> mode 
+     (see below for 64bit support),<p></li>
+ <li>an up-to-date CD or DVD drive with ATAPI or SCSI interface,<p></li>
  <li>at least a P4 at 2Ghz or comparable processor<p></b>
 </ul>
 
@@ -1078,7 +1083,7 @@ function download10en()
  <li><b>FreeBSD</b> version <b>6.0</b> or later<br>
      (using ATAPI drives requires a kernel recompile)<p>
  </li>
- <li><b>Linux</b> with kernel <b>2.6.7</b> or later<br>
+ <li><b>Linux</b> with kernel <b>2.6.7</b> or later, 64bit supported<br>
      (using kernels >= 2.4.20 is possible, but not recommended!)<p>
  </li>
  <li><b>Windows</b> <b>2000</b> or <b>XP</b><br>
@@ -1423,6 +1428,13 @@ Read position: 100.0% ( 2.4x)<br>
 
 The reported read errors may be different from "Medium Error; ..."
 as these depend on the drive's firmware. <p>
+
+If a suitable error correction file is available for your medium,
+specify it using the <a href="syntax90.html#image">-e option</a>
+along with the -s option. This invokes an additional compare of the image
+against the checksums stored in the error correction file.
+<p>
+
 
 <table width=100%><tr><td bgcolor=#000000 width=2><img width=1 height=1 alt=""></td><td>
 As soon as you notice read errors on your medium, try

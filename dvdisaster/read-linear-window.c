@@ -25,8 +25,8 @@
  *** Forward declarations
  ***/
 
-static void redraw_curve(GtkWidget*);
-static void update_geometry(GtkWidget*);
+static void redraw_curve(void);
+static void update_geometry(void);
 
 /***
  *** Routines for updating the GUI from the action thread.
@@ -39,7 +39,8 @@ static void update_geometry(GtkWidget*);
 static gboolean max_speed_idle_func(gpointer data)
 {  
    gdk_window_clear(Closure->readLinearDrawingArea->window);
-   redraw_curve(Closure->readLinearDrawingArea);
+   update_geometry();
+   redraw_curve();
 
    return FALSE;
 }
@@ -79,8 +80,12 @@ static gboolean curve_idle_func(gpointer data)
    utf = g_locale_to_utf8(buf, -1, NULL, NULL, NULL);
    gtk_label_set_text(GTK_LABEL(Closure->readLinearSpeed), utf);
    g_free(utf);
-   
-   g_snprintf(buf, 80, _("Unreadable / skipped sectors: %lld"), *(gint64*)data);
+
+   if(!Closure->crcErrors)
+        g_snprintf(buf, 80, _("Unreadable / skipped sectors: %lld"), Closure->readErrors);
+   else g_snprintf(buf, 80, _("Unreadable / skipped sectors: %lld, CRC errors: %lld"), 
+		   Closure->readErrors, Closure->crcErrors);
+
    utf = g_locale_to_utf8(buf, -1, NULL, NULL, NULL);
    gtk_label_set_text(GTK_LABEL(Closure->readLinearErrors), utf);
    g_free(utf);
@@ -98,6 +103,7 @@ static gboolean curve_idle_func(gpointer data)
         case 1: DrawSpiralSegment(Closure->readLinearSpiral, Closure->green, i-1); break;
         case 2: DrawSpiralSegment(Closure->readLinearSpiral, Closure->red, i-1); break;
         case 3: DrawSpiralSegment(Closure->readLinearSpiral, Closure->darkgreen, i-1); break;
+        case 4: DrawSpiralSegment(Closure->readLinearSpiral, Closure->yellow, i-1); break;
      }
 
    Closure->lastPercent = Closure->percent;
@@ -112,9 +118,9 @@ static gboolean curve_idle_func(gpointer data)
    if(Closure->readLinearCurve->fvalue[Closure->percent] > Closure->readLinearCurve->maxY)
    {  Closure->readLinearCurve->maxY = Closure->readLinearCurve->fvalue[Closure->percent] + 1;
 
-      update_geometry(Closure->readLinearDrawingArea);
+      update_geometry();
       gdk_window_clear(Closure->readLinearDrawingArea->window);
-      redraw_curve(Closure->readLinearDrawingArea);
+      redraw_curve();
       //      Closure->lastPercent = Closure->percent;
       Closure->lastPercentPlotted = Closure->percent;
 
@@ -138,8 +144,8 @@ static gboolean curve_idle_func(gpointer data)
  * Add one new data point
  */
 
-void AddCurveValues(int percent, double speed, gint64 total_errors, int color)
-{  static gint64 t_errors;
+void AddCurveValues(int percent, double speed, int color)
+{  static int dummy;  /* create unique ptr for g_idle_remove... */
 
    if(percent < 0 || percent > 1000)
      return;
@@ -147,10 +153,9 @@ void AddCurveValues(int percent, double speed, gint64 total_errors, int color)
    Closure->readLinearCurve->fvalue[percent] = speed;
    Closure->readLinearCurve->ivalue[percent] = color;
    Closure->percent = percent;
-   t_errors = total_errors;
 
-   g_idle_remove_by_data(&t_errors);        /* do not queue up redraws */
-   g_idle_add(curve_idle_func, &t_errors);
+   g_idle_remove_by_data(&dummy);             /* do not queue up redraws */
+   g_idle_add(curve_idle_func, &dummy);
 }
 
 /*
@@ -159,8 +164,9 @@ void AddCurveValues(int percent, double speed, gint64 total_errors, int color)
 
 /* Calculate the geometry of the curve and spiral */
 
-static void update_geometry(GtkWidget *widget)
-{  GtkAllocation *a = &widget->allocation;
+static void update_geometry(void)
+{  GtkWidget *widget = Closure->readLinearDrawingArea;
+   GtkAllocation *a = &widget->allocation;
 
    /* Curve geometry */ 
 
@@ -171,6 +177,14 @@ static void update_geometry(GtkWidget *widget)
    Closure->readLinearSpiral->mx = a->width - 15 - Closure->readLinearSpiral->diameter / 2;
    Closure->readLinearSpiral->my = a->height / 2;
 
+   if(Closure->checkCrc || Closure->crcErrors)
+   {  int w,h;
+
+      SetText(Closure->readLinearCurve->layout, _("Sectors with CRC errors"), &w, &h);
+
+      Closure->readLinearSpiral->my -= h;
+   }
+
    /* Label positions in the foot line */
 
    gtk_box_set_child_packing(GTK_BOX(Closure->readLinearFootlineBox), Closure->readLinearSpeed, 
@@ -180,9 +194,10 @@ static void update_geometry(GtkWidget *widget)
 
 }
 
-static void redraw_curve(GtkWidget *widget)
+static void redraw_curve(void)
 {  GdkDrawable *d = Closure->readLinearDrawingArea->window;
    int x,w,h;
+   int pos = 1;
 
    /* Draw and label the spiral */
 
@@ -203,10 +218,14 @@ static void redraw_curve(GtkWidget *widget)
 		     _("Already present"), Closure->darkgreen, x, -1);
 
    DrawSpiralLabel(Closure->readLinearSpiral, Closure->readLinearCurve->layout,
-		   _("Successfully read"), Closure->green, x, 1);
+		   _("Successfully read"), Closure->green, x, pos++);
 
+   if(Closure->checkCrc || Closure->crcErrors)
+     DrawSpiralLabel(Closure->readLinearSpiral, Closure->readLinearCurve->layout,
+		     _("Sectors with CRC errors"), Closure->yellow, x, pos++);
+   
    DrawSpiralLabel(Closure->readLinearSpiral, Closure->readLinearCurve->layout,
-		   _("Unreadable / skipped"), Closure->red, x, 2);
+		   _("Unreadable / skipped"), Closure->red, x, pos++);
 
    DrawSpiral(Closure->readLinearSpiral);
 
@@ -224,8 +243,8 @@ static gboolean expose_cb(GtkWidget *widget, GdkEventExpose *event, gpointer dat
    if(event->count) /* Exposure compression */
      return TRUE;
 
-   update_geometry(widget);
-   redraw_curve(widget);
+   update_geometry();
+   redraw_curve();
 
    return TRUE;
 }
@@ -274,10 +293,10 @@ void CreateLinearReadWindow(GtkWidget *parent)
    gtk_notebook_set_show_border(GTK_NOTEBOOK(notebook), FALSE);
    gtk_box_pack_end(GTK_BOX(parent), notebook, FALSE, FALSE, 0);
 
-   hbox = Closure->readLinearFootlineBox = gtk_hbox_new(TRUE, 0);
+   hbox = Closure->readLinearFootlineBox = gtk_hbox_new(FALSE, 0);
    Closure->readLinearSpeed = gtk_label_new(NULL);
    gtk_misc_set_alignment(GTK_MISC(Closure->readLinearSpeed), 0.0, 0.0); 
-   gtk_box_pack_start(GTK_BOX(hbox), Closure->readLinearSpeed, TRUE, TRUE, 0);
+   gtk_box_pack_start(GTK_BOX(hbox), Closure->readLinearSpeed, FALSE, FALSE, 0);
 
    Closure->readLinearErrors = gtk_label_new(NULL);
    gtk_misc_set_alignment(GTK_MISC(Closure->readLinearErrors), 1.0, 0.0); 
