@@ -946,17 +946,26 @@ void SwitchAndSetFootline(GtkWidget *notebook, int page, GtkWidget *label, char 
  * Rearrange buttons to OK Cancel order
  * in file dialogs
  * 
- * Should we use gtk_dialog_set_alternative_button_order()
- * in gtk+2.6 instead?
+ * gtk_dialog_set_alternative_button_order()
+ * has been introduced since gtk+2.6,
+ * but seems to work only in 2.8.
  */
 
 void ReverseCancelOK(GtkDialog *dialog)
-{  GtkWidget *box, *button ;
+{  
+#if GTK_MINOR_VERSION <= 6
+   GtkWidget *box, *button ;
 
    box = dialog->action_area; 
    button = ((GtkBoxChild*)(g_list_first(GTK_BOX(box)->children)->data))->widget;
 
    gtk_box_reorder_child(GTK_BOX(box), button, 1);
+#else
+   gtk_dialog_set_alternative_button_order(GTK_DIALOG(dialog),
+					   GTK_RESPONSE_OK,
+					   GTK_RESPONSE_CANCEL,
+					   -1);
+#endif
 }
 
 /*

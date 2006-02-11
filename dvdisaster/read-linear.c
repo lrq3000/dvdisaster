@@ -277,8 +277,6 @@ reopen_image:
      {  char *t = _("Completing existing medium image.");
         int unknown_footprint = FALSE;
 
-	Closure->checkCrc = 0; /* does not make sense here */
-
         /* Use the existing file as a starting point.
 	   Set the read_marker at the end of the file
 	   so that the reader looks for "dead_sector" markers
@@ -327,6 +325,8 @@ reopen_image:
 
 	/* If the image is not complete yet, first aim to read the
 	   unvisited sectors before trying to re-read the missing ones. */
+
+	Closure->checkCrc = 0; /* makes only sense if image is completely read */
 
 	if(!Closure->readStart && !Closure->readEnd && read_marker < sectors-1)
 	{  PrintLog(_("Completing image %s. Continuing with sector %lld.\n"),
@@ -400,7 +400,7 @@ reopen_image:
 	 if(!LargeSeek(rc->ei->file, (gint64)sizeof(EccHeader)))
 	   Stop(_("Failed skipping the ecc header: %s"),strerror(errno));
 
-	 PrintLog("%s ...",_("Reading CRC information from ecc file"));
+	 PrintCLI("%s ...",_("Reading CRC information from ecc file"));
 
 	 while(i<crc_sectors)
 	 {  int n = i+512<crc_sectors ? 512 : crc_sectors - i;
@@ -412,7 +412,7 @@ reopen_image:
 	    i+=n;
 	 }
 
-         PrintLog(_("done.\n"));
+         PrintCLI(_("done.\n"));
 
 	 if(Closure->guiMode)
 	   SetLabelText(GTK_LABEL(Closure->readLinearHeadline),

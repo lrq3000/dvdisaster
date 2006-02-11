@@ -140,7 +140,6 @@ typedef enum
    MODIFIER_DEBUG,
    MODIFIER_FILL_UNREADABLE,
    MODIFIER_KEEP_STYLE,
-   MODIFIER_MEDIUM_SIZE,
    MODIFIER_PARSE_UDF,
    MODIFIER_RANDOM_SEED,
    MODIFIER_SPEED_WARNING, 
@@ -305,7 +304,6 @@ int main(int argc, char *argv[])
 #ifdef SYS_MINGW
 	{"list", 0, 0, 'l' },
 #endif
-	{"medium-size", 1, 0, MODIFIER_MEDIUM_SIZE },
 	{"method", 2, 0, 'm' },
 	{"parse-udf", 0, 0, MODIFIER_PARSE_UDF },
         {"prefix", 1, 0, 'p'},
@@ -363,7 +361,11 @@ int main(int argc, char *argv[])
                    }
 	           else {  ListMethods(); FreeClosure(); exit(EXIT_SUCCESS); }
 	           break;
-         case 'n': if(optarg) Closure->redundancy = g_strdup(optarg); break;
+         case 'n': if(optarg) 
+		   {  Closure->redundancy = g_strdup(optarg); 
+		      Closure->mediumSize = (gint64)atoll(optarg);
+		      break;
+		   }
          case 'e': if(optarg) 
 	           {  g_free(Closure->eccName);
 		      Closure->eccName = g_strdup(optarg);
@@ -417,9 +419,6 @@ int main(int argc, char *argv[])
 	   break;
          case MODIFIER_DEBUG:
 	   Closure->debugMode = TRUE;
-	   break;
-         case MODIFIER_MEDIUM_SIZE:
-	   Closure->mediumSize = atoi(optarg);
 	   break;
          case MODIFIER_PARSE_UDF:
 	   Closure->parseUDF = TRUE;
@@ -625,7 +624,8 @@ int main(int argc, char *argv[])
 
       PrintCLI(_("Tweaking options (see manual before using!)\n"
 	     "  -j,--jump n            - jump n sectors forward after a read error (default: 16)\n"
-	     "  -n,--redundancy n%%     - sets redundancy for error correction (default: 14.3%%)\n"
+	     "  -n,--redundancy n%%     - error correction file redundancy (in percent), or\n"
+	     "                           maximum error correction image size (in sectors)\n"
 	     "  -v,--verbose           - more diagnostic messages\n"
 	     "  --adaptive-read        - use optimized strategy for reading damaged media\n"
 	     "  --auto-suffix          - automatically add .img and .ecc file suffixes\n"

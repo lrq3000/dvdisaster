@@ -2449,6 +2449,7 @@ function background_contents_de()
  
    link)    link_title="Hintergrundinformationen" ;;
    link10)   link_title="Eigenschaften der Fehlerkorrektur" ;;   
+   link20)   link_title="RS01 und RS02" ;;   
    link30)   link_title="Lineares Lese-Verfahren" ;;   
    link40)   link_title="Angepaßtes Lese-Verfahren" ;;   
    link50)   link_title="Bemerkungen zu Lesefehlern" ;;   
@@ -2472,6 +2473,7 @@ entsprechend Ihren Bedürfnissen anzuwenden.
 
 <ol>
 <li><a href="background10.html">Eigenschaften der Reed-Solomon-Fehlerkorrektur</a><p></li>
+<li><a href="background20.html">Die RS01 und RS02-Verfahren</a><p></li>
 <li><a href="background30.html">Arbeitsweise des linearen Lese-Verfahrens</a><p></li>   
 <li><a href="background40.html">Arbeitsweise des angepaßten Lese-Verfahrens</a><p></li>   
 <li><a href="background50.html">Einige Bemerkungen zu Lesefehlern</a><p></li>   
@@ -2546,6 +2548,139 @@ und so die Leistungfähigkeit der Fehlerkorrektur anpassen.<p>
 EOF
 }
 
+
+function background20de()
+{  cat >> $1 <<EOF
+<h3>Übersicht über die RS01- und RS02-Fehlerkorrekturverfahren.</h3>
+
+RS01 ist das bisherige Fehlerkorrekturverfahren von dvdisaster.
+Ein weiteres Verfahren RS02 wird gerade entwickelt; es ist in Version
+0.66 in der Kommandozeile verfügbar und wird ab Version 0.70 vollständig
+in die graphische Benutzeroberfläche integriert. Das RS02-Verfahren
+ist noch experimentell und sollte bis zum Erscheinen von Version 0.80 nicht als
+ausschließliche Datensicherung eingesetzt werden. <p>
+
+
+<b>Gemeinsamkeiten der beiden Verfahren.</b>
+
+RS01 und RS02 arbeiten nach dem gleichen <a href="background10.html">Reed-Solomon</a>-Verfahren. 
+<!--- Sie berechnen Fehlerkorrektur-Informationen zu CD/DVD-Abbildern mit dem Ziel,
+später unlesbar gewordene Abbild-Sektoren aus den Fehlerkorrektur-Informationen
+wiederherzustellen. ---> 
+Die Unterschiede liegen in der Art, 
+wie die Fehlerkorrektur-Informationen abgelegt werden.<p>
+
+<b>Das RS01-Verfahren.</b>
+
+Das RS01-Verfahren berechnet Fehlerkorrektur-Dateien, die unabhängig von dem
+zugehörigen Abbild aufbewahrt werden. RS01-Fehlerkorrektur-Dateien sind bezüglich
+Größe und Geschwindigkeit optimiert und dadurch empfindlich gegenüber Beschädigung.
+Sie müssen daher durch weitere Maßnahmen gegen Datenverlust geschützt werden;
+typischerweise werden sie auf Datenträgern aufbewahrt,
+die selbst mit dvdisaster gegen Datenverlust geschützt sind.<p>
+
+<b>Das RS02-Verfahren.</b> Dieses Verfahren hat zwei Betriebsarten:
+
+<ol>
+<li><b>Fehlerkorrektur-Abbilder.</b><br>
+
+In dieser Betriebsart wird das ursprüngliche Abbild zunächst um Fehlerkorrektur-Informationen
+erweitert und dann auf den Datenträger geschrieben. Dadurch befinden sich die
+zu schützenden Daten zusammen mit den Fehlerkorrektur-Informationen auf dem
+selben Datenträger. Defekte Sektoren in den Fehlerkorrektur-Informationen verringern
+die Kapazität der Fehlerkorrektur, machen diese aber nicht unmöglich.<p>
+</li>
+<li><b>Fehlerkorrektur-Dateien.</b><br>
+
+RS02-Fehlerkorrektur-Dateien funktionieren genauso wie ihre RS01-Gegenstücke.
+Sie verkraften allerdings Beschädigungen wie fehlerhafte Bytes, fehlende Sektoren
+und ein Abschneiden von Teilen der Fehlerkorrektur-Datei. Dafür verbrauchen sie
+mehr Speicherplatz und die Fehlerkorrektur ist langsamer.<p>
+</li>
+</ol>
+
+<b>Vergleich von Fehlerkorrektur-Dateien und -Abbildern.</b><p>
+
+<table width="100%" border="1" cellspacing="0" cellpadding="5">
+<tr>
+<td width="50%"><i>Fehlerkorrektur-Dateien</i></td>
+<td width="50%"><i>Fehlerkorrektur-Abbilder</i></td>
+</tr>
+<tr valign="top">
+<td> Redundanz kann beliebig groß gewählt werden</td>
+<td> Redundanz ist durch freien Platz auf dem Datenträger beschränkt<br>
+(= Kapazität des Datenträgers - Größe des ursprünglichen Abbildes)</td>
+</tr>
+
+<tr valign="top">
+<td>bereits wirksam ab 15% Redundanz;
+Datenträger kann beliebig voll sein</td>
+<td>benötigt mindestens 20%-30% Redundanz;
+nutzbare Datenträger-Kapazität sinkt entsprechend</td> 
+</tr>
+
+<tr valign="top">
+<td> können nachträglich für bereits existierende Datenträger
+erzeugt werden</td>
+<td> nur beim Brennen neuer Datenträger anwendbar, weil das Abbild vorher 
+um Fehlerkorrektur-Daten erweitert werden muß
+</tr>
+
+<tr valign="top">
+<td> unabhängige Speicherung von den zu schützenden Daten erhöht Datensicherheit</td>
+<td> gemeinsame Aufbewahrung von Nutzdaten und Fehlerkorrektur-Daten auf dem gleichen Datenträger vermindert die Fehlerkorrektur-Kapazität</td>
+</tr>
+
+<tr valign="top">
+<td>Zuordnung von Fehlerkorrektur-Dateien zu Datenträgern
+muß geeignet realisiert werden. Fehlerkorrektur-Dateien müssen
+vor Beschädigung geschützt werden</td>
+<td>Einfache Lösung mit einem Datenträger; Fehlerkorrektur-Informationen müssen nicht
+katalogisiert oder geschützt werden</td></tr>
+
+<tr valign="top">
+<td> keine Kompatibilitätsprobleme beim Abspielen </td>
+<td> Datenträger mit Fehlerkorrektur-Abbildern sind möglicherweise nicht überall abspielbar</td>
+</tr>
+</table><p>
+
+<b>Vergleich von RS01/RS02-Fehlerkorrektur-Dateien.</b><p>
+
+RS02-Fehlerkorrektur-Dateien haben auf den ersten Blick den Vorteil,
+durch Beschädigungen nicht unbrauchbar zu werden. Dadurch darf man sich aber
+nicht verleiten lassen, diese Dateien ohne weitere 
+Sicherungsmaßnahmen auf einer CD oder DVD aufzuheben:<p>
+
+<ul>
+<li>Versuchen Sie einmal, eine größere Datei von einem beschädigten
+Datenträger zu lesen. Das geht nur mit speziellen Werkzeugen und ist
+sehr aufwändig.<p></li>
+<li>Wenn die Verzeichnis-Strukturen des Datenträgers beschädigt sind,
+bekommen Sie die Fehlerkorrektur-Dateien nicht mehr von dem Datenträger herunter,
+selbst wenn die zugehörigen Sektoren noch lesbar sind.</li>
+</ul>
+
+
+Deshalb müssen Sie mit dvdisaster auch das Abbild <sup>*)</sup> des Datenträgers schützen,
+auf dem Sie Ihre Fehlerkorrektur-Dateien aufheben. Da auf diese Weise die gespeicherten
+Fehlerkorrektur-Dateien wiederherstellbar sind, spricht nichts gegen die Verwendung
+der effizienteren RS01-Dateien.
+
+<table width="50%"><tr><td><hr></td></tr></table>
+
+<font size="-1">
+<a name="footnote2"><sup>*)</sup></a> Fehlerkorrektur auf Datei-Ebene 
+ist bei optischen Datenträgern aufgrund der beschriebenen Ausleseproblematik
+nicht empfehlenswert. Deshalb sind sowohl das
+RS02-Dateiformat als auch andere externe Werkzeuge wie PAR 2.0
+einer Fehlerkorrektur auf Abbild-Ebene unterlegen.
+
+<p>
+</font>
+
+
+EOF
+}
 
 function background30de()
 {  cat >> $1 <<EOF

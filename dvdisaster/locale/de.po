@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-29 18:12+0100\n"
+"POT-Creation-Date: 2006-02-11 15:12+0100\n"
 "PO-Revision-Date: 2004-11-30 19:48+0100\n"
 "Last-Translator: Carsten Gnörlich <carsten@dvdisaster.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -61,14 +61,14 @@ msgstr ""
 "\n"
 "Erzeuge zufällige reparierbare Auslöschungen (für %d Nullstellen, max. %d Auslöschungen).\n"
 
-#: debug.c:108 debug.c:356 debug.c:424 rs01-common.c:54 rs02-common.c:55
-#: rs02-compare.c:94 rs02-create.c:237 rs02-create.c:803 rs02-fix.c:202
+#: debug.c:108 debug.c:356 debug.c:424 rs01-common.c:54 rs02-common.c:46
+#: rs02-compare.c:94 rs02-create.c:237 rs02-create.c:795 rs02-fix.c:216
 #, c-format
 msgid "Failed seeking to sector %lld in image: %s"
 msgstr "Ansteuern von Sektor %lld im Abbild fehlgeschlagen: %s"
 
 #: debug.c:110 debug.c:225 debug.c:316 debug.c:361 debug.c:428
-#: rs02-create.c:265 rs02-create.c:289 rs02-create.c:806
+#: rs02-create.c:265 rs02-create.c:289 rs02-create.c:798
 #, c-format
 msgid "Failed writing to sector %lld in image: %s"
 msgstr "Schreiben von Sektor %lld im Abbild fehlgeschlagen: %s"
@@ -230,24 +230,24 @@ msgstr "RS01-Methode zum Überprüfen der Dateien nicht verfügbar."
 #. TRANSLATORS:
 #. This is a dummy entry which is supposed to translate into "ok".
 #. Please do not return anything else here.
-#: dvdisaster.c:230 dvdisaster.c:242 dvdisaster.c:255
+#: dvdisaster.c:229 dvdisaster.c:241 dvdisaster.c:254
 msgid "test phrase for verifying the locale installation"
 msgstr "ok"
 
-#: dvdisaster.c:273
+#: dvdisaster.c:272
 #, c-format
 msgid "sizeof(EccHeader) is %d, but must be 4096.\n"
 msgstr "sizeof(EccHeader) ist %d, muß aber 4096 sein.\n"
 
-#: dvdisaster.c:398
+#: dvdisaster.c:400
 msgid "--cache-size must at least be 1MB; 16MB or higher is recommended."
 msgstr "--cache-size muß mindestens 1MB sein; 16MB oder mehr werden empfohlen."
 
-#: dvdisaster.c:400
+#: dvdisaster.c:402
 msgid "--cache-size maximum is 2048MB."
 msgstr "Die Maximalgröße von --cache-size ist 2048MB."
 
-#: dvdisaster.c:447
+#: dvdisaster.c:446
 #, c-format
 msgid ""
 "\n"
@@ -258,14 +258,14 @@ msgstr ""
 "dvdisaster Version %s\n"
 "\n"
 
-#: dvdisaster.c:479
+#: dvdisaster.c:478
 #, c-format
 msgid "?? illegal getopt return value %d\n"
 msgstr "?? ungültiger Rückgabewert von getopt: %d\n"
 
 #. TRANSLATORS: Program options like -r and --read are not to be translated
 #. to avoid confusion when discussing the program in international forums.
-#: dvdisaster.c:604
+#: dvdisaster.c:603
 msgid ""
 "\n"
 "Common usage examples:\n"
@@ -289,7 +289,7 @@ msgstr ""
 "  dvdisaster -u,--unlink # Löscht .img - Dateien nach Beenden der vorherigen Aktionen.\n"
 "\n"
 
-#: dvdisaster.c:613
+#: dvdisaster.c:612
 #, c-format
 msgid ""
 "Drive and file specification:\n"
@@ -304,7 +304,7 @@ msgstr ""
 "  -i,--image  Name       - Name der Abbild - Datei        (Standard: medium.img)\n"
 "  -e,--ecc    Name       - Name der Fehlerkorrektur-Datei (Standard: medium.ecc)\n"
 
-#: dvdisaster.c:621
+#: dvdisaster.c:620
 msgid ""
 "  -l,--list              - list drives available under ASPI manager\n"
 "\n"
@@ -312,12 +312,13 @@ msgstr ""
 "  -l,--list              - zeigt unter ASPI verfügbare Laufwerke\n"
 "\n"
 
-#: dvdisaster.c:626
+#: dvdisaster.c:625
 #, c-format
 msgid ""
 "Tweaking options (see manual before using!)\n"
 "  -j,--jump n            - jump n sectors forward after a read error (default: 16)\n"
-"  -n,--redundancy n%%     - sets redundancy for error correction (default: 14.3%%)\n"
+"  -n,--redundancy n%%     - error correction file redundancy (in percent), or\n"
+"                           maximum error correction image size (in sectors)\n"
 "  -v,--verbose           - more diagnostic messages\n"
 "  --adaptive-read        - use optimized strategy for reading damaged media\n"
 "  --auto-suffix          - automatically add .img and .ecc file suffixes\n"
@@ -333,14 +334,14 @@ msgid ""
 msgstr ""
 "Feineinstellung (Beachten Sie die Hinweise in der Dokumentation!):\n"
 "  -j,--jump n            - überspringe n Sektoren nach einem Lesefehler (Standard: 16)\n"
-"  -n,--redundancy n%%     - Redundanz der Fehlerkorrektur (Standard: 14.3%%)\n"
+"  -n,--redundancy n%%     - Redundanz der Fehlerkorrektur-Dateien (in Prozent), oder\n"
+"                           höchstmögliche Größe für Fehlerkorrektur-Abbilder (in Sektoren)\n"
 "  -v,--verbose           - mehr erläuternde Ausgaben\n"
 "  --adaptive-read        - verwende optimiertes Leseverfahren für defekte Datenträger\n"
 "  --auto-suffix          - automatisches Anfügen der .img- und .ecc-Dateiendungen\n"
 "  --cache-size n         - Zwischenspeicher in MB bei .ecc-Datei-Erzeugung - (Standard: 32MB)\n"
 "  --dao                  - unterstelle DAO; Abbild am Ende nicht kürzen\n"
 "  --fill-unreadable n    - fülle unlesbare Sektoren mit Byte n\n"
-"  --medium-size          - höchste zulässige Abbild-Größe auf dem Datenträger (in Sektoren)\n"
 "  --parse-udf            - Informationen aus ISO/UDF-Dateisystem auswerten\n"
 "  --speed-warning n      - warnt bei Geschwindigkeitsänderung um mehr als n Prozent\n"
 "  --spinup-delay n       - gibt dem Laufwerk n Sekunden Zeit zum Hochlaufen\n"
@@ -562,6 +563,22 @@ msgid ""
 msgstr ""
 "\n"
 "e-mail: carsten@dvdisaster.de   -oder-   cgnoerlich@fsfe.org"
+
+#: large-io.c:402
+#, c-format
+msgid ""
+"Error while writing the file:\n"
+"\n"
+"%s\n"
+"\n"
+"You can redo this operation after freeing some space."
+msgstr ""
+"Fehler beim Schreiben der Datei:\n"
+"\n"
+"%s\n"
+"\n"
+"Sie können den Vorgang wiederholen\n"
+"nachdem Sie Speicherplatz freigegeben haben."
 
 #: main-window.c:69
 #, c-format
@@ -1203,7 +1220,7 @@ msgstr "Auffüllen des Abbild-Bereichs [%lld..%lld]"
 
 #: read-adaptive.c:834 read-adaptive.c:967 read-adaptive.c:1102
 #: read-linear.c:357 read-linear.c:482 read-linear.c:584 read-linear.c:639
-#: rs01-fix.c:390 rs01-fix.c:648
+#: rs01-fix.c:390 rs01-fix.c:648 rs02-fix.c:573
 #, c-format
 msgid "Failed seeking to sector %lld in image [%s]: %s"
 msgstr "Ansteuern von Sektor %lld im Abbild fehlgeschlagen [%s]: %s"
@@ -1237,12 +1254,12 @@ msgstr ""
 "Eine Fortsetzung ist gegebenenfalls nicht mehr möglich.\n"
 "Soll der Fehler nicht beachtet und weiter gelesen werden?"
 
-#: read-adaptive.c:990 rs01-fix.c:38 rs02-fix.c:245
+#: read-adaptive.c:990 rs01-fix.c:38 rs02-fix.c:251
 #, c-format
 msgid "Failed seeking in crc area: %s"
 msgstr "Suchen im CRC-Abschnitt fehlgeschlagen: %s"
 
-#: read-adaptive.c:1006 rs01-fix.c:344 rs02-fix.c:257
+#: read-adaptive.c:1006 rs01-fix.c:344 rs02-fix.c:263
 #, c-format
 msgid "CRC error in sector %lld\n"
 msgstr "Prüfsummen-Fehler in Sektor %lld\n"
@@ -1543,7 +1560,7 @@ msgstr "Bereits vorhanden"
 msgid "Speed"
 msgstr "Geschwindigkeit"
 
-#: rs01-common.c:70 rs02-common.c:71 rs02-create.c:141 rs02-fix.c:205
+#: rs01-common.c:70 rs02-common.c:62 rs02-create.c:141 rs02-fix.c:219
 #, c-format
 msgid "Failed reading sector %lld in image: %s"
 msgstr "Lesen von Sektor %lld im Abbild fehlgeschlagen: %s"
@@ -1902,11 +1919,11 @@ msgstr "Ecc-Datei-Größe %lldm außerhalb des nutzbaren Bereiches [%lld .. %lld
 msgid "Redundancy %d out of useful range [8..100]."
 msgstr "Redundanz %d außerhalb des nutzbaren Bereiches [8..100]."
 
-#: rs01-create.c:124 rs01-fix.c:76 rs02-create.c:54 rs02-fix.c:51
+#: rs01-create.c:124 rs01-fix.c:76 rs02-create.c:54 rs02-fix.c:52
 msgid "<span color=\"red\">Aborted by unrecoverable error.</span>"
 msgstr "<span color=\"red\">Abbruch durch nicht behebbaren Fehler.</span>"
 
-#: rs01-create.c:180 rs02-create.c:830
+#: rs01-create.c:180 rs02-create.c:822
 msgid "Error correction file creation aborted"
 msgstr "Erzeugung der Fehlerkorrektur-Datei abgebrochen"
 
@@ -1978,12 +1995,12 @@ msgstr ""
 "Konnte den Vorspann der Fehlerkorrektur-Datei nicht schreiben:\n"
 "%s"
 
-#: rs01-create.c:927 rs02-create.c:889
+#: rs01-create.c:927 rs02-create.c:881
 #, c-format
 msgid "Ecc generation: 100.0%%\n"
 msgstr "Kodierungs-Fortschritt: 100.0%%\n"
 
-#: rs01-create.c:928 rs02-create.c:890
+#: rs01-create.c:928 rs02-create.c:882
 #, c-format
 msgid ""
 "Error correction file \"%s\" created.\n"
@@ -1992,7 +2009,7 @@ msgstr ""
 "Fehlerkorrektur-Datei \"%s\" wurde erzeugt.\n"
 "Verwahren Sie die Datei auf einem zuverlässigen Datenträger.\n"
 
-#: rs01-create.c:936 rs02-create.c:898
+#: rs01-create.c:936 rs02-create.c:890
 msgid ""
 "The error correction file has been successfully created.\n"
 "Make sure to keep this file on a reliable medium."
@@ -2000,12 +2017,12 @@ msgstr ""
 "Die Fehlerkorrektur-Datei wurde erfolgreich erzeugt.\n"
 "Verwahren Sie die Datei auf einem zuverlässigen Datenträger."
 
-#: rs01-fix.c:43 rs02-compare.c:131 rs02-fix.c:248
+#: rs01-fix.c:43 rs02-compare.c:131 rs02-fix.c:254
 #, c-format
 msgid "problem reading crc data: %s"
 msgstr "Problem beim Lesen der CRC-Daten: %s"
 
-#: rs01-fix.c:133 rs02-fix.c:105
+#: rs01-fix.c:133 rs02-fix.c:113
 msgid "Repairing of image aborted"
 msgstr "Reparatur des Abbildes abgebrochen"
 
@@ -2108,7 +2125,7 @@ msgstr ""
 "Kann nicht aus der Fehlerkorrektur-Datei lesen:\n"
 "%s"
 
-#: rs01-fix.c:555
+#: rs01-fix.c:555 rs02-fix.c:452
 #, c-format
 msgid "Decoder problem (%d != %d) for %d sectors: "
 msgstr "Dekodierungsproblem (%d != %d) für %d Sektoren: "
@@ -2128,12 +2145,12 @@ msgstr "Unerwarteter Byte-Fehler in Sektor %lld, Byte %d\n"
 msgid "Bad error location %d; corrupted .ecc file?\n"
 msgstr "Ungültige Fehlerposition %d; beschädigte .ecc-Datei?\n"
 
-#: rs01-fix.c:637
+#: rs01-fix.c:637 rs02-fix.c:542
 #, c-format
 msgid "  %3d repaired sectors: "
 msgstr "  %3d reparierte Sektoren: "
 
-#: rs01-fix.c:656
+#: rs01-fix.c:656 rs02-fix.c:581
 #, c-format
 msgid ""
 "could not write medium sector %lld:\n"
@@ -2142,12 +2159,12 @@ msgstr ""
 "Konnte Abbild-Sektor %lld nicht schreiben:\n"
 "%s"
 
-#: rs01-fix.c:682 rs02-fix.c:328
+#: rs01-fix.c:682 rs02-fix.c:609
 #, c-format
 msgid "Ecc progress: %3d.%1d%%"
 msgstr "Reparatur-Fortschritt: %3d.%1d%%"
 
-#: rs01-fix.c:694 rs02-fix.c:342
+#: rs01-fix.c:694 rs02-fix.c:623
 #, c-format
 msgid "Ecc progress: 100.0%%\n"
 msgstr "Reparatur-Fortschritt: 100.0%%\n"
@@ -2352,7 +2369,7 @@ msgstr "Erweitere das Abbild: %3d%%"
 msgid "Failed writing ecc header at %lld: %s\n"
 msgstr "Schreiben des Ecc-Vorspanns bei Pos. %lld fehlgeschlagen: %s\n"
 
-#: rs02-create.c:843
+#: rs02-create.c:835
 msgid ""
 "Not enough space on medium left for error correction data.\n"
 "If reducing the image size or using a larger medium is\n"
@@ -2364,14 +2381,14 @@ msgstr ""
 "und kein größerer Datenträger zur Verfügung steht, erzeugen Sie bitte\n"
 "eine alleinstehenden Fehlerkorrektur-Datei mit dem RS01-Verfahren.\n"
 
-#: rs02-create.c:857
+#: rs02-create.c:849
 #, c-format
 msgid "Appending image with Method RS02: %lldM data, %lldM ecc (%d roots; %4.1f%% redundancy)"
 msgstr ""
 "Erweitere Abbild mit dem RS02-Verfahren:\n"
 "%lldM Daten, %lldM Fehlerkorrektur-Daten (%d Nullstellen; %4.1f%% Redundanz)"
 
-#: rs02-create.c:861
+#: rs02-create.c:853
 #, c-format
 msgid ""
 "* Warning: Using redundancies below 20%% may not give\n"
@@ -2379,6 +2396,21 @@ msgid ""
 msgstr ""
 "* Warnung: Redundanzen unterhalb von 20%% haben möglicherweise\n"
 "*          nicht die erhoffte Datensicherungs-Funktion.\n"
+
+#: rs02-fix.c:294
+#, c-format
+msgid "* Ecc block %4d: %3d unrepairable sectors: "
+msgstr ""
+
+#: rs02-fix.c:513
+#, c-format
+msgid "-> CRC-predicted error in sector %lld at byte %4d (value %2x '%c', expected %2x '%c')\n"
+msgstr ""
+
+#: rs02-fix.c:516
+#, c-format
+msgid "-> Non-predicted error in sector %lld at byte %4d (value %2x '%c', expected %2x '%c')\n"
+msgstr ""
 
 #: scsi-freebsd.c:42 scsi-linux.c:42
 msgid ""

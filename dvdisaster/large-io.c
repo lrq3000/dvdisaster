@@ -369,13 +369,60 @@ int LargeRead(LargeFile *lf, void *buf, size_t count)
  * Writing in segmented files
  */
 
+static void insert_buttons(GtkDialog *dialog)
+{  
+  gtk_dialog_add_buttons(dialog, 
+			 GTK_STOCK_REDO , 1,
+			 GTK_STOCK_CANCEL, 0, NULL);
+} 
+
+static int xwrite(int fdes, void *buf_base, size_t count)
+{  unsigned char *buf = (unsigned char*)buf_base;
+   int total = 0;
+
+   /* Simply fail when going out of space in command line mode */
+
+   if(!Closure->guiMode)
+     return write(fdes, buf, count);
+
+   /* Give the user a chance to free more space in GUI mode.
+      When running out of space, the last write() may complete
+      with n<count but no error condition, so we try writing
+      until a real error hits (n = -1). */
+
+   while(count)
+   {  int n = write(fdes, buf, count);
+
+      if(n < 0) /* error occurred */
+      {  int answer; 
+
+	 if(errno != ENOSPC) return total;
+
+	 answer = ModalDialog(GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, insert_buttons,
+			      _("Error while writing the file:\n\n%s\n\n"
+				"You can redo this operation after freeing some space."),
+			      strerror(errno),n);
+
+	 if(!answer) return total; 
+      }
+
+      if(n>0)  /* write at least partially successful */
+      {  total += n;
+	 count -= n;
+	 buf   += n;
+      }
+   }
+
+   return total;
+}
+
 int LargeWrite(LargeFile *lf, void *buf, size_t count)
 {  int n;
 
    /* Simple unsegmented case */  
 
    if(!Closure->splitFiles)
-   {  n = write(lf->fileSegment[0], buf, count);
+   {  n = xwrite(lf->fileSegment[0], buf, count);
       lf->offset += n;
       return n;
    }
@@ -390,7 +437,7 @@ int LargeWrite(LargeFile *lf, void *buf, size_t count)
       simply write it to the current segment and return */
 
    if(lf->offset + count <= MAX_FILE_SIZE)
-   {  n = write(lf->fileSegment[lf->segment], buf, count);
+   {  n = xwrite(lf->fileSegment[lf->segment], buf, count);
       lf->offset += n;
 
       /* If the segment boundary was touched,
@@ -419,7 +466,7 @@ int LargeWrite(LargeFile *lf, void *buf, size_t count)
       size_t chunk = 0;
       size_t written = 0;
 	
-      n = write(lf->fileSegment[lf->segment], buf, first);
+      n = xwrite(lf->fileSegment[lf->segment], buf, first);
       lf->offset += n;
       if(n != first) return n;
 
@@ -447,7 +494,7 @@ int LargeWrite(LargeFile *lf, void *buf, size_t count)
 
         chunk = count > MAX_FILE_SIZE ? MAX_FILE_SIZE : count; 
 
-	written = write(lf->fileSegment[lf->segment], buf+n, chunk);
+	written = xwrite(lf->fileSegment[lf->segment], buf+n, chunk);
 	n += written;
 	count -= written;
 	if(written != chunk) return n;

@@ -157,7 +157,7 @@ static int query_type(DeviceHandle *dh)
    cmd[6] = 0;        /* First layer */
    cmd[7] = 0;        /* We want PHYSICAL info */
    cmd[8] = 0;        /* Allocation length */
-   cmd[9] = 4;
+   cmd[9] = 2;
 
    /* Different drives react with different error codes on this request;
       especially CDROMs seem to react very indeterministic here 
@@ -165,7 +165,7 @@ static int query_type(DeviceHandle *dh)
       So we do not look for specific error and regard any failure as a sign
       that the medium is not a DVD. */
 
-   if(SendPacket(dh, cmd, 12, buf, 4, &sense, DATA_READ)<0)
+   if(SendPacket(dh, cmd, 12, buf, 2, &sense, DATA_READ)<0)
    {  
       if(Closure->debugMode)
 	LogWarning(_("%s\nCould not query dvd structure length.\n"), 
@@ -277,7 +277,7 @@ assume_cd:
    }
 
    length = buf[0]<<8 | buf[1];
-   length -= 2;  /* MMC3: "Disc information length excludes itself" */
+   length += 2  ;  /* MMC3: "Disc information length excludes itself" */
    if(length>1024) /* don't let the drive hack us using a buffer overflow ;-) */
    {  Stop(_("TOC info too long (%d), probably multisession.\n"),length);
       return FALSE;
@@ -317,7 +317,7 @@ assume_cd:
    }
 
    length = buf[0]<<8 | buf[1];
-   length -= 2;  /* MMC3: "Disc information length excludes itself" */
+   length += 2;    /* MMC3: "Disc information length excludes itself" */
    if(length < 15)
    {  Stop(_("TOC info too short, length %d.\n"),length);
       return FALSE;
@@ -386,9 +386,9 @@ static int query_copyright(DeviceHandle *dh)
    cmd[6] = 0;        /* First layer */
    cmd[7] = 1;        /* We want copyright info */
    cmd[8] = 0;        /* Allocation length */
-   cmd[9] = 4;
+   cmd[9] = 2;
 
-   if(SendPacket(dh, cmd, 12, buf, 4, &sense, DATA_READ)<0)
+   if(SendPacket(dh, cmd, 12, buf, 2, &sense, DATA_READ)<0)
    {  Stop(_("%s\nCould not query dvd structure length for format code 1.\n"),
 	   GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
       return TRUE;

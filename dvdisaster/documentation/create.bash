@@ -426,7 +426,7 @@ create_subpages example de "0 10 20 30 40 50 60 90 91 92 93"
 create_subpages download de "0 10 20"
 create_subpages syntax de "0 10 20 30 40 50 60 70 90"
 create_subpages qa de "0 10 20"
-create_subpages background de "0 10 30 40 50 60"
+create_subpages background de "0 10 20 30 40 50 60"
 create_subpages imprint de "0"
 
 # English translation

@@ -1,3 +1,14 @@
+0.65 (devel-3) 11-02-2006
+	- Creation of image and ecc files can be resumed after going
+	  out of disc space (only in GUI mode)
+	- updated README
+	- created contrib directory; added desktop and rpm skeletons
+	  contributed by Lubos Stanek
+	- changed length query for SCSI opcode 0xad 
+	- changed length calculation for SCSI opcode 0x43
+	- enabled CRC testing when "Delete image file?" is answered
+	  positively
+
 0.65 (devel-2) 29-01-2006
 	- added CRC testing during linear read and scan options
 	  (if the respective ecc file is present)
