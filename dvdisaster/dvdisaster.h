@@ -125,7 +125,7 @@ typedef struct _GlobalClosure
    int debugMode;       /* may activate additional features */
    int verbose;         /* may activate additional messages */
    int splitFiles;      /* limit image files to 2GB */
-   int autoSuffix;      /* automatically extend files with suffices .img/.ecc */
+   int autoSuffix;      /* automatically extend files with suffices .iso/.ecc */
    int parseUDF;        /* use information from the ISO/UDF filesystems */
    int readAndCreate;   /* automatically create .ecc file after reading an image */
    int enableCurveSwitch; /* TRUE in readAndCreateMode after reading is complete */
@@ -309,7 +309,7 @@ typedef struct _EccHeader
    gint32 neededVersion;       /* oldest version which can decode this file */
    gint32 fpSector;            /* sector used to calculate mediumFP */
    guint32 selfCRC;            /* CRC32 of EccHeader (currently RS02 only) */
-   guint8 crcSum[16];          /* md5sum of crc code section of RS02 .img file  */
+   guint8 crcSum[16];          /* md5sum of crc code section of RS02 .iso file  */
    gint8 padding[3980];        /* pad to 4096 bytes: room for future expansion */
 
   /* Note: Bytes 2048 and up are currently used by the RS02 codec

@@ -74,7 +74,7 @@ static void action_cb(GtkWidget *widget, gpointer data)
       g_free(Closure->imageName);
       Closure->imageName = g_strdup(gtk_entry_get_text(GTK_ENTRY(Closure->imageEntry)));
       if(Closure->autoSuffix)
-      {  Closure->imageName = ApplyAutoSuffix(Closure->imageName, "img");
+      {  Closure->imageName = ApplyAutoSuffix(Closure->imageName, "iso");
 	 gtk_entry_set_text(GTK_ENTRY(Closure->imageEntry), Closure->imageName);
       }
 
@@ -88,7 +88,7 @@ static void action_cb(GtkWidget *widget, gpointer data)
 	 gtk_entry_set_text(GTK_ENTRY(Closure->eccEntry), Closure->eccName);
       }
 
-      /* Transform foo00.[img|ecc] into foo.[img|ecc] when in filesplit mode */
+      /* Transform foo00.[iso|ecc] into foo.[iso|ecc] when in filesplit mode */
 
       if(Closure->splitFiles)
       {  remove_the_00s(Closure->imageName);
@@ -155,7 +155,7 @@ static void action_cb(GtkWidget *widget, gpointer data)
         break;
 
       case ACTION_COMPARE:  
-	/* If something is wrong with the .img or .ecc files
+	/* If something is wrong with the .iso or .ecc files
 	   we fall back to the RS01 method for comparing since it is robust
 	   against missing files. */
 	if(!(method = EccFileMethod(FALSE)))

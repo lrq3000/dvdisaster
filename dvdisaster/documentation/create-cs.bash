@@ -734,12 +734,12 @@ některými mechanikami pro DVD-RW/+RW média.
  
 <b>Automatická přípona souborů<font color="red">(1)</font>:</b>
 Pokud je tento přepínač nastaven, soubory dostanou automaticky
-přípony ".img" nebo ".ecc", pokud dosud není přípona v názvu přítomna.<p>
+přípony ".iso" nebo ".ecc", pokud dosud není přípona v názvu přítomna.<p>
 
 <b>Rozdělení souborů na segmenty<font color="red">(2)</font>:</b>
 Umožňuje pracovat se souborovými systémy, které jsou omezeny na 2 GB na soubor
 (t.j. FAT z Windows). Vytvořené soubory jsou rozprostřeny přes až 100 segmentů
-nazvaných "medium00.img", "medium01.img" atd. za cenu malého snížení výkonu.<p>
+nazvaných "medium00.iso", "medium01.iso" atd. za cenu malého snížení výkonu.<p>
 
 <p><hr><p>
 
@@ -1313,7 +1313,7 @@ právně závazná licence je uvedena v souboru "COPYING".<p>
 Zařízení: /dev/cdrom, HL-DT-STDVDRAM GSA-4165B DL04<br>
 Médium: DVD-R, 2287168 sektorů, 1 vrstva(y)<p>
 
-Vytváření nového obrazu medium.img.<br>
+Vytváření nového obrazu medium.iso.<br>
 Čekám 5 sekund na roztočení disku...<br>
 Pozice čtení: 100.0% (10.2x)<br>
 Všechny sektory byly úspěšně načteny.
@@ -1322,11 +1322,11 @@ Všechny sektory byly úspěšně načteny.
 V průběhu čtení se bude zobrazovat počet načtených sektorů v procentech
 a aktuální rychlost mechaniky.<p>
 
-Po dokončení najdete soubor obrazu <i>medium.img</i> v aktuálním adresáři:<p>
+Po dokončení najdete soubor obrazu <i>medium.iso</i> v aktuálním adresáři:<p>
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>ls -lA</b><br>
--rwx------    1 user     linux    4555341824 2004-07-02 21:31 medium.img<br>
+-rwx------    1 user     linux    4555341824 2004-07-02 21:31 medium.iso<br>
 </td></tr></table><p>
 
 Ve výchozím nastavení se čte z mechaniky <i>/dev/cdrom</i> a vytváří se
@@ -1355,7 +1355,7 @@ user@linux&gt; <b>dvdisaster -c</b><br>
 dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
 <i>[... zbytek oznámení GPL ...]</i><p>
 
-Otevírání medium.img: 2224288 sektorů média.<br>
+Otevírání medium.iso: 2224288 sektorů média.<br>
 Skenuji sektory obrazu: 100%<br>
 Kódování metodou RS01: 32 kořenů, redundance 14.3%.<br>
 Tvorba ecc: 100.0%<br>
@@ -1381,13 +1381,13 @@ Po dokončení se objeví v aktuálním adresáři soubor oprav chyb <i>medium.e
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>ls -lA</b><br>
 -rwx------    1 user     linux    653721680 2004-07-02 22:45 medium.ecc<br>
--rwx------    1 user     linux    4555341824 2004-07-02 21:31 medium.img<br>
+-rwx------    1 user     linux    4555341824 2004-07-02 21:31 medium.iso<br>
 </td></tr></table><p>
 
 Nyní můžete obraz smazat. <p>
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
-user@linux&gt; <b>rm -f medium.img</b><br>
+user@linux&gt; <b>rm -f medium.iso</b><br>
 </td></tr></table><p>
 
 Ale uchovejte soubor oprav chyb na <a href="background60.html">spolehlivém úložném médiu</a>!
@@ -1470,7 +1470,7 @@ Zařízení: /dev/cdrom, HL-DT-STDVDRAM GSA-4165B DL04<br>
 Médium: DVD+R, 2224288 sektorů, 1 vrstva(y)<p>
 
 Adaptivní čtení: Pokouším se shromáždit dostatek dat pro opravu chyb.<br>
-Vytváření nového obrazu medium.img.<br>
+Vytváření nového obrazu medium.iso.<br>
 Opravitelné:  2.6% (opravitelné: 0; nyní načítám [0..2224288], velikost 2224288)<br>
 Sektory 57264-57279: Medium Error; Unrecovered read error.<br>
 Vyplňování oblasti obrazu [57280..1083504]<br>
@@ -1488,7 +1488,7 @@ user@linux&gt; <b>dvdisaster -f</b><br>
 dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
 <i>[... zbytek oznámení GPL ...]</i><p>
 
-Otevírání medium.img: 2224288 sektorů média.<p>
+Otevírání medium.iso: 2224288 sektorů média.<p>
 
 Režim opravy: Opravitelné sektory budou v obrazu opraveny.<br>
 &nbsp;&nbsp;&nbsp;    5 opravených sektorů: 708225 59850 69825 79800 199500 <br>
@@ -1502,7 +1502,7 @@ Počet výmazů na blok ecc:  průměr =  3.3; nejvíce = 7.
 </td></tr></table><p>
 
 Hlášení "V pořádku! Všechny sektory jsou opraveny." potvrzuje, že obraz média
-("medium.img") byl plně obnoven.
+("medium.iso") byl plně obnoven.
 Opravený obraz může  být dále zpracováván jako běžný obraz ". i s o".
 Lze jej zapsat na nové médium za použití vhodného vypalovacího programu
 pro CD/DVD.<p>
@@ -1550,10 +1550,10 @@ Můžete změnit názvy souborů obrazu a oprav chyb pomocí
 <a href="syntax90.html#image">voleb "-i a -e"</a>:<p>
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
-user@linux&gt; dvdisaster <b>-i mujimage.img -e medium01.ecc</b> -c
+user@linux&gt; dvdisaster <b>-i mujimage.iso -e medium01.ecc</b> -c
 </td></tr></table><p>
 
-Je možné vynechat přípony souborů ".img" nebo ".ecc" nebo použít jiné.
+Je možné vynechat přípony souborů ".iso" nebo ".ecc" nebo použít jiné.
 EOF
 }
 
@@ -1566,7 +1566,7 @@ Program dvdisaster může provést několik <a href="syntax90.html#modes">akcí<
 v rámci jednoho spuštění programu.<br>
 Například pro načtení obrazu z <tt>/dev/hdc</tt>,
 vytvoření jemu odpovídajícímu souboru oprav chyb "medium42.ecc"
-a nakonec smazání dočasného souboru obrazu "medium.img", zadáte:<p>
+a nakonec smazání dočasného souboru obrazu "medium.iso", zadáte:<p>
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; dvdisaster <b>-r -c -u</b> -d /dev/hdc -e medium42.ecc
@@ -1613,7 +1613,7 @@ v dlouhé formě, pokud není zmíněno jinak.<p>
 
 <table>
 <tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#adaptiveread">--adaptive-read</a></td><td>Použít adaptivní strategii čtení poškozených médií</td></tr>
-<tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#autosuffix">--auto-suffix</a></td><td>Automaticky doplnit souborové přípony .img a .ecc</td></tr>
+<tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#autosuffix">--auto-suffix</a></td><td>Automaticky doplnit souborové přípony .iso a .ecc</td></tr>
 <tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#cache">--cache-size</a> &nbsp; &nbsp;</td><td>Velikost vyrovnávací paměti v průběhu vytváření souboru oprav chyb</td></tr>
 <tr valign=top><td></td><td><a href="#dao">--dao</a></td><td>Předpokládat médium zapsané v režimu "disk at once"</td></tr>
 <tr valign=top><td></td><td><a href="#fillunreadable">--fill-unreadable [n]</a></td><td>Vyplnit nečitelné sektory daným bajtem</td></tr>
@@ -1740,13 +1740,13 @@ standard MMC3, na které lze odkazovat pomocí písmena disku v systému.
 <a name="prefix"><b>--prefix &lt;název&gt;: Název pro soubory obrazu a oprav chyb</b></a><p>
 
 Přednastavený název je "medium"; soubor obrazu a soubor oprav chyb automaticky dostanou
-přípony ".img" a ".ecc".
+přípony ".iso" a ".ecc".
 
 <div align=right><a href="#drive">&uarr;</a></div><p>
 
 <a name="image"><b>--image &lt;název souboru&gt;: Název souboru obrazu</b></a><p>
 
-Přednastavený název je "medium.img"; zadaný název souboru bude použit pro soubor obrazu
+Přednastavený název je "medium.iso"; zadaný název souboru bude použit pro soubor obrazu
 přesně (bez přidání přípony), pokud není zadána také volba <a href="#autosuffix">--auto-suffix</a>.
 
 <div align=right><a href="#drive">&uarr;</a></div><p>
@@ -1806,11 +1806,11 @@ pro opravu obrazu média.
 
 
 
-<a name="autosuffix"><b>--auto-suffix: Automaticky doplnit souborové přípony .img a .ecc</b></a><p>
+<a name="autosuffix"><b>--auto-suffix: Automaticky doplnit souborové přípony .iso a .ecc</b></a><p>
 
 Pokud je tato volba zadána, k názvům souborů zadaných volbami
 <a href="#image">-i/--image</a>- nebo <a href="#eccfile">-e/--eccfile</a>
-bude automaticky přidána přípona ".img" respektive ".ecc",
+bude automaticky přidána přípona ".iso" respektive ".ecc",
 pokud dosud není žádná jiná souborová přípona přítomna.
 
 <div align=right><a href="#options">&uarr;</a></div><p>
@@ -2005,11 +2005,11 @@ Pokud není zadána volitelná hodnota [n], program dvdisaster bude čekat 5 sek
 
 Umožňuje tvorbu velkých obrazů a souborů oprav chyb na souborových
 systémech s omezením na 2 GB na soubor (t.j. FAT z Windows).
-Soubory jsou rozprostřeny až do 100 segmentů "medium00.img", "medium01.img" atd.
+Soubory jsou rozprostřeny až do 100 segmentů "medium00.iso", "medium01.iso" atd.
 za cenu mírného snížení výkonu.<p>
 
 Název souboru musí být stále zadán jako
-"medium.img" s použitím volby <a href="#image">--image</a>;
+"medium.iso" s použitím volby <a href="#image">--image</a>;
 číslování bude automaticky vloženo, je-li tento přepínač aktivní.<p>
 
 <div align=right><a href="#options">&uarr;</a></div><p>

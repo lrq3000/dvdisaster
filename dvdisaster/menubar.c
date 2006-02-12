@@ -308,7 +308,7 @@ static void file_select_cb(GtkWidget *widget, gpointer data)
 	 g_free(Closure->imageName);
 	 Closure->imageName = g_strdup(gtk_file_selection_get_filename(GTK_FILE_SELECTION(Closure->imageFileSel)));
 	 if(Closure->autoSuffix)
-	   Closure->imageName = ApplyAutoSuffix(Closure->imageName, "img");
+	   Closure->imageName = ApplyAutoSuffix(Closure->imageName, "iso");
 	 gtk_entry_set_text(GTK_ENTRY(Closure->imageEntry), Closure->imageName);
 	 gtk_editable_set_position(GTK_EDITABLE(Closure->imageEntry), -1);
 	 gtk_widget_hide(Closure->imageFileSel);
@@ -392,7 +392,7 @@ static void suffix_cb(GtkWidget *widget, gpointer data)
 
    if(!ecc_file)
    {  Closure->imageName = g_strdup(gtk_entry_get_text(GTK_ENTRY(Closure->imageEntry)));
-      Closure->imageName = ApplyAutoSuffix(Closure->imageName, "img");
+      Closure->imageName = ApplyAutoSuffix(Closure->imageName, "iso");
       gtk_entry_set_text(GTK_ENTRY(Closure->imageEntry), Closure->imageName);
    }
    else

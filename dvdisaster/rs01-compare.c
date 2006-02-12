@@ -379,7 +379,7 @@ void RS01Compare(Method *self)
 
    RegisterCleanup(_("Comparison aborted"), cleanup, cc);
 
-   /*** Examine the .img file */
+   /*** Examine the .iso file */
 
    if(Closure->guiMode)
      SetLabelText(GTK_LABEL(wl->cmpHeadline), "<big>%s</big>\n<i>%s</i>",
@@ -665,7 +665,7 @@ void RS01Compare(Method *self)
 	 }
          else
 	 if(memcmp(ii->mediumFP, eh->mediumFP, 16)) 
-	 {    PrintLog(_("* fingerprint match: MISMATCH - .img and .ecc don't belong together!\n"));
+	 {    PrintLog(_("* fingerprint match: MISMATCH - .iso and .ecc don't belong together!\n"));
 	      if(Closure->guiMode)
 	      {  SetLabelText(GTK_LABEL(wl->cmpEccFingerprint), 
 			      _("<span color=\"red\">mismatch</span>"));

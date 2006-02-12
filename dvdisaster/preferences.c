@@ -439,7 +439,7 @@ void CreatePreferencesWindow(void)
       gtk_container_set_border_width(GTK_CONTAINER(vbox2), 10);
       gtk_container_add(GTK_CONTAINER(frame), vbox2);
 
-      button = gtk_check_button_new_with_label(_utf("Automatically add .img and .ecc file suffixes"));
+      button = gtk_check_button_new_with_label(_utf("Automatically add .iso and .ecc file suffixes"));
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->autoSuffix);
       g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_SUFFIX));
       gtk_box_pack_start(GTK_BOX(vbox2), button, FALSE, FALSE, 0);

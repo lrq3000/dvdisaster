@@ -276,6 +276,8 @@ void RandomImage(char *image_name, char *n_sectors)
 
    /*** Open the image file */
 
+   LargeUnlink(image_name);
+
    if(!(image = LargeOpen(image_name, O_RDWR | O_CREAT, IMG_PERMS)))
      Stop(_("Can't open %s:\n%s"),image_name,strerror(errno));
 

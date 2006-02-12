@@ -93,7 +93,7 @@ void FixEcc(void)
 void Compare(void)
 {  Method *method; 
    
-  /* If something is wrong with the .img or .ecc files
+  /* If something is wrong with the .iso or .ecc files
      we fall back to the RS01 method for comparing 
      since it is robust against missing files. */
 
@@ -375,7 +375,7 @@ int main(int argc, char *argv[])
 	           {  Closure->eccName = g_malloc(strlen(optarg)+5);
 		      Closure->imageName = g_malloc(strlen(optarg)+5);
 		      g_sprintf(Closure->eccName,"%s.ecc",optarg);
-		      g_sprintf(Closure->imageName,"%s.img",optarg);
+		      g_sprintf(Closure->imageName,"%s.iso",optarg);
 		   }
 	           break;
          case 'd': if(optarg) 
@@ -520,7 +520,7 @@ int main(int argc, char *argv[])
 
    if(Closure->autoSuffix)
    {  Closure->eccName   = ApplyAutoSuffix(Closure->eccName, "ecc");
-      Closure->imageName = ApplyAutoSuffix(Closure->imageName, "img");
+      Closure->imageName = ApplyAutoSuffix(Closure->imageName, "iso");
    }
 
    /*** Dispatch action depending on mode.
@@ -606,13 +606,13 @@ int main(int argc, char *argv[])
 	     "  dvdisaster -c,--create # Create .ecc information for the medium image.\n"
 	     "  dvdisaster -f,--fix    # Try to fix medium image using .ecc information.\n"
 	     "  dvdisaster -s,--scan   # Scan the medium for read errors.\n"
-	     "  dvdisaster -t,--test   # Test integrity of the .img and .ecc files.\n"
-	     "  dvdisaster -u,--unlink # Delete .img files (when other actions complete)\n\n"));
+	     "  dvdisaster -t,--test   # Test integrity of the .iso and .ecc files.\n"
+	     "  dvdisaster -u,--unlink # Delete .iso files (when other actions complete)\n\n"));
 
       PrintCLI(_("Drive and file specification:\n"
 	     "  -d,--device device     - read from given device   (default: %s)\n"
-	     "  -p,--prefix prefix     - prefix of .img/.ecc file (default: medium.*  )\n"
-	     "  -i,--image  imagefile  - name of image file       (default: medium.img)\n"
+	     "  -p,--prefix prefix     - prefix of .iso/.ecc file (default: medium.*  )\n"
+	     "  -i,--image  imagefile  - name of image file       (default: medium.iso)\n"
 	     "  -e,--ecc    eccfile    - name of parity file      (default: medium.ecc)\n"),
 	     Closure->device);
 
@@ -628,7 +628,7 @@ int main(int argc, char *argv[])
 	     "                           maximum error correction image size (in sectors)\n"
 	     "  -v,--verbose           - more diagnostic messages\n"
 	     "  --adaptive-read        - use optimized strategy for reading damaged media\n"
-	     "  --auto-suffix          - automatically add .img and .ecc file suffixes\n"
+	     "  --auto-suffix          - automatically add .iso and .ecc file suffixes\n"
 	     "  --cache-size n         - image cache size in MB during -c mode (default: 32MB)\n"
 	     "  --dao                  - assume DAO disc; do not trim image end\n"
 	     "  --fill-unreadable n    - fill unreadable sectors with byte n\n"

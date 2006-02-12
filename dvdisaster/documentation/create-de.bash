@@ -599,7 +599,7 @@ Der Fortschritt der Rekonstruktion wird in Prozent angezeigt.<p>
 <ul>
 <li>Die Meldung "Gut! Alle Sektoren wurden repariert." bedeutet, daß das Abbild
 des Datenträgers vollständig wiederhergestellt werden konnte. Das reparierte 
-Abbild läßt sich wie ein normales ". i s o"-Abbild mit einer geeigneten Brennsoftware
+Abbild läßt sich mit einer geeigneten Brennsoftware
 auf einen neuen Datenträger schreiben. 
 <p></li>
 
@@ -748,15 +748,15 @@ die bei DVD-RW/+RW falsche Abbild-Größen zurückmelden.
 
 <b>Dateien automatisch mit Endungen versehen <font color="red">(1)</font>:</b> 
 Dieser Schalter bewirkt, daß Dateien automatisch
-mit den Endungen ".img" oder ".ecc" versehen werden, sofern nicht bereits eine andere Endung
+mit den Endungen ".iso" oder ".ecc" versehen werden, sofern nicht bereits eine andere Endung
 angegeben wurde.<p>
 
 <b>Dateien in Segmente aufteilen <font color="red">(2)</font>:</b> 
 Ermöglicht das Arbeiten mit Dateisystemen, 
 die nur Dateien mit einer Maximalgröße von 2GB zulassen 
 (z.B. FAT unter Windows). <br>
-Anstelle einer einzigen Datei "abbild.img" werden bis zu 100
-Segmente "abbild00.img", "abbild01.img" usw. verwendet; dies kostet
+Anstelle einer einzigen Datei "abbild.iso" werden bis zu 100
+Segmente "abbild00.iso", "abbild01.iso" usw. verwendet; dies kostet
 etwas Geschwindigkeit.<p> 
 
 <p><hr><p>
@@ -1340,7 +1340,7 @@ GNU GENERAL PUBLIC LICENSE aus dem Quelltext.<p>
 Laufwerk: /dev/cdrom, &nbsp;ATAPI DVD+RW 8X4X12 B2K7<br>
 Datenträger: DVD+R, 2224288 Sektoren, 1 Schicht(en)<p>
 
-Erzeuge neues Abbild medium.img.<br>
+Erzeuge neues Abbild medium.iso.<br>
 Warte 5 Sekunden auf das Hochdrehen des Laufwerks...<br>
 Leseposition: 100.0% ( 7.7x)<br>
 Alle Sektoren erfolgreich eingelesen.
@@ -1349,11 +1349,11 @@ Alle Sektoren erfolgreich eingelesen.
 Während des Einlesens werden der Fortschritt in Prozent und die momentane
 Lesegeschwindigkeit des Laufwerks angezeigt. <p>
 
-Anschließend finden Sie im aktuellen Verzeichnis die Abbild-Datei <i>medium.img</i>:<p>
+Anschließend finden Sie im aktuellen Verzeichnis die Abbild-Datei <i>medium.iso</i>:<p>
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>ls -lA</b><br>
--rwx------    1 user     linux    4555341824 2004-07-02 21:31 medium.img<br>
+-rwx------    1 user     linux    4555341824 2004-07-02 21:31 medium.iso<br>
 </td></tr></table><p>
 
 In der Grundeinstellung liest dvdisaster vom Laufwerk <i>/dev/cdrom</i> 
@@ -1381,7 +1381,7 @@ dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnörlich.<br>
 Dies ist freie Software; es gelten die Bedingungen der<br>
 GNU GENERAL PUBLIC LICENSE aus dem Quelltext.<p>
 
-Öffne medium.img: 2224288 Datenträger-Sektoren.<br>
+Öffne medium.iso: 2224288 Datenträger-Sektoren.<br>
 Prüfe Abbild-Sektoren : 100%<br>
 Kodiere mit Methode RS01: 32 Nullstellen, 14.3% Redundanz.<br>
 Kodierungs-Fortschritt: 100.0%<br>
@@ -1408,13 +1408,13 @@ Verzeichnis:<p>
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>ls -lA</b><br>
 -rwx------    1 user     linux    653721680 2004-07-02 22:45 medium.ecc<br>
--rwx------    1 user     linux    4555341824 2004-07-02 21:31 medium.img<br>
+-rwx------    1 user     linux    4555341824 2004-07-02 21:31 medium.iso<br>
 </td></tr></table><p>
 
 Die Abbild-Datei können Sie jetzt löschen, <p>
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
-user@linux&gt; <b>rm -f medium.img</b><br>
+user@linux&gt; <b>rm -f medium.iso</b><br>
 </td></tr></table><p>
 
 aber die Fehlerkorrektur-Datei müssen Sie auf 
@@ -1506,7 +1506,7 @@ Laufwerk: /dev/cdrom, &nbsp;ATAPI DVD+RW 8X4X12 B2K7<br>
 Datenträger: DVD+R, 2224288 Sektoren, 1 Schicht(en)<p>
 
 Angepaßtes Leseverfahren: Versuche genügend Daten für die Fehlerkorrektur zu sammeln.<br>
-Erzeuge neues Abbild medium.img.<br>
+Erzeuge neues Abbild medium.iso.<br>
 Reparierbar:  2.6% (korrigierbar: 0; lese in [0..2224288], Größe 2224288)<br>
 Sektoren 57264-57279: Medium Error; Unrecovered read error.<br>
 Auffüllen des Abbild-Bereichs [57280..1083504]<br>
@@ -1525,7 +1525,7 @@ dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnörlich.<br>
 Dies ist freie Software; es gelten die Bedingungen der<br>
 GNU GENERAL PUBLIC LICENSE aus dem Quelltext.<p>
 
-Öffne medium.img: 2224288 Datenträger-Sektoren.<p>
+Öffne medium.iso: 2224288 Datenträger-Sektoren.<p>
 
 "Fix"-Modus: Reparierbare Sektoren werden im Abbild wiederhergestellt.<br>
 &nbsp;&nbsp;&nbsp;    5 reparierte Sektoren: 708225 59850 69825 79800 199500 <br>
@@ -1539,9 +1539,8 @@ Auslöschungen pro Ecc-Bereich: Mittelwert =  3.3; Schlechtester = 7.
 </td></tr></table><p>
 
 Die Meldung "Gut! Alle Sektoren wurden repariert." bedeutet, daß das Abbild
-des Datenträgers ("medium.img") vollständig wiederhergestellt werden konnte. 
-Das reparierte Abbild läßt sich wie ein 
-normales ". i s o"-Abbild mit einer geeigneten Brennsoftware
+des Datenträgers ("medium.iso") vollständig wiederhergestellt werden konnte. 
+Das reparierte Abbild läßt sich mit einer geeigneten Brennsoftware
 auf einen neuen Datenträger schreiben.<p>
 
 Wenn unkorrigierbare Sektoren übrigbleiben, lesen Sie das Abbild erneut 
@@ -1588,10 +1587,10 @@ mit Hilfe der <a href="syntax90.html#image">"-i bzw. -e" - Optionen</a>
 festlegen:<p> 
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
-user@linux&gt; dvdisaster <b>-i abbild.img -e korrektur.ecc</b> -c
+user@linux&gt; dvdisaster <b>-i abbild.iso -e korrektur.ecc</b> -c
 </td></tr></table><p>
 
-Die Dateiendungen ".img" bzw. ".ecc" können auch entfallen oder
+Die Dateiendungen ".iso" bzw. ".ecc" können auch entfallen oder
 durch etwas anderes ersetzt werden. 
 EOF
 }
@@ -1604,7 +1603,7 @@ function syntax70de()
 dvdisaster erlaubt es, mehrere <a href="syntax90.html#modes">Aktionen</a>
 in einem Aufruf zusammenzufassen. <br>Um beispielsweise ein Abbild von <tt>/dev/hdc</tt>
 einzulesen, dazu eine Fehlerkorrektur-Datei "korrektur42.ecc" zu erzeugen und zum Schluß
-die temporäre Abbild-Datei "medium.img" wieder zu löschen, geben Sie ein:<p>
+die temporäre Abbild-Datei "medium.iso" wieder zu löschen, geben Sie ein:<p>
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; dvdisaster <b>-r -c -u</b> -d /dev/hdc -e korrektur42.ecc
@@ -1650,7 +1649,7 @@ sofern nicht anders angegeben.<p>
 
 <table>
 <tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#adaptiveread">--adaptive-read</a></td><td>Angepaßtes Leseverfahren für defekte Datenträger verwenden</td></tr>
-<tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#autosuffix">--auto-suffix</a></td><td>Automatisches Anfügen der .img- und .ecc-Dateiendungen</td></tr>
+<tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#autosuffix">--auto-suffix</a></td><td>Automatisches Anfügen der .iso- und .ecc-Dateiendungen</td></tr>
 <tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#cache">--cache-size</a></td><td>Zwischenspeicher-Größe während der Fehlerkode-Berechnung</td></tr>
 <tr valign=top><td></td><td><a href="#dao">--dao</a></td><td>Behandelt Datenträger als "disk at once"</td></tr>
 <tr valign=top><td></td><td><a href="#fillunreadable">--fill-unreadable [n]</a></td><td>fülle unlesbare Sektoren mit Byte n auf</td></tr>
@@ -1785,13 +1784,13 @@ implementieren und mit einem Laufwerksbuchstaben im System erscheinen.
 <a name="prefix"><b>--prefix &lt;Präfix&gt;: Präfix für Abbild- und Fehlerkorrektur-Datei</b></a><p>
 
 Voreingestellt ist "medium"; die Abbild- und Fehlerkorrekturdateien erhalten automatisch
-die Endungen ".img" bzw. ".ecc".
+die Endungen ".iso" bzw. ".ecc".
 
 <div align=right><a href="#drive">&uarr;</a></div><p>
 
 <a name="image"><b>--image &lt;Dateiname&gt;: Name der Abbild-Datei</b></a><p>
 
-Voreingestellt ist "medium.img"; der angegebene Dateiname wird genau (ohne automatisches
+Voreingestellt ist "medium.iso"; der angegebene Dateiname wird genau (ohne automatisches
 Anfügen einer Endung) für die Abbild-Datei übernommen, 
 sofern die <a href="#autosuffix">--auto-suffix</a>--Option nicht ebenfalls verwendet wird.
 
@@ -1855,9 +1854,9 @@ Abbildes eingelesen worden sind.
 
 
 
-<a name="autosuffix"><b>--auto-suffix: Automatisches Anfügen der .img- und .ecc-Dateiendungen</b></a><p>
+<a name="autosuffix"><b>--auto-suffix: Automatisches Anfügen der .iso- und .ecc-Dateiendungen</b></a><p>
 
-Diese Option bewirkt, daß an die mit den <a href="#image">-i/--image</a>- bzw. <a href="#eccfile">-e/--eccfile</a>-Optionen angegebenen Dateinamen die Endungen ".img" bzw. ".ecc" angehängt werden,
+Diese Option bewirkt, daß an die mit den <a href="#image">-i/--image</a>- bzw. <a href="#eccfile">-e/--eccfile</a>-Optionen angegebenen Dateinamen die Endungen ".iso" bzw. ".ecc" angehängt werden,
 sofern nicht bereits eine andere Endung vorhanden ist.
 
 <div align=right><a href="#options">&uarr;</a></div><p>
@@ -2060,11 +2059,11 @@ Ermöglicht das Anlegen von Abbildern und Fehlerkorrektur-Dateien
 auf Dateisystemen, 
 die nur Dateien mit einer Maximalgröße von 2GB zulassen 
 (z.B. FAT unter Windows). <br>
-Anstelle einer einzigen Datei "abbild.img" werden bis zu 100
-Segmente "abbild00.img", "abbild01.img" usw. verwendet; dies kostet
+Anstelle einer einzigen Datei "abbild.iso" werden bis zu 100
+Segmente "abbild00.iso", "abbild01.iso" usw. verwendet; dies kostet
 etwas Geschwindigkeit.<p> 
 
-Geben Sie weiterhin den Dateinamen als "abbild.img" bei der <a href="#image">--image</a>-Option an; 
+Geben Sie weiterhin den Dateinamen als "abbild.iso" bei der <a href="#image">--image</a>-Option an; 
 die Nummern werden automatisch hinzugefügt, wenn dieser Schalter aktiv ist.<p>
 
 <div align=right><a href="#options">&uarr;</a></div><p>

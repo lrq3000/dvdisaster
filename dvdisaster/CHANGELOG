@@ -1,3 +1,7 @@
+0.65 (devel-4) 12-02-2006
+	- renamed .img files to .iso files to facilitate easier
+	  interoperability between RS02 ecc images and burning software
+
 0.65 (devel-3) 11-02-2006
 	- Creation of image and ecc files can be resumed after going
 	  out of disc space (only in GUI mode)

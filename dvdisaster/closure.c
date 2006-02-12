@@ -331,7 +331,7 @@ void InitClosure()
 
    Closure->deviceNames = g_ptr_array_new();
    Closure->deviceNodes = g_ptr_array_new();
-   Closure->imageName   = g_strdup("medium.img");
+   Closure->imageName   = g_strdup("medium.iso");
    Closure->eccName     = g_strdup("medium.ecc");
    Closure->browser     = g_strdup("gnome-open");
    Closure->methodList  = g_ptr_array_new();

@@ -596,8 +596,7 @@ The repairing progress will be shown in percent.<p>
 
 <ul>
 <li>The message "Good! All sectors are repaired." confirms that the medium image
-has been fully recovered. The repaired image can be handled like an ordinary ". i s o" image.
-It can be written to a new
+has been fully recovered. The repaired image can be written to a new
 medium using a suitable CD/DVD recording software. <p></li>
 
 <li>If uncorrectable sectors remain after this stage, try reading the image again
@@ -740,12 +739,12 @@ with DVD-RW/+RW media.
  
 <b>Automatic file name extension<font color="red">(1)</font>:</b>
 When this switch is set, files will be automatically appended
-with ".img" or ".ecc" suffixes if no other file name extension is already present.<p>
+with ".iso" or ".ecc" suffixes if no other file name extension is already present.<p>
 
 <b>Split file into segments <font color="red">(2)</font>:</b>
 Allows working with file systems which are limited to 2GB per file
 (e.g. FAT from Windows). Created files are spread over upto 100 segments called 
-"medium00.img", "medium01.img" etc. at the cost of a small performance hit.<p>
+"medium00.iso", "medium01.iso" etc. at the cost of a small performance hit.<p>
 
 <p><hr><p>
 
@@ -1318,7 +1317,7 @@ See the file "COPYING" for further information.<p>
 Device: /dev/cdrom, &nbsp;ATAPI DVD+RW 8X4X12 B2K7<br>
 Medium: DVD+R, 2224288 sectors, 1 layer(s)<p>
 
-Creating new medium.img image.<br>
+Creating new medium.iso image.<br>
 Waiting 5 seconds for drive to spin up...<br>
 Read position: 100.0% ( 6.3x)<br>
 All sectors successfully read.
@@ -1327,11 +1326,11 @@ All sectors successfully read.
 The percentage of already read sectors and the current drive speed
 will be shown during the process.<p>
 
-Upon completion you will find the image file <i>medium.img</i> in the current directory:<p>
+Upon completion you will find the image file <i>medium.iso</i> in the current directory:<p>
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>ls -lA</b><br>
--rwx------    1 user     linux    4555341824 2004-07-02 21:31 medium.img<br>
+-rwx------    1 user     linux    4555341824 2004-07-02 21:31 medium.iso<br>
 </td></tr></table><p>
 
 The default setting is to read from drive <i>/dev/cdrom</i> and to create 
@@ -1359,7 +1358,7 @@ user@linux&gt; <b>dvdisaster -c</b><br>
 dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
 <i>[... remainder of the GPL announcement ...]</i><p>
 
-Opening medium.img: 2224288 medium sectors.<br>
+Opening medium.iso: 2224288 medium sectors.<br>
 Scanning image sectors: 100%<br>
 Encoding with Codec RS01: 32 roots, 14.3% redundancy.<br>
 Ecc generation: 100.0%<br>
@@ -1385,13 +1384,13 @@ When finished, the error correction file <i>medium.ecc</i> appears in the curren
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>ls -lA</b><br>
 -rwx------    1 user     linux    653721680 2004-07-02 22:45 medium.ecc<br>
--rwx------    1 user     linux    4555341824 2004-07-02 21:31 medium.img<br>
+-rwx------    1 user     linux    4555341824 2004-07-02 21:31 medium.iso<br>
 </td></tr></table><p>
 
 You can remove the image file now, <p>
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
-user@linux&gt; <b>rm -f medium.img</b><br>
+user@linux&gt; <b>rm -f medium.iso</b><br>
 </td></tr></table><p>
 
 but keep the error correction file on a <a href="background60.html">reliable storage medium</a>!
@@ -1480,7 +1479,7 @@ Device: /dev/cdrom, &nbsp;ATAPI DVD+RW 8X4X12 B2K7<br>
 Medium: DVD+R, 2224288 sectors, 1 layer(s)<p>
 
 Adaptive reading: Trying to collect enough data for error correction.<br>
-Creating new medium.img image.<br>
+Creating new medium.iso image.<br>
 Repairable:  2.6% (correctable: 0; now reading [0..2224288], size 2224288)<br>
 Sectors 57264-57279: Medium Error; Unrecovered read error.<br>
 Filling image area [57280..1083504]<br>
@@ -1498,7 +1497,7 @@ user@linux&gt; <b>dvdisaster -f</b><br>
 dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
 <i>[... remainder of the GPL announcement ...]</i><p>
 
-Opening medium.img: 2224288 medium sectors.<p>
+Opening medium.iso: 2224288 medium sectors.<p>
 
 Fix mode: Repairable sectors will be fixed in the image.<br>
 &nbsp;&nbsp;&nbsp;    5 repaired sectors: 708225 59850 69825 79800 199500 <br>
@@ -1512,9 +1511,8 @@ Erasure counts per ecc block:  avg =  3.3; worst = 7.
 </td></tr></table><p>
 
 The message "Good! All sectors are repaired." confirms that the medium image
-("medium.img") has been fully recovered. 
-The repaired image can be handled like an ordinary ". i s o" image.
-It can be written to a new
+("medium.iso") has been fully recovered. 
+The repaired image can be written to a new
 medium using a suitable CD/DVD recording software.<p>
 
 If uncorrectable sectors remain after this stage, 
@@ -1559,10 +1557,10 @@ You can change the names of image and error correction files
 using the <a href="syntax90.html#image">"-i and -e" - options</a>:<p>
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
-user@linux&gt; dvdisaster <b>-i myimage.img -e medium01.ecc</b> -c
+user@linux&gt; dvdisaster <b>-i myimage.iso -e medium01.ecc</b> -c
 </td></tr></table><p>
 
-It is possible to omit the file suffixes ".img" bzw. ".ecc" 
+It is possible to omit the file suffixes ".iso" bzw. ".ecc" 
 or to use other file endings.
 EOF
 }
@@ -1576,7 +1574,7 @@ dvdisaster can execute several <a href="syntax90.html#modes">actions</a>
 within one program invocation.<br>
 For example, to read an image from <tt>/dev/hdc</tt>,
 create an error correction file "medium42.ecc" for it and
-finally delete the temporary image file "medium.img", enter:<p>
+finally delete the temporary image file "medium.iso", enter:<p>
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; dvdisaster <b>-r -c -u</b> -d /dev/hdc -e medium42.ecc
@@ -1622,7 +1620,7 @@ long form unless noted otherwise.<p>
 
 <table>
 <tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#adaptiveread">--adaptive-read</a></td><td>use adaptive strategy for reading damaged media</td></tr>
-<tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#autosuffix">--auto-suffix</a></td><td>automatically add .img and .ecc file suffixes</td></tr>
+<tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#autosuffix">--auto-suffix</a></td><td>automatically add .iso and .ecc file suffixes</td></tr>
 <tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#cache">--cache-size</a> &nbsp; &nbsp;</td><td>Cache size during creation of the error correction file</td></tr>
 <tr valign=top><td></td><td><a href="#dao">--dao</a></td><td>Assumes "disk at once" medium</td></tr>
 <tr valign=top><td></td><td><a href="#fillunreadable">--fill-unreadable [n]</a></td><td>fill unreadable sectors with given byte</td></tr>
@@ -1752,13 +1750,13 @@ and which are referenced through a drive letter in the system.
 <a name="prefix"><b>--prefix &lt;prefix&gt;: Prefix for image and error correction files</b></a><p>
 
 The preset is "medium"; the image and error correction files will automatically receive the
-endings ".img" and ".ecc".
+endings ".iso" and ".ecc".
 
 <div align=right><a href="#drive">&uarr;</a></div><p>
 
 <a name="image"><b>--image &lt;file name&gt;: Name of image file</b></a><p>
 
-The preset is "medium.img"; the specified file name will be used exactly (without appending a suffix)
+The preset is "medium.iso"; the specified file name will be used exactly (without appending a suffix)
 for the image file
 as long as <a href="#autosuffix">--auto-suffix</a> is not specified also.
 
@@ -1820,11 +1818,11 @@ collected for recovering the medium image.
 
 
 
-<a name="autosuffix"><b>--auto-suffix: automatically add .img and .ecc file suffixes</b></a><p>
+<a name="autosuffix"><b>--auto-suffix: automatically add .iso and .ecc file suffixes</b></a><p>
 
 When this option is given, file names specified by the
 <a href="#image">-i/--image</a>- or <a href="#eccfile">-e/--eccfile</a> option
-will be automatically appended with ".img" or ".ecc" respectively
+will be automatically appended with ".iso" or ".ecc" respectively
 if no other file name extension is already present.
 
 <div align=right><a href="#options">&uarr;</a></div><p>
@@ -2019,10 +2017,10 @@ If the optional value [n] is not given, dvdisaster will wait for 5 seconds.
 
 Allows the creation of large images and error correction files 
  on file systems which are limited to 2GB per file
-(e.g. FAT from Windows). The files are spread over upto 100 segments "medium00.img", "medium01.img" etc. at the cost of a small performance hit.<p>
+(e.g. FAT from Windows). The files are spread over upto 100 segments "medium00.iso", "medium01.iso" etc. at the cost of a small performance hit.<p>
 
 The file name must still be specified as
-"medium.img" using the <a href="#image">--image</a> option; 
+"medium.iso" using the <a href="#image">--image</a> option; 
 the numbering will be automatically inserted when this switch is active.<p>
 
 <div align=right><a href="#options">&uarr;</a></div><p>

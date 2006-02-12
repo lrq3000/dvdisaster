@@ -27,7 +27,7 @@
 #include "rs01-includes.h"
 
 /***
- *** Read an image sector from the .img file.
+ *** Read an image sector from the .iso file.
  ****
  * Two special cases here:
  * - Missing sectors (beyond the range recorded in eh->sectors) will be padded with zeros,
