@@ -94,7 +94,7 @@ achieve an equal distribution of
 medium read errors over all error correction blocks.<p>
 
 Upto 32 read errors can be compensated per error correction block (green line)
-when the <a href="example93.html#redundancy">standard settings</a> are used.
+when the <a href="example83.html#redundancy">standard settings</a> are used.
 Exceeding this line means that the medium contents can not be fully recovered.
 
 </tr></td>
@@ -134,15 +134,17 @@ dvdisaster provides a margin of safety against <b>data loss</b> on
 by <b>aging</b> or <b>scratches</b>.  
 
 <ul>
-<li>dvdisaster creates <b>error correction codes</b> to compensate
+<li>dvdisaster creates <b>error correction data</b> to compensate
 read errors which are not correctable in the CD/DVD drive.<p></li>
 <li>dvdisaster tries to read as much data as possible from defective media.
 Afterwards unreadable sectors are recovered using the previously created
-error correction code. The maximum error correction capacity is user-selectable.
+error correction data. The maximum error correction capacity is user-selectable.<p>
 </li>
+<li>dvdisaster operates at the <a href="background20.html">image level</a> 
+and does not depend on the file system.</li>
 </ul>
 
-If you create the error correction code file in time and keep it at a safe place,
+If you create the error correction data in time and keep it at a safe place,
 you have a good chance of recovering the medium contents from typical read errors
 and to transfer your complete data onto a new medium.
 
@@ -170,7 +172,7 @@ a bit exaggerated due to reflections from the photoflash.<p>
 A surface scan of the medium yields about 135.000 unreadable sectors
 (of 2.200.000 total, giving about 6% defective sectors).
 During the <a href="example50.html">recovery</a> of the medium image
-(using <a href="example93.html#redundancy">standard settings</a>)
+(using <a href="example83.html#redundancy">standard settings</a>)
 a maximum of 22 errors per <a href="background10.html">ECC block</a> is counted
 which equals to a 69% load of the error correction under the applied settings.<p>
 
@@ -234,10 +236,11 @@ only when they are really defective.</li>
 
 <h3>Limitations of using dvdisaster:</h3>
 <ul>
-<li>Error correction file <b>must be created before the medium fails</b>.<p></li>
-<li>Error correction files require <b>additional storage space</b> and
-must be stored on reliable media.
-Using the <a href="example93.html#redundancy">standard settings</a> the additional
+<li>Error correction data <b>must be created before the medium fails</b>, 
+preferably at the same time the medium is written.<p></li>
+<li>Error correction data requires <b>additional storage space</b> either on the protected 
+medium or by using additional media. 
+Using the <a href="example83.html#redundancy">standard settings</a> the additional
 storage space amounts to 15% of the original data size
 (approx. 700MB for a full 4.7GB DVD).<p></li>
 <li><a href="background10.html">no guaranteed protection</a> against data loss.</li>
@@ -259,250 +262,123 @@ function example_contents_en()
    case $query in
    title)   title="Examples" ;;
 
-   link)    link_title="Examples and screen shots" ;;
-   link10)   link_title="Invoking the graphical user interface" ;;
-   link20)   link_title="Creating a medium image" ;;
-   link30)   link_title="Generating error correction files" ;;
-   link40)   link_title="Scanning a medium for errors" ;;
-   link50)   link_title="Recovering a medium image" ;;
-   link60)   link_title="Compare image against error correction data" ;;
+   link)    link_title="Examples" ;;
 
-   link90)   link_title="Configuration" ;;
-   link91)   link_title="General" ;;
-   link92)   link_title="Reading" ;;
-   link93)   link_title="Error correction" ;;
+   link10)   link_title="Scanning a medium for errors" ;;
+
+   link20)   link_title="Generating error correction data" ;;
+   link21)   link_title="as a file" ;;
+   link22)   link_title="within the image" ;;
+
+   link30)   link_title="Creating images from defective media" ;;
+   link40)   link_title="Recovering a medium image" ;;
+   link50)   link_title="Compare image against error correction data" ;;
+
+   link80)   link_title="Configuration" ;;
+   link81)   link_title="General" ;;
+   link82)   link_title="Reading" ;;
+   link83)   link_title="Error correction" ;;
+
+   link90)   link_title="Command syntax" ;;
 
    content*) eval "example$page$lang $file" ;;
    esac 
 }
 
-
 function example0en()
 {  cat >> $1 <<EOF
-<h3>Examples</h3>
-The following pages contain a guided tour through dvdisaster:
+<h3>Which topics are you interested in?</h3>
 
-<ol>
-<li><a href="example10.html">Invoking the graphical user interface</a><p></li>
-<li><a href="example20.html">Creating the medium image</a><p></li>
-<li><a href="example30.html">Generating the error correction file</a><p></li>
-<li><a href="example40.html">Scanning the medium for errors</a><p></li>
-<li><a href="example50.html">Recovering the medium image</a><p></li>
-<li><a href="example60.html">Comparing the image against error correction data</a><p></li>
-</ol>
+<table>
+<tr>
+<td valign="top">
+  <a href="example10.html"><b>Scanning a medium</b></a><br>
+  The medium scan analyzes the
+  reading speed and readability.
+</td>
+<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">
+ <a href="example20.html"><b>Creating error correction data.</b></a><br>
+Error correction data can be appended to an image
+or exist as a separate file.
+</td>
+</tr>
+<tr>
+<td>
+<a href="example1.html">
+  <img src="../images/ex-scan-en.png" border=0 width=275>
+</a>
+</td>
+<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td>
+<a href="example3.html#ecc">
+  <img src="../images/ex-create-en.png" border=0 width=264>
+</a>
+</td>
+</tr>
+
+<tr><td colspan=3>&nbsp;</td></tr>
+
+<tr>
+<td valign="top">
+  <a href="example30.html"><b>Reading a defective medium.</b></a><br>
+  An optimized <a href="background50.html">reading strategy</a>
+  extracts data from defective media.
+</td>
+<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td>
+  <a href="example40.html"><b>Repairing a medium.</b></a><br>
+  Unreadable sectors are reconstructed  from
+  <a href="example20.html">error correction data</a>.
+</td>
+</tr>
+<tr>
+<td>
+<a href="example4.html">
+  <img src="../images/ex-read-a-en.png" border=0 width=264>
+</a>
+</td>
+<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td>
+<a href="example5.html">
+  <img src="../images/ex-fix-en.png" border=0 width=264>
+</a>
+</td>
+</tr>
+</table>
+
 <pre> </pre>
 
 Additional topics: 
 
 <ul>
-<li><a href="example90.html">Configuration</a><p></li>
+<li><a href="example50.html">Getting information about image and error correction data</a><p></li>
+
+<li><a href="example80.html">Configuration (graphical interface)</a><p></li>
 
 <ul>
-<li><a href="example91.html">General settings</a><p></li>
-<li><a href="example92.html">Reading preferences</a><p></li>
-<li><a href="example93.html">Error correction settings</a><p></li>
+<li><a href="example81.html">General settings</a><p></li>
+<li><a href="example82.html">Reading preferences</a><p></li>
+<li><a href="example83.html">Error correction settings</a><p></li>
 </ul>
 
-<li><a href="background60.html">Hints for storing the error correction files</a></li>
+<li><a href="example90.html">Command line syntax</a><p></li>
+
+<li><a href="background70.html">Hints for storing the error correction files</a></li>
 </ul>
 EOF
 }
 
-function example10en()
-{  
-cat >> $1 <<EOF
-<h3>Invoking the graphical user interface</h3>
 
-dvdisaster will open the graphical user interface automatically<br>
-when you click at the dvdisaster program icon from your windowing system.<p>
-
-After a short loading time the initial dvdisaster window will appear:<p>
-
-<img src="../images/ex-start-en.png" alt="Start screen"><p>
-
-<b>General hints:</b>
-
-<ul>
-<li>The visual appearance of window elements depends on the operating system
-and the personal settings for the windowing system.<p></li>
-<li>dvdisaster does also provide a <a href="syntax10.html">command line mode</a>.<p></li>
-<li>When dvdisaster is invoked in the graphical mode, a configuration file
-<i>.dvdisaster</i> will be created for storing the selections made in the
-<a href="example90.html">preferences dialog</a>. When this file exists,
-command line parameters cease to have an effect in the graphical mode.<p>
-
-</ul>
-
-<b>Hints for the Windows version:</b>
-
-<ul>
-<li>Under Windows 2000 and XP either <b>administrator priviledges</b> or an installed
-<a href="qa10.html#aspi">ASPI</a> driver are required in order to access the CD/DVD drives.<p></li>
-<li>For technical reasons there are two program versions for Windows:
-<table>
-<tr><td><i>dvdisaster<b>-win</b>.exe</i></td><td>--</td><td>contains the graphical user interface</td></tr>
-<tr><td><i>dvdisaster.exe</i></td><td>--</td><td>provides the command line interface</td></tr>
-</table>
-</li>
-</ul>
-
-<a href="example20.html">Creating the medium image...</a>
-EOF
-}
-
-
-function example20en()
+function example1en()
 {  cat >> $1 <<EOF
-<h3>Creating the medium image</h3>
 
-Most actions of dvdisaster are performed on a medium image residing on your hard drive.
-This makes things faster and reduces wear of your CD/DVD drive.<p>
-
-Please follow these steps to create a medium image (see also the respective
-markings in the screen shot):<p>
-
-<b>1. Select the drive  <font color="red">(1)</font> 
-where the CD or DVD has been inserted.</b><p>
-
-The Linux version currently only provides those drives for selection
-which are contained in the /dev directory. A more flexible selection
-scheme will be introduced in a later program version.<p>
-
-
-<b>2. Select a name for the image file.</b><p>
-
-Click on the
-<img src="../images/open-img.png" alt="Image file selection" align="middle"> symbol 
-<font color="red">(2a)</font>
-to bring up a window for selecting the image file name.<br>
-As a shortcut the file name can also be entered directly into 
-the text field <font color="red">(2b)</font>.<p>
-
-Make sure to have enough free disk space for the image. Activate the
-<a href="example91.html#localfiles">split file option</a> if your file system 
-does not support files larger than 2GB.<p>
-
-<b>3. Read the medium image into the file.</b><p>
-
-Click on the "Read" button <font color="red">(3)</font>
-to start the reading process.<p>
-
-<hr>
-Screen shot: Reading the image
-<hr>
-<img src="../images/ex-read-en.png" alt="Reading the image"><p>
-<hr>
-
-
-The reading progress will be shown in the graphical representation.<p>
-
-Clicking on the
-<img src="../images/btn-protocol-en.png" alt="Protokoll" align="middle"> symbol
-provides additional information on the reading process.<p>
-
-<a href="example30.html">Generating the error correction file...</a>
-EOF
-}
-
-
-function example30en()
-{  cat >> $1 <<EOF
-<h3>Generating the error correction file</h3>
-
-The error correction file has an important role in dvdisaster:<br>
-It is required to recover unreadable medium sectors.<p>
-
-When you have created the
-<a href="example20.html">medium image</a> on your hard disk, 
-perform the following actions:<p>
-
-<b>1. Choose the image file <font color="red">(1)</font>.</b><p>
-
-The previously read image file will be pre-selected.<p>
-
-<b>2. Select a name for the error correction file.</b><p>
-
-Click on the
-<img src="../images/open-ecc.png" alt="Error correction file selection" align="middle"> symbol 
-<font color="red">(2a)</font>
-to bring up a window for selecting the error correction file name.<br>
-As a shortcut the file name can also be entered directly into 
-the text field <font color="red">(2b)</font>.<p>
-<p>
-
-<b>3. Create the error correction file.</b><p>
-
-Click on the "Create" button <font color="red">(3)</font> 
-to generate the error correction file.<p>
-
-<hr>
-Screen shot: Creating the error correction file
-<hr>
-<img src="../images/ex-create-en.png" alt="Creating the error correction file"><p>
-<hr>
-
-
-The progress will be shown using a percentage reading. 
-Processing a single layered DVD image with the 
-default <a href="example93.html#redundancy">redundancy</a>
-takes about 10 minutes on an average 2Ghz system.<p>
-
-<b>Please note</b>:
-
-<ul>
-<li>The error correction file can not be created if the image is incomplete or
-containing read errors.<p>
-
-<table width=100%><tr><td bgcolor=#000000 width=2><img width=1 height=1 alt=""></td>
-<td>Generate the error correction file immediately after writing the medium.
-</td></tr></table>
-</li>
-
-<li>The image file is no longer
-required when the error correction file has been successfully created.<br>
-dvdisaster will automatically overwrite an existing image file if a different
-medium is read in.<p></li>
-
-<li>
-Always keep the error correction file on a 
-<a href="background60.html">reliable storage medium</a>!
-</li>
-</ul>
-
-<a href="example40.html">From now on you should regularly scan the medium for read errors...</a>
-EOF
-}
-
-
-function example40en()
-{  cat >> $1 <<EOF
-<h3>Scanning the medium for errors</h3>
-
-To check your medium for read errors insert it into your drive and carry out
-these steps:<p>
-
-<b>1. Select the drive <font color="red">(1)</font>
-where the CD or DVD has been inserted.</b><p>
-
-The Linux version currently only provides those drives for selection
-which are contained in the /dev directory. A more flexible selection
-scheme will be introduced in the next program version.<p>
-
-Scanning does not necessarily need an error correction file, 
-but it can take advantage of some information from it.
-If a suitable error correction file is available for your medium,
-enter its file name before the scan.<p>
-
-<b>2. Start the medium scan.</b><p>
-
-Click on the "Scan" button <font color="red">(2)</font>
-to begin with the medium check.<p>
-
-<hr>
-Screen shot: Medium scan
-<hr>
-<img src="../images/ex-scan-en.png" alt="Medium scan"><p>
-<hr>
+<tr align="center"><td><h3>Screenshot: Scanning the medium for errors</h3><p></td></tr>
+<tr align="center"><td>
+<center><img src="../images/ex-scan-en.png"></center>
+<br clear="all">
+</td></tr>
+<tr><td>
 
 The graphical representation gives information on the scanning progress and media state:<p>
 
@@ -528,6 +404,60 @@ and transfer it onto a new storage medium.
 provides additional information on the reading process.<p></li>
 </ul>
 
+</td></tr>
+EOF
+}
+
+function example10en()
+{  
+  create_inline example en 1 example10.html "to scanning the medium"
+
+cat >> $1 <<EOF
+<h3>Scanning the medium for errors</h3>
+
+To check your medium for read errors carry out these steps:<p>
+
+(Note: Under Windows 2000 and XP either <b>administrator priviledges</b> or an installed
+<a href="qa10.html#aspi">ASPI</a> driver are required in order to access the CD/DVD drives.)<p>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+<tr valign="top" $BGCOLOR1>
+<td>1.</td>
+<td>Insert the medium into the drive.</td>
+<td></td>
+</tr>
+
+<tr valign="top" $BGCOLOR2>
+<td>2.</td>
+<td>Select the drive.</td>
+<td><img src="../images/btn-drive.png"></td>
+</tr>
+
+<tr valign="top" $BGCOLOR1>
+<td>3.</td>
+<td>If a suitable error correction file is available for your medium,
+enter its file name. Scanning does not necessarily need an error correction file, 
+but it can take advantage of some information from it.</td>
+<td><img src="../images/btn-eccfile.png"><p>
+The <img src="../images/open-ecc.png" align="middle"> symbol opens the file chooser.</td>
+</tr>
+ 
+<tr valign="top" $BGCOLOR2>
+<td>4.</td>
+<td>Click on the "Scan" button to begin the medium check.</td>
+<td><img src="../images/btn-scan-en.png"></td>
+</tr>
+
+<tr valign="top" $BGCOLOR1>
+<td>5.</td>
+<td>Watch the scanning progress in the graphical representation.</td>
+<td><a href="example1.html"><img src="../images/ex-scan-en.png" width="200"></a><p>
+</td>
+</tr>
+</table>
+
+<p>
+
 <b>How frequently should the media be scanned?</b><br>
 This depends on your media quality and storage conditions.
 As a guide line for CD- and DVD media of unknown quality:
@@ -542,57 +472,626 @@ As a guide line for CD- and DVD media of unknown quality:
 If you're using lots of media from the same production of a high quality manufacturer,
 it may be sufficient to scan a sample of 2-3 media per month and batch.<p>
 
-<a href="example50.html">Recovering a medium image...</a>
+<hr><p>
+
+<h3>Scanning the medium using the command line</h3>
+
+Scanning requires the following parameters (defaults are given in parenthesis):
+
+<table>
+<tr>
+<td><b><a href="example90.html#scan">-s / --scan</a></td>
+<td>Scan</td>
+</tr>
+<tr>
+<td><b><a href="example90.html#device">-d / --device</a>&nbsp;</td>
+<td>Drive selection (/dev/cdrom)</td>
+</tr>
+<tr>
+<td><b><a href="example90.html#ecc">-e / --ecc</a></td>
+<td>Error correction file (medium.ecc)</td>
+</tr>
+<tr>
+<td><b><a href="example90.html#jump">-j / --jump</a></td>
+<td>Skip sectors after a read error (16)</td>
+</tr>
+</table><p>
+
+<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+user@linux&gt; <b>dvdisaster -s -d /dev/hdc -e corrdata.ecc</b><br>
+dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
+<i>[... remainder of the GPL announcement ...]</i><p>
+
+Device: /dev/cdrom, &nbsp;ATAPI DVD+RW 8X4X12 B2K7<br>
+Medium: DVD+R, 2224288 sectors, 1 layer(s)<p>
+
+Scanning medium for read errors.<br>
+Waiting 5 seconds for drive to spin up...<br>
+Sector 57664: Medium Error; Unrecovered read error. Skipping 15 sectors.<br>
+Sector 57728: Medium Error; Unrecovered read error. Skipping 15 sectors.<br>
+[... more read error reports ...] <br>
+Sector 716640: Medium Error; Unrecovered read error. Skipping 15 sectors.<br>
+Read position: 100.0% ( 2.4x)<br>
+33840 unreadable sectors.
+</td></tr></table><p>
+
+The reported read errors may be different from "Medium Error; ..."
+as these depend on the drive's firmware. 
 EOF
 }
 
-function example50en()
+function example20en()
+{  
+   cat >> $1 <<EOF
+<h3>Generating the error correction data</h3>
+
+The error correction data has an important role in dvdisaster:<br>
+It is required to recover unreadable medium sectors.<p>
+
+Error correction data can be either kept in a separate
+<a href="background30.html#files">error correction file</a>
+or be incorporated <a href="background30.html#image">into the image</a>,
+with respective <a href="background30.html#table">advantages and disadvantages</a>.<p>
+
+As a short decision help:<p>
+
+<b>Do you need error correction data for an existing medium?</b><p>
+
+&nbsp; Yes: <a href="example21.html">Create an error correction file.</a><p>
+
+&nbsp; No: see next question.<p>
+
+<b>Does the medium which is to be created contain less than 20% free space?</b><p>
+
+&nbsp; Yes: <a href="example21.html">Create an error correction file.</a><p>
+
+&nbsp; No: <a href="example22.html">Create an error correction image.</a><p>
+EOF
+}
+
+function example2en()
 {  cat >> $1 <<EOF
-<h3>Recovering a medium image</h3>
 
-To recover data from damaged media you need 
-the <a href="example30.html">appropriate error correction file</a>
-which you have hopefully generated at a time when the medium was still fully readable.
-Perform the following actions:<p>
+<tr align="center"><td><h3>Screenshot: Creating a medium image</h3><p></td></tr>
+<tr align="center"><td>
+<center><img src="../images/ex-read-en.png"></center>
+<br clear="all">
+</td></tr>
 
-<b>1. Switch the reading strategy.</b><p>
+<tr><td>
+The reading progress will be shown in the graphical representation.<p>
 
-Go to the Read & Scan preferences dialog and select the
-<a href="example92.html#read">adaptive reading strategy</a>.<p>
+<ul>
+<li>The <b>spiral</b> provides a (not drawn to scale) 
+overview of the <b>medium state</b>.
+Red marks indicate the presence of read errors!<p></li>
 
-<b>2. Try to read in as much data as possible into an image file.</b><p>
+<li>
+The error correction file can <i>not be generated</i>
+if the image is incomplete or contains unreadble sectors.
+Generate the error correction file immediately after writing the medium.
+<p></li>
 
-Select the drive, image file and error correction file <font color="red">(2a)</font>.<br>
-The error correction file must be available at this stage so that dvdisaster can determine
-when enough data for reconstructing the image has been collected.<br>
-Start the reading process by clicking at the "Read" button <font color="red">(2b)</font>.<p>
+<li>Clicking on the
+<img src="../images/btn-protocol-en.png" alt="Protokoll" align="middle"> symbol
+provides additional information on the reading process.</li>
+<ul>
 
-Please note that reading a damaged medium may take several hours to complete.<p>
+</td></tr>
+EOF
+}
 
-<hr>
-Screen shot: Reading the image
-<hr>
-<img src="../images/ex-read-a-en.png" alt="Reading the image"><p>
-<hr>
+function example3en()
+{  cat >> $1 <<EOF
+
+<tr align="center"><td>
+<h3>Screen shot: Generating the error correction file</h3><p></td></tr>
+<tr align="center"><td>
+<center><img src="../images/ex-create-en.png"></center>
+<br clear="all">
+</td></tr>
+
+<tr><td>
+The progress will be shown using a percentage reading. 
+Processing a single layered DVD image with the 
+default <a href="example83.html#redundancy">redundancy</a>
+takes about 10 minutes on an average 2Ghz system.<p>
+
+<b>Please note</b>:
+
+<ul>
+<li>The image file is no longer
+required when the error correction file has been successfully created.<br>
+dvdisaster will automatically overwrite an existing image file if a different
+medium is read in.<p></li>
+
+<li>
+Always keep the error correction file on a 
+<a href="background70.html">reliable storage medium</a>!<p>
+</li>
+
+<li>From now on you should regularly scan the medium for read errors.</li>
+</ul>
+</td></tr>
+
+
+EOF
+}
+
+function example21en()
+{  create_inline example en 2 example21.html "to creating the error correction file"
+   create_inline example en 3 example21.html "to creating the error correction file"
+ 
+   cat >> $1 <<EOF
+<h3>Generating the error correction file</h3>
+
+<b>First create a medium image on the hard drive:</b><p>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+<tr valign="top" $BGCOLOR1>
+<td>1.</td>
+<td>Insert the medium into the drive.</td>
+<td></td>
+</tr>
+
+<tr valign="top" $BGCOLOR2>
+<td>2.</td>
+<td>Select the drive.</td>
+<td><img src="../images/btn-drive.png"></td>
+</tr>
+
+<tr valign="top" $BGCOLOR1>
+<td>3.</td>
+<td>Select the image file name.
+
+Make sure to have enough free disk space for the image. Activate the
+<a href="example91.html#localfiles">split file option</a> if your file system 
+does not support files larger than 2GB.<p>
+</td>
+<td><img src="../images/btn-image.png"><p>
+The <img src="../images/open-img.png" align="middle"> symbol opens the file chooser.</td>
+</tr>
+
+<tr valign="top" $BGCOLOR2>
+<td>4.</td>
+<td>Click on the "Read" button to start the reading process.</td>
+<td><img src="../images/btn-read-en.png"></td>
+</tr>
+
+<tr valign="top" $BGCOLOR1>
+<td>5.</td>
+<td>Watch the reading progress in the graphical representation.</td>
+<td><a href="example2.html"><img src="../images/ex-read-en.png" width="200"></a><p>
+</td>
+</tr>
+</table>
 
 <pre> </pre>
 
-<a name="repair"></a>
-<b>3. Perform the image reconstruction.</b><p>
+<b>Now create the error correction file:</b><p>
+The image must not contain any read errors.<p>
 
-Click on the "Fix" button.
-It is normal to experience phases of high hard drive
-activity during image reconstruction.<p>
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+<tr valign="top" $BGCOLOR1>
+<td>1.</td>
+<td>
+Choose the image file.
+The previously read image file is pre-selected.<p>
+</td>
+<td><img src="../images/btn-image.png"><p>
+The <img src="../images/open-img.png" align="middle"> symbol opens the file chooser.</td>
+</tr>
 
-<hr>
-Screen shot: Repairing the image
-<hr>
-<img src="../images/ex-fix-en.png" alt="Repairing the image"><p>
-<hr>
+<tr valign="top" $BGCOLOR2>
+<td>2.</td>
+<td>
+Select the error correction file name.<p>
+</td>
+<td><img src="../images/btn-eccfile.png"><p>
+The <img src="../images/open-ecc.png" align="middle"> symbol opens the file chooser.</td>
+</tr>
 
+<tr valign="top" $BGCOLOR1>
+<td>3.</td>
+<td>
+Configure the error correction.<p>
+</td>
+<td><a href="example82.html"><img src="../images/prefs-ecc-en.png" width="200"></a></td>
+</tr>
+
+<tr valign="top" $BGCOLOR2>
+<td>4.</td>
+<td>Click on the "Create" button to generate the error correction file.</td>
+<td><img src="../images/btn-create-en.png"></td>
+</tr>
+
+<tr valign="top" $BGCOLOR1>
+<td>5.</td>
+<td>Watch the progress of the error correction file generation.</td>
+<td><a href="example3.html"><img src="../images/ex-create-en.png" width="200"></a><p>
+</td>
+</tr>
+</table><p>
+
+Keep the error correction file on a 
+<a href="background70.html">reliable storage medium</a>.
+Scan the protected medium for read errors on a regular basis.<p>
+
+<hr><p>
+
+<h3>Creating the error correction file using the command line</h3>
+
+You will need the following parameters for reading the image
+(defaults are given in parenthesis):
+
+<table>
+<tr>
+<td><b><a href="example90.html#read">-r/ --read</a></td>
+<td>Read</td>
+</tr>
+<tr>
+<td><b><a href="example90.html#device">-d / --device</a>&nbsp;</td>
+<td>Drive selection (/dev/cdrom)</td>
+</tr>
+<tr>
+<td><b><a href="example90.html#image">-i / --image</a></td>
+<td>Image file (medium.iso)</td>
+</tr>
+</table><p>
+
+<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+user@linux&gt; <b>dvdisaster -r -d /dev/hdc -i image.iso</b><br>
+dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
+This software comes with &nbsp;ABSOLUTELY NO WARRANTY. &nbsp;This<br>
+is free software and you are welcome to redistribute it<br>
+under the conditions of the GNU GENERAL PUBLIC LICENSE.<br>
+See the file "COPYING" for further information.<p>
+
+Device: /dev/cdrom, &nbsp;ATAPI DVD+RW 8X4X12 B2K7<br>
+Medium: DVD+R, 2224288 sectors, 1 layer(s)<p>
+
+Creating new image.iso image.<br>
+Waiting 5 seconds for drive to spin up...<br>
+Read position: 100.0% ( 6.3x)<br>
+All sectors successfully read.
+</td></tr></table><p>
+
+The percentage of already read sectors and the current drive speed
+will be shown during the process. When reading is finished,
+create the error correction file:<p>
+
+<table>
+<tr>
+<td><b><a href="example90.html#create">-c/ --create</a></td>
+<td>Create the error correction file</td>
+</tr>
+<tr>
+<td><b><a href="example90.html#image">-i / --image</a></td>
+<td>Image file (medium.iso)</td>
+</tr>
+<tr>
+<td><b><a href="example90.html#ecc">-e / --ecc</a></td>
+<td>Error correction file (medium.ecc)</td>
+</tr>
+<tr>
+<td><b><a href="example90.html#redundancy">-n / --redundancy</a>&nbsp;</td>
+<td>Choose redundancy (32 roots = 14.3%)</td>
+</tr>
+</table><p>
+
+<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+user@linux&gt; <b>dvdisaster -c -i image.iso -e corrdata.ecc </b><br>
+dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
+<i>[... remainder of the GPL announcement ...]</i><p>
+
+Opening image.iso: 2224288 medium sectors.<br>
+Scanning image sectors: 100%<br>
+Encoding with Codec RS01: 32 roots, 14.3% redundancy.<br>
+Ecc generation: 100.0%<br>
+Error correction file "medium.ecc" created.<br>
+Make sure to keep this file on a reliable medium.<br>
+</td></tr></table><p>
+
+The progress will be shown using a percentage reading.<p>
+
+When finished, the error correction file <i>medium.ecc</i> appears in the current directory:<p>
+
+<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+user@linux&gt; <b>ls -lA</b><br>
+-rwx------    1 user     linux    653721680 2004-07-02 22:45 corrdata.ecc<br>
+-rwx------    1 user     linux    4555341824 2004-07-02 21:31 image.iso<br>
+</td></tr></table><p>
+
+You can remove the image file now, <p>
+
+<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+user@linux&gt; <b>rm -f image.iso</b><br>
+</td></tr></table><p>
+
+but keep the error correction file on a <a href="background70.html">reliable storage medium</a>!<p>
+
+<underline>Hint:</underline> Combine the actions for reading the image
+and for creating the error correction file. This will save the image scan in the 
+second step:<p>
+
+<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+user@linux&gt; dvdisaster <b>-r -c</b> -d /dev/hdc -i image.iso -e corrdata.ecc<br>
+(and so on)
+</td></tr></table>
+EOF
+}
+
+function example22en()
+{  
+   cat >> $1 <<EOF
+<h3>Generating the error correction image</h3>
+
+Creating error correction images is currently only supported at the command line.
+The respective functions will be integrated into the graphical user interface
+in dvdiaster version 0.70.<p>
+
+<b>Create an image of the data to be protected.</b><p>
+
+Use your favourite CD/DVD writing software to select data files
+and create an ISO or UDF image from them. Using other image types
+may lead to data loss!<p>
+
+<b>Append the error correction data to the image.</b><p>
+
+This requires the following parameters (defaults are given in parenthesis):
+
+<table>
+<tr>
+<td><b><a href="example90.html#create">-c/ --create</a></td>
+<td>Create the error correction data</td>
+</tr>
+<tr>
+<td><b><a href="example90.html#method">-m / --method</a>&nbsp;</td>
+<td>Select the error correction method</td>
+</tr>
+<tr>
+<td><b><a href="example90.html#redundancy">-n / --redundancy</a></td>
+<td>maximum medium size in sectors (size of smallest possible medium)</td>
+</tr>
+</table><p>
+
+When you have created the image "image.iso" using the CD/DVD writing software, enter:<p>
+
+<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+user@linux&gt; <b>dvdisaster -c -mRS02 -i image.iso</b><br>
+dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
+<i>[... remainder of the GPL announcement ...]</i><p>
+
+Opening /dvd/image.iso: 284234 medium sectors.<p>
+
+Appending image with Method RS02: 555M data, 143M ecc (52 roots; 25.6% redundancy)<br>
+Calculating sector checksums: 100%<br>
+Expanding image: 100%<br>
+Ecc generation: 100.0%<br>
+Image has been appended with error correction data.<br>
+New image size is 357818 sectors.
+</table><p>
+
+<b>Write the image to the medium.</b><p>
+
+Use your CD/DVD writing software to transfer the augmented image to the medium.<p>
+
+Your writing software may not be compatible with the augmented
+image and destroy the error correction information. At least when using it the first time,
+perform the following check:<p>
+
+Re-read the image with dvdisaster after burning the medium:<p>
+
+<table>
+<tr>
+<td><b><a href="example90.html#read">-r/ --read</a></td>
+<td>Read</td>
+</tr>
+<tr>
+<td><b><a href="example90.html#device">-d / --device</a>&nbsp;</td>
+<td>Drive selection (/dev/cdrom)</td>
+</tr>
+<tr>
+<td><b><a href="example90.html#image">-i / --image</a></td>
+<td>Image file (medium.iso)</td>
+</tr>
+</table><p>
+
+<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+user@linux&gt; <b>dvdisaster -r -d/dev/hdc -i image-new.iso</b><br>
+dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
+<i>[... remainder of the GPL announcement ...]</i><p>
+
+Device: /dev/hdc, &nbsp;ATAPI DVD+RW 8X4X12 B2K7<br>
+Medium: Data CD Mode 1, 357818 sectors, 1 layer(s)<p>
+
+Creating new image-new.iso image.<br>
+Waiting 5 seconds for drive to spin up...<br>
+Read position: 100.0% ( 6.3x)<br>
+All sectors successfully read.
+</table><p>
+
+Check the image:<p>
+
+<table>
+<tr>
+<td><b><a href="example90.html#test">-t/ --test</a></td>
+<td>Check the image</td>
+</tr>
+<tr>
+<td><b><a href="example90.html#image">-i / --image</a></td>
+<td>Image file (medium.iso)</td>
+</tr>
+</table><p>
+
+<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+user@linux&gt; <b>dvdisaster -t -i image-new.iso</b><br>
+dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnörlich.<br>
+<i>[... remainder of the GPL announcement ...]</i><p>
+
+dvd/new-image.iso: present, contains 357818 medium sectors.<br>
+- good image       : all sectors present<br>
+- data md5sum      : 4eca3615a88a11ba68466226295c4bcb<p>
+
+Error correction data: created by dvdisaster-0.66<br>
+- method           : RS02, 52 roots, 25.6% redundancy.<br>
+- requires         : dvdisaster-0.65 (good)<br>
+- data md5sum      : 4eca3615a88a11ba68466226295c4bcb (good)<br>
+- crc md5sum       : 9776489c12e12cbabfe5145da4f6ae66 (good)<br>
+- ecc md5sum       : e975aed39c962eeabedd9d6cbdbfc45e (good)
+</table>
+EOF
+}
+
+function example4en()
+{  cat >> $1 <<EOF
+
+<tr align="center"><td>
+<h3>Screen shot: Reading damaged media</h3><p></td></tr>
+<tr align="center"><td>
+<center><img src="../images/ex-read-a-en.png"></center>
+<br clear="all">
+</td></tr>
+
+<tr><td>
+Please note that reading a damaged medium may take several hours to complete.
+</td></tr>
+EOF
+}
+
+function example30en()
+{  create_inline example en 4 example30.html "to reading the defective medium"
+ 
+   cat >> $1 <<EOF
+<h3>Creating images from defective media</h3>
+
+dvdisaster contains a <a href="background50.html">reading strategy</a>
+which is especially suited for reading damaged media:<p>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+<tr valign="top" $BGCOLOR1>
+<td>1.</td>
+<td>Insert the medium into the drive.</td>
+<td></td>
+</tr>
+
+<tr valign="top" $BGCOLOR2>
+<td>2.</td>
+<td>Select the drive.</td>
+<td><img src="../images/btn-drive.png"></td>
+</tr>
+
+<tr valign="top" $BGCOLOR1>
+<td>3.</td>
+<td>
+Select the image file name.<p>
+</td>
+<td><img src="../images/btn-image.png"><p>
+The <img src="../images/open-img.png" align="middle"> symbol opens the file chooser.</td>
+</tr>
+
+<tr valign="top" $BGCOLOR2>
+<td>4.</td>
+<td>
+Select the error correction file.
+The error correction file must be available at this stage so that dvdisaster can determine
+when enough data for reconstructing the image has been collected.<p>
+</td>
+<td><img src="../images/btn-eccfile.png"><p>
+The <img src="../images/open-ecc.png" align="middle"> symbol opens the file chooser.</td>
+</tr>
+
+<tr valign="top" $BGCOLOR1>
+<td>5.</td>
+<td>
+Select the adaptive reading strategy.<p>
+</td>
+<td><a href="example82.html"><img src="../images/prefs-read-en.png" width="200"></a></td>
+</tr>
+
+<tr valign="top" $BGCOLOR2>
+<td>6.</td>
+<td>Start the reading process by clicking at the "Read" button.</td>
+<td><img src="../images/btn-read-en.png"></td>
+</tr>
+
+<tr valign="top" $BGCOLOR1>
+<td>7.</td>
+<td>Watch the reading progress.</td>
+<td><a href="example4.html"><img src="../images/ex-read-a-de.png" width="200"></a><p>
+</td>
+</tr>
+</table><p>
+
+If the reading process states that enough data has been collected for a
+successful recovery, <a href="example20.html">repair the missing sectors</a> 
+using the error correction data.<p>
+
+Otherwise,  try reading the image 
+again <a href="background60.html#reading-tips">(some hints for re-reading)</a>.
+In that case dvdisaster will try to re-read only the missing sectors.
+
+<hr><p>
+
+<h3>Reading damaged media from the command line</h3>
+
+This requires the following parameters (defaults are given in parenthesis):
+
+<table>
+<tr>
+<td><b><a href="example90.html#read">-r/ --read</a></td>
+<td>Read</td>
+</tr>
+<tr>
+<td><b><a href="example90.html#adaptiveread">--adaptive-read</a></td>
+<td>Use reading strategy for damaged media</td>
+</tr>
+<tr>
+<td><b><a href="example90.html#device">-d / --device</a>&nbsp;</td>
+<td>Drive selection (/dev/cdrom)</td>
+</tr>
+<tr>
+<td><b><a href="example90.html#image">-i / --image</a></td>
+<td>Image file (medium.iso)</td>
+</tr>
+<tr>
+<td><b><a href="example90.html#ecc">-e / --ecc</a></td>
+<td>Error correction file (medium.ecc)</td>
+</tr>
+</table><p>
+
+<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+user@linux&gt; <b>dvdisaster -r --adaptive-read -i image.iso -e corrdata.ecc</b><br>
+dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
+<i>[... remainder of the GPL announcement ...]</i><p>
+
+Device: /dev/cdrom, &nbsp;ATAPI DVD+RW 8X4X12 B2K7<br>
+Medium: DVD+R, 2224288 sectors, 1 layer(s)<p>
+
+Adaptive reading: Trying to collect enough data for error correction.<br>
+Creating new image.iso image.<br>
+Repairable:  2.6% (correctable: 0; now reading [0..2224288], size 2224288)<br>
+Sectors 57264-57279: Medium Error; Unrecovered read error.<br>
+Filling image area [57280..1083504]<br>
+[... more descriptions of reading process ...] <br>
+Repairable: 100.0% (correctable: 319200; now reading [320304..327065], size 6762)<br>
+Sufficient data for reconstructing the image is available.
+</td></tr></table><p>
+EOF
+}
+
+function example5en()
+{  cat >> $1 <<EOF
+
+<tr align="center"><td>
+<h3>Screen shot: Recovering the medium image</h3><p></td></tr>
+<tr align="center"><td>
+<center><img src="../images/ex-fix-en.png"></center>
+<br clear="all">
+</td></tr>
+
+<tr><td>
 The repairing progress will be shown in percent.<p>
-
-<b>Additional hints:</b><p>
 
 <ul>
 <li>The message "Good! All sectors are repaired." confirms that the medium image
@@ -600,7 +1099,7 @@ has been fully recovered. The repaired image can be written to a new
 medium using a suitable CD/DVD recording software. <p></li>
 
 <li>If uncorrectable sectors remain after this stage, try reading the image again
-<a href="background50.html#reading-tips">(some hints for re-reading)</a>.
+<a href="background60.html#reading-tips">(some hints for re-reading)</a>.
 dvdisaster will try to re-read only the missing sectors, and this might
 retrieve enough missing sectors for a successful error correction run.<p></li>
 
@@ -609,68 +1108,231 @@ read errors on the disc: The error correction method is explicitly built to achi
 an equal distribution of medium read errors over all error correction blocks.<p>
 The green line marks the maximum capacity of the error correction. If this line is exceeded,
 the image can not be recovered with the currently available data.
-In case of tight misses <a href="background50.html#reading-tips">another reading attempt</a>
+In case of tight misses <a href="background60.html#reading-tips">another reading attempt</a>
  might help.
 </li>
 
 <li>When the image has been read in by the adaptive reading strategy,
 the error correction load will always be maxed out.</li>
 </ul>
+</td></tr>
 EOF
 }
 
+function example40en()
+{  create_inline example en 5 example40.html "to recovering the medium image"
 
-function example60en()
+   cat >> $1 <<EOF
+<h3>Recovering the medium image</h3>
+
+To recover a defective medium you must first try to
+<a href="example30.html">read as much data as possible from it</a>.
+Then you need the <a href="example20.html">appropriate error correction file</a>
+which you have hopefully generated at a time when the medium was still fully readable.<p>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+<tr valign="top" $BGCOLOR1>
+<td>1.</td>
+<td>
+Select the image file.<p>
+</td>
+<td><img src="../images/btn-image.png"><p>
+The <img src="../images/open-img.png" align="middle"> symbol opens the file chooser.</td>
+</tr>
+
+<tr valign="top" $BGCOLOR2>
+<td>2.</td>
+<td>
+Select the respective error correction file.<p>
+</td>
+<td><img src="../images/btn-eccfile.png"><p>
+The <img src="../images/open-ecc.png" align="middle"> symbol opens the file chooser.</td>
+</tr>
+
+<tr valign="top" $BGCOLOR1>
+<td>3.</td>
+<td>Click on the "Fix" button.</td>
+<td><img src="../images/btn-fix-en.png"></td>
+</tr>
+
+<tr valign="top" $BGCOLOR2>
+<td>4.</td>
+<td>Watch the recovery progress.<p>
+It is normal to experience phases of high hard drive
+activity during image reconstruction</td>
+<td><a href="example5.html"><img src="../images/ex-fix-cs.png" width="200"></a><p>
+</td>
+</tr>
+</table><p>
+
+When the image has been successfully recovered, transfer it to a new medium
+using a CD/DVD writing software.
+
+<hr><p>
+
+<h3>Recovering the image using the command line</h3>
+
+Recovering requires the following parameters (defaults are given in parenthesis):
+
+<table>
+<tr>
+<td><b><a href="example90.html#fix">-f/ --fix</a></td>
+<td>Recover</td>
+</tr>
+<tr>
+<td><b><a href="example90.html#image">-i / --image</a></td>
+<td>Image file (medium.iso)</td>
+</tr>
+<tr>
+<td><b><a href="example90.html#ecc">-e / --ecc</a></td>
+<td>Error correction file (medium.ecc)</td>
+</tr>
+</table><p>
+
+<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+user@linux&gt; <b>dvdisaster -f -i image.iso -e corrdata.ecc</b><br>
+dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
+<i>[... remainder of the GPL announcement ...]</i><p>
+
+Opening image.iso: 2224288 medium sectors.<p>
+
+Fix mode: Repairable sectors will be fixed in the image.<br>
+&nbsp;&nbsp;&nbsp;    5 repaired sectors: 708225 59850 69825 79800 199500 <br>
+&nbsp;&nbsp;&nbsp;    6 repaired sectors: 708226 59851 69826 79801 89776 199501<br>
+[... more reports on repaired sectors ...] <br>
+&nbsp;&nbsp;&nbsp;    5 repaired sectors: 708224 59849 69824 79799 199499<br>
+Ecc progress: 100.0% <br>
+Repaired sectors: 33264 <br>  
+Good! All sectors are repaired.<br>
+Erasure counts per ecc block:  avg =  3.3; worst = 7.
+</td></tr></table><p>
+
+EOF
+}
+
+function example6en()
 {  cat >> $1 <<EOF
-<h3>Comparing the image against error correction data</h3>
+
+<tr align="center"><td>
+<h3>Screenshot: Comparing image and error correction files</h3><p></td></tr>
+<tr align="center"><td>
+<center><img src="../images/ex-compare-en.png"></center>
+<br clear="all">
+</td></tr>
+
+<tr><td>
+
+This process may take a while as both
+files need to be read completely (but no changes are applied to them).<p>
+
+When the comparison is finished, you get the following information:<p>
+
+<ul>
+<li><b>"Image file summary" and "Image state"</b>. 
+The number of missing sectors will be above zero if the image contains
+still uncorrected read errors. In contrast the appearance of checksum errors 
+is usually the result of
+<a href="qa20.html#crc">incorrect handling or hardware problems</a>.<p></li>
+
+<li><b>"Error correction file summary"</b>.<br>
+This field shows the settings used while creating the error correction file,
+and whether it can be processed by your version of dvdisaster.
+If the error correction file does not correspond to the image file
+or if it is damaged, warnings are printed beneath the last four entries.<p></li>
+
+<li><b>Hint:</b> The results of the compare are unreliable if the image has been read in
+by a software other than dvdisaster. Especially, all missing sectors
+will be classfied as checksum errors if a different software has been used.</li>
+</ul>
+</td></tr>
+EOF
+}
+
+function example50en()
+{  create_inline example en 6 example50.html "to comparing the image against error correction data"
+
+   cat >> $1 <<EOF
+<h3>Getting information about images and error correction data</h3>
 
 This function provides information about image and error correction files
 which are already present on your hard disc:<p>
 
-<b>1. Select the files to compare <font color="red">(1)</font>.</b><p>
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+<tr valign="top" $BGCOLOR1>
+<td>1.</td>
+<td>
+Select the image file.<p>
+</td>
+<td><img src="../images/btn-image.png"><p>
+The <img src="../images/open-img.png" align="middle"> symbol opens the file chooser.</td>
+</tr>
 
-Enter the names of an image file and its corresponding error correction file
-(as described in steps 2a/2b for creating the <a href="example20.html">image</a> and <a href="example30.html">error correction</a> files).<p>
+<tr valign="top" $BGCOLOR2>
+<td>2.</td>
+<td>
+Select the respective error correction file.<p>
+</td>
+<td><img src="../images/btn-eccfile.png"><p>
+The <img src="../images/open-ecc.png" align="middle"> symbol opens the file chooser</td>
+</tr>
 
-<b>2. Invoke the comparison <font color="red">(2)</font>.</b><p>
+<tr valign="top" $BGCOLOR1>
+<td>3.</td>
+<td>Click the "Compare" button.</td>
+<td><img src="../images/btn-compare-en.png"></td>
+</tr>
 
-Click the "Compare" button. This process may take a while as both
-files need to be read completely (but no changes are applied to them).
-<p>
+<tr valign="top" $BGCOLOR2>
+<td>4.</td>
+<td>Watch the comparison progress.</td>
+<td><a href="example6.html"><img src="../images/ex-compare-en.png" width="200"></a><p>
+</td>
+</tr>
+</table><p>
 
-<hr>
-Screen shot: Comparing image and error correction files
-<hr>
-<img src="../images/ex-compare-en.png" alt="Datenträger-Inhalt rekonstruieren"><p>
-<hr>
+<hr><p>
 
-When the comparison is finished, you get the following information:<p>
+<h3>Getting the information from the command line</h3>
 
-<b>"Image file summary" and "Image state"</b>. 
-The number of missing sectors will be above zero if the image contains
-still uncorrected read errors. In contrast the appearance of checksum errors 
-is usually the result of
-<a href="qa20.html#crc">incorrect handling or hardware problems</a>.<p>
+You will need the following parameters (defaults are given in parenthesis):
 
-<b>"Error correction file summary"</b>. 
-This field shows the settings used while creating the error correction file,
-and whether it can be processed by your version of dvdisaster.
-If the error correction file does not correspond to the image file
-or if it is damaged, warnings are printed beneath the last four entries.<p>
+<table>
+<tr>
+<td><b><a href="example90.html#test">-t/ --test</a></td>
+<td>Compare</td>
+</tr>
+<tr>
+<td><b><a href="example90.html#image">-i / --image</a></td>
+<td>Image file (medium.iso)</td>
+</tr>
+<tr>
+<td><b><a href="example90.html#ecc">-e / --ecc</a></td>
+<td>Error correction file (medium.ecc)</td>
+</tr>
+</table><p>
 
-<b>Additional hints:</b>
+<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+user@linux&gt; <b>dvdisaster -t -i image.iso -e corrdata.ecc</b><br>
+dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnörlich.<br>
+<i>[... remainder of the GPL announcement ...]</i><p>
 
-<ul>
-<li>The results of the compare are unreliable if the image has been read in
-by a software other than dvdisaster. Especially, all missing sectors
-will be classfied as checksum errors if a different software has been used.
-</li>
-</ul>
+/dvd/image.iso: present, contains 2224288 medium sectors.<br>
+- good image       : all sectors present<br>
+- image md5sum     : 55cdd507e8d96af0da0667ce4365c7ae<p>
+
+/dvd/corrdata.ecc: created by dvdisaster-0.62<br>
+- method           : RS01, 32 roots, 14.3% redundancy.<br>
+- requires         : dvdisaster-0.55 (good)<br>
+- medium sectors   : 2224288 (good)<br>
+- image md5sum     : 55cdd507e8d96af0da0667ce4365c7ae (good)<br>
+- fingerprint match: good<br>
+- ecc blocks       : 20428800 (good)<br>
+- ecc md5sum       : 4bdf5ed398e7662ac93c9d08e1ba9ff2 (good)
+</td></tr></table><p>
 EOF
 }
 
-
-function example90en()
+function example80en()
 {  cat >> $1 <<EOF
 
 <h3>Configuration</h3>
@@ -681,7 +1343,7 @@ at the upper right of the tool bar to open the configuration dialog.
 The dialog contains several forms:<p>
 
 <center>
-<a href="example91.html">
+<a href="example81.html">
 <img src="../images/prefs-general-en.png"><br>
 General settings
 </a>
@@ -689,7 +1351,7 @@ General settings
 <br clear="all">
 
 <center>
-<a href="example92.html">
+<a href="example82.html">
 <img src="../images/prefs-read-en.png"><br>
 Reading preferences
 </a>
@@ -697,7 +1359,7 @@ Reading preferences
 <br clear="all">
 
 <center>
-<a href="example93.html">
+<a href="example83.html">
 <img src="../images/prefs-ecc-en.png"><br>
 Error correction settings
 </a>
@@ -706,7 +1368,7 @@ Error correction settings
 EOF
 }
 
-function example91en()
+function example81en()
 {  cat >> $1 <<EOF
 
 <h3>General Configuration</h3>
@@ -765,7 +1427,7 @@ generation of the respective error correction file.
 EOF
 }
 
-function example92en()
+function example82en()
 {  cat >> $1 <<EOF
 
 <h3>Reading preferences</h3>
@@ -784,8 +1446,8 @@ More information on this form follows down this page.<p>
 <br clear="all">
 
 <b>Reading strategy <font color="red">(1)</font>:</b> Choose between the
-<a href="background30.html">linear reading strategy</a> and the
-<a href="background40.html">adaptive reading strategy</a>.
+<a href="background40.html">linear reading strategy</a> and the
+<a href="background50.html">adaptive reading strategy</a>.
 The linear strategy is suited for undamaged media while the adaptive
 strategy is better for media already containing read errors.<p>
 
@@ -796,8 +1458,8 @@ only effective for the current session and will not be saved.<p>
 <b> Skip x sectors after read error / <br>
 Stop reading when unreadable intervals < x <font color="red">(3)</font>:</b><br>
 The slider value affects the handling of read errors. It has slightly different
-effects for the <a href="background30.html#configure">linear</a> and 
-<a href="background40.html#configure">adaptive</a> reading strategies.
+effects for the <a href="background40.html#configure">linear</a> and 
+<a href="background50.html#configure">adaptive</a> reading strategies.
 However large values reduce the processing time and the mechanical wear
 on the drive, but will also leave larger gaps in the image when reading defective areas.
 
@@ -831,7 +1493,7 @@ reading curve.
 EOF
 }
 
-function example93en()
+function example83en()
 {  cat >> $1 <<EOF
 
 <h3>Error correction settings</h3>
@@ -886,6 +1548,489 @@ and less to the larger ones.<p>
 
 dvdisaster optimizes access to the image and error correction files by maintaining 
 its own cache. The preset of 32MB is suitable for most systems.<p>
+
+EOF
+}
+
+function example90en()
+{  cat >> $1 <<EOF
+<h3>Command syntax</h3>
+
+<b>Using the command line.</b> 
+dvdisaster will work in command line mode if it is called with one of the
+<a href="#modes">actions</a> described below (read, create, scan, fix, test). 
+Otherwise a window for the graphical user interface will be opened.<p>
+
+Command line mode ignores any settings from the graphical interface and the
+<i>.dvdisaster</i> file. Likewise, the command line options described here
+have no effect in the graphical user interface.<p>
+
+For technical reasons there are two program versions for Windows:<p>
+<table>
+<tr><td><i>dvdisaster.exe</i></td><td>--</td><td>provides the command line interface</td></tr>
+<tr><td><i>dvdisaster-win.exe</i></td><td>--</td><td>contains the graphical user interface</td></tr>
+</table><p>
+
+<b><a name="modes">Actions.</a>&nbsp;</b>dvdisaster needs to be called with at least one action 
+specified either in long form (--read) or just by the beginning letter (-r):<p>
+
+<table>
+<tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#scan">--scan</a></td><td>Scan medium for read errors</tr>
+<tr valign=top><td></td><td><a href="#read">--read</a></td><td>Read the medium image to hard disc</td></tr>
+<tr valign=top><td></td><td><a href="#create">--create</a> &nbsp; &nbsp;</td><td>Create the error correction file</td></tr>
+<tr valign=top><td></td><td><a href="#fix">--fix</a></td><td>Try to fix an image using the error correction file</td></tr>
+<tr valign=top><td></td><td><a href="#test">--test</a></td><td>Test whether image and error correction file match</td></tr>
+<tr valign=top><td></td><td><a href="#unlink">--unlink</a></td><td>Delete the image file at program exit</td></tr>
+</table>
+<pre> </pre> 
+
+<b><a name="drive">Device and filenames.</a></b> These options do also have a long form (--device) and a 
+first letter abbreviation (-d). They are used to change the pre-selected drive and file names.<p>
+
+<table>
+<tr><td>&nbsp; &nbsp;</td><td><a href="#device">--device</a>  &nbsp; &nbsp;</td><td>Device selection</td></tr>
+<tr><td></td><td><a href="#prefix">--prefix</a></td><td>Prefix for image and error correction files</td></tr>
+<tr><td></td><td><a href="#image">--image</a></td><td>Name of image file</td></tr>
+<tr valign=top><td></td><td><a href="#eccfile">--eccfile</a></td><td>Name of error correction file<p></td></tr>
+<tr><td></td><td><a href="#list">--list</a></td><td>shows drives available under ASPI (Windows version only)</td></tr>
+</table><pre> </pre> 
+
+<b><a name="options">Other Options.</a></b> These less frequently used options are only available in the
+long form unless noted otherwise.<p>
+
+<table>
+<tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#adaptiveread">--adaptive-read</a></td><td>use adaptive strategy for reading damaged media</td></tr>
+<tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#autosuffix">--auto-suffix</a></td><td>automatically add .iso and .ecc file suffixes</td></tr>
+<tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#cache">--cache-size</a> &nbsp; &nbsp;</td><td>Cache size during creation of the error correction file</td></tr>
+<tr valign=top><td></td><td><a href="#dao">--dao</a></td><td>Assumes "disk at once" medium</td></tr>
+<tr valign=top><td></td><td><a href="#fillunreadable">--fill-unreadable [n]</a></td><td>fill unreadable sectors with given byte</td></tr>
+<tr valign=top><td></td><td><a href="#jump">-j / --jump</td><td>Skip sectors after a read error</td></tr>
+<tr valign=top><td></td><td><a href="#parse-udf">--parse-udf</td><td>Use information from ISO/UDF filesystem</td></tr>
+<tr valign=top><td></td><td><a href="#redundancy">-n / --redundancy</td><td>Set error correction code redundancy</td></tr>
+<tr valign=top><td></td><td><a href="#method">-m / --method</a>&nbsp; &nbsp;</td><td>Select error correction method</td></tr>
+<tr valign=top><td></td><td><a href="#speedwarn">--speed-warning [n]</a>&nbsp; &nbsp;</td><td>Warns when reading speed drops a certain amount</td></tr>
+<tr valign=top><td></td><td><a href="#spinup">--spinup-delay [n]</a>&nbsp; &nbsp;</td><td>Gives drive time to spin up</td></tr>
+<tr valign=top><td></td><td><a href="#split">--split-files</a>&nbsp; &nbsp;</td><td>Splits files into segments <= 2GB</td></tr>
+</table>
+
+<h3>Actions.</h3>
+
+<a name="scan"><b>--scan [n-m]: Scan medium for read errors</b></a><p>
+
+Reads every medium sector 
+and prints the number of unreadable sectors when finished.<p>
+
+It is possible to limit the scan to a certain range of sectors. Sector counting
+starts with 0; "end" refers to the last sector.  
+The given interval is inclusive; 0-100 will read 101 sectors.<p>
+
+Do not use white space in the abbreviated form between the "-s" and the interval: 
+<pre>
+dvdisaster -s0-100          # reads sectors 0 to 100
+dvdisaster --scan 0-100     # long form
+dvdisaster --scan 3000-end  # reads from sector 3000 until the end of medium
+</pre>
+<div align=right><a href="#modes">&uarr;</a></div><p>
+
+
+
+<a name="read"><b>--read [n-m]: Read the medium image to hard disc </b></a><p>
+
+Creates a medium image on the hard disc.<p>
+
+If the image file is already present, only sectors missing in the image will be
+re-read. This allows for completing the image in several reading passes,
+and optionally to employ different drives in each of them.<p>
+
+--read will use the <a href="background40.html">linear reading strategy</a> by default.
+Add the <a href="example90.html#adaptiveread">--adaptive-read</a> option
+to employ the <a href="background50.html">adaptive reading strategy</a> instead.<p>
+
+The range of sectors to be read in can be limited analogous to the
+<a href="example90.html#scan">--scan</a> option. 
+
+<div align=right><a href="#modes">&uarr;</a></div><p>
+
+
+
+<a name="create"><b>--create: Create the error correction file</b></a><p>
+
+Creates the error correction file for an image.<p>
+
+<div align=right><a href="#modes">&uarr;</a></div><p>
+
+
+
+<a name="fix"><b>--fix: Fix an image</b></a><p>
+
+Try to fix an image using the error correction file.<p>
+
+If not all sectors can be repaired during the first pass,
+try reading the image again with another <a href="#read">--read</a> pass
+<a href="background60.html#reading-tips">(some hints for re-reading)</a>.
+This might gather enough missing sectors 
+for a successful error correction run.<p>
+
+<div align=right><a href="#modes">&uarr;</a></div><p>
+
+
+
+<a name="test"><b>--test: Test whether image and error correction files match</b></a><p>
+
+This action simply checks whether the image and error correction files match
+(e.g. belong to the same medium), and whether their internal check sums are correct.<p>
+
+See also <a href="qa20.html#crc">topic 3.3</a> in the <a href="qa20.html">Questions and
+Answers</a>.
+
+
+<div align=right><a href="#modes">&uarr;</a></div><p>
+
+
+
+<a name="unlink"><b>--unlink: Delete the image file at program exit</b></a><p>
+
+This function deletes the image file if all preceeding actions were successful.
+
+<div align=right><a href="#modes">&uarr;</a></div><p>
+
+
+
+<h3>Devices and file names.</h3>
+
+<a name="device"><b>--device &lt;drive&gt;: Select a drive</b></a><p>
+
+The preset is "/dev/cdrom" for Linux. Under Windows, the first CD/DVD drive 
+(according to the drive letter order) is pre-selected.<p>
+
+<b>FreeBSD:</b><br>
+<table class="example-bsd" width=100%><tr><td>
+user@freebsd&gt; dvdisaster <b>-d /dev/pass0</b> -r
+</td></tr></table><p>
+
+dvdisaster supports drives which are accessible through 
+the passthrough driver <tt>/dev/pass*</tt> and which are MMC3 compliant. 
+Access to ATAPI drives may require a <a href="download20.html#freebsd">kernel recompile</a>.<p>
+
+<b>Linux:</b><br>
+ 
+<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+user@linux&gt; dvdisaster <b>-d /dev/hdc</b> -r
+</td></tr></table><p>
+
+dvdisaster supports drives which are accessible through 
+the Linux uniform CD-ROM driver and which are MMC3 compliant. 
+These are particularly ATAPI drives attached to the symbolic devices
+<tt>/dev/hd*</tt> and SCSI drives using the symbolic devices <tt>/dev/scd*</tt>.
+External drives using other bus systems (like USB, IEEE 1394) usually also appear
+as SCSI devices.<p>
+
+Accessing ATAPI drives using the <i>ide-scsi</i> module is not recommended,
+but possible since these devices are usually available under the
+<tt>/dev/scd*</tt> interface.<p>
+
+The general SCSI driver <i>sg</i> (<tt>/dev/sg*</tt>) is not supported.
+This should not be a problem since the respective drives are also available
+using the <tt>/dev/scd*</tt> or <tt>/dev/sr*</tt> devices.<p>
+
+<b>Windows:</b><br>
+<table class="example-win" width=100% bgcolor=#e0e0ff><tr><td>
+user@windows&gt; dvdisaster <b>-d E:</b> -r
+</td></tr></table><p>
+
+dvdisaster supports local drives implementing the MMC3 standard
+and which are referenced through a drive letter in the system.
+
+
+<div align=right><a href="#drive">&uarr;</a></div><p>
+
+<a name="prefix"><b>--prefix &lt;prefix&gt;: Prefix for image and error correction files</b></a><p>
+
+The preset is "medium"; the image and error correction files will automatically receive the
+endings ".iso" and ".ecc".
+
+<div align=right><a href="#drive">&uarr;</a></div><p>
+
+<a name="image"><b>--image &lt;file name&gt;: Name of image file</b></a><p>
+
+The preset is "medium.iso"; the specified file name will be used exactly (without appending a suffix)
+for the image file
+as long as <a href="#autosuffix">--auto-suffix</a> is not specified also.
+
+<div align=right><a href="#drive">&uarr;</a></div><p>
+
+<a name="eccfile"><b>--eccfile &lt;file name&gt;: Name of error correction file</b></a><p>
+
+The preset is "medium.ecc"; the specified file name will be used exactly (without appending a suffix)
+for the error correction file
+as long as <a href="#autosuffix">--auto-suffix</a> is not specified also.
+
+<div align=right><a href="#drive">&uarr;</a></div><p>
+
+<a name="list"><b>--list: shows drives available under ASPI</b></a><p>
+
+This option lists all CD/DVD drives which are accessible through
+the <a href="qa10.html#aspi">ASPI</a> layer of Windows:<p>
+
+<table class="example-win" width=100% bgcolor=#e0e0ff><tr><td>
+user@windows&gt; dvdisaster <b>-l</b><br>
+dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
+<i>[... remainder of the GPL announcement ...]</i><p>
+
+List of ASPI CD/DVD drives:<p>
+ 1: (H:) ATAPI DVD+RW 8X4X12 B2K7<br>
+ 2: (I:) MYDRIVE CD-R MY-401610X 1.05<p>
+
+To force ASPI usage over SPTI, refer to the drive by the<br>
+above numbers (use 1:, 2:,... instead of C:, D:,...)
+</td></tr></table><p>
+
+The default is trying to access a drive using SPTI first
+and only fall back to ASPI if the former does not work.
+Usage of the ASPI layer can be forced by
+specifying the drive by its number rather than by its letter.
+To read in a disc using ASPI and the "MYDRIVE" unit from the above
+example, you would therefore enter:<p>
+
+<table class="example-win" width=100% bgcolor=#e0e0ff><tr><td>
+user@windows&gt; dvdisaster <b>-d 2:</b> -r<br>
+</table>
+
+<div align=right><a href="#drive">&uarr;</a></div><p>
+
+
+<h3>Other Options.</h3>
+
+<a name="adaptiveread"><b>--adaptive-read: Use adaptive strategy for reading damaged media</b></a><p>
+
+This switch selects the <a href="background50.html">adaptive reading strategy</a>
+which is particularly suited for reading in damaged media.
+Use this switch in conjunction with <a href="#read">-r/--read</a> and with
+<a href="#eccfile">-e/--eccfile</a>. Specifying the error correction file 
+causes the reading process to finish as soon as enough information has been 
+collected for recovering the medium image.
+<p>
+
+<div align=right><a href="#options">&uarr;</a></div><p>
+
+
+
+<a name="autosuffix"><b>--auto-suffix: automatically add .iso and .ecc file suffixes</b></a><p>
+
+When this option is given, file names specified by the
+<a href="#image">-i/--image</a>- or <a href="#eccfile">-e/--eccfile</a> option
+will be automatically appended with ".iso" or ".ecc" respectively
+if no other file name extension is already present.
+
+<div align=right><a href="#options">&uarr;</a></div><p>
+
+
+
+<a name="cache"><b>--cache-size &lt;size in MB&gt;: Specify the cache size</b></a><p>
+
+dvdisaster optimizes access to the image and error correction
+files by maintaining its own cache.
+The cache size can be between 1 and 2048 MB. 
+The preset is  32MB, which should be suitable for most systems.<p>
+
+This option is only effective during the <a href="#create">--create</a> action.
+
+<div align=right><a href="#options">&uarr;</a></div><p>
+
+
+
+<a name="dao"><b>--dao: Assumes "disk at once" medium</b></a><p>
+
+Media written in "TAO" ("track at once") mode may contain two sectors
+with <a href="qa20.html#tao">pseudo read errors</a> at the end.
+By default these two errors are ignored by dvdisaster.<p>
+
+If you are extremely unlucky to have a "DAO" ("disc at once") medium
+with exactly one or two real read errors at the end,
+use the "--dao" option to have these read errors handled correctly.
+
+<div align=right><a href="#options">&uarr;</a></div><p>
+
+
+
+<a name="fillunreadable"><b>--fill-unreadable &lt;fill byte&gt;: fill unreadable sectors with given byte </b></a><p>
+
+dvdisaster marks unreadable sectors with a special filling sequence which is very unlikely
+to occur in undamaged media.<br>
+In other data recovery software it is common to fill unreadable sectors with a certain byte
+value. To allow interoperability with such programs, you can specify the byte value
+they are using:<p>
+
+<ul>
+<li><b>0xb0 (176 decimal)</b>: for compatibility with <i>h2cdimage</i> 
+published by "c't", a German periodical.
+</li>
+</ul>
+
+Using zero filling (0x00, decimal 0) is <b>highly discouraged</b>.
+Most media contain regular zero filled sectors. At a later error correction pass,
+these can not be told apart from unreadable sectors if zero filling is used.
+</li>
+</ul>
+
+<div align=right><a href="#options">&uarr;</a></div><p>
+
+
+
+<a name="jump"><b>-j / --jump &lt;number of sectors&gt;: Skip sectors after a read error </b></a><p>
+
+This option has slightly different behaviour depending on the used reading strategy:
+<ul>
+<li>when using the <a href="background40.html#configure">linear reading strategy</a>
+(default setting), 
+the given number of sectors will be skipped after a read error.</li>
+<li>the <a href="background50.html#configure">adaptive reading strategy</a> 
+(<a href="#adaptiveread">--adaptive-read</a> option) will terminate
+when no unreadable areas are left in the image which are larger than the given value.</li>
+</ul> 
+
+Large values reduce the processing time and the mechanical wear on the drive,
+but will also leave larger gaps in the image when reading defective areas.
+The number of skipped sectors must be a multiple of 16.
+
+<div align=right><a href="#options">&uarr;</a></div><p>
+
+
+
+<a name="parse-udf"><b>--parse-udf: Use information from ISO/UDF filesystem</b></a><p>
+dvdisaster will determine the image size from the ISO/UDF file system
+if this option is given. This works around some problems caused by drives
+<a href="qa20.html#plusrw">reporting incorrect image lengths</a>
+with DVD-RW/+RW media.
+<div align=right><a href="#options">&uarr;</a></div><p>
+
+
+
+<a name="redundancy"><b>-n / --redundancy: Set error correction code redundancy</b></a><p>
+
+The redundancy specifies the percentage of correctable errors
+<a href="background10.html">in the best case</a>.
+Since the ideal case is rare, it is recommended to apply a reasonable margin 
+to the redundancy. Also, consider the following properties of the error correction:<p>
+
+<ul>
+<li>An error correction file with  x% redundancy will be approximately x% of the size
+of the corresponding image file.</li>
+<li>The error correction capability depends on the statistical distribution of read errors. 
+Only changes by 5 percentage points and more may 
+have a recognizable effect on the error correction.<p></li>
+</ul>
+
+The are several ways of specifying the redundancy:<p>
+
+<ol>
+<li> <b>"normal" or "high"</b><p>
+
+Enter "normal" or "high" to get the following redundancies:<p>
+
+<table border="1" cellpadding="3">
+<tr><td align=center>Value</td><td>Redundancy</td></tr>
+<tr><td><tt>-n normal</tt></td><td align=center>14.3%</td></tr>
+<tr><td><tt>-n high</tt></td><td align=center>33.5%</td></tr>
+</table><p>
+
+These values invoke optimized program code to speed up the
+error correction file creation. The default value is "normal".<p>
+</li>
+
+<li> <b>Percentage values</b><p>
+
+Specifying the redundancy by percent is also possible:<p>
+
+<table border="1" cellpadding="3">
+<tr><td>Example</td><td>Valid range</td></tr>
+<tr><td><tt>-n 25%</tt></td><td align=center>3.2% to 64.5%</td></tr>
+</table><p>
+
+For technical reasons the actual redundancy can deviate a few tenths
+from the specified value.<p>
+</li>
+
+<li> <b>Correctable errors per ECC block</b><p>
+
+When no redundancy unit is given, the value is interpreted to
+create a (255, 255-x)-Reed-Solomon code:<p>
+
+<table border="1" cellpadding="3">
+<tr><td>Example</td><td>Valid range</td></tr>
+<tr><td><tt>-n 32</tt></td><td align=center>8 to 100</td></tr>
+</table><p>
+
+This combines 255-x media sectors into one ECC block. Within this block
+up to x unreadable sectors can be recovered.<p>
+
+By the way: &nbsp; &nbsp; Redundancy in percent = (100 * x) / (255 - x)<p>
+</li>
+
+<li> <b>Maximum size of error correction file</b><p>
+
+Another way of specifying redundancy is to
+give the size of the error correction file in MB:<p>
+
+<table border="1" cellpadding="3">
+<tr><td>Example</td><td>Valid range</td></tr>
+<tr><td><tt>-n 50m</tt></td><td align=center>3.2% to 64.5% of image size</td></tr>
+</table><p>
+
+In this case dvdisaster will choose a suitable redundancy setting so that
+the overall size of the error correction file does not exceed the
+given limit.<p>
+
+Advance notice: When using the same size setting for images of vastly different size,
+more error correction information is allotted to the smaller images
+and less to the larger ones.<p>
+</li>
+</ol>
+
+<div align=right><a href="#options">&uarr;</a></div><p>
+
+
+<a name="method"><b>-m / --method <m>: Select error correction method</b></a><p>
+
+Choose between the
+<a href="background30.html">RS01</a> (default) 
+and <a href="background30.html">RS02</a> method.
+
+<div align=right><a href="#options">&uarr;</a></div><p>
+
+
+
+<a name="speedwarn"><b>--speed-warning [n]: Warns when reading speed drops a certain amount</b></a><p>
+
+Prints a warning when the reading speed changes by more than <i>n</i> percent.
+This is useful for recognizing a beginning decay in media quality.
+If the optional value [n] is omitted, a preset of 10 percent is used.
+
+<div align=right><a href="#options">&uarr;</a></div><p>
+
+
+<a name="--spinup"><b>--spinup-delay [n]: Gives drive time to spin up</b></a><p>
+
+Waits the given amount of seconds for the drive to spin up before the real
+reading process starts.
+This avoids spurious warnings about speed changes at the beginning of the medium
+when the <a href="#speedwarn">--speed-warning</a> option is used.<br>
+
+If the optional value [n] is not given, dvdisaster will wait for 5 seconds.
+
+<div align=right><a href="#options">&uarr;</a></div><p>
+
+<a name="split"><b>--split-files: Splits files into segments <= 2GB</b></a><p>
+
+Allows the creation of large images and error correction files 
+ on file systems which are limited to 2GB per file
+(e.g. FAT from Windows). The files are spread over upto 100 segments "medium00.iso", "medium01.iso" etc. at the cost of a small performance hit.<p>
+
+The file name must still be specified as
+"medium.iso" using the <a href="#image">--image</a> option; 
+the numbering will be automatically inserted when this switch is active.<p>
+
+<div align=right><a href="#options">&uarr;</a></div><p>
 
 EOF
 }
@@ -986,11 +2131,11 @@ if creation is invoked immediately after the image read.</li>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
 This version is capable of determining the
-<a href="example91.html#iso">image size from the UDF/ISO file system</a>
+<a href="example81.html#iso">image size from the UDF/ISO file system</a>
 to improve the
 <a href="qa20.html#plusrw">image size recognition for -RW/+RW media</a>.
 Reading images and creating the respective error correction file can now be invoked together
-with a <a href="example91.html#auto">single mouse click</a>.
+with a <a href="example81.html#auto">single mouse click</a>.
 A couple of small improvements have been made
 to support more CD/DVD drives, polish existing functionality, and to weed out some
 minor bugs ;-)<p>
@@ -1019,8 +2164,8 @@ Unix conventions under Linux.
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
-Contains an <a href="example50.html">improved strategy</a> for
-<a href="syntax90.html#adaptiveread">reading defective media</a> 
+Contains an <a href="example30.html">improved strategy</a> for
+<a href="example80.html#adaptiveread">reading defective media</a> 
 which has been motivated by an article in issue 16/2005 of the german
 periodical c't.
 </td></tr></table><p>
@@ -1174,7 +2319,7 @@ Invoke the program for a quick test:<p>
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>./dvdisaster</b><br>
-<i>[... after a moment the <a href="example10.html">main window</a> will open ...]</i>
+<i>[... after a moment the main window</a> will open ...]</i>
 </td></tr></table><p>
 
 Working with the program from the current directory is okay.
@@ -1197,834 +2342,6 @@ paths.
 <pre> </pre>
 
 <font size="+1">Enjoy using dvdisaster!</font>
-EOF
-}
-
-# ----- Command line syntex
-
-function syntax_contents_en()
-{  local file="$1.html"
-   local query=$2
-   local page=$3
-   local lang=$4
-
-   case $query in
-   title)   title="Commandline mode" ;;
-
-   link)    link_title="Command line mode" ;;
-   link10)   link_title="Using the command line" ;;
-   link20)   link_title="Creating a medium image" ;;
-   link30)   link_title="Generating error correction files" ;;
-   link40)   link_title="Scanning the medium for errors" ;;
-   link50)   link_title="Recovering a medium image" ;;
-
-   link60)   link_title="Choosing alternative drives and file names" ;;
-   link70)   link_title="Performing several actions within one program call" ;;
-
-   link90)   link_title="Command syntax" ;;
-
-   content*) eval "syntax$page$lang $file" ;;
-   esac 
-}
-
-
-function syntax0en()
-{  cat >> $1 <<EOF
-<h3>dvdisaster as command line tool</h3>
-
-Overview of basic functions:
-
-<ol>
-<li><a href="syntax10.html">Using the command line</a><p></li>
-<li><a href="syntax20.html">Creating the medium image</a><p></li>
-<li><a href="syntax30.html">Generating the error correction file</a><p></li>
-<li><a href="syntax40.html">Scanning the medium for errors</a><p></li>
-<li><a href="syntax50.html">Recovering the medium image</a><p></li>
-</ol>
-<pre> </pre>
-
-Some hints for making work easier: 
-
-<ul>
-<li><a href="syntax60.html">Choosing alternative drives and file names</a><p></li>
-<li><a href="syntax70.html">Performing several actions within one program call</a><p></li>
-<li><a href="background60.html">Hints for storing the error correction files</a></li>
-</ul>
-
-<pre> </pre>
-
-Complete list of command line options:
-<ul>
-<li><a href="syntax90.html">Command syntax</a><p></li>
-</ul>
-
-EOF
-}
-
-
-function syntax10en()
-{  cat >> $1 <<EOF
-<h3>Using the command line</h3>
-
-dvdisaster switches into command line mode if it is invoked
-with an <a href="syntax90.html#modes">action parameter</a> 
-(such as read, create, scan, fix, test). Otherwise a window for the
-<a href="example10.html">graphical user interface</a> will be opened.<p>
-
-Command line mode ignores any settings from the graphical user interface and the <i>.dvdisaster</i> configuration file.<p>
-
-<b>Hints for the Windows version:</b>
-
-<ul>
-<li>Under Windows 2000 and XP either <b>administrator priviledges</b> or an installed
-<a href="qa10.html#aspi">ASPI</a> driver are required in order to access the CD/DVD drives.<p></li>
-<li>For technical reasons there are two program versions for Windows:
-<table>
-<tr><td><i><b>dvdisaster</b>.exe</i></td><td>--</td><td>provides the command line interface</td></tr>
-<tr><td><i>dvdisaster-win.exe</i></td><td>--</td><td>contains the graphical user interface</td></tr>
-</table>
-</li>
-</ul>
-
-<a href="syntax20.html">Creating the medium image...</a>
-
-EOF
-}
-
-
-function syntax20en()
-{  cat >> $1 <<EOF
-<h3>Creating the medium image</h3>
-
-Most actions of dvdisaster are performed on a medium image residing on your hard drive.
-This makes things faster and reduces wear of your CD/DVD drive.<p>
-
-In order to create the medium image:
-<ul>
-<li>Change into a directory with enough free storage space.
-<li>Insert the medium into the drive.</li>
-<li>Read the medium image onto the hard disk:</li>
-</ul>
-
-<table class="example" width=100% bgcolor=#ffffe0><tr><td>
-user@linux&gt; <b>dvdisaster -r</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
-This software comes with &nbsp;ABSOLUTELY NO WARRANTY. &nbsp;This<br>
-is free software and you are welcome to redistribute it<br>
-under the conditions of the GNU GENERAL PUBLIC LICENSE.<br>
-See the file "COPYING" for further information.<p>
-
-Device: /dev/cdrom, &nbsp;ATAPI DVD+RW 8X4X12 B2K7<br>
-Medium: DVD+R, 2224288 sectors, 1 layer(s)<p>
-
-Creating new medium.iso image.<br>
-Waiting 5 seconds for drive to spin up...<br>
-Read position: 100.0% ( 6.3x)<br>
-All sectors successfully read.
-</td></tr></table><p>
-
-The percentage of already read sectors and the current drive speed
-will be shown during the process.<p>
-
-Upon completion you will find the image file <i>medium.iso</i> in the current directory:<p>
-
-<table class="example" width=100% bgcolor=#ffffe0><tr><td>
-user@linux&gt; <b>ls -lA</b><br>
--rwx------    1 user     linux    4555341824 2004-07-02 21:31 medium.iso<br>
-</td></tr></table><p>
-
-The default setting is to read from drive <i>/dev/cdrom</i> and to create 
-file names beginning with <i>medium</i>. Of course it is possible to
-select other <a href="syntax60.html">drives</a>
-and <a href="syntax60.html">file names</a>.<p>
-
-<a href="syntax30.html">Generating the error correction file...</a>
-EOF
-}
-
-
-function syntax30en()
-{  cat >> $1 <<EOF
-<h3>Generating the error correction file</h3>
-
-The error correction file has an important role in dvdisaster:<br>
-It is required to recover unreadable medium sectors.<p>
-
-When you have created the
-<a href="syntax20.html">medium image</a> on your hard disk, enter the following:<p>
-
-<table class="example" width=100% bgcolor=#ffffe0><tr><td>
-user@linux&gt; <b>dvdisaster -c</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
-<i>[... remainder of the GPL announcement ...]</i><p>
-
-Opening medium.iso: 2224288 medium sectors.<br>
-Scanning image sectors: 100%<br>
-Encoding with Codec RS01: 32 roots, 14.3% redundancy.<br>
-Ecc generation: 100.0%<br>
-Error correction file "medium.ecc" created.<br>
-Make sure to keep this file on a reliable medium.<br>
-</td></tr></table><p>
-
-dvdisaster will first check the image for completeness
-<i>because an error correction file can not be generated for media 
-already containing unreadable sectors!</i> <br>
-
-<table width=100%><tr><td bgcolor=#000000 width=2><img width=1 height=1 alt=""></td>
-<td>Generate the error correction file immediately after writing the medium.
-</td></tr></table>
-
-The progress will be shown using a percentage reading. 
-Processing a single layered DVD image with the 
-default <a href="syntax90.html#redundancy">redundancy</a>
-takes about 10 minutes on an average 2Ghz system.<p>
-
-When finished, the error correction file <i>medium.ecc</i> appears in the current directory:<p>
-
-<table class="example" width=100% bgcolor=#ffffe0><tr><td>
-user@linux&gt; <b>ls -lA</b><br>
--rwx------    1 user     linux    653721680 2004-07-02 22:45 medium.ecc<br>
--rwx------    1 user     linux    4555341824 2004-07-02 21:31 medium.iso<br>
-</td></tr></table><p>
-
-You can remove the image file now, <p>
-
-<table class="example" width=100% bgcolor=#ffffe0><tr><td>
-user@linux&gt; <b>rm -f medium.iso</b><br>
-</td></tr></table><p>
-
-but keep the error correction file on a <a href="background60.html">reliable storage medium</a>!
-<p>
-
-<a href="syntax40.html">From now on you should regularly scan the medium for read errors...</a>
-EOF
-}
-
-
-function syntax40en()
-{  cat >> $1 <<EOF
-<h3>Scanning the medium for errors</h3>
-
-To check your medium for read errors insert it into your drive and enter:<p>
-
-<table class="example" width=100% bgcolor=#ffffe0><tr><td>
-user@linux&gt; <b>dvdisaster -s</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
-<i>[... remainder of the GPL announcement ...]</i><p>
-
-Device: /dev/cdrom, &nbsp;ATAPI DVD+RW 8X4X12 B2K7<br>
-Medium: DVD+R, 2224288 sectors, 1 layer(s)<p>
-
-Scanning medium for read errors.<br>
-Waiting 5 seconds for drive to spin up...<br>
-Sector 57664: Medium Error; Unrecovered read error. Skipping 15 sectors.<br>
-Sector 57728: Medium Error; Unrecovered read error. Skipping 15 sectors.<br>
-[... more read error reports ...] <br>
-Sector 716640: Medium Error; Unrecovered read error. Skipping 15 sectors.<br>
-Read position: 100.0% ( 2.4x)<br>
-33840 unreadable sectors.
-</td></tr></table><p>
-
-The reported read errors may be different from "Medium Error; ..."
-as these depend on the drive's firmware. <p>
-
-If a suitable error correction file is available for your medium,
-specify it using the <a href="syntax90.html#image">-e option</a>
-along with the -s option. This invokes an additional compare of the image
-against the checksums stored in the error correction file.
-<p>
-
-
-<table width=100%><tr><td bgcolor=#000000 width=2><img width=1 height=1 alt=""></td><td>
-As soon as you notice read errors on your medium, try
-<a href="syntax50.html">recovering the medium image</a> 
-and transfer it onto a new storage medium. </td></tr></table><p>
-
-<b>How frequently should the media be scanned?</b> 
-This depends on your media quality and storage conditions.
-As a guide line for CD- and DVD media of unknown quality:
-
-<ol>
-<li> 3 days after burning (keep the media images on hard disc until this test passes!), </li>
-<li> 14 days after burning, </li>
-<li> 3 months after burning, </li>
-<li> then one more scan after each 6 months.</li>
-</ol>
-
-If you're using lots of media from the same production of a high quality manufacturer,
-it may be sufficient to scan a sample of 2-3 media per month and batch.<p>
-
-<a href="syntax50.html">Recovering a medium image...</a>
-EOF
-}
-
-
-function syntax50en()
-{  cat >> $1 <<EOF
-<h3>Recovering a medium image</h3>
-
-To recover data from damaged media, you must first try
-to read as much data as possible from it into an image file.<br>
-If you use the <a href="background40.html">adaptive reading strategy</a> 
-and point dvdisaster to the name
-of the error correction file, reading will stop when enough data
-for recovering the image has been collected - resulting in a major time saving!<p>
-
-<table class="example" width=100% bgcolor=#ffffe0><tr><td>
-user@linux&gt; <b>dvdisaster -r --adaptive-read -e medium.ecc</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
-<i>[... remainder of the GPL announcement ...]</i><p>
-
-Device: /dev/cdrom, &nbsp;ATAPI DVD+RW 8X4X12 B2K7<br>
-Medium: DVD+R, 2224288 sectors, 1 layer(s)<p>
-
-Adaptive reading: Trying to collect enough data for error correction.<br>
-Creating new medium.iso image.<br>
-Repairable:  2.6% (correctable: 0; now reading [0..2224288], size 2224288)<br>
-Sectors 57264-57279: Medium Error; Unrecovered read error.<br>
-Filling image area [57280..1083504]<br>
-[... more descriptions of reading process ...] <br>
-Repairable: 100.0% (correctable: 319200; now reading [320304..327065], size 6762)<br>
-Sufficient data for reconstructing the image is available.
-</td></tr></table><p>
-
-Then you need the <a href="syntax30.html">appropriate error correction file</a>,
-which you have hopefully generated at a time when the medium was still fully readable.
-Enter:<p>
-
-<table class="example" width=100% bgcolor=#ffffe0><tr><td>
-user@linux&gt; <b>dvdisaster -f</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
-<i>[... remainder of the GPL announcement ...]</i><p>
-
-Opening medium.iso: 2224288 medium sectors.<p>
-
-Fix mode: Repairable sectors will be fixed in the image.<br>
-&nbsp;&nbsp;&nbsp;    5 repaired sectors: 708225 59850 69825 79800 199500 <br>
-&nbsp;&nbsp;&nbsp;    6 repaired sectors: 708226 59851 69826 79801 89776 199501<br>
-[... more reports on repaired sectors ...] <br>
-&nbsp;&nbsp;&nbsp;    5 repaired sectors: 708224 59849 69824 79799 199499<br>
-Ecc progress: 100.0% <br>
-Repaired sectors: 33264 <br>  
-Good! All sectors are repaired.<br>
-Erasure counts per ecc block:  avg =  3.3; worst = 7.
-</td></tr></table><p>
-
-The message "Good! All sectors are repaired." confirms that the medium image
-("medium.iso") has been fully recovered. 
-The repaired image can be written to a new
-medium using a suitable CD/DVD recording software.<p>
-
-If uncorrectable sectors remain after this stage, 
-try reading the image again
-<a href="background50.html#reading-tips">(some hints for re-reading)</a>.
-dvdisaster will try to re-read only the missing sectors, and this might
-retrieve enough missing sectors for a successful error correction run.
-EOF
-}
-
-
-function syntax60en()
-{  cat >> $1 <<EOF
-<h3>Choosing a drive for reading</h3>
-
-Use the <a href="syntax90.html#device">"-d" - option</a>
-to specify the drive for reading media images:<p>
-
-<table class="example-bsd" width=100%><tr><td>
-user@freebsd&gt; dvdisaster <b>-d /dev/pass0</b> -r
-</td></tr></table><p>
-
-<table class="example" width=100%><tr><td>
-user@linux&gt; dvdisaster <b>-d /dev/hdc</b> -r
-</td></tr></table><p>
-
-<table class="example-win" width=100%><tr><td>
-user@windows&gt; dvdisaster <b>-d E:</b> -r
-</td></tr></table><p>
-
-The FreeBSD version accesses devices using the passthrough drivers 
-<tt>/dev/pass*</tt>.
-Under Linux some commonly used device names are
-<tt>/dev/hd*</tt> for ATAPI drives and <tt>/dev/scd*</tt>
-for SCSI drives. The Windows version works with the usual drive letters.
-
-<pre> </pre>
-
-<h3>Specifying image and error correction files names</h3>
-
-You can change the names of image and error correction files
-using the <a href="syntax90.html#image">"-i and -e" - options</a>:<p>
-
-<table class="example" width=100% bgcolor=#ffffe0><tr><td>
-user@linux&gt; dvdisaster <b>-i myimage.iso -e medium01.ecc</b> -c
-</td></tr></table><p>
-
-It is possible to omit the file suffixes ".iso" bzw. ".ecc" 
-or to use other file endings.
-EOF
-}
-
-
-function syntax70en()
-{  cat >> $1 <<EOF
-<h3>Performing several actions within one program call</h3>
-
-dvdisaster can execute several <a href="syntax90.html#modes">actions</a>
-within one program invocation.<br>
-For example, to read an image from <tt>/dev/hdc</tt>,
-create an error correction file "medium42.ecc" for it and
-finally delete the temporary image file "medium.iso", enter:<p>
-
-<table class="example" width=100% bgcolor=#ffffe0><tr><td>
-user@linux&gt; dvdisaster <b>-r -c -u</b> -d /dev/hdc -e medium42.ecc
-</td></tr></table><p>
-
-Actions will always be executed in the same order as they are 
-<a href="syntax90.html#modes">listed in the command syntax section</a>,
-even if they are specified in a different sequence on the command line.
-EOF
-}
-
-
-function syntax90en()
-{  cat >> $1 <<EOF
-<h3>Command syntax</h3>
-
-<b><a name="modes">Actions.</a>&nbsp;</b>dvdisaster needs to be called with at least one action 
-specified either in long form (--read) or just by the beginning letter (-r):<p>
-
-<table>
-<tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#scan">--scan</a></td><td>Scan medium for read errors</tr>
-<tr valign=top><td></td><td><a href="#read">--read</a></td><td>Read the medium image to hard disc</td></tr>
-<tr valign=top><td></td><td><a href="#create">--create</a> &nbsp; &nbsp;</td><td>Create the error correction file</td></tr>
-<tr valign=top><td></td><td><a href="#fix">--fix</a></td><td>Try to fix an image using the error correction file</td></tr>
-<tr valign=top><td></td><td><a href="#test">--test</a></td><td>Test whether image and error correction file match</td></tr>
-<tr valign=top><td></td><td><a href="#unlink">--unlink</a></td><td>Delete the image file at program exit</td></tr>
-</table>
-<pre> </pre> 
-
-<b><a name="drive">Device and filenames.</a></b> These options do also have a long form (--device) and a 
-first letter abbreviation (-d). They are used to change the pre-selected drive and file names.<p>
-
-<table>
-<tr><td>&nbsp; &nbsp;</td><td><a href="#device">--device</a>  &nbsp; &nbsp;</td><td>Device selection</td></tr>
-<tr><td></td><td><a href="#prefix">--prefix</a></td><td>Prefix for image and error correction files</td></tr>
-<tr><td></td><td><a href="#image">--image</a></td><td>Name of image file</td></tr>
-<tr valign=top><td></td><td><a href="#eccfile">--eccfile</a></td><td>Name of error correction file<p></td></tr>
-<tr><td></td><td><a href="#list">--list</a></td><td>shows drives available under ASPI (Windows version only)</td></tr>
-</table><pre> </pre> 
-
-<b><a name="options">Other Options.</a></b> These less frequently used options are only available in the
-long form unless noted otherwise.<p>
-
-<table>
-<tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#adaptiveread">--adaptive-read</a></td><td>use adaptive strategy for reading damaged media</td></tr>
-<tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#autosuffix">--auto-suffix</a></td><td>automatically add .iso and .ecc file suffixes</td></tr>
-<tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#cache">--cache-size</a> &nbsp; &nbsp;</td><td>Cache size during creation of the error correction file</td></tr>
-<tr valign=top><td></td><td><a href="#dao">--dao</a></td><td>Assumes "disk at once" medium</td></tr>
-<tr valign=top><td></td><td><a href="#fillunreadable">--fill-unreadable [n]</a></td><td>fill unreadable sectors with given byte</td></tr>
-<tr valign=top><td></td><td><a href="#jump">-j / --jump</td><td>Skip sectors after a read error</td></tr>
-<tr valign=top><td></td><td><a href="#parse-udf">--parse-udf</td><td>Use information from ISO/UDF filesystem</td></tr>
-<tr valign=top><td></td><td><a href="#redundancy">-n / --redundancy</td><td>Set error correction code redundancy</td></tr>
-<tr valign=top><td></td><td><a href="#speedwarn">--speed-warning [n]</a>&nbsp; &nbsp;</td><td>Warns when reading speed drops a certain amount</td></tr>
-<tr valign=top><td></td><td><a href="#spinup">--spinup-delay [n]</a>&nbsp; &nbsp;</td><td>Gives drive time to spin up</td></tr>
-<tr valign=top><td></td><td><a href="#split">--split-files</a>&nbsp; &nbsp;</td><td>Splits files into segments <= 2GB</td></tr>
-</table>
-
-<h3>Actions.</h3>
-
-<a name="scan"><b>--scan [n-m]: Scan medium for read errors</b></a><p>
-
-Reads every medium sector 
-and prints the number of unreadable sectors when finished.<p>
-
-It is possible to limit the scan to a certain range of sectors. Sector counting
-starts with 0; "end" refers to the last sector.  
-The given interval is inclusive; 0-100 will read 101 sectors.<p>
-
-Do not use white space in the abbreviated form between the "-s" and the interval: 
-<pre>
-dvdisaster -s0-100          # reads sectors 0 to 100
-dvdisaster --scan 0-100     # long form
-dvdisaster --scan 3000-end  # reads from sector 3000 until the end of medium
-</pre>
-<div align=right><a href="#modes">&uarr;</a></div><p>
-
-
-
-<a name="read"><b>--read [n-m]: Read the medium image to hard disc </b></a><p>
-
-Creates a medium image on the hard disc.<p>
-
-If the image file is already present, only sectors missing in the image will be
-re-read. This allows for completing the image in several reading passes,
-and optionally to employ different drives in each of them.<p>
-
---read will use the <a href="background30.html">linear reading strategy</a> by default.
-Add the <a href="syntax90.html#adaptiveread">--adaptive-read</a> option
-to employ the <a href="background40.html">adaptive reading strategy</a> instead.<p>
-
-The range of sectors to be read in can be limited analogous to the
-<a href="syntax90.html#scan">--scan</a> option. 
-
-<div align=right><a href="#modes">&uarr;</a></div><p>
-
-
-
-<a name="create"><b>--create: Create the error correction file</b></a><p>
-
-Creates the error correction file for an image.<p>
-
-<div align=right><a href="#modes">&uarr;</a></div><p>
-
-
-
-<a name="fix"><b>--fix: Fix an image</b></a><p>
-
-Try to fix an image using the error correction file.<p>
-
-If not all sectors can be repaired during the first pass,
-try reading the image again with another <a href="#read">--read</a> pass
-<a href="background50.html#reading-tips">(some hints for re-reading)</a>.
-This might gather enough missing sectors 
-for a successful error correction run.<p>
-
-<div align=right><a href="#modes">&uarr;</a></div><p>
-
-
-
-<a name="test"><b>--test: Test whether image and error correction files match</b></a><p>
-
-This action simply checks whether the image and error correction files match
-(e.g. belong to the same medium), and whether their internal check sums are correct.<p>
-
-See also <a href="qa20.html#crc">topic 3.3</a> in the <a href="qa20.html">Questions and
-Answers</a>.
-
-
-<div align=right><a href="#modes">&uarr;</a></div><p>
-
-
-
-<a name="unlink"><b>--unlink: Delete the image file at program exit</b></a><p>
-
-This function deletes the image file if all preceeding actions were successful.
-
-<div align=right><a href="#modes">&uarr;</a></div><p>
-
-
-
-<h3>Devices and file names.</h3>
-
-<a name="device"><b>--device &lt;drive&gt;: Select a drive</b></a><p>
-
-The preset is "/dev/cdrom" for Linux. Under Windows, the first CD/DVD drive 
-(according to the drive letter order) is pre-selected.<p>
-
-<b>FreeBSD:</b> &nbsp; dvdisaster supports drives which are accessible through 
-the passthrough driver <tt>/dev/pass*</tt> and which are MMC3 compliant. 
-Access to ATAPI drives may require a <a href="download20.html#freebsd">kernel recompile</a>.<p>
-
-<b>Linux:</b> &nbsp; dvdisaster supports drives which are accessible through 
-the Linux uniform CD-ROM driver and which are MMC3 compliant. 
-These are particularly ATAPI drives attached to the symbolic devices
-<tt>/dev/hd*</tt> and SCSI drives using the symbolic devices <tt>/dev/scd*</tt>.
-External drives using other bus systems (like USB, IEEE 1394) usually also appear
-as SCSI devices.<p>
-
-Accessing ATAPI drives using the <i>ide-scsi</i> module is not recommended,
-but possible since these devices are usually available under the
-<tt>/dev/scd*</tt> interface.<p>
-
-The general SCSI driver <i>sg</i> (<tt>/dev/sg*</tt>) is not supported.
-This should not be a problem since the respective drives are also available
-using the <tt>/dev/scd*</tt> or <tt>/dev/sr*</tt> devices.<p>
-
-<b>Windows:</b> &nbsp; dvdisaster supports local drives implementing the MMC3 standard
-and which are referenced through a drive letter in the system.
-
-
-<div align=right><a href="#drive">&uarr;</a></div><p>
-
-<a name="prefix"><b>--prefix &lt;prefix&gt;: Prefix for image and error correction files</b></a><p>
-
-The preset is "medium"; the image and error correction files will automatically receive the
-endings ".iso" and ".ecc".
-
-<div align=right><a href="#drive">&uarr;</a></div><p>
-
-<a name="image"><b>--image &lt;file name&gt;: Name of image file</b></a><p>
-
-The preset is "medium.iso"; the specified file name will be used exactly (without appending a suffix)
-for the image file
-as long as <a href="#autosuffix">--auto-suffix</a> is not specified also.
-
-<div align=right><a href="#drive">&uarr;</a></div><p>
-
-<a name="eccfile"><b>--eccfile &lt;file name&gt;: Name of error correction file</b></a><p>
-
-The preset is "medium.ecc"; the specified file name will be used exactly (without appending a suffix)
-for the error correction file
-as long as <a href="#autosuffix">--auto-suffix</a> is not specified also.
-
-<div align=right><a href="#drive">&uarr;</a></div><p>
-
-<a name="list"><b>--list: shows drives available under ASPI</b></a><p>
-
-This option lists all CD/DVD drives which are accessible through
-the <a href="qa10.html#aspi">ASPI</a> layer of Windows:<p>
-
-<table class="example-win" width=100% bgcolor=#e0e0ff><tr><td>
-user@windows&gt; dvdisaster <b>-l</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
-<i>[... remainder of the GPL announcement ...]</i><p>
-
-List of ASPI CD/DVD drives:<p>
- 1: (H:) ATAPI DVD+RW 8X4X12 B2K7<br>
- 2: (I:) MYDRIVE CD-R MY-401610X 1.05<p>
-
-To force ASPI usage over SPTI, refer to the drive by the<br>
-above numbers (use 1:, 2:,... instead of C:, D:,...)
-</td></tr></table><p>
-
-The default is trying to access a drive using SPTI first
-and only fall back to ASPI if the former does not work.
-Usage of the ASPI layer can be forced by
-specifying the drive by its number rather than by its letter.
-To read in a disc using ASPI and the "MYDRIVE" unit from the above
-example, you would therefore enter:<p>
-
-<table class="example-win" width=100% bgcolor=#e0e0ff><tr><td>
-user@windows&gt; dvdisaster <b>-d 2:</b> -r<br>
-</table>
-
-<div align=right><a href="#drive">&uarr;</a></div><p>
-
-
-<h3>Other Options.</h3>
-
-<a name="adaptiveread"><b>--adaptive-read: Use adaptive strategy for reading damaged media</b></a><p>
-
-This switch selects the <a href="background40.html">adaptive reading strategy</a>
-which is particularly suited for reading in damaged media.
-Use this switch in conjunction with <a href="#read">-r/--read</a> and with
-<a href="#eccfile">-e/--eccfile</a>. Specifying the error correction file 
-causes the reading process to finish as soon as enough information has been 
-collected for recovering the medium image.
-<p>
-
-<div align=right><a href="#options">&uarr;</a></div><p>
-
-
-
-<a name="autosuffix"><b>--auto-suffix: automatically add .iso and .ecc file suffixes</b></a><p>
-
-When this option is given, file names specified by the
-<a href="#image">-i/--image</a>- or <a href="#eccfile">-e/--eccfile</a> option
-will be automatically appended with ".iso" or ".ecc" respectively
-if no other file name extension is already present.
-
-<div align=right><a href="#options">&uarr;</a></div><p>
-
-
-
-<a name="cache"><b>--cache-size &lt;size in MB&gt;: Specify the cache size</b></a><p>
-
-dvdisaster optimizes access to the image and error correction
-files by maintaining its own cache.
-The cache size can be between 1 and 2048 MB. 
-The preset is  32MB, which should be suitable for most systems.<p>
-
-This option is only effective during the <a href="#create">--create</a> action.
-
-<div align=right><a href="#options">&uarr;</a></div><p>
-
-
-
-<a name="dao"><b>--dao: Assumes "disk at once" medium</b></a><p>
-
-Media written in "TAO" ("track at once") mode may contain two sectors
-with <a href="qa20.html#tao">pseudo read errors</a> at the end.
-By default these two errors are ignored by dvdisaster.<p>
-
-If you are extremely unlucky to have a "DAO" ("disc at once") medium
-with exactly one or two real read errors at the end,
-use the "--dao" option to have these read errors handled correctly.
-
-<div align=right><a href="#options">&uarr;</a></div><p>
-
-
-
-<a name="fillunreadable"><b>--fill-unreadable &lt;fill byte&gt;: fill unreadable sectors with given byte </b></a><p>
-
-dvdisaster marks unreadable sectors with a special filling sequence which is very unlikely
-to occur in undamaged media.<br>
-In other data recovery software it is common to fill unreadable sectors with a certain byte
-value. To allow interoperability with such programs, you can specify the byte value
-they are using:<p>
-
-<ul>
-<li><b>0xb0 (176 decimal)</b>: for compatibility with <i>h2cdimage</i> 
-published by "c't", a German periodical.
-</li>
-</ul>
-
-Using zero filling (0x00, decimal 0) is <b>highly discouraged</b>.
-Most media contain regular zero filled sectors. At a later error correction pass,
-these can not be told apart from unreadable sectors if zero filling is used.
-</li>
-</ul>
-
-<div align=right><a href="#options">&uarr;</a></div><p>
-
-
-
-<a name="jump"><b>-j / --jump &lt;number of sectors&gt;: Skip sectors after a read error </b></a><p>
-
-This option has slightly different behaviour depending on the used reading strategy:
-<ul>
-<li>when using the <a href="background30.html#configure">linear reading strategy</a>
-(default setting), 
-the given number of sectors will be skipped after a read error.</li>
-<li>the <a href="background40.html#configure">adaptive reading strategy</a> 
-(<a href="#adaptiveread">--adaptive-read</a> option) will terminate
-when no unreadable areas are left in the image which are larger than the given value.</li>
-</ul> 
-
-Large values reduce the processing time and the mechanical wear on the drive,
-but will also leave larger gaps in the image when reading defective areas.
-The number of skipped sectors must be a multiple of 16.
-
-<div align=right><a href="#options">&uarr;</a></div><p>
-
-
-
-<a name="parse-udf"><b>--parse-udf: Use information from ISO/UDF filesystem</b></a><p>
-dvdisaster will determine the image size from the ISO/UDF file system
-if this option is given. This works around some problems caused by drives
-<a href="qa20.html#plusrw">reporting incorrect image lengths</a>
-with DVD-RW/+RW media.
-<div align=right><a href="#options">&uarr;</a></div><p>
-
-
-
-<a name="redundancy"><b>-n / --redundancy: Set error correction code redundancy</b></a><p>
-
-The redundancy specifies the percentage of correctable errors
-<a href="background10.html">in the best case</a>.
-Since the ideal case is rare, it is recommended to apply a reasonable margin 
-to the redundancy. Also, consider the following properties of the error correction:<p>
-
-<ul>
-<li>An error correction file with  x% redundancy will be approximately x% of the size
-of the corresponding image file.</li>
-<li>The error correction capability depends on the statistical distribution of read errors. 
-Only changes by 5 percentage points and more may 
-have a recognizable effect on the error correction.<p></li>
-</ul>
-
-The are several ways of specifying the redundancy:<p>
-
-<ol>
-<li> <b>"normal" or "high"</b><p>
-
-Enter "normal" or "high" to get the following redundancies:<p>
-
-<table border="1" cellpadding="3">
-<tr><td align=center>Value</td><td>Redundancy</td></tr>
-<tr><td><tt>-n normal</tt></td><td align=center>14.3%</td></tr>
-<tr><td><tt>-n high</tt></td><td align=center>33.5%</td></tr>
-</table><p>
-
-These values invoke optimized program code to speed up the
-error correction file creation. The default value is "normal".<p>
-</li>
-
-<li> <b>Percentage values</b><p>
-
-Specifying the redundancy by percent is also possible:<p>
-
-<table border="1" cellpadding="3">
-<tr><td>Example</td><td>Valid range</td></tr>
-<tr><td><tt>-n 25%</tt></td><td align=center>3.2% to 64.5%</td></tr>
-</table><p>
-
-For technical reasons the actual redundancy can deviate a few tenths
-from the specified value.<p>
-</li>
-
-<li> <b>Correctable errors per ECC block</b><p>
-
-When no redundancy unit is given, the value is interpreted to
-create a (255, 255-x)-Reed-Solomon code:<p>
-
-<table border="1" cellpadding="3">
-<tr><td>Example</td><td>Valid range</td></tr>
-<tr><td><tt>-n 32</tt></td><td align=center>8 to 100</td></tr>
-</table><p>
-
-This combines 255-x media sectors into one ECC block. Within this block
-up to x unreadable sectors can be recovered.<p>
-
-By the way: &nbsp; &nbsp; Redundancy in percent = (100 * x) / (255 - x)<p>
-</li>
-
-<li> <b>Maximum size of error correction file</b><p>
-
-Another way of specifying redundancy is to
-give the size of the error correction file in MB:<p>
-
-<table border="1" cellpadding="3">
-<tr><td>Example</td><td>Valid range</td></tr>
-<tr><td><tt>-n 50m</tt></td><td align=center>3.2% to 64.5% of image size</td></tr>
-</table><p>
-
-In this case dvdisaster will choose a suitable redundancy setting so that
-the overall size of the error correction file does not exceed the
-given limit.<p>
-
-Advance notice: When using the same size setting for images of vastly different size,
-more error correction information is allotted to the smaller images
-and less to the larger ones.<p>
-</li>
-</ol>
-
-<div align=right><a href="#options">&uarr;</a></div><p>
-
-
-<a name="speedwarn"><b>--speed-warning [n]: Warns when reading speed drops a certain amount</b></a><p>
-
-Prints a warning when the reading speed changes by more than <i>n</i> percent.
-This is useful for recognizing a beginning decay in media quality.
-If the optional value [n] is omitted, a preset of 10 percent is used.
-
-<div align=right><a href="#options">&uarr;</a></div><p>
-
-
-<a name="--spinup"><b>--spinup-delay [n]: Gives drive time to spin up</b></a><p>
-
-Waits the given amount of seconds for the drive to spin up before the real
-reading process starts.
-This avoids spurious warnings about speed changes at the beginning of the medium
-when the <a href="#speedwarn">--speed-warning</a> option is used.<br>
-
-If the optional value [n] is not given, dvdisaster will wait for 5 seconds.
-
-<div align=right><a href="#options">&uarr;</a></div><p>
-
-<a name="split"><b>--split-files: Splits files into segments <= 2GB</b></a><p>
-
-Allows the creation of large images and error correction files 
- on file systems which are limited to 2GB per file
-(e.g. FAT from Windows). The files are spread over upto 100 segments "medium00.iso", "medium01.iso" etc. at the cost of a small performance hit.<p>
-
-The file name must still be specified as
-"medium.iso" using the <a href="#image">--image</a> option; 
-the numbering will be automatically inserted when this switch is active.<p>
-
-<div align=right><a href="#options">&uarr;</a></div><p>
-
 EOF
 }
 
@@ -2156,7 +2473,7 @@ Usable media by type:<p>
 
 <ul>
 <li>Some drives report wrong <a href="qa20.html#plusrw">image sizes</a>.<br>
-Remedy: Activate <a href="example91.html#iso">"Use information from the ISO/UDF file system"</a>
+Remedy: Activate <a href="example81.html#iso">"Use information from the ISO/UDF file system"</a>
 </li></ul>
 
 <b>CD-R, CD-RW</b><p>
@@ -2214,7 +2531,7 @@ In order to provide a unified access to SPTI and ASPI,
 dvdisaster tries to guess the mapping of ASPI drives to drive letters.
 However this does not work under all configurations.<p>
 
-The <a href="syntax90.html#list">--list</a> function prints out
+The <a href="example90.html#list">--list</a> function prints out
 the current mapping of drive letters.<p>
 
 <i>&gt;&nbsp; How to select between SPTI and ASPI?</i><p>
@@ -2222,7 +2539,7 @@ the current mapping of drive letters.<p>
 dvdisaster will automatically choose between SPTI and ASPI, 
 deciding in favor of SPTI if both are available. 
 Usage of ASPI can be forced; see the description of the
-<a href="syntax90.html#list">--list</a> function for details.
+<a href="example90.html#list">--list</a> function for details.
 
 <div align=right><a href="#top">&uarr;</a></div><p>
 
@@ -2253,8 +2570,8 @@ Since the writing mode can not be determined from the medium, dvdisaster assumes
 a "TAO" CD if exactly the last two sectors are unreadable, and trims the image
 accordingly. It is up to you to decide whether this is okay. You can
 advise dvdisaster to treat these sectors as real read errors by using the
-<a href="syntax90.html#dao">--dao</a> option or 
-the <a href="example92.html#image">preferences tab for reading/scanning</a>.<p>
+<a href="example90.html#dao">--dao</a> option or 
+the <a href="example82.html#image">preferences tab for reading/scanning</a>.<p>
 
 To avoid these problems, consider using the "DAO / Disc at once" (sometimes
 also called "SAO / Session at once") mode for writing single session media. 
@@ -2285,7 +2602,7 @@ communicating with its mass storage devices.</li>
 
 
 If you suspect technical problems, try creating another version of the image 
-and error correction files and <a href="example60.html">compare
+and error correction files and <a href="example50.html">compare
 them again</a>.
 When the error disappears or surfaces at a different location,
 your computer may be suffering from defective memory, 
@@ -2322,7 +2639,7 @@ but all files on the medium are still readable and complete.
 Possible remedy:<p>
 
 <table width=100%><tr><td bgcolor=#000000 width=2><img width=1 height=1 alt=""></td><td>
-Activate the option  <a href="example91.html#iso">Use information from the
+Activate the option  <a href="example81.html#iso">Use information from the
 ISO/UDF file system</a> so that the image size will be determined from the
 ISO/UDF file system.
 </td></tr></table><p>
@@ -2331,13 +2648,13 @@ If the required ISO/UDF sectors are unreadable when trying to recover damaged me
 there are two possible workarounds:
 
 <ul>
-<li>Execute the <a href="example60.html">"Compare"</a> function with only
+<li>Execute the <a href="example50.html">"Compare"</a> function with only
 the error correction file being selected/given. Note down the correct image size 
-from the output and <a href="example92.html#read">restrict the
+from the output and <a href="example82.html#read">restrict the
 reading range</a> accordingly.
 </li>
 <li>Simply read in the image with the incorrect (larger) size.
-When invoking the <a href="example50.html#repair">"Fix"</a> function,
+When invoking the <a href="example40.html#repair">"Fix"</a> function,
 answer "OK" when you are asked whether the image should be truncated.
 </li>
 </ul>
@@ -2393,10 +2710,12 @@ function background_contents_en()
  
    link)    link_title="Background information" ;;
    link10)   link_title="Error correction properties" ;;
-   link30)   link_title="Linear reading strategy" ;;
-   link40)   link_title="Adaptive reading strategy" ;;
-   link50)   link_title="Remarks on read errors" ;;
-   link60)   link_title="Hints for storing the error correction files" ;;
+   link20)   link_title="Image level error correction" ;;
+   link30)   link_title="RS01 and RS02" ;;
+   link40)   link_title="Linear reading strategy" ;;
+   link50)   link_title="Adaptive reading strategy" ;;
+   link60)   link_title="Remarks on read errors" ;;
+   link70)   link_title="Hints for storing the error correction files" ;;
 
    content*) eval "background$page$lang $file"
 	    return 0
@@ -2416,10 +2735,12 @@ you getting the most out of the program according to your needs.
 
 <ol>
 <li><a href="background10.html">Properties of the Reed-Solomon error correction</a><p></li>
-<li><a href="background30.html">Details of the linear reading strategy</a><p></li>   
-<li><a href="background40.html">Details of the adaptive reading strategy</a><p></li>   
-<li><a href="background50.html">Some remarks on read errors</a><p></li>   
-<li><a href="background60.html">Hints for storing the error correction files</a><p></li>
+<li><a href="background20.html">Image level error correction</a><p></li>
+<li><a href="background30.html">The RS01 and RS02 methods</a><p></li>
+<li><a href="background40.html">Details of the linear reading strategy</a><p></li>   
+<li><a href="background50.html">Details of the adaptive reading strategy</a><p></li>   
+<li><a href="background60.html">Some remarks on read errors</a><p></li>   
+<li><a href="background70.html">Hints for storing the error correction files</a><p></li>
 </ol>
 
 EOF
@@ -2445,7 +2766,7 @@ The implementation draws a lot of inspiration and program code from the excellen
 
 <p>
 
-Using the <a href="example93.html#redundancy">standard settings</a>
+Using the <a href="example83.html#redundancy">standard settings</a>
 223 medium sectors are combined into one error correction code ("ECC") block.
 Medium read errors are regarded as "erasures"; therefore a maximum 
 of 32 bad medium sectors<sup><a href="#footnote1">*)</a></sup>
@@ -2490,7 +2811,7 @@ the capabilities of the error correction code. <p>
 <font size="-1">
 <a name="footnote1"><sup>*)</sup></a> 
 The given threshold of 32 correctable errors per ECC block is the standard setting.
-It is possible to <a href="example93.html#redundancy">select other values</a>
+It is possible to <a href="example83.html#redundancy">select other values</a>
 for higher or lower error correction capabilities.
 <p>
 </font>
@@ -2498,13 +2819,24 @@ for higher or lower error correction capabilities.
 EOF
 }
 
+function background20en()
+{  cat >> $1 <<EOF
+<h3>Image level error correction</h3>
+EOF
+}
 
 function background30en()
+{  cat >> $1 <<EOF
+<h3>The RS01 and RS02 methods</h3>
+EOF
+}
+
+function background40en()
 {  cat >> $1 <<EOF
 <h3>The linear reading strategy.</h3>
 
 dvdisaster contains two different
-<a href="example92.html#read">reading strategies</a>.<p>
+<a href="example82.html#read">reading strategies</a>.<p>
 
 <b>The linear reading strategy is recommended for:</b><p>
 <ul>
@@ -2512,7 +2844,7 @@ dvdisaster contains two different
 <li>scanning the medium for reading speed and read errors</li>
 </ul>
 
-<b>The <a href="background40.html">adaptive reading strategy</a> is recommended for:</b><p>
+<b>The <a href="background50.html">adaptive reading strategy</a> is recommended for:</b><p>
 <ul>
 <li> extracting data from damaged media
 </li>
@@ -2527,7 +2859,7 @@ continously numbered beginning with zero. Each sector contains 2048 bytes of dat
 
 The linear reading strategy reads the medium from the start (sector 0)
 until the end (last sector). The reading speed is shown graphically to provide
-information about the <a href="background30.html#quality">medium quality</a>:<p>
+information about the <a href="background40.html#quality">medium quality</a>:<p>
 
 <center><img src="../images/bg-linear-en.png"><br>
 partial screen shot: linear reading strategy</center>
@@ -2542,7 +2874,7 @@ partial screen shot: linear reading strategy</center>
 Reading attempts for defective sectors are slow and may wear out the drive mechanics
 under unfavourable conditions. A series of read errors, spread over a continous sector
 range, is more common than single spot defects. Therefore a 
-<a href="example92.html#read"> configuration option</a> exists so that a certain number
+<a href="example82.html#read"> configuration option</a> exists so that a certain number
 of sectors will be skipped after the occurance of a read error. The skipped sectors are
 assumed to be defective without further reading attempts. 
 Some guide lines for selecting the number of skipped sectors are:<p>
@@ -2564,7 +2896,7 @@ reasons. Therefore a sector skip less than 16 is not recommended for DVD media.
 <a name="range"></a>
 <b>Limiting the reading range.</b>
 Reading can be
-<a href="example92.html#read">limited to a given range of sectors</a>. This comes in handy
+<a href="example82.html#read">limited to a given range of sectors</a>. This comes in handy
 during multiple read attempts of damaged media.
 
 <pre> </pre>
@@ -2587,33 +2919,33 @@ until actual read errors occur.
 </ul><p>
 
 The reading curve is most accurate when using the
-<a href="example40.html"> "Scan"</a> function. During the
-<a href="example20.html"> "Read"</a> operation the read data will be written to
+<a href="example10.html"> "Scan"</a> function. During the
+"Read" operation the read data will be written to
 the hard drive at the same time, which may cause irregularities in the reading
 curve depending on the operating system and hardware used.<p>
 
 <a name="error"></a>
 <b>Read errors.</b>
-Read errors cause <a href="example40.html">red markings in the spiral</a> or respective
-messages <a href="syntax40.html">at the command line</a>. 
+Read errors cause <a href="example30.html">red markings in the spiral</a> or respective
+messages at the command line</a>. 
 This means that the medium could not be
 read at these places during the current reading pass:
 <ul>
 <li>The medium is most likely defective.</li>
 <li>The image should be 
-<a href="example50.html">repaired</a> as soon as possible and then be transferred
+<a href="example40.html">repaired</a> as soon as possible and then be transferred
 to a new medium.</li>
 </ul>
 EOF
 }
 
 
-function background40en()
+function background50en()
 {  cat >> $1 <<EOF
 <h3>The adaptive reading strategy.</h3>
 
 dvdisaster contains two different
-<a href="example92.html#read">reading strategies</a>.<p>
+<a href="example82.html#read">reading strategies</a>.<p>
 
 <b>The adaptive reading strategy is recommended for:</b><p>
 <ul>
@@ -2621,7 +2953,7 @@ dvdisaster contains two different
 </li>
 </ul>
 
-<b>The <a href="background30.html">linear reading strategy</a> is recommended for:</b><p>
+<b>The <a href="background40.html">linear reading strategy</a> is recommended for:</b><p>
 <ul>
 <li>creating images from undamaged media, e.g. to generate the error correction file</li>
 <li>scanning the medium for reading speed and read errors</li>
@@ -2674,13 +3006,13 @@ partial screen shot: adaptive reading strategy</center>
 
 <b>Error correction file.</b> 
 Adaptive reading works best when an error correction file is available. 
-Obviously the error correction file must have been <a href="example30.html">created</a>
+Obviously the error correction file must have been <a href="example20.html">created</a>
 at a time where the medium was still fully readable. To use the error correction file
 during adaptive reading, 
-<a href="example30.html">enter its name</a> before starting the reading process.<p>
+<a href="example20.html">enter its name</a> before starting the reading process.<p>
 
 <b>Limiting the adaptive reading range.</b> Reading can be 
-<a href="example92.html#read">limited</a> to a part of the medium.
+<a href="example82.html#read">limited</a> to a part of the medium.
 
 This is not recommended when an error correction file is used since the limit
 might prevent sectors from being read which are required for a succesful error correction. 
@@ -2690,19 +3022,19 @@ during multiple reading attempts.<p>
 <b>Early reading termination.</b>
 If no error correction file is available, adaptive reading will stop when no unread
 intervals
-<a href="example92.html#read">larger than a selectable size</a> remain.<p>
+<a href="example82.html#read">larger than a selectable size</a> remain.<p>
 
 The termination value should not be smaller than 128.
 Otherwise the laser head will have to carry out lots of repositioning moves during the
 final phase of the reading process. This will negatively affect both the life expectancy
 of the drive and its reading capability. A better approach is to stop adaptive 
 reading earlier and then try reading the remaining sectors with an additional
-<a href="background30.html">linear reading</a> pass.
+<a href="background40.html">linear reading</a> pass.
 EOF
 }
 
 
-function background50en()
+function background60en()
 {  cat >> $1 <<EOF
 <h3>Remarks on read errors</h3>
 
@@ -2716,7 +3048,7 @@ during many years of the medium usage.
 
 When the capacity of the built-in error correction is finally exhausted,
 read errors will start to appear on the medium. These will be reported by
-the <a href="example40.html">"Scan"</a>-operation of dvdisaster.
+the <a href="example10.html">"Scan"</a>-operation of dvdisaster.
 Depending on the time of first occurrence, 
 two types of read errors are of particular interest:<p>
 
@@ -2746,7 +3078,7 @@ These effects typically occur while the medium is stored away for a few months,
 and it may not be possible to read in all sectors afterwards.<p>
 
 Therefore it is crucial to create the 
-<a href="example30.html">error correction file (ecc file)</a> in time. 
+<a href="example20.html">error correction file (ecc file)</a> in time. 
 The ecc file contains information for recalculating the contents of
 missing sectors
 <a href="background10.html">(within certain limits)</a>.
@@ -2756,7 +3088,7 @@ could actually be read by the drive.<p>
 
 Since the error correction can reconstruct missing sectors up to a certain number,
 it is not necessary to squeeze out a defective medium for every readable sector.
-The <a href="background40.html">adaptive reading strategy</a> checks during
+The <a href="background50.html">adaptive reading strategy</a> checks during
 reading whether enough data for error correction has been collected.
 As soon as this is the case, reading stops and still unread sectors
 will be recovered using the ecc file.<p>
@@ -2788,7 +3120,7 @@ EOF
 }
 
 
-function background60en()
+function background70en()
 {  cat >> $1 <<EOF
 <h3>Hints for storing the error correction files</h3>
 
@@ -2797,7 +3129,7 @@ Here are a few suggestions for storing the error correction files:<p>
 <b>1. Storing the error correction files on dedicated media:</b><p>
 
 An empty DVD can typically hold about 7-10 error correction files from 
-same-sized media when using the default <a href="example93.html#redundancy">redundancy</a>.
+same-sized media when using the default <a href="example83.html#redundancy">redundancy</a>.
 
 So one could store 9+1 DVDs (9 carrying actual data and 1
 used for the error correction files) using common 10 pack boxes. However:<p>
@@ -2827,7 +3159,7 @@ on the succeeding medium within a series.<p>
 <b>3. Using (external) hard discs for storing the error correction files:</b><p>
 
 A 400GB hard disc can hold approximately 600 error correction files
-(assuming full 4.7GB media and default <a href="example93.html#redundancy">redundancy</a>). 
+(assuming full 4.7GB media and default <a href="example83.html#redundancy">redundancy</a>). 
 This might be an alternative in price if you
 keep in mind that current ATA hard discs are not built for eternity, either ;-) 
 

@@ -1,3 +1,7 @@
+0.66 (rc-1) 19-02-2006
+	- command line version of RS02 codec 
+	- joined examples and command line section of manual
+
 0.65 (devel-4) 12-02-2006
 	- renamed .img files to .iso files to facilitate easier
 	  interoperability between RS02 ecc images and burning software

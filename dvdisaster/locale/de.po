@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-12 16:18+0100\n"
+"POT-Creation-Date: 2006-02-19 19:14+0100\n"
 "PO-Revision-Date: 2004-11-30 19:48+0100\n"
 "Last-Translator: Carsten Gnörlich <carsten@dvdisaster.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -62,13 +62,13 @@ msgstr ""
 "Erzeuge zufällige reparierbare Auslöschungen (für %d Nullstellen, max. %d Auslöschungen).\n"
 
 #: debug.c:108 debug.c:358 debug.c:426 rs01-common.c:54 rs02-common.c:56
-#: rs02-compare.c:94 rs02-create.c:240 rs02-create.c:803 rs02-fix.c:216
+#: rs02-compare.c:94 rs02-create.c:240 rs02-create.c:886 rs02-fix.c:220
 #, c-format
 msgid "Failed seeking to sector %lld in image: %s"
 msgstr "Ansteuern von Sektor %lld im Abbild fehlgeschlagen: %s"
 
 #: debug.c:110 debug.c:225 debug.c:318 debug.c:363 debug.c:430
-#: rs02-create.c:268 rs02-create.c:292 rs02-create.c:806
+#: rs02-create.c:268 rs02-create.c:292 rs02-create.c:889
 #, c-format
 msgid "Failed writing to sector %lld in image: %s"
 msgstr "Schreiben von Sektor %lld im Abbild fehlgeschlagen: %s"
@@ -839,12 +839,12 @@ msgstr ""
 "Liste der verfügbaren Methoden:\n"
 "\n"
 
-#: method.c:216 method.c:217
+#: method.c:235 method.c:236
 #, c-format
 msgid "Image file %s not present.\n"
 msgstr "Abbild-Datei %s nicht vorhanden.\n"
 
-#: method.c:241 method.c:246
+#: method.c:260 method.c:265
 #, c-format
 msgid ""
 "\n"
@@ -853,7 +853,7 @@ msgstr ""
 "\n"
 "Unbekanntes Verfahren %s.\n"
 
-#: method.c:242 method.c:247
+#: method.c:261 method.c:266
 msgid ""
 "\n"
 "Neither ecc file nor ecc data in image found.\n"
@@ -1220,7 +1220,7 @@ msgstr "Auffüllen des Abbild-Bereichs [%lld..%lld]"
 
 #: read-adaptive.c:834 read-adaptive.c:967 read-adaptive.c:1102
 #: read-linear.c:357 read-linear.c:482 read-linear.c:584 read-linear.c:639
-#: rs01-fix.c:390 rs01-fix.c:648 rs02-fix.c:573
+#: rs01-fix.c:390 rs01-fix.c:648 rs02-fix.c:577
 #, c-format
 msgid "Failed seeking to sector %lld in image [%s]: %s"
 msgstr "Ansteuern von Sektor %lld im Abbild fehlgeschlagen [%s]: %s"
@@ -1254,12 +1254,12 @@ msgstr ""
 "Eine Fortsetzung ist gegebenenfalls nicht mehr möglich.\n"
 "Soll der Fehler nicht beachtet und weiter gelesen werden?"
 
-#: read-adaptive.c:990 rs01-fix.c:38 rs02-fix.c:251
+#: read-adaptive.c:990 rs01-fix.c:38 rs02-fix.c:255
 #, c-format
 msgid "Failed seeking in crc area: %s"
 msgstr "Suchen im CRC-Abschnitt fehlgeschlagen: %s"
 
-#: read-adaptive.c:1006 rs01-fix.c:344 rs02-fix.c:263
+#: read-adaptive.c:1006 rs01-fix.c:344 rs02-fix.c:267
 #, c-format
 msgid "CRC error in sector %lld\n"
 msgstr "Prüfsummen-Fehler in Sektor %lld\n"
@@ -1389,7 +1389,7 @@ msgstr ""
 
 #: read-linear.c:163 rs01-compare.c:417 rs01-compare.c:723 rs01-create.c:616
 #: rs01-fix.c:179 rs01-fix.c:199 rs01-fix.c:237 rs01-fix.c:253 rs01-fix.c:302
-#: rs02-create.c:505
+#: rs02-create.c:468
 msgid "<span color=\"red\">Aborted by user request!</span>"
 msgstr "<span color=\"red\">Abbruch auf Benutzeranforderung!</span>"
 
@@ -1560,7 +1560,7 @@ msgstr "Bereits vorhanden"
 msgid "Speed"
 msgstr "Geschwindigkeit"
 
-#: rs01-common.c:70 rs02-common.c:72 rs02-create.c:144 rs02-fix.c:219
+#: rs01-common.c:70 rs02-common.c:72 rs02-create.c:144 rs02-fix.c:223
 #, c-format
 msgid "Failed reading sector %lld in image: %s"
 msgstr "Lesen von Sektor %lld im Abbild fehlgeschlagen: %s"
@@ -1699,7 +1699,7 @@ msgstr "* Abbild zu lang    : %lld überzählige Sektoren\n"
 msgid "<span color=\"red\">%lld (%lld excess sectors)</span>"
 msgstr "<span color=\"red\">%lld (%lld überzählige Sektoren)</span>"
 
-#: rs01-compare.c:465 rs02-compare.c:359
+#: rs01-compare.c:465
 #, c-format
 msgid ""
 "- good image       : all sectors present\n"
@@ -1752,11 +1752,11 @@ msgstr "Keine Fehlerkorrekturdatei vorhanden."
 msgid "Could not open %s: %s"
 msgstr "Konnte %s nicht öffnen: %s"
 
-#: rs01-compare.c:549
+#: rs01-compare.c:549 rs02-compare.c:401
 msgid "created by dvdisaster"
 msgstr "Erzeugt von dvdisaster"
 
-#: rs01-compare.c:561 rs02-compare.c:402
+#: rs01-compare.c:561 rs02-compare.c:414
 #, c-format
 msgid "created by dvdisaster-%d.%d\n"
 msgstr "Erzeugt von dvdisaster-%d.%d.\n"
@@ -1765,22 +1765,22 @@ msgstr "Erzeugt von dvdisaster-%d.%d.\n"
 msgid "created by dvdisaster-0.41.x.\n"
 msgstr "Erzeugt von dvdisaster-0.41.x.\n"
 
-#: rs01-compare.c:576 rs02-compare.c:416
+#: rs01-compare.c:576 rs02-compare.c:429
 #, c-format
 msgid "- method           : %4s, %d roots, %4.1f%% redundancy.\n"
 msgstr "- Methode           : %4s, %d Nullstellen, %4.1f%% Redundanz.\n"
 
-#: rs01-compare.c:580 rs02-compare.c:422
+#: rs01-compare.c:580 rs02-compare.c:435
 #, c-format
 msgid "%4s, %d roots, %4.1f%% redundancy"
 msgstr "%4s, %d Nullstellen, %4.1f%% Redundanz"
 
-#: rs01-compare.c:585 rs02-compare.c:430
+#: rs01-compare.c:585 rs02-compare.c:443
 #, c-format
 msgid "- requires         : dvdisaster-%d.%d (good)\n"
 msgstr "- Benötigt          : dvdisaster-%d.%d (gut)\n"
 
-#: rs01-compare.c:594 rs02-compare.c:442
+#: rs01-compare.c:594 rs02-compare.c:455
 #, c-format
 msgid ""
 "* requires         : dvdisaster-%d.%d (BAD)\n"
@@ -1792,7 +1792,7 @@ msgstr ""
 "*                   : Bitte besuchen Sie http://www.dvdisaster.de\n"
 "*                   : um eine neuere Version herunterzuladen.\n"
 
-#: rs01-compare.c:606 rs02-compare.c:455
+#: rs01-compare.c:606 rs02-compare.c:468
 msgid "<span color=\"red\">Please upgrade your version of dvdisaster!</span>"
 msgstr "<span color=\"red\">Bitte verwenden Sie eine neuere Version von dvdisaster!</span>"
 
@@ -1820,17 +1820,17 @@ msgstr "<span color=\"red\">Abbild-Größe paßt nicht zum Wert in der Fehlerkor
 msgid "- medium sectors   : %lld\n"
 msgstr "* Datentr.-Sektoren : %lld\n"
 
-#: rs01-compare.c:644 rs02-compare.c:465
+#: rs01-compare.c:644
 #, c-format
 msgid "- image md5sum     : %s (good)\n"
 msgstr "- Abbild-md5sum     : %s (gut)\n"
 
-#: rs01-compare.c:645 rs02-compare.c:466
+#: rs01-compare.c:645
 #, c-format
 msgid "* image md5sum     : %s (BAD)\n"
 msgstr "* Abbild-md5sum     : %s (SCHLECHT)\n"
 
-#: rs01-compare.c:655 rs02-compare.c:478
+#: rs01-compare.c:655
 #, c-format
 msgid "- image md5sum     : %s\n"
 msgstr "- Abbild-md5sum     : %s\n"
@@ -1895,7 +1895,7 @@ msgstr "<span color=\"red\">schlecht</span>"
 msgid "<span color=\"red\">Error correction file may be damaged!</span>"
 msgstr "<span color=\"red\">Fehlerkorrekturdatei ist möglicherweise beschädigt!</span>"
 
-#: rs01-compare.c:739 rs02-compare.c:497
+#: rs01-compare.c:739 rs02-compare.c:510
 #, c-format
 msgid "- ecc md5sum       : %s (good)\n"
 msgstr "- Ecc-md5sum        : %s (gut) \n"
@@ -1923,7 +1923,7 @@ msgstr "Redundanz %d außerhalb des nutzbaren Bereiches [8..100]."
 msgid "<span color=\"red\">Aborted by unrecoverable error.</span>"
 msgstr "<span color=\"red\">Abbruch durch nicht behebbaren Fehler.</span>"
 
-#: rs01-create.c:180 rs02-create.c:842
+#: rs01-create.c:180 rs02-create.c:925
 msgid "Error correction file creation aborted"
 msgstr "Erzeugung der Fehlerkorrektur-Datei abgebrochen"
 
@@ -1968,11 +1968,11 @@ msgstr "%lld unlesbare oder fehlende Sektoren im Abbild.\n"
 msgid "Failed skipping ecc+crc header: %s"
 msgstr "Überspringen der Ecc/Crc-Vorspänne fehlgeschlagen: %s"
 
-#: rs01-create.c:348 rs02-create.c:441
+#: rs01-create.c:348 rs02-create.c:404
 msgid "Internal error: parity blocks are not a multiple of sector size.\n"
 msgstr "Interner Fehler: Umfang der Korrektur-Blöcke ist kein Vielfaches der Sektorgröße\n"
 
-#: rs01-create.c:475 rs01-create.c:598 rs01-create.c:891 rs02-create.c:783
+#: rs01-create.c:475 rs01-create.c:598 rs01-create.c:891 rs02-create.c:866
 #, c-format
 msgid "Ecc generation: %3d.%1d%%"
 msgstr "Kodierungs-Fortschritt: %3d.%1d%%"
@@ -1995,12 +1995,12 @@ msgstr ""
 "Konnte den Vorspann der Fehlerkorrektur-Datei nicht schreiben:\n"
 "%s"
 
-#: rs01-create.c:927 rs02-create.c:901
+#: rs01-create.c:927 rs02-create.c:983
 #, c-format
 msgid "Ecc generation: 100.0%%\n"
 msgstr "Kodierungs-Fortschritt: 100.0%%\n"
 
-#: rs01-create.c:928 rs02-create.c:902
+#: rs01-create.c:928
 #, c-format
 msgid ""
 "Error correction file \"%s\" created.\n"
@@ -2009,7 +2009,7 @@ msgstr ""
 "Fehlerkorrektur-Datei \"%s\" wurde erzeugt.\n"
 "Verwahren Sie die Datei auf einem zuverlässigen Datenträger.\n"
 
-#: rs01-create.c:936 rs02-create.c:910
+#: rs01-create.c:936 rs02-create.c:993
 msgid ""
 "The error correction file has been successfully created.\n"
 "Make sure to keep this file on a reliable medium."
@@ -2017,7 +2017,7 @@ msgstr ""
 "Die Fehlerkorrektur-Datei wurde erfolgreich erzeugt.\n"
 "Verwahren Sie die Datei auf einem zuverlässigen Datenträger."
 
-#: rs01-fix.c:43 rs02-compare.c:131 rs02-fix.c:254
+#: rs01-fix.c:43 rs02-compare.c:131 rs02-fix.c:258
 #, c-format
 msgid "problem reading crc data: %s"
 msgstr "Problem beim Lesen der CRC-Daten: %s"
@@ -2125,7 +2125,7 @@ msgstr ""
 "Kann nicht aus der Fehlerkorrektur-Datei lesen:\n"
 "%s"
 
-#: rs01-fix.c:555 rs02-fix.c:452
+#: rs01-fix.c:555 rs02-fix.c:456
 #, c-format
 msgid "Decoder problem (%d != %d) for %d sectors: "
 msgstr "Dekodierungsproblem (%d != %d) für %d Sektoren: "
@@ -2145,12 +2145,12 @@ msgstr "Unerwarteter Byte-Fehler in Sektor %lld, Byte %d\n"
 msgid "Bad error location %d; corrupted .ecc file?\n"
 msgstr "Ungültige Fehlerposition %d; beschädigte .ecc-Datei?\n"
 
-#: rs01-fix.c:637 rs02-fix.c:542
+#: rs01-fix.c:637 rs02-fix.c:546
 #, c-format
 msgid "  %3d repaired sectors: "
 msgstr "  %3d reparierte Sektoren: "
 
-#: rs01-fix.c:656 rs02-fix.c:581
+#: rs01-fix.c:656 rs02-fix.c:585
 #, c-format
 msgid ""
 "could not write medium sector %lld:\n"
@@ -2159,12 +2159,12 @@ msgstr ""
 "Konnte Abbild-Sektor %lld nicht schreiben:\n"
 "%s"
 
-#: rs01-fix.c:682 rs02-fix.c:609
+#: rs01-fix.c:682 rs02-fix.c:613
 #, c-format
 msgid "Ecc progress: %3d.%1d%%"
 msgstr "Reparatur-Fortschritt: %3d.%1d%%"
 
-#: rs01-fix.c:694 rs02-fix.c:623
+#: rs01-fix.c:694 rs02-fix.c:627
 #, c-format
 msgid "Ecc progress: 100.0%%\n"
 msgstr "Reparatur-Fortschritt: 100.0%%\n"
@@ -2270,15 +2270,29 @@ msgstr "Speichernutzung"
 msgid "Use"
 msgstr "Verwende"
 
-#: rs02-compare.c:330 rs02-create.c:348 rs02-create.c:359
+#: rs02-common.c:226 rs02-common.c:237 rs02-compare.c:330
 #, c-format
 msgid "Failed seeking to ecc header at %lld: %s\n"
 msgstr "Ansteuern des Ecc-Vorspanns bei Pos. %lld fehlgeschlagen: %s\n"
+
+#: rs02-common.c:230 rs02-common.c:241
+#, c-format
+msgid "Failed writing ecc header at %lld: %s\n"
+msgstr "Schreiben des Ecc-Vorspanns bei Pos. %lld fehlgeschlagen: %s\n"
 
 #: rs02-compare.c:334
 #, c-format
 msgid "Failed reading ecc header at %lld: %s\n"
 msgstr "Lesen des Ecc-Vorspanns bei Pos. %lld fehlgeschlagen: %s\n"
+
+#: rs02-compare.c:359
+#, c-format
+msgid ""
+"- good image       : all sectors present\n"
+"- data md5sum      : %s\n"
+msgstr ""
+"- Gutes Abbild      : Alle Sektoren vorhanden\n"
+"- Daten-md5sum      : %s\n"
 
 #: rs02-compare.c:366
 #, c-format
@@ -2297,8 +2311,8 @@ msgstr "  ... Datenabschnitt : %lld Sektoren fehlen; %lld Prüfsummen-Fehler\n"
 
 #: rs02-compare.c:375
 #, c-format
-msgid "  ... image md5sum   : %s\n"
-msgstr "  ... Abbild-md5sum  : %s\n"
+msgid "  ... data md5sum    : %s\n"
+msgstr "  ... Daten-md5sum   : %s\n"
 
 #: rs02-compare.c:376
 #, c-format
@@ -2310,22 +2324,40 @@ msgstr "  ... CRC-Abschnitt  : %lld Sektoren fehlen\n"
 msgid "  ... ecc section    : %lld sectors missing\n"
 msgstr "  ... ECC-Abschnitt  : %lld Sektoren fehlen\n"
 
-#: rs02-compare.c:391
-#, c-format
-msgid "created by dvdisaster-%d.%dpl%d.\n"
-msgstr "Erzeugt von dvdisaster-%d.%dpl%d.\n"
+#: rs02-compare.c:382
+msgid ""
+"\n"
+"Error correction data: "
+msgstr ""
+"\n"
+"Fehlerkorrektur-Daten: "
 
-#: rs02-compare.c:489
+#: rs02-compare.c:478
+#, c-format
+msgid "- data md5sum      : %s (good)\n"
+msgstr "- Daten-md5sum     : %s (gut)\n"
+
+#: rs02-compare.c:479
+#, c-format
+msgid "* data md5sum      : %s (BAD)\n"
+msgstr "* Daten-md5sum     : %s (SCHLECHT)\n"
+
+#: rs02-compare.c:491
+#, c-format
+msgid "- data md5sum      : %s\n"
+msgstr "- Daten-md5sum     : %s\n"
+
+#: rs02-compare.c:502
 #, c-format
 msgid "- crc md5sum       : %s (good)\n"
 msgstr "- CRC-md5sum        : %s (gut)\n"
 
-#: rs02-compare.c:490
+#: rs02-compare.c:503
 #, c-format
 msgid "* crc md5sum       : %s (BAD)\n"
 msgstr "* CRC-md5sum        : %s (SCHLECHT)\n"
 
-#: rs02-compare.c:498
+#: rs02-compare.c:511
 #, c-format
 msgid "* ecc md5sum       : %s (BAD)\n"
 msgstr "* Ecc-md5sum        : %s (SCHLECHT)\n"
@@ -2369,12 +2401,7 @@ msgstr "Erweitern des Abbildes fehlgeschlagen: %s\n"
 msgid "Expanding image: %3d%%"
 msgstr "Erweitere das Abbild: %3d%%"
 
-#: rs02-create.c:352 rs02-create.c:363
-#, c-format
-msgid "Failed writing ecc header at %lld: %s\n"
-msgstr "Schreiben des Ecc-Vorspanns bei Pos. %lld fehlgeschlagen: %s\n"
-
-#: rs02-create.c:855
+#: rs02-create.c:938
 msgid ""
 "Not enough space on medium left for error correction data.\n"
 "If reducing the image size or using a larger medium is\n"
@@ -2386,14 +2413,14 @@ msgstr ""
 "und kein größerer Datenträger zur Verfügung steht, erzeugen Sie bitte\n"
 "eine alleinstehenden Fehlerkorrektur-Datei mit dem RS01-Verfahren.\n"
 
-#: rs02-create.c:869
+#: rs02-create.c:952
 #, c-format
 msgid "Appending image with Method RS02: %lldM data, %lldM ecc (%d roots; %4.1f%% redundancy)"
 msgstr ""
 "Erweitere Abbild mit dem RS02-Verfahren:\n"
 "%lldM Daten, %lldM Fehlerkorrektur-Daten (%d Nullstellen; %4.1f%% Redundanz)"
 
-#: rs02-create.c:873
+#: rs02-create.c:956
 #, c-format
 msgid ""
 "* Warning: Using redundancies below 20%% may not give\n"
@@ -2402,17 +2429,26 @@ msgstr ""
 "* Warnung: Redundanzen unterhalb von 20%% haben möglicherweise\n"
 "*          nicht die erhoffte Datensicherungs-Funktion.\n"
 
-#: rs02-fix.c:294
+#: rs02-create.c:984
+#, c-format
+msgid ""
+"Image has been appended with error correction data.\n"
+"New image size is %lld sectors.\n"
+msgstr ""
+"Das Abbild wurde um Fehlerkorrektur-Informationen erweitert.\n"
+"Die neue Abbild-Größe ist %lld Sektoren.\n"
+
+#: rs02-fix.c:298
 #, c-format
 msgid "* Ecc block %4d: %3d unrepairable sectors: "
 msgstr ""
 
-#: rs02-fix.c:513
+#: rs02-fix.c:517
 #, c-format
 msgid "-> CRC-predicted error in sector %lld at byte %4d (value %2x '%c', expected %2x '%c')\n"
 msgstr ""
 
-#: rs02-fix.c:516
+#: rs02-fix.c:520
 #, c-format
 msgid "-> Non-predicted error in sector %lld at byte %4d (value %2x '%c', expected %2x '%c')\n"
 msgstr ""
@@ -2969,3 +3005,9 @@ msgstr "Bitte warten Sie bis der HTML-Betrachter erscheint!"
 #: udf.c:90
 msgid "Unnamed"
 msgstr "Unbenannt"
+
+#~ msgid "  ... image md5sum   : %s\n"
+#~ msgstr "  ... Abbild-md5sum  : %s\n"
+
+#~ msgid "created by dvdisaster-%d.%dpl%d.\n"
+#~ msgstr "Erzeugt von dvdisaster-%d.%dpl%d.\n"

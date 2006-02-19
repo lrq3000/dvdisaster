@@ -23,6 +23,9 @@
 BGCOLOR="bgcolor=\"#ffffff\""     # Background of body
 IDXCOLOR="bgcolor=\"#f0f0f0\""    # Background of index
 
+BGCOLOR1="bgcolor=\"#e8e8e8\""    # used in example section
+BGCOLOR2="bgcolor=\"#f0f0f0\""    # used in exmaple section
+
 major_mode=$1
 workdir=`pwd`
 
@@ -405,7 +408,7 @@ function create_subpages()
    done
 }
 
-SECTIONS="index example download syntax qa background imprint"
+SECTIONS="index example download qa background imprint"
 
 # Prepare entry links for each section
 
@@ -422,11 +425,10 @@ done
 if ! test -e $workdir/de; then mkdir $workdir/de; fi
 cd $workdir/de
 create_subpages index de "0 10 20 30"
-create_subpages example de "0 10 20 30 40 50 60 90 91 92 93"
+create_subpages example de "0 10 20 21 22 30 40 50 80 81 82 83 90"
 create_subpages download de "0 10 20"
-create_subpages syntax de "0 10 20 30 40 50 60 70 90"
 create_subpages qa de "0 10 20"
-create_subpages background de "0 10 20 30 40 50 60"
+create_subpages background de "0 10 20 30 40 50 60 70"
 create_subpages imprint de "0"
 
 # English translation
@@ -442,11 +444,10 @@ done
 if ! test -e $workdir/en; then mkdir $workdir/en; fi
 cd $workdir/en
 create_subpages index en "0 10 20 30"
-create_subpages example en "0 10 20 30 40 50 60 90 91 92 93"
+create_subpages example en "0 10 20 21 22 30 40 50 80 81 82 83 90"
 create_subpages download en "0 10 20"
-create_subpages syntax en "0 10 20 30 40 50 60 70 90"
 create_subpages qa en "0 10 20"
-create_subpages background en "0 10 30 40 50 60"
+create_subpages background en "0 10 20 30 40 50 60 70"
 create_subpages imprint en "0"
 
 # Czech translation
@@ -462,9 +463,8 @@ done
 if ! test -e $workdir/cs; then mkdir $workdir/cs; fi
 cd $workdir/cs
 create_subpages index cs "0 10 20 30"
-create_subpages example cs "0 10 20 30 40 50 60 90 91 92 93"
+create_subpages example cs "0 10 20 21 22 30 40 50 80 81 82 83 90"
 create_subpages download cs "0 10 20"
-create_subpages syntax cs "0 10 20 30 40 50 60 70 90"
 create_subpages qa cs "0 10 20"
-create_subpages background cs "0 10 30 40 50 60"
+create_subpages background cs "0 10 20 30 40 50 60 70"
 create_subpages imprint cs "0"

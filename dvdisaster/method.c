@@ -118,52 +118,71 @@ EccHeader* FindHeaderInImage(char *filename)
    file = LargeOpen(filename, O_RDONLY, IMG_PERMS);
    if(!file) return NULL;
 
-   header_modulo = 4096;
+   header_modulo = (gint64)1<<62;
    sectors = length / 2048;
-   pos = sectors & ~(header_modulo - 1);
 
-   while(pos > 0)
-   {  if(LargeSeek(file, 2048*pos))
-      {  int n;
+   /*** Search for the headers */
 
-	 n = LargeRead(file, buf, sizeof(EccHeader));
+   while(header_modulo >= 32)
+   {  pos = sectors & ~(header_modulo - 1);
 
-	 if(n != sizeof(EccHeader))
-	   goto check_next;
+//printf("Trying modulo %lld\n", header_modulo);
 
-	 eh = (EccHeader*)buf;
+      while(pos > 0)
+      {  if(LargeSeek(file, 2048*pos))
+	 {  int n;
 
-	 /* Medium read error in ecc header? */
+//printf(" trying sector %lld\n", pos);
+	    n = LargeRead(file, buf, sizeof(EccHeader));
 
-	 if(   !memcmp(buf, Closure->deadSector, 2048)
+	    if(n != sizeof(EccHeader))
+	      goto check_next_header;
+
+	    eh = (EccHeader*)buf;
+
+	    /* Medium read error in ecc header? */
+
+	    if(   !memcmp(buf, Closure->deadSector, 2048)
 	       || !memcmp(buf+2048, Closure->deadSector, 2048))
-	 {  printf("header at %lld: read error\n", (long long int)pos);
-	    goto check_next;
-	 }
-
-	 /* See if the magic cookie is there */
-
-	 if(!strncmp((char*)eh->cookie, "*dvdisaster*", 12))
-	 {  guint32 recorded_crc = eh->selfCRC;
- 	    guint32 real_crc;
-
-//printf("header found at %lld\n", (long long int)pos);
-
-	    eh->selfCRC = 0x4c5047;
-	    real_crc = Crc32((unsigned char*)eh, sizeof(EccHeader));
-
-	    if(real_crc == recorded_crc)
-	    {  eh = g_malloc(sizeof(EccHeader));
-	       memcpy(eh, buf, sizeof(EccHeader));
-	       return eh;
+	    {  
+//printf(" header at %lld: read error\n", (long long int)pos);
+	       goto check_next_header;
 	    }
 
-	    goto check_next;
+	    /* See if the magic cookie is there */
+
+	    if(!strncmp((char*)eh->cookie, "*dvdisaster*", 12))
+	    {  guint32 recorded_crc = eh->selfCRC;
+	       guint32 real_crc;
+
+//printf(" header at %lld: magic cookie found\n", (long long int)pos);
+
+	       eh->selfCRC = 0x4c5047;
+	       real_crc = Crc32((unsigned char*)eh, sizeof(EccHeader));
+
+	       if(real_crc == recorded_crc)
+	       {  eh = g_malloc(sizeof(EccHeader));
+		  memcpy(eh, buf, sizeof(EccHeader));
+		  eh->selfCRC = recorded_crc;
+//printf(" --> CRC okay, using it\n");
+		  return eh;
+	       }
+//printf(" CRC failed, skipping it\n");
+	       goto check_next_header;
+	    }
+	    else
+	    {
+//printf(" no cookie, skipping current modulo\n");
+	      goto check_next_modulo;
+	    }
 	 }
+
+      check_next_header:
+	pos -= header_modulo;
       }
 
-   check_next:
-     pos -= header_modulo;
+   check_next_modulo:
+      header_modulo >>= 1;
    }
 
    LargeClose(file);
