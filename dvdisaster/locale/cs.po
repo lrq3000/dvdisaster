@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-19 19:14+0100\n"
+"POT-Creation-Date: 2006-02-21 19:54+0100\n"
 "PO-Revision-Date: 2006-01-01 19:25+0100\n"
 "Last-Translator: Luboš Staněk <lubek@users.sourceforge.net>\n"
 "Language-Team: čeština <cs@li.org>\n"
@@ -63,13 +63,14 @@ msgstr ""
 "Generuji náhodné opravitelné výmazy (pro %d kořenů, max. výmazů = %d).\n"
 
 #: debug.c:108 debug.c:358 debug.c:426 rs01-common.c:54 rs02-common.c:56
-#: rs02-compare.c:94 rs02-create.c:240 rs02-create.c:886 rs02-fix.c:220
+#: rs02-compare.c:94 rs02-create.c:240 rs02-create.c:893 rs02-create.c:913
+#: rs02-fix.c:220
 #, c-format
 msgid "Failed seeking to sector %lld in image: %s"
 msgstr "Selhalo vystavení na sektor %lld v obrazu: %s"
 
 #: debug.c:110 debug.c:225 debug.c:318 debug.c:363 debug.c:430
-#: rs02-create.c:268 rs02-create.c:292 rs02-create.c:889
+#: rs02-create.c:268 rs02-create.c:292 rs02-create.c:896 rs02-create.c:916
 #, c-format
 msgid "Failed writing to sector %lld in image: %s"
 msgstr "Selhal zápis do sektoru %lld v obrazu: %s"
@@ -1370,7 +1371,7 @@ msgstr ""
 
 #: read-linear.c:163 rs01-compare.c:417 rs01-compare.c:723 rs01-create.c:616
 #: rs01-fix.c:179 rs01-fix.c:199 rs01-fix.c:237 rs01-fix.c:253 rs01-fix.c:302
-#: rs02-create.c:468
+#: rs02-create.c:469
 msgid "<span color=\"red\">Aborted by user request!</span>"
 msgstr "<span color=\"red\">Zrušeno uživatelem!</span>"
 
@@ -1903,7 +1904,7 @@ msgstr "Redundance %d z použitelného rozsahu [8..100]."
 msgid "<span color=\"red\">Aborted by unrecoverable error.</span>"
 msgstr "<span color=\"red\">Zrušeno kvůli neopravitelné chybě.</span>"
 
-#: rs01-create.c:180 rs02-create.c:925
+#: rs01-create.c:180 rs02-create.c:953
 msgid "Error correction file creation aborted"
 msgstr "Tvorba souboru oprav chyb zrušena"
 
@@ -1948,11 +1949,11 @@ msgstr "%lld sektorů nepřečteno nebo chybí kvůli chybám.\n"
 msgid "Failed skipping ecc+crc header: %s"
 msgstr "Selhalo přeskočení hlavičky ecc+crc: %s"
 
-#: rs01-create.c:348 rs02-create.c:404
+#: rs01-create.c:348 rs02-create.c:405
 msgid "Internal error: parity blocks are not a multiple of sector size.\n"
 msgstr "Interní chyba: paritní bloky nejsou násobky velikosti sektoru.\n"
 
-#: rs01-create.c:475 rs01-create.c:598 rs01-create.c:891 rs02-create.c:866
+#: rs01-create.c:475 rs01-create.c:598 rs01-create.c:891 rs02-create.c:867
 #, c-format
 msgid "Ecc generation: %3d.%1d%%"
 msgstr "Tvorba ecc: %3d.%1d%%"
@@ -1975,7 +1976,7 @@ msgstr ""
 "Nelze zapsat hlavičku ecc:\n"
 "%s"
 
-#: rs01-create.c:927 rs02-create.c:983
+#: rs01-create.c:927 rs02-create.c:1011
 #, c-format
 msgid "Ecc generation: 100.0%%\n"
 msgstr "Tvorba ecc: 100.0%%\n"
@@ -1989,7 +1990,7 @@ msgstr ""
 "Soubor oprav chyb \"%s\" byl vytvořen.\n"
 "Zajistěte, aby byl tento soubor uložen na spolehlivém médiu.\n"
 
-#: rs01-create.c:936 rs02-create.c:993
+#: rs01-create.c:936 rs02-create.c:1021
 msgid ""
 "The error correction file has been successfully created.\n"
 "Make sure to keep this file on a reliable medium."
@@ -2371,7 +2372,7 @@ msgstr ""
 msgid "Expanding image: %3d%%"
 msgstr ""
 
-#: rs02-create.c:938
+#: rs02-create.c:966
 msgid ""
 "Not enough space on medium left for error correction data.\n"
 "If reducing the image size or using a larger medium is\n"
@@ -2379,19 +2380,19 @@ msgid ""
 "file using the RS01 method.\n"
 msgstr ""
 
-#: rs02-create.c:952
+#: rs02-create.c:980
 #, c-format
 msgid "Appending image with Method RS02: %lldM data, %lldM ecc (%d roots; %4.1f%% redundancy)"
 msgstr ""
 
-#: rs02-create.c:956
+#: rs02-create.c:984
 #, c-format
 msgid ""
 "* Warning: Using redundancies below 20%% may not give\n"
 "*          the expected data loss protection.\n"
 msgstr ""
 
-#: rs02-create.c:984
+#: rs02-create.c:1012
 #, c-format
 msgid ""
 "Image has been appended with error correction data.\n"

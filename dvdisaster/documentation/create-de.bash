@@ -2904,35 +2904,28 @@ EOF
 
 function background20de()
 {  cat >> $1 <<EOF
-<h3>Verschiedene Ansätze zur Fehlerkorrektur</h3>
+<h3>Datenrekonstruktion auf Abbild-Ebene</h3>
 
-Bei der Rekonstruktion von Datenträger-Inhalten gibt es verschiedene Ansätze:
-
-<ul>
-<li>Rekonstruktion auf der Ebene von Dateien, z.B. mit PAR 2</li>
-<li>Rekonstruktion auf der Ebene von Abbildern, z.B. mit dvdisaster</li>
-</ul>
-
-Die Vor- und Nachteile der beiden Verfahren hängen davon ab,
-welche Speicher- bzw. Übertragungsmedien eingesetzt werden. 
-Bei der folgenden Diskussion geht es um die Datenspeicherung
-auf optischen Datenträgern.<p>
+Eine Datenrekonstruktion kann auf verschiedenen logischen Ebenen
+des Datenträgers stattfinden, zum Beispiel auf der Abbild-Ebene
+oder der Datei-Ebene. Diese Seite erklärt, warum dvdisaster
+auf der Abbild-Ebene arbeitet.<p>
 
 <a name="file"> </a>
-<b>Daten-Rekonstruktion auf Datei-Ebene (bei CD/DVD).</b><br>
+<b>Nachteile der Daten-Rekonstruktion auf Datei-Ebene für CD/DVD.</b><p>
 
-Jede einzelne Datei (oder auch ein Archiv von Dateien) wird
+Bei der Daten-Rekonstruktion auf Datei-Ebene werden einzelne
+Dateien (oder auch ein Archiv von Dateien)
 mit Fehlerkorrektur-Informationen versehen. Dadurch können
-Beschädigungen wie fehlerhafte Bytes, fehlende Sektoren
+Beschädigungen wie fehlerhafte Bytes, fehlende Datenblöcke
 und ein Abschneiden von Teilen der Datei repariert werden.<p>
 
-Dieses Vorgehen ist mathematisch einwandfrei, berücksichtigt aber nicht,
+Dabei wird aber nicht berücksichtigt,
 daß Dateien Teil eines <i>Dateisystems</i> sind, das vom
-Betriebssystem verwaltet wird.<br>
-Die Voraussetzung,
-daß das Datei- und Betriebssystem mit fehlerhaften Datenträgern umgehen
+Betriebssystem verwaltet wird. Die Voraussetzung,
+daß das Datei- und Betriebssystem mit fehlerhaften CD/DVD-Datenträgern umgehen
 kann, ist aber typischerweise nicht erfüllt. Im ungünstigsten
-Fall kommt man gar nicht mehr an die Dateien heran, um sie 
+Fall kommt man daher gar nicht mehr an die Dateien heran, um sie 
 anhand der darin enthaltenen Fehlerkorrektur-Informationen zu reparieren:<p>
 
 <ul>
@@ -2942,23 +2935,25 @@ sehr aufwändig.<p></li>
 <li>Das Dateisystem enthält Datenstrukturen, die nicht Teil der darin
 enthaltenen Dateien und damit ungeschützt sind. Wenn diese Strukturen
 beschädigt werden, bekommen Sie keine Dateien mehr von dem Datenträger herunter,
-selbst wenn die zugehörigen Datei-Sektoren noch lesbar sind.</li>
+selbst wenn die zugehörigen Datenblöcke noch lesbar sind.</li>
 </ul><p>
 
-Daten-Rekonstruktion auf Datei-Ebene erscheint damit eher auf dateisystemlosen
-Medien wie zum Beispiel der Datei-Übertragung über das Internet geeignet
-zu sein. Für die Rekonstruktion von optischen Datenträgern wiegen die obigen
-Nachteile hingegen schwer.<p>
+
+Für die Rekonstruktion von optischen Datenträgern wiegen die obigen
+Nachteile schwer. Fairerweise muß aber auch gesagt werden, daß 
+Daten-Rekonstruktion auf Datei-Ebene bei dateisystemlosen
+Medien wie zum Beispiel der Daten-Übertragung über das Internet 
+sehr gut funktionieren kann. <p>
 
 <a name="image"> </a>
-<b>Daten-Rekonstruktion auf Abbild-Ebene von CD/DVD.</b><p>
+<b>Vorteile der Daten-Rekonstruktion auf der Abbild-Ebene von CD/DVD.</b><p>
 
 CD- und DVD-Datenträger sind intern in Daten-Sektoren aufgeteilt,
 die jeweils 2048 Bytes an Daten enthalten. Liest man diese Sektoren nacheinander
-aus und speichert man sie ab, so erhält man ein <i>Abbild</i> des Datenträgers.
-Eine Fehlerkorrektur, die an dieser Stelle ansetzt, 
-also beim Lesen und Rekonstruieren nur auf Daten-Sektoren zugreift, 
-hat die folgenden Vorteile:
+aus und speichert sie ab, so erhält man ein <i>Abbild</i> des Datenträgers.
+Eine Daten-Rekonstruktion, die an der Abbild-Ebene ansetzt, greift
+beim Lesen und Rekonstruieren nur auf Daten-Sektoren zu. 
+Dies hat die folgenden Vorteile:
 
 <ul>
 <li>Abbilder lassen sich auch dann problemlos lesen, wenn der Datenträger beschädigt ist.<br>
@@ -2979,34 +2974,34 @@ Nach der vollständigen Reparatur des Abbildes sind nicht nur alle Dateien, sonde
 Dateisystem-Strukturen wieder hergestellt - ohne das Dateisystem jemals "angefaßt" zu haben!</li>
 </ul>
 
+Diese Vorteile lassen sich gut auf die Rekonstruktion von CD/DVD-Datenträgern übertragen.
+Daher wurde dvdisaster ausschließlich mit Abbild-basierten Verfahren ausgestattet.<p>
 
+
+<a name="eccfile"> </a>
 <b>Konsequenzen für das Aufbewahren von Fehlerkorrektur-Dateien</b><p>
 
 Bei der Speicherung von Fehlerkorrektur-Dateien müssen Sie natürlich 
 davon ausgehen, daß der verwendete Datenträger ebenfalls schadhaft werden kann.<p>
 
-Sie dürfen daher nicht darauf verzichten, auch die Datenträger mit dvdisaster zu
-schützen, auf denen Sie Ihre Fehlerkorrektur-Dateien aufheben. 
-Dadurch kommen auch die Fehlerkorrektur-Dateien in den Genuß eines Schutzes
-auf der Abbild-Ebene.<p>
+Vielleicht erwarten Sie, daß dies kein Problem ist, und daß auch mit einer beschädigten
+Fehlerkorrektur-Datei eine Daten-Rekonstrution gelingt. Dies ist mitnichten so:
+Die Fehlerkorrektur-Dateien enthalten <i>keinerlei</i> Schutzmechanismen gegenüber
+einer Beschädigung! Es wäre auch nicht sinnvoll, sich einen inneren Schutzmechanismus
+für die Fehlerkorrektur-Dateien auszudenken: Egal wie ausgeklügelt dieser Mechanismus
+auch wäre, es bliebe ein Schutz auf Datei-Ebene mit allen
+oben beschriebenen Nachteilen.<p>
 
-Daraus folgend enthalten die Fehlerkorrektur-Dateien
-keinen eigenen Schutz gegen Beschädigungen.
-Widerstehen Sie der Versuchung, dies durch externe Werkzeuge wie PAR zu "reparieren"
-und den Datenträger mit den Fehlerkorrektur-Dateien nicht 
-erneut<sup><a href="#footnote1">*)</a></sup> mit dvdisaster zu schützen.
-Sie erhielten nur einen Schutz auf Datei-Ebene und würden sich die oben
-beschriebenen Probleme einhandeln.<p>
+Sie dürfen daher nicht darauf verzichten, auch die Fehlerkorrektur-Dateien
+in den Genuß eines Schutzes auf Abbild-Ebene kommen zu lassen: Sichern Sie
+den Datenträger mit den Fehlerkorrektur-Dateien ebenfalls mit dvdisaster.<p>
 
-<pre> </pre>
-<table width="50%"><tr><td><hr></td></tr></table>
-
-<font size="-1">
-<a name="footnote1"><sup>*)</sup></a> 
-Ja, das ist lästig. Deshalb gibt es auch neuerdings
-<a href="background30.html">Fehlerkorrektur-Abbilder</a> ;-)
-</font>
-
+Falls Sie der zusätzliche Aufwand abschreckt, für den Datenträger mit Fehlerkorrektur-Dateien 
+noch einmal eine Fehlerkorrektur-Dateien zu erzeugen, lassen Sie sich von
+<a href="background70.html">einigen Vorschlägen inspirieren</a>. Oder Sie
+verzichten ganz auf die Verwendung von Fehlerkorrektur-Dateien und verwenden
+stattdessen <a href="background30.html">Fehlerkorrektur-Abbilder</a>,
+die prinzipbedingt einen reinen Abbild-basierten Ansatz darstellen.
 EOF
 }
 
@@ -3394,46 +3389,45 @@ function background70de()
 {  cat >> $1 <<EOF
 <h3>Tips zum Aufbewahren der Fehlerkorrektur-Datei</h3>
 
-Hier sind ein paar Anregungen zum Aufbewahren der Fehlerkorrektur-Dateien:<p>
+Zur Zeit gibt es kaum Wechselspeichersysteme, 
+die eine wirtschaftliche Alternative zu CD/DVD-Formaten darstellen.
+Vermutlich werden Sie daher Ihre Fehlerkorrektur-Dateien auch auf CD/DVD
+speichern. <p>
+
+
+Dagegen ist nichts einzuwenden, aber Sie müssen sich dabei bewußt sein,
+daß sich Ihre Nutzdaten und die Fehlerkorrektur-Dateien auf 
+Speichermedien mit ähnlicher Verläßlichkeit befinden.
+Wenn Lesefehler
+auf einem zu rekonstruierenden Datenträger auftreten, so müssen Sie damit rechnen,
+daß die zur gleichen Zeit erstellte Scheibe mit den Fehlerkorrektur-Daten
+ebenfalls nicht mehr vollständig lesbar ist.<p>
+
+Deshalb ist es wichtig, die Fehlerkorrektur-Dateien
+genauso wie die übrigen Daten zu schützen. Am einfachsten geht dies, wenn Sie die
+Fehlerkorrektur-Dateien in Ihre normale Datensicherung mit einbeziehen. 
+Dazu zwei Anregungen:<p>
 
 <b>1. Fehlerkorrektur-Dateien auf eigenen Datenträgern sammeln:</b><p>
 
-Mit der voreingestellten <a href="example83.html#redundancy">Redundanz</a>
-passen typischerweise Fehlerkorrektur-Dateien für 7-10 DVDs auf eine leere DVD. 
-So kann man zum Beispiel 9+1 DVDs (9 mit Nutzdaten und 1 mit Fehlerkorrektur)
-gut als 10er-Paket lagern. Allerdings:<p>
+Wenn Sie Fehlerkorrektur-Dateien auf extra dafür vorgesehenen Datenträgern speichern,
+ist es <a href="background20.html#eccfile">wichtig</a>, diese Datenträger ebenfalls
+mit dvdisaster zu schützen. Um zu verhindern, daß man eine endlose Kette 
+(Fehlerkorrektur-Dateien über Fehlerkorrektur-Dateien über ...) erhält, 
+hilft folgender Kniff:<p>
 
-<table width=100%><tr><td bgcolor=#000000 width=2><img width=1 height=1 alt=""></td>
-<td>Vermeiden Sie es, die Fehlerkorrektur-Dateien auf einen Rohling zu brennen,
-der aus der gleichen Produktion wie derjenige stammt, von dem Sie das Abbild erzeugt haben.
-</td></tr></table><p>
-
-Rohlinge aus der gleichen Produktion altern auch gleich schnell, d.h. sie
-versagen häufig zum gleichen Zeitpunkt. Damit wäre nicht sichergestellt, 
-daß die Fehlerkorrektur-Dateien die anderen Datenträger überdauern.<p>
-
-Da auch Rohlinge mit unterschiedlichem Herstelleraufdruck aus der gleichen
-Produktionslinie stammen können, empfiehlt es sich, unterschiedliche Rohlingstypen
-zu verwenden:
-
-DVD-R und DVD+R - Rohlinge sowie solche aus unterschiedlichen 
-Geschwindigkeitsklassen (z.B. 8x und 16x-Rohlinge) wurden
-mit hoher Wahrscheinlichkeit auf verschiedenen Produktionslinien
-und zu verschiedenen Zeitpunkten gefertigt.<p>
+Angenommen, Sie können jeweils 5 Fehlerkorrektur-Dateien pro Datenträger speichern.
+Legen Sie die ersten fünf Fehlerkorrektur-Dateien auf dem ersten Datenträger ab
+und erzeugen Sie dann eine weitere Fehlerkorrektur-Datei für diesen Datenträger.
+Speichern Sie die neu erzeugte Fehlerkorrektur-Datei zusammen mit vier weiteren auf dem
+zweiten Datenträger. Wenn Sie so weitermachen, sind stets alle Fehlerkorrekur-Dateien
+bis auf diejenigen vom letzten Datenträger mit dvdisaster gesichert.<p>
 
 <b>2. Fehlerkorrektur-Dateien jeweils auf dem nächsten Datenträger speichern:</b><p>
 
 Wenn Sie Ihre DVDs nicht randvoll mit Nutzdaten (also mit weniger als 4GB) beschreiben,
 können Sie die Fehlerkorrektur-Dateien innerhalb einer Serie von DVDs jeweils
 auf dem nächsten Datenträger ablegen.<p>
-
-<b>3. Fehlerkorrektur-Dateien auf (externen) Festplatten speichern:</b><p>
-
-Eine Festplatte mit 400GB reicht für rund 600 Fehlerkorrektur-Dateien
-(mit der voreingestellten <a href="example83.html#redundancy">Redundanz</a> bei 
-jeweils vollen 4.7GB DVDs). Das kann eine preisliche Alternative sein,
-wenn man sich bewußt ist, daß aktuelle ATA-Platten auch nicht für die Ewigkeit
-gebaut sind ;-)
 
 EOF
 }

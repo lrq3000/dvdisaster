@@ -322,7 +322,7 @@ static void prepare_header(ecc_closure *ec)
    eh->eccBytes        = lay->nroots;
 
    eh->creatorVersion  = Closure->version;
-   eh->neededVersion   = 6500;
+   eh->neededVersion   = 6600;
    eh->fpSector        = FOOTPRINT_SECTOR;
 
    eh->selfCRC = 0x4c5047;
@@ -387,8 +387,9 @@ static gint32 *enc_alpha_to;
         The algorithm builds the parity file consecutively in chunks of n_parity_blocks.
         We use all the amount of memory allowed by cacheMB for caching the parity blocks. */
 
-   n_parity_blocks = (Closure->cacheMB<<20) / nroots;
-   n_parity_blocks &= ~0x7ff;                   /* round down to multiple of 2048 */
+   n_parity_blocks = (Closure->cacheMB<<20) / nroots;  /* 1 MB = 2^20 */
+   n_parity_blocks >>= 1;                              /* two buffer sets for scrambling */
+   n_parity_blocks &= ~0x7ff;                          /* round down to multiple of 2048 */
    n_parity_bytes  = nroots * n_parity_blocks;
 
    /* Each chunk of parity blocks is built iteratively by processing the data in layers
@@ -416,7 +417,7 @@ static gint32 *enc_alpha_to;
    /*** Create buffers for dividing the ecc information into nroots slices */
 
    for(i=0; i<nroots; i++)
-     ec->slice[i] = g_malloc(2048);
+     ec->slice[i] = g_malloc(n_layer_bytes);
 
    /*** Initialize md5 contexts for checksumming the nroots slices */
 
@@ -868,11 +869,37 @@ static gint32 *enc_alpha_to;
 	 }
       }
 
-      /* The parity bytes are now prepared as sequences of nroots bytes for each 
+      /* The parity bytes have been prepared as sequences of nroots bytes for each 
 	 ecc block. Now we split them up into nroots slices and write them out. */
 
       par_ptr = ec->parity;
 
+      for(i=0; i<actual_layer_sectors; i++)
+      {  int idx = 2048*i;
+
+	 for(j=0; j<2048; j++, idx++)
+	 {  for(k=0; k<nroots; k++)
+	      ec->slice[k][idx] = *par_ptr++;
+	 }
+      }
+
+      for(k=0; k<nroots; k++)
+      {  int idx=0;
+
+	for(i=0; i<actual_layer_sectors; i++, idx+=2048)
+	 {  gint64 s = RS02EccSectorIndex(lay, k, chunk + i);
+
+	    if(!LargeSeek(file, 2048*s))
+	      Stop(_("Failed seeking to sector %lld in image: %s"), s, strerror(errno));
+
+	    if(LargeWrite(file, ec->slice[k]+idx, 2048) != 2048)
+	      Stop(_("Failed writing to sector %lld in image: %s"), s, strerror(errno));
+
+	    MD5Update(&ec->md5Ctxt[k], ec->slice[k]+idx, 2048);
+	}
+      }
+
+#if 0
       for(i=0; i<actual_layer_sectors; i++)
       {  for(j=0; j<2048; j++)
 	 {  for(k=0; k<nroots; k++)
@@ -891,6 +918,7 @@ static gint32 *enc_alpha_to;
 	    MD5Update(&ec->md5Ctxt[k], ec->slice[k], 2048);
 	}
       }
+#endif
    }
 
    /*** We can store only one md5sum in the header,

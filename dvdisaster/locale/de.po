@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-19 19:14+0100\n"
+"POT-Creation-Date: 2006-02-21 19:54+0100\n"
 "PO-Revision-Date: 2004-11-30 19:48+0100\n"
 "Last-Translator: Carsten Gnörlich <carsten@dvdisaster.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -62,13 +62,14 @@ msgstr ""
 "Erzeuge zufällige reparierbare Auslöschungen (für %d Nullstellen, max. %d Auslöschungen).\n"
 
 #: debug.c:108 debug.c:358 debug.c:426 rs01-common.c:54 rs02-common.c:56
-#: rs02-compare.c:94 rs02-create.c:240 rs02-create.c:886 rs02-fix.c:220
+#: rs02-compare.c:94 rs02-create.c:240 rs02-create.c:893 rs02-create.c:913
+#: rs02-fix.c:220
 #, c-format
 msgid "Failed seeking to sector %lld in image: %s"
 msgstr "Ansteuern von Sektor %lld im Abbild fehlgeschlagen: %s"
 
 #: debug.c:110 debug.c:225 debug.c:318 debug.c:363 debug.c:430
-#: rs02-create.c:268 rs02-create.c:292 rs02-create.c:889
+#: rs02-create.c:268 rs02-create.c:292 rs02-create.c:896 rs02-create.c:916
 #, c-format
 msgid "Failed writing to sector %lld in image: %s"
 msgstr "Schreiben von Sektor %lld im Abbild fehlgeschlagen: %s"
@@ -1389,7 +1390,7 @@ msgstr ""
 
 #: read-linear.c:163 rs01-compare.c:417 rs01-compare.c:723 rs01-create.c:616
 #: rs01-fix.c:179 rs01-fix.c:199 rs01-fix.c:237 rs01-fix.c:253 rs01-fix.c:302
-#: rs02-create.c:468
+#: rs02-create.c:469
 msgid "<span color=\"red\">Aborted by user request!</span>"
 msgstr "<span color=\"red\">Abbruch auf Benutzeranforderung!</span>"
 
@@ -1923,7 +1924,7 @@ msgstr "Redundanz %d außerhalb des nutzbaren Bereiches [8..100]."
 msgid "<span color=\"red\">Aborted by unrecoverable error.</span>"
 msgstr "<span color=\"red\">Abbruch durch nicht behebbaren Fehler.</span>"
 
-#: rs01-create.c:180 rs02-create.c:925
+#: rs01-create.c:180 rs02-create.c:953
 msgid "Error correction file creation aborted"
 msgstr "Erzeugung der Fehlerkorrektur-Datei abgebrochen"
 
@@ -1968,11 +1969,11 @@ msgstr "%lld unlesbare oder fehlende Sektoren im Abbild.\n"
 msgid "Failed skipping ecc+crc header: %s"
 msgstr "Überspringen der Ecc/Crc-Vorspänne fehlgeschlagen: %s"
 
-#: rs01-create.c:348 rs02-create.c:404
+#: rs01-create.c:348 rs02-create.c:405
 msgid "Internal error: parity blocks are not a multiple of sector size.\n"
 msgstr "Interner Fehler: Umfang der Korrektur-Blöcke ist kein Vielfaches der Sektorgröße\n"
 
-#: rs01-create.c:475 rs01-create.c:598 rs01-create.c:891 rs02-create.c:866
+#: rs01-create.c:475 rs01-create.c:598 rs01-create.c:891 rs02-create.c:867
 #, c-format
 msgid "Ecc generation: %3d.%1d%%"
 msgstr "Kodierungs-Fortschritt: %3d.%1d%%"
@@ -1995,7 +1996,7 @@ msgstr ""
 "Konnte den Vorspann der Fehlerkorrektur-Datei nicht schreiben:\n"
 "%s"
 
-#: rs01-create.c:927 rs02-create.c:983
+#: rs01-create.c:927 rs02-create.c:1011
 #, c-format
 msgid "Ecc generation: 100.0%%\n"
 msgstr "Kodierungs-Fortschritt: 100.0%%\n"
@@ -2009,7 +2010,7 @@ msgstr ""
 "Fehlerkorrektur-Datei \"%s\" wurde erzeugt.\n"
 "Verwahren Sie die Datei auf einem zuverlässigen Datenträger.\n"
 
-#: rs01-create.c:936 rs02-create.c:993
+#: rs01-create.c:936 rs02-create.c:1021
 msgid ""
 "The error correction file has been successfully created.\n"
 "Make sure to keep this file on a reliable medium."
@@ -2335,7 +2336,7 @@ msgstr ""
 #: rs02-compare.c:478
 #, c-format
 msgid "- data md5sum      : %s (good)\n"
-msgstr "- Daten-md5sum     : %s (gut)\n"
+msgstr "- Daten-md5sum      : %s (gut)\n"
 
 #: rs02-compare.c:479
 #, c-format
@@ -2401,7 +2402,7 @@ msgstr "Erweitern des Abbildes fehlgeschlagen: %s\n"
 msgid "Expanding image: %3d%%"
 msgstr "Erweitere das Abbild: %3d%%"
 
-#: rs02-create.c:938
+#: rs02-create.c:966
 msgid ""
 "Not enough space on medium left for error correction data.\n"
 "If reducing the image size or using a larger medium is\n"
@@ -2411,16 +2412,16 @@ msgstr ""
 "Der Datenträger hat nicht genügend Platz für die Fehlerkorrektur-Daten.\n"
 "Falls die Abbild-Größe nicht verringert werden kann\n"
 "und kein größerer Datenträger zur Verfügung steht, erzeugen Sie bitte\n"
-"eine alleinstehenden Fehlerkorrektur-Datei mit dem RS01-Verfahren.\n"
+"eine alleinstehende Fehlerkorrektur-Datei mit dem RS01-Verfahren.\n"
 
-#: rs02-create.c:952
+#: rs02-create.c:980
 #, c-format
 msgid "Appending image with Method RS02: %lldM data, %lldM ecc (%d roots; %4.1f%% redundancy)"
 msgstr ""
 "Erweitere Abbild mit dem RS02-Verfahren:\n"
 "%lldM Daten, %lldM Fehlerkorrektur-Daten (%d Nullstellen; %4.1f%% Redundanz)"
 
-#: rs02-create.c:956
+#: rs02-create.c:984
 #, c-format
 msgid ""
 "* Warning: Using redundancies below 20%% may not give\n"
@@ -2429,7 +2430,7 @@ msgstr ""
 "* Warnung: Redundanzen unterhalb von 20%% haben möglicherweise\n"
 "*          nicht die erhoffte Datensicherungs-Funktion.\n"
 
-#: rs02-create.c:984
+#: rs02-create.c:1012
 #, c-format
 msgid ""
 "Image has been appended with error correction data.\n"

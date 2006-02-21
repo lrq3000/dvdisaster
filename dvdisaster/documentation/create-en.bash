@@ -3124,44 +3124,41 @@ function background70en()
 {  cat >> $1 <<EOF
 <h3>Hints for storing the error correction files</h3>
 
-Here are a few suggestions for storing the error correction files:<p>
+Currently there are few exchangeable media technologies
+which can be a cost-effective alternative to the various CD/DVD formats.
+So you will probably not only use CD/DVD for data archival, but store
+the respective error correction files on CD/DVD as well.<p>
+
+There is nothing wrong with that, but bear in mind that your archived data
+and the error correction files are stored on media with the same degree of
+reliability. When read errors occur on the archived data, be prepared that
+the disc with the respective error correction file might have aged beyond
+full readability, too.
+
+Therefore it is important to protect your error correction files with the same
+care as your other data. This is best achieved by integrating the error correction
+files into your normal data backup scheme. Here are two ideas:<p>
 
 <b>1. Storing the error correction files on dedicated media:</b><p>
 
-An empty DVD can typically hold about 7-10 error correction files from 
-same-sized media when using the default <a href="example83.html#redundancy">redundancy</a>.
+If you decide to store error correction files on separate media, it is
+<a href="background20.html#eccfile">important</a> to protect those media
+with dvdisaster as well. To avoid a never-ending chain
+(error correction files for media of error correction files for ...),
+try the following:<p>
 
-So one could store 9+1 DVDs (9 carrying actual data and 1
-used for the error correction files) using common 10 pack boxes. However:<p>
-
-<table width=100%><tr><td bgcolor=#000000 width=2><img width=1 height=1 alt=""></td>
-<td>Avoid storing the error correction files on media coming from the same 
-batch as those holding the data you are going to protect.
-</td></tr></table><p>
-
-Media from the same production run have similar aging characteristics,
-so they may all start to fail at the same time. That is not good as
-we want the error correction files to outlast the other media.<p>
-
-Since even media with different labels printed on them can actually come from
-the same production, it is a good idea to use different media types:
-
-DVD-R and DVD+R media as well as media classified for different writing speeds
-(e.g. 8x and 16x media) are very likely to come from different
-production lines and have been manufactured at different times.<p>
+Lets assume that five error correction files can be stored at each medium.
+Write the first five error correction files to the first medium and create
+another error correction file for that medium. Now save that error correction
+file together with four other error correction files on the second medium.
+If you continue that way, all error correction files except for those from the
+last medium (which may still be kept on hard disc) are protected by dvdisaster.<p>
 
 <b>2. Putting the error correction file on the next medium of a series:</b><p>
 
 If you do not fill your DVDs to the max (e.g. with less than 4GB for single layered
 media), you can store the error correction file of one medium
 on the succeeding medium within a series.<p>
-
-<b>3. Using (external) hard discs for storing the error correction files:</b><p>
-
-A 400GB hard disc can hold approximately 600 error correction files
-(assuming full 4.7GB media and default <a href="example83.html#redundancy">redundancy</a>). 
-This might be an alternative in price if you
-keep in mind that current ATA hard discs are not built for eternity, either ;-) 
 
 EOF
 }
