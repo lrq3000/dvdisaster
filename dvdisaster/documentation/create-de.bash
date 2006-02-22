@@ -2148,6 +2148,37 @@ der Quellkode-Version gibt es <a href="download20.html">Installationshinweise</a
 <b>Entwickler-Versionen</b> - neu und experimentell für erfahrene Benutzer!<p> 
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
+<tr><td><b>dvdisaster-0.66</b></td><td align="right">xx-Mar-2006</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+  <table>
+    <tr><td align="right">&nbsp;&nbsp;Quellkode für alle Betriebssysteme:&nbsp;</td>
+        <td><a href="http://download.berlios.de/dvdisaster/dvdisaster-0.66.tar.bz2">dvdisaster-0.66.tar.bz2</a></td></tr>
+    <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
+        <td><a href="http://download.berlios.de/dvdisaster/dvdisaster-0.66.tar.bz2.gpg">dvdisaster-0.66.tar.bz2.gpg</a></td></tr>
+    <tr><td align="right">Binärversion für Windows:&nbsp;</td>
+        <td><a href="http://download.berlios.de/dvdisaster/dvdisaster-0.66-setup.exe">dvdisaster-0.66-setup.exe</a></td></tr>
+    <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
+        <td><a href="http://download.berlios.de/dvdisaster/dvdisaster-0.66-setup.exe.gpg">dvdisaster-0.66-setup.exe.gpg</a></td></tr>
+  </table>
+</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+Abbilder werden bereits beim <a href="example10.html">Prüfen</a> mit der
+Fehlerkorrektur-Datei abgeglichen. Das Erzeugen von Dateien kann nach 
+behobenem Speicherplatzmangel auf der Festplatte fortgesetzt werden.<p>
+
+<i>Neues <a href="background30.html">Fehlerkorrektur-Verfahren</a> ohne 
+Fehlerkorrektur-Datei:</i> 
+Fehlerkorrektur-Informationen können direkt an das Abbild angehängt werden.
+Das Verfahren ist noch experimentell und in dieser Version nur in der
+Kommandozeile verfügbar. Schauen Sie auch in 
+das <a href="http://sourceforge.net/cvs/?group_id=157550">CVS-Archiv</a>,
+um die Weiterentwicklung des neuen Verfahrens zu verfolgen (benötigt Kenntnisse
+zum Erzeugen von Programmen aus dem Quellkode).
+</td></tr></table><p>
+
+<table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.65</b></td><td align="right">14-Jan-2006</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">

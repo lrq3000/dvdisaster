@@ -2074,6 +2074,38 @@ For the source code version see the <a href="download20.html">installation instr
 <b>Developer versions</b> - new and experimental for experienced users!<p>
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
+<tr><td><b>dvdisaster-0.66</b></td><td align="right">xx-Mar-2006</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+  <table>
+    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
+        <td><a href="http://download.berlios.de/dvdisaster/dvdisaster-0.66.tar.bz2">dvdisaster-0.66.tar.bz2</a></td></tr>
+    <tr><td align="right">Digital signature:&nbsp;</td>
+        <td><a href="http://download.berlios.de/dvdisaster/dvdisaster-0.66.tar.bz2.gpg">dvdisaster-0.66.tar.bz2.gpg</a></td></tr>
+    <tr><td align="right">Binary for Windows:&nbsp;</td>
+        <td><a href="http://download.berlios.de/dvdisaster/dvdisaster-0.66-setup.exe">dvdisaster-0.66-setup.exe</a></td></tr>
+    <tr><td align="right">Digital signature:&nbsp;</td>
+        <td><a href="http://download.berlios.de/dvdisaster/dvdisaster-0.66-setup.exe.gpg">dvdisaster-0.66-setup.exe.gpg</a></td></tr>
+  </table>
+</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+
+Images are checked against the error correction file during
+the <a href="example10.html">Scan</a> function. Creation of files can
+be continued after encountering and removing out-out-space conditions on hard disc.<p>
+
+<i>New <a href="background30.html">error correction method</a> without 
+error correction files:</i>
+Error correction information can be appended directly to the image.
+This method is still experimental and currently only available in the
+command line. Please visit 
+the <a href="http://sourceforge.net/cvs/?group_id=157550">CVS archive</a>
+to follow development of the new method (requires some skills in building
+programs from source).
+</td></tr></table><p>
+
+<table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.65</b></td><td align="right">14-Jan-2006</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
