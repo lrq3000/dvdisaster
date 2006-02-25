@@ -132,45 +132,38 @@ EOF
     echo "<tr bgcolor=\"#000000\"><td colspan=\"2\" width=\"100%\"><img width=1 height=1 alt=\"\"></td></tr>" >> $file
   fi
 
-  echo "<tr>" >> $file
+  if [ $major_mode != "local" ]; then
+    echo "<tr>" >> $file
 
-  case $lang in
-    cs) if [ $major_mode != "local" ]
-           then 
-             echo "   <td align=\"left\"><a href=\"http://developer.berlios.de/projects/dvdisaster/\">$trans_to_hoster</a></td>" >> $file
-             echo "<td align=\"right\">" >>$file
-             echo "&#268;esky &nbsp;&nbsp;&nbsp;" >>$file
-	     echo "<a href=\"../de/$file\" title=\"Deutsche Sprache\">Deutsch</a> &nbsp;&nbsp;&nbsp;" >>$file
-	     echo "<a href=\"../en/$file\" title=\"English language\">English</a>" >>$file
-             echo "</td>" >>$file
-        fi
-	;;
+    case $lang in
+      cs)  echo "   <td align=\"left\"><a href=\"http://developer.berlios.de/projects/dvdisaster/\">$trans_to_hoster</a></td>" >> $file
+           echo "<td align=\"right\">" >>$file
+           echo "&#268;esky &nbsp;&nbsp;&nbsp;" >>$file
+	   echo "<a href=\"../de/$file\" title=\"Deutsche Sprache\">Deutsch</a> &nbsp;&nbsp;&nbsp;" >>$file
+	   echo "<a href=\"../en/$file\" title=\"English language\">English</a>" >>$file
+           echo "</td>" >>$file
+	   ;;
 
-    de) if [ $major_mode != "local" ]
-           then 
-             echo "   <td align=\"left\"><a href=\"http://developer.berlios.de/projects/dvdisaster/\">$trans_to_hoster</a></td>" >> $file
-             echo "<td align=\"right\">" >>$file
-             echo "<a href=\"../cs/$file\">&#268;esky</a> &nbsp;&nbsp;&nbsp;" >>$file
-	     echo "Deutsch &nbsp;&nbsp;&nbsp;" >>$file
-	     echo "<a href=\"../en/$file\">English</a>" >>$file
-             echo "</td>" >>$file
-        fi
-	;;
+      de) echo "   <td align=\"left\"><a href=\"http://developer.berlios.de/projects/dvdisaster/\">$trans_to_hoster</a></td>" >> $file
+          echo "<td align=\"right\">" >>$file
+          echo "<a href=\"../cs/$file\">&#268;esky</a> &nbsp;&nbsp;&nbsp;" >>$file
+	  echo "Deutsch &nbsp;&nbsp;&nbsp;" >>$file
+	  echo "<a href=\"../en/$file\">English</a>" >>$file
+          echo "</td>" >>$file
+	  ;;
 
-    *)  if [ $major_mode != "local" ]
-           then 
-             echo "   <td align=\"left\"><a href=\"http://developer.berlios.de/projects/dvdisaster/\">$trans_to_hoster</a></td>" >> $file
-             echo "<td align=\"right\">" >>$file
-             echo "<a href=\"../cs/$file\">&#268;esky</a> &nbsp;&nbsp;&nbsp;" >>$file
-	     echo "<a href=\"../de/$file\">Deutsch</a> &nbsp;&nbsp;&nbsp;" >>$file
-	     echo "English" >>$file
-             echo "</td>" >>$file
-        fi
-        ;;
-   esac
+      *)  echo "   <td align=\"left\"><a href=\"http://developer.berlios.de/projects/dvdisaster/\">$trans_to_hoster</a></td>" >> $file
+          echo "<td align=\"right\">" >>$file
+          echo "<a href=\"../cs/$file\">&#268;esky</a> &nbsp;&nbsp;&nbsp;" >>$file
+	  echo "<a href=\"../de/$file\">Deutsch</a> &nbsp;&nbsp;&nbsp;" >>$file
+	  echo "English" >>$file
+          echo "</td>" >>$file
+          ;;
+    esac
+    echo "</tr>" >>$file
+  fi
 
-   cat >> $file <<EOF
- </tr>
+  cat >> $file <<EOF
  <tr bgcolor="#000000"><td colspan="2" width="100%"><img width=1 height=1 alt=""></td></tr>
  <tr><td colspan="2" width="100%" height="10"><img width=1 height=1 alt=""></td></tr>
 </table>
@@ -366,7 +359,7 @@ function create_inline()
 
    echo "<table width=\"70%\" align=\"center\">" >> $file
    eval "${prefix}${page}${lang} $file"
-   echo "<tr><td><pre> </pre><a href=\"$backlink\">$trans_back $backlink_text</a></tr></td>" >> $file    
+   echo "<tr><td><pre> </pre><a href=\"$backlink\">$trans_back $backlink_text</a></td></tr>" >> $file    
    echo "</table>" >> $file
 
    footer   ${prefix} $lang $page

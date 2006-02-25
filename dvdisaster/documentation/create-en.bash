@@ -49,13 +49,13 @@ function inline1en()
 
 <tr align="center"><td><h3>Picture: Badly scratched medium</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/scratch-img.jpg"></center>
+<center><img src="../images/scratch-img.jpg" alt="scratched medium read"></center>
 <br clear="all">
 </td></tr>
 <tr><td>
 This medium has been carried around without protection in a backpack;
 the round prints were made by a bottle of water. The scratches are
-a bit exaggerated due to reflections from the photoflash.</tr></td>
+a bit exaggerated due to reflections from the photoflash.</td></tr>
 EOF
 }
 
@@ -65,7 +65,7 @@ function inline2en()
 
 <tr align="center"><td><h3>Figures: Error analysis</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/scratch-scan-en.png"></center>
+<center><img src="../images/scratch-scan-en.png" alt="scratched medium scan"></center>
 <br clear="all">
 </td></tr>
 <tr><td>
@@ -79,9 +79,9 @@ medium for technical reasons.
 <pre>
 
 </pre>
-</tr></td>
+</td></tr>
 <tr align="center"><td>
-<center><img src="../images/scratch-corr-en.png"></center>
+<center><img src="../images/scratch-corr-en.png" alt="scratched medium recovery"></center>
 <br clear="all">
 </td></tr>
 <tr><td>
@@ -97,7 +97,7 @@ Upto 32 read errors can be compensated per error correction block (green line)
 when the <a href="example83.html#redundancy">standard settings</a> are used.
 Exceeding this line means that the medium contents can not be fully recovered.
 
-</tr></td>
+</td></tr>
 EOF
 }
 
@@ -171,7 +171,7 @@ a bit exaggerated due to reflections from the photoflash.<p>
 
 A surface scan of the medium yields about 135.000 unreadable sectors
 (of 2.200.000 total, giving about 6% defective sectors).
-During the <a href="example50.html">recovery</a> of the medium image
+During the <a href="example40.html">recovery</a> of the medium image
 (using <a href="example83.html#redundancy">standard settings</a>)
 a maximum of 22 errors per <a href="background10.html">ECC block</a> is counted
 which equals to a 69% load of the error correction under the applied settings.<p>
@@ -179,13 +179,13 @@ which equals to a 69% load of the error correction under the applied settings.<p
 
 </td><td width=110>
 <a href="inline1.html">
-<img src="../images/scratch-img.jpg" width=100 height=97></a>
+<img src="../images/scratch-img.jpg" alt="scratched medium" width=100 height=97></a>
 <br clear="all">
 <a href="inline2.html">
-<img src="../images/scratch-scan-en.png" width=100 height=74></a>
+<img src="../images/scratch-scan-en.png" alt="reading scratched medium" width=100 height=74></a>
 <br clear="all">
 <a href="inline2.html">
-<img src="../images/scratch-corr-en.png" width=100 height=74></a>
+<img src="../images/scratch-corr-en.png" alt="repairing scratched medium" width=100 height=74></a>
 </td></tr></table>
 
 <a href="index20.html">Why PI/PO scans won't suffice...</a>
@@ -197,7 +197,7 @@ function index20en()
 {  cat >> $1 <<EOF
 <h3>dvdisaster as a complement to PI/PO scans</h3>
 
-PI/PO scans are a valueable tool to assess and optimize
+<a href="qa.html#pipo">PI/PO scans</a> are a valueable tool to assess and optimize
 the quality of burned media.<p>
 
 However, PI/PO scans are <b>not</b> a reliable means of <b>predicting 
@@ -262,17 +262,17 @@ function example_contents_en()
    case $query in
    title)   title="Examples" ;;
 
-   link)    link_title="Examples" ;;
+   link)    link_title="Examples and screen shots" ;;
 
-   link10)   link_title="Scanning a medium for errors" ;;
+   link10)   link_title="Scanning media for errors" ;;
 
-   link20)   link_title="Generating error correction data" ;;
+   link20)   link_title="Creating error correction data" ;;
    link21)   link_title="as a file" ;;
    link22)   link_title="within the image" ;;
 
-   link30)   link_title="Creating images from defective media" ;;
-   link40)   link_title="Recovering a medium image" ;;
-   link50)   link_title="Compare image against error correction data" ;;
+   link30)   link_title="Reading defective media" ;;
+   link40)   link_title="Recovering media images" ;;
+   link50)   link_title="Getting information about images and error correction data" ;;
 
    link80)   link_title="Configuration" ;;
    link81)   link_title="General" ;;
@@ -292,13 +292,13 @@ function example0en()
 <table>
 <tr>
 <td valign="top">
-  <a href="example10.html"><b>Scanning a medium</b></a><br>
+  <a href="example10.html"><b>Scanning media for errors</b></a><br>
   The medium scan analyzes the
   reading speed and readability.
 </td>
 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 <td valign="top">
- <a href="example20.html"><b>Creating error correction data.</b></a><br>
+ <a href="example20.html"><b>Creating error correction data</b></a><br>
 Error correction data can be appended to an image
 or exist as a separate file.
 </td>
@@ -306,13 +306,13 @@ or exist as a separate file.
 <tr>
 <td>
 <a href="example1.html">
-  <img src="../images/ex-scan-en.png" border=0 width=275>
+  <img src="../images/ex-scan-en.png" alt="Media scan" border=0 width=275>
 </a>
 </td>
 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 <td>
 <a href="example3.html#ecc">
-  <img src="../images/ex-create-en.png" border=0 width=264>
+  <img src="../images/ex-create-en.png" alt="Ecc data generation" border=0 width=264>
 </a>
 </td>
 </tr>
@@ -321,13 +321,13 @@ or exist as a separate file.
 
 <tr>
 <td valign="top">
-  <a href="example30.html"><b>Reading a defective medium.</b></a><br>
+  <a href="example30.html"><b>Reading defective media</b></a><br>
   An optimized <a href="background50.html">reading strategy</a>
   extracts data from defective media.
 </td>
 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 <td>
-  <a href="example40.html"><b>Repairing a medium.</b></a><br>
+  <a href="example40.html"><b>Recovering media images</b></a><br>
   Unreadable sectors are reconstructed  from
   <a href="example20.html">error correction data</a>.
 </td>
@@ -335,13 +335,13 @@ or exist as a separate file.
 <tr>
 <td>
 <a href="example4.html">
-  <img src="../images/ex-read-a-en.png" border=0 width=264>
+  <img src="../images/ex-read-a-en.png" alt="Reading defective media" border=0 width=264>
 </a>
 </td>
 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 <td>
 <a href="example5.html">
-  <img src="../images/ex-fix-en.png" border=0 width=264>
+  <img src="../images/ex-fix-en.png" alt="Repairing defective media" border=0 width=264>
 </a>
 </td>
 </tr>
@@ -375,7 +375,7 @@ function example1en()
 
 <tr align="center"><td><h3>Screenshot: Scanning the medium for errors</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/ex-scan-en.png"></center>
+<center><img src="../images/ex-scan-en.png" alt="screen shot"></center>
 <br clear="all">
 </td></tr>
 <tr><td>
@@ -394,7 +394,7 @@ overview of the <b>medium state</b>.
 Red marks indicate the presence of read errors!
 <table width=100%><tr><td bgcolor=#000000 width=2><img width=1 height=1 alt=""></td><td>
 As soon as you notice read errors on your medium, try
-<a href="example50.html">recovering the medium image</a> 
+<a href="example40.html">recovering the medium image</a> 
 and transfer it onto a new storage medium. 
 </td></tr></table><p>
 </li>
@@ -430,7 +430,7 @@ To check your medium for read errors carry out these steps:<p>
 <tr valign="top" $BGCOLOR2>
 <td>2.</td>
 <td>Select the drive.</td>
-<td><img src="../images/btn-drive.png"></td>
+<td><img src="../images/btn-drive.png" alt="drive selection"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
@@ -438,20 +438,20 @@ To check your medium for read errors carry out these steps:<p>
 <td>If a suitable error correction file is available for your medium,
 enter its file name. Scanning does not necessarily need an error correction file, 
 but it can take advantage of some information from it.</td>
-<td><img src="../images/btn-eccfile.png"><p>
-The <img src="../images/open-ecc.png" align="middle"> symbol opens the file chooser.</td>
+<td><img src="../images/btn-eccfile.png" alt="ecc file selection"><p>
+The <img src="../images/open-ecc.png" alt="filechooser button" align="middle"> symbol opens the file chooser.</td>
 </tr>
  
 <tr valign="top" $BGCOLOR2>
 <td>4.</td>
 <td>Click on the "Scan" button to begin the medium check.</td>
-<td><img src="../images/btn-scan-en.png"></td>
+<td><img src="../images/btn-scan-en.png" alt="scan button"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
 <td>5.</td>
 <td>Watch the scanning progress in the graphical representation.</td>
-<td><a href="example1.html"><img src="../images/ex-scan-en.png" width="200"></a><p>
+<td><a href="example1.html"><img src="../images/ex-scan-en.png" alt="screen shot" width="200"></a><p>
 </td>
 </tr>
 </table>
@@ -474,25 +474,26 @@ it may be sufficient to scan a sample of 2-3 media per month and batch.<p>
 
 <hr><p>
 
+<a name="cli"></a>
 <h3>Scanning the medium using the command line</h3>
 
 Scanning requires the following parameters (defaults are given in parenthesis):
 
 <table>
 <tr>
-<td><b><a href="example90.html#scan">-s / --scan</a></td>
+<td><a href="example90.html#scan">-s / --scan</a></td>
 <td>Scan</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#device">-d / --device</a>&nbsp;</td>
+<td><a href="example90.html#device">-d / --device</a>&nbsp;</td>
 <td>Drive selection (/dev/cdrom)</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#ecc">-e / --ecc</a></td>
+<td><a href="example90.html#ecc">-e / --ecc</a></td>
 <td>Error correction file (medium.ecc)</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#jump">-j / --jump</a></td>
+<td><a href="example90.html#jump">-j / --jump</a></td>
 <td>Skip sectors after a read error (16)</td>
 </tr>
 </table><p>
@@ -523,13 +524,13 @@ EOF
 function example20en()
 {  
    cat >> $1 <<EOF
-<h3>Generating the error correction data</h3>
+<h3>Creating the error correction data</h3>
 
 The error correction data has an important role in dvdisaster:<br>
 It is required to recover unreadable medium sectors.<p>
 
 Error correction data can be either kept in a separate
-<a href="background30.html#files">error correction file</a>
+<a href="background30.html#file">error correction file</a>
 or be incorporated <a href="background30.html#image">into the image</a>,
 with respective <a href="background30.html#table">advantages and disadvantages</a>.<p>
 
@@ -541,11 +542,11 @@ As a short decision help:<p>
 
 &nbsp; No: see next question.<p>
 
-<b>Does the medium which is to be created contain less than 20% free space?</b><p>
+<b>Does the medium which is to be created contain at least 20% free space?</b><p>
 
-&nbsp; Yes: <a href="example21.html">Create an error correction file.</a><p>
+&nbsp; Yes: <a href="example22.html">Create an error correction image.</a><p>
 
-&nbsp; No: <a href="example22.html">Create an error correction image.</a><p>
+&nbsp; No: <a href="example21.html">Create an error correction file.</a><p>
 EOF
 }
 
@@ -554,7 +555,7 @@ function example2en()
 
 <tr align="center"><td><h3>Screenshot: Creating a medium image</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/ex-read-en.png"></center>
+<center><img src="../images/ex-read-en.png" alt="screen shot"></center>
 <br clear="all">
 </td></tr>
 
@@ -575,7 +576,7 @@ Generate the error correction file immediately after writing the medium.
 <li>Clicking on the
 <img src="../images/btn-protocol-en.png" alt="Protokoll" align="middle"> symbol
 provides additional information on the reading process.</li>
-<ul>
+</ul>
 
 </td></tr>
 EOF
@@ -585,9 +586,9 @@ function example3en()
 {  cat >> $1 <<EOF
 
 <tr align="center"><td>
-<h3>Screen shot: Generating the error correction file</h3><p></td></tr>
+<h3>Screen shot: Creating the error correction file</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/ex-create-en.png"></center>
+<center><img src="../images/ex-create-en.png" alt="screen shot"></center>
 <br clear="all">
 </td></tr>
 
@@ -623,7 +624,7 @@ function example21en()
    create_inline example en 3 example21.html "to creating the error correction file"
  
    cat >> $1 <<EOF
-<h3>Generating the error correction file</h3>
+<h3>Creating the error correction file</h3>
 
 <b>First create a medium image on the hard drive:</b><p>
 
@@ -637,7 +638,7 @@ function example21en()
 <tr valign="top" $BGCOLOR2>
 <td>2.</td>
 <td>Select the drive.</td>
-<td><img src="../images/btn-drive.png"></td>
+<td><img src="../images/btn-drive.png" alt="Drive selection"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
@@ -645,23 +646,23 @@ function example21en()
 <td>Select the image file name.
 
 Make sure to have enough free disk space for the image. Activate the
-<a href="example91.html#localfiles">split file option</a> if your file system 
+<a href="example81.html#localfiles">split file option</a> if your file system 
 does not support files larger than 2GB.<p>
 </td>
-<td><img src="../images/btn-image.png"><p>
-The <img src="../images/open-img.png" align="middle"> symbol opens the file chooser.</td>
+<td><img src="../images/btn-image.png" alt="image file selection"><p>
+The <img src="../images/open-img.png" alt="filechooser button" align="middle"> symbol opens the file chooser.</td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
 <td>4.</td>
 <td>Click on the "Read" button to start the reading process.</td>
-<td><img src="../images/btn-read-en.png"></td>
+<td><img src="../images/btn-read-en.png" alt="Read button"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
 <td>5.</td>
 <td>Watch the reading progress in the graphical representation.</td>
-<td><a href="example2.html"><img src="../images/ex-read-en.png" width="200"></a><p>
+<td><a href="example2.html"><img src="../images/ex-read-en.png" alt="screen shot" width="200"></a><p>
 </td>
 </tr>
 </table>
@@ -678,8 +679,8 @@ The image must not contain any read errors.<p>
 Choose the image file.
 The previously read image file is pre-selected.<p>
 </td>
-<td><img src="../images/btn-image.png"><p>
-The <img src="../images/open-img.png" align="middle"> symbol opens the file chooser.</td>
+<td><img src="../images/btn-image.png" alt="image file selection"><p>
+The <img src="../images/open-img.png" alt="filechooser button" align="middle"> symbol opens the file chooser.</td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
@@ -687,8 +688,8 @@ The <img src="../images/open-img.png" align="middle"> symbol opens the file choo
 <td>
 Select the error correction file name.<p>
 </td>
-<td><img src="../images/btn-eccfile.png"><p>
-The <img src="../images/open-ecc.png" align="middle"> symbol opens the file chooser.</td>
+<td><img src="../images/btn-eccfile.png" alt="ecc file selection"><p>
+The <img src="../images/open-ecc.png" alt="filechooser button" align="middle"> symbol opens the file chooser.</td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
@@ -696,19 +697,19 @@ The <img src="../images/open-ecc.png" align="middle"> symbol opens the file choo
 <td>
 Configure the error correction.<p>
 </td>
-<td><a href="example82.html"><img src="../images/prefs-ecc-en.png" width="200"></a></td>
+<td><a href="example83.html"><img src="../images/prefs-ecc-en.png" alt="screen shot" width="200"></a></td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
 <td>4.</td>
 <td>Click on the "Create" button to generate the error correction file.</td>
-<td><img src="../images/btn-create-en.png"></td>
+<td><img src="../images/btn-create-en.png" alt="Create button"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
 <td>5.</td>
 <td>Watch the progress of the error correction file generation.</td>
-<td><a href="example3.html"><img src="../images/ex-create-en.png" width="200"></a><p>
+<td><a href="example3.html"><img src="../images/ex-create-en.png" alt="screen shot" width="200"></a><p>
 </td>
 </tr>
 </table><p>
@@ -726,15 +727,15 @@ You will need the following parameters for reading the image
 
 <table>
 <tr>
-<td><b><a href="example90.html#read">-r/ --read</a></td>
+<td><a href="example90.html#read">-r/ --read</a></td>
 <td>Read</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#device">-d / --device</a>&nbsp;</td>
+<td><a href="example90.html#device">-d / --device</a>&nbsp;</td>
 <td>Drive selection (/dev/cdrom)</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#image">-i / --image</a></td>
+<td><a href="example90.html#image">-i / --image</a></td>
 <td>Image file (medium.iso)</td>
 </tr>
 </table><p>
@@ -762,19 +763,19 @@ create the error correction file:<p>
 
 <table>
 <tr>
-<td><b><a href="example90.html#create">-c/ --create</a></td>
+<td><a href="example90.html#create">-c/ --create</a></td>
 <td>Create the error correction file</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#image">-i / --image</a></td>
+<td><a href="example90.html#image">-i / --image</a></td>
 <td>Image file (medium.iso)</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#ecc">-e / --ecc</a></td>
+<td><a href="example90.html#ecc">-e / --ecc</a></td>
 <td>Error correction file (medium.ecc)</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#redundancy">-n / --redundancy</a>&nbsp;</td>
+<td><a href="example90.html#redundancy">-n / --redundancy</a>&nbsp;</td>
 <td>Choose redundancy (32 roots = 14.3%)</td>
 </tr>
 </table><p>
@@ -810,7 +811,7 @@ user@linux&gt; <b>rm -f image.iso</b><br>
 
 but keep the error correction file on a <a href="background70.html">reliable storage medium</a>!<p>
 
-<underline>Hint:</underline> Combine the actions for reading the image
+<u>Hint:</u> Combine the actions for reading the image
 and for creating the error correction file. This will save the image scan in the 
 second step:<p>
 
@@ -824,11 +825,11 @@ EOF
 function example22en()
 {  
    cat >> $1 <<EOF
-<h3>Generating the error correction image</h3>
+<h3>Creating the error correction image</h3>
 
 Creating error correction images is currently only supported at the command line.
 The respective functions will be integrated into the graphical user interface
-in dvdiaster version 0.70.<p>
+in dvdisaster version 0.70.<p>
 
 <b>Create an image of the data to be protected.</b><p>
 
@@ -842,22 +843,22 @@ This requires the following parameters (defaults are given in parenthesis):
 
 <table>
 <tr>
-<td><b><a href="example90.html#create">-c/ --create</a></td>
+<td><a href="example90.html#create">-c/ --create</a></td>
 <td>Create the error correction data</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#method">-m / --method</a>&nbsp;</td>
+<td><a href="example90.html#method">-m / --method</a>&nbsp;</td>
 <td>Select the error correction method</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#redundancy">-n / --redundancy</a></td>
+<td><a href="example90.html#redundancy">-n / --redundancy</a></td>
 <td>maximum medium size in sectors (size of smallest possible medium)</td>
 </tr>
 </table><p>
 
 When you have created the image "image.iso" using the CD/DVD writing software, enter:<p>
 
-<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+<table class="example" width="100%" bgcolor="#ffffe0"><tr><td>
 user@linux&gt; <b>dvdisaster -c -mRS02 -i image.iso</b><br>
 dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
 <i>[... remainder of the GPL announcement ...]</i><p>
@@ -870,6 +871,7 @@ Expanding image: 100%<br>
 Ecc generation: 100.0%<br>
 Image has been appended with error correction data.<br>
 New image size is 357818 sectors.
+</td></tr>
 </table><p>
 
 <b>Write the image to the medium.</b><p>
@@ -884,20 +886,20 @@ Re-read the image with dvdisaster after burning the medium:<p>
 
 <table>
 <tr>
-<td><b><a href="example90.html#read">-r/ --read</a></td>
+<td><a href="example90.html#read">-r/ --read</a></td>
 <td>Read</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#device">-d / --device</a>&nbsp;</td>
+<td><a href="example90.html#device">-d / --device</a>&nbsp;</td>
 <td>Drive selection (/dev/cdrom)</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#image">-i / --image</a></td>
+<td><a href="example90.html#image">-i / --image</a></td>
 <td>Image file (medium.iso)</td>
 </tr>
 </table><p>
 
-<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+<table class="example" width="100%" bgcolor="#ffffe0"><tr><td>
 user@linux&gt; <b>dvdisaster -r -d/dev/hdc -i image-new.iso</b><br>
 dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
 <i>[... remainder of the GPL announcement ...]</i><p>
@@ -909,22 +911,23 @@ Creating new image-new.iso image.<br>
 Waiting 5 seconds for drive to spin up...<br>
 Read position: 100.0% ( 6.3x)<br>
 All sectors successfully read.
+</td></tr>
 </table><p>
 
 Check the image:<p>
 
 <table>
 <tr>
-<td><b><a href="example90.html#test">-t/ --test</a></td>
+<td><a href="example90.html#test">-t/ --test</a></td>
 <td>Check the image</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#image">-i / --image</a></td>
+<td><a href="example90.html#image">-i / --image</a></td>
 <td>Image file (medium.iso)</td>
 </tr>
 </table><p>
 
-<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+<table class="example" width="100%" bgcolor="#ffffe0"><tr><td>
 user@linux&gt; <b>dvdisaster -t -i image-new.iso</b><br>
 dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnörlich.<br>
 <i>[... remainder of the GPL announcement ...]</i><p>
@@ -939,6 +942,7 @@ Error correction data: created by dvdisaster-0.66<br>
 - data md5sum      : 4eca3615a88a11ba68466226295c4bcb (good)<br>
 - crc md5sum       : 9776489c12e12cbabfe5145da4f6ae66 (good)<br>
 - ecc md5sum       : e975aed39c962eeabedd9d6cbdbfc45e (good)
+</td></tr>
 </table>
 EOF
 }
@@ -947,9 +951,9 @@ function example4en()
 {  cat >> $1 <<EOF
 
 <tr align="center"><td>
-<h3>Screen shot: Reading damaged media</h3><p></td></tr>
+<h3>Screen shot: Reading a defective medium</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/ex-read-a-en.png"></center>
+<center><img src="../images/ex-read-a-en.png" alt="screen shot"></center>
 <br clear="all">
 </td></tr>
 
@@ -963,7 +967,7 @@ function example30en()
 {  create_inline example en 4 example30.html "to reading the defective medium"
  
    cat >> $1 <<EOF
-<h3>Creating images from defective media</h3>
+<h3>Reading a defective medium</h3>
 
 dvdisaster contains a <a href="background50.html">reading strategy</a>
 which is especially suited for reading damaged media:<p>
@@ -978,7 +982,7 @@ which is especially suited for reading damaged media:<p>
 <tr valign="top" $BGCOLOR2>
 <td>2.</td>
 <td>Select the drive.</td>
-<td><img src="../images/btn-drive.png"></td>
+<td><img src="../images/btn-drive.png" alt="drive selection"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
@@ -986,8 +990,8 @@ which is especially suited for reading damaged media:<p>
 <td>
 Select the image file name.<p>
 </td>
-<td><img src="../images/btn-image.png"><p>
-The <img src="../images/open-img.png" align="middle"> symbol opens the file chooser.</td>
+<td><img src="../images/btn-image.png" alt="image file selection"><p>
+The <img src="../images/open-img.png" alt="filechooser button" align="middle"> symbol opens the file chooser.</td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
@@ -997,8 +1001,8 @@ Select the error correction file.
 The error correction file must be available at this stage so that dvdisaster can determine
 when enough data for reconstructing the image has been collected.<p>
 </td>
-<td><img src="../images/btn-eccfile.png"><p>
-The <img src="../images/open-ecc.png" align="middle"> symbol opens the file chooser.</td>
+<td><img src="../images/btn-eccfile.png" alt="ecc file selection"><p>
+The <img src="../images/open-ecc.png" alt="filechooser button" align="middle"> symbol opens the file chooser.</td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
@@ -1006,26 +1010,26 @@ The <img src="../images/open-ecc.png" align="middle"> symbol opens the file choo
 <td>
 Select the adaptive reading strategy.<p>
 </td>
-<td><a href="example82.html"><img src="../images/prefs-read-en.png" width="200"></a></td>
+<td><a href="example82.html"><img src="../images/prefs-read-en.png" alt="screenshot" width="200"></a></td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
 <td>6.</td>
 <td>Start the reading process by clicking at the "Read" button.</td>
-<td><img src="../images/btn-read-en.png"></td>
+<td><img src="../images/btn-read-en.png" alt="Read button"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
 <td>7.</td>
 <td>Watch the reading progress.</td>
-<td><a href="example4.html"><img src="../images/ex-read-a-de.png" width="200"></a><p>
+<td><a href="example4.html"><img src="../images/ex-read-a-de.png" alt="screenshot" width="200"></a><p>
 </td>
 </tr>
 </table><p>
 
 If the reading process states that enough data has been collected for a
-successful recovery, <a href="example20.html">repair the missing sectors</a> 
-using the error correction data.<p>
+successful recovery, <a href="example40.html">repair</a> the missing sectors</a> 
+using the <a href="example20.html">error correction data</a>.<p>
 
 Otherwise,  try reading the image 
 again <a href="background60.html#reading-tips">(some hints for re-reading)</a>.
@@ -1039,23 +1043,23 @@ This requires the following parameters (defaults are given in parenthesis):
 
 <table>
 <tr>
-<td><b><a href="example90.html#read">-r/ --read</a></td>
+<td><a href="example90.html#read">-r/ --read</a></td>
 <td>Read</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#adaptiveread">--adaptive-read</a></td>
+<td><a href="example90.html#adaptiveread">--adaptive-read</a></td>
 <td>Use reading strategy for damaged media</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#device">-d / --device</a>&nbsp;</td>
+<td><a href="example90.html#device">-d / --device</a>&nbsp;</td>
 <td>Drive selection (/dev/cdrom)</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#image">-i / --image</a></td>
+<td><a href="example90.html#image">-i / --image</a></td>
 <td>Image file (medium.iso)</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#ecc">-e / --ecc</a></td>
+<td><a href="example90.html#ecc">-e / --ecc</a></td>
 <td>Error correction file (medium.ecc)</td>
 </tr>
 </table><p>
@@ -1086,7 +1090,7 @@ function example5en()
 <tr align="center"><td>
 <h3>Screen shot: Recovering the medium image</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/ex-fix-en.png"></center>
+<center><img src="../images/ex-fix-en.png" alt="screen shot"></center>
 <br clear="all">
 </td></tr>
 
@@ -1127,7 +1131,7 @@ function example40en()
 
 To recover a defective medium you must first try to
 <a href="example30.html">read as much data as possible from it</a>.
-Then you need the <a href="example20.html">appropriate error correction file</a>
+Then you need the <a href="example20.html">appropriate error correction data</a>
 which you have hopefully generated at a time when the medium was still fully readable.<p>
 
 <table width="100%" border="0" cellspacing="0" cellpadding="10">
@@ -1136,8 +1140,8 @@ which you have hopefully generated at a time when the medium was still fully rea
 <td>
 Select the image file.<p>
 </td>
-<td><img src="../images/btn-image.png"><p>
-The <img src="../images/open-img.png" align="middle"> symbol opens the file chooser.</td>
+<td><img src="../images/btn-image.png" alt="image file selection"><p>
+The <img src="../images/open-img.png" alt="filechooser button" align="middle"> symbol opens the file chooser.</td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
@@ -1145,14 +1149,14 @@ The <img src="../images/open-img.png" align="middle"> symbol opens the file choo
 <td>
 Select the respective error correction file.<p>
 </td>
-<td><img src="../images/btn-eccfile.png"><p>
-The <img src="../images/open-ecc.png" align="middle"> symbol opens the file chooser.</td>
+<td><img src="../images/btn-eccfile.png" alt="ecc file selection"><p>
+The <img src="../images/open-ecc.png" alt="filechooser button" align="middle"> symbol opens the file chooser.</td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
 <td>3.</td>
 <td>Click on the "Fix" button.</td>
-<td><img src="../images/btn-fix-en.png"></td>
+<td><img src="../images/btn-fix-en.png" alt="Fix button"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
@@ -1160,7 +1164,7 @@ The <img src="../images/open-ecc.png" align="middle"> symbol opens the file choo
 <td>Watch the recovery progress.<p>
 It is normal to experience phases of high hard drive
 activity during image reconstruction</td>
-<td><a href="example5.html"><img src="../images/ex-fix-cs.png" width="200"></a><p>
+<td><a href="example5.html"><img src="../images/ex-fix-en.png" alt="screen shot" width="200"></a><p>
 </td>
 </tr>
 </table><p>
@@ -1176,15 +1180,15 @@ Recovering requires the following parameters (defaults are given in parenthesis)
 
 <table>
 <tr>
-<td><b><a href="example90.html#fix">-f/ --fix</a></td>
+<td><a href="example90.html#fix">-f/ --fix</a></td>
 <td>Recover</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#image">-i / --image</a></td>
+<td><a href="example90.html#image">-i / --image</a></td>
 <td>Image file (medium.iso)</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#ecc">-e / --ecc</a></td>
+<td><a href="example90.html#ecc">-e / --ecc</a></td>
 <td>Error correction file (medium.ecc)</td>
 </tr>
 </table><p>
@@ -1216,7 +1220,7 @@ function example6en()
 <tr align="center"><td>
 <h3>Screenshot: Comparing image and error correction files</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/ex-compare-en.png"></center>
+<center><img src="../images/ex-compare-en.png" alt="screen shot"></center>
 <br clear="all">
 </td></tr>
 
@@ -1249,7 +1253,7 @@ EOF
 }
 
 function example50en()
-{  create_inline example en 6 example50.html "to comparing the image against error correction data"
+{  create_inline example en 6 example50.html "to getting information on images and error correction data"
 
    cat >> $1 <<EOF
 <h3>Getting information about images and error correction data</h3>
@@ -1263,8 +1267,8 @@ which are already present on your hard disc:<p>
 <td>
 Select the image file.<p>
 </td>
-<td><img src="../images/btn-image.png"><p>
-The <img src="../images/open-img.png" align="middle"> symbol opens the file chooser.</td>
+<td><img src="../images/btn-image.png" alt="image file selection"><p>
+The <img src="../images/open-img.png" alt="filechooser button" align="middle"> symbol opens the file chooser.</td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
@@ -1272,20 +1276,20 @@ The <img src="../images/open-img.png" align="middle"> symbol opens the file choo
 <td>
 Select the respective error correction file.<p>
 </td>
-<td><img src="../images/btn-eccfile.png"><p>
-The <img src="../images/open-ecc.png" align="middle"> symbol opens the file chooser</td>
+<td><img src="../images/btn-eccfile.png" alt="eccfile selection"><p>
+The <img src="../images/open-ecc.png" alt="filechooser button" align="middle"> symbol opens the file chooser</td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
 <td>3.</td>
 <td>Click the "Compare" button.</td>
-<td><img src="../images/btn-compare-en.png"></td>
+<td><img src="../images/btn-compare-en.png" alt="compare button"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
 <td>4.</td>
 <td>Watch the comparison progress.</td>
-<td><a href="example6.html"><img src="../images/ex-compare-en.png" width="200"></a><p>
+<td><a href="example6.html"><img src="../images/ex-compare-en.png" alt="screen shot" width="200"></a><p>
 </td>
 </tr>
 </table><p>
@@ -1298,15 +1302,15 @@ You will need the following parameters (defaults are given in parenthesis):
 
 <table>
 <tr>
-<td><b><a href="example90.html#test">-t/ --test</a></td>
+<td><a href="example90.html#test">-t/ --test</a></td>
 <td>Compare</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#image">-i / --image</a></td>
+<td><a href="example90.html#image">-i / --image</a></td>
 <td>Image file (medium.iso)</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#ecc">-e / --ecc</a></td>
+<td><a href="example90.html#ecc">-e / --ecc</a></td>
 <td>Error correction file (medium.ecc)</td>
 </tr>
 </table><p>
@@ -1344,7 +1348,7 @@ The dialog contains several forms:<p>
 
 <center>
 <a href="example81.html">
-<img src="../images/prefs-general-en.png"><br>
+<img src="../images/prefs-general-en.png" alt="screen shot"><br>
 General settings
 </a>
 </center>
@@ -1352,7 +1356,7 @@ General settings
 
 <center>
 <a href="example82.html">
-<img src="../images/prefs-read-en.png"><br>
+<img src="../images/prefs-read-en.png" alt="screen shot"><br>
 Reading preferences
 </a>
 </center>
@@ -1360,7 +1364,7 @@ Reading preferences
 
 <center>
 <a href="example83.html">
-<img src="../images/prefs-ecc-en.png"><br>
+<img src="../images/prefs-ecc-en.png" alt="screen shot"><br>
 Error correction settings
 </a>
 </center>
@@ -1375,7 +1379,7 @@ function example81en()
 
 More information on this form follows down this page.<p>
 
-<center><img src="../images/prefs-general-en.png"></center>
+<center><img src="../images/prefs-general-en.png" alt="screen shot"></center>
 <br clear="all">
 
 <p><hr><p>
@@ -1383,7 +1387,7 @@ More information on this form follows down this page.<p>
 <a name="iso"></a>
 <b>Medium and Image filesystem</b><p>
 
-<center><img src="../images/prefs-general-1-en.png"></center>
+<center><img src="../images/prefs-general-1-en.png" alt="screen shot"></center>
 <br clear="all">
 
 dvdisaster will determine the image size from the ISO/UDF file system
@@ -1396,7 +1400,7 @@ with DVD-RW/+RW media.
 
 <a name="localfiles"></a>
 <b>Setting for local files</b><p>
-<center><img src="../images/prefs-general-2-en.png"></center>
+<center><img src="../images/prefs-general-2-en.png" alt="screen shot"></center>
 <br clear="all">
  
 <b>Automatic file name extension<font color="red">(1)</font>:</b>
@@ -1413,7 +1417,7 @@ Allows working with file systems which are limited to 2GB per file
 <a name="auto"> </a>
 <b>Automatic file creation and deletion</b><p>
 
-<center><img src="../images/prefs-general-3-en.png"></center>
+<center><img src="../images/prefs-general-3-en.png" alt="screen shot"></center>
 <br clear="all">
 
 <b>Create error correction file <font color="red">(1)</font>:</b>
@@ -1434,7 +1438,7 @@ function example82en()
 
 More information on this form follows down this page.<p>
 
-<center><img src="../images/prefs-read-en.png"></center>
+<center><img src="../images/prefs-read-en.png" alt="screen shot"></center>
 <br clear="all">
 
 <p><hr><p>
@@ -1442,7 +1446,7 @@ More information on this form follows down this page.<p>
 <a name="read"></a>
 <b>Reading preferences</b><p>
 
-<center><img src="../images/prefs-read-1-en.png"></center>
+<center><img src="../images/prefs-read-1-en.png" alt="screen shot"></center>
 <br clear="all">
 
 <b>Reading strategy <font color="red">(1)</font>:</b> Choose between the
@@ -1468,7 +1472,7 @@ on the drive, but will also leave larger gaps in the image when reading defectiv
 <a name="image"></a>
 <b>Image properties</b><p>
 
-<center><img src="../images/prefs-read-2-en.png"></center>
+<center><img src="../images/prefs-read-2-en.png" alt="screen shot"></center>
 <br clear="all">
 
 <b>DAO image <font color="red">(1)</font>:</b>
@@ -1485,7 +1489,7 @@ Uncheck (disable) this field when images are exclusivley processed with dvdisast
 
 <b>Drive initialisation</b><p>
 
-<center><img src="../images/prefs-read-3-en.png"></center>
+<center><img src="../images/prefs-read-3-en.png" alt="screen shot"></center>
 <br clear="all">
 Waits the given amount of seconds for the drive to spin up before the real
 reading process starts. This avoids speed jumps at the beginning of the
@@ -1500,7 +1504,7 @@ function example83en()
 
 More information on this form follows down this page.<p>
 
-<center><img src="../images/prefs-ecc-en.png"></center>
+<center><img src="../images/prefs-ecc-en.png" alt="screen shot"></center>
 <br clear="all">
 
 <p><hr><p>
@@ -1508,7 +1512,7 @@ More information on this form follows down this page.<p>
 <a name="redundancy"></a>
 <b>Redundancy for new error correction files</b><p>
 
-<center><img src="../images/prefs-ecc-1-en.png"></center>
+<center><img src="../images/prefs-ecc-1-en.png" alt="screen shot"></center>
 <br clear="all">
 
  The redundancy specifies the amount of correctable errors
@@ -1543,7 +1547,7 @@ and less to the larger ones.<p>
 
 <b>Memory utilization</b><p>
 
-<center><img src="../images/prefs-ecc-2-en.png"></center>
+<center><img src="../images/prefs-ecc-2-en.png" alt="screen shot"></center>
 <br clear="all">
 
 dvdisaster optimizes access to the image and error correction files by maintaining 
@@ -1591,7 +1595,7 @@ first letter abbreviation (-d). They are used to change the pre-selected drive a
 <tr><td>&nbsp; &nbsp;</td><td><a href="#device">--device</a>  &nbsp; &nbsp;</td><td>Device selection</td></tr>
 <tr><td></td><td><a href="#prefix">--prefix</a></td><td>Prefix for image and error correction files</td></tr>
 <tr><td></td><td><a href="#image">--image</a></td><td>Name of image file</td></tr>
-<tr valign=top><td></td><td><a href="#eccfile">--eccfile</a></td><td>Name of error correction file<p></td></tr>
+<tr valign=top><td></td><td><a href="#ecc">--ecc</a></td><td>Name of error correction file<p></td></tr>
 <tr><td></td><td><a href="#list">--list</a></td><td>shows drives available under ASPI (Windows version only)</td></tr>
 </table><pre> </pre> 
 
@@ -1604,9 +1608,9 @@ long form unless noted otherwise.<p>
 <tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#cache">--cache-size</a> &nbsp; &nbsp;</td><td>Cache size during creation of the error correction file</td></tr>
 <tr valign=top><td></td><td><a href="#dao">--dao</a></td><td>Assumes "disk at once" medium</td></tr>
 <tr valign=top><td></td><td><a href="#fillunreadable">--fill-unreadable [n]</a></td><td>fill unreadable sectors with given byte</td></tr>
-<tr valign=top><td></td><td><a href="#jump">-j / --jump</td><td>Skip sectors after a read error</td></tr>
-<tr valign=top><td></td><td><a href="#parse-udf">--parse-udf</td><td>Use information from ISO/UDF filesystem</td></tr>
-<tr valign=top><td></td><td><a href="#redundancy">-n / --redundancy</td><td>Set error correction code redundancy</td></tr>
+<tr valign=top><td></td><td><a href="#jump">-j / --jump</a></td><td>Skip sectors after a read error</td></tr>
+<tr valign=top><td></td><td><a href="#parse-udf">--parse-udf</a></td><td>Use information from ISO/UDF filesystem</td></tr>
+<tr valign=top><td></td><td><a href="#redundancy">-n / --redundancy</a></td><td>Set error correction code redundancy</td></tr>
 <tr valign=top><td></td><td><a href="#method">-m / --method</a>&nbsp; &nbsp;</td><td>Select error correction method</td></tr>
 <tr valign=top><td></td><td><a href="#speedwarn">--speed-warning [n]</a>&nbsp; &nbsp;</td><td>Warns when reading speed drops a certain amount</td></tr>
 <tr valign=top><td></td><td><a href="#spinup">--spinup-delay [n]</a>&nbsp; &nbsp;</td><td>Gives drive time to spin up</td></tr>
@@ -1759,7 +1763,7 @@ as long as <a href="#autosuffix">--auto-suffix</a> is not specified also.
 
 <div align=right><a href="#drive">&uarr;</a></div><p>
 
-<a name="eccfile"><b>--eccfile &lt;file name&gt;: Name of error correction file</b></a><p>
+<a name="ecc"><b>--ecc &lt;file name&gt;: Name of error correction file</b></a><p>
 
 The preset is "medium.ecc"; the specified file name will be used exactly (without appending a suffix)
 for the error correction file
@@ -1792,8 +1796,9 @@ specifying the drive by its number rather than by its letter.
 To read in a disc using ASPI and the "MYDRIVE" unit from the above
 example, you would therefore enter:<p>
 
-<table class="example-win" width=100% bgcolor=#e0e0ff><tr><td>
+<table class="example-win" width="100%" bgcolor="#e0e0ff"><tr><td>
 user@windows&gt; dvdisaster <b>-d 2:</b> -r<br>
+</td></tr>
 </table>
 
 <div align=right><a href="#drive">&uarr;</a></div><p>
@@ -1806,7 +1811,7 @@ user@windows&gt; dvdisaster <b>-d 2:</b> -r<br>
 This switch selects the <a href="background50.html">adaptive reading strategy</a>
 which is particularly suited for reading in damaged media.
 Use this switch in conjunction with <a href="#read">-r/--read</a> and with
-<a href="#eccfile">-e/--eccfile</a>. Specifying the error correction file 
+<a href="#ecc">-e/--ecc</a>. Specifying the error correction file 
 causes the reading process to finish as soon as enough information has been 
 collected for recovering the medium image.
 <p>
@@ -1818,7 +1823,7 @@ collected for recovering the medium image.
 <a name="autosuffix"><b>--auto-suffix: automatically add .iso and .ecc file suffixes</b></a><p>
 
 When this option is given, file names specified by the
-<a href="#image">-i/--image</a>- or <a href="#eccfile">-e/--eccfile</a> option
+<a href="#image">-i/--image</a>- or <a href="#ecc">-e/--ecc</a> option
 will be automatically appended with ".iso" or ".ecc" respectively
 if no other file name extension is already present.
 
@@ -1870,8 +1875,6 @@ published by "c't", a German periodical.
 Using zero filling (0x00, decimal 0) is <b>highly discouraged</b>.
 Most media contain regular zero filled sectors. At a later error correction pass,
 these can not be told apart from unreadable sectors if zero filling is used.
-</li>
-</ul>
 
 <div align=right><a href="#options">&uarr;</a></div><p>
 
@@ -1990,7 +1993,7 @@ and less to the larger ones.<p>
 <div align=right><a href="#options">&uarr;</a></div><p>
 
 
-<a name="method"><b>-m / --method <m>: Select error correction method</b></a><p>
+<a name="method"><b>-m / --method &lt;m&gt;: Select error correction method</b></a><p>
 
 Choose between the
 <a href="background30.html">RS01</a> (default) 
@@ -2009,7 +2012,7 @@ If the optional value [n] is omitted, a preset of 10 percent is used.
 <div align=right><a href="#options">&uarr;</a></div><p>
 
 
-<a name="--spinup"><b>--spinup-delay [n]: Gives drive time to spin up</b></a><p>
+<a name="spinup"><b>--spinup-delay [n]: Gives drive time to spin up</b></a><p>
 
 Waits the given amount of seconds for the drive to spin up before the real
 reading process starts.
@@ -2249,9 +2252,9 @@ function download10en()
 
 <ul>
  <li><b>x86 compatible</b> hardware in <b>32bit</b> mode 
-     (see below for 64bit support),<p></li>
+     (see operating systems for 64bit support),<p></li>
  <li>an up-to-date CD or DVD drive with ATAPI or SCSI interface,<p></li>
- <li>at least a P4 at 2Ghz or comparable processor<p></b>
+ <li>at least a P4 at 2Ghz or comparable processor<p>
 </ul>
 
 <h3>Operating systems</h3>
@@ -2351,7 +2354,7 @@ Invoke the program for a quick test:<p>
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>./dvdisaster</b><br>
-<i>[... after a moment the main window</a> will open ...]</i>
+<i>[... after a moment the main window will open ...]</i>
 </td></tr></table><p>
 
 Working with the program from the current directory is okay.
@@ -2522,7 +2525,8 @@ CD-Audio and CD-Video as well as DVD-ROM and DVD-RAM.
 
 <b><a name="filesystem">2.3 Which file systems are supported?</a></b><p>
 
-dvdisaster works exclusively on the image level which is accessed sector-wise.
+dvdisaster works exclusively on the <a href="background20.html">image level</a>
+which is accessed sector-wise.
 That means it does not matter with which file system the medium has been formatted.<p>
 
 Since dvdisaster neither knows nor uses the file system structure,
@@ -2742,7 +2746,7 @@ function background_contents_en()
  
    link)    link_title="Background information" ;;
    link10)   link_title="Error correction properties" ;;
-   link20)   link_title="Image level error correction" ;;
+   link20)   link_title="Image level data recovery" ;;
    link30)   link_title="RS01 and RS02" ;;
    link40)   link_title="Linear reading strategy" ;;
    link50)   link_title="Adaptive reading strategy" ;;
@@ -2767,7 +2771,7 @@ you getting the most out of the program according to your needs.
 
 <ol>
 <li><a href="background10.html">Properties of the Reed-Solomon error correction</a><p></li>
-<li><a href="background20.html">Image level error correction</a><p></li>
+<li><a href="background20.html">Image level data recovery</a><p></li>
 <li><a href="background30.html">The RS01 and RS02 methods</a><p></li>
 <li><a href="background40.html">Details of the linear reading strategy</a><p></li>   
 <li><a href="background50.html">Details of the adaptive reading strategy</a><p></li>   
@@ -2824,7 +2828,7 @@ Empirical tests have shown that on aging media about 10% of the overall sector c
 may become defective before
 the threshold of 33 defects per ECC block<sup><a href="#footnote1">*)</a></sup>
  is reached. <br>
-<a href="index10.html#scratches">Scratches</a> will cause the threshold to be reached earlier, 
+<a href="index10.html">Scratches</a> will cause the threshold to be reached earlier, 
 therefore it is recommended to visually check the media in regular intervals.
 Media with read errors caused by scratches should be replaced immediately.<p>
 
@@ -2845,27 +2849,196 @@ the capabilities of the error correction code. <p>
 The given threshold of 32 correctable errors per ECC block is the standard setting.
 It is possible to <a href="example83.html#redundancy">select other values</a>
 for higher or lower error correction capabilities.
-<p>
 </font>
+<p>
 
 EOF
 }
 
 function background20en()
 {  cat >> $1 <<EOF
-<h3>Image level error correction</h3>
+<h3>Image level data recovery</h3>
+
+Data recovery can take place at several logical levels of the medium,
+two of them being the image level and the file system level. This page
+explains why dvdisaster is working at the image level.<p>
+
+<a name="file"> </a>
+<b>Disadvantages of data recovery at the file system level for CD/DVD.</b><p>
+
+A file level data recovery uses files (or file archives) which are extended
+with error correction information. This makes it possible to restore faulty bytes,
+missing data blocks and truncated files.<p>
+
+However files are also part of a <i>file system</i> which is managed
+by the operating system. The success of the data recovery hinges on the
+assumption that the file- and operating system can handle defective 
+CD/DVD media, which is typically not true. In the worst case
+a file may become unaccessible due to read errors and as a consequence the error 
+correction information needed for recovery is also lost:<p>
+
+
+<ul>
+<li>Try reading a large file from a damaged medium. This requires special tools
+and a huge effort.<p></li>
+<li>The file system contains data structures which are not part of the files
+and are therefore not protected. If these structures are damaged, you won't be
+able to extract files from the file system even if the file
+data blocks are still intact.</li>
+</ul><p>
+
+These are serious disadvantages for data recovery from optical media.
+But to be fair it must be noted that file level data recovery
+can work well in file-system less environments like 
+data transfers over the internet.<p>
+
+<a name="image"> </a>
+<b>Advantages of data recovery at the image level of CD/DVD.</b><p>
+
+CD- and DVD media are organized into data sectors containing 2048 bytes each.
+Consecutively reading and storing these sectors produces a media <i>image</i>.
+An image level data recovery will read and recover these sectors directly (within the image). 
+That has the following advantages:
+
+<ul>
+<li>Reading images is relatively trouble-free for damaged media.<br>
+Image sectors are read using direct communication with the CD/DVD device drivers.
+These low-level drivers give good control over the drive and allow for efficient
+dealing with unreadable sectors and other error conditions.<p>
+</li>
+
+<li>Reading and recovering damaged or unreadable sectors does not depend
+on the condition of the file system.<p></li>
+
+<li>The Reed-Solomon error correction works best when error correction information
+is spread over huge amounts of data: It is better to protect the image as a whole
+than individually protecting each file within.<p></li>
+
+<li>The image contains all information stored on the medium.<br>
+After a full image recovery not only the files but also the file system is completely
+restored - without relying on the file system structures during the recovery!</li>
+</ul>
+
+These advantages apply well to the recovery of CD/DVD media. Therefore dvdisaster
+employs an exclusive image based approach.<p>
+
+
+<a name="eccfile"> </a>
+<b>Consequences for the storage of error correction files</b><p>
+
+When storing error correction files you must take into account that
+the respective media may also become defective.<p>
+
+The error correction files do <i>not</i> contain any protection against
+being damaged. Therefore it is important to give them image level 
+protection as well:
+<a href="background70.html">Protect</a> the media containing your
+error correction files with dvdisaster, too.<p>
+
+Here's the rationale: Error correction files could of course
+be designed in a way that allows them to provide a (reduced) data
+recovering capacity even when being damaged. 
+But however such internal protection would be designed, the
+error correction file would still be only protected at the file system
+level - with all the disadvantages discussed above. And the computing time
+and redundancy used up by the internal protection is better spent
+at protection on the image level.<p>
 EOF
 }
 
 function background30en()
 {  cat >> $1 <<EOF
 <h3>The RS01 and RS02 methods</h3>
+
+dvdisaster contains two error correction methods named RS01 and RS02.
+RS01 is the existing and proven method while RS02 is still
+under development. RS02 is currently only available at the command line
+and will be fully integrated into the graphical user interface in Version 0.70.<p>
+
+<b>Comparison of both methods.</b>
+
+RS01 and RS02 build on the same
+<a href="background10.html">Reed-Solomon</a> error correction.
+They calculate error correction information for CD/DVD images which
+is used to recover unreadable sectors if the disc becomes damaged afterwards.<p>
+
+The methods differ in the way the error correction information is stored:<p>
+
+<ul>
+<li>
+<a name="file"> </a>
+RS01 creates <b>error correction files</b> which are stored separately from 
+the image they belong to. Since data protection at the
+<a href="background20.html">file level</a> is difficult,
+error correction files must be stored on media which are protected
+against data loss by dvdisaster, too.<p></li>
+
+<li>
+<a name="image"> </a>
+To apply the RS02 method an image is first created on hard disc using a
+CD/DVD writing software. Before the image is written on the medium,
+it is extended with dvdisaster into an <b>error correction image</b>.
+Therefore the data to be protected and the error correction information
+are located at the same medium. Damaged sectors in the error correction
+information reduce the data recovery capacity, but do not make recovery
+impossible - a second medium for keeping or protecting the error correction
+information is not required.<p></li>
+</ul>
+
+
+<a name="table"> </a>
+<b>Comparison of error correction files and images.</b><p>
+
+<table width="100%" border="1" cellspacing="0" cellpadding="5">
+<tr>
+<td width="50%"><i>Error correction files</i></td>
+<td width="50%"><i>Error correction images</i></td>
+</tr>
+<tr valign="top">
+<td> 
+any possible redundancy can be chosen</td>
+<td> redundancy is limited by free space on medium<br>
+(= medium capacity - size of data image)</td>
+</tr>
+
+<tr valign="top">
+<td>already effective at 15% redundancy;
+medium can be completely filled with data</td>
+<td>requires at least 20%-30% redundancy;
+usable medium capacity is reduced accordingly</td> 
+</tr>
+
+<tr valign="top">
+<td> can be created for already existing media</td>
+<td> only applicable before writing the new medium since
+the image must be augmented with error correction information in advance
+</tr>
+
+<tr valign="top">
+<td> separately storing the error correction file from user data
+strengthens data protection</td>
+<td> common storage of user data and error correction data may reduce error
+correction capacity</td>
+</tr>
+
+<tr valign="top">
+<td>Mapping between error correction files and media must be kept.
+Error correction files must be protected against damage.</td>
+<td>Easy one-medium solution; error correction information
+needs not to be cataloged or explicitly protected.</td></tr>
+
+<tr valign="top">
+<td> no compatibilty issues with play-back units</td>
+<td> media with error correction images may not play correctly on all units</td>
+</tr>
+</table><p>
+
 EOF
 }
 
 function background40en()
 {  cat >> $1 <<EOF
-<h3>The linear reading strategy.</h3>
+<h3>The linear reading strategy</h3>
 
 dvdisaster contains two different
 <a href="example82.html#read">reading strategies</a>.<p>
@@ -2893,7 +3066,7 @@ The linear reading strategy reads the medium from the start (sector 0)
 until the end (last sector). The reading speed is shown graphically to provide
 information about the <a href="background40.html#quality">medium quality</a>:<p>
 
-<center><img src="../images/bg-linear-en.png"><br>
+<center><img src="../images/bg-linear-en.png" alt="screen shot"><br>
 partial screen shot: linear reading strategy</center>
 
 <pre> </pre>
@@ -2917,12 +3090,11 @@ degree of damage, but will usually not collect enough data for repairing the med
 <p></li> 
 <li>Smaller values like <b>16, 32 or 64</b> are a good trade-off:
 The processing time will be considerably shortened, but still enough data for repairing
-the image will be collected.<p></li></ul>
+the image will be collected.<p></li>
+</ul>
 
 On DVD media read errors do usually extend over at least 16 sectors for technical
 reasons. Therefore a sector skip less than 16 is not recommended for DVD media.
-</li>
-</ul>
 <p>
 
 <a name="range"></a>
@@ -2956,10 +3128,9 @@ The reading curve is most accurate when using the
 the hard drive at the same time, which may cause irregularities in the reading
 curve depending on the operating system and hardware used.<p>
 
-<a name="error"></a>
 <b>Read errors.</b>
-Read errors cause <a href="example30.html">red markings in the spiral</a> or respective
-messages at the command line</a>. 
+Read errors cause <a href="example1.html">red markings in the spiral</a> or respective
+messages at the <a href="example10.html#cli">command line</a>. 
 This means that the medium could not be
 read at these places during the current reading pass:
 <ul>
@@ -2974,7 +3145,7 @@ EOF
 
 function background50en()
 {  cat >> $1 <<EOF
-<h3>The adaptive reading strategy.</h3>
+<h3>The adaptive reading strategy</h3>
 
 dvdisaster contains two different
 <a href="example82.html#read">reading strategies</a>.<p>
@@ -3028,12 +3199,12 @@ error correction file. This can reduce the reading time by as much as 90 percent
 compared with a full read attempt, but does of course only work when 
 an error correction file is available.<p>
 
-<center><img src="../images/bg-adaptive-en.png"><br>
+<center><img src="../images/bg-adaptive-en.png" alt="screen shot"><br>
 partial screen shot: adaptive reading strategy</center>
 
 <pre> </pre>
 
-<a name="configure">
+<a name="configure"></a>
 <b>Configuration</b><p>
 
 <b>Error correction file.</b> 
@@ -3041,7 +3212,7 @@ Adaptive reading works best when an error correction file is available.
 Obviously the error correction file must have been <a href="example20.html">created</a>
 at a time where the medium was still fully readable. To use the error correction file
 during adaptive reading, 
-<a href="example20.html">enter its name</a> before starting the reading process.<p>
+<a href="example30.html">enter its name</a> before starting the reading process.<p>
 
 <b>Limiting the adaptive reading range.</b> Reading can be 
 <a href="example82.html#read">limited</a> to a part of the medium.
@@ -3110,11 +3281,11 @@ These effects typically occur while the medium is stored away for a few months,
 and it may not be possible to read in all sectors afterwards.<p>
 
 Therefore it is crucial to create the 
-<a href="example20.html">error correction file (ecc file)</a> in time. 
+<a href="example20.html">error correction data</a> in time. 
 The ecc file contains information for recalculating the contents of
 missing sectors
 <a href="background10.html">(within certain limits)</a>.
-Therefore with the help of the ecc file
+Therefore with the help of the ecc data
 dvdisaster can recover images even if not all sectors
 could actually be read by the drive.<p>
 

@@ -1,3 +1,13 @@
+0.66 (rc-3) 25-02-2006
+	- cleanup of the documentation HTML code (thanks to Lubos)
+	  . cleaned up misplaced </tr></td> tags
+	  . added missing alt="" within <img>
+	  . fixed several links
+	  . removed spurius <b> from command line argument tables
+	  . added missing </td></tr> to command line examples
+	  . fixed <u> tags
+	  . remove full stop from head lines
+
 0.66 (rc-2) 21-02-2006
 	- released brake on RS02 encoding (improved HDD writing pattern)
 
