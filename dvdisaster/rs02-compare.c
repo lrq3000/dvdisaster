@@ -168,7 +168,7 @@ void RS02Compare(Method *self)
    gint64 total_missing,data_missing,crc_missing,ecc_missing,hdr_missing;
    gint64 data_crc_errors,hdr_crc_errors;
    gint64 hdr_ok,hdr_pos;
-   gint64 ecc_sector;
+   gint64 ecc_sector,expected_sectors;
    int ecc_slice;
    int major,minor,pl;
    char method[5];
@@ -191,6 +191,7 @@ void RS02Compare(Method *self)
 
    eh  = self->lastEh;  /* will always be present */
    lay = CalcRS02Layout(uchar_to_gint64(eh->sectors), eh->eccBytes); 
+   expected_sectors = lay->eccSectors+lay->dataSectors;
 
    /*** Read the CRC portion */ 
 
@@ -216,7 +217,7 @@ void RS02Compare(Method *self)
 
    layer_offset = lay->sectorsPerLayer - lay->firstCrcLayerIndex - 1;
 
-   for(s=0; s<image_sectors; s++)
+   for(s=0; s<expected_sectors; s++)
    {  int n,percent,current_missing;
 
       /* Check for user interruption */
@@ -247,7 +248,7 @@ void RS02Compare(Method *self)
 
       /* Report dead sectors. Combine subsequent missing sectors into one report. */
 
-      if(!current_missing || s==image_sectors-1)
+      if(!current_missing || s==expected_sectors-1)
       {  if(first_missing>=0)
 	 {   if(first_missing == last_missing)
 	           PrintCLI(_("* missing sector   : %lld\n"), first_missing);
@@ -285,8 +286,8 @@ void RS02Compare(Method *self)
       }
 
       if(Closure->guiMode) 
-	    percent = (COMPARE_IMAGE_SEGMENTS*s)/image_sectors;
-      else  percent = (100*s)/image_sectors;
+	    percent = (COMPARE_IMAGE_SEGMENTS*s)/expected_sectors;
+      else  percent = (100*s)/expected_sectors;
 
       if(last_percent != percent) 
       {  PrintProgress(_("- testing sectors  : %3d%%") ,percent);
@@ -322,7 +323,7 @@ void RS02Compare(Method *self)
    hdr_ok = hdr_missing = hdr_crc_errors = 0;
    hdr_pos = lay->firstEccHeader;
 
-   while(hdr_pos < image_sectors - 2)
+   while(hdr_pos < expected_sectors - 2)
    {  EccHeader eh;
       int n;
 
@@ -468,6 +469,38 @@ void RS02Compare(Method *self)
 	  ecc_advice = g_strdup(_("<span color=\"red\">Please upgrade your version of dvdisaster!</span>"));
      }
 #endif
+   }
+
+   /* Number of sectors medium is supposed to have */
+
+   if(image_sectors == expected_sectors)
+   {  PrintLog(_("- medium sectors   : %lld (good)\n"), expected_sectors);
+#if 0
+      if(Closure->guiMode)
+	SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), "%lld", expected_sectors);
+#endif
+   }
+   else 
+   {  if(image_sectors > expected_sectors && image_sectors - expected_sectors <= 2)   
+      {  PrintLog(_("* medium sectors   : %lld (BAD, perhaps TAO/DAO mismatch)\n"),
+		  expected_sectors);
+#if 0
+	 if(Closure->guiMode)
+	   SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), 
+			"<span color=\"red\">%lld</span>", expected_sectors);
+#endif
+      }
+      else 
+      {  PrintLog(_("* medium sectors   : %lld (BAD)\n"),expected_sectors);
+#if 0
+	 if(Closure->guiMode)
+	 {  SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), 
+			 "<span color=\"red\">%lld</span>", expected_sectors);
+	    if(!ecc_advice)
+	      ecc_advice = g_strdup(_("<span color=\"red\">Image size does not match error correction file.</span>"));
+	 }
+#endif
+      }
    }
 
    /* image md5sum as stored in the ecc header */

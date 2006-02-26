@@ -1,3 +1,14 @@
+0.66 (rc-4) 26-02-2006
+	- fixed documentation path in manuals
+	- added summary messages after RS02 repair
+	- added correct handling of truncated images in fix, compare
+	- added correct handling of images with trailing garbage
+	  in fix, compare
+	- fixed commandline crash in RS01 when image was 1 or 2 sectors
+	  too large
+	- added FAQ item 3.7 to documentation
+	- fixed spurious <td></td> in example40cs table
+ 
 0.66 (rc-3) 25-02-2006
 	- cleanup of the documentation HTML code (thanks to Lubos)
 	  . cleaned up misplaced </tr></td> tags

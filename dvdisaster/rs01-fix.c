@@ -167,11 +167,11 @@ void RS01Fix(Method *method)
 		     "the image and ecc files do not belong together.\n\n%s");
 
      if(diff>0 && diff<=2)
-     {  int answer = ModalDialog(GTK_MESSAGE_QUESTION, GTK_BUTTONS_OK_CANCEL, NULL,
-				 _("Image file is %lld sectors longer than expected.\n"
-				   "Assuming this is a TAO mode medium.\n"
-				   "%lld sectors will be removed from the image end.\n"),
-				 diff, diff);
+     {  int answer = ModalWarning(GTK_MESSAGE_QUESTION, GTK_BUTTONS_OK_CANCEL, NULL,
+				  _("Image file is %lld sectors longer than expected.\n"
+				    "Assuming this is a TAO mode medium.\n"
+				    "%lld sectors will be removed from the image end.\n"),
+				  diff, diff);
 
         if(!answer)
         {  SwitchAndSetFootline(fc->wl->fixNotebook, 1,

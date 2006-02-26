@@ -123,7 +123,7 @@ RS02Layout *CalcRS02Layout(gint64 data_sectors, int requested_roots)
    /* If no medium size is given by the user,
       pick the smallest possible among CDR, single layer DVD and two layer DVD. */
 
-   if(Closure->mediumSize > data_sectors)
+   if(Closure->mediumSize)
      medium_capacity = Closure->mediumSize;
    else
    {  if(data_sectors < CDR_SIZE)
@@ -202,7 +202,7 @@ RS02Layout *CalcRS02Layout(gint64 data_sectors, int requested_roots)
    Verbose("medium capacity   = %lld\n", lay->mediumCapacity);
 
    Verbose("\nInterleaving layout:\n");
-   Verbose("%lld sectors per ecc layer (%d layers total)\n",lay->sectorsPerLayer, lay->ndata);
+   Verbose("%lld sectors per ecc layer\n",lay->sectorsPerLayer);
    Verbose("first layer sector with CRC data %lld (sector# %lld)\n",lay->firstCrcLayerIndex,(lay->ndata-1)*lay->sectorsPerLayer+lay->firstCrcLayerIndex);
    Verbose("\n");
 

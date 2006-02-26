@@ -204,7 +204,7 @@ install: dvdisaster html
 	  install -m 644 dvdisaster.updated $(BUILDROOT)$(MANDIR)/cs/man1/dvdisaster.1; \
 	  sed "s/%docdir%/$$ESCAPED_DOCSUBDIR\/de/" <dvdisaster.de.1 >dvdisaster.updated; \
 	  install -m 644 dvdisaster.updated $(BUILDROOT)$(MANDIR)/de/man1/dvdisaster.1; \
-	  sed "s/%docdir%/$$ESCAPED_DOCSUBDIR\/it/" <dvdisaster.it.1 >dvdisaster.updated; \
+	  sed "s/%docdir%/$$ESCAPED_DOCSUBDIR\/en/" <dvdisaster.it.1 >dvdisaster.updated; \
 	  install -m 644 dvdisaster.updated $(BUILDROOT)$(MANDIR)/it/man1/dvdisaster.1; \
 	  rm dvdisaster.updated
 	if echo $(WITH_OPTIONS) | grep -q "NLS_YES"; then \

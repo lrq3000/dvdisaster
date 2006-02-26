@@ -1177,8 +1177,8 @@ Symbol <img src="../images/open-ecc.png" align="middle" title="Výběr souboru">
 
 <tr valign="top" $BGCOLOR2>
 <td>4.</td>
-<td>Sledujte proces opravy.</td>
-<td>Normálně se během opravy obrazu místy projevuje vysoká
+<td>Sledujte proces opravy.<p>
+Normálně se během opravy obrazu místy projevuje vysoká
 aktivita pevného disku.</td>
 <td><a href="example5.html"><img src="../images/ex-fix-cs.png" width="200" title="Oprava obrazu média"></a><p>
 </td>

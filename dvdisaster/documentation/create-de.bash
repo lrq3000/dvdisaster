@@ -2680,6 +2680,7 @@ function qa20de()
 <a href="#plusrw">3.4 Lesefehler oder falsche Abbild-Größe bei -RW/+RW-Datenträgern</a><p>
 <a href="#dvdrom">3.5 Selbstgebrannter Datenträger wird als "DVD-ROM" erkannt und abgelehnt.</a><p>
 <a href="#freebsd">3.6 Unter FreeBSD erscheinen keine Laufwerke.</a><p>
+<a href="#v40error">3.7 "Fehlerkorrekturdatei wurde mit Version 0.40.7 erzeugt"</a><p>
 <pre> </pre><hr><pre> </pre>
 
 <b><a name="tao">3.1 Was bedeutet "Warnung: 2 Sektoren fehlen am Ende des Datenträgers..."?</a></b><p>
@@ -2816,6 +2817,17 @@ benötigt, um die Laufwerke mit dvdisaster verwenden zu können.
 <li>Sie müssen Lese- und Schreibrechte auf dem betreffenden Gerät 
 (z.B. /dev/pass0) haben.
 </ul>
+
+<div align=right><a href="#top">&uarr;</a></div>
+
+
+<b><a name="v40error">3.7 "Fehlerkorrekturdatei wurde mit Version 0.40.7 erzeugt"</a></b><p>
+
+Die <a href="http://sourceforge.net/cvs/?group_id=157550">CVS-Versionen</a> von 
+dvdisaster markieren ihre Fehlerkorrektur-Dateien mit einem
+speziellen Bit. Dies bewirkt in den dvdisaster-Versionen bis einschließlich
+0.65 fälschlicherweise die obige Fehlermeldung. Bitte verwenden Sie die CVS-Versionen
+nur zusammen mit dvdisaster 0.66 oder neueren Versionen.
 
 <div align=right><a href="#top">&uarr;</a></div>
 

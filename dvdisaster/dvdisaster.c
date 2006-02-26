@@ -624,6 +624,7 @@ int main(int argc, char *argv[])
 
       PrintCLI(_("Tweaking options (see manual before using!)\n"
 	     "  -j,--jump n            - jump n sectors forward after a read error (default: 16)\n"
+	     "  -m n                   - list/select error correction methods (default: RS01)\n" 
 	     "  -n,--redundancy n%%     - error correction file redundancy (in percent), or\n"
 	     "                           maximum error correction image size (in sectors)\n"
 	     "  -v,--verbose           - more diagnostic messages\n"

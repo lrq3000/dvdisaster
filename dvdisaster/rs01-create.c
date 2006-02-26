@@ -317,8 +317,12 @@ void RS01Create(Method *self)
    ei->eh->eccBytes        = nroots;
 
    ei->eh->creatorVersion  = Closure->version;
-   ei->eh->neededVersion   = 5500;
    ei->eh->fpSector        = FOOTPRINT_SECTOR;
+
+   /* This is unfortunate; Versions prior to 0.66 will incorrectly reject
+      ecc files as being produced by version 0.40.7 
+      if any other bit than methodFlags[0] = 1. */
+   ei->eh->neededVersion   = Closure->releaseFlags ? 6600: 5500;
 
    memcpy(ei->eh->mediumFP, ii->mediumFP, 16);
    memcpy(ei->eh->mediumSum, ii->mediumSum, 16);

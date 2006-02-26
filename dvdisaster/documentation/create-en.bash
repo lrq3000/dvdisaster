@@ -2593,6 +2593,7 @@ function qa20en()
 <a href="#plusrw">3.4 Read errors or wrong image size with -RW/+RW media</a><p>
 <a href="#dvdrom">3.5 My self-written media is recognized as "DVD-ROM" and rejected.</a><p>
 <a href="#freebsd">3.6 No drives appear under FreeBSD.</a><p>
+<a href="#v40error">3.7 "Ecc file has been created with version 0.40.7."</a><p>
 
 <pre> </pre><hr><pre> </pre>
 
@@ -2728,6 +2729,15 @@ dvdisaster.
 (e.g. /dev/pass0).
 </ul>
 
+<div align=right><a href="#top">&uarr;</a></div>
+
+
+<b><a name="v40error">3.7 "Ecc file has been created with version 0.40.7."</a></b><p>
+
+The <a href="http://sourceforge.net/cvs/?group_id=157550">CVS versions</a>
+of dvdisaster mark their ecc files with a special bit. This causes dvdisaster
+versions upto 0.65 to falsely display the above error message. Please use the
+CVS versions only together with dvdisaster 0.66 or newer versions.
 <div align=right><a href="#top">&uarr;</a></div>
 
 EOF

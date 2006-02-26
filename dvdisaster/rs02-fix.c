@@ -74,10 +74,46 @@ static void fix_cleanup(gpointer data)
    g_thread_exit(0);
 }
 
+/*
+ * Expand a truncated image 
+ */
+
+static void expand_image(ImageInfo *ii, gint64 new_size)
+{  int last_percent, percent;
+   gint64 sectors, new_sectors;
+
+   if(!LargeSeek(ii->file, ii->size))
+     Stop(_("Failed seeking to end of image: %s\n"), strerror(errno));
+
+   last_percent = 0;
+   new_sectors = new_size - ii->sectors;
+   for(sectors = 0; sectors < new_sectors; sectors++)
+   {  int n;
+
+      n = LargeWrite(ii->file, Closure->deadSector, 2048);
+      if(n != 2048)
+	Stop(_("Failed expanding the image: %s\n"), strerror(errno));
+
+      percent = (100*sectors) / new_sectors;
+      if(last_percent != percent)
+      {  if(Closure->guiMode)
+	  ;
+	 else PrintProgress(_("Expanding image: %3d%%"), percent);
+	 last_percent = percent; 
+      }
+   }
+
+   if(Closure->guiMode)
+     ;
+   else 
+   {  PrintProgress(_("Expanding image: %3d%%"), 100);
+      PrintProgress("\n");
+   }
+}
+
 /***
  *** Test and fix the current image.
  ***/
-
 
 void RS02Fix(Method *self)
 {  RS02Widgets *wl = (RS02Widgets*)self->widgetList;
@@ -95,16 +131,25 @@ void RS02Fix(Method *self)
    int crc_idx, ecc_idx;
    int cache_size, cache_sector, cache_offset;
    int erasure_count,erasure_list[255],erasure_map[255];
-   int defective_bytes;
    int percent, last_percent;
-   int worst_ecc, local_plot_max;
+   int worst_ecc = 0, local_plot_max = 0;
    int i,j;
    gint64 crc_errors=0;
    gint64 dead_data=0;
    gint64 dead_ecc=0;
+   gint64 dead_crc=0;
+   gint64 data_count=0;
+   gint64 ecc_count=0;
+   gint64 crc_count=0;
+   gint64 data_corr=0;
+   gint64 ecc_corr=0;
    gint64 corrected=0;
    gint64 uncorrected=0;
-   int count=0;
+   gint64 damaged_sectors=0;
+   gint64 damaged_eccblocks=0;
+   gint64 damaged_eccsecs=0;
+   gint64 expected_sectors;
+   char *t;
 
    /*** Register the cleanup procedure for GUI mode */
 
@@ -129,8 +174,79 @@ void RS02Fix(Method *self)
 
    /*** Expand a truncated image with "dead sector" markers */
 
-   if(ii->size < lay->dataSectors + lay->eccSectors)
-     printf("TODO: Expand the image\n");
+   expected_sectors = lay->eccSectors+lay->dataSectors;
+   if(ii->sectors < expected_sectors)
+     expand_image(ii, expected_sectors);
+
+   /*** Truncate an image with trailing garbage */
+
+   if(ii->sectors > expected_sectors)
+   { gint64 diff = ii->sectors - expected_sectors;
+     char *trans = _("The image file is %lld sectors longer as noted in the\n"
+		     "ecc data. This might simply be zero padding, but could\n"
+		     "also mean that the image was manipulated after appending\n"
+		     "the error correction information.\n\n%s");
+
+     if(diff>0 && diff<=2)
+     {  int answer = ModalWarning(GTK_MESSAGE_QUESTION, GTK_BUTTONS_OK_CANCEL, NULL,
+				  _("Image file is %lld sectors longer than expected.\n"
+				    "Assuming this is a TAO mode medium.\n"
+				    "%lld sectors will be removed from the image end.\n"),
+				  diff, diff);
+
+        if(!answer)
+        {  SwitchAndSetFootline(fc->wl->fixNotebook, 1,
+				fc->wl->fixFootline,
+				_("<span color=\"red\">Aborted by user request!</span>")); 
+	   fc->earlyTermination = FALSE;  /* suppress respective error message */
+	   goto terminate;
+	}
+
+        ii->sectors -= diff;
+
+        if(!LargeTruncate(ii->file, (gint64)(2048*ii->sectors)))
+	  Stop(_("Could not truncate %s: %s\n"),Closure->imageName,strerror(errno));
+     }
+     
+#if 0
+     if(diff>2 && Closure->guiMode)
+     {  int answer = ModalDialog(GTK_MESSAGE_QUESTION, GTK_BUTTONS_OK_CANCEL, NULL,
+				 trans,
+				 diff, 
+				 _("Is it okay to remove the superfluous sectors?"));
+
+       if(!answer)
+       {  SwitchAndSetFootline(fc->wl->fixNotebook, 1,
+			       fc->wl->fixFootline,
+			       _("<span color=\"red\">Aborted by user request!</span>")); 
+	  fc->earlyTermination = FALSE;  /* suppress respective error message */
+	  goto terminate;
+       }
+
+       ii->sectors -= diff;
+
+       if(!LargeTruncate(ii->file, (gint64)(2048*ii->sectors)))
+	 Stop(_("Could not truncate %s: %s\n"),Closure->imageName,strerror(errno));
+
+       PrintLog(_("Image has been truncated by %lld sectors.\n"), diff);
+     }
+#endif
+     if(diff>2 && !Closure->guiMode)
+     {  if(!Closure->truncate)
+	   Stop(trans, 
+		diff,
+		_("Add the --truncate option to the program call\n"
+		  "to have the superfluous sectors removed."));
+
+         ii->sectors -= diff;
+
+	 if(!LargeTruncate(ii->file, (gint64)(2048*ii->sectors)))
+	   Stop(_("Could not truncate %s: %s\n"),Closure->imageName,strerror(errno));
+
+	 PrintLog(_("Image has been truncated by %lld sectors.\n"), diff);
+     }
+   }
+
 
    /*** Rewrite all headers from the one which was given us as a reference */
 
@@ -244,6 +360,7 @@ void RS02Fix(Method *self)
 	  if(!memcmp(fc->imgBlock[i]+cache_offset, Closure->deadSector, 2048))
 	  {  erasure_map[i] = 1;
 	     erasure_list[erasure_count++] = i;
+	     damaged_sectors++;
 	     dead_data++;
           }
 
@@ -265,11 +382,14 @@ void RS02Fix(Method *self)
 	     {  erasure_map[i] = 3;
 	        erasure_list[erasure_count++] = i;
 	        PrintCLI(_("CRC error in sector %lld\n"),block_idx[i]);
+		damaged_sectors++;
 		crc_errors++;
 	     }
-	  count++;
+
+	     data_count++;
 	     crc_idx++;
           }
+	  else if(block_idx[i] >= lay->dataSectors + 2) crc_count++;
 	}
      }
 
@@ -279,9 +399,15 @@ void RS02Fix(Method *self)
 	if(!memcmp(fc->imgBlock[i]+cache_offset, Closure->deadSector, 2048))
 	{  erasure_map[i] = 1;
 	   erasure_list[erasure_count++] = i;
+	   damaged_sectors++;
 	   dead_ecc++;
 	}
+
+	ecc_count++;
      }
+
+     if(erasure_count)
+       damaged_eccsecs++;
 
      if(erasure_count>worst_ecc)
        worst_ecc = erasure_count;
@@ -308,8 +434,6 @@ void RS02Fix(Method *self)
      }
 
      /* Build ecc block and attempt to correct it */
-
-     defective_bytes = 0;
 
      for(bi=0; bi<2048; bi++)  /* Run through each ecc block byte */
      {  int offset = cache_offset+bi;
@@ -345,7 +469,7 @@ void RS02Fix(Method *self)
 
 	/* If it is already correct by coincidence, we have nothing to do any further */
 
-	if(syn_error) defective_bytes++; 
+	if(syn_error) damaged_eccblocks++; 
 	else continue;
 
 //printf("Syndrome error for ecc block %lld, byte %d\n",s,bi);
@@ -547,7 +671,7 @@ void RS02Fix(Method *self)
 
         for(i=0; i<255; i++)
         {  gint64 sec;
-           char type;
+           char type='?';
 	   int length,n;
 	   
 	   if(!erasure_map[i]) continue;
@@ -566,8 +690,9 @@ void RS02Fix(Method *self)
 	        break;
 	   }
 
-	   if(i < ndata) sec = block_idx[i];
-	   else          sec = fc->eccIdx[i-ndata][cache_sector];
+	   if(i < ndata) {  data_corr++; sec = block_idx[i]; }
+	   else          {  ecc_corr++;  sec = fc->eccIdx[i-ndata][cache_sector]; }
+	   corrected++;
 
 	   PrintCLI("%lld%c ", sec, type);
 
@@ -626,10 +751,58 @@ skip:
 
    PrintProgress(_("Ecc progress: 100.0%%\n"));
 
-   printf("%d sectors tested\n",count);
-   printf("%lld dead data sectors\n",dead_data);
-   printf("%lld dead ecc sectors\n",dead_ecc);
-   printf("%lld CRC errors\n",crc_errors);
+   if(corrected > 0) PrintLog(_("Repaired sectors: %lld (%lld data, %lld ecc)\n"),
+			      corrected, data_corr, ecc_corr);
+   if(uncorrected > 0) 
+   {  PrintLog(_("Unrepaired sectors: %lld\n"), uncorrected);      
+#if 0
+      if(Closure->guiMode)
+        SwitchAndSetFootline(wl->fixNotebook, 1, wl->fixFootline,
+			     _("Image sectors could not be fully restored "
+			       "(%lld repaired; <span color=\"red\">%lld unrepaired</span>)"),
+			     corrected, uncorrected);
+#endif
+   }
+   else
+   {  if(!corrected)
+      {    t=_("Good! All sectors are already present.");
+           PrintLog("%s\n", t);
+      }
+      else 
+      {    t=_("Good! All sectors are repaired.");
+	   PrintLog("%s\n", t);
+      }
+   }
+   if(corrected > 0 || uncorrected > 0)
+     PrintLog(_("Erasure counts per ecc block:  avg =  %.1f; worst = %d.\n"),
+	     (double)damaged_sectors/(double)damaged_eccsecs,worst_ecc);
+
+#if 0
+   if(Closure->guiMode && t)
+     SwitchAndSetFootline(wl->fixNotebook, 1, wl->fixFootline,
+			  "%s %s", _("Repair results:"), t);
+#endif
+
+   Verbose("\nSummary of processed sectors:\n");
+   Verbose("%lld damaged sectors\n", damaged_sectors);
+   Verbose("%lld of %lld ecc blocks damaged (%lld / %lld sectors)\n",
+	   damaged_eccblocks, 2048*lay->sectorsPerLayer,
+	   damaged_eccsecs, lay->sectorsPerLayer);
+   if(data_count != lay->dataSectors)
+        g_printf("ONLY %lld of %lld data sectors processed; %lld damaged\n", 
+		 data_count, lay->dataSectors, dead_data);
+   else Verbose("all data sectors processed; %lld damaged\n", dead_data);
+
+   if(crc_count != lay->crcSectors)
+        g_printf("%lld of %lld crc sectors processed; %lld damaged\n", 
+		 crc_count, lay->crcSectors, dead_crc);
+   else Verbose("all  crc sectors processed; %lld damaged\n", dead_crc);
+
+   if(ecc_count != lay->rsSectors)
+        g_printf("%lld of %lld ecc sectors processed; %lld damaged\n", 
+		 ecc_count, lay->rsSectors, dead_ecc);
+   else Verbose("all  ecc sectors processed; %lld damaged\n", dead_ecc);
+   Verbose("%lld CRC errors\n",crc_errors);
 
    /*** Clean up */
 
