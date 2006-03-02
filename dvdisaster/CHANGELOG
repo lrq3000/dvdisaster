@@ -1,3 +1,9 @@
+0.66 (rc-5)
+	- changed ShellExecute() call which might have caused the 
+	  mysterious Help system crashes on Windows (I was ever able
+	  to reproduce them)
+	- adapted --random-errors for ecc images
+
 0.66 (rc-4) 26-02-2006
 	- fixed documentation path in manuals
 	- added summary messages after RS02 repair

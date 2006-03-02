@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-26 17:49+0100\n"
+"POT-Creation-Date: 2006-03-02 19:50+0100\n"
 "PO-Revision-Date: 2006-02-22 21:30+0100\n"
 "Last-Translator: Luboš Staněk <lubek@users.sourceforge.net>\n"
 "Language-Team: čeština <cs@li.org>\n"
@@ -41,11 +41,11 @@ msgstr ""
 "# takže jej program dvdisaster při každém spuštění přepíše.\n"
 "\n"
 
-#: debug.c:53 debug.c:150
+#: debug.c:51 debug.c:242
 msgid "2nd argument is missing"
 msgstr "chybí druhý argument"
 
-#: debug.c:60
+#: debug.c:58
 msgid ""
 "Number of roots must be 8..100;\n"
 "the number of erasures must be > 0 and less than the number of roots.\n"
@@ -53,7 +53,7 @@ msgstr ""
 "Počet kořenů musí být 8..100;\n"
 "počet výmazů musí být > 0 a menší než počet kořenů.\n"
 
-#: debug.c:79
+#: debug.c:77 debug.c:155
 #, c-format
 msgid ""
 "\n"
@@ -62,25 +62,25 @@ msgstr ""
 "\n"
 "Generuji náhodné opravitelné výmazy (pro %d kořenů, max. výmazů = %d).\n"
 
-#: debug.c:108 debug.c:358 debug.c:426 rs01-common.c:54 rs02-common.c:56
-#: rs02-compare.c:94 rs02-create.c:240 rs02-create.c:893 rs02-create.c:913
-#: rs02-fix.c:336
+#: debug.c:106 debug.c:190 debug.c:450 debug.c:518 rs01-common.c:54
+#: rs02-common.c:56 rs02-compare.c:94 rs02-create.c:240 rs02-create.c:893
+#: rs02-create.c:913 rs02-fix.c:336
 #, c-format
 msgid "Failed seeking to sector %lld in image: %s"
 msgstr "Selhalo vystavení na sektor %lld v obrazu: %s"
 
-#: debug.c:110 debug.c:225 debug.c:318 debug.c:363 debug.c:430
+#: debug.c:108 debug.c:192 debug.c:317 debug.c:410 debug.c:455 debug.c:522
 #: rs02-create.c:268 rs02-create.c:292 rs02-create.c:896 rs02-create.c:916
 #, c-format
 msgid "Failed writing to sector %lld in image: %s"
 msgstr "Selhal zápis do sektoru %lld v obrazu: %s"
 
-#: debug.c:118 debug.c:322 debug.c:370
+#: debug.c:116 debug.c:198 debug.c:414 debug.c:462
 #, c-format
 msgid "Progress: %3d%%"
 msgstr "Průběh: %3d%%"
 
-#: debug.c:123
+#: debug.c:121 debug.c:203
 #, c-format
 msgid ""
 "Progress: 100%%\n"
@@ -91,64 +91,69 @@ msgstr ""
 "Opravte obraz s použitím volby --fix před spuštěním dalšího běhu --random-errors.\n"
 "Jinak nahromadíte >= %d výmazů/blok ECC a obraz bude ztracen.\n"
 
-#: debug.c:157
+#: debug.c:146
+#, c-format
+msgid "Number of erasures must be > 0 and <= %d\n"
+msgstr ""
+
+#: debug.c:249
 msgid "3rd argument is missing"
 msgstr "chybí třetí argument"
 
-#: debug.c:164 debug.c:419
+#: debug.c:256 debug.c:511
 #, c-format
 msgid "Sector must be in range [0..%lld]\n"
 msgstr "Sektor musí být v rozsahu [0..%lld]\n"
 
-#: debug.c:167
+#: debug.c:259
 msgid "Byte position must be in range [0..2047]"
 msgstr "Pozice bajtu musí výt v rozsahu [0..2047]"
 
-#: debug.c:170
+#: debug.c:262
 msgid "Byte value must be in range [0..255]"
 msgstr "Hodnota bajtu musí být v rozsahu [0..255]"
 
-#: debug.c:172
+#: debug.c:264
 #, c-format
 msgid "Setting byte %d in sector %lld to value %d.\n"
 msgstr "Nastavování bajtu %d v sektoru %lld na hodnotu %d.\n"
 
-#: debug.c:179 debug.c:218 rs02-compare.c:204 rs02-create.c:136
+#: debug.c:271 debug.c:310 rs02-compare.c:204 rs02-create.c:136
 #, c-format
 msgid "Failed seeking to start of image: %s\n"
 msgstr "Selhalo vystavení na začátek obrazu: %s\n"
 
-#: debug.c:182
+#: debug.c:274
 msgid "Could not write the new byte value"
 msgstr "Nelze zapsat novou hodnotu bajtu"
 
-#: debug.c:211 read-adaptive.c:419 read-linear.c:224
+#: debug.c:303 read-adaptive.c:419 read-linear.c:224
 #, c-format
 msgid "Sectors must be in range [0..%lld].\n"
 msgstr "Sektory musí být v rozsahu [0..%lld].\n"
 
-#: debug.c:213
+#: debug.c:305
 #, c-format
 msgid "Erasing sectors [%lld,%lld]\n"
 msgstr "Mazání sektorů [%lld,%lld]\n"
 
-#: debug.c:250
+#: debug.c:342
 #, c-format
 msgid "New length must be in range [0..%lld].\n"
 msgstr "Nová délka musí být v rozsahu [0..%lld].\n"
 
-#: debug.c:252
+#: debug.c:344
 #, c-format
 msgid "Truncating image to %lld sectors.\n"
 msgstr "Zkrácení obrazu na %lld sektorů.\n"
 
-#: debug.c:257 read-linear.c:829 rs01-fix.c:187 rs01-fix.c:207 rs01-fix.c:222
+#: debug.c:349 read-linear.c:829 rs01-fix.c:187 rs01-fix.c:207 rs01-fix.c:222
 #: rs02-create.c:110 rs02-fix.c:208 rs02-fix.c:229 rs02-fix.c:244
 #, c-format
 msgid "Could not truncate %s: %s\n"
 msgstr "Nelze zkrátit %s: %s\n"
 
-#: debug.c:282 file.c:59 file.c:122 file.c:142 read-adaptive.c:517
+#: debug.c:374 file.c:59 file.c:122 file.c:142 read-adaptive.c:517
 #: read-adaptive.c:535 read-linear.c:261 read-linear.c:286
 #, c-format
 msgid ""
@@ -158,7 +163,7 @@ msgstr ""
 "Nelze otevřít %s:\n"
 "%s"
 
-#: debug.c:286
+#: debug.c:378
 #, c-format
 msgid ""
 "\n"
@@ -177,7 +182,7 @@ msgstr ""
 "dvdisaster --debug --random-image %lld --random-seed %d\n"
 "\n"
 
-#: debug.c:330 file.c:101 read-adaptive.c:74 read-linear.c:64
+#: debug.c:422 file.c:101 read-adaptive.c:74 read-linear.c:64
 #, c-format
 msgid ""
 "Error closing image file:\n"
@@ -186,11 +191,11 @@ msgstr ""
 "Chyba při zavírání souboru obrazu:\n"
 "%s"
 
-#: debug.c:344
+#: debug.c:436
 msgid "Replacing the \"unreadable sector\" markers with zeros.\n"
 msgstr "Nahrazování značek \"nečitelných sektorů\" nulami.\n"
 
-#: debug.c:351
+#: debug.c:443
 #, c-format
 msgid ""
 "Could not read image sector %lld:\n"
@@ -199,12 +204,12 @@ msgstr ""
 "Nelze načíst sektor %lld obrazu:\n"
 "%s\n"
 
-#: debug.c:375
+#: debug.c:467
 #, c-format
 msgid "%lld \"unreadable sector\" markers replaced.\n"
 msgstr "%lld značek \"nečitelných sektorů\" nahrazeno.\n"
 
-#: debug.c:421
+#: debug.c:513
 #, c-format
 msgid ""
 "Contents of sector %lld:\n"

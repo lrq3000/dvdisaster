@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-26 17:49+0100\n"
+"POT-Creation-Date: 2006-03-02 19:50+0100\n"
 "PO-Revision-Date: 2004-11-30 19:48+0100\n"
 "Last-Translator: Carsten Gnörlich <carsten@dvdisaster.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -40,11 +40,11 @@ msgstr ""
 "# Sie wird bei jedem Aufruf von dvdisaster neu überschrieben.\n"
 "\n"
 
-#: debug.c:53 debug.c:150
+#: debug.c:51 debug.c:242
 msgid "2nd argument is missing"
 msgstr "Das zweite Argument fehlt"
 
-#: debug.c:60
+#: debug.c:58
 msgid ""
 "Number of roots must be 8..100;\n"
 "the number of erasures must be > 0 and less than the number of roots.\n"
@@ -52,7 +52,7 @@ msgstr ""
 "Die Anzahl der Nullstellen muß 8..100 sein;\n"
 "die Anzahl der Auslöschungen muß > 0 und kleiner als die Anzahl Nullstellen sein.\n"
 
-#: debug.c:79
+#: debug.c:77 debug.c:155
 #, c-format
 msgid ""
 "\n"
@@ -61,25 +61,25 @@ msgstr ""
 "\n"
 "Erzeuge zufällige reparierbare Auslöschungen (für %d Nullstellen, max. %d Auslöschungen).\n"
 
-#: debug.c:108 debug.c:358 debug.c:426 rs01-common.c:54 rs02-common.c:56
-#: rs02-compare.c:94 rs02-create.c:240 rs02-create.c:893 rs02-create.c:913
-#: rs02-fix.c:336
+#: debug.c:106 debug.c:190 debug.c:450 debug.c:518 rs01-common.c:54
+#: rs02-common.c:56 rs02-compare.c:94 rs02-create.c:240 rs02-create.c:893
+#: rs02-create.c:913 rs02-fix.c:336
 #, c-format
 msgid "Failed seeking to sector %lld in image: %s"
 msgstr "Ansteuern von Sektor %lld im Abbild fehlgeschlagen: %s"
 
-#: debug.c:110 debug.c:225 debug.c:318 debug.c:363 debug.c:430
+#: debug.c:108 debug.c:192 debug.c:317 debug.c:410 debug.c:455 debug.c:522
 #: rs02-create.c:268 rs02-create.c:292 rs02-create.c:896 rs02-create.c:916
 #, c-format
 msgid "Failed writing to sector %lld in image: %s"
 msgstr "Schreiben von Sektor %lld im Abbild fehlgeschlagen: %s"
 
-#: debug.c:118 debug.c:322 debug.c:370
+#: debug.c:116 debug.c:198 debug.c:414 debug.c:462
 #, c-format
 msgid "Progress: %3d%%"
 msgstr "Fortschritt: %3d%%"
 
-#: debug.c:123
+#: debug.c:121 debug.c:203
 #, c-format
 msgid ""
 "Progress: 100%%\n"
@@ -91,64 +91,69 @@ msgstr ""
 "erneut anwenden. Anderenfalls werden >= %d Auslöschungen pro ECC-Bereich\n"
 "erzeugt und das Abbild kann nicht mehr wiederhergestellt werden.\n"
 
-#: debug.c:157
+#: debug.c:146
+#, c-format
+msgid "Number of erasures must be > 0 and <= %d\n"
+msgstr ""
+
+#: debug.c:249
 msgid "3rd argument is missing"
 msgstr "Das dritte Argument fehlt"
 
-#: debug.c:164 debug.c:419
+#: debug.c:256 debug.c:511
 #, c-format
 msgid "Sector must be in range [0..%lld]\n"
 msgstr "Sektor muß im Bereich [0..%lld] liegen\n"
 
-#: debug.c:167
+#: debug.c:259
 msgid "Byte position must be in range [0..2047]"
 msgstr "Byte-Position muß im Bereich [0..2047] liegen"
 
-#: debug.c:170
+#: debug.c:262
 msgid "Byte value must be in range [0..255]"
 msgstr "Byte muß einen Wert von [0..255] haben"
 
-#: debug.c:172
+#: debug.c:264
 #, c-format
 msgid "Setting byte %d in sector %lld to value %d.\n"
 msgstr "Setze Byte %d in Sektor %lld auf den Wert %d.\n"
 
-#: debug.c:179 debug.c:218 rs02-compare.c:204 rs02-create.c:136
+#: debug.c:271 debug.c:310 rs02-compare.c:204 rs02-create.c:136
 #, c-format
 msgid "Failed seeking to start of image: %s\n"
 msgstr "Ansteuern des Abbild-Anfangs fehlgeschlagen: %s\n"
 
-#: debug.c:182
+#: debug.c:274
 msgid "Could not write the new byte value"
 msgstr "Konnte den neuen Byte-Wert nicht schreiben"
 
-#: debug.c:211 read-adaptive.c:419 read-linear.c:224
+#: debug.c:303 read-adaptive.c:419 read-linear.c:224
 #, c-format
 msgid "Sectors must be in range [0..%lld].\n"
 msgstr "Sektoren müssen im Intervall [0..%lld] liegen.\n"
 
-#: debug.c:213
+#: debug.c:305
 #, c-format
 msgid "Erasing sectors [%lld,%lld]\n"
 msgstr "Lösche Sektoren [%lld,%lld]\n"
 
-#: debug.c:250
+#: debug.c:342
 #, c-format
 msgid "New length must be in range [0..%lld].\n"
 msgstr "Neue Länge muß im Bereich [0..%lld] liegen.\n"
 
-#: debug.c:252
+#: debug.c:344
 #, c-format
 msgid "Truncating image to %lld sectors.\n"
 msgstr "Verkürze das Abbild auf %lld Sektoren.\n"
 
-#: debug.c:257 read-linear.c:829 rs01-fix.c:187 rs01-fix.c:207 rs01-fix.c:222
+#: debug.c:349 read-linear.c:829 rs01-fix.c:187 rs01-fix.c:207 rs01-fix.c:222
 #: rs02-create.c:110 rs02-fix.c:208 rs02-fix.c:229 rs02-fix.c:244
 #, c-format
 msgid "Could not truncate %s: %s\n"
 msgstr "Konnte %s nicht abschneiden: %s\n"
 
-#: debug.c:282 file.c:59 file.c:122 file.c:142 read-adaptive.c:517
+#: debug.c:374 file.c:59 file.c:122 file.c:142 read-adaptive.c:517
 #: read-adaptive.c:535 read-linear.c:261 read-linear.c:286
 #, c-format
 msgid ""
@@ -158,7 +163,7 @@ msgstr ""
 "Kann %s nicht öffnen:\n"
 "%s"
 
-#: debug.c:286
+#: debug.c:378
 #, c-format
 msgid ""
 "\n"
@@ -177,7 +182,7 @@ msgstr ""
 "dvdisaster --debug --random-image %lld --random-seed %d\n"
 "\n"
 
-#: debug.c:330 file.c:101 read-adaptive.c:74 read-linear.c:64
+#: debug.c:422 file.c:101 read-adaptive.c:74 read-linear.c:64
 #, c-format
 msgid ""
 "Error closing image file:\n"
@@ -186,11 +191,11 @@ msgstr ""
 "Fehler beim Schließen des Abbildes:\n"
 "%s"
 
-#: debug.c:344
+#: debug.c:436
 msgid "Replacing the \"unreadable sector\" markers with zeros.\n"
 msgstr "Ersetze die \"unlesbarer Sektor\"-Markierungen durch Nullen.\n"
 
-#: debug.c:351
+#: debug.c:443
 #, c-format
 msgid ""
 "Could not read image sector %lld:\n"
@@ -199,12 +204,12 @@ msgstr ""
 "Konnte Abbild-Sektor %lld nicht lesen:\n"
 "%s\n"
 
-#: debug.c:375
+#: debug.c:467
 #, c-format
 msgid "%lld \"unreadable sector\" markers replaced.\n"
 msgstr "%lld \"unlesbarer Sektor\"-Markierungen ersetzt.\n"
 
-#: debug.c:421
+#: debug.c:513
 #, c-format
 msgid ""
 "Contents of sector %lld:\n"

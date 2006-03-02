@@ -4,7 +4,7 @@
 
 BASH_BASED_CONFIGURE=./scripts/bash-based-configure
 REQUIRED_CFLAGS="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -I." 
-RECOMMENDED_CFLAGS="-O2 -Wall"
+RECOMMENDED_CFLAGS="-O2 -fomit-frame-pointer -Wall"
 DEBUG_CFLAGS="-ggdb -Wall"
 
 CFG_USE_CYGWIN="no"   # do not change
@@ -21,7 +21,7 @@ fi
 
 PACKAGE dvdisaster 0.66
 
-DEFINE_STRING RELEASE_MICRO "4"
+DEFINE_STRING RELEASE_MICRO "5"
 #DEFINE_STRING RELEASE_STATUS "-"
 #DEFINE_STRING RELEASE_STATUS "patch"
 #DEFINE_STRING RELEASE_STATUS "devel"
@@ -189,7 +189,7 @@ CREATE_MAKEFILES GNUmakefile
 
 echo
 echo -n "Configuring the tools ... "
-if (cd tools; bash configure >tools-configure); then
+if (cd tools; bash configure $@ >tools-configure); then
   echo "OK"
 else
   echo "Failed"

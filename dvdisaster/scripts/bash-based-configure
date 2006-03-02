@@ -152,7 +152,7 @@ do
 
   case "$cfg_opt" in
   -help | --help)
-    echo "Usage: configure [options]"
+    echo "Usage: bash configure [options]"
     echo
     echo "Options:"
     echo " --help                 print this message"

@@ -2977,8 +2977,8 @@ Fall kommt man daher gar nicht mehr an die Dateien heran, um sie
 anhand der darin enthaltenen Fehlerkorrektur-Informationen zu reparieren:<p>
 
 <ul>
-<li>Versuchen Sie einmal, eine größere Datei von einem beschädigten
-Datenträger zu lesen. Das geht nur mit speziellen Werkzeugen und ist
+<li>Das Einlesen einer größeren Datei von einem beschädigten
+Datenträger benötigt spezielle Werkzeuge und ist
 sehr aufwändig.<p></li>
 <li>Das Dateisystem enthält Datenstrukturen, die nicht Teil der darin
 enthaltenen Dateien und damit ungeschützt sind. Wenn diese Strukturen
@@ -3117,7 +3117,7 @@ nutzbare Datenträger-Kapazität sinkt entsprechend</td>
 <td> können nachträglich für bereits existierende Datenträger
 erzeugt werden</td>
 <td> nur beim Brennen neuer Datenträger anwendbar, weil das Abbild vorher 
-um Fehlerkorrektur-Daten erweitert werden muß
+um Fehlerkorrektur-Daten erweitert werden muß</td>
 </tr>
 
 <tr valign="top">

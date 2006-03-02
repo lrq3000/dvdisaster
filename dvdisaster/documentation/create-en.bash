@@ -2889,7 +2889,7 @@ correction information needed for recovery is also lost:<p>
 
 
 <ul>
-<li>Try reading a large file from a damaged medium. This requires special tools
+<li>Reading a large file from a damaged medium requires special tools
 and a huge effort.<p></li>
 <li>The file system contains data structures which are not part of the files
 and are therefore not protected. If these structures are damaged, you won't be
@@ -3021,7 +3021,7 @@ usable medium capacity is reduced accordingly</td>
 <tr valign="top">
 <td> can be created for already existing media</td>
 <td> only applicable before writing the new medium since
-the image must be augmented with error correction information in advance
+the image must be augmented with error correction information in advance</td>
 </tr>
 
 <tr valign="top">

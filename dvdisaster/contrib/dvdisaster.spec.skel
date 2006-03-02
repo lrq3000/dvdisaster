@@ -43,6 +43,7 @@ se il supporto dovesse danneggiarsi col tempo.
 %setup -q
 
 %build
+CFLAGS="%{optflags} -fomit-frame-pointer"; export CFLAGS; \
 ./configure \
     --prefix=%{_prefix} \
     --bindir=%{_bindir} \

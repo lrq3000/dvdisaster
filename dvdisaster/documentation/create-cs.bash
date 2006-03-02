@@ -50,7 +50,7 @@ function inline1cs()
 
 <tr align="center"><td><h3>Obrázek: Silně poškrábané médium</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/scratch-img.jpg" title="Silně poškrábané médium"></center>
+<center><img src="../images/scratch-img.jpg" alt="Silně poškrábané médium" title="Silně poškrábané médium"></center>
 <br clear="all">
 </td></tr>
 <tr><td>
@@ -66,7 +66,7 @@ function inline2cs()
 
 <tr align="center"><td><h3>Obrázky: Analýza chyb</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/scratch-scan-cs.png" title="Analýza chyb"></center>
+<center><img src="../images/scratch-scan-cs.png" alt="Analýza chyb" title="Analýza chyb"></center>
 <br clear="all">
 </td></tr>
 <tr><td>
@@ -80,7 +80,7 @@ neodpovídá z technických důvodů vykreslené datové stopě.
 </pre>
 </td></tr>
 <tr align="center"><td>
-<center><img src="../images/scratch-corr-cs.png" title="Oprava obrazu"></center>
+<center><img src="../images/scratch-corr-cs.png" alt="Oprava obrazu" title="Oprava obrazu"></center>
 <br clear="all">
 </td></tr>
 <tr><td>
@@ -168,7 +168,7 @@ nadměrně zvýrazněny díky odrazům fotografického blesku.
 
 <p>Sken povrchu média odhalí asi 135000 nečitelných sektorů
 (z celkového počtu 2200000, což představuje asi 6% poškozených sektorů).
-V průběhu <a href="example50.html">opravy</a> obrazu média
+V průběhu <a href="example40.html">opravy</a> obrazu média
 (s použitím <a href="example83.html#redundancy">standardního nastavení</a>)
 dosáhne počet chyb maximální hodnoty 22 chyb na <a href="background10.html" title="Technické vlastnosti opravy chyb">blok ECC</a>,
 což představuje 69% využití opravy chyb při použitém nastavení.
@@ -176,13 +176,13 @@ což představuje 69% využití opravy chyb při použitém nastavení.
 <p>
 </td><td width=110>
 <a href="inline1.html">
-<img src="../images/scratch-img.jpg" width=100 height=97 title="Silně poškrábané médium"></a>
+<img src="../images/scratch-img.jpg" width=100 height=97 alt="Silně poškrábané médium" title="Silně poškrábané médium"></a>
 <br clear="all">
 <a href="inline2.html">
-<img src="../images/scratch-scan-cs.png" width=100 height=74 title="Analýza chyb"></a>
+<img src="../images/scratch-scan-cs.png" width=100 height=74 alt="Analýza chyb" title="Analýza chyb"></a>
 <br clear="all">
 <a href="inline2.html">
-<img src="../images/scratch-corr-cs.png" width=100 height=74  title="Oprava obrazu"></a>
+<img src="../images/scratch-corr-cs.png" width=100 height=74 alt="Oprava obrazu" title="Oprava obrazu"></a>
 </td></tr></table>
 
 <a href="index20.html">Proč není sken PI/PO dostatečný...</a>
@@ -194,7 +194,7 @@ function index20cs()
 {  cat >> $1 <<EOF
 <h3>Program dvdisaster doplňuje PI/PO skeny</h3>
 
-PI/PO skeny jsou cenným nástrojem pro měření a optimalizaci
+<a href="qa.html#pipo">PI/PO skeny</a> jsou cenným nástrojem pro měření a optimalizaci
 kvality vypálených médií.<p>
 
 Přesto <b>nejsou</b> PI/PO skeny spolehlivým prostředkem <b>předpovědi
@@ -259,17 +259,17 @@ function example_contents_cs()
    case $query in
    title)   title="Příklady" ;;
 
-   link)    link_title="Příklady" ;;
+   link)    link_title="Příklady a snímky obrazovek" ;;
 
-   link10)   link_title="Skenování média na chyby" ;;
+   link10)   link_title="Skenování médií na chyby" ;;
 
-   link20)   link_title="Vytvoření opravných dat" ;;
+   link20)   link_title="Vytváření opravných dat" ;;
    link21)   link_title="v samostatném souboru" ;;
    link22)   link_title="v rámci obrazu média" ;;
 
-   link30)   link_title="Vytváření obrazů z poškozených médií" ;;
-   link40)   link_title="Oprava obrazu média" ;;
-   link50)   link_title="Porovnání obrazu proti opravným datům" ;;
+   link30)   link_title="Čtení poškozených médií" ;;
+   link40)   link_title="Obnovení obrazů médií" ;;
+   link50)   link_title="Získání informací o obrazech a opravných datech" ;;
 
    link80)   link_title="Konfigurace" ;;
    link81)   link_title="Obecná nastavení" ;;
@@ -290,12 +290,12 @@ function example0cs()
 <table>
 <tr>
   <td valign="top">
-    <a href="example10.html"><b>Skenování média</b></a><br>
+    <a href="example10.html"><b>Skenování médií na chyby</b></a><br>
     Sken média analyzuje rychlost čtení a čitelnost.
   </td>
   <td>&nbsp;</td>
   <td valign="top">
-    <a href="example20.html"><b>Vytvoření opravných dat</b></a><br>
+    <a href="example20.html"><b>Vytváření opravných dat</b></a><br>
     Opravná data mohou být přidána do obrazu nebo mohou
     existovat jako samostatný soubor.
   </td>
@@ -303,12 +303,12 @@ function example0cs()
 <tr>
   <td>
     <a href="example1.html">
-    <img src="../images/ex-scan-cs.png" border=0 width=264 title="Skenování média"></a>
+    <img src="../images/ex-scan-cs.png" border=0 width=264 alt="Skenování média" title="Skenování média"></a>
   </td>
   <td>&nbsp;</td>
   <td>
     <a href="example3.html#ecc">
-    <img src="../images/ex-create-cs.png" border=0 width=264 title="Vytvoření opravných dat"></a>
+    <img src="../images/ex-create-cs.png" border=0 width=264 alt="Vytvoření opravných dat" title="Vytvoření opravných dat"></a>
   </td>
 </tr>
 
@@ -316,13 +316,13 @@ function example0cs()
 
 <tr>
   <td valign="top">
-    <a href="example30.html"><b>Čtení poškozeného média</b></a><br>
+    <a href="example30.html"><b>Čtení poškozených médií</b></a><br>
     Optimalizovaná <a href="background50.html">strategie čtení</a>
     vytěží data z poškozeného média.
   </td>
   <td>&nbsp;</td>
   <td>
-    <a href="example40.html"><b>Oprava média</b></a><br>
+    <a href="example40.html"><b>Obnovení obrazů médií</b></a><br>
     Nečitelné sektory jsou rekonstruovány z
     <a href="example20.html">opravných dat</a>.
   </td>
@@ -330,12 +330,12 @@ function example0cs()
 <tr>
   <td>
     <a href="example4.html">
-    <img src="../images/ex-read-a-cs.png" border=0 width=264 title="Čtení poškozeného média"></a>
+    <img src="../images/ex-read-a-cs.png" border=0 width=264 alt="Čtení poškozeného média" title="Čtení poškozeného média"></a>
   </td>
   <td>&nbsp;</td>
   <td>
     <a href="example5.html">
-    <img src="../images/ex-fix-cs.png" border=0 width=264 title="Oprava média"></a>
+    <img src="../images/ex-fix-cs.png" border=0 width=264 alt="Oprava média" title="Oprava média"></a>
   </td>
 </tr>
 </table>
@@ -345,7 +345,7 @@ function example0cs()
 Další témata: 
 
 <ul>
-<li><a href="example50.html">Získání informací o obrazu a opravných datech</a></li>
+<li><a href="example50.html">Získání informací o obrazech a opravných datech</a></li>
 
 <li><a href="example80.html">Konfigurace</a>
 
@@ -367,7 +367,7 @@ function example1cs()
 
 <tr align="center"><td><h3>Snímek obrazovky: Skenování média na chyby</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/ex-scan-cs.png" title="Skenování média"></center>
+<center><img src="../images/ex-scan-cs.png" alt="Skenování média" title="Skenování média"></center>
 <br clear="all">
 </td></tr>
 <tr><td>
@@ -387,13 +387,13 @@ přehled o <b>stavu média</b>.
 Červené značky indikují přítomnost chyb čtení!
 <table width=100%><tr><td bgcolor=#000000 width=2><img width=1 height=1 alt=""></td><td>
 Jakmile si všimnete chyb čtení na vašem médiu, pokuste se
-<a href="example50.html">opravit obraz média</a> 
+<a href="example40.html">opravit obraz média</a> 
 a přeneste jej na nové médium. 
 </td></tr></table>
 </li>
 
 <li>Kliknutím na symbol
-<img src="../images/btn-protocol-cs.png" alt="Zobrazit záznam" align="middle">
+<img src="../images/btn-protocol-cs.png" alt="Tlačítko Zobrazit záznam" title="Tlačítko Zobrazit záznam" align="middle">
 zobrazíte další informace o procesu čtení.<p></p></li>
 </ul>
 
@@ -423,7 +423,7 @@ ovladač <a href="qa10.html#aspi">ASPI</a>, aby bylo možno pracovat s mechanika
 <tr valign="top" $BGCOLOR2>
 <td>2.</td>
 <td>Zvolte mechaniku.</td>
-<td><img src="../images/btn-drive-cs.png" title="Volba mechaniky"></td>
+<td><img src="../images/btn-drive-cs.png" alt="Volba mechaniky" title="Volba mechaniky"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
@@ -432,20 +432,20 @@ ovladač <a href="qa10.html#aspi">ASPI</a>, aby bylo možno pracovat s mechanika
 zadejte jeho název. Skenování soubor oprav chyb nezbytně nepotřebuje, 
 ale může z něj výhodně načíst nějaké informace.
 </td>
-<td><img src="../images/btn-eccfile-cs.png" title="Soubor oprav chyb"><p>
-Symbol <img src="../images/open-ecc.png" align="middle" title="Výběr souboru"> otevírá výběr souborů.</td>
+<td><img src="../images/btn-eccfile-cs.png" alt="Soubor oprav chyb" title="Soubor oprav chyb"><p>
+Symbol <img src="../images/open-ecc.png" alt="Výběr souboru" title="Výběr souboru" align="middle"> otevírá výběr souborů.</td>
 </tr>
  
 <tr valign="top" $BGCOLOR2>
 <td>4.</td>
 <td>Kliknutím na tlačítko "Skenovat" začne kontrola média.</td>
-<td><img src="../images/btn-scan-cs.png" title="Tlačítko Skenovat"></td>
+<td><img src="../images/btn-scan-cs.png" alt="Tlačítko Skenovat" alt="Tlačítko Skenovat" title="Tlačítko Skenovat" align="middle"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
 <td>5.</td>
 <td>Sledujte proces skenování v graphické reprezentaci.</td>
-<td><a href="example1.html"><img src="../images/ex-scan-cs.png" width="200" title="Skenování média"></a><p>
+<td><a href="example1.html"><img src="../images/ex-scan-cs.png" width="200" alt="Skenování média" title="Skenování média" align="middle"></a><p>
 </td>
 </tr>
 </table>
@@ -467,31 +467,32 @@ mohlo by být dostatečné skenovat vzorek 2-3 médií měsíčně a dávkově.<
 
 <hr><p>
 
+<a name="cli"></a>
 <h3>Skenování média z příkazové řádky</h3>
 
 Skenování vyžaduje následující parametry (výchozí hodnoty jsou uvedeny v závorce):
 
 <table>
 <tr>
-<td><b><a href="example90.html#scan">-s / --scan</a></b></td>
+<td><a href="example90.html#scan">-s / --scan</a></td>
 <td>Skenovat</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#device">-d / --device</a></b></td>
+<td><a href="example90.html#device">-d / --device</a></td>
 <td>Volba mechaniky (/dev/cdrom)</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#ecc">-e / --ecc</a></b></td>
+<td><a href="example90.html#ecc">-e / --ecc</a></td>
 <td>Soubor oprav chyb (medium.ecc)</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#jump">-j / --jump</a></b></td>
+<td><a href="example90.html#jump">-j / --jump</a></td>
 <td>Přeskočit sektory po chybě čtení (16)</td>
 </tr>
 </table>
 <p></p>
 
-<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+<table class="example" width="100%" bgcolor="#ffffe0"><tr><td>
 user@linux&gt; <b>dvdisaster -s -d /dev/hdc -e medium.ecc</b><br>
 dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
 [... zbytek oznámení GPL ...]<p>
@@ -507,7 +508,8 @@ Sektor 57728: Medium Error; Unrecovered read error. Přeskakuji 15 sektorů.<br>
 Sektor 716640: Medium Error; Unrecovered read error. Přeskakuji 15 sektorů.<br>
 Pozice čtení: 100.0% ( 16.0x)<br>
 33840 nečitelných sektorů.
-</td></tr></table>
+</td></tr>
+</table>
 <p></p>
 
 Nahlášené chyby čtení mohou být jiné než "Medium Error; ...", obsah hlášení
@@ -519,13 +521,13 @@ function example20cs()
 {  
    cat >> $1 <<EOF
 
-<h3>Vytvoření opravných dat</h3>
+<h3>Vytváření opravných dat</h3>
 
 Opravná data mají v programu dvdisaster důležitou roli:<br>
 Jsou nezbytná k obnovení nečitelných sektorů média.<p>
 
 Opravná data mohou být uložena buď v samostatném
-<a href="background30.html#files">souboru oprav chyb</a>
+<a href="background30.html#file">souboru oprav chyb</a>
 nebo mohou být s příslušnými
 <a href="background30.html#table">výhodami a nevýhodami</a>
 vepsána <a href="background30.html#image">do obrazu</a>.<p>
@@ -538,11 +540,11 @@ Rychlá pomoc při rozhodování:<p>
 
 &nbsp; Ne: viz následující otázka.<p>
 
-<b>Zůstane na médiu, které se bude vytvářet, méně než 20% volného prostoru?</b><p>
+<b>Zůstane na médiu, které se bude vytvářet, alespoň 20% volného prostoru?</b><p>
 
-&nbsp; Ano: <a href="example21.html">Vytvořte soubor oprav chyb.</a><p>
+&nbsp; Ano: <a href="example21.html">Vytvořte obraz s opravnými daty.</a><p>
 
-&nbsp; Ne: <a href="example22.html">Vytvořte obraz s opravnými daty.</a><p>
+&nbsp; Ne: <a href="example22.html">Vytvořte soubor oprav chyb.</a><p>
 EOF
 
 }
@@ -552,7 +554,7 @@ function example2cs()
 
 <tr align="center"><td><h3>Snímek obrazovky: Načtení obrazu média</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/ex-read-cs.png" title="Načtení obrazu média"></center>
+<center><img src="../images/ex-read-cs.png" alt="Načtení obrazu média" title="Načtení obrazu média"></center>
 <br clear="all">
 </td></tr>
 
@@ -584,9 +586,9 @@ function example3cs()
 {  cat >> $1 <<EOF
 
 <tr align="center"><td>
-<h3>Snímek obrazovky: Vytvoření souboru oprav chyb</h3><p></td></tr>
+<h3>Snímek obrazovky: Vytváření souboru oprav chyb</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/ex-create-cs.png" title="Vytvoření souboru oprav chyb"></center>
+<center><img src="../images/ex-create-cs.png" alt="Vytváření souboru oprav chyb" title="Vytváření souboru oprav chyb"></center>
 <br clear="all">
 </td></tr>
 
@@ -620,11 +622,11 @@ EOF
 }
 
 function example21cs()
-{  create_inline example cs 2 example21.html "na Vytvoření souboru oprav chyb"
-   create_inline example cs 3 example21.html "na Vytvoření souboru oprav chyb"
+{  create_inline example cs 2 example21.html "na Vytváření souboru oprav chyb"
+   create_inline example cs 3 example21.html "na Vytváření souboru oprav chyb"
  
    cat >> $1 <<EOF
-<h3>Vytvoření souboru oprav chyb</h3>
+<h3>Vytváření souboru oprav chyb</h3>
 
 <b>Nejprve načtěte obraz média na pevný disk:</b><p>
 
@@ -638,7 +640,7 @@ function example21cs()
 <tr valign="top" $BGCOLOR2>
 <td>2.</td>
 <td>Zvolte mechaniku.</td>
-<td><img src="../images/btn-drive-cs.png" title="Volba mechaniky"></td>
+<td><img src="../images/btn-drive-cs.png" alt="Volba mechaniky" title="Volba mechaniky"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
@@ -646,23 +648,23 @@ function example21cs()
 <td>Zvolte název souboru obrazu.
 
 Ujistěte se, že máte dostatek volného místa pro obraz. Aktivujte
-<a href="example91.html#localfiles">volbu rozdělení souboru</a>, pokud
+<a href="example81.html#localfiles">volbu rozdělení souboru</a>, pokud
 váš souborový systém nepodporuje soubory větší než 2 GB.<p>
 </td>
-<td><img src="../images/btn-image-cs.png" title="Soubor obrazu"><p>
-Symbol <img src="../images/open-img.png" align="middle" title="Výběr souboru"> otevírá výběr souborů.</td>
+<td><img src="../images/btn-image-cs.png" alt="Soubor obrazu" title="Soubor obrazu"><p>
+Symbol <img src="../images/open-img.png" alt="Výběr souboru" title="Výběr souboru" align="middle"> otevírá výběr souborů.</td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
 <td>4.</td>
 <td>Kliknutím na tlačítko "Načíst" spustíte čtení.</td>
-<td><img src="../images/btn-read-cs.png" title="Tlačítko Načíst"></td>
+<td><img src="../images/btn-read-cs.png" alt="Tlačítko Načíst" title="Tlačítko Načíst" align="middle"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
 <td>5.</td>
 <td>Sledujte proces čtení v graphické reprezentaci.</td>
-<td><a href="example2.html"><img src="../images/ex-read-cs.png" width="200" title="Načtení obrazu média"></a><p>
+<td><a href="example2.html"><img src="../images/ex-read-cs.png" width="200" alt="Načtení obrazu média" title="Načtení obrazu média" align="middle"></a><p>
 </td>
 </tr>
 </table>
@@ -679,8 +681,8 @@ Obraz nesmí obsahovat žádné chyby čtení.<p>
 Zvolte soubor obrazu.
 Dříve načtený soubor obrazu bude přednastaven.<p>
 </td>
-<td><img src="../images/btn-image-cs.png" title="Soubor obrazu"><p>
-Symbol <img src="../images/open-img.png" align="middle" title="Výběr souboru"> otevírá výběr souborů.</td>
+<td><img src="../images/btn-image-cs.png" alt="Soubor obrazu" title="Soubor obrazu"><p>
+Symbol <img src="../images/open-img.png" alt="Výběr souboru" title="Výběr souboru" align="middle"> otevírá výběr souborů.</td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
@@ -688,8 +690,8 @@ Symbol <img src="../images/open-img.png" align="middle" title="Výběr souboru">
 <td>
 Zvolte název pro soubor oprav chyb.<p>
 </td>
-<td><img src="../images/btn-eccfile-cs.png" title="Soubor oprav chyb"><p>
-Symbol <img src="../images/open-ecc.png" align="middle" title="Výběr souboru"> otevírá výběr souborů.</td>
+<td><img src="../images/btn-eccfile-cs.png" alt="Soubor oprav chyb" title="Soubor oprav chyb"><p>
+Symbol <img src="../images/open-ecc.png" alt="Výběr souboru" title="Výběr souboru" align="middle"> otevírá výběr souborů.</td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
@@ -697,19 +699,19 @@ Symbol <img src="../images/open-ecc.png" align="middle" title="Výběr souboru">
 <td>
 Nastavte volby opravy chyb.<p>
 </td>
-<td><a href="example83.html"><img src="../images/prefs-ecc-cs.png" width="200" title="Nastavení oprav chyb"></a></td>
+<td><a href="example83.html"><img src="../images/prefs-ecc-cs.png" width="200" alt="Nastavení oprav chyb" title="Nastavení oprav chyb"></a></td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
 <td>4.</td>
 <td>Kliknutím na tlačítko "Vytvořit" vytvoříte soubor oprav chyb.</td>
-<td><img src="../images/btn-create-cs.png" title="Tlačítko Vytvořit"></td>
+<td><img src="../images/btn-create-cs.png" alt="Tlačítko Vytvořit" title="Tlačítko Vytvořit"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
 <td>5.</td>
 <td>Sledujte průběh tvorby souboru oprav chyb.</td>
-<td><a href="example3.html"><img src="../images/ex-create-cs.png" width="200" title="Vytvoření souboru oprav chyb"></a><p>
+<td><a href="example3.html"><img src="../images/ex-create-cs.png" width="200" alt="Vytvoření souboru oprav chyb" title="Vytvoření souboru oprav chyb"></a><p>
 </td>
 </tr>
 </table>
@@ -728,21 +730,21 @@ Pro načtení obrazu budete potřebovat následující parametry
 
 <table>
 <tr>
-<td><b><a href="example90.html#read">-r/ --read</a></b></td>
+<td><a href="example90.html#read">-r/ --read</a></td>
 <td>Načíst</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#device">-d / --device</a></b></td>
+<td><a href="example90.html#device">-d / --device</a></td>
 <td>Volba mechaniky (/dev/cdrom)</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#image">-i / --image</a></b></td>
+<td><a href="example90.html#image">-i / --image</a></td>
 <td>Soubor obrazu (medium.iso)</td>
 </tr>
 </table>
 <p></p>
 
-<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+<table class="example" width="100%" bgcolor="#ffffe0"><tr><td>
 user@linux&gt; <b>dvdisaster -r -d /dev/hdc -i medium.iso</b><br>
 dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
 [... zbytek oznámení GPL ...]<p>
@@ -754,7 +756,8 @@ Vytváření nového obrazu medium.iso.<br>
 Čekám 5 sekund na roztočení disku...<br>
 Pozice čtení: 100.0% (10.2x)<br>
 Všechny sektory byly úspěšně načteny.
-</td></tr></table>
+</td></tr>
+</table>
 <p></p>
 
 V průběhu čtení se bude zobrazovat počet načtených sektorů v procentech
@@ -763,25 +766,25 @@ Jakmile je načtení dokončeno, vytvořte soubor oprav chyb:<p>
 
 <table>
 <tr>
-<td><b><a href="example90.html#create">-c/ --create</a></b></td>
+<td><a href="example90.html#create">-c/ --create</a></td>
 <td>Vytvořte soubor oprav chyb</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#image">-i / --image</a></b></td>
+<td><a href="example90.html#image">-i / --image</a></td>
 <td>Soubor obrazu (medium.iso)</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#ecc">-e / --ecc</a></b></td>
+<td><a href="example90.html#ecc">-e / --ecc</a></td>
 <td>Soubor oprav chyb (medium.ecc)</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#redundancy">-n / --redundancy</a></b></td>
+<td><a href="example90.html#redundancy">-n / --redundancy</a></td>
 <td>Volba redundance (32 kořenů = 14.3%)</td>
 </tr>
 </table>
 <p></p>
 
-<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+<table class="example" width="100%" bgcolor="#ffffe0"><tr><td>
 user@linux&gt; <b>dvdisaster -c -i medium.iso -e medium.ecc </b><br>
 dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
 [... zbytek oznámení GPL ...]<p>
@@ -792,7 +795,8 @@ Kódování metodou RS01: 32 kořenů, redundance 14.3%.<br>
 Tvorba ecc: 100.0%<br>
 Soubor oprav chyb "medium.ecc" byl vytvořen.<br>
 Zajistěte, aby byl tento soubor uložen na spolehlivém médiu.<br>
-</td></tr></table>
+</td></tr>
+</table>
 <p></p>
 
 Průběh se zobrazuje v procentech. <p>
@@ -803,14 +807,16 @@ Po dokončení se objeví v aktuálním adresáři soubor oprav chyb <i>medium.e
 user@linux&gt; <b>ls -lA</b><br>
 -rwx------    1 user     linux    653721680 2004-07-02 22:45 medium.ecc<br>
 -rwx------    1 user     linux    4555341824 2004-07-02 21:31 medium.iso<br>
-</td></tr></table>
+</td></tr>
+</table>
 <p></p>
 
 Nyní můžete obraz smazat.<p>
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>rm -f medium.iso</b><br>
-</td></tr></table>
+</td></tr>
+</table>
 <p></p>
 
 Ale uchovejte soubor oprav chyb na <a href="background70.html">spolehlivém úložném médiu</a>!
@@ -823,7 +829,8 @@ v druhém kroku:<p>
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; dvdisaster <b>-r -c</b> -d /dev/hdc -i medium.iso -e medium.ecc<br>
 (a tak dál)
-</td></tr></table>
+</td></tr>
+</table>
 EOF
 }
 
@@ -849,15 +856,15 @@ v závorce):
 
 <table>
 <tr>
-<td><b><a href="example90.html#create">-c/ --create</a></b></td>
+<td><a href="example90.html#create">-c/ --create</a></td>
 <td>Vytvořit opravná data</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#method">-m / --method</a></b></td>
+<td><a href="example90.html#method">-m / --method</a></td>
 <td>Volba metody oprav chyb</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#redundancy">-n / --redundancy</a></b></td>
+<td><a href="example90.html#redundancy">-n / --redundancy</a></td>
 <td>maximální velikost média v sektorech (velikost nejmenšího možného média)</td>
 </tr>
 </table>
@@ -866,7 +873,7 @@ v závorce):
 Jakmile vytvoříte obraz "image.iso" za použití softwaru pro vypalování
 CD/DVD, zadejte:<p>
 
-<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+<table class="example" width="100%" bgcolor="#ffffe0"><tr><td>
 user@linux&gt; <b>dvdisaster -c -mRS02 -i image.iso</b><br>
 dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
 [... zbytek oznámení GPL ...]<p>
@@ -879,6 +886,7 @@ Rozšiřuji obraz: 100%<br>
 Tvorba ecc: 100.0%<br>
 Do obrazu byla přidána opravná data.<br>
 Nová velikost obrazu je 357818 sektorů.
+</td></tr>
 </table>
 <p></p>
 
@@ -895,21 +903,21 @@ Znovu načtěte obraz pomocí programu dvdisaster po vypálení média:<p>
 
 <table>
 <tr>
-<td><b><a href="example90.html#read">-r/ --read</a></b></td>
+<td><a href="example90.html#read">-r/ --read</a></td>
 <td>Načtení</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#device">-d / --device</a></b></td>
+<td><a href="example90.html#device">-d / --device</a></td>
 <td>Volba mechaniky (/dev/cdrom)</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#image">-i / --image</a></b></td>
+<td><a href="example90.html#image">-i / --image</a></td>
 <td>Soubor obrazu (medium.iso)</td>
 </tr>
 </table>
 <p></p>
 
-<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+<table class="example" width="100%" bgcolor="#ffffe0"><tr><td>
 user@linux&gt; <b>dvdisaster -r -d/dev/hdc -i image-new.iso</b><br>
 dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
 [... zbytek oznámení GPL ...]<p>
@@ -921,6 +929,7 @@ Vytváření nového obrazu image-new.iso.<br>
 Čekám 5 sekund na roztočení disku...<br>
 Pozice čtení: 100.0% ( 6.3x)<br>
 Všechny sektory byly úspěšně načteny.
+</td></tr>
 </table>
 <p></p>
 
@@ -938,7 +947,7 @@ Zkontrolujte obraz:<p>
 </table>
 <p></p>
 
-<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+<table class="example" width="100%" bgcolor="#ffffe0"><tr><td>
 user@linux&gt; <b>dvdisaster -t -i image-new.iso</b><br>
 dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnörlich.<br>
 [... zbytek oznámení GPL ...]<p>
@@ -953,6 +962,7 @@ Data oprav chyb: vytvořil dvdisaster-0.66<br>
 - md5suma dat      : 4eca3615a88a11ba68466226295c4bcb (v pořádku)<br>
 - md5suma crc      : 9776489c12e12cbabfe5145da4f6ae66 (v pořádku)<br>
 - md5suma ecc      : e975aed39c962eeabedd9d6cbdbfc45e (v pořádku)
+</td></tr>
 </table>
 EOF
 }
@@ -963,7 +973,7 @@ function example4cs()
 <tr align="center"><td>
 <h3>Snímek obrazovky: Čtení poškozeného média</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/ex-read-a-cs.png" title="Čtení poškozeného média"></center>
+<center><img src="../images/ex-read-a-cs.png" alt="Čtení poškozeného média" title="Čtení poškozeného média"></center>
 <br clear="all">
 </td></tr>
 
@@ -992,7 +1002,7 @@ která je zvláště vhodná pro čtení poškozených médií:<p>
 <tr valign="top" $BGCOLOR2>
 <td>2.</td>
 <td>Zvolte mechaniku.</td>
-<td><img src="../images/btn-drive-cs.png" title="Volba mechaniky"></td>
+<td><img src="../images/btn-drive-cs.png" alt="Volba mechaniky" title="Volba mechaniky"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
@@ -1000,8 +1010,8 @@ která je zvláště vhodná pro čtení poškozených médií:<p>
 <td>
 Zvolte název souboru obrazu.<p>
 </td>
-<td><img src="../images/btn-image-cs.png" title="Soubor obrazu"><p>
-Symbol <img src="../images/open-img.png" align="middle" title="Výběr souboru"> otevírá výběr souborů.</td>
+<td><img src="../images/btn-image-cs.png" alt="Soubor obrazu" title="Soubor obrazu"><p>
+Symbol <img src="../images/open-img.png" alt="Výběr souboru" title="Výběr souboru" align="middle"> otevírá výběr souborů.</td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
@@ -1010,8 +1020,8 @@ Symbol <img src="../images/open-img.png" align="middle" title="Výběr souboru">
 Soubor oprav chyb musí být v tomto stádiu dostupný, aby program dvdisaster mohl
 určit, zda bylo shromážděno dostatek dat pro rekonstrukci obrazu.<p>
 </td>
-<td><img src="../images/btn-eccfile-cs.png" title="Soubor oprav chyb"><p>
-Symbol <img src="../images/open-ecc.png" align="middle" title="Výběr souboru"> otevírá výběr souborů.</td>
+<td><img src="../images/btn-eccfile-cs.png" alt="Soubor oprav chyb" title="Soubor oprav chyb"><p>
+Symbol <img src="../images/open-ecc.png" alt="Výběr souboru" title="Výběr souboru" align="middle"> otevírá výběr souborů.</td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
@@ -1019,19 +1029,19 @@ Symbol <img src="../images/open-ecc.png" align="middle" title="Výběr souboru">
 <td>
 Zvolte strategii adaptivního čtení.<p>
 </td>
-<td><a href="example82.html"><img src="../images/prefs-read-cs.png" width="200" title="Nastavení čtení"></a></td>
+<td><a href="example82.html"><img src="../images/prefs-read-cs.png" width="200" alt="Nastavení čtení" title="Nastavení čtení"></a></td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
 <td>6.</td>
 <td>Spusťte proces čtení kliknutím na tlačítko "Načíst".</td>
-<td><img src="../images/btn-read-cs.png" title="Tlačítko Načíst"></td>
+<td><img src="../images/btn-read-cs.png" alt="Tlačítko Načíst" title="Tlačítko Načíst"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
 <td>7.</td>
 <td>Sledujte proces čtení.</td>
-<td><a href="example4.html"><img src="../images/ex-read-a-cs.png" width="200" title="Čtení poškozeného média"></a><p>
+<td><a href="example4.html"><img src="../images/ex-read-a-cs.png" width="200" alt="Čtení poškozeného média" title="Čtení poškozeného média"></a><p>
 </td>
 </tr>
 </table>
@@ -1039,7 +1049,7 @@ Zvolte strategii adaptivního čtení.<p>
 
 Jakmile proces čtení process hlásí, že bylo shromážděno dostatek dat pro
 úspěšnou opravu, <a href="example40.html">opravte chybějící sektory</a> 
-za použití opravných dat.<p>
+za použití <a href="example20.html">opravných dat</a>.<p>
 
 Jinak zkoušejte načíst obraz znovu
 <a href="background60.html#reading-tips">(některé tipy pro opakované čtení)</a>.
@@ -1053,29 +1063,29 @@ V takovém případě se program dvdisaster pokusí znovu načíst pouze chyběj
 
 <table>
 <tr>
-<td><b><a href="example90.html#read">-r/ --read</a></b></td>
+<td><a href="example90.html#read">-r/ --read</a></td>
 <td>Načíst</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#adaptiveread">--adaptive-read</a></b></td>
+<td><a href="example90.html#adaptiveread">--adaptive-read</a></td>
 <td>Použít strategii čtení pro poškozená média</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#device">-d / --device</a></b></td>
+<td><a href="example90.html#device">-d / --device</a></td>
 <td>Volba mechaniky (/dev/cdrom)</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#image">-i / --image</a></b></td>
+<td><a href="example90.html#image">-i / --image</a></td>
 <td>Soubor obrazu (medium.iso)</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#ecc">-e / --ecc</a></b></td>
+<td><a href="example90.html#ecc">-e / --ecc</a></td>
 <td>Soubor oprav chyb (medium.ecc)</td>
 </tr>
 </table>
 <p></p>
 
-<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+<table class="example" width="100%" bgcolor="#ffffe0"><tr><td>
 user@linux&gt; <b>dvdisaster -r --adaptive-read -i medium.iso -e medium.ecc</b><br>
 dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
 [... zbytek oznámení GPL ...]<p>
@@ -1091,7 +1101,8 @@ Vyplňování oblasti obrazu [57280..1083504]<br>
 [... další hlášení o procesu čtení ...] <br>
 Opravitelné: 100.0% (opravitelné: 319200; nyní načítám [320304..327065], velikost 6762)<br>
 Je k dispozici dostatek dat pro rekonstrukci obrazu.
-</td></tr></table>
+</td></tr>
+</table>
 <p></p>
 EOF
 }
@@ -1102,7 +1113,7 @@ function example5cs()
 <tr align="center"><td>
 <h3>Snímek obrazovky: Oprava obrazu média</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/ex-fix-cs.png"></center>
+<center><img src="../images/ex-fix-cs.png" alt="Oprava média" title="Oprava média"></center>
 <br clear="all">
 </td></tr>
 
@@ -1146,8 +1157,8 @@ function example40cs()
 Abyste opravili vadné médium, musíte nejprve zkusit
 <a href="example30.html">z něj načíst co možná nejvíce dat</a>.
 Pak potřebujete
-<a href="example30.html">odpovídající soubor oprav chyb</a>,
-který jste snad vytvořili v době, kdy bylo ještě médium plně čitelné.
+<a href="example20.html">odpovídající opravná data</a>,
+která jste snad vytvořili v době, kdy bylo ještě médium plně čitelné.
 Proveďte následující akce.<p>
 
 <table width="100%" border="0" cellspacing="0" cellpadding="10">
@@ -1156,8 +1167,8 @@ Proveďte následující akce.<p>
 <td>
 Zvolte soubor obrazu.<p>
 </td>
-<td><img src="../images/btn-image-cs.png" title="Soubor obrazu"><p>
-Symbol <img src="../images/open-img.png" align="middle" title="Výběr souboru"> otevírá výběr souborů.</td>
+<td><img src="../images/btn-image-cs.png" alt="Soubor obrazu" title="Soubor obrazu"><p>
+Symbol <img src="../images/open-img.png" alt="Výběr souboru" title="Výběr souboru" align="middle">otevírá výběr souborů.</td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
@@ -1165,22 +1176,22 @@ Symbol <img src="../images/open-img.png" align="middle" title="Výběr souboru">
 <td>
 Zvolte odpovídající soubor oprav chyb.<p>
 </td>
-<td><img src="../images/btn-eccfile-cs.png" title="Soubor oprav chyb"><p>
-Symbol <img src="../images/open-ecc.png" align="middle" title="Výběr souboru"> otevírá výběr souborů.</td>
+<td><img src="../images/btn-eccfile-cs.png" alt="Soubor oprav chyb" title="Soubor oprav chyb"><p>
+Symbol <img src="../images/open-ecc.png" alt="Výběr souboru" title="Výběr souboru" align="middle"> otevírá výběr souborů.</td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
 <td>3.</td>
 <td>Klikněte na tlačítko "Opravit".</td>
-<td><img src="../images/btn-fix-cs.png" title="Tlačítko Opravit"></td>
+<td><img src="../images/btn-fix-cs.png" alt="Tlačítko Opravit" title="Tlačítko Opravit"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
 <td>4.</td>
-<td>Sledujte proces opravy.<p>
-Normálně se během opravy obrazu místy projevuje vysoká
+<td>Sledujte proces opravy.</td>
+<td>Normálně se během opravy obrazu místy projevuje vysoká
 aktivita pevného disku.</td>
-<td><a href="example5.html"><img src="../images/ex-fix-cs.png" width="200" title="Oprava obrazu média"></a><p>
+<td><a href="example5.html"><img src="../images/ex-fix-cs.png" width="200" alt="Oprava obrazu média" title="Oprava obrazu média"></a><p>
 </td>
 </tr>
 </table>
@@ -1197,21 +1208,21 @@ Oprava vyžaduje následující parametry (výchozí hodnoty jsou uvedeny v záv
 
 <table>
 <tr>
-<td><b><a href="example90.html#fix">-f/ --fix</a></b></td>
+<td><a href="example90.html#fix">-f/ --fix</a></td>
 <td>Opravit</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#image">-i / --image</a></b></td>
+<td><a href="example90.html#image">-i / --image</a></td>
 <td>Soubor obrazu (medium.iso)</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#ecc">-e / --ecc</a></b></td>
+<td><a href="example90.html#ecc">-e / --ecc</a></td>
 <td>Soubor oprav chyb (medium.ecc)</td>
 </tr>
 </table>
 <p></p>
 
-<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+<table class="example" width="100%" bgcolor="#ffffe0"><tr><td>
 user@linux&gt; <b>dvdisaster -f -i medium.iso -e medium.ecc</b><br>
 dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
 [... zbytek oznámení GPL ...]<p>
@@ -1227,7 +1238,8 @@ Průběh ecc: 100.0% <br>
 Opraveno sektorů: 33264 <br>  
 V pořádku! Všechny sektory jsou opraveny.<br>
 Počet výmazů na blok ecc:  průměr =  3.3; nejvíce = 7.
-</td></tr></table>
+</td></tr>
+</table>
 <p></p>
 
 EOF
@@ -1273,10 +1285,10 @@ EOF
 }
 
 function example50cs()
-{  create_inline example cs 6 example50.html "to comparing the image against error correction data"
+{  create_inline example cs 6 example50.html "na Získání informací o obrazech a opravných datech"
 
    cat >> $1 <<EOF
-<h3>waiting4decision:Getting information about images and error correction data</h3>
+<h3>Získání informací o obrazech a opravných datech</h3>
 
 Tato funkce poskytuje informaci o souborech obrazu a oprav chyb, které
 jsou aktuálně uloženy na vašem pevném disku:<p>
@@ -1287,8 +1299,8 @@ jsou aktuálně uloženy na vašem pevném disku:<p>
 <td>
 Zvolte soubor obrazu.<p>
 </td>
-<td><img src="../images/btn-image-cs.png" title="Soubor obrazu"><p>
-Symbol <img src="../images/open-img.png" align="middle" title="Výběr souboru"> otevírá výběr souborů.</td>
+<td><img src="../images/btn-image-cs.png" alt="Soubor obrazu" title="Soubor obrazu"><p>
+Symbol <img src="../images/open-img.png" alt="Výběr souboru" title="Výběr souboru" align="middle"> otevírá výběr souborů.</td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
@@ -1296,20 +1308,20 @@ Symbol <img src="../images/open-img.png" align="middle" title="Výběr souboru">
 <td>
 Zvolte odpovídající soubor oprav chyb.<p>
 </td>
-<td><img src="../images/btn-eccfile-cs.png" title="Soubor oprav chyb"><p>
-Symbol <img src="../images/open-ecc.png" align="middle" title="Výběr souboru"> otevírá výběr souborů.</td>
+<td><img src="../images/btn-eccfile-cs.png" alt="Soubor oprav chyb" title="Soubor oprav chyb"><p>
+Symbol <img src="../images/open-ecc.png" alt="Výběr souboru" title="Výběr souboru" align="middle"> otevírá výběr souborů.</td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
 <td>3.</td>
 <td>Klikněte na tlačítko "Porovnat".</td>
-<td><img src="../images/btn-compare-cs.png" title="Tlačítko Porovnat"></td>
+<td><img src="../images/btn-compare-cs.png" alt="Tlačítko Porovnat" title="Tlačítko Porovnat"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
 <td>4.</td>
 <td>Sledujte proces porovnávání.</td>
-<td><a href="example6.html"><img src="../images/ex-compare-cs.png" width="200" title="Porovnání souborů obrazu a oprav chyb"></a><p>
+<td><a href="example6.html"><img src="../images/ex-compare-cs.png" width="200" alt="Porovnání souborů obrazu a oprav chyb" title="Porovnání souborů obrazu a oprav chyb"></a><p>
 </td>
 </tr>
 </table>
@@ -1317,27 +1329,27 @@ Symbol <img src="../images/open-ecc.png" align="middle" title="Výběr souboru">
 
 <hr><p>
 
-<h3>waiting4decision:Getting the information from the command line</h3>
+<h3>Získání informací z příkazové řádky</h3>
 
 Budete potřebovat následující parametry (výchozí hodnoty jsou uvedeny v závorce):
 
 <table>
 <tr>
-<td><b><a href="example90.html#test">-t/ --test</a></b></td>
+<td><a href="example90.html#test">-t/ --test</a></td>
 <td>Porovnat</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#image">-i / --image</a></b></td>
+<td><a href="example90.html#image">-i / --image</a></td>
 <td>Soubor obrazu (medium.iso)</td>
 </tr>
 <tr>
-<td><b><a href="example90.html#ecc">-e / --ecc</a></b></td>
+<td><a href="example90.html#ecc">-e / --ecc</a></td>
 <td>Soubor oprav chyb (medium.ecc)</td>
 </tr>
 </table>
 <p></p>
 
-<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+<table class="example" width="100%" bgcolor="#ffffe0"><tr><td>
 user@linux&gt; <b>dvdisaster -t -i medium.iso -e medium.ecc</b><br>
 dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnörlich.<br>
 [... zbytek oznámení GPL ...]<p>
@@ -1354,7 +1366,8 @@ dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnörlich.<br>
 - porovnání otisku : v pořádku<br>
 - ecc bloky        : 20428800 (v pořádku)<br>
 - md5suma ecc      : 4bdf5ed398e7662ac93c9d08e1ba9ff2 (v pořádku)
-</td></tr></table>
+</td></tr>
+</table>
 <p></p>
 EOF
 }
@@ -1365,13 +1378,13 @@ function example80cs()
 <h3>Konfigurace</h3>
 
 Stiskněte tlačítko
-<img src="../images/open-preferences.png" align="middle" title="Tlačítko nastavení">
+<img src="../images/open-preferences.png" align="middle" alt="Tlačítko nastavení" title="Tlačítko nastavení">
 v pravém horním rohu nástrojové lišty k otevření dialogu nastavení.
 Dialog obsahuje několik formulářů:<p>
 
 <center>
 <a href="example81.html">
-<img src="../images/prefs-general-cs.png" title="Obecná nastavení"><br>
+<img src="../images/prefs-general-cs.png" alt="Obecná nastavení" title="Obecná nastavení"><br>
 Obecná nastavení
 </a>
 </center>
@@ -1379,7 +1392,7 @@ Obecná nastavení
 
 <center>
 <a href="example82.html">
-<img src="../images/prefs-read-cs.png" title="Nastavení čtení"><br>
+<img src="../images/prefs-read-cs.png" alt="Nastavení čtení" title="Nastavení čtení"><br>
 Nastavení čtení
 </a>
 </center>
@@ -1387,7 +1400,7 @@ Nastavení čtení
 
 <center>
 <a href="example83.html">
-<img src="../images/prefs-ecc-cs.png" title="Nastavení oprav chyb"><br>
+<img src="../images/prefs-ecc-cs.png" alt="Nastavení oprav chyb" title="Nastavení oprav chyb"><br>
 Nastavení oprav chyb
 </a>
 </center>
@@ -1402,7 +1415,7 @@ function example81cs()
 
 Více informací o formuláři následuje níže na stránce.<p>
 
-<center><img src="../images/prefs-general-cs.png" title="Obecná nastavení"></center>
+<center><img src="../images/prefs-general-cs.png" alt="Obecná nastavení" title="Obecná nastavení"></center>
 <br clear="all">
 
 <p><hr><p>
@@ -1410,7 +1423,7 @@ Více informací o formuláři následuje níže na stránce.<p>
 <a name="iso"></a>
 <b>Souborový systém média a obrazu</b><p>
 
-<center><img src="../images/prefs-general-1-cs.png" title="Souborový systém média a obrazu"></center>
+<center><img src="../images/prefs-general-1-cs.png" alt="Souborový systém média a obrazu" title="Souborový systém média a obrazu"></center>
 <br clear="all">
 
 Program dvdisaster určí velikost obrazu ze souborového systému ISO/UDF,
@@ -1422,7 +1435,7 @@ některými mechanikami pro DVD-RW/+RW média.
 
 <a name="localfiles"></a>
 <b>Nastavení pro místní soubory</b><p>
-<center><img src="../images/prefs-general-2-cs.png" title="Nastavení pro místní soubory"></center>
+<center><img src="../images/prefs-general-2-cs.png" alt="Nastavení pro místní soubory" title="Nastavení pro místní soubory"></center>
 <br clear="all">
  
 <b>Automatická přípona souborů<font color="red">(1)</font>:</b>
@@ -1439,7 +1452,7 @@ nazvaných "medium00.iso", "medium01.iso" atd. za cenu malého snížení výkon
 <a name="auto"> </a>
 <b>Automatická tvorba a mazání souborů</b><p>
 
-<center><img src="../images/prefs-general-3-cs.png" title="Automatická tvorba a mazání souborů"></center>
+<center><img src="../images/prefs-general-3-cs.png" alt="Automatická tvorba a mazání souborů" title="Automatická tvorba a mazání souborů"></center>
 <br clear="all">
 
 <b>Vytvořit soubor oprav chyb po načtení obrazu <font color="red">(1)</font>:</b>
@@ -1461,7 +1474,7 @@ function example82cs()
 
 Více informací o formuláři následuje níže na stránce.<p>
 
-<center><img src="../images/prefs-read-cs.png" title="Nastavení čtení"></center>
+<center><img src="../images/prefs-read-cs.png" alt="Nastavení čtení" title="Nastavení čtení"></center>
 <br clear="all">
 
 <p><hr><p>
@@ -1469,7 +1482,7 @@ Více informací o formuláři následuje níže na stránce.<p>
 <a name="read"></a>
 <b>Nastavení čtení</b><p>
 
-<center><img src="../images/prefs-read-1-cs.png" title="Nastavení čtení"></center>
+<center><img src="../images/prefs-read-1-cs.png" alt="Nastavení čtení" title="Nastavení čtení"></center>
 <br clear="all">
 
 <b>Strategie čtení <font color="red">(1)</font>:</b> Zvolte mezi
@@ -1495,7 +1508,7 @@ mechaniky, ale také nechávají větší mezery v obrazu při čtení poškozen
 <a name="image"></a>
 <b>Vlastnosti obrazu</b><p>
 
-<center><img src="../images/prefs-read-2-cs.png" title="Vlastnosti obrazu"></center>
+<center><img src="../images/prefs-read-2-cs.png" alt="Vlastnosti obrazu" title="Vlastnosti obrazu"></center>
 <br clear="all">
 
 <b>Obraz DAO <font color="red">(1)</font>:</b>
@@ -1513,7 +1526,7 @@ programem dvdisaster.
 
 <b>Inicializace mechaniky</b><p>
 
-<center><img src="../images/prefs-read-3-cs.png" title="Inicializace mechaniky"></center>
+<center><img src="../images/prefs-read-3-cs.png" alt="Inicializace mechaniky" title="Inicializace mechaniky"></center>
 <br clear="all">
 Čeká daný počet sekund, až se mechanika roztočí, než začne
 skutečné čtení dat. Tak se vyhnete rychlostním skokům na začátku
@@ -1528,7 +1541,7 @@ function example83cs()
 
 Více informací o formuláři následuje níže na stránce.<p>
 
-<center><img src="../images/prefs-ecc-cs.png" title="Nastavení oprav chyb"></center>
+<center><img src="../images/prefs-ecc-cs.png" alt="Nastavení oprav chyb" title="Nastavení oprav chyb"></center>
 <br clear="all">
 
 <p><hr><p>
@@ -1536,7 +1549,7 @@ Více informací o formuláři následuje níže na stránce.<p>
 <a name="redundancy"></a>
 <b>Redundance pro nové soubory oprav chyb</b><p>
 
-<center><img src="../images/prefs-ecc-1-cs.png" title="Redundance pro nové soubory oprav chyb"></center>
+<center><img src="../images/prefs-ecc-1-cs.png" alt="Redundance pro nové soubory oprav chyb" title="Redundance pro nové soubory oprav chyb"></center>
 <br clear="all">
 
 Redundance určuje množství opravitelných chyb
@@ -1570,7 +1583,7 @@ a méně větším.<p>
 
 <b>Využití paměti</b><p>
 
-<center><img src="../images/prefs-ecc-2-cs.png" title="Využití paměti"></center>
+<center><img src="../images/prefs-ecc-2-cs.png" alt="Využití paměti" title="Využití paměti"></center>
 <br clear="all">
 
 Program dvdisaster optimalizuje přístup k obrazům a souborům oprav chyb tím,
@@ -1624,7 +1637,7 @@ a jednopísmennou zkratku (-d). Používají se pro změnu přednastavené mecha
 <tr><td>&nbsp; &nbsp;</td><td><a href="#device">--device</a></td><td>Výběr zařízení</td></tr>
 <tr><td></td><td><a href="#prefix">--prefix</a></td><td>Název pro soubory obrazu a oprav chyb</td></tr>
 <tr><td></td><td><a href="#image">--image</a></td><td>Název souboru obrazu</td></tr>
-<tr valign=top><td></td><td><a href="#eccfile">--eccfile</a></td><td>Název souboru oprav chyb<p></td></tr>
+<tr valign=top><td></td><td><a href="#ecc">--ecc</a></td><td>Název souboru oprav chyb<p></td></tr>
 <tr><td></td><td><a href="#list">--list</a></td><td>Zobrazit mechaniky dostupné pod ASPI (pouze verze pro Windows)</td></tr>
 </table><pre> </pre> 
 
@@ -1637,7 +1650,7 @@ v dlouhé formě, pokud není zmíněno jinak.<p>
 <tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#cache">--cache-size</a> &nbsp; &nbsp;</td><td>Velikost vyrovnávací paměti v průběhu vytváření souboru oprav chyb</td></tr>
 <tr valign=top><td></td><td><a href="#dao">--dao</a></td><td>Předpokládat médium zapsané v režimu "disk at once"</td></tr>
 <tr valign=top><td></td><td><a href="#fillunreadable">--fill-unreadable [n]</a></td><td>Vyplnit nečitelné sektory daným bajtem</td></tr>
-	<tr valign=top><td></td><td><a href="#jump">-j / --jump</a></td><td>Přeskočit sektory po chybě čtení</td></tr>
+<tr valign=top><td></td><td><a href="#jump">-j / --jump</a></td><td>Přeskočit sektory po chybě čtení</td></tr>
 <tr valign=top><td></td><td><a href="#parse-udf">--parse-udf</a></td><td>Použít informace ze souborového systému ISO/UDF</td></tr>
 <tr valign=top><td></td><td><a href="#redundancy">-n / --redundancy</a></td><td>Nastavit redundanci pro opravný kód</td></tr>
 <tr valign=top><td></td><td><a href="#method">-m / --method</a>&nbsp; &nbsp;</td><td>Zvolit metodu opravy chyb</td></tr>
@@ -1791,7 +1804,7 @@ přesně (bez přidání přípony), pokud není zadána také volba <a href="#a
 
 <div align=right><a href="#drive">&uarr;</a></div><p>
 
-<a name="eccfile"><b>--eccfile &lt;název souboru&gt;: Název souboru oprav chyb</b></a><p>
+<a name="ecc"><b>--ecc &lt;název souboru&gt;: Název souboru oprav chyb</b></a><p>
 
 Přednastavený název je "medium.ecc"; zadaný název souboru bude použit pro soubor oprav chyb
 přesně (bez přidání přípony), pokud není zadána také volba <a href="#autosuffix">--auto-suffix</a>.
@@ -1803,7 +1816,7 @@ přesně (bez přidání přípony), pokud není zadána také volba <a href="#a
 Tato volba zobrazí seznam všech mechanik CD/DVD, které jsou přístupné prostřednictvím
 vrstvy <a href="qa10.html#aspi">ASPI</a> ve Windows:<p>
 
-<table class="example-win" width=100% bgcolor=#e0e0ff><tr><td>
+<table class="example-win" width="100%" bgcolor="#e0e0ff"><tr><td>
 user@windows&gt; dvdisaster <b>-l</b><br>
 dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
 [... zbytek oznámení GPL ...]<p>
@@ -1814,7 +1827,8 @@ Seznam ASPI CD/DVD mechanik:<p>
 
 K vynucení ASPI místo SPTI odkazujte na mechaniku pomocí<br>
 čísel nahoře (použijte 1:, 2:,... místo C:, D:,...)
-</td></tr></table>
+</td></tr>
+</table>
 <p></p>
 
 Implicitně se zkouší přístup k mechanice nejprve za použití SPTI
@@ -1824,8 +1838,9 @@ jejím číslem místo jejím písmenem.
 K načtení disku s použitím ASPI a jednotky "MYDRIVE" z příkladu nahoře
 byste pak zadali:<p>
 
-<table class="example-win" width=100% bgcolor=#e0e0ff><tr><td>
+<table class="example-win" width="100%" bgcolor="#e0e0ff"><tr><td>
 user@windows&gt; dvdisaster <b>-d 2:</b> -r<br>
+</td></tr>
 </table>
 
 <div align=right><a href="#drive">&uarr;</a></div><p>
@@ -1838,7 +1853,7 @@ user@windows&gt; dvdisaster <b>-d 2:</b> -r<br>
 Tento přepínač volí <a href="background50.html">adaptivní strategii čtení</a>,
 která je zvláště vhodná pro načtení poškozených médií.
 Použijte tento přepínač ve spojení s <a href="#read">-r/--read</a> a
-<a href="#eccfile">-e/--eccfile</a>. Zadání souboru oprav chyb způsobí,
+<a href="#ecc">-e/--ecc</a>. Zadání souboru oprav chyb způsobí,
 že proces čtení je ukončen, jakmile je shromážděno dostatek informací
 pro opravu obrazu média.
 <p>
@@ -1850,7 +1865,7 @@ pro opravu obrazu média.
 <a name="autosuffix"><b>--auto-suffix: Automaticky doplnit souborové přípony .iso a .ecc</b></a><p>
 
 Pokud je tato volba zadána, k názvům souborů zadaných volbami
-<a href="#image">-i/--image</a>- nebo <a href="#eccfile">-e/--eccfile</a>
+<a href="#image">-i/--image</a>- nebo <a href="#ecc">-e/--ecc</a>
 bude automaticky přidána přípona ".iso" respektive ".ecc",
 pokud dosud není žádná jiná souborová přípona přítomna.
 
@@ -1898,13 +1913,12 @@ můžete zadat hodnotu bajtu, kterou používají:<p>
 <li><b>0xb0 (176 desítkově)</b>: pro kompatibilitu s <i>h2cdimage</i> 
 publikováno v "c't", německém periodiku.
 </li>
+</ul>
 
-<li>Použití vyplňování nulou (0x00, desítkově 0) se <b>důrazně nedoporučuje</b>.
+Použití vyplňování nulou (0x00, desítkově 0) se <b>důrazně nedoporučuje</b>.
 Většina médií obsahuje správné nulou vyplněné sektory. Při pozdějším průchodu
 opravou chyb je nelze odlišit od nečitelných sektorů, pokud je použito
 vyplňování nulou.
-</li>
-</ul>
 
 <div align=right><a href="#options">&uarr;</a></div><p>
 
@@ -2025,7 +2039,7 @@ a méně větším.<p>
 <div align=right><a href="#options">&uarr;</a></div><p>
 
 
-<a name="method"><b>-m / --method [m]: Zvolit metodu opravy chyb</b></a><p>
+<a name="method"><b>-m / --method &lt;m&gt;: Zvolit metodu opravy chyb</b></a><p>
 
 Zvolí mezi metodami
 <a href="background30.html">RS01</a> (výchozí) 
@@ -2044,7 +2058,7 @@ Pokud je volitelná hodnota [n] vynechána, je použito výchozí nastavení 10 
 <div align=right><a href="#options">&uarr;</a></div><p>
 
 
-<a name="--spinup"><b>--spinup-delay [n]: Poskytnout mechanice čas na roztočení</b></a><p>
+<a name="spinup"><b>--spinup-delay [n]: Poskytnout mechanice čas na roztočení</b></a><p>
 
 Počká zadaný počet sekund na roztočení disku v mechanice, než odstartuje skutečný
 proces čtení.
@@ -2281,10 +2295,10 @@ function download10cs()
 <h3>Systémové požadavky</h3>
 
 <ul>
- <li><b>x86 kompatibilní</b> hardware v <b>32 bitovém</b> režimu;<br>
-     kompilace jako <b>64 bitová</b> aplikace pod Linuxem je možné, ale nebylo testováno.<p></p></li>
+ <li><b>x86 kompatibilní</b> hardware v <b>32 bitovém</b> režimu
+     (64 bitová podpora viz Operační systémy),<p></p></li>
  <li>současné mechaniky CD nebo DVD s rozhraním ATAPI nebo SCSI<p></p></li>
- <li>minimálně P4 na 2 GHz nebo srovnatelný procesor<p></b>
+ <li>minimálně P4 na 2 GHz nebo srovnatelný procesor<p></li>
 </ul>
 
 <h3>Operační systémy</h3>
@@ -2387,7 +2401,7 @@ Spusťte program na krátký test:<p>
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>./dvdisaster</b><br>
-<i>[... za okamžik se otevře <a href="example10.html">hlavní okno</a> ...]</i>
+<i>[... za okamžik se otevře hlavní okno ...]</i>
 </td></tr></table>
 <p></p>
 
@@ -2561,7 +2575,8 @@ CD-Audio a CD-Video stejně jako DVD-ROM a DVD-RAM.
 
 <b><a name="filesystem">2.3 Které souborové systémy jsou podporovány?</a></b><p>
 
-Program dvdisaster pracuje výhradně na úrovni obrazu, který je čten po sektorech.
+Program dvdisaster pracuje výhradně na <a href="background20.html">úrovni obrazu</a>,
+který je čten po sektorech.
 To znamená, že není podstatné, s jakým souborovým systémem bylo médium naformátováno.<p>
 
 Vzhledem k tomu, že program dvdisaster ani nezná ani nepoužívá strukturu souborového
@@ -2780,8 +2795,8 @@ function background_contents_cs()
  
    link)    link_title="Základní informace" ;;
    link10)   link_title="Vlastnosti opravy chyb" ;;
-   link20)   link_title="Image level error correction" ;;
-   link30)   link_title="RS01 and RS02" ;;
+   link20)   link_title="Oprava dat na úrovni obrazu" ;;
+   link30)   link_title="RS01 a RS02" ;;
    link40)   link_title="Lineární strategie čtení" ;;
    link50)   link_title="Adaptivní strategie čtení" ;;
    link60)   link_title="Poznámky k chybám čtení" ;;
@@ -2804,9 +2819,9 @@ Přesto jsou užitečné k pochopení, jak program dvdisaster pracuje, a mohou v
 pomoci, abyste program maximálně využili pro vaše potřeby.
 
 <ol>
-<li><a href="background10.html" title="Technické vlastnosti opravy chyb">Vlastnosti opravy chyb kódu Reed-Solomon</a><p></p></li>
-<li><a href="background20.html">Image level error correction</a><p></p></li>
-<li><a href="background30.html">The RS01 and RS02 methods</a><p></p></li>
+<li><a href="background10.html">Vlastnosti opravy chyb kódu Reed-Solomon</a><p></p></li>
+<li><a href="background20.html">Oprava dat na úrovni obrazu</a><p></p></li>
+<li><a href="background30.html">Metody RS01 a RS02</a><p></p></li>
 <li><a href="background40.html">Podrobnosti o lineární strategii čtení</a><p></p></li>
 <li><a href="background50.html">Podrobnosti o adaptivní strategii čtení</a><p></p></li>
 <li><a href="background60.html">Některé poznámky k chybám čtení</a><p></p></li>   
@@ -2858,7 +2873,7 @@ rozloženy na médiu podobným způsobem, jako jsou umístěny v samotném bloku
 - takový vzorek je velmi nepravděpodobný.<br>
 Pokusné testy ukázaly, že na stárnoucím médiu může být okolo 10% počtu všech sektorů
 vadných, než je dosažena hranice 33 defektů na blok ECC<sup><a href="#footnote1" title="Poznámka k nastavení hranice oprav">*)</a></sup>.<br>
-<a href="index10.html#scratches">Škrábance</a> způsobí dosažení této hranice dříve, 
+<a href="index10.html">Škrábance</a> způsobí dosažení této hranice dříve, 
 takže se doporučuje vizuálně kontrolovat média v pravidelných intervalech.
 Média s chybami čtení způsobenými poškrábáním by měla být nahrazena okamžitě.<p>
 
@@ -2878,26 +2893,195 @@ přesáhne schopnosti kódu pro opravu chyb.<p>
 Tato hranice 32 opravitelných chyb na blok ECC je dána standardním nastavením.
 Je možné <a href="example83.html#redundancy">zvolit jiné hodnoty</a>
 pro vyšší nebo nižší schopnosti opravy chyb.
-</font><p>
+</font>
+<p>
 
 EOF
 }
 
 function background20cs()
 {  cat >> $1 <<EOF
-<h3>Image level error correction</h3>
+<h3>Oprava dat na úrovni obrazu</h3>
+
+Obnova dat může probíhat na několika logických úrovních média, z nichž
+dvě jsou úroveň obrazu a úroveň souborového systému. Tato stránka
+vysvětluje, proč pracuje program dvdisaster na úrovni obrazu.<p>
+
+<a name="file"> </a>
+<b>Nevýhody obnovy dat na úrovni souborového systému pro CD/DVD.</b><p>
+
+Obnova dat na úrovni souborového systému používá soubory (nebo souborové archivy),
+které jsou rozšířeny o opravné informace. Tak je možné obnovit chybné bajty,
+chybějící bloky dat a zkrácené soubory.<p>
+
+Jenomže soubory jsou také částí <i>souborového systému</i>, který je
+spravován operačním systémem. Úspěch obnovy dat závisí na předpokladu,
+že soubor a operační systém zvládají poškozená média CD/DVD, což
+obvykle není pravda. V nejhorším případě se soubor kvůli chybám čtení může
+stát nedostupný a následkem toho jsou opravné informace potřebné pro obnovu
+také ztraceny:<p>
+
+<ul>
+<li>Načtení velkých souborů z poškozeného média vyžaduje speciální nástroje
+a velké úsilí.<p></p></li>
+<li>Souborový systém obsahuje datové struktury, které nejsou součástí
+souborů, a nejsou proto chráněny. pokud jsou tyto struktury poškozeny,
+nebudete schopni ze souborového systému extrahovat soubory dokonce
+i v případě, že jsou datové bloky souborů dosud nedotčené.</li>
+</ul><p>
+
+To jsou závažné nevýhody pro obnovu dat z optických médií.
+Ale abychom byli spravedliví, tak je nezbytné poznamenat, že
+obnova dat na úrovni souborů může pracovat dobře v prostředí bez
+souborového systému, jako jsou přenosy dat přes Internet.<p>
+
+<a name="image"> </a>
+<b>Výhody obnovy dat na úrovni obrazu CD/DVD.</b><p>
+
+CD a DVD média jsou organizována do datových sektorů o velikosti 2048 bajtů.
+Posloupné čtení a ukládání těchto sektorů vytvoří <i>obraz</i> média.
+Obnova dat na úrovni obrazu bude číst a obnovovat tyto sektory přímo
+(v rámci obrazu).
+To má následující výhody:
+
+<ul>
+<li>Načtení obrazů poškozených médií je relativně bezproblémové.<br>
+Sektory obrazu jsou čteny pomocí přímé  komunikace s ovladači mechaniky
+CD/DVD. Tyto nízkoúrovňové ovladače poskytují dobré ovládání mechaniky
+a umožňují účinné zacházení s nečitelnými sektory a dalšími chybovými
+stavy.<p>
+</li>
+
+<li>Čtení a obnova poškozených nebo nečitelných sektorů nezávisí
+na stavu souborového systému.<p></li>
+
+<li>Oprava chyb Reed-Solomon pracuje nejlépe, když se opravné informace
+rozprostírají přes velká množství dat: Je lepší chránit obraz média jako
+celek, než chránit jednotlivé soubory v jeho rámci.<p></li>
+
+<li>Obraz obsahuje všechny informace uložené na médiu.<br>
+Po úplné obnově obrazu nejsou obnoveny jenom soubory, ale je také kompletně
+obnoven souborový systém - bez spoléhání na struktury souborového
+systému v průběhu obnovy!</li>
+</ul>
+
+Tyto výhody platí také pro obnovu médií CD/DVD. Proto program dvdisaster
+využívá výhradně formu obrazů.<p>
+
+
+<a name="eccfile"> </a>
+<b>Důsledky pro ukládání souborů oprav chyb</b><p>
+
+Když ukládáte soubory oprav chyb, musíte také vzít v úvahu, že
+se příslušné médium také může poškodit..<p>
+
+Soubory oprav chyb <i>neobsahují</i> žádnou ochranu proti poškození.
+Proto je důležité jim také poskytnout ochanu na úrovni obrazu:
+<a href="background70.html">Chraňte</a> média obsahující vaše
+soubory oprav chyb pomocí programu dvdisaster také.<p>
+
+Zde je odůvodnění: Soubory oprav chyb mohou být samozřejmě také
+navženy tak, aby jim byla poskytnuta (omezená) schopnost obnovy dat
+v případě poškození.
+I když by byla taková vnitřní ochrana navržena, soubor oprav chyb
+by byl stále chráněn jen na úrovni souborového systému - se všemi
+nevýhodami zmíněnými výše. A výpočetní čas a redundanci užitou
+vnitřní ochranou je lepší využít pro ochranu na úrovni obrazu.<p>
 EOF
 }
 
 function background30cs()
 {  cat >> $1 <<EOF
-<h3>The RS01 and RS02 methods</h3>
+<h3>Metody RS01 a RS02</h3>
+
+Program dvdisaster obsahuje dvě metody opravy chyb pojmenované RS01 a RS02.
+RS01 je existující a vyzkoušená metoda, zatímco RS02 je stále ve vývoji.
+RS02 je v současnosti dostupná pouze na příkazové řádce a bude plně
+integrována do grafického uživatelského rozhraní ve verzi 0.70.<p>
+
+<b>Srovnání obou metod.</b>
+
+RS01 a RS02 vytváří stejnou opravu chyb
+<a href="background10.html">Reed-Solomon</a>.
+Vypočítávají pro obrazy CD/DVD opravné informace, které jsou použity
+k obnově nečitelných sektorů, jakmile se později disk poškodí.<p>
+
+Metody se liší ve způsobu, jak je opravná informace ukládána:<p>
+
+<ul>
+<li>
+<a name="file"> </a>
+RS01 vytváří <b>soubory oprav chyb</b>, které jsou uloženy odděleně
+od obrazů, ke kterým patří. Vzhledem k tomu, že je ochrana dat na
+<a href="background20.html">úrovni souborů</a> obtížná,
+musí být soubory oprav chyb uloženy na média, která jsou také chráněna
+proti ztrátě dat programem dvdisaster.<p></li>
+
+<li>
+<a name="image"> </a>
+Metoda RS02 se použije tak, že se nejprve vytvoří obraz na pevném disku
+za použití softwaru pro vypalování CD/DVD. Než se obraz zapíše na médium,
+je rozšířen programem dvdisaster na <b>obraz s opravnými daty</b>.
+Takže jsou data, která se mají chránit, a informace opravy chyb umístěna
+na stejné médium. Poškozené sektory v opravných informacích snižují
+kapacitu opravy dat, ale nečiní opravu nemožnou - druhé médium pro
+uložení nebo ochranu opravných informací není požadováno.<p></li>
+</ul>
+
+
+<a name="table"> </a>
+<b>Srovnání souborů oprav chyb a obrazů s opravnými daty.</b><p>
+
+<table width="100%" border="1" cellspacing="0" cellpadding="5">
+<tr>
+<td width="50%"><i>Soubory oprav chyb</i></td>
+<td width="50%"><i>Obrazy s opravnými daty</i></td>
+</tr>
+<tr valign="top">
+<td> 
+lze použít jakoukoli možnou redundanci</td>
+<td>redundance je omezena volným prostorem na médiu<br>
+(= kapacita média - velikost obrazu dat)</td>
+</tr>
+
+<tr valign="top">
+<td>je efektivní již při 15% redundance;
+médium může být zcela zaplněno daty</td>
+<td>vyžaduje nejméně 20%-30% redundance;
+použitelná kapacita média je odpovídajícím způsobem zmenšena</td> 
+</tr>
+
+<tr valign="top">
+<td>může být vytvořen pro již existující média</td>
+<td>lze použít pouze před zápisem nového média, protože
+obraz musí být předem rozšířen o informace opravy chyb</td>
+</tr>
+
+<tr valign="top">
+<td>oddělené ukládání souboru oprav chyb a uživatelských dat
+posiluje ochranu dat</td>
+<td>společný úložný prostor pro uživatelská i opravná data
+může snížit kapacitu opravy chyb</td>
+</tr>
+
+<tr valign="top">
+<td>Oddělení souborů oprav chyb a médií se musí zachovávat.
+Soubory oprav chyb musí být chráněny proti poškození.</td>
+<td>Snadné řešení s jedním médiem; informace opravy chyb se
+nemusí katalogizovat nebo výlučně chránit.</td></tr>
+
+<tr valign="top">
+<td>žádné problémy s kompatibilitou v přehrávacích zařízeních</td>
+<td>média s obrazy s opravnými daty se nemusí přehrávat správně ve všech zařízeních</td>
+</tr>
+</table><p>
+
 EOF
 }
 
 function background40cs()
 {  cat >> $1 <<EOF
-<h3>Lineární strategie čtení.</h3>
+<h3>Lineární strategie čtení</h3>
 
 Program dvdisaster obsahuje dvě rozdílné
 <a href="example82.html#read">strategie čtení</a>.<p>
@@ -2925,7 +3109,7 @@ Lineární strategie čtení načítá médium od počátečního (sektor 0)
 do konce (poslední sektor). Rychlost čtení je zobrazována graficky, aby poskytla
 informaci o <a href="background40.html#quality">kvalitě média</a>:<p>
 
-<center><img src="../images/bg-linear-cs.png"><br>
+<center><img src="../images/bg-linear-cs.png" alt="Lineární strategie čtení" title="Lineární strategie čtení"><br>
 Částečný snímek obrazovky: lineární strategie čtení</center>
 
 <pre> </pre>
@@ -2949,11 +3133,10 @@ o stupni poškození, ale obvykle neshromáždí dostatek dat pro opravu obrazu 
 <li>Menší hodnoty jako <b>16, 32 nebo 64</b> jsou dobrým kompromisem:
 Čas zpracování bude znatelně zkrácen, ale stále bude shromážděno dostatek dat pro
 opravu obrazu.<p></p></li>
-
-<li>Na DVD médiích se z technických důvodů chyby čtení obvykle rozšiřují přes nejméně
-16 sektorů. Proto není doporučeno přeskakovat v případě DVD médií méně než 16 sektorů.
-</li>
 </ul>
+
+Na DVD médiích se z technických důvodů chyby čtení obvykle rozšiřují přes nejméně
+16 sektorů. Proto není doporučeno přeskakovat v případě DVD médií méně než 16 sektorů.
 <p>
 
 <a name="range"></a>
@@ -2987,10 +3170,9 @@ Křivka čtení je mnohem přesnější, pokud se použije funkce
 na pevný disk, což může způsobit nepravidelnosti v průběhu křivky čtení
 v závislosti na operačním systému a použitém hardwaru.<p>
 
-<a name="error"></a>
 <b>Chyby čtení.</b>
-Chyby čtení vytvářejí <a href="example30.html">červené značky na spirále</a> nebo
-se zobrazují odpovídající hlášení na příkazové řádce.
+Chyby čtení vytvářejí <a href="example1.html">červené značky na spirále</a> nebo
+se zobrazují odpovídající hlášení na <a href="example10.html#cli">příkazové řádce</a>.
 Znamenají, že médium nelze v těchto místech číst v současném průchodu načítáním:
 <ul>
 <li>Médium je s největší pravděpodobností defektní.</li>
@@ -3004,7 +3186,7 @@ EOF
 
 function background50cs()
 {  cat >> $1 <<EOF
-<h3>Adaptivní strategie čtení.</h3>
+<h3>Adaptivní strategie čtení</h3>
 
 Program dvdisaster obsahuje dvě rozdílné
 <a href="example82.html#read">strategie čtení</a>.<p>
@@ -3055,7 +3237,7 @@ dostatek sektorů pro úspěšnou opravu obrazu s použitím souboru oprav chyb.
 Tak se dá zkrátit čas čtení až o 90 procent v porovnání s pokusem o úplné
 načtení, ale funguje jen tehdy, je-li dostupný soubor oprav chyb.<p>
 
-<center><img src="../images/bg-adaptive-cs.png"><br>
+<center><img src="../images/bg-adaptive-cs.png" alt="Adaptivní strategie čtení" title="Adaptivní strategie čtení"><br>
 Částečný snímek obrazovky: adaptivní strategie čtení</center>
 
 <pre> </pre>
@@ -3068,7 +3250,7 @@ Adaptivní čtení pracuje nejlépe, když je dostupný soubor oprav chyb.
 Samozřejmě, že soubor oprav chyb musel být <a href="example20.html">vytvořen</a>
 v době, kdy bylo médium ještě plně čitelné. Pro použití souboru oprav chyb
 v průběhu adaptivního čtení
-<a href="example20.html">zadejte jeho název</a> před spuštěním procesu čtení.<p>
+<a href="example30.html">zadejte jeho název</a> před spuštěním procesu čtení.<p>
 
 <b>Omezení rozsahu adaptivního čtení.</b> Čtení může být
 <a href="example82.html#read">omezeno</a> na část média.
@@ -3136,10 +3318,10 @@ Tyto následky se typicky vyskytují, pokud bylo médium uskladněno po několik
 a pak nemusí být možné načíst všechny sektory.<p>
 
 Proto je rozhodující vytvořit
-<a href="example20.html">soubor oprav chyb (soubor ecc)</a> včas.
+<a href="example20.html">opravná data</a> včas.
 Soubor ecc obsahuje informace pro dopočítání obsahu chybějících sektorů
 <a href="background10.html" title="Technické vlastnosti opravy chyb">(v rámci určitých omezení)</a>.
-Takže s pomocí souboru ecc může program dvdisaster obnovit obrazy dokonce
+Takže s pomocí dat ecc může program dvdisaster obnovit obrazy dokonce
 i v případě, že ne všechny sektory mohly být opravdu mechanikou načteny.<p>
 
 Vzhledem k tomu, že oprava chyb může rekonstruovat chybějící sektory do určitého

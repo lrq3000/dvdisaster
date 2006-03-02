@@ -21,6 +21,8 @@
 
 #include "dvdisaster.h"
 
+#include "rs02-includes.h"
+
 #include <time.h>
 
 /***
@@ -31,7 +33,9 @@
  * Debugging function to seed the image with random correctable errors
  */
 
-void RandomError(char *prefix, char *arg)
+/* RS01-style files */
+
+static void random_error1(char *prefix, char *arg)
 {  ImageInfo *ii;
    gint64 block_idx[255];
    gint64 s,si;
@@ -42,12 +46,6 @@ void RandomError(char *prefix, char *arg)
    char *cpos = NULL;
 
    SRandom(Closure->randomSeed);
-
-#if 0  /* old style pattern */
-   if(!Closure->redundancy || !strcmp(Closure->redundancy, "normal")) n_eras = 32; 
-   else if(!strcmp(Closure->redundancy, "high")) n_eras = 64;
-   else n_eras = atoi(Closure->redundancy);
-#endif
 
    cpos = strchr(arg,',');
    if(!cpos) Stop(_("2nd argument is missing"));
@@ -126,6 +124,100 @@ void RandomError(char *prefix, char *arg)
 	n_errors);
 
    FreeImageInfo(ii);
+}
+
+/* RS02-style ecc images */
+
+static void random_error2(EccHeader *eh, char *prefix, char *arg)
+{  RS02Layout *lay;
+   ImageInfo *ii;
+   gint64 si;
+   int block_sel[255];
+   int i,percent,last_percent = 0;
+   int n_errors;
+   double eras_scale, blk_scale;
+
+   SRandom(Closure->randomSeed);
+   lay = CalcRS02Layout(uchar_to_gint64(eh->sectors), eh->eccBytes); 
+
+   n_errors = atoi(arg);
+
+   if(n_errors <= 0 || n_errors > eh->eccBytes)
+     Stop(_("Number of erasures must be > 0 and <= %d\n"), eh->eccBytes);
+
+   eras_scale = (n_errors+1)/((double)MY_RAND_MAX+1.0);
+   blk_scale  = (double)255.0/((double)MY_RAND_MAX+1.0);
+
+   /*** Open the image file */
+
+   ii = OpenImageFile(NULL, WRITEABLE_IMAGE);
+
+   PrintLog(_("\nGenerating random correctable erasures (for %d roots, max erasures = %d).\n"), eh->eccBytes, n_errors);
+
+   /*** Randomly delete the blocks */
+
+   for(si=0; si<lay->sectorsPerLayer; si++)
+   {  int n_erasures = (int)(eras_scale*(double)Random());
+
+      /* Reset the block selector */
+
+      for(i=0; i<255; i++)  
+	block_sel[i] = 0;
+
+      /* Randomly pick n blocks */
+
+      for(i=0; i<n_erasures; i++)
+      {  int idx;
+      
+         do
+	 {  idx = (int)(blk_scale*(double)Random());
+	 } while(block_sel[idx]);
+
+	 block_sel[idx] = 1;
+      }
+
+      /* Delete the randomly picked blocks */
+
+      for(i=0; i<255; i++)
+      {  if(block_sel[i])
+	 {  gint64 s;
+	 
+	   if(i<eh->dataBytes)
+	         s = si + i * lay->sectorsPerLayer;
+	   else  s = RS02EccSectorIndex(lay, i-eh->dataBytes, si);
+
+             if(!LargeSeek(ii->file, (gint64)(2048*s)))
+	       Stop(_("Failed seeking to sector %lld in image: %s"), s, strerror(errno));
+	     if(LargeWrite(ii->file, Closure->deadSector, 2048) != 2048)
+	       Stop(_("Failed writing to sector %lld in image: %s"), s, strerror(errno));
+	  }
+      }
+
+      percent = (100*si)/lay->sectorsPerLayer;
+      if(last_percent != percent) 
+      {  PrintProgress(_("Progress: %3d%%"),percent);
+	 last_percent = percent;
+      }
+   }
+
+   PrintProgress(_("Progress: 100%%\n"
+	"Recover the image using the --fix option before doing another --random-errors run.\n"
+	"Otherwise you'll accumulate >= %d erasures/ECC block and the image will be lost.\n"), 
+	n_errors);
+
+   FreeImageInfo(ii);
+
+}
+
+void RandomError(char *prefix, char *arg)
+{  Method *method = EccFileMethod(TRUE);
+
+   if(!strncmp(method->name, "RS01", 4))
+     random_error1(prefix, arg);
+
+
+   if(!strncmp(method->name, "RS02", 4))
+     random_error2(method->lastEh, prefix, arg);
 }
 
 /*

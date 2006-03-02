@@ -348,7 +348,7 @@ void ShowHTML(char *target)
 #ifdef SYS_MINGW
    /* Okay, Billy wins big time here ;-) */
 
-   ShellExecute(NULL, "open", target, "", "c:\\", SW_SHOWNORMAL);
+   ShellExecute(NULL, "open", target, NULL, NULL, SW_SHOWNORMAL);
    g_timeout_add(1000, browser_timeout_func, (gpointer)bi);
 #endif
 
