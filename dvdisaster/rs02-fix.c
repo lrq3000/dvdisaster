@@ -328,15 +328,15 @@ void RS02Fix(Method *self)
         for(i=0; i<nroots; i++)      /* and ecc portion */
         {  int offset = 0;
 	   for(j=0; j<cache_size; j++) 
-	   {  gint64 s = RS02EccSectorIndex(lay, i, ecc_idx+j);
+	   {  gint64 esi = RS02EccSectorIndex(lay, i, ecc_idx+j);
 
-	      fc->eccIdx[i][j] = s; /* remember for later use */ 
+	      fc->eccIdx[i][j] = esi; /* remember for later use */ 
 
-	      if(!LargeSeek(ii->file, 2048*s))
-		Stop(_("Failed seeking to sector %lld in image: %s"), s, strerror(errno));
+	      if(!LargeSeek(ii->file, 2048*esi))
+		Stop(_("Failed seeking to sector %lld in image: %s"), esi, strerror(errno));
 
 	      if(LargeRead(ii->file, fc->imgBlock[i+ndata]+offset, 2048) != 2048)
-		Stop(_("Failed reading sector %lld in image: %s"), s, strerror(errno));
+		Stop(_("Failed reading sector %lld in image: %s"), esi, strerror(errno));
 
 	      offset += 2048;
 	   }

@@ -628,7 +628,7 @@ Als kurze Entscheidungshilfe:<p>
 
 <b>Sind auf dem zu brennenden Datenträger mindestens 20% frei?</b><p>
 
-&nbsp; Ja: <a href="example22.html">Erzeugen Sie ein Fehlerkorrektur-Abbild.</a><p>
+&nbsp; Ja: <a href="example22.html">Erweitern Sie das Abbild um Fehlerkorrektur-Daten.</a><p>
 
 &nbsp; Nein: <a href="example21.html">Erzeugen Sie eine Fehlerkorrektur-Datei.</a><p>
 EOF
@@ -842,9 +842,9 @@ EOF
 function example22de()
 {  
    cat >> $1 <<EOF
-<h3>Fehlerkorrektur-Abbild erzeugen</h3>
+<h3>Abbild um Fehlerkorrektur-Daten erweitern</h3>
 
-Die Erstellung von Fehlerkorrektur-Abbildern wird in der vorliegenden
+Das Erweitern von Abbildern um Fehlerkorrektur-Daten  wird in der vorliegenden
 Version nur in der Kommandozeile unterstützt. Ab Version 0.70 werden die
 entsprechenden Funktionen auch mit der Maus bedienbar.<p>
 
@@ -2954,98 +2954,115 @@ function background20de()
 {  cat >> $1 <<EOF
 <h3>Datenrekonstruktion auf Abbild-Ebene</h3>
 
-Eine Datenrekonstruktion kann auf verschiedenen logischen Ebenen
-des Datenträgers stattfinden, zum Beispiel auf der Abbild-Ebene
-oder der Datei-Ebene. Diese Seite erklärt, warum dvdisaster
-auf der Abbild-Ebene arbeitet.<p>
+Eine Datenträger-Rekonstruktion mit fehlerkorrigierenden Kodes findet in
+zwei Schritten statt:
+
+<ol>
+<li>Zuerst wird versucht, möglichst viele Daten von dem Datenträger zu lesen.<p></li>
+<li>Dann werden die noch fehlenden Daten durch den Fehlerkorrektur-Kode rekonstruiert.</li>
+</ol>
+
+Der Erfolg der Datenrekonstruktion hängt wesentlich davon ab, wieviele
+Daten im ersten Schritt noch eingelesen werden konnten. Deshalb ist es
+wichtig, ein Leseverfahren einzusetzen, das die Ausbeute an noch lesbaren
+Daten optimiert. Zwei mögliche Leseverfahren werden nachfolgend verglichen.<p>
+
+<b>Einlesen auf Datei- und Abbild-Ebene gegenübergestellt</b><p>
+
+Datenträger können auf verschiedenen logischen Ebenen eingelesen werden:<p>
 
 <a name="file"> </a>
-<b>Nachteile der Daten-Rekonstruktion auf Datei-Ebene für CD/DVD.</b><p>
-
-Die Daten-Rekonstruktion auf Datei-Ebene verwendet 
-Dateien (oder auch Archive von Dateien), die mit
-Fehlerkorrektur-Informationen versehen wurden. Dadurch können
-Beschädigungen wie fehlerhafte Bytes, fehlende Datenblöcke
-und ein Abschneiden von Teilen der Datei repariert werden.<p>
-
-Dabei wird aber nicht berücksichtigt,
-daß Dateien Teil eines <i>Dateisystems</i> sind, das vom
-Betriebssystem verwaltet wird. Die Voraussetzung,
-daß das Datei- und Betriebssystem mit fehlerhaften CD/DVD-Datenträgern umgehen
-kann, ist aber typischerweise nicht erfüllt. Im ungünstigsten
-Fall kommt man daher gar nicht mehr an die Dateien heran, um sie 
-anhand der darin enthaltenen Fehlerkorrektur-Informationen zu reparieren:<p>
-
-<ul>
-<li>Das Einlesen einer größeren Datei von einem beschädigten
-Datenträger benötigt spezielle Werkzeuge und ist
-sehr aufwändig.<p></li>
-<li>Das Dateisystem enthält Datenstrukturen, die nicht Teil der darin
-enthaltenen Dateien und damit ungeschützt sind. Wenn diese Strukturen
-beschädigt werden, bekommen Sie keine Dateien mehr von dem Datenträger herunter,
-selbst wenn die Datei-Datenblöcke noch lesbar sind.</li>
-</ul><p>
-
-
-Für die Rekonstruktion von optischen Datenträgern wiegen die obigen
-Nachteile schwer. Fairerweise muß aber auch gesagt werden, daß 
-Daten-Rekonstruktion auf Datei-Ebene bei dateisystemlosen
-Medien wie zum Beispiel der Daten-Übertragung über das Internet 
-sehr gut funktionieren kann. <p>
+Beim Lesen auf <b>Datei-Ebene</b> wird versucht, die auf einem
+defekten Datenträger enthaltenen Dateien einzeln soweit wie möglich auszulesen.
+Dabei ist jedoch zu berücksichtigen, daß Dateien Teil 
+eines <i>Dateisystems</i> sind, das vom Betriebssystem verwaltet wird.
+Der Menge der noch lesbaren Daten hängt sehr davon ab, ob das Dateisystem
+mit beschädigten Datenträgern umgehen kann. Dies ist bei CD und DVD 
+typischerweise nicht der Fall.<p>
 
 <a name="image"> </a>
-<b>Vorteile der Daten-Rekonstruktion auf der Abbild-Ebene von CD/DVD.</b><p>
-
-CD- und DVD-Datenträger sind intern in Daten-Sektoren aufgeteilt,
-die jeweils 2048 Bytes an Daten enthalten. Liest man diese Sektoren nacheinander
+Unterhalb der logischen Ebene von Dateien und Dateisystemen liegt 
+die <b>Abbild-Ebene</b>, die CD- und DVD-Datenträger in Daten-Sektoren 
+von jeweils 2048 Bytes aufteilt. Liest man diese Sektoren nacheinander
 aus und speichert sie ab, so erhält man ein <i>Abbild</i> des Datenträgers.
-Eine Daten-Rekonstruktion, die an der Abbild-Ebene ansetzt, greift
-beim Lesen und Rekonstruieren nur auf Daten-Sektoren zu. 
-Dies hat die folgenden Vorteile:
+Auf der Abbild-Ebene können die noch lesbaren Daten sehr effizient gesammelt werden.
+<p>
 
-<ul>
-<li>Abbilder lassen sich auch dann problemlos lesen, wenn der Datenträger beschädigt ist.<br>
-Das Einlesen geschieht durch direkte Kommunikation mit den Gerätetreibern des Laufwerks.
-Diese Treiber sitzen sehr "tief" im Betriebssystem und ermöglichen ein effizientes
-Umgehen mit Lesefehlern und anderen Fehlerzuständen.<p>
-</li>
+Der nachfolgende Vergleich zeigt, daß das Lesen auf Abbild-Ebene die besseren
+Voraussetzungen bietet, um genügend Daten für eine erfolgreiche 
+Datenträger-Rekonstruktion zu erhalten. Deshalb ist dvdisaster mit 
+Abbild-basierten Leseverfahren ausgestattet.<p>
 
-<li>Sowohl das Einlesen als auch das Rekonstruieren von beschädigten oder unlesbaren Sektoren
-ist unabhängig vom Zustand des auf dem Datenträger enthaltenen Dateisystems.<p></li>
 
-<li>Die Reed-Solomon-Fehlerkorrektur profitiert davon,
-wenn Fehlerkorrektur-Informationen über große Datenmengen verteilt werden: 
-Das Abbild als Ganzes läßt sich besser schützen als die einzelnen Dateien darin.<p></li>
+<table width="100%" border="1" cellspacing="0" cellpadding="5">
+<tr>
+<td width="50%"><i>Einlesen auf Datei-Ebene</i></td>
+<td width="50%"><i>Einlesen auf Abbild-Ebene</i></td>
+</tr>
+<tr valign="top">
+<td><i>Abhängigkeit vom Dateisystem</i><p>
+Wenn die Datenstrukturen des Dateisystems beschädigt sind,
+können keine Dateien mehr von dem Datenträger gelesen werden,
+auch wenn die Datei-Datenblöcke selbst noch lesbar sind.</td>
+<td><i>Unabhängigkeit vom Dateisystem</i><p>
+Das Einlesen von Abbild-Sektoren ist unabhängig vom Zustand des Dateisystems.</td>
+</tr>
 
-<li>Das Abbild enthält alle auf dem Datenträger gespeicherten Informationen.<br>
-Nach der vollständigen Reparatur des Abbildes sind nicht nur alle Dateien, sondern auch die
-Dateisystem-Strukturen wieder hergestellt - ohne das Dateisystem jemals "angefaßt" zu haben!</li>
-</ul>
+<tr valign="top">
+<td><i>Verlust von lesbaren Informationen</i><p>
+Das Betriebssystem erlaubt häufig nur das Einlesen einer Datei bis zum
+ersten Lesefehler. Nur mit speziellen Werkzeugen können beschädigte 
+Dateien bis zum Ende gelesen werden. Anderenfalls ist der Rest der Datei verloren, 
+auch wenn die zugehörigen Datei-Datenblöcke noch lesbar sind. 
+</td>
+<td><i>Alle lesbaren Daten können gerettet werden</i><p>
+Abbilder lassen sich auch dann problemlos lesen, wenn der Datenträger beschädigt ist.
+Lesefehler in einem Sektor verhindern nicht den Zugriff auf andere Sektoren.
+</td>
+</tr>
 
-Diese Vorteile lassen sich gut auf die Rekonstruktion von CD/DVD-Datenträgern übertragen.
-Daher wurde dvdisaster ausschließlich mit Abbild-basierten Verfahren ausgestattet.<p>
-
+<tr valign="top">
+<td><i>Kein Schutz des Dateisystems</i><p>
+Die Datenstrukturen des Dateisystems sind nicht Teil der darin enthaltenen
+Dateien. Das Dateisystem kann daher nicht durch Einbringen von 
+Fehlerkorrektur-Informationen in die Dateien geschützt werden.</td>
+<td><i>Wiederherstellung des Dateisystems</i><p>
+Das Abbild enthält sowohl die Dateien als auch das Dateisystem.
+Fehlerkorrektur-Informationen für das Abbild beinhalten den Schutz und die
+Wiederherstellung des Dateisystems.</td>
+</tr>
+</table><p>
 
 <a name="eccfile"> </a>
 <b>Konsequenzen für das Aufbewahren von Fehlerkorrektur-Dateien</b><p>
 
-Bei der Speicherung von Fehlerkorrektur-Dateien müssen Sie natürlich 
-davon ausgehen, daß der verwendete Datenträger ebenfalls schadhaft werden kann.<p>
+Datenträger sind durch die mit dvdisaster erzeugten Fehlerkorrektur-Daten
+auf Abbild-Ebene geschützt. Aber was ist mit den Fehlerkorrektur-Dateien selbst?<p>
 
-Die Fehlerkorrektur-Dateien enthalten <i>keinen</i> Schutz gegen Beschädigung.
-Daher dürfen Sie nicht darauf verzichten, auch die Fehlerkorrektur-Dateien
-in den Genuß eines Schutzes auf Abbild-Ebene kommen zu lassen: 
-<a href="background70.html">Sichern</a> Sie
-den Datenträger mit den Fehlerkorrektur-Dateien ebenfalls mit dvdisaster.<p>
+Für Fehlerkorrektur-Dateien treffen die Einschränkungen beim Lesen auf
+Datei-Ebene natürlich auch zu. Wenn der Datenträger schadhaft wird,
+auf dem sich die Fehlerkorrektur-Dateien befinden, ist nicht mehr
+sichergestellt, daß sich die Fehlerkorrektur-Dateien noch vollständig lesen
+lassen.<p>
+
+Deshalb ist es unverzichtbar, auch Fehlerkorrektur-Dateien auf der
+Abbild-Ebene zu schützen: Die 
+<a href="background70.html">Datenträger mit Fehlerkorrektur-Dateien</a> 
+müssen ebenfalls mit dvdisaster gesichert werden.<p>
 
 
-Der Grund dafür ist der folgende: Die Fehlerkorrektur-Dateien könnten
-natürlich so gestaltet werden, daß sie auch im beschädigten Zustand 
+Weil dies vorausgesetzt wird, enthalten die Fehlerkorrektur-Dateien <i>keinen</i> 
+Schutz gegen Beschädigung! Dies würde auch mehr schaden als nutzen:
+Natürlich könnten die Fehlerkorrektur-Dateien so gestaltet werden, 
+daß sie auch im beschädigten Zustand 
 noch eine (verminderte) Fehlerkorrektur leisten können. 
-Aber egal wie ausgeklügelt  der innere Schutz-Mechanismus einer 
-Fehlerkorrektur-Datei auch wäre, es bliebe ein Schutz auf Datei-Ebene 
-mit den oben beschriebenen Nachteilen! Und die zusätzliche Rechenzeit 
-und Redundanz dafür sind besser in den Schutz auf Abbild-Ebene investiert.<p>
+Aber egal wie ausgeklügelt  der innere Schutz-Mechanismus auch wäre, 
+es bliebe ein Schutz auf Datei-Ebene mit den oben beschriebenen Nachteilen!<p>
+
+Hinzu kommt, daß die dafür benötigte Rechenzeit und Redundanz besser 
+auf der Abbild-Ebene investiert sind: Die Reed-Solomon-Fehlerkorrektur profitiert davon,
+wenn Fehlerkorrektur-Informationen über große Datenmengen verteilt werden. 
+Das Abbild als Ganzes läßt sich besser schützen als die einzelnen Dateien darin.
 EOF
 }
 
@@ -3073,7 +3090,7 @@ Die Unterschiede liegen in der Art, wie die Fehlerkorrektur-Informationen abgele
 <a name="file"> </a>
 RS01 erzeugt <b>Fehlerkorrektur-Dateien,</b> die unabhängig von dem
 zugehörigen Abbild aufbewahrt werden. Da ein Schutz von Daten auf
-<a href="background20.html">Datei-Ebene</a> schwierig ist, 
+<a href="background20.html#file">Datei-Ebene</a> schwierig ist, 
 müssen Fehlerkorrektur-Dateien auf Datenträgern gespeichert werden,
 die selbst mit dvdisaster gegen Datenverlust geschützt sind.<p></li>
 
@@ -3081,8 +3098,8 @@ die selbst mit dvdisaster gegen Datenverlust geschützt sind.<p></li>
 <a name="image"> </a>
 Beim RS02-Verfahren wird zunächst ein Abbild der zu sichernden Daten 
 auf der Festplatte mit Hilfe einer Brennsoftware erzeugt. Vor dem Schreiben auf
-den Datenträger wird dieses Abbild jedoch mit dvdisaster zu einem 
-<b>Fehlerkorrektur-Abbild</b> erweitert.
+den Datenträger wird dieses <b>Abbild</b> jedoch mit dvdisaster um 
+Fehlerkorrektur-Daten <b>erweitert</b>.
 Dadurch befinden sich die zu schützenden Daten zusammen mit den 
 Fehlerkorrektur-Informationen auf dem selben Datenträger. 
 Defekte Sektoren in den Fehlerkorrektur-Informationen verringern
@@ -3093,12 +3110,12 @@ der Fehlerkorrektur-Informationen wird nicht benötigt.<p></li>
 
 
 <a name="table"> </a>
-<b>Vergleich von Fehlerkorrektur-Dateien und -Abbildern.</b><p>
+<b>Vergleich zum Ablegen der Fehlerkorrektur-Informationen</b><p>
 
 <table width="100%" border="1" cellspacing="0" cellpadding="5">
 <tr>
 <td width="50%"><i>Fehlerkorrektur-Dateien</i></td>
-<td width="50%"><i>Fehlerkorrektur-Abbilder</i></td>
+<td width="50%"><i>Fehlerkorrektur-Daten im Abbild</i></td>
 </tr>
 <tr valign="top">
 <td> Redundanz kann beliebig groß gewählt werden</td>
@@ -3134,7 +3151,8 @@ katalogisiert oder geschützt werden</td></tr>
 
 <tr valign="top">
 <td> keine Kompatibilitätsprobleme beim Abspielen </td>
-<td> Datenträger mit Fehlerkorrektur-Abbildern sind möglicherweise nicht überall abspielbar</td>
+<td> um Fehlerkorrektur-Daten erweiterte Abbilder
+ sind möglicherweise nicht überall abspielbar</td>
 </tr>
 </table><p>
 

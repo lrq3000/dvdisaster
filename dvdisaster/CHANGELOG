@@ -1,8 +1,14 @@
-0.66 (rc-5)
+0.66 (rc-5) 03-03-2006
 	- changed ShellExecute() call which might have caused the 
 	  mysterious Help system crashes on Windows (I was ever able
 	  to reproduce them)
 	- adapted --random-errors for ecc images
+	- fixed miscalculation of ecc header count for certain
+	  image lenghts in RS02
+	- fixed misreported CRC errors in RS02Compare when read errors
+	  are present in the CRC section
+	- dropped / rephrased "error correction images" in documentation
+	- reworked German part of background20, this is still work in progress
 
 0.66 (rc-4) 26-02-2006
 	- fixed documentation path in manuals

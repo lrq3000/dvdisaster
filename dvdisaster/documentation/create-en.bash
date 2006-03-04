@@ -544,7 +544,7 @@ As a short decision help:<p>
 
 <b>Does the medium which is to be created contain at least 20% free space?</b><p>
 
-&nbsp; Yes: <a href="example22.html">Create an error correction image.</a><p>
+&nbsp; Yes: <a href="example22.html">Augment the image with error correction data.</a><p>
 
 &nbsp; No: <a href="example21.html">Create an error correction file.</a><p>
 EOF
@@ -825,9 +825,10 @@ EOF
 function example22en()
 {  
    cat >> $1 <<EOF
-<h3>Creating the error correction image</h3>
+<h3>Augmenting the image with error correction data</h3>
 
-Creating error correction images is currently only supported at the command line.
+Augmenting images with error correction data 
+is currently only supported at the command line.
 The respective functions will be integrated into the graphical user interface
 in dvdisaster version 0.70.<p>
 
@@ -2979,7 +2980,7 @@ The methods differ in the way the error correction information is stored:<p>
 <a name="file"> </a>
 RS01 creates <b>error correction files</b> which are stored separately from 
 the image they belong to. Since data protection at the
-<a href="background20.html">file level</a> is difficult,
+<a href="background20.html#file">file level</a> is difficult,
 error correction files must be stored on media which are protected
 against data loss by dvdisaster, too.<p></li>
 
@@ -2987,7 +2988,7 @@ against data loss by dvdisaster, too.<p></li>
 <a name="image"> </a>
 To apply the RS02 method an image is first created on hard disc using a
 CD/DVD writing software. Before the image is written on the medium,
-it is extended with dvdisaster into an <b>error correction image</b>.
+dvdisaster is used to <b>augment the image</b> with error correction data.
 Therefore the data to be protected and the error correction information
 are located at the same medium. Damaged sectors in the error correction
 information reduce the data recovery capacity, but do not make recovery
@@ -2997,12 +2998,12 @@ information is not required.<p></li>
 
 
 <a name="table"> </a>
-<b>Comparison of error correction files and images.</b><p>
+<b>Comparison of error correction storage.</b><p>
 
 <table width="100%" border="1" cellspacing="0" cellpadding="5">
 <tr>
 <td width="50%"><i>Error correction files</i></td>
-<td width="50%"><i>Error correction images</i></td>
+<td width="50%"><i>Image augmented with error correction data</i></td>
 </tr>
 <tr valign="top">
 <td> 
@@ -3039,7 +3040,7 @@ needs not to be cataloged or explicitly protected.</td></tr>
 
 <tr valign="top">
 <td> no compatibilty issues with play-back units</td>
-<td> media with error correction images may not play correctly on all units</td>
+<td> media with augmented images may not play correctly on all units</td>
 </tr>
 </table><p>
 

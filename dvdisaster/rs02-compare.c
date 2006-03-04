@@ -51,6 +51,7 @@ typedef struct
 {  LargeFile *file;
    RS02Layout *lay;
    guint32 *crcBuf;
+   gint8   *crcValid;
    unsigned char crcSum[16];
 } compare_closure;
 
@@ -65,6 +66,7 @@ static void cleanup(gpointer data)
    if(cc->file) LargeClose(cc->file);
    if(cc->lay) g_free(cc->lay);
    if(cc->crcBuf) g_free(cc->crcBuf);
+   if(cc->crcValid) g_free(cc->crcValid);
    
    g_free(cc);
 
@@ -82,10 +84,12 @@ static void read_crc(compare_closure *cc, RS02Layout *lay)
    guint32 crc_buf[512];
    gint64 s;
    int i,crc_idx;
-   
+   int crc_valid = 1;
+
    /* Allocate buffer for ascending sector order CRCs */
 
-   cc->crcBuf = g_malloc(2048 * lay->crcSectors);
+   cc->crcBuf   = g_malloc(2048 * lay->crcSectors);
+   cc->crcValid = g_malloc(512 * lay->crcSectors);
    MD5Init(&crc_md5);
 
    /* First sector containing crc data */
@@ -103,7 +107,7 @@ static void read_crc(compare_closure *cc, RS02Layout *lay)
 
    crc_idx = 512;  /* force crc buffer reload */
 
-   /* Cycle to the ecc blocks and sort CRC sums in
+   /* Cycle through the ecc blocks and sort CRC sums in
       ascending sector numbers. */
 
    for(s=0; s<lay->sectorsPerLayer; s++)
@@ -129,6 +133,8 @@ static void read_crc(compare_closure *cc, RS02Layout *lay)
 	    if(crc_idx >= 512)
 	    {   if(LargeRead(cc->file, crc_buf, 2048) != 2048)
 		  Stop(_("problem reading crc data: %s"), strerror(errno));
+
+	        crc_valid = memcmp(crc_buf, Closure->deadSector, 2048);
 		
 	        MD5Update(&crc_md5, (unsigned char*)crc_buf, 2048);
 		crc_idx = 0;
@@ -136,7 +142,8 @@ static void read_crc(compare_closure *cc, RS02Layout *lay)
 
 	    /* Sort crc into appropriate place */
 
-	    cc->crcBuf[block_idx[i]] = crc_buf[crc_idx];
+	    cc->crcBuf[block_idx[i]]   = crc_buf[crc_idx];
+	    cc->crcValid[block_idx[i]] = crc_valid;
 	    crc_idx++;
 	    block_idx[i]++;
 	 }
@@ -263,7 +270,7 @@ void RS02Compare(Method *self)
       if(s < lay->dataSectors && !current_missing)
       {  guint32 crc = Crc32(buf, 2048);
 
-	 if(crc != cc->crcBuf[crc_idx])
+	 if(cc->crcValid[crc_idx] && crc != cc->crcBuf[crc_idx])
 	 {  PrintCLI(_("* CRC error, sector: %lld\n"), s);
 	    data_crc_errors++;
 	 }

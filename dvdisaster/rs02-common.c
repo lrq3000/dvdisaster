@@ -164,18 +164,21 @@ RS02Layout *CalcRS02Layout(gint64 data_sectors, int requested_roots)
    /* Now assemble everything together and make sure it fits on the medium */
 
    while(lay->nroots > 7)
-   {  gint64 first_repeat;
+   {  gint64 first_repeat;  /* first header which is interleaved with ecc sectors */
+      gint64 interleaved;   /* number of ecc sectors after first header */
 
       lay->ndata             = FIELDMAX-lay->nroots;
       lay->rsSectors         = lay->nroots * ((lay->protectedSectors + lay->ndata - 1) / lay->ndata); 
       first_repeat  = (lay->protectedSectors + lay->headerModulo - 1) / lay->headerModulo;
       first_repeat *= lay->headerModulo;
 
-      lay->headers  = 1 + (lay->rsSectors + lay->protectedSectors - first_repeat) / lay->headerModulo;  
-      //      lay->headers           = (lay->rsSectors + lay->headerModulo - 3) / (lay->headerModulo - 2);
+      interleaved  = lay->rsSectors + lay->protectedSectors - first_repeat;
+      lay->headers = interleaved / (lay->headerModulo-2) + 1;
 
-      lay->eccSectors        = 2 + lay->crcSectors + lay->rsSectors + 2*lay->headers;
-      lay->sectorsPerLayer   = (lay->protectedSectors + lay->ndata - 1) / lay->ndata;
+      //lay->headers  = 1 + (lay->rsSectors + lay->protectedSectors - first_repeat) / lay->headerModulo;  
+
+      lay->eccSectors         = 2 + lay->crcSectors + lay->rsSectors + 2*lay->headers;
+      lay->sectorsPerLayer    = (lay->protectedSectors + lay->ndata - 1) / lay->ndata;
       lay->firstCrcLayerIndex = 2 + lay->dataSectors % lay->sectorsPerLayer;
 
       if(requested_roots > 0)
@@ -231,6 +234,7 @@ void WriteRS02Headers(LargeFile *file, RS02Layout *lay, EccHeader *eh)
 
    hpos = (lay->protectedSectors + lay->headerModulo - 1) / lay->headerModulo;
    hpos *= lay->headerModulo;
+
    while(hpos < end)
    { 
       if(!LargeSeek(file, 2048*hpos))
