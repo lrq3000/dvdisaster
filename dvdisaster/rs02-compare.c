@@ -143,7 +143,7 @@ static void read_crc(compare_closure *cc, RS02Layout *lay)
 	    /* Sort crc into appropriate place */
 
 	    cc->crcBuf[block_idx[i]]   = crc_buf[crc_idx];
-	    cc->crcValid[block_idx[i]] = crc_valid;
+       	    cc->crcValid[block_idx[i]] = crc_valid;
 	    crc_idx++;
 	    block_idx[i]++;
 	 }
@@ -168,7 +168,7 @@ void RS02Compare(Method *self)
    unsigned char ecc_sum[16];
    unsigned char medium_sum[16];
    char digest[33];
-   gint64 s, image_sectors, layer_offset, crc_idx;
+   gint64 s, image_sectors, crc_idx;
    int last_percent = 0;
    unsigned char buf[2048];
    gint64 first_missing, last_missing;
@@ -221,8 +221,6 @@ void RS02Compare(Method *self)
 
    ecc_sector = 0;
    ecc_slice  = 0;
-
-   layer_offset = lay->sectorsPerLayer - lay->firstCrcLayerIndex - 1;
 
    for(s=0; s<expected_sectors; s++)
    {  int n,percent,current_missing;

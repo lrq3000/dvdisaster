@@ -611,7 +611,7 @@ void RS01Fix(Method *method)
 		    {  int old = fc->imgBlock[location][offset];
 		       int new = old ^ gf_alpha_to[mod_fieldmax(gf_index_of[num1] + gf_index_of[num2] + FIELDMAX - gf_index_of[den])];
 
-		       PrintCLI(_("-> Error located in sector %lld at byte %4d (value %2x '%c', expected %2x '%c')\n"),
+		       PrintCLI(_("-> Error located in sector %lld at byte %4d (value %02x '%c', expected %02x '%c')\n"),
 				block_idx[location], bi, 
 				old, isprint(old) ? old : '.',
 				new, isprint(new) ? new : '.');

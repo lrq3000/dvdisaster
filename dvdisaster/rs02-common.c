@@ -133,7 +133,6 @@ RS02Layout *CalcRS02Layout(gint64 data_sectors, int requested_roots)
       else  medium_capacity = DVD_DL;   /* Double layered DVD */
    }
 
-   lay->mediumCapacity   = medium_capacity;
    lay->dataSectors      = data_sectors;
    lay->firstEccHeader   = lay->dataSectors;
    lay->crcSectors       = (sizeof(guint32)*lay->dataSectors+2047)/2048;
@@ -144,8 +143,8 @@ RS02Layout *CalcRS02Layout(gint64 data_sectors, int requested_roots)
    if(requested_roots > 0)
       lay->nroots = requested_roots;
    else
-   {  lay->rsSectors        = lay->mediumCapacity - lay->protectedSectors;     /* just to start */
-      lay->nroots           = (FIELDMAX*lay->rsSectors) / lay->mediumCapacity; /* iteration below */
+   {  lay->rsSectors        = medium_capacity - lay->protectedSectors;     /* just to start */
+      lay->nroots           = (FIELDMAX*lay->rsSectors) / medium_capacity; /* iteration below */
    }
 
    if(lay->nroots > 170)   /* Cap redundancy to 200% */
@@ -179,12 +178,12 @@ RS02Layout *CalcRS02Layout(gint64 data_sectors, int requested_roots)
 
       lay->eccSectors         = 2 + lay->crcSectors + lay->rsSectors + 2*lay->headers;
       lay->sectorsPerLayer    = (lay->protectedSectors + lay->ndata - 1) / lay->ndata;
-      lay->firstCrcLayerIndex = 2 + lay->dataSectors % lay->sectorsPerLayer;
+      lay->firstCrcLayerIndex = (2 + lay->dataSectors) % lay->sectorsPerLayer;
 
       if(requested_roots > 0)
 	break;
 
-      if(lay->protectedSectors + lay->rsSectors <= lay->mediumCapacity)
+      if(lay->eccSectors + lay->dataSectors <= medium_capacity)
 	break;
 
       lay->nroots--;
@@ -202,11 +201,14 @@ RS02Layout *CalcRS02Layout(gint64 data_sectors, int requested_roots)
    Verbose("header repeats    = %lld (using modulo %lld)\n", lay->headers, lay->headerModulo);
    Verbose("added sectors     = %lld\n", lay->eccSectors);
    Verbose("total image size  = %lld\n", lay->eccSectors+lay->dataSectors);
-   Verbose("medium capacity   = %lld\n", lay->mediumCapacity);
+   if(requested_roots > 0)
+        Verbose("medium capacity   = n.a.\n");
+   else Verbose("medium capacity   = %lld\n", medium_capacity);
 
    Verbose("\nInterleaving layout:\n");
    Verbose("%lld sectors per ecc layer\n",lay->sectorsPerLayer);
-   Verbose("first layer sector with CRC data %lld (sector# %lld)\n",lay->firstCrcLayerIndex,(lay->ndata-1)*lay->sectorsPerLayer+lay->firstCrcLayerIndex);
+   Verbose("first layer sector with CRC data %lld (sector# %lld)\n",
+	   lay->firstCrcLayerIndex, lay->dataSectors+2);
    Verbose("\n");
 
    return lay;

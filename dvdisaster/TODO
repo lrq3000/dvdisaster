@@ -1,14 +1,13 @@
 
 CURRENTLY WORKING ON
 
-- devising a strategy to put ecc information on the same media as the image,
-  using the left-over space for error correction information (within the
-  bounds of meaningful redundancies, of course).
+- 0.70: full RS02 integration into the graphical user interface
 
+ROADMAP
 
-TODO  (in no particular order)
+- 0.72: introduce multi threading for multicore processor support
 
-- introduce multi threading for multicore processor support
+TODO  (with no particular order / schedule)
 
 - add real UDF parsing to udf.c 
   (currently only the backward compatibility ISO structures are used)

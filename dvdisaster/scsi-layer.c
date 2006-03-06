@@ -514,6 +514,17 @@ static unsigned int query_size(DeviceHandle *dh)
    if(dh->mainType == CD)
      return size+1;  /* size is the number of the last sector, starting with 0 */
 
+   /* If RS02 header search is enabled and we can find an appropriate header,
+      use it as an authoritative source for the medium size. */
+
+   if(1)
+   {  gint64 rs02_size;
+
+      rs02_size = MediumLengthFromRS02(dh, MAX(size, dh->userAreaSize));
+
+      if(rs02_size) return rs02_size;
+   }
+
    /* For DVD media, READ CAPACITY should give the real image size.
       READ DVD STRUCTURE may be same value or the unformatted size.
       But some older drives appear to have both functions reversed,

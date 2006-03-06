@@ -245,7 +245,7 @@ static void write_crc(ecc_closure *ec)
       /* Write CRC sums for layer_index'th slice.
          Some ecc blocks contain padding sectors >= lay->dataSectors. 
          CRCs for padding sectors are not written out,
-         so we have to keep in mind that there might be ndata or ndata-1 CRC sums
+         so we have to keep in mind that there might be <= ndata CRC sums
          per ecc blocks. */
 
       for(i=0; i<lay->ndata; i++)

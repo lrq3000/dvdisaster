@@ -96,8 +96,7 @@ void RS02Compare(Method*);
 /* rs02-common.c */
 
 typedef struct _RS02Layout
-{  guint64 mediumCapacity;       /* maximum capacity of medium */
-   guint64 dataSectors;          /* number of sectors used for image data */
+{  guint64 dataSectors;          /* number of sectors used for image data */
    guint64 crcSectors;           /* number of sectors needed for CRC32 sector checkums */
    guint64 firstEccHeader;       /* location of first ecc header */
    guint64 headers;              /* number of ecc header ("master block") repeats */

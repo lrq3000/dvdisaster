@@ -1,6 +1,14 @@
+0.66 (rc-6) 04-03-2006
+	- fixed image size miscalculation in RS02Common
+	- fixed layout miscalculation for certain border cases in RS02Common
+	- debug.c: added random removal of ecc headers;
+	  fixed range check in erasure calculation
+	- added media size recognition from RS02 headers in query_size()
+	  this will need some more thought.
+
 0.66 (rc-5) 03-03-2006
 	- changed ShellExecute() call which might have caused the 
-	  mysterious Help system crashes on Windows (I was ever able
+	  mysterious Help system crashes on Windows (I was never able
 	  to reproduce them)
 	- adapted --random-errors for ecc images
 	- fixed miscalculation of ecc header count for certain

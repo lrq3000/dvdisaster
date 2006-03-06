@@ -100,7 +100,8 @@ Method *FindMethod(char *name)
 }
 
 /*
- * Search for ecc headers in RS02 style image files
+ * Search for ecc headers in RS02 style image files.
+ * Note that udf.c has a similar function FindHeaderInMedia().
  */
 
 EccHeader* FindHeaderInImage(char *filename)
@@ -112,8 +113,6 @@ EccHeader* FindHeaderInImage(char *filename)
 
    if(!LargeStat(filename, &length))
      return NULL;
-
-   /*** TODO: This needs to search all possible header locations */
 
    file = LargeOpen(filename, O_RDONLY, IMG_PERMS);
    if(!file) return NULL;

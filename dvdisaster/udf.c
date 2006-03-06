@@ -22,6 +22,94 @@
 #include "dvdisaster.h"
 
 #include "udf.h"
+#include "rs02-includes.h"
+
+/***
+ *** Look for ecc headers in RS02 style media
+ ***/
+
+static EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
+{  EccHeader *eh = NULL;
+   gint64 pos;
+   gint64 header_modulo;
+
+   header_modulo = (gint64)1<<62;
+
+   /*** Search for the headers */
+
+   while(header_modulo >= 32)
+   {  pos = max_sectors & ~(header_modulo - 1);
+
+//printf("Trying modulo %lld\n", header_modulo);
+
+      while(pos > 0)
+      {  
+	 /* Try reading the sector */
+//printf(" trying sector %lld\n", pos);
+	 if(ReadSectors(dh, Closure->scratchBuf, pos, 2))
+	   goto check_next_header;  /* read error */
+
+	 eh = (EccHeader*)Closure->scratchBuf;
+
+
+	 /* See if the magic cookie is there */
+
+	 if(!strncmp((char*)eh->cookie, "*dvdisaster*", 12))
+	 {  guint32 recorded_crc = eh->selfCRC;
+	    guint32 real_crc;
+
+//printf(" header at %lld: magic cookie found\n", (long long int)pos);
+
+	    eh->selfCRC = 0x4c5047;
+	    real_crc = Crc32((unsigned char*)eh, sizeof(EccHeader));
+
+	    if(real_crc == recorded_crc)
+	    {  eh = g_malloc(sizeof(EccHeader));
+	       memcpy(eh, Closure->scratchBuf, sizeof(EccHeader));
+	       eh->selfCRC = recorded_crc;
+//printf(" --> CRC okay, using it\n");
+	       return eh;
+	    }
+//printf(" CRC failed, skipping it\n");
+	    goto check_next_header;
+	 }
+	 else
+	 {
+//printf(" no cookie, skipping current modulo\n");
+	   goto check_next_modulo;
+	 }
+
+      check_next_header:
+	 pos -= header_modulo;
+      }
+
+   check_next_modulo:
+      header_modulo >>= 1;
+   }
+
+   return NULL;
+}
+
+gint64 MediumLengthFromRS02(DeviceHandle *dh, gint64 max_size)
+{  EccHeader *eh;
+   RS02Layout *lay;
+   gint64 real_size;
+
+   eh = FindHeaderInMedium(dh, max_size);
+   if(eh) 
+   {  
+      lay = CalcRS02Layout(uchar_to_gint64(eh->sectors), eh->eccBytes); 
+      real_size = lay->eccSectors+lay->dataSectors;
+
+      g_free(eh);
+      g_free(lay);
+
+      return real_size;
+   }
+
+   return 0;
+}
+
 
 /***
  *** Rudimentary UDF and ISO filesystem parsing.

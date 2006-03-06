@@ -132,10 +132,13 @@ static void random_error2(EccHeader *eh, char *prefix, char *arg)
 {  RS02Layout *lay;
    ImageInfo *ii;
    gint64 si;
+   guint64 hpos;
+   guint64 end;
+   guint64 header[42];
    int block_sel[255];
    int i,percent,last_percent = 0;
-   int n_errors;
-   double eras_scale, blk_scale;
+   int hidx,n_errors;
+   double eras_scale, blk_scale, hdr_scale;
 
    SRandom(Closure->randomSeed);
    lay = CalcRS02Layout(uchar_to_gint64(eh->sectors), eh->eccBytes); 
@@ -154,6 +157,38 @@ static void random_error2(EccHeader *eh, char *prefix, char *arg)
 
    PrintLog(_("\nGenerating random correctable erasures (for %d roots, max erasures = %d).\n"), eh->eccBytes, n_errors);
 
+   /*** Randomly delete some ecc headers */
+
+   header[0] = lay->firstEccHeader;
+   hidx = 1;
+
+   hpos = (lay->protectedSectors + lay->headerModulo - 1) / lay->headerModulo;
+   hpos *= lay->headerModulo;
+
+   end = lay->eccSectors+lay->dataSectors-2;
+
+   while(hpos < end)  /* Calculate positions of all headers */
+   { 
+      header[hidx++] = hpos;
+      hpos += lay->headerModulo;
+   }
+
+   /* Pick one header to remain intact.
+      Currently this must be one of the repeated headers */
+
+   hdr_scale = (double)(hidx-1)/((double)MY_RAND_MAX+1.0);
+   header[(int)(hdr_scale*(double)Random())+1] = 0;
+#if 1
+   for(i=0; i<hidx; i++)
+   {  gint64 s = header[i];
+      if(s>0)
+      {  if(!LargeSeek(ii->file, (gint64)(2048*s)))
+	   Stop(_("Failed seeking to sector %lld in image: %s"), s, strerror(errno));
+         if(LargeWrite(ii->file, Closure->deadSector, 2048) != 2048)
+	   Stop(_("Failed writing to sector %lld in image: %s"), s, strerror(errno));
+      }
+   }
+#endif
    /*** Randomly delete the blocks */
 
    for(si=0; si<lay->sectorsPerLayer; si++)
@@ -182,13 +217,16 @@ static void random_error2(EccHeader *eh, char *prefix, char *arg)
       {  if(block_sel[i])
 	 {  gint64 s;
 	 
-	   if(i<eh->dataBytes)
-	         s = si + i * lay->sectorsPerLayer;
-	   else  s = RS02EccSectorIndex(lay, i-eh->dataBytes, si);
+	    if(i<eh->dataBytes)
+	    {     s = si + i * lay->sectorsPerLayer;
+	          if(s >= lay->protectedSectors)  /* exclude the padding area */ 
+		    continue;                     /* respective sectors do not exist */
+	    }
+	    else  s = RS02EccSectorIndex(lay, i-eh->dataBytes, si);
 
-             if(!LargeSeek(ii->file, (gint64)(2048*s)))
+            if(!LargeSeek(ii->file, (gint64)(2048*s)))
 	       Stop(_("Failed seeking to sector %lld in image: %s"), s, strerror(errno));
-	     if(LargeWrite(ii->file, Closure->deadSector, 2048) != 2048)
+	    if(LargeWrite(ii->file, Closure->deadSector, 2048) != 2048)
 	       Stop(_("Failed writing to sector %lld in image: %s"), s, strerror(errno));
 	  }
       }

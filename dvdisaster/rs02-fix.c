@@ -373,7 +373,7 @@ void RS02Fix(Method *self)
 	
 		if(LargeRead(ii->file, crc_buf, 2048) != 2048)
 		  Stop(_("problem reading crc data: %s"), strerror(errno));
-		
+
 		crc_sector_byte += 2048;
 		crc_idx = 0;
 	     }
@@ -638,10 +638,10 @@ void RS02Fix(Method *self)
 		 gint64 sector;
 
 		 if(erasure_map[location] == 3)  /* erasure came from CRC error */
-		 {  msg = _("-> CRC-predicted error in sector %lld at byte %4d (value %2x '%c', expected %2x '%c')\n");
+		 {  msg = _("-> CRC-predicted error in sector %lld at byte %4d (value %02x '%c', expected %02x '%c')\n");
 		 }
 		 else
-		 {  msg = _("-> Non-predicted error in sector %lld at byte %4d (value %2x '%c', expected %2x '%c')\n");
+		 {  msg = _("-> Non-predicted error in sector %lld at byte %4d (value %02x '%c', expected %02x '%c')\n");
 		    if(erasure_map[location] == 0) /* remember error location */
 		    {  erasure_map[location] = 7;
 		       erasure_count++;  /* not really an erasure. */
@@ -802,7 +802,7 @@ skip:
         g_printf("%lld of %lld ecc sectors processed; %lld damaged\n", 
 		 ecc_count, lay->rsSectors, dead_ecc);
    else Verbose("all  ecc sectors processed; %lld damaged\n", dead_ecc);
-   Verbose("%lld CRC errors\n",crc_errors);
+   Verbose("%lld CRC errors\n", crc_errors);
 
    /*** Clean up */
 
