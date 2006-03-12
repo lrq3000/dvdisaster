@@ -172,7 +172,7 @@ show:
 # Distribution management
 ######################################################################
 
-.PHONY : install uninstall clean distclean arch www www-images srcdist bindist
+.PHONY : install uninstall clean distclean arch www berlios-images berlios sf sf-images srcdist bindist
 
 install: dvdisaster html
 	@echo "Installing package..."
@@ -238,7 +238,7 @@ clean:
 	@rm -f inlined-icons.h installer.iss
 	@find . -name \*\~ -print | xargs rm -f;
 	@find . -name \*.mo -print | xargs rm -f;
-	@rm -rf documentation/cs documentation/de documentation/en
+	@rm -rf documentation/cs/*.html documentation/de/*.html documentation/en/*.html
 #	@if test -e THESE_ARE_THE_DEVEL_SOURCES; then rm -f documentation/images*.pngpack; fi
 	@rm -f documentation/pngpack.log
 	@rm -f version.h
@@ -248,12 +248,25 @@ arch:	clean distclean
 	@cd .. ; tar -c -z -f $(PKGNAME)-arch.tgz $(PKGNAME)
 
 www:
-	@cd documentation ; ./create.bash www $(VERSION) ; \
-	tar czf ../../www.tgz pubkey.asc cs de en
+	@echo -e "Please use one of the following targets:\n"
+	@echo "make berlios    # create WWW pages for hosting at BerliOS"
+	@echo "make sf         # create WWW pages for hosting at SourceForge"
 
-www-images:
-	@cd documentation ; ./create.bash www $(VERSION) ; \
-	tar czf ../../www.tgz cs de en images
+sf:
+	@cd documentation ; ./create.bash sf $(VERSION) ; \
+	tar czf ../../sf.tgz pubkey.asc cs de en
+
+sf-images:
+	@cd documentation ; ./create.bash sf $(VERSION) ; \
+	tar czf ../../sf.tgz cs de en images
+
+berlios:
+	@cd documentation ; ./create.bash berlios $(VERSION) ; \
+	tar czf ../../berlios.tgz pubkey.asc cs de en
+
+berlios-images:
+	@cd documentation ; ./create.bash berlios $(VERSION) ; \
+	tar czf ../../berlios.tgz cs de en images
 
 srcdist: pack-images clean distclean 
 	@cd .. ; tar -c -j -X $(PKGNAME)/NODIST -f $(PKGNAME).tar.bz2 $(PKGNAME)

@@ -112,8 +112,9 @@ gint64 RS02EccSectorIndex(RS02Layout *lay, gint64 slice, gint64 n)
  ***/
 
 #define CDR_SIZE (351*1024)
-#define DVD_SL 	 2295104
-#define DVD_DL 	 4500000
+#define DVD_SL 	 2295104  /* DVD+R/RW size used at least common denominator */
+#define DVD_DASH 2294922  /* DVD-R/RW, 2,298,496 seems to be more common */
+#define DVD_DL 	 4171712  /* also seen: 4148992 4173824  */
 
 RS02Layout *CalcRS02Layout(gint64 data_sectors, int requested_roots)
 {  RS02Layout *lay = g_malloc0(sizeof(RS02Layout));

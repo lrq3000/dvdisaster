@@ -104,12 +104,35 @@ Method *FindMethod(char *name)
  * Note that udf.c has a similar function FindHeaderInMedia().
  */
 
+static int read_footprint(LargeFile *file, char *footprint, gint64 sector)
+{  struct MD5Context md5ctxt;
+   int n;
+
+   if(!LargeSeek(file, 2048LL*sector))
+     return FALSE;
+
+   n = LargeRead(file, Closure->scratchBuf, 2048);
+
+   if(n != 2048) return FALSE;
+
+   if(!memcmp(Closure->scratchBuf, Closure->deadSector, 2048))
+     return FALSE;
+
+   MD5Init(&md5ctxt);
+   MD5Update(&md5ctxt, Closure->scratchBuf, 2048);
+   MD5Final(footprint, &md5ctxt);
+
+   return TRUE;
+}
+
 EccHeader* FindHeaderInImage(char *filename)
 {  EccHeader *eh = NULL;
    LargeFile *file;
    unsigned char buf[4096];
    gint64 length,sectors,pos;
    gint64 header_modulo;
+   gint64 last_fp = -1;
+   unsigned char footprint[16];
 
    if(!LargeStat(filename, &length))
      return NULL;
@@ -164,7 +187,24 @@ EccHeader* FindHeaderInImage(char *filename)
 		  memcpy(eh, buf, sizeof(EccHeader));
 		  eh->selfCRC = recorded_crc;
 //printf(" --> CRC okay, using it\n");
-		  return eh;
+
+		  if(last_fp != eh->fpSector)
+		  {  int status;
+
+		     status = read_footprint(file, footprint, eh->fpSector);
+		     last_fp = eh->fpSector;
+
+		     if(!status)  /* be optimistic if footprint sector is unreadable */
+		       return eh;
+		  }
+
+		  if(!memcmp(footprint, eh->mediumFP, 16))  /* good footprint */
+		    return eh;
+
+		  /* might be a header from a larger previous session.
+		     discard it and continue */
+
+		  g_free(eh);
 	       }
 //printf(" CRC failed, skipping it\n");
 	       goto check_next_header;

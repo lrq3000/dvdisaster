@@ -43,10 +43,39 @@ fi
 
 # Make sure we've got a valid mode
 
+tar_0_65="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.65.tar.bz2?download"
+tar_0_65_sig="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.65.tar.bz2.gpg?download"
+setup_0_65="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.65-setup.exe?download"
+setup_0_65_sig="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.65-setup.exe.gpg?download"
+
+tar_0_66="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.66.tar.bz2?download"
+tar_0_66_sig="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.66.tar.bz2.gpg?download"
+setup_0_66="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.66-setup.exe?download"
+setup_0_66_sig="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.66-setup.exe.gpg?download"
+
 case $major_mode in
   local) echo "Creating local documentation for $project_title $cooked_version" ;;
-  www)   echo "Creating WWW homepage for $project_title $cooked_version" ;;
-  *)     echo "Error: mode $major_mode unknown. Use \"local\" or \"www\"." ;;
+
+  sf)    echo "Creating WWW homepage for $project_title $cooked_version at SourceForge" 
+         project_at_hoster="http://sourceforge.net/projects/dvdisaster"
+         ;;
+
+  berlios)    
+         echo "Creating WWW homepage for $project_title $cooked_version at BerliOS" 
+         project_at_hoster="http://developer.berlios.de/projects/dvdisaster"
+
+	 tar_0_65="http://download.berlios.de/dvdisaster/dvdisaster-0.65.tar.bz2"
+         tar_0_65_sig="http://download.berlios.de/dvdisaster/dvdisaster-0.65.tar.bz2.gpg"
+         setup_0_65="http://download.berlios.de/dvdisaster/dvdisaster-0.65-setup.exe"
+         setup_0_65_sig="http://download.berlios.de/dvdisaster/dvdisaster-0.65-setup.exe.gpg"
+
+	 tar_0_66="http://download.berlios.de/dvdisaster/dvdisaster-0.66.tar.bz2"
+         tar_0_66_sig="http://download.berlios.de/dvdisaster/dvdisaster-0.66.tar.bz2.gpg"
+         setup_0_66="http://download.berlios.de/dvdisaster/dvdisaster-0.66-setup.exe"
+         setup_0_66_sig="http://download.berlios.de/dvdisaster/dvdisaster-0.66-setup.exe.gpg"
+
+         ;;
+  *)     echo "Error: mode $major_mode unknown. Use \"local\", \"sf\" or \"berlios\"." ;;
 esac
 
 # begin a new html file
@@ -135,8 +164,13 @@ EOF
   if [ $major_mode != "local" ]; then
     echo "<tr>" >> $file
 
+    case $major_mode in
+      sf) trans_to_hoster="$trans_to_sourceforge" ;;
+      berlios) trans_to_hoster="$trans_to_berlios" ;;
+    esac
+
     case $lang in
-      cs)  echo "   <td align=\"left\"><a href=\"http://developer.berlios.de/projects/dvdisaster/\">$trans_to_hoster</a></td>" >> $file
+      cs)  echo "   <td align=\"left\"><a href=\"$project_at_hoster\">$trans_to_hoster</a></td>" >> $file
            echo "<td align=\"right\">" >>$file
            echo "&#268;esky &nbsp;&nbsp;&nbsp;" >>$file
 	   echo "<a href=\"../de/$file\" title=\"Deutsche Sprache\">Deutsch</a> &nbsp;&nbsp;&nbsp;" >>$file
@@ -144,7 +178,7 @@ EOF
            echo "</td>" >>$file
 	   ;;
 
-      de) echo "   <td align=\"left\"><a href=\"http://developer.berlios.de/projects/dvdisaster/\">$trans_to_hoster</a></td>" >> $file
+      de) echo "   <td align=\"left\"><a href=\"$project_at_hoster\">$trans_to_hoster</a></td>" >> $file
           echo "<td align=\"right\">" >>$file
           echo "<a href=\"../cs/$file\">&#268;esky</a> &nbsp;&nbsp;&nbsp;" >>$file
 	  echo "Deutsch &nbsp;&nbsp;&nbsp;" >>$file
@@ -152,7 +186,7 @@ EOF
           echo "</td>" >>$file
 	  ;;
 
-      *)  echo "   <td align=\"left\"><a href=\"http://developer.berlios.de/projects/dvdisaster/\">$trans_to_hoster</a></td>" >> $file
+      *)  echo "   <td align=\"left\"><a href=\"$project_at_hoster\">$trans_to_hoster</a></td>" >> $file
           echo "<td align=\"right\">" >>$file
           echo "<a href=\"../cs/$file\">&#268;esky</a> &nbsp;&nbsp;&nbsp;" >>$file
 	  echo "<a href=\"../de/$file\">Deutsch</a> &nbsp;&nbsp;&nbsp;" >>$file
@@ -306,10 +340,27 @@ cat >> $file <<EOF
  <tr valign="bottom">
    <td $IDXCOLOR align="center">
     <font size="-2">$trans_hosting</font><br>
+EOF
+    case $major_mode in
+      berlios)
+cat >> $file <<EOF
       <a href="http://developer.berlios.de" title="BerliOS Developer"> 
         <img src="http://developer.berlios.de/bslogo.php?group_id=2105" 
              width="124px" height="32px" border="0" alt="BerliOS Developer Logo">
       </a>
+EOF
+      ;;
+      sf)
+cat >> $file <<EOF
+      <a href="http://sourceforge.net">
+         <img src="http://sflogo.sourceforge.net/sflogo.php?group_id=157550&amp;type=2" 
+              width="125" height="37" border="0" alt="SourceForge.net Logo" />
+      </a>
+EOF
+      ;;
+    esac
+
+cat >> $file <<EOF
    </td>
    <td></td><td></td>
  </tr>

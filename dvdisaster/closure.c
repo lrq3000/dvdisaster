@@ -209,6 +209,7 @@ void ReadDotfile()
 	                                       continue; 
                                              }
       if(!strcmp(symbol, "jump"))            { Closure->sectorSkip  = atoi(value); continue; }
+      if(!strcmp(symbol, "parse-ecc"))       { Closure->parseEcc  = atoi(value); continue; }
       if(!strcmp(symbol, "parse-udf"))       { Closure->parseUDF  = atoi(value); continue; }
       if(!strcmp(symbol, "read-and-create")) { Closure->readAndCreate = atoi(value); continue; }
       if(!strcmp(symbol, "redundancy"))      { if(Closure->redundancy) g_free(Closure->redundancy);
@@ -261,6 +262,7 @@ static void update_dotfile()
    g_fprintf(dotfile, "dao:             %d\n", Closure->noTruncate);
    g_fprintf(dotfile, "fill-unreadable: %d\n", Closure->fillUnreadable);
    g_fprintf(dotfile, "jump:            %d\n", Closure->sectorSkip);
+   g_fprintf(dotfile, "parse-ecc:       %d\n", Closure->parseEcc);
    g_fprintf(dotfile, "parse-udf:       %d\n", Closure->parseUDF);
    g_fprintf(dotfile, "read-and-create: %d\n", Closure->readAndCreate);
    if(Closure->redundancy)

@@ -517,12 +517,9 @@ static unsigned int query_size(DeviceHandle *dh)
    /* If RS02 header search is enabled and we can find an appropriate header,
       use it as an authoritative source for the medium size. */
 
-   if(1)
-   {  gint64 rs02_size;
-
-      rs02_size = MediumLengthFromRS02(dh, MAX(size, dh->userAreaSize));
-
-      if(rs02_size) return rs02_size;
+   if(Closure->parseEcc)
+   {  dh->rs02Size = MediumLengthFromRS02(dh, MAX(size, dh->userAreaSize));
+      if(dh->rs02Size) return dh->rs02Size;
    }
 
    /* For DVD media, READ CAPACITY should give the real image size.
@@ -951,13 +948,16 @@ DeviceHandle* OpenAndQueryDevice(char *device)
    switch(dh->subType)
    {  case DVD:
         if(!dh->isoInfo)
-	  dh->mediumDescr = g_strdup_printf(_("Medium: %s, %lld sectors, %d layer(s)"),
-					    dh->typedescr, dh->sectors, dh->layers);
+	  dh->mediumDescr = g_strdup_printf(_("Medium: %s, %lld sectors%s %d layer(s)"),
+					    dh->typedescr, dh->sectors, 
+					    dh->rs02Size ? ", Ecc," : ",",
+					    dh->layers);
 	else
-	  dh->mediumDescr = g_strdup_printf(_("Medium \"%s\": %s, %lld sectors, %d layer(s), created %s"),
+	  dh->mediumDescr = g_strdup_printf(_("Medium \"%s\": %s, %lld sectors%s %d layer(s), created %s"),
 					    dh->isoInfo->volumeLabel,
-					    dh->typedescr, dh->sectors, dh->layers,
-					    dh->isoInfo->creationDate);
+					    dh->typedescr, dh->sectors, 
+					    dh->rs02Size ? ", Ecc," : ",",
+					    dh->layers, dh->isoInfo->creationDate);
 
 	PrintLog("%s\n\n", dh->mediumDescr);
 	break;
@@ -965,12 +965,14 @@ DeviceHandle* OpenAndQueryDevice(char *device)
       case DATA1:
       case XA21:
         if(!dh->isoInfo)
-	  dh->mediumDescr = g_strdup_printf(_("Medium: %s, %lld sectors"),
-					    dh->typedescr, dh->sectors);
+	  dh->mediumDescr = g_strdup_printf(_("Medium: %s, %lld sectors%s"),
+					    dh->typedescr, dh->sectors,
+					    dh->rs02Size ? ", Ecc" : " ");
 	else
-	  dh->mediumDescr = g_strdup_printf(_("Medium \"%s\": %s, %lld sectors, created %s"),
+	  dh->mediumDescr = g_strdup_printf(_("Medium \"%s\": %s, %lld sectors%s created %s"),
 					    dh->isoInfo->volumeLabel,
 					    dh->typedescr, dh->sectors,
+					    dh->rs02Size ? ", Ecc," : ",",
 					    dh->isoInfo->creationDate);
 
 	PrintLog("%s\n\n", dh->mediumDescr);

@@ -1,3 +1,12 @@
+0.66 (rc-7) 12-03-2006
+	- added homepage generation for SourceForge
+	- final rework of background20 in the documentation
+	- added --parse-ecc option
+	- added documentation for --parse-ecc: example90, example10, example30,
+	  example81, prefs-general.png, prefs-general1.png
+	- moved localized screenshots from images to lang/images
+	- added media checksum test for ecc header search
+
 0.66 (rc-6) 04-03-2006
 	- fixed image size miscalculation in RS02Common
 	- fixed layout miscalculation for certain border cases in RS02Common

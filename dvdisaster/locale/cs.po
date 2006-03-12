@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-05 17:46+0100\n"
+"POT-Creation-Date: 2006-03-12 13:43+0100\n"
 "PO-Revision-Date: 2006-02-22 21:30+0100\n"
 "Last-Translator: Luboš Staněk <lubek@users.sourceforge.net>\n"
 "Language-Team: čeština <cs@li.org>\n"
@@ -237,24 +237,24 @@ msgstr "Metoda RS01 není dostupná pro porovnání souborů."
 #. TRANSLATORS:
 #. This is a dummy entry which is supposed to translate into "ok".
 #. Please do not return anything else here.
-#: dvdisaster.c:229 dvdisaster.c:241 dvdisaster.c:254
+#: dvdisaster.c:230 dvdisaster.c:242 dvdisaster.c:255
 msgid "test phrase for verifying the locale installation"
 msgstr "ok"
 
-#: dvdisaster.c:272
+#: dvdisaster.c:273
 #, c-format
 msgid "sizeof(EccHeader) is %d, but must be 4096.\n"
 msgstr "velikost(EccHlavička) je %d, ale musí být 4096.\n"
 
-#: dvdisaster.c:400
+#: dvdisaster.c:402
 msgid "--cache-size must at least be 1MB; 16MB or higher is recommended."
 msgstr "--cache-size musí být alespoň 1MB; je doporučeno 16MB nebo větší."
 
-#: dvdisaster.c:402
+#: dvdisaster.c:404
 msgid "--cache-size maximum is 2048MB."
 msgstr "--cache-size maximum je 2048MB."
 
-#: dvdisaster.c:446
+#: dvdisaster.c:451
 #, c-format
 msgid ""
 "\n"
@@ -265,14 +265,14 @@ msgstr ""
 "dvdisaster, verze %s\n"
 "\n"
 
-#: dvdisaster.c:478
+#: dvdisaster.c:483
 #, c-format
 msgid "?? illegal getopt return value %d\n"
 msgstr "?? neplatná návratová hodnota getopt %d\n"
 
 #. TRANSLATORS: Program options like -r and --read are not to be translated
 #. to avoid confusion when discussing the program in international forums.
-#: dvdisaster.c:603
+#: dvdisaster.c:608
 msgid ""
 "\n"
 "Common usage examples:\n"
@@ -296,7 +296,7 @@ msgstr ""
 "  dvdisaster -u,--unlink # Smaže soubor .iso (když se dokončí další akce)\n"
 "\n"
 
-#: dvdisaster.c:612
+#: dvdisaster.c:617
 #, c-format
 msgid ""
 "Drive and file specification:\n"
@@ -311,7 +311,7 @@ msgstr ""
 "  -i,--image  imagefile  - název souboru obrazu     (výchozí: medium.iso)\n"
 "  -e,--ecc    eccfile    - název souboru ecc        (výchozí: medium.ecc)\n"
 
-#: dvdisaster.c:620
+#: dvdisaster.c:625
 msgid ""
 "  -l,--list              - list drives available under ASPI manager\n"
 "\n"
@@ -319,7 +319,7 @@ msgstr ""
 "  -l,--list              - vypíše seznam mechanik dostupných pod ASPI\n"
 "\n"
 
-#: dvdisaster.c:625
+#: dvdisaster.c:630
 #, c-format
 msgid ""
 "Tweaking options (see manual before using!)\n"
@@ -334,6 +334,7 @@ msgid ""
 "  --dao                  - assume DAO disc; do not trim image end\n"
 "  --fill-unreadable n    - fill unreadable sectors with byte n\n"
 "  --medium-size          - max. possible image size on medium (in sectors)\n"
+"  --parse-ecc            - use information from ecc headers\n"
 "  --parse-udf            - use information from ISO/UDF filesystem\n"
 "  --speed-warning n      - print warning if speed changes by more than n percent\n"
 "  --spinup-delay n       - wait n seconds for drive to spin up\n"
@@ -352,13 +353,14 @@ msgstr ""
 "  --dao                  - předpokládat disk DAO; neořezávat konec obrazu\n"
 "  --fill-unreadable n    - vyplnit nečitelné sektory bajtem n\n"
 "  --medium-size          - max. možná velikost obrazu na médiu (v sektorech)\n"
+"  --parse-ecc            - use information from ecc headers\n"
 "  --parse-udf            - použít informace ze souborového systému ISO/UDF\n"
 "  --speed-warning n      - vypsat upozornění, změní-li se rychlost o více než n procent\n"
 "  --spinup-delay n       - počkat n sekund na roztočení mechaniky\n"
 "  --split-files          - rozdělit obraz na soubory <= 2 GB\n"
 "\n"
 
-#: dvdisaster.c:642
+#: dvdisaster.c:648
 msgid ""
 "Graphical user interface options\n"
 "  --keep-style           - do not override the style settings\n"
@@ -368,7 +370,7 @@ msgstr ""
 "  --keep-style           - nepřepisovat nastavení\n"
 "\n"
 
-#: dvdisaster.c:646
+#: dvdisaster.c:652
 msgid ""
 "Debugging options (purposefully undocumented and possibly harmful)\n"
 "  --debug           - enables the following options\n"
@@ -839,12 +841,12 @@ msgstr ""
 "Seznam dostupných metod:\n"
 "\n"
 
-#: method.c:235 method.c:236
+#: method.c:234 method.c:235
 #, c-format
 msgid "Image file %s not present.\n"
 msgstr "Soubor obrazu %s není přítomen.\n"
 
-#: method.c:260 method.c:265
+#: method.c:259 method.c:264
 #, c-format
 msgid ""
 "\n"
@@ -853,7 +855,7 @@ msgstr ""
 "\n"
 "Neznámá metoda %s.\n"
 
-#: method.c:261 method.c:266
+#: method.c:260 method.c:265
 msgid ""
 "\n"
 "Neither ecc file nor ecc data in image found.\n"
@@ -898,117 +900,121 @@ msgstr ""
 "* dvdisaster - nemůže pokračovat:\n"
 "*\n"
 
-#: preferences.c:165
+#: preferences.c:170
 msgid "Switched to the linear reading strategy."
 msgstr "Přepnuto na strategii lineárního čtení."
 
-#: preferences.c:318
+#: preferences.c:323
 msgid "Disabled automatic error correction file generation."
 msgstr "Zakázána automatická tvorba souboru oprav chyb."
 
-#: preferences.c:390
+#: preferences.c:395
 msgid "Preferences"
 msgstr "Nastavení"
 
-#: preferences.c:420
+#: preferences.c:425
 msgid "General"
 msgstr "Obecné"
 
-#: preferences.c:424
+#: preferences.c:429
 msgid "Medium and image filesystem"
 msgstr "Souborové systémy média a obrazu"
 
-#: preferences.c:427
+#: preferences.c:436
+msgid "Use information from ECC headers"
+msgstr ""
+
+#: preferences.c:441
 msgid "Use information from ISO/UDF filesystem (experimental)"
 msgstr "Použít informace ze souborových systémů ISO/UDF (experimentální)"
 
-#: preferences.c:435
+#: preferences.c:448
 msgid "Local files (on hard disc)"
 msgstr "Lokální soubory (na pevném disku)"
 
-#: preferences.c:442
+#: preferences.c:455
 msgid "Automatically add .iso and .ecc file suffixes"
 msgstr "Automaticky přidat souborové přípony .iso a .ecc"
 
-#: preferences.c:449
+#: preferences.c:462
 msgid "Split files into segments <= 2GB"
 msgstr "Rozdělit soubory na segmenty <= 2 GB"
 
-#: preferences.c:456
+#: preferences.c:469
 msgid "Automatic file creation and deletion"
 msgstr "Automatická tvorba a mazání souborů"
 
-#: preferences.c:465
+#: preferences.c:478
 msgid "Create error correction file after reading image"
 msgstr "Vytvořit soubor oprav chyb po načtení obrazu"
 
-#: preferences.c:473
+#: preferences.c:486
 msgid "Remove image after error correction file creation"
 msgstr "Odstranit obraz po vytvoření souboru oprav chyb"
 
-#: preferences.c:480
+#: preferences.c:493
 msgid "Read & Scan"
 msgstr "Čtení a skenování"
 
-#: preferences.c:484
+#: preferences.c:497
 msgid "Reading preferences"
 msgstr "Nastavení čtení"
 
-#: preferences.c:495
+#: preferences.c:508
 msgid "Reading strategy: "
 msgstr "Strategie čtení: "
 
-#: preferences.c:501
+#: preferences.c:514
 msgid "Linear"
 msgstr "Lineární"
 
-#: preferences.c:507
+#: preferences.c:520
 msgid "Adaptive (for defective media)"
 msgstr "Adaptivní (pro vadná média)"
 
-#: preferences.c:519
+#: preferences.c:532
 msgid "Read/Scan from sector"
 msgstr "Číst/Skenovat od sektoru"
 
-#: preferences.c:528
+#: preferences.c:541
 msgid "to sector"
 msgstr "po sektor"
 
-#: preferences.c:542
+#: preferences.c:555
 #, c-format
 msgid "Skip %d sectors after read error"
 msgstr "Přeskočit %d sektorů po chybě čtení"
 
-#: preferences.c:543
+#: preferences.c:556
 #, c-format
 msgid "Stop reading when unreadable intervals < %d"
 msgstr "Přestat číst, je-li nečitelný úsek < %d"
 
-#: preferences.c:555
+#: preferences.c:568
 msgid "Image properties"
 msgstr "Vlastnosti obrazu"
 
-#: preferences.c:564
+#: preferences.c:577
 msgid "Assume image to be written in DAO mode (don't truncate)"
 msgstr "Předpokládat, že obraz má být zapsán v režimu DAO (nezkracovat)"
 
-#: preferences.c:576
+#: preferences.c:589
 msgid "Fill unreadable sectors with byte:"
 msgstr "Vyplnit nečitelné sektory bajtem:"
 
-#: preferences.c:598
+#: preferences.c:611
 msgid "Drive initialisation"
 msgstr "Inicializace mechaniky"
 
-#: preferences.c:605
+#: preferences.c:618
 msgid "Wait"
 msgstr "Čekat"
 
-#: preferences.c:614
+#: preferences.c:627
 msgid "seconds for drive to spin up"
 msgstr "sekund na roztočení mechaniky"
 
-#: preferences.c:619
+#: preferences.c:632
 msgid "Error correction"
 msgstr "Oprava chyb"
 
@@ -1414,7 +1420,7 @@ msgstr "Kompletace obrazu %s. Budou se načítat pouze chybějící sektory.\n"
 msgid "done.\n"
 msgstr "hotovo.\n"
 
-#: read-linear.c:429 scsi-layer.c:729
+#: read-linear.c:429 scsi-layer.c:737
 #, c-format
 msgid "Waiting %d seconds for drive to spin up...\n"
 msgstr "Čekám %d sekund na roztočení disku...\n"
@@ -2267,12 +2273,12 @@ msgstr "Využití paměti"
 msgid "Use"
 msgstr "Použít"
 
-#: rs02-common.c:231 rs02-common.c:243 rs02-compare.c:336
+#: rs02-common.c:232 rs02-common.c:244 rs02-compare.c:336
 #, c-format
 msgid "Failed seeking to ecc header at %lld: %s\n"
 msgstr "Skok na hlavičku ecc selhal na %lld: %s\n"
 
-#: rs02-common.c:235 rs02-common.c:247
+#: rs02-common.c:236 rs02-common.c:248
 #, c-format
 msgid "Failed writing ecc header at %lld: %s\n"
 msgstr "Selhal zápis hlavičky ecc na %lld: %s\n"
@@ -2672,7 +2678,7 @@ msgstr ""
 "%s\n"
 "Nelze se dotázat na velikost média.\n"
 
-#: scsi-layer.c:537 scsi-layer.c:580
+#: scsi-layer.c:545 scsi-layer.c:588
 #, c-format
 msgid ""
 "Different media sizes depending on query method:\n"
@@ -2683,7 +2689,7 @@ msgstr ""
 "NAČTENÁ KAPACITA:      %lld sektorů\n"
 "NAČTENÁ STRUKTURA DVD: %lld sektorů\n"
 
-#: scsi-layer.c:543
+#: scsi-layer.c:551
 #, c-format
 msgid ""
 "ISO file system   : %d sectors\n"
@@ -2696,7 +2702,7 @@ msgstr ""
 "Používám velikost specifikovanou souborovým systémem ISO.\n"
 "\n"
 
-#: scsi-layer.c:557
+#: scsi-layer.c:565
 msgid ""
 "Drive data base suggests using READ CAPACITY.\n"
 "\n"
@@ -2704,7 +2710,7 @@ msgstr ""
 "Databáze mechanik navrhuje použití READ CAPACITY.\n"
 "\n"
 
-#: scsi-layer.c:567
+#: scsi-layer.c:575
 msgid ""
 "Drive data base suggests using READ DVD STRUCTURE.\n"
 "\n"
@@ -2712,7 +2718,7 @@ msgstr ""
 "Databáze mechanik navrhuje použití READ DVD STRUCTURE.\n"
 "\n"
 
-#: scsi-layer.c:586
+#: scsi-layer.c:594
 msgid ""
 "Evaluation of returned medium sizes:\n"
 "\n"
@@ -2720,15 +2726,15 @@ msgstr ""
 "Vyhodnocení vrácených velikostí médií:\n"
 "\n"
 
-#: scsi-layer.c:641
+#: scsi-layer.c:649
 msgid "Using value from READ CAPACITY"
 msgstr "Používám hodnotu z READ CAPACITY"
 
-#: scsi-layer.c:645
+#: scsi-layer.c:653
 msgid "Using value from READ DVD STRUCTURE"
 msgstr "Používám hodnotu z READ DVD STRUCTURE"
 
-#: scsi-layer.c:655
+#: scsi-layer.c:663
 #, c-format
 msgid ""
 "FAILED to determine image size.\n"
@@ -2739,7 +2745,7 @@ msgstr ""
 "Používám menší hodnotu, protože je to správně pro >90%% všech mechanik,\n"
 "ale POKRAČUJTE NA VLASTNÍ NEBEZPEČÍ (obraz může být neúplný/nepoužitelný)"
 
-#: scsi-layer.c:660
+#: scsi-layer.c:668
 #, c-format
 msgid ""
 "Final decision: %s\n"
@@ -2748,15 +2754,15 @@ msgstr ""
 "Konečné rozhodnutí: %s\n"
 "\n"
 
-#: scsi-layer.c:664
+#: scsi-layer.c:672
 msgid "If you can verify that one of the above image sizes is correct,\n"
 msgstr "Pokud můžete ověřit, že jedna z velikostí obrazu výše je správná,\n"
 
-#: scsi-layer.c:667
+#: scsi-layer.c:675
 msgid "If you can verify that this image size is correct,\n"
 msgstr "Pokud můžete ověřit, že tato velikost obrazu je správná,\n"
 
-#: scsi-layer.c:670
+#: scsi-layer.c:678
 msgid ""
 "please send in the whole dvdisaster output upto this line\n"
 "to have your drive included in the internal data base.\n"
@@ -2764,7 +2770,7 @@ msgstr ""
 "pošlete prosím celý výpis programu dvdisaster až k této řádce,\n"
 "aby byla vaše mechanika zahrnuta do interní databáze.\n"
 
-#: scsi-layer.c:680
+#: scsi-layer.c:688
 msgid ""
 "Failed to determine image size.\n"
 "Try using a different drive."
@@ -2772,16 +2778,16 @@ msgstr ""
 "Selhalo určení velikosti obrazu.\n"
 "Zkuste použít jinou mechaniku."
 
-#: scsi-layer.c:785
+#: scsi-layer.c:793
 msgid "Setting the drive speed failed:\n"
 msgstr "Nastavení rychlosti mechaniky se nepodařilo:\n"
 
-#: scsi-layer.c:896
+#: scsi-layer.c:904
 #, c-format
 msgid "Retrying Sector %lld because of: %s\n"
 msgstr "Opakování sektoru %lld kvůli: %s\n"
 
-#: scsi-layer.c:920
+#: scsi-layer.c:928
 #, c-format
 msgid ""
 "\n"
@@ -2790,7 +2796,7 @@ msgstr ""
 "\n"
 "Zařízení: %s, %s [Poznámka %d]\n"
 
-#: scsi-layer.c:921
+#: scsi-layer.c:929
 #, c-format
 msgid ""
 "\n"
@@ -2799,7 +2805,7 @@ msgstr ""
 "\n"
 "Zařízení: %s, %s\n"
 
-#: scsi-layer.c:926
+#: scsi-layer.c:934
 #, c-format
 msgid ""
 "\n"
@@ -2808,7 +2814,7 @@ msgstr ""
 "\n"
 "Zařízení: %s (%s), %s [Poznámka %d]\n"
 
-#: scsi-layer.c:929
+#: scsi-layer.c:937
 #, c-format
 msgid ""
 "\n"
@@ -2817,36 +2823,36 @@ msgstr ""
 "\n"
 "Zařízení: %s (%s), %s\n"
 
-#: scsi-layer.c:943
+#: scsi-layer.c:951
 #, c-format
-msgid "Medium: %s, %lld sectors, %d layer(s)"
-msgstr "Médium: %s, %lld sektorů, %d vrstva(y)"
+msgid "Medium: %s, %lld sectors%s %d layer(s)"
+msgstr "Médium: %s, %lld sektorů%s %d vrstva(y)"
 
-#: scsi-layer.c:946
+#: scsi-layer.c:956
 #, c-format
-msgid "Medium \"%s\": %s, %lld sectors, %d layer(s), created %s"
-msgstr "Médium \"%s\": %s, %lld sektorů, %d vrstva(y), vytvořeno %s"
+msgid "Medium \"%s\": %s, %lld sectors%s %d layer(s), created %s"
+msgstr "Médium \"%s\": %s, %lld sektorů%s %d vrstva(y), vytvořeno %s"
 
-#: scsi-layer.c:957
+#: scsi-layer.c:968
 #, c-format
-msgid "Medium: %s, %lld sectors"
-msgstr "Médium: %s, %lld sektorů"
+msgid "Medium: %s, %lld sectors%s"
+msgstr "Médium: %s, %lld sektorů%s"
 
-#: scsi-layer.c:960
+#: scsi-layer.c:972
 #, c-format
-msgid "Medium \"%s\": %s, %lld sectors, created %s"
-msgstr "Médium \"%s\": %s, %lld sektorů, vytvořeno %s"
+msgid "Medium \"%s\": %s, %lld sectors%s created %s"
+msgstr "Médium \"%s\": %s, %lld sektorů%s vytvořeno %s"
 
-#: scsi-layer.c:974
+#: scsi-layer.c:987
 #, c-format
 msgid "Medium type \"%s\" not supported."
 msgstr "Typ média \"%s\" není podporován."
 
-#: scsi-layer.c:981
+#: scsi-layer.c:994
 msgid "Can not continue: Encrypted medium.\n"
 msgstr "Nelze pokračovat: Šifrované médium.\n"
 
-#: scsi-layer.c:988
+#: scsi-layer.c:1001
 #, c-format
 msgid "Multisession (%d sessions) not supported."
 msgstr "Režim multisession (%d zápisy(ů)) není podporován."
@@ -3001,7 +3007,7 @@ msgstr ""
 msgid "Please hang on until the browser comes up!"
 msgstr "Vydržte prosím, až se spustí prohlížeč!"
 
-#: udf.c:90
+#: udf.c:178
 msgid "Unnamed"
 msgstr "Nepojmenovaný"
 

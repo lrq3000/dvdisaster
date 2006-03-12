@@ -9,13 +9,14 @@ ROADMAP
 
 TODO  (with no particular order / schedule)
 
+- let user select the number of reading passes so that a defective
+  medium can be read in several passed overnight
+
+- provide a function for searching directories for suitable .ecc files 
+  for the current image
+
 - add real UDF parsing to udf.c 
   (currently only the backward compatibility ISO structures are used)
-
-- Provide a deep verify method which calculates and tests the error
-  syndrome for each image byte.
-
-- Optimize the decoding (fixing) part
 
 - Graceful handling of situations where the SCSI/IDE bus 
   becomes temporarily unavailable (does this happen on ATAPI at all?)

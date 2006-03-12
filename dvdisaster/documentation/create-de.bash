@@ -26,7 +26,8 @@ function dictionary_de()
    trans_version="Version"
 
    trans_to_internet="Zur Internet-Version"
-   trans_to_hoster="Übersicht (auf BerliOS)"
+   trans_to_berlios="Übersicht (auf BerliOS)"
+   trans_to_sourceforge="Übersicht (auf SourceForge.net)"
 
    trans_back="Zurück"
 
@@ -65,7 +66,7 @@ function inline2de()
 
 <tr align="center"><td><h3>Abbildungen: Fehleranalyse</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/scratch-scan-de.png" alt="Verkratzten Datenträger einlesen"></center>
+<center><img src="images/scratch-scan.png" alt="Verkratzten Datenträger einlesen"></center>
 <br clear="all">
 </td></tr>
 <tr><td>
@@ -79,7 +80,7 @@ aus technischen Gründen nicht den wirklichen Verhältnissen auf dem Datenträger e
 </pre>
 </td></tr>
 <tr align="center"><td>
-<center><img src="../images/scratch-corr-de.png" alt="Verkratzten Datenträger reparieren"></center>
+<center><img src="images/scratch-corr.png" alt="Verkratzten Datenträger reparieren"></center>
 <br clear="all">
 </td></tr>
 <tr><td>
@@ -183,10 +184,10 @@ unter den gewählten Einstellungen.<p>
 <img src="../images/scratch-img.jpg" alt="verkratzter Datenträger" width=100 height=97></a>
 <br clear="all">
 <a href="inline2.html">
-<img src="../images/scratch-scan-de.png" alt="verkratzten Datenträger lesen" width=100 height=74></a>
+<img src="images/scratch-scan.png" alt="verkratzten Datenträger lesen" width=100 height=74></a>
 <br clear="all">
 <a href="inline2.html">
-<img src="../images/scratch-corr-de.png" alt="verkratzten Datenträger reparieren" width=100 height=74></a>
+<img src="images/scratch-corr.png" alt="verkratzten Datenträger reparieren" width=100 height=74></a>
 </td></tr></table>
 
 <a href="index20.html">Warum PI/PO-Analysen alleine nicht ausreichen...</a>
@@ -311,13 +312,13 @@ als eigenständige Datei abgelegt werden.
 <tr>
 <td>
 <a href="example1.html">
-  <img src="../images/ex-scan-de.png" alt="Datenträger prüfen" border=0 width=275>
+  <img src="images/ex-scan.png" alt="Datenträger prüfen" border=0 width=275>
 </a>
 </td>
 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 <td>
 <a href="example3.html#ecc">
-  <img src="../images/ex-create-de.png" alt="Fehlerkorrektur-Daten erzeugen" border=0 width=264>
+  <img src="images/ex-create.png" alt="Fehlerkorrektur-Daten erzeugen" border=0 width=264>
 </a>
 </td>
 </tr>
@@ -341,13 +342,13 @@ als eigenständige Datei abgelegt werden.
 <tr>
 <td>
 <a href="example4.html">
-  <img src="../images/ex-read-a-de.png" alt="beschädigten Datenträger lesen" border=0 width=264>
+  <img src="images/ex-read-a.png" alt="beschädigten Datenträger lesen" border=0 width=264>
 </a>
 </td>
 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 <td>
 <a href="example5.html">
-  <img src="../images/ex-fix-de.png" alt="beschädigten Datenträger reparieren" border=0 width=264>
+  <img src="images/ex-fix.png" alt="beschädigten Datenträger reparieren" border=0 width=264>
 </a>
 </td>
 </tr>
@@ -381,7 +382,7 @@ function example1de()
 
 <tr align="center"><td><h3>Bildschirmfoto: Datenträger auf Lesefehler überprüfen</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/ex-scan-de.png" alt="Bildschirmfoto"></center>
+<center><img src="images/ex-scan.png" alt="Bildschirmfoto"></center>
 <br clear="all">
 </td></tr>
 <tr><td>
@@ -406,7 +407,7 @@ und auf einen neuen Datenträger übertragen. </td></tr></table><p>
 </li>
 
 <li>Durch Anklicken des 
-<img src="../images/btn-protocol-de.png" alt="Protokoll" align="middle">--Symbols
+<img src="images/btn-protocol.png" alt="Protokoll" align="middle">--Symbols
 erhalten Sie zusätzliche Informationen über den Lesevorgang.<p></li>
 </ul>
 
@@ -457,13 +458,13 @@ Das <img src="../images/open-ecc.png" alt="Dateiauswahl-Knopf" align="middle">-S
 <tr valign="top" $BGCOLOR2>
 <td>4.</td>
 <td>Beginnen Sie die Überprüfung mit dem "Prüfen"-Knopf.</td>
-<td><img src="../images/btn-scan-de.png" alt="Prüfen-Knopf"></td>
+<td><img src="images/btn-scan.png" alt="Prüfen-Knopf"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
 <td>5.</td>
 <td>Verfolgen Sie den Fortschritt der Überprüfung in der graphischen Darstellung.</td>
-<td><a href="example1.html"><img src="../images/ex-scan-de.png" alt="Bildschirmfoto" width="200"></a><p>
+<td><a href="example1.html"><img src="images/ex-scan.png" alt="Bildschirmfoto" width="200"></a><p>
 </td>
 </tr>
 </table>
@@ -504,7 +505,11 @@ In der Kommandozeilen-Betriebsart benötigen Sie die folgenden Parameter
 </tr>
 <tr>
 <td><a href="example90.html#ecc">-e / --ecc</a></td>
-<td>Fehlerkorrektur-Datei auswählen (medium.ecc)</td>
+<td>nur für <a href="background30.html">RS01</a>: Fehlerkorrektur-Datei auswählen (medium.ecc)</td>
+</tr>
+<tr>
+<td><a href="example90.html#parse-ecc">--parse-ecc</a></td>
+<td>nur für <a href="background30.html">RS02</a>: Fehlerkorrektur-Vorspann auswerten</td>
 </tr>
 <tr>
 <td><a href="example90.html#jump">-j / --jump</a></td>
@@ -541,7 +546,7 @@ function example2de()
 
 <tr align="center"><td><h3>Bildschirmfoto: Datenträger-Abbild erstellen</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/ex-read-de.png" alt="Bildschirmfoto"></center>
+<center><img src="images/ex-read.png" alt="Bildschirmfoto"></center>
 <br clear="all">
 </td></tr>
 
@@ -559,7 +564,7 @@ Erstellen Sie die Fehlerkorrektur-Datei deshalb sofort
 nach dem Brennen des Datenträgers.<p></li>
 
 <li>Durch Anklicken des 
-<img src="../images/btn-protocol-de.png" alt="Protokoll" align="middle">--Symbols
+<img src="images/btn-protocol.png" alt="Protokoll" align="middle">--Symbols
 erhalten Sie zusätzliche Informationen.</li>
 </ul>
 
@@ -573,7 +578,7 @@ function example3de()
 <tr align="center"><td>
 <h3>Bildschirmfoto: Fehlerkorrektur-Datei erzeugen</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/ex-create-de.png" alt="Bildschirmfoto"></center>
+<center><img src="images/ex-create.png" alt="Bildschirmfoto"></center>
 <br clear="all">
 </td></tr>
 
@@ -671,13 +676,13 @@ Das <img src="../images/open-img.png" alt="Dateiauswahl-Knopf" align="middle">-S
 <tr valign="top" $BGCOLOR2>
 <td>4.</td>
 <td>Beginnen Sie das Einlesen mit dem "Lesen"-Knopf.</td>
-<td><img src="../images/btn-read-de.png" alt="Lesen-Knopf"></td>
+<td><img src="images/btn-read.png" alt="Lesen-Knopf"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
 <td>5.</td>
 <td>Verfolgen Sie den Fortschritt des Lesevorgangs in der graphischen Darstellung.</td>
-<td><a href="example2.html"><img src="../images/ex-read-de.png" alt="Bildschirmfoto" width="200"></a><p>
+<td><a href="example2.html"><img src="images/ex-read.png" alt="Bildschirmfoto" width="200"></a><p>
 </td>
 </tr>
 </table>
@@ -712,19 +717,19 @@ Das <img src="../images/open-ecc.png" alt="Dateiauswahl-Knopf" align="middle">-S
 <td>
 Stellen Sie die Fehlerkorrektur nach Ihren Wünschen ein.<p>
 </td>
-<td><a href="example83.html"><img src="../images/prefs-ecc-de.png" alt="Bildschirmfoto" width="200"></a></td>
+<td><a href="example83.html"><img src="images/prefs-ecc.png" alt="Bildschirmfoto" width="200"></a></td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
 <td>4.</td>
 <td>Erstellen Sie die Fehlerkorrektur-Datei durch Klick auf den "Erzeugen"-Knopf.</td>
-<td><img src="../images/btn-create-de.png" alt="Erzeugen-Knopf"></td>
+<td><img src="images/btn-create.png" alt="Erzeugen-Knopf"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
 <td>5.</td>
 <td>Verfolgen Sie den Fortschritt des Vorgangs.</td>
-<td><a href="example3.html"><img src="../images/ex-create-de.png" alt="Bildschirmfoto" width="200"></a><p>
+<td><a href="example3.html"><img src="images/ex-create.png" alt="Bildschirmfoto" width="200"></a><p>
 </td>
 </tr>
 </table><p>
@@ -976,7 +981,7 @@ function example4de()
 <tr align="center"><td>
 <h3>Bildschirmfoto: Beschädigten Datenträger einlesen</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/ex-read-a-de.png" alt="Bildschirmfoto"></center>
+<center><img src="images/ex-read-a.png" alt="Bildschirmfoto"></center>
 <br clear="all">
 </td></tr>
 
@@ -1037,19 +1042,19 @@ Das <img src="../images/open-ecc.png" alt="Dateiauswahl-Knopf" align="middle">-S
 <td>
 Wählen Sie das angepaßte Leseverfahren aus.<p>
 </td>
-<td><a href="example82.html"><img src="../images/prefs-read-de.png" alt="Bildschirmfoto" width="200"></a></td>
+<td><a href="example82.html"><img src="images/prefs-read.png" alt="Bildschirmfoto" width="200"></a></td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
 <td>6.</td>
 <td>Beginnen Sie mit dem Einlesen durch Klick auf den "Lesen"-Knopf.</td>
-<td><img src="../images/btn-read-de.png" alt="Lesen-Knopf"></td>
+<td><img src="images/btn-read.png" alt="Lesen-Knopf"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
 <td>7.</td>
 <td>Verfolgen Sie den Fortschritt des Vorgangs.</td>
-<td><a href="example4.html"><img src="../images/ex-read-a-de.png" alt="Bildschirmfoto" width="200"></a><p>
+<td><a href="example4.html"><img src="images/ex-read-a.png" alt="Bildschirmfoto" width="200"></a><p>
 </td>
 </tr>
 </table><p>
@@ -1088,8 +1093,17 @@ Zum Einlesen des beschädigten Datenträgers benötigen Sie die folgenden Parameter
 </tr>
 <tr>
 <td><a href="example90.html#ecc">-e / --ecc</a></td>
-<td>Fehlerkorrektur-Datei auswählen (medium.ecc)</td>
+<td>nur für <a href="background30.html">RS01</a>: Fehlerkorrektur-Datei auswählen (medium.ecc)</td>
 </tr>
+<tr>
+<td><a href="example90.html#parse-ecc">--parse-ecc</a></td>
+<td>nur für <a href="background30.html">RS02</a>: Fehlerkorrektur-Vorspann auswerten</td>
+</tr>
+<tr>
+<td><a href="example90.html#jump">-j / --jump</a></td>
+<td>Überspringe Sektoren nach einem Lesefehler (16)</td>
+</tr>
+
 </table><p>
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
@@ -1120,7 +1134,7 @@ function example5de()
 <tr align="center"><td>
 <h3>Bildschirmfoto: Datenträger-Abbild wiederherstellen</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/ex-fix-de.png" alt="Bildschirmfoto"></center>
+<center><img src="images/ex-fix.png" alt="Bildschirmfoto"></center>
 <br clear="all">
 </td></tr>
 
@@ -1196,14 +1210,14 @@ Das <img src="../images/open-ecc.png" alt="Dateiauswahl-Knopf" align="middle">-S
 <tr valign="top" $BGCOLOR1>
 <td>3.</td>
 <td>Führen Sie die Wiederherstellung durch Klick auf den "Reparieren"-Knopf aus.</td>
-<td><img src="../images/btn-fix-de.png" alt="Reparieren-Knopf"></td>
+<td><img src="images/btn-fix.png" alt="Reparieren-Knopf"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
 <td>4.</td>
 <td>Verfolgen Sie den Fortschritt der Wiederherstellung.<p>
 Während der Wiederherstellung sind Phasen hoher Festplatten-Aktivität normal.</td>
-<td><a href="example5.html"><img src="../images/ex-fix-de.png" alt="Bildschirmfoto" width="200"></a><p>
+<td><a href="example5.html"><img src="images/ex-fix.png" alt="Bildschirmfoto" width="200"></a><p>
 </td>
 </tr>
 </table><p>
@@ -1261,7 +1275,7 @@ function example6de()
 <tr align="center"><td>
 <h3>Bildschirmfoto: Datenträger-Abbild mit Fehlerkorrektur-Datei vergleichen</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/ex-compare-de.png" alt="Bildschirmfoto"></center>
+<center><img src="images/ex-compare.png" alt="Bildschirmfoto"></center>
 <br clear="all">
 </td></tr>
 
@@ -1327,13 +1341,13 @@ Das <img src="../images/open-ecc.png" alt="Dateiauswahl-Knopf" align="middle">-S
 <tr valign="top" $BGCOLOR1>
 <td>3.</td>
 <td>Vergleichen Sie die beiden Dateien durch Klick auf den "Vergleichen"-Knopf.</td>
-<td><img src="../images/btn-compare-de.png" alt="Vergleichen-Knopf"></td>
+<td><img src="images/btn-compare.png" alt="Vergleichen-Knopf"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
 <td>4.</td>
 <td>Verfolgen Sie den Fortschritt des Vergleichs.</td>
-<td><a href="example6.html"><img src="../images/ex-compare-de.png" alt="Bildschirmfoto" width="200"></a><p>
+<td><a href="example6.html"><img src="images/ex-compare.png" alt="Bildschirmfoto" width="200"></a><p>
 </td>
 </tr>
 </table><p>
@@ -1395,7 +1409,7 @@ Der Dialog enthält die folgenden Reiterkarten:<p>
 
 <center>
 <a href="example81.html">
-<img src="../images/prefs-general-de.png" alt="Bildschirmfoto"><br>
+<img src="images/prefs-general.png" alt="Bildschirmfoto"><br>
 Allgemeine Einstellungen
 </a>
 </center>
@@ -1403,7 +1417,7 @@ Allgemeine Einstellungen
 
 <center>
 <a href="example82.html">
-<img src="../images/prefs-read-de.png" alt="Bildschirmfoto"><br>
+<img src="images/prefs-read.png" alt="Bildschirmfoto"><br>
 Einstellungen zum Lesen und Prüfen
 </a>
 </center>
@@ -1411,7 +1425,7 @@ Einstellungen zum Lesen und Prüfen
 
 <center>
 <a href="example83.html">
-<img src="../images/prefs-ecc-de.png" alt="Bildschirmfoto"><br>
+<img src="images/prefs-ecc.png" alt="Bildschirmfoto"><br>
 Einstellungen zur Fehlerkorrektur
 </a>
 </center>
@@ -1428,7 +1442,7 @@ function example81de()
 Mehr Informationen über die Reiterkarte mit allgemeinen Einstellungen befinden sich
 weiter unten.<p>
 
-<center><img src="../images/prefs-general-de.png" alt="Bildschirmfoto"></center>
+<center><img src="images/prefs-general.png" alt="Bildschirmfoto"></center>
 <br clear="all">
 
 <p><hr><p>
@@ -1436,21 +1450,31 @@ weiter unten.<p>
 <a name="iso"></a>
 <b>Dateisystem-Einstellungen für Datenträger und Abbilder</b><p>
 
-<center><img src="../images/prefs-general-1-de.png" alt="Bildschirmfoto"></center>
+<center><img src="images/prefs-general-1.png" alt="Bildschirmfoto"></center>
 <br clear="all">
 
-Aktivieren Sie diese Option, 
-damit dvdisaster die Größenangaben für das Abbild aus dem
-ISO- bzw. UDF-Dateisystem ermittelt. 
-Dies ist hilfreich bei <a href="qa20.html#plusrw">Problemen mit Laufwerken</a>, 
-die bei DVD-RW/+RW falsche Abbild-Größen zurückmelden.
+Diese Optionen sind hilfreich bei <a href="qa20.html#plusrw">Problemen mit Laufwerken</a>, 
+die bei DVD-RW/+RW falsche Abbild-Größen zurückmelden.<p>
+
+<b>Fehlerkorrektur-Vorspann auswerten <font color="red">(1)</font>:</b>
+Die Abbild-Größe wird aus dem Vorspann der 
+<a href="background30.html">RS02</a> Fehlerkorrektur-Informationen 
+ermittelt. Wenn das Abbild keine RS02-Fehlerkorrektur-Informationen enthält,
+verzögert diese Option den Beginn des Einlesens deutlich.<p>
+
+<b>ISO/UDF-Dateisystem auswerten <font color="red">(2)</font>:</b>
+Aktivieren Sie diese Option, damit dvdisaster die Größenangaben für das Abbild aus dem
+ISO- bzw. UDF-Dateisystem ermittelt. Wenn das Abbild  
+<a href="background30.html">RS02</a> Fehlerkorrektur-Informationen enthält, müssen Sie
+zusätzlich auch die Option <font color="red">(1)</font> setzen, 
+da die Fehlerkorrektur-Daten sonst nicht in das Abbild übernommen werden.
 
 <p><hr><p>
 
 <a name="localfiles"></a>
 <b>Einstellungen für lokale Dateien (auf der Festplatte)</b><p>
 
-<center><img src="../images/prefs-general-2-de.png" alt="Bildschirmfoto"></center>
+<center><img src="images/prefs-general-2.png" alt="Bildschirmfoto"></center>
 <br clear="all">
 
 <b>Dateien automatisch mit Endungen versehen <font color="red">(1)</font>:</b> 
@@ -1471,7 +1495,7 @@ etwas Geschwindigkeit.<p>
 <a name="auto"> </a>
 <b>Automatisches Erzeugen und Löschen von Dateien</b><p>
 
-<center><img src="../images/prefs-general-3-de.png" alt="Bildschirmfoto"></center>
+<center><img src="images/prefs-general-3.png" alt="Bildschirmfoto"></center>
 <br clear="all">
 
 <b>Fehlerkorrektur-Datei erzeugen <font color="red">(1)</font>:</b> Nach dem erfolgreichen 
@@ -1493,14 +1517,14 @@ function example82de()
 Mehr Informationen über die Reiterkarte zum Lesen und Prüfen befinden sich
 weiter unten.<p>
 
-<center><img src="../images/prefs-read-de.png" alt="Einstellungen zum Lesen und Prüfen"></center><br clear="all">
+<center><img src="images/prefs-read.png" alt="Einstellungen zum Lesen und Prüfen"></center><br clear="all">
 
 <p><hr><p>
 
 <a name="read"></a>
 <b>Einstellungen zum Lesen</b><p>
 
-<center><img src="../images/prefs-read-1-de.png" alt="Bildschirmfoto"></center>
+<center><img src="images/prefs-read-1.png" alt="Bildschirmfoto"></center>
 <br clear="all">
 
 <b>Leseverfahren <font color="red">(1)</font>:</b> Wählen Sie zwischen dem
@@ -1527,7 +1551,7 @@ des Laufwerkes, lassen aber größere Lücken beim Einlesen defekter Bereiche.
 
 <a name="image"></a>
 <b>Abbild-Eigenschaften</b><p>
-<center><img src="../images/prefs-read-2-de.png" alt="Bildschirmfoto"></center>
+<center><img src="images/prefs-read-2.png" alt="Bildschirmfoto"></center>
 <br clear="all">
 
 <b>DAO-Abbild <font color="red">(1)</font>:</b> 
@@ -1545,7 +1569,7 @@ mit dvdisaster verarbeiten.
 
 <b>Laufwerk vorbereiten</b><p>
 
-<center><img src="../images/prefs-read-3-de.png" alt="Bildschirmfoto"></center>
+<center><img src="images/prefs-read-3.png" alt="Bildschirmfoto"></center>
 <br clear="all">
 
 Gibt dem Laufwerk die angegebene Anzahl Sekunden Zeit zum Hochdrehen bevor
@@ -1562,7 +1586,7 @@ function example83de()
 Mehr Informationen über die Reiterkarte zur Fehlerkorrektur befinden sich
 weiter unten.<p>
 
-<center><img src="../images/prefs-ecc-de.png" alt="Fehlerkorrektur-Einstellungen"></center><br clear="all">
+<center><img src="images/prefs-ecc.png" alt="Fehlerkorrektur-Einstellungen"></center><br clear="all">
 
 <p><hr><p>
 
@@ -1570,7 +1594,7 @@ weiter unten.<p>
 <a name="redundancy"></a>
 <b>Redundanz für neu erstellte Fehlerkorrekturdateien</b> <p>
 
-<center><img src="../images/prefs-ecc-1-de.png"  alt="Bildschirmfoto"></center><br clear="all">
+<center><img src="images/prefs-ecc-1.png"  alt="Bildschirmfoto"></center><br clear="all">
 
 Die Redundanz gibt an, wieviel Prozent der 
 Originaldaten <a href="background10.html">im günstigsten Fall</a>
@@ -1605,7 +1629,7 @@ mehr Fehlerkorrekturinformationen als die großen Abbilder.<p>
 
 <b>Speichernutzung.</b><p>
 
-<center><img src="../images/prefs-ecc-2-de.png"  alt="Bildschirmfoto"></center><br clear="all">
+<center><img src="images/prefs-ecc-2.png"  alt="Bildschirmfoto"></center><br clear="all">
 
 Zugriffe auf die Abbild- und Fehlerkorrektur-Datei werden durch einen eigenen
 Zwischenspeicher optimiert. Die Voreinstellung von 32MB ist für die meisten Systeme passend.<p>
@@ -1667,6 +1691,7 @@ sofern nicht anders angegeben.<p>
 <tr valign=top><td></td><td><a href="#dao">--dao</a></td><td>Behandelt Datenträger als "disk at once"</td></tr>
 <tr valign=top><td></td><td><a href="#fillunreadable">--fill-unreadable [n]</a></td><td>fülle unlesbare Sektoren mit Byte n auf</td></tr>
 <tr valign=top><td></td><td><a href="#jump">-j / --jump</a></td><td>Überspringe Sektoren nach einem Lesefehler</td></tr>
+<tr valign=top><td></td><td><a href="#parse-ecc">--parse-ecc</a>&nbsp; &nbsp;</td><td>Informationen aus dem Fehlerkorrektur-Vorspann auswerten</td></tr>
 <tr valign=top><td></td><td><a href="#parse-udf">--parse-udf</a>&nbsp; &nbsp;</td><td>Informationen aus dem ISO/UDF-Dateisystem auswerten</td></tr>
 <tr valign=top><td></td><td><a href="#redundancy">-n / --redundancy</a>&nbsp; &nbsp;</td><td>Redundanz des Fehlerkorrekturkodes festlegen</td></tr>
 <tr valign=top><td></td><td><a href="#method">-m / --method</a>&nbsp; &nbsp;</td><td>Fehlerkorrektur-Methode auswählen</td></tr>
@@ -1965,11 +1990,32 @@ Die Anzahl der zu überspringenden Sektoren muß ein Vielfaches von 16 sein.
 
 
 
+<a name="parse-ecc"><b>--parse-ecc: Informationen aus dem Fehlerkorrektur-Vorspann auswerten</b></a><p>
+Aktivieren Sie diese Option, damit dvdisaster die Größenangaben für das Abbild aus dem
+Vorspann für <a href="background30.html">RS02-Fehlerkorrektur-Daten</a> ermittelt. 
+Dies ist hilfreich bei <a href="qa20.html#plusrw">Problemen mit Laufwerken</a>, 
+die bei DVD-RW/+RW falsche Abbild-Größen zurückmelden.<p>
+
+Hinweis: Verwenden Sie diese Option nur für Abbilder, die mit der RS02-Methode um
+Fehlerkorrektur-Daten erweitert wurden. Anderenfalls dauert es sehr lange,
+bis der Lesevorgang beginnt.
+
+<div align=right><a href="#options">&uarr;</a></div><p>
+
+
+
 <a name="parse-udf"><b>--parse-udf: Informationen aus dem ISO/UDF-Dateisystem auswerten</b></a><p>
 Aktivieren Sie diese Option, damit dvdisaster die Größenangaben für das Abbild aus dem
 ISO- bzw. UDF-Dateisystem ermittelt. 
 Dies ist hilfreich bei <a href="qa20.html#plusrw">Problemen mit Laufwerken</a>, 
-die bei DVD-RW/+RW falsche Abbild-Größen zurückmelden.
+die bei DVD-RW/+RW falsche Abbild-Größen zurückmelden.<p>
+
+Vorsicht: Verwenden Sie diese Option zusammen mit <a href="#parse-ecc">--parse-ecc</a>, 
+um Abbilder zu bearbeiten, die mit der
+<a href="background30.html">RS02-Methode</a> um Fehlerkorrektur-Informationen erweitert wurden.
+Anderenfalls werden die Fehlerkorrektur-Daten nicht gelesen.
+
+
 
 <div align=right><a href="#options">&uarr;</a></div><p>
 
@@ -2156,13 +2202,13 @@ der Quellkode-Version gibt es <a href="download20.html">Installationshinweise</a
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Quellkode für alle Betriebssysteme:&nbsp;</td>
-        <td><a href="http://download.berlios.de/dvdisaster/dvdisaster-0.66.tar.bz2">dvdisaster-0.66.tar.bz2</a></td></tr>
+        <td><a href="${tar_0_66}">dvdisaster-0.66.tar.bz2</a></td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><a href="http://download.berlios.de/dvdisaster/dvdisaster-0.66.tar.bz2.gpg">dvdisaster-0.66.tar.bz2.gpg</a></td></tr>
+        <td><a href="${tar_0_66_sig}">dvdisaster-0.66.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Binärversion für Windows:&nbsp;</td>
-        <td><a href="http://download.berlios.de/dvdisaster/dvdisaster-0.66-setup.exe">dvdisaster-0.66-setup.exe</a></td></tr>
+        <td><a href="${setup_0_66}">dvdisaster-0.66-setup.exe</a></td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><a href="http://download.berlios.de/dvdisaster/dvdisaster-0.66-setup.exe.gpg">dvdisaster-0.66-setup.exe.gpg</a></td></tr>
+        <td><a href="${setup_0_66_sig}">dvdisaster-0.66-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
@@ -2187,13 +2233,13 @@ zum Erzeugen von Programmen aus dem Quellkode).
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Quellkode für alle Betriebssysteme:&nbsp;</td>
-        <td><a href="http://download.berlios.de/dvdisaster/dvdisaster-0.65.tar.bz2">dvdisaster-0.65.tar.bz2</a></td></tr>
+        <td><a href="${tar_0_65}">dvdisaster-0.65.tar.bz2</a></td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><a href="http://download.berlios.de/dvdisaster/dvdisaster-0.65.tar.bz2.gpg">dvdisaster-0.65.tar.bz2.gpg</a></td></tr>
+        <td><a href="${tar_0_65_sig}">dvdisaster-0.65.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Binärversion für Windows:&nbsp;</td>
-        <td><a href="http://download.berlios.de/dvdisaster/dvdisaster-0.65-setup.exe">dvdisaster-0.65-setup.exe</a></td></tr>
+        <td><a href="${setup_0_65}">dvdisaster-0.65-setup.exe</a></td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><a href="http://download.berlios.de/dvdisaster/dvdisaster-0.65-setup.exe.gpg">dvdisaster-0.65-setup.exe.gpg</a></td></tr>
+        <td><a href="${setup_0_65_sig}">dvdisaster-0.65-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
@@ -2962,76 +3008,88 @@ zwei Schritten statt:
 <li>Dann werden die noch fehlenden Daten durch den Fehlerkorrektur-Kode rekonstruiert.</li>
 </ol>
 
-Der Erfolg der Datenrekonstruktion hängt wesentlich davon ab, wieviele
-Daten im ersten Schritt noch eingelesen werden konnten. Deshalb ist es
-wichtig, ein Leseverfahren einzusetzen, das die Ausbeute an noch lesbaren
-Daten optimiert. Zwei mögliche Leseverfahren werden nachfolgend verglichen.<p>
+Die Ausbeute an noch lesbaren Daten (Schritt 1) hängt nicht nur von dem
+verwendeten Laufwerk ab, sondern auch davon, auf welcher logischen Ebene 
+auf den Datenträger zugegriffen wird. Diese Seite liefert die Hintergründe
+dafür, warum dvdisaster auf der logischen Ebene von Abbildern arbeitet:<p>
 
-<b>Einlesen auf Datei- und Abbild-Ebene gegenübergestellt</b><p>
+<b>Logische Ebenen eines Datenträgers</b><p>
 
-Datenträger können auf verschiedenen logischen Ebenen eingelesen werden:<p>
+CD- und DVD-Datenträger sind in <i>Daten-Sektoren</i> von jeweils 2048 Bytes aufgeteilt.
+Liest man diese Sektoren nacheinander aus und speichert sie ab, 
+so erhält man ein <i>Abbild</i> des Datenträgers.<p>
+
+Das Arbeiten mit einzelnen Sektoren ist aus Benutzersicht sehr unhandlich. 
+Deshalb werden Datenträger
+mit einem <i>Dateisystem</i> versehen, das Daten-Sektoren zu <i>Dateien</i> 
+zusammenfaßt. Dies erfordert eine genaue Buchführung darüber, aus welchen
+Daten-Sektoren die Dateien bestehen (sowie weitere Merkmale wie 
+Dateinamen und Zugriffsrechte). Für diese Buchführung
+wird ein Teil der Daten-Sektoren reserviert und mit entsprechenden Datenstrukturen
+gefüllt.<p>
+
+Datenträger lassen sich somit in verschiedene <i>logische Ebenen</i> einteilen: 
+Betrachtet man den Inhalt eines Datenträgers als eine Folge von Daten-Sektoren,
+so arbeitet man auf der <i>Abbild-Ebene</i>. Stellt man ihn sich hingegen als eine
+Menge von Dateien vor, so befindet man sich auf der <i>Dateisystem-Ebene</i>.<p>
+
+In Hinsicht auf die Daten-Rekonstruktion haben die beiden Ebenen unterschiedliche 
+Eigenschaften:<p>
+
 
 <a name="file"> </a>
-Beim Lesen auf <b>Datei-Ebene</b> wird versucht, die auf einem
-defekten Datenträger enthaltenen Dateien einzeln soweit wie möglich auszulesen.
-Dabei ist jedoch zu berücksichtigen, daß Dateien Teil 
-eines <i>Dateisystems</i> sind, das vom Betriebssystem verwaltet wird.
-Der Menge der noch lesbaren Daten hängt sehr davon ab, ob das Dateisystem
-mit beschädigten Datenträgern umgehen kann. Dies ist bei CD und DVD 
-typischerweise nicht der Fall.<p>
+<b>Probleme beim Lesen auf Dateisystem-Ebene</b><p>
 
-<a name="image"> </a>
-Unterhalb der logischen Ebene von Dateien und Dateisystemen liegt 
-die <b>Abbild-Ebene</b>, die CD- und DVD-Datenträger in Daten-Sektoren 
-von jeweils 2048 Bytes aufteilt. Liest man diese Sektoren nacheinander
-aus und speichert sie ab, so erhält man ein <i>Abbild</i> des Datenträgers.
-Auf der Abbild-Ebene können die noch lesbaren Daten sehr effizient gesammelt werden.
+Beim Lesen auf Dateisystem-Ebene wird versucht, die auf einem
+defekten Datenträger enthaltenen Dateien einzeln soweit wie möglich auszulesen.<p>
+
+Dabei entsteht ein Problem, wenn Daten-Sektoren beschädigt sind, 
+die zur Buchführung im Dateisystem dienen. Dies kann bewirken, daß die Liste
+aller Dateien auf dem Datenträger unvollständig ist. Oder die Zuordnung
+von Daten-Sektoren zu Dateien ist nicht mehr vorhanden.
+Dadurch gehen Dateien oder Teile davon verloren, 
+selbst wenn die zugehörigen Daten-Sektoren 
+noch technisch lesbar sind. Das ist schlecht, denn auch die noch lesbaren Anteile
+von beschädigten Dateien sind für den Fehlerkorrektur-Kode wichtig.<p>
+
+Ein besonders übler Fall entsteht, wenn die Fehlerkorrektur-Daten auch 
+in Dateien abgelegt sind. Dann werden die Fehlerkorrektur-Daten gebraucht, 
+um das zugehörige Dateisystem zu reparieren, aber aufgrund des defekten 
+Dateisystems ist kein Zugriff auf die Fehlerkorrektur-Daten möglich.
+Das führt zum vollständigen Datenverlust und hat auch Konsequenzen für das 
+<a href="#eccfile"> Aufheben von Fehlerkorrektur-Dateien</a>.
 <p>
 
-Der nachfolgende Vergleich zeigt, daß das Lesen auf Abbild-Ebene die besseren
-Voraussetzungen bietet, um genügend Daten für eine erfolgreiche 
-Datenträger-Rekonstruktion zu erhalten. Deshalb ist dvdisaster mit 
-Abbild-basierten Leseverfahren ausgestattet.<p>
+Mit einem Abbild-basierten Ansatz sieht die Situation hingegen besser aus:<p>
 
+<a name="image"> </a>
+<b>Vorteile beim Lesen auf Abbild-Ebene</b><p>
 
-<table width="100%" border="1" cellspacing="0" cellpadding="5">
-<tr>
-<td width="50%"><i>Einlesen auf Datei-Ebene</i></td>
-<td width="50%"><i>Einlesen auf Abbild-Ebene</i></td>
-</tr>
-<tr valign="top">
-<td><i>Abhängigkeit vom Dateisystem</i><p>
-Wenn die Datenstrukturen des Dateisystems beschädigt sind,
-können keine Dateien mehr von dem Datenträger gelesen werden,
-auch wenn die Datei-Datenblöcke selbst noch lesbar sind.</td>
-<td><i>Unabhängigkeit vom Dateisystem</i><p>
-Das Einlesen von Abbild-Sektoren ist unabhängig vom Zustand des Dateisystems.</td>
-</tr>
+Beim Einlesen auf der Abbild-Ebene wird auf die Daten-Sektoren durch direkte Kommunikation
+mit der Laufwerks-Hardware zugegriffen.<p>
 
-<tr valign="top">
-<td><i>Verlust von lesbaren Informationen</i><p>
-Das Betriebssystem erlaubt häufig nur das Einlesen einer Datei bis zum
-ersten Lesefehler. Nur mit speziellen Werkzeugen können beschädigte 
-Dateien bis zum Ende gelesen werden. Anderenfalls ist der Rest der Datei verloren, 
-auch wenn die zugehörigen Datei-Datenblöcke noch lesbar sind. 
-</td>
-<td><i>Alle lesbaren Daten können gerettet werden</i><p>
-Abbilder lassen sich auch dann problemlos lesen, wenn der Datenträger beschädigt ist.
-Lesefehler in einem Sektor verhindern nicht den Zugriff auf andere Sektoren.
-</td>
-</tr>
+Der Erfolg beim Einlesen von Daten-Sektoren hängt nur von den Lesefähigkeiten des
+Laufwerks ab, nicht aber vom Zustand des Dateisystems. Lesefehler in einem Sektor
+verhindern nicht den Zugriff auf andere Sektoren. Weil <i>alle</i> noch technisch 
+lesbaren Daten gerettet werden können, liefert das Verfahren die günstigste
+Ausgangsbasis für die Fehlerkorrektur.<p>
 
-<tr valign="top">
-<td><i>Kein Schutz des Dateisystems</i><p>
-Die Datenstrukturen des Dateisystems sind nicht Teil der darin enthaltenen
-Dateien. Das Dateisystem kann daher nicht durch Einbringen von 
-Fehlerkorrektur-Informationen in die Dateien geschützt werden.</td>
-<td><i>Wiederherstellung des Dateisystems</i><p>
-Das Abbild enthält sowohl die Dateien als auch das Dateisystem.
-Fehlerkorrektur-Informationen für das Abbild beinhalten den Schutz und die
-Wiederherstellung des Dateisystems.</td>
-</tr>
-</table><p>
+Das Abbild enthält alle Daten-Sektoren des Datenträgers. Deshalb ist nach der 
+Wiederherstellung des Abbilds auch das darauf gespeicherte Dateisystem 
+wieder vollständig. Ein Schutz des Datenträgers auf Abbild-Ebene ist damit
+umfassender als eine Fehlerkorrektur auf Datei-Ebene.<p>
+
+dvdisaster arbeitet ausschließlich auf der Abbild-Ebene, um von diesen Vorteilen
+zu profitieren. Mit dem neuen <a href="background30.html">RS02-Verfahren</a>
+ist sogar ein Ablegen der Fehlerkorrektur-Daten auf dem selben Datenträger 
+möglich, weil das Auslesen der Fehlerkorrektur-Daten auf der Abbild-Ebene
+nicht durch Fehler an anderen Stellen verhindert wird (beschädigte 
+Sektoren mit Fehlerkorrektur-Daten verringern natürlich die Leistung der 
+Fehlerkorrektur, machen sie aber nicht unmöglich).<p>
+
+Das <a href="background30.html">RS01-Verfahren</a> schützt Datenträger ebenfalls
+auf der Abbild-Ebene, legt die Fehlerkorrektur-Informationen aber in Dateien ab.
+Auf mögliche Fallgruben in diesem Zusammenhang weist der nächste Abschnitt hin.<p>
 
 <a name="eccfile"> </a>
 <b>Konsequenzen für das Aufbewahren von Fehlerkorrektur-Dateien</b><p>
@@ -3039,30 +3097,33 @@ Wiederherstellung des Dateisystems.</td>
 Datenträger sind durch die mit dvdisaster erzeugten Fehlerkorrektur-Daten
 auf Abbild-Ebene geschützt. Aber was ist mit den Fehlerkorrektur-Dateien selbst?<p>
 
-Für Fehlerkorrektur-Dateien treffen die Einschränkungen beim Lesen auf
-Datei-Ebene natürlich auch zu. Wenn der Datenträger schadhaft wird,
-auf dem sich die Fehlerkorrektur-Dateien befinden, ist nicht mehr
+Da Fehlerkorrektur-Dateien auf Dateisystem-Ebene gelesen werden, unterliegen sie
+den entsprechenden Einschränkungen. Wenn der Datenträger mit den
+Fehlerkorrektur-Dateien schadhaft wird, ist nicht mehr
 sichergestellt, daß sich die Fehlerkorrektur-Dateien noch vollständig lesen
 lassen.<p>
 
+<table width=100%><tr><td bgcolor=#000000 width=2><img width=1 height=1 alt=""></td><td>
 Deshalb ist es unverzichtbar, auch Fehlerkorrektur-Dateien auf der
 Abbild-Ebene zu schützen: Die 
 <a href="background70.html">Datenträger mit Fehlerkorrektur-Dateien</a> 
-müssen ebenfalls mit dvdisaster gesichert werden.<p>
+müssen ebenfalls mit dvdisaster gesichert werden.
+</td></tr></table><p>
 
 
 Weil dies vorausgesetzt wird, enthalten die Fehlerkorrektur-Dateien <i>keinen</i> 
-Schutz gegen Beschädigung! Dies würde auch mehr schaden als nutzen:
-Natürlich könnten die Fehlerkorrektur-Dateien so gestaltet werden, 
+eigenen Schutz gegen Beschädigung! Dies würde auch nicht viel nutzen:
+Natürlich könnten die Fehlerkorrektur-Dateien so erweitert werden, 
 daß sie auch im beschädigten Zustand 
-noch eine (verminderte) Fehlerkorrektur leisten können. 
+noch eine verminderte Fehlerkorrektur leisten. 
 Aber egal wie ausgeklügelt  der innere Schutz-Mechanismus auch wäre, 
-es bliebe ein Schutz auf Datei-Ebene mit den oben beschriebenen Nachteilen!<p>
+es bliebe ein Schutz auf Dateisystem-Ebene mit den oben beschriebenen Nachteilen!<p>
 
 Hinzu kommt, daß die dafür benötigte Rechenzeit und Redundanz besser 
 auf der Abbild-Ebene investiert sind: Die Reed-Solomon-Fehlerkorrektur profitiert davon,
 wenn Fehlerkorrektur-Informationen über große Datenmengen verteilt werden. 
-Das Abbild als Ganzes läßt sich besser schützen als die einzelnen Dateien darin.
+Das Abbild als Ganzes läßt sich besser schützen als die einzelnen 
+Fehlerkorrektur-Dateien darin.
 EOF
 }
 
@@ -3192,7 +3253,7 @@ bis zum Ende (letzter Sektor) ein. Die Lesegeschwindigkeit wird
 graphisch dargestellt, um die <a href="background40.html#quality">Qualität des Datenträgers</a>
 abschätzen zu können:<p>
 
-<center><img src="../images/bg-linear-de.png" alt="Bildschirmfoto"><br>
+<center><img src="images/bg-linear.png" alt="Bildschirmfoto"><br>
 Bildschirmausschnitt: lineares Leseverfahren</center>
 
 <pre> </pre>
@@ -3328,7 +3389,7 @@ der Fehlerkorrektur gelesen worden sind.
 Dies kann die Bearbeitungszeit  gegenüber einem vollständigen Einlese-Versuch um bis zu 90% verkürzen,
 erfordert aber natürlich, daß man die zugehörige Fehlerkorrektur-Datei zur Hand hat.<p>
 
-<center><img src="../images/bg-adaptive-de.png" alt="Bildschirmfoto"><br>
+<center><img src="images/bg-adaptive.png" alt="Bildschirmfoto"><br>
 Bildschirmausschnitt: angepaßtes Leseverfahren</center>
 
 <pre> </pre>

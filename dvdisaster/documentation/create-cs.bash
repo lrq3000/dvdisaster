@@ -28,7 +28,8 @@ function dictionary_cs()
    trans_version="verze"
 
    trans_to_internet="Na Internetovou verzi"
-   trans_to_hoster="Přehled (na BerliOS)"
+   trans_to_berlios="Přehled (na BerliOS)"
+   trans_to_sourceforge="Přehled (na SourceForge.net)"
 
    trans_back="Zpět"
 
@@ -66,7 +67,7 @@ function inline2cs()
 
 <tr align="center"><td><h3>Obrázky: Analýza chyb</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/scratch-scan-cs.png" alt="Analýza chyb" title="Analýza chyb"></center>
+<center><img src="images/scratch-scan.png" alt="Analýza chyb" title="Analýza chyb"></center>
 <br clear="all">
 </td></tr>
 <tr><td>
@@ -80,7 +81,7 @@ neodpovídá z technických důvodů vykreslené datové stopě.
 </pre>
 </td></tr>
 <tr align="center"><td>
-<center><img src="../images/scratch-corr-cs.png" alt="Oprava obrazu" title="Oprava obrazu"></center>
+<center><img src="images/scratch-corr.png" alt="Oprava obrazu" title="Oprava obrazu"></center>
 <br clear="all">
 </td></tr>
 <tr><td>
@@ -179,10 +180,10 @@ což představuje 69% využití opravy chyb při použitém nastavení.
 <img src="../images/scratch-img.jpg" width=100 height=97 alt="Silně poškrábané médium" title="Silně poškrábané médium"></a>
 <br clear="all">
 <a href="inline2.html">
-<img src="../images/scratch-scan-cs.png" width=100 height=74 alt="Analýza chyb" title="Analýza chyb"></a>
+<img src="images/scratch-scan.png" width=100 height=74 alt="Analýza chyb" title="Analýza chyb"></a>
 <br clear="all">
 <a href="inline2.html">
-<img src="../images/scratch-corr-cs.png" width=100 height=74 alt="Oprava obrazu" title="Oprava obrazu"></a>
+<img src="images/scratch-corr.png" width=100 height=74 alt="Oprava obrazu" title="Oprava obrazu"></a>
 </td></tr></table>
 
 <a href="index20.html">Proč není sken PI/PO dostatečný...</a>
@@ -303,12 +304,12 @@ function example0cs()
 <tr>
   <td>
     <a href="example1.html">
-    <img src="../images/ex-scan-cs.png" border=0 width=264 alt="Skenování média" title="Skenování média"></a>
+    <img src="images/ex-scan.png" border=0 width=264 alt="Skenování média" title="Skenování média"></a>
   </td>
   <td>&nbsp;</td>
   <td>
     <a href="example3.html#ecc">
-    <img src="../images/ex-create-cs.png" border=0 width=264 alt="Vytvoření opravných dat" title="Vytvoření opravných dat"></a>
+    <img src="images/ex-create.png" border=0 width=264 alt="Vytvoření opravných dat" title="Vytvoření opravných dat"></a>
   </td>
 </tr>
 
@@ -330,12 +331,12 @@ function example0cs()
 <tr>
   <td>
     <a href="example4.html">
-    <img src="../images/ex-read-a-cs.png" border=0 width=264 alt="Čtení poškozeného média" title="Čtení poškozeného média"></a>
+    <img src="images/ex-read-a.png" border=0 width=264 alt="Čtení poškozeného média" title="Čtení poškozeného média"></a>
   </td>
   <td>&nbsp;</td>
   <td>
     <a href="example5.html">
-    <img src="../images/ex-fix-cs.png" border=0 width=264 alt="Oprava média" title="Oprava média"></a>
+    <img src="images/ex-fix.png" border=0 width=264 alt="Oprava média" title="Oprava média"></a>
   </td>
 </tr>
 </table>
@@ -367,7 +368,7 @@ function example1cs()
 
 <tr align="center"><td><h3>Snímek obrazovky: Skenování média na chyby</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/ex-scan-cs.png" alt="Skenování média" title="Skenování média"></center>
+<center><img src="images/ex-scan.png" alt="Skenování média" title="Skenování média"></center>
 <br clear="all">
 </td></tr>
 <tr><td>
@@ -393,7 +394,7 @@ a přeneste jej na nové médium.
 </li>
 
 <li>Kliknutím na symbol
-<img src="../images/btn-protocol-cs.png" alt="Tlačítko Zobrazit záznam" title="Tlačítko Zobrazit záznam" align="middle">
+<img src="images/btn-protocol.png" alt="Tlačítko Zobrazit záznam" title="Tlačítko Zobrazit záznam" align="middle">
 zobrazíte další informace o procesu čtení.<p></p></li>
 </ul>
 
@@ -423,7 +424,7 @@ ovladač <a href="qa10.html#aspi">ASPI</a>, aby bylo možno pracovat s mechanika
 <tr valign="top" $BGCOLOR2>
 <td>2.</td>
 <td>Zvolte mechaniku.</td>
-<td><img src="../images/btn-drive-cs.png" alt="Volba mechaniky" title="Volba mechaniky"></td>
+<td><img src="images/btn-drive.png" alt="Volba mechaniky" title="Volba mechaniky"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
@@ -432,20 +433,20 @@ ovladač <a href="qa10.html#aspi">ASPI</a>, aby bylo možno pracovat s mechanika
 zadejte jeho název. Skenování soubor oprav chyb nezbytně nepotřebuje, 
 ale může z něj výhodně načíst nějaké informace.
 </td>
-<td><img src="../images/btn-eccfile-cs.png" alt="Soubor oprav chyb" title="Soubor oprav chyb"><p>
+<td><img src="images/btn-eccfile.png" alt="Soubor oprav chyb" title="Soubor oprav chyb"><p>
 Symbol <img src="../images/open-ecc.png" alt="Výběr souboru" title="Výběr souboru" align="middle"> otevírá výběr souborů.</td>
 </tr>
  
 <tr valign="top" $BGCOLOR2>
 <td>4.</td>
 <td>Kliknutím na tlačítko "Skenovat" začne kontrola média.</td>
-<td><img src="../images/btn-scan-cs.png" alt="Tlačítko Skenovat" alt="Tlačítko Skenovat" title="Tlačítko Skenovat" align="middle"></td>
+<td><img src="images/btn-scan.png" alt="Tlačítko Skenovat" alt="Tlačítko Skenovat" title="Tlačítko Skenovat" align="middle"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
 <td>5.</td>
 <td>Sledujte proces skenování v graphické reprezentaci.</td>
-<td><a href="example1.html"><img src="../images/ex-scan-cs.png" width="200" alt="Skenování média" title="Skenování média" align="middle"></a><p>
+<td><a href="example1.html"><img src="images/ex-scan.png" width="200" alt="Skenování média" title="Skenování média" align="middle"></a><p>
 </td>
 </tr>
 </table>
@@ -554,7 +555,7 @@ function example2cs()
 
 <tr align="center"><td><h3>Snímek obrazovky: Načtení obrazu média</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/ex-read-cs.png" alt="Načtení obrazu média" title="Načtení obrazu média"></center>
+<center><img src="images/ex-read.png" alt="Načtení obrazu média" title="Načtení obrazu média"></center>
 <br clear="all">
 </td></tr>
 
@@ -574,7 +575,7 @@ Vytvořte soubor oprav chyb bezprostředně po vypálení média.
 
 <li>
 Kliknutím na symbol
-<img src="../images/btn-protocol-cs.png" alt="Zobrazit záznam" align="middle">
+<img src="images/btn-protocol.png" alt="Zobrazit záznam" align="middle">
 zobrazíte další informace o procesu čtení.</li>
 </ul>
 
@@ -588,7 +589,7 @@ function example3cs()
 <tr align="center"><td>
 <h3>Snímek obrazovky: Vytváření souboru oprav chyb</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/ex-create-cs.png" alt="Vytváření souboru oprav chyb" title="Vytváření souboru oprav chyb"></center>
+<center><img src="images/ex-create.png" alt="Vytváření souboru oprav chyb" title="Vytváření souboru oprav chyb"></center>
 <br clear="all">
 </td></tr>
 
@@ -640,7 +641,7 @@ function example21cs()
 <tr valign="top" $BGCOLOR2>
 <td>2.</td>
 <td>Zvolte mechaniku.</td>
-<td><img src="../images/btn-drive-cs.png" alt="Volba mechaniky" title="Volba mechaniky"></td>
+<td><img src="images/btn-drive.png" alt="Volba mechaniky" title="Volba mechaniky"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
@@ -651,20 +652,20 @@ Ujistěte se, že máte dostatek volného místa pro obraz. Aktivujte
 <a href="example81.html#localfiles">volbu rozdělení souboru</a>, pokud
 váš souborový systém nepodporuje soubory větší než 2 GB.<p>
 </td>
-<td><img src="../images/btn-image-cs.png" alt="Soubor obrazu" title="Soubor obrazu"><p>
+<td><img src="images/btn-image.png" alt="Soubor obrazu" title="Soubor obrazu"><p>
 Symbol <img src="../images/open-img.png" alt="Výběr souboru" title="Výběr souboru" align="middle"> otevírá výběr souborů.</td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
 <td>4.</td>
 <td>Kliknutím na tlačítko "Načíst" spustíte čtení.</td>
-<td><img src="../images/btn-read-cs.png" alt="Tlačítko Načíst" title="Tlačítko Načíst" align="middle"></td>
+<td><img src="images/btn-read.png" alt="Tlačítko Načíst" title="Tlačítko Načíst" align="middle"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
 <td>5.</td>
 <td>Sledujte proces čtení v graphické reprezentaci.</td>
-<td><a href="example2.html"><img src="../images/ex-read-cs.png" width="200" alt="Načtení obrazu média" title="Načtení obrazu média" align="middle"></a><p>
+<td><a href="example2.html"><img src="images/ex-read.png" width="200" alt="Načtení obrazu média" title="Načtení obrazu média" align="middle"></a><p>
 </td>
 </tr>
 </table>
@@ -681,7 +682,7 @@ Obraz nesmí obsahovat žádné chyby čtení.<p>
 Zvolte soubor obrazu.
 Dříve načtený soubor obrazu bude přednastaven.<p>
 </td>
-<td><img src="../images/btn-image-cs.png" alt="Soubor obrazu" title="Soubor obrazu"><p>
+<td><img src="images/btn-image.png" alt="Soubor obrazu" title="Soubor obrazu"><p>
 Symbol <img src="../images/open-img.png" alt="Výběr souboru" title="Výběr souboru" align="middle"> otevírá výběr souborů.</td>
 </tr>
 
@@ -690,7 +691,7 @@ Symbol <img src="../images/open-img.png" alt="Výběr souboru" title="Výběr so
 <td>
 Zvolte název pro soubor oprav chyb.<p>
 </td>
-<td><img src="../images/btn-eccfile-cs.png" alt="Soubor oprav chyb" title="Soubor oprav chyb"><p>
+<td><img src="images/btn-eccfile.png" alt="Soubor oprav chyb" title="Soubor oprav chyb"><p>
 Symbol <img src="../images/open-ecc.png" alt="Výběr souboru" title="Výběr souboru" align="middle"> otevírá výběr souborů.</td>
 </tr>
 
@@ -699,19 +700,19 @@ Symbol <img src="../images/open-ecc.png" alt="Výběr souboru" title="Výběr so
 <td>
 Nastavte volby opravy chyb.<p>
 </td>
-<td><a href="example83.html"><img src="../images/prefs-ecc-cs.png" width="200" alt="Nastavení oprav chyb" title="Nastavení oprav chyb"></a></td>
+<td><a href="example83.html"><img src="images/prefs-ecc.png" width="200" alt="Nastavení oprav chyb" title="Nastavení oprav chyb"></a></td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
 <td>4.</td>
 <td>Kliknutím na tlačítko "Vytvořit" vytvoříte soubor oprav chyb.</td>
-<td><img src="../images/btn-create-cs.png" alt="Tlačítko Vytvořit" title="Tlačítko Vytvořit"></td>
+<td><img src="images/btn-create.png" alt="Tlačítko Vytvořit" title="Tlačítko Vytvořit"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
 <td>5.</td>
 <td>Sledujte průběh tvorby souboru oprav chyb.</td>
-<td><a href="example3.html"><img src="../images/ex-create-cs.png" width="200" alt="Vytvoření souboru oprav chyb" title="Vytvoření souboru oprav chyb"></a><p>
+<td><a href="example3.html"><img src="images/ex-create.png" width="200" alt="Vytvoření souboru oprav chyb" title="Vytvoření souboru oprav chyb"></a><p>
 </td>
 </tr>
 </table>
@@ -973,7 +974,7 @@ function example4cs()
 <tr align="center"><td>
 <h3>Snímek obrazovky: Čtení poškozeného média</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/ex-read-a-cs.png" alt="Čtení poškozeného média" title="Čtení poškozeného média"></center>
+<center><img src="images/ex-read-a.png" alt="Čtení poškozeného média" title="Čtení poškozeného média"></center>
 <br clear="all">
 </td></tr>
 
@@ -1002,7 +1003,7 @@ která je zvláště vhodná pro čtení poškozených médií:<p>
 <tr valign="top" $BGCOLOR2>
 <td>2.</td>
 <td>Zvolte mechaniku.</td>
-<td><img src="../images/btn-drive-cs.png" alt="Volba mechaniky" title="Volba mechaniky"></td>
+<td><img src="images/btn-drive.png" alt="Volba mechaniky" title="Volba mechaniky"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
@@ -1010,7 +1011,7 @@ která je zvláště vhodná pro čtení poškozených médií:<p>
 <td>
 Zvolte název souboru obrazu.<p>
 </td>
-<td><img src="../images/btn-image-cs.png" alt="Soubor obrazu" title="Soubor obrazu"><p>
+<td><img src="images/btn-image.png" alt="Soubor obrazu" title="Soubor obrazu"><p>
 Symbol <img src="../images/open-img.png" alt="Výběr souboru" title="Výběr souboru" align="middle"> otevírá výběr souborů.</td>
 </tr>
 
@@ -1020,7 +1021,7 @@ Symbol <img src="../images/open-img.png" alt="Výběr souboru" title="Výběr so
 Soubor oprav chyb musí být v tomto stádiu dostupný, aby program dvdisaster mohl
 určit, zda bylo shromážděno dostatek dat pro rekonstrukci obrazu.<p>
 </td>
-<td><img src="../images/btn-eccfile-cs.png" alt="Soubor oprav chyb" title="Soubor oprav chyb"><p>
+<td><img src="images/btn-eccfile.png" alt="Soubor oprav chyb" title="Soubor oprav chyb"><p>
 Symbol <img src="../images/open-ecc.png" alt="Výběr souboru" title="Výběr souboru" align="middle"> otevírá výběr souborů.</td>
 </tr>
 
@@ -1029,19 +1030,19 @@ Symbol <img src="../images/open-ecc.png" alt="Výběr souboru" title="Výběr so
 <td>
 Zvolte strategii adaptivního čtení.<p>
 </td>
-<td><a href="example82.html"><img src="../images/prefs-read-cs.png" width="200" alt="Nastavení čtení" title="Nastavení čtení"></a></td>
+<td><a href="example82.html"><img src="images/prefs-read.png" width="200" alt="Nastavení čtení" title="Nastavení čtení"></a></td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
 <td>6.</td>
 <td>Spusťte proces čtení kliknutím na tlačítko "Načíst".</td>
-<td><img src="../images/btn-read-cs.png" alt="Tlačítko Načíst" title="Tlačítko Načíst"></td>
+<td><img src="images/btn-read.png" alt="Tlačítko Načíst" title="Tlačítko Načíst"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
 <td>7.</td>
 <td>Sledujte proces čtení.</td>
-<td><a href="example4.html"><img src="../images/ex-read-a-cs.png" width="200" alt="Čtení poškozeného média" title="Čtení poškozeného média"></a><p>
+<td><a href="example4.html"><img src="images/ex-read-a.png" width="200" alt="Čtení poškozeného média" title="Čtení poškozeného média"></a><p>
 </td>
 </tr>
 </table>
@@ -1113,7 +1114,7 @@ function example5cs()
 <tr align="center"><td>
 <h3>Snímek obrazovky: Oprava obrazu média</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/ex-fix-cs.png" alt="Oprava média" title="Oprava média"></center>
+<center><img src="images/ex-fix.png" alt="Oprava média" title="Oprava média"></center>
 <br clear="all">
 </td></tr>
 
@@ -1167,7 +1168,7 @@ Proveďte následující akce.<p>
 <td>
 Zvolte soubor obrazu.<p>
 </td>
-<td><img src="../images/btn-image-cs.png" alt="Soubor obrazu" title="Soubor obrazu"><p>
+<td><img src="images/btn-image.png" alt="Soubor obrazu" title="Soubor obrazu"><p>
 Symbol <img src="../images/open-img.png" alt="Výběr souboru" title="Výběr souboru" align="middle">otevírá výběr souborů.</td>
 </tr>
 
@@ -1176,22 +1177,22 @@ Symbol <img src="../images/open-img.png" alt="Výběr souboru" title="Výběr so
 <td>
 Zvolte odpovídající soubor oprav chyb.<p>
 </td>
-<td><img src="../images/btn-eccfile-cs.png" alt="Soubor oprav chyb" title="Soubor oprav chyb"><p>
+<td><img src="images/btn-eccfile.png" alt="Soubor oprav chyb" title="Soubor oprav chyb"><p>
 Symbol <img src="../images/open-ecc.png" alt="Výběr souboru" title="Výběr souboru" align="middle"> otevírá výběr souborů.</td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
 <td>3.</td>
 <td>Klikněte na tlačítko "Opravit".</td>
-<td><img src="../images/btn-fix-cs.png" alt="Tlačítko Opravit" title="Tlačítko Opravit"></td>
+<td><img src="images/btn-fix.png" alt="Tlačítko Opravit" title="Tlačítko Opravit"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
 <td>4.</td>
-<td>Sledujte proces opravy.</td>
-<td>Normálně se během opravy obrazu místy projevuje vysoká
+<td>Sledujte proces opravy.
+Normálně se během opravy obrazu místy projevuje vysoká
 aktivita pevného disku.</td>
-<td><a href="example5.html"><img src="../images/ex-fix-cs.png" width="200" alt="Oprava obrazu média" title="Oprava obrazu média"></a><p>
+<td><a href="example5.html"><img src="images/ex-fix.png" width="200" alt="Oprava obrazu média" title="Oprava obrazu média"></a><p>
 </td>
 </tr>
 </table>
@@ -1251,7 +1252,7 @@ function example6cs()
 <tr align="center"><td>
 <h3>Snímek obrazovky: Porovnání souborů obrazu a oprav chyb</h3><p></td></tr>
 <tr align="center"><td>
-<center><img src="../images/ex-compare-cs.png" title="Porovnání souborů obrazu a oprav chyb"></center>
+<center><img src="images/ex-compare.png" title="Porovnání souborů obrazu a oprav chyb"></center>
 <br clear="all">
 </td></tr>
 
@@ -1299,7 +1300,7 @@ jsou aktuálně uloženy na vašem pevném disku:<p>
 <td>
 Zvolte soubor obrazu.<p>
 </td>
-<td><img src="../images/btn-image-cs.png" alt="Soubor obrazu" title="Soubor obrazu"><p>
+<td><img src="images/btn-image.png" alt="Soubor obrazu" title="Soubor obrazu"><p>
 Symbol <img src="../images/open-img.png" alt="Výběr souboru" title="Výběr souboru" align="middle"> otevírá výběr souborů.</td>
 </tr>
 
@@ -1308,20 +1309,20 @@ Symbol <img src="../images/open-img.png" alt="Výběr souboru" title="Výběr so
 <td>
 Zvolte odpovídající soubor oprav chyb.<p>
 </td>
-<td><img src="../images/btn-eccfile-cs.png" alt="Soubor oprav chyb" title="Soubor oprav chyb"><p>
+<td><img src="images/btn-eccfile.png" alt="Soubor oprav chyb" title="Soubor oprav chyb"><p>
 Symbol <img src="../images/open-ecc.png" alt="Výběr souboru" title="Výběr souboru" align="middle"> otevírá výběr souborů.</td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
 <td>3.</td>
 <td>Klikněte na tlačítko "Porovnat".</td>
-<td><img src="../images/btn-compare-cs.png" alt="Tlačítko Porovnat" title="Tlačítko Porovnat"></td>
+<td><img src="images/btn-compare.png" alt="Tlačítko Porovnat" title="Tlačítko Porovnat"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
 <td>4.</td>
 <td>Sledujte proces porovnávání.</td>
-<td><a href="example6.html"><img src="../images/ex-compare-cs.png" width="200" alt="Porovnání souborů obrazu a oprav chyb" title="Porovnání souborů obrazu a oprav chyb"></a><p>
+<td><a href="example6.html"><img src="images/ex-compare.png" width="200" alt="Porovnání souborů obrazu a oprav chyb" title="Porovnání souborů obrazu a oprav chyb"></a><p>
 </td>
 </tr>
 </table>
@@ -1384,7 +1385,7 @@ Dialog obsahuje několik formulářů:<p>
 
 <center>
 <a href="example81.html">
-<img src="../images/prefs-general-cs.png" alt="Obecná nastavení" title="Obecná nastavení"><br>
+<img src="images/prefs-general.png" alt="Obecná nastavení" title="Obecná nastavení"><br>
 Obecná nastavení
 </a>
 </center>
@@ -1392,7 +1393,7 @@ Obecná nastavení
 
 <center>
 <a href="example82.html">
-<img src="../images/prefs-read-cs.png" alt="Nastavení čtení" title="Nastavení čtení"><br>
+<img src="images/prefs-read.png" alt="Nastavení čtení" title="Nastavení čtení"><br>
 Nastavení čtení
 </a>
 </center>
@@ -1400,7 +1401,7 @@ Nastavení čtení
 
 <center>
 <a href="example83.html">
-<img src="../images/prefs-ecc-cs.png" alt="Nastavení oprav chyb" title="Nastavení oprav chyb"><br>
+<img src="images/prefs-ecc.png" alt="Nastavení oprav chyb" title="Nastavení oprav chyb"><br>
 Nastavení oprav chyb
 </a>
 </center>
@@ -1415,7 +1416,7 @@ function example81cs()
 
 Více informací o formuláři následuje níže na stránce.<p>
 
-<center><img src="../images/prefs-general-cs.png" alt="Obecná nastavení" title="Obecná nastavení"></center>
+<center><img src="images/prefs-general.png" alt="Obecná nastavení" title="Obecná nastavení"></center>
 <br clear="all">
 
 <p><hr><p>
@@ -1423,7 +1424,7 @@ Více informací o formuláři následuje níže na stránce.<p>
 <a name="iso"></a>
 <b>Souborový systém média a obrazu</b><p>
 
-<center><img src="../images/prefs-general-1-cs.png" alt="Souborový systém média a obrazu" title="Souborový systém média a obrazu"></center>
+<center><img src="images/prefs-general-1.png" alt="Souborový systém média a obrazu" title="Souborový systém média a obrazu"></center>
 <br clear="all">
 
 Program dvdisaster určí velikost obrazu ze souborového systému ISO/UDF,
@@ -1435,7 +1436,7 @@ některými mechanikami pro DVD-RW/+RW média.
 
 <a name="localfiles"></a>
 <b>Nastavení pro místní soubory</b><p>
-<center><img src="../images/prefs-general-2-cs.png" alt="Nastavení pro místní soubory" title="Nastavení pro místní soubory"></center>
+<center><img src="images/prefs-general-2.png" alt="Nastavení pro místní soubory" title="Nastavení pro místní soubory"></center>
 <br clear="all">
  
 <b>Automatická přípona souborů<font color="red">(1)</font>:</b>
@@ -1452,7 +1453,7 @@ nazvaných "medium00.iso", "medium01.iso" atd. za cenu malého snížení výkon
 <a name="auto"> </a>
 <b>Automatická tvorba a mazání souborů</b><p>
 
-<center><img src="../images/prefs-general-3-cs.png" alt="Automatická tvorba a mazání souborů" title="Automatická tvorba a mazání souborů"></center>
+<center><img src="images/prefs-general-3.png" alt="Automatická tvorba a mazání souborů" title="Automatická tvorba a mazání souborů"></center>
 <br clear="all">
 
 <b>Vytvořit soubor oprav chyb po načtení obrazu <font color="red">(1)</font>:</b>
@@ -1474,7 +1475,7 @@ function example82cs()
 
 Více informací o formuláři následuje níže na stránce.<p>
 
-<center><img src="../images/prefs-read-cs.png" alt="Nastavení čtení" title="Nastavení čtení"></center>
+<center><img src="images/prefs-read.png" alt="Nastavení čtení" title="Nastavení čtení"></center>
 <br clear="all">
 
 <p><hr><p>
@@ -1482,7 +1483,7 @@ Více informací o formuláři následuje níže na stránce.<p>
 <a name="read"></a>
 <b>Nastavení čtení</b><p>
 
-<center><img src="../images/prefs-read-1-cs.png" alt="Nastavení čtení" title="Nastavení čtení"></center>
+<center><img src="images/prefs-read-1.png" alt="Nastavení čtení" title="Nastavení čtení"></center>
 <br clear="all">
 
 <b>Strategie čtení <font color="red">(1)</font>:</b> Zvolte mezi
@@ -1508,7 +1509,7 @@ mechaniky, ale také nechávají větší mezery v obrazu při čtení poškozen
 <a name="image"></a>
 <b>Vlastnosti obrazu</b><p>
 
-<center><img src="../images/prefs-read-2-cs.png" alt="Vlastnosti obrazu" title="Vlastnosti obrazu"></center>
+<center><img src="images/prefs-read-2.png" alt="Vlastnosti obrazu" title="Vlastnosti obrazu"></center>
 <br clear="all">
 
 <b>Obraz DAO <font color="red">(1)</font>:</b>
@@ -1526,7 +1527,7 @@ programem dvdisaster.
 
 <b>Inicializace mechaniky</b><p>
 
-<center><img src="../images/prefs-read-3-cs.png" alt="Inicializace mechaniky" title="Inicializace mechaniky"></center>
+<center><img src="images/prefs-read-3.png" alt="Inicializace mechaniky" title="Inicializace mechaniky"></center>
 <br clear="all">
 Čeká daný počet sekund, až se mechanika roztočí, než začne
 skutečné čtení dat. Tak se vyhnete rychlostním skokům na začátku
@@ -1541,7 +1542,7 @@ function example83cs()
 
 Více informací o formuláři následuje níže na stránce.<p>
 
-<center><img src="../images/prefs-ecc-cs.png" alt="Nastavení oprav chyb" title="Nastavení oprav chyb"></center>
+<center><img src="images/prefs-ecc.png" alt="Nastavení oprav chyb" title="Nastavení oprav chyb"></center>
 <br clear="all">
 
 <p><hr><p>
@@ -1549,7 +1550,7 @@ Více informací o formuláři následuje níže na stránce.<p>
 <a name="redundancy"></a>
 <b>Redundance pro nové soubory oprav chyb</b><p>
 
-<center><img src="../images/prefs-ecc-1-cs.png" alt="Redundance pro nové soubory oprav chyb" title="Redundance pro nové soubory oprav chyb"></center>
+<center><img src="images/prefs-ecc-1.png" alt="Redundance pro nové soubory oprav chyb" title="Redundance pro nové soubory oprav chyb"></center>
 <br clear="all">
 
 Redundance určuje množství opravitelných chyb
@@ -1583,7 +1584,7 @@ a méně větším.<p>
 
 <b>Využití paměti</b><p>
 
-<center><img src="../images/prefs-ecc-2-cs.png" alt="Využití paměti" title="Využití paměti"></center>
+<center><img src="images/prefs-ecc-2.png" alt="Využití paměti" title="Využití paměti"></center>
 <br clear="all">
 
 Program dvdisaster optimalizuje přístup k obrazům a souborům oprav chyb tím,
@@ -2129,13 +2130,13 @@ U verze ve zdrojovém kódu si přečtěte <a href="download20.html">instalačn�
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Zdrojový kód pro všechny operační systémy:&nbsp;</td>
-        <td><a href="http://download.berlios.de/dvdisaster/dvdisaster-0.66.tar.bz2">dvdisaster-0.66.tar.bz2</a></td></tr>
+        <td><a href="${tar_0_66}">dvdisaster-0.66.tar.bz2</a></td></tr>
     <tr><td align="right">Digitální podpis:&nbsp;</td>
-        <td><a href="http://download.berlios.de/dvdisaster/dvdisaster-0.66.tar.bz2.gpg">dvdisaster-0.66.tar.bz2.gpg</a></td></tr>
+        <td><a href="${tar_0_66_sig}">dvdisaster-0.66.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Binární verze pro Windows:&nbsp;</td>
-        <td><a href="http://download.berlios.de/dvdisaster/dvdisaster-0.66-setup.exe">dvdisaster-0.66-setup.exe</a></td></tr>
+        <td><a href="${setup_0_66}">dvdisaster-0.66-setup.exe</a></td></tr>
     <tr><td align="right">Digitální podpis:&nbsp;</td>
-        <td><a href="http://download.berlios.de/dvdisaster/dvdisaster-0.66-setup.exe.gpg">dvdisaster-0.66-setup.exe.gpg</a></td></tr>
+        <td><a href="${setup_0_66_sig}">dvdisaster-0.66-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
@@ -2160,13 +2161,13 @@ programů ze zdroje).
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Zdrojový kód pro všechny operační systémy:&nbsp;</td>
-        <td><a href="http://download.berlios.de/dvdisaster/dvdisaster-0.65.tar.bz2">dvdisaster-0.65.tar.bz2</a></td></tr>
+        <td><a href="${tar_0_65}">dvdisaster-0.65.tar.bz2</a></td></tr>
     <tr><td align="right">Digitální podpis:&nbsp;</td>
-        <td><a href="http://download.berlios.de/dvdisaster/dvdisaster-0.65.tar.bz2.gpg">dvdisaster-0.65.tar.bz2.gpg</a></td></tr>
+        <td><a href="${tar_0_65_sig}">dvdisaster-0.65.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Binární verze pro Windows:&nbsp;</td>
-        <td><a href="http://download.berlios.de/dvdisaster/dvdisaster-0.65-setup.exe">dvdisaster-0.65-setup.exe</a></td></tr>
+        <td><a href="${setup_0_65}">dvdisaster-0.65-setup.exe</a></td></tr>
     <tr><td align="right">Digitální podpis:&nbsp;</td>
-        <td><a href="http://download.berlios.de/dvdisaster/dvdisaster-0.65-setup.exe.gpg">dvdisaster-0.65-setup.exe.gpg</a></td></tr>
+        <td><a href="${setup_0_65_sig}">dvdisaster-0.65-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
@@ -3109,7 +3110,7 @@ Lineární strategie čtení načítá médium od počátečního (sektor 0)
 do konce (poslední sektor). Rychlost čtení je zobrazována graficky, aby poskytla
 informaci o <a href="background40.html#quality">kvalitě média</a>:<p>
 
-<center><img src="../images/bg-linear-cs.png" alt="Lineární strategie čtení" title="Lineární strategie čtení"><br>
+<center><img src="images/bg-linear.png" alt="Lineární strategie čtení" title="Lineární strategie čtení"><br>
 Částečný snímek obrazovky: lineární strategie čtení</center>
 
 <pre> </pre>
@@ -3237,7 +3238,7 @@ dostatek sektorů pro úspěšnou opravu obrazu s použitím souboru oprav chyb.
 Tak se dá zkrátit čas čtení až o 90 procent v porovnání s pokusem o úplné
 načtení, ale funguje jen tehdy, je-li dostupný soubor oprav chyb.<p>
 
-<center><img src="../images/bg-adaptive-cs.png" alt="Adaptivní strategie čtení" title="Adaptivní strategie čtení"><br>
+<center><img src="images/bg-adaptive.png" alt="Adaptivní strategie čtení" title="Adaptivní strategie čtení"><br>
 Částečný snímek obrazovky: adaptivní strategie čtení</center>
 
 <pre> </pre>

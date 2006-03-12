@@ -109,7 +109,8 @@ static void close_cb(GtkWidget *widget, gpointer data)
  */
 
 enum 
-{  TOGGLE_UDF,
+{  TOGGLE_ECC,
+   TOGGLE_UDF,
    TOGGLE_READ_CREATE,
    TOGGLE_UNLINK,
    TOGGLE_SUFFIX,
@@ -148,7 +149,11 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
    prefs_context *pc = (prefs_context*)Closure->prefsContext;
 
    switch(action)
-   {  case TOGGLE_UDF:
+   {  case TOGGLE_ECC:
+	Closure->parseEcc = state;
+	break;
+
+      case TOGGLE_UDF:
 	Closure->parseUDF = state;
 	break;
 
@@ -424,11 +429,19 @@ void CreatePreferencesWindow(void)
       frame = gtk_frame_new(_utf("Medium and image filesystem"));
       gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
 
+      vbox2 = gtk_vbox_new(FALSE, 15);
+      gtk_container_set_border_width(GTK_CONTAINER(vbox2), 10);
+      gtk_container_add(GTK_CONTAINER(frame), vbox2);
+
+      button = gtk_check_button_new_with_label(_utf("Use information from ECC headers"));
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->parseEcc);
+      g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_ECC));
+      gtk_box_pack_start(GTK_BOX(vbox2), button, FALSE, FALSE, 0);
+
       button = gtk_check_button_new_with_label(_utf("Use information from ISO/UDF filesystem (experimental)"));
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->parseUDF);
       g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_UDF));
-      gtk_container_add(GTK_CONTAINER(frame), button);
-      gtk_container_set_border_width(GTK_CONTAINER(button), 10);
+      gtk_box_pack_start(GTK_BOX(vbox2), button, FALSE, FALSE, 0);
 
       /* file extension */
 

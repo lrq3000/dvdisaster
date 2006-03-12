@@ -127,6 +127,7 @@ typedef struct _GlobalClosure
    int splitFiles;      /* limit image files to 2GB */
    int autoSuffix;      /* automatically extend files with suffices .iso/.ecc */
    int parseUDF;        /* use information from the ISO/UDF filesystems */
+   int parseEcc;        /* use information from the RS02 headers */
    int readAndCreate;   /* automatically create .ecc file after reading an image */
    int enableCurveSwitch; /* TRUE in readAndCreateMode after reading is complete */
   

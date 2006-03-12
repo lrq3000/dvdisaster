@@ -141,6 +141,7 @@ typedef enum
    MODIFIER_FILL_UNREADABLE,
    MODIFIER_KEEP_STYLE,
    MODIFIER_PARSE_UDF,
+   MODIFIER_PARSE_ECC,
    MODIFIER_RANDOM_SEED,
    MODIFIER_SPEED_WARNING, 
    MODIFIER_SPINUP_DELAY, 
@@ -305,6 +306,7 @@ int main(int argc, char *argv[])
 	{"list", 0, 0, 'l' },
 #endif
 	{"method", 2, 0, 'm' },
+	{"parse-ecc", 0, 0, MODIFIER_PARSE_ECC },
 	{"parse-udf", 0, 0, MODIFIER_PARSE_UDF },
         {"prefix", 1, 0, 'p'},
 	{"random-errors", 1, 0, MODE_RANDOM_ERR },
@@ -419,6 +421,9 @@ int main(int argc, char *argv[])
 	   break;
          case MODIFIER_DEBUG:
 	   Closure->debugMode = TRUE;
+	   break;
+         case MODIFIER_PARSE_ECC:
+	   Closure->parseEcc = TRUE;
 	   break;
          case MODIFIER_PARSE_UDF:
 	   Closure->parseUDF = TRUE;
@@ -634,6 +639,7 @@ int main(int argc, char *argv[])
 	     "  --dao                  - assume DAO disc; do not trim image end\n"
 	     "  --fill-unreadable n    - fill unreadable sectors with byte n\n"
 	     "  --medium-size          - max. possible image size on medium (in sectors)\n"
+	     "  --parse-ecc            - use information from ecc headers\n"
 	     "  --parse-udf            - use information from ISO/UDF filesystem\n"
 	     "  --speed-warning n      - print warning if speed changes by more than n percent\n"
 	     "  --spinup-delay n       - wait n seconds for drive to spin up\n"

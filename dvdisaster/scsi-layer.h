@@ -173,7 +173,8 @@ typedef struct _DeviceHandle
    DriveDatabase *db;         /* see drive database above */
    int (*read)(struct _DeviceHandle*, unsigned char*, int, int);
    Sense sense;               /* sense data from last operation */
-   gint64 userAreaSize;        /* size of user area according to DVD Info struct */
+   gint64 userAreaSize;       /* size of user area according to DVD Info struct */
+   gint64 rs02Size;           /* size reported in RS02 header */
    int sessions;
    int layers;
    int mainType;
