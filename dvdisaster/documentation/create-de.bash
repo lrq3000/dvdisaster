@@ -3010,8 +3010,8 @@ zwei Schritten statt:
 
 Die Ausbeute an noch lesbaren Daten (Schritt 1) hängt nicht nur von dem
 verwendeten Laufwerk ab, sondern auch davon, auf welcher logischen Ebene 
-auf den Datenträger zugegriffen wird. Diese Seite liefert die Hintergründe
-dafür, warum dvdisaster auf der logischen Ebene von Abbildern arbeitet:<p>
+auf den Datenträger zugegriffen wird. Diese Seite erklärt die logischen Ebenen
+und warum dvdisaster auf der Ebene von Abbildern arbeitet:<p>
 
 <b>Logische Ebenen eines Datenträgers</b><p>
 
@@ -3052,12 +3052,12 @@ selbst wenn die zugehörigen Daten-Sektoren
 noch technisch lesbar sind. Das ist schlecht, denn auch die noch lesbaren Anteile
 von beschädigten Dateien sind für den Fehlerkorrektur-Kode wichtig.<p>
 
-Ein besonders übler Fall entsteht, wenn die Fehlerkorrektur-Daten auch 
+Ein besonders schlechter Fall entsteht, wenn die Fehlerkorrektur-Daten auch 
 in Dateien abgelegt sind. Dann werden die Fehlerkorrektur-Daten gebraucht, 
 um das zugehörige Dateisystem zu reparieren, aber aufgrund des defekten 
 Dateisystems ist kein Zugriff auf die Fehlerkorrektur-Daten möglich.
 Das führt zum vollständigen Datenverlust und hat auch Konsequenzen für das 
-<a href="#eccfile"> Aufheben von Fehlerkorrektur-Dateien</a>.
+<a href="#eccfile"> Aufheben von Fehlerkorrektur-Dateien</a> - dazu gleich mehr.
 <p>
 
 Mit einem Abbild-basierten Ansatz sieht die Situation hingegen besser aus:<p>
@@ -3076,8 +3076,8 @@ Ausgangsbasis für die Fehlerkorrektur.<p>
 
 Das Abbild enthält alle Daten-Sektoren des Datenträgers. Deshalb ist nach der 
 Wiederherstellung des Abbilds auch das darauf gespeicherte Dateisystem 
-wieder vollständig. Ein Schutz des Datenträgers auf Abbild-Ebene ist damit
-umfassender als eine Fehlerkorrektur auf Datei-Ebene.<p>
+wieder vollständig. Ein Schutz des Datenträgers auf der Abbild-Ebene ist damit
+umfassender als eine Fehlerkorrektur auf der Datei-Ebene.<p>
 
 dvdisaster arbeitet ausschließlich auf der Abbild-Ebene, um von diesen Vorteilen
 zu profitieren. Mit dem neuen <a href="background30.html">RS02-Verfahren</a>

@@ -2927,7 +2927,7 @@ Media recovery with error correcting codes takes place in two steps:
 
 The amount of readable data (step 1) does not only depend on the reading capabilities
 of the drive, but also on which logical level the reading process takes place.
-This page gives some background information why dvdisaster uses image level reading.<p>
+This page discusses the logical levels and explains why dvdisaster uses image level reading.<p>
 
 <b>Logical levels of a medium</b><p>
 
@@ -2936,8 +2936,8 @@ Consecutively reading and storing these sectors produces a medium <i>image</i>.<
 
 But working with single data sectors is unwieldy from a users perspective. Therefore
 media contain <i>file systems</i> which combine data sectors into <i>files</i>.
-This requires accurate book-keeping about the data sectors a file is comprised of,
-and further attributes like the file name and access permissions. For this book-keeping
+This requires accurate book-keeping about which data sectors the files are comprised of,
+and further attributes like file names and access permissions. For this book-keeping
 some data sectors are reserved on the medium 
 and filled with respective data structures.<p>
 
@@ -2959,14 +2959,14 @@ book-keeping functions in the file system. The list of files on the medium
 may be truncated. Or the mapping of data sectors to files is incomplete.
 Therefore files or parts from files may be lost even though the respective
 data sectors would still be readable by the hardware. This is very bad
-because even small readable portions of damaged files are valuable for
+since even small readable portions of damaged files are valuable for
 the error correcting code.<p>
 
 An extremely bad case occurs when the error correction data is also
 stored in files. Then the error correction data is required to repair the
 file system, but the defective file system prevents access to the error
-correction data. That means total data loss and rises special issues on the
-<a href="#eccfile">treatment of error correction files</a>.<p>
+correction data. That means total data loss and rises some issues on the
+<a href="#eccfile">treatment of error correction files</a> (more on that later).<p>
 
 However the situation improves greatly when employing an image-based approach:<p>
 
@@ -3004,7 +3004,7 @@ The error correction data created by dvdisaster protects media at the image leve
 But how are the error correction <i>files</i> protected?<p>
 
 Since error correction files are read at the file level they are subject
-to the respective restrictions. If the medium containing the error correction
+to the problems discussed above. If the medium containing the error correction
 files becomes damaged it may not be possible to access or read them completely.
 <p>
 

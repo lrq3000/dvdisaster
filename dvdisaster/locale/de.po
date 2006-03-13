@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-12 13:43+0100\n"
+"POT-Creation-Date: 2006-03-13 20:36+0100\n"
 "PO-Revision-Date: 2004-11-30 19:48+0100\n"
 "Last-Translator: Carsten Gnörlich <carsten@dvdisaster.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -17,17 +17,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: closure.c:222 closure.c:273
+#: closure.c:223 closure.c:275
 #, c-format
 msgid "Error closing configuration file %s: %s\n"
 msgstr "Fehler beim Schließen der Konfigurations-Datei %s: %s\n"
 
-#: closure.c:242
+#: closure.c:243
 #, c-format
 msgid "Could not open configuration file %s: %s\n"
 msgstr "Konnte Konfigurations-Datei %s nicht öffnen: %s\n"
 
-#: closure.c:248
+#: closure.c:249
 #, c-format
 msgid ""
 "# dvdisaster-%s configuration file\n"
@@ -583,87 +583,115 @@ msgstr ""
 msgid "dvdisaster-%s log\n"
 msgstr "dvdisaster-%s-Protokoll\n"
 
-#: main-window.c:227
+#: main-window.c:144
+#, c-format
+msgid ""
+"Repairing RS02 augmented images is not yet supported\n"
+"in the graphical user interface.\n"
+"You can do it in the command line by typing:\n"
+"\n"
+"dvdisaster -i%s -f"
+msgstr ""
+"Das Reparieren von RS02-erweiterten Abbildern wird noch\n"
+"nicht in der graphischen Benutzeroberfläche unterstützt.\n"
+"Sie können es aber in der Kommandozeile durchführen:\n\n"
+"dvdisaster -i%s -f"
+
+#: main-window.c:175
+#, c-format
+msgid ""
+"Comparing RS02 augmented images is not yet supported\n"
+"in the graphical user interface.\n"
+"You can do it in the command line by typing:\n"
+"\n"
+"dvdisaster -i%s -t"
+msgstr ""
+"Das Vergleichen von RS02-erweiterten Abbildern wird noch\n"
+"nicht in der graphischen Benutzeroberfläche unterstützt.\n"
+"Sie können es aber in der Kommandozeile durchführen:\n\n"
+"dvdisaster -i%s -t"
+
+#: main-window.c:245
 msgid "button|Read"
 msgstr "Lesen"
 
-#: main-window.c:230
+#: main-window.c:248
 msgid "tooltip|Read Image"
 msgstr "Abbild einlesen"
 
-#: main-window.c:230
+#: main-window.c:248
 msgid "Reads a CD/DVD image into a file (or tries to complete an existing image file)."
 msgstr "Liest ein CD/DVD-Abbild in eine Datei ein (oder vervollständigt ein vorhandenes Abbild)."
 
-#: main-window.c:244
+#: main-window.c:262
 msgid "button|Create"
 msgstr "Erzeugen"
 
-#: main-window.c:247
+#: main-window.c:265
 msgid "tooltip|Create error correction file"
 msgstr "Fehlerkorrekturdatei erzeugen"
 
-#: main-window.c:247
+#: main-window.c:265
 msgid "Creates an error correction file. Requires an image file."
 msgstr "Erzeugt eine Fehlerkorrekturdatei. Benötigt eine Abbild-Datei."
 
-#: main-window.c:251
+#: main-window.c:269
 msgid "button|Scan"
 msgstr "Prüfen"
 
-#: main-window.c:254
+#: main-window.c:272
 msgid "tooltip|Scan medium"
 msgstr "Datenträger untersuchen"
 
-#: main-window.c:254
+#: main-window.c:272
 msgid "Scans medium for unreadable sectors."
 msgstr "Untersucht den Datenträger auf Lesefehler."
 
-#: main-window.c:258
+#: main-window.c:276
 msgid "button|Fix"
 msgstr "Reparieren"
 
-#: main-window.c:261
+#: main-window.c:279
 msgid "tooltip|Repair image"
 msgstr "Abbild reparieren"
 
-#: main-window.c:261
+#: main-window.c:279
 msgid "Repairs an image. Requires image and error correction files."
 msgstr "Repariert ein Abbild. Benötigt eine Abbild- und Fehlerkorrekturdatei."
 
-#: main-window.c:265
+#: main-window.c:283
 msgid "button|Compare"
 msgstr "Vergleichen"
 
-#: main-window.c:268
+#: main-window.c:286
 msgid "tooltip|Compare files"
 msgstr "Dateivergleich"
 
-#: main-window.c:268
+#: main-window.c:286
 msgid "Tests consistency of error correction and image files."
 msgstr "Vergleicht Abbild- und Fehlerkorrektur-Datei."
 
-#: main-window.c:272
+#: main-window.c:290
 msgid "button|Stop"
 msgstr "Abbrechen"
 
-#: main-window.c:275
+#: main-window.c:293
 msgid "tooltip|Abort action"
 msgstr "Vorgang abbrechen"
 
-#: main-window.c:275
+#: main-window.c:293
 msgid "Aborts an ongoing action."
 msgstr "Bricht den laufenden Vorgang ab."
 
-#: main-window.c:442
+#: main-window.c:460
 msgid "tooltip|Protocol for current action"
 msgstr "Protokoll des Vorgangs"
 
-#: main-window.c:443
+#: main-window.c:461
 msgid "Displays additional information created during the current or last action."
 msgstr "Zeigt zusätzliche Informationen über den laufenden oder zuletzt durchgeführten Vorgang an."
 
-#: main-window.c:452
+#: main-window.c:470
 msgid "View log"
 msgstr "Protokoll"
 
@@ -837,12 +865,12 @@ msgstr ""
 "Liste der verfügbaren Methoden:\n"
 "\n"
 
-#: method.c:234 method.c:235
+#: method.c:274 method.c:275
 #, c-format
 msgid "Image file %s not present.\n"
 msgstr "Abbild-Datei %s nicht vorhanden.\n"
 
-#: method.c:259 method.c:264
+#: method.c:299 method.c:304
 #, c-format
 msgid ""
 "\n"
@@ -851,7 +879,7 @@ msgstr ""
 "\n"
 "Unbekanntes Verfahren %s.\n"
 
-#: method.c:260 method.c:265
+#: method.c:300 method.c:305
 msgid ""
 "\n"
 "Neither ecc file nor ecc data in image found.\n"
@@ -2454,7 +2482,8 @@ msgstr ""
 "Fehlerkorrektur-Daten vermerkt wurde. Dies kann durch\n"
 "Auffüllen mit leeren Sektoren verursacht sein. Es kann\n"
 "aber auch bedeuten daß das Abbild nach dem Hinzufügen\n"
-"der Fehlerkorrektur-Daten verändert wurde.\n\n"
+"der Fehlerkorrektur-Daten verändert wurde.\n"
+"\n"
 "%s"
 
 #: rs02-fix.c:424
@@ -3026,6 +3055,6 @@ msgstr ""
 msgid "Please hang on until the browser comes up!"
 msgstr "Bitte warten Sie bis der HTML-Betrachter erscheint!"
 
-#: udf.c:178
+#: udf.c:213
 msgid "Unnamed"
 msgstr "Unbenannt"

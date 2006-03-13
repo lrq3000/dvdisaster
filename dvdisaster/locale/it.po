@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-12 13:43+0100\n"
+"POT-Creation-Date: 2006-03-13 20:36+0100\n"
 "PO-Revision-Date: 2005-01-01 14:24+0100\n"
 "Last-Translator: Andrea Polverini <polve@polve.com>\n"
 "Language-Team: Italian <>\n"
@@ -17,17 +17,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: closure.c:222 closure.c:273
+#: closure.c:223 closure.c:275
 #, c-format
 msgid "Error closing configuration file %s: %s\n"
 msgstr "Errore durante la chiusura del file di configurazione %s: %s\n"
 
-#: closure.c:242
+#: closure.c:243
 #, c-format
 msgid "Could not open configuration file %s: %s\n"
 msgstr "Non posso aprire il file di configurazione %s: %s\n"
 
-#: closure.c:248
+#: closure.c:249
 #, c-format
 msgid ""
 "# dvdisaster-%s configuration file\n"
@@ -573,87 +573,107 @@ msgstr ""
 msgid "dvdisaster-%s log\n"
 msgstr "dvdisaster-%s protocollo\n"
 
-#: main-window.c:227
+#: main-window.c:144
+#, c-format
+msgid ""
+"Repairing RS02 augmented images is not yet supported\n"
+"in the graphical user interface.\n"
+"You can do it in the command line by typing:\n"
+"\n"
+"dvdisaster -i%s -f"
+msgstr ""
+
+#: main-window.c:175
+#, c-format
+msgid ""
+"Comparing RS02 augmented images is not yet supported\n"
+"in the graphical user interface.\n"
+"You can do it in the command line by typing:\n"
+"\n"
+"dvdisaster -i%s -t"
+msgstr ""
+
+#: main-window.c:245
 msgid "button|Read"
 msgstr "Leggi"
 
-#: main-window.c:230
+#: main-window.c:248
 msgid "tooltip|Read Image"
 msgstr "Leggi Immagine"
 
-#: main-window.c:230
+#: main-window.c:248
 msgid "Reads a CD/DVD image into a file (or tries to complete an existing image file)."
 msgstr "Legge un'immagine CD/DVD in un file (oppure prova a completare un file immagine esistente)"
 
-#: main-window.c:244
+#: main-window.c:262
 msgid "button|Create"
 msgstr "Crea"
 
-#: main-window.c:247
+#: main-window.c:265
 msgid "tooltip|Create error correction file"
 msgstr "Crea il file di correzione di errore"
 
-#: main-window.c:247
+#: main-window.c:265
 msgid "Creates an error correction file. Requires an image file."
 msgstr "Crea il file di correzione di errore. Richiede un file immagine."
 
-#: main-window.c:251
+#: main-window.c:269
 msgid "button|Scan"
 msgstr "Scansiona"
 
-#: main-window.c:254
+#: main-window.c:272
 msgid "tooltip|Scan medium"
 msgstr "Scansiona Supporto"
 
-#: main-window.c:254
+#: main-window.c:272
 msgid "Scans medium for unreadable sectors."
 msgstr "Scansiona il supporto per i settori illeggibili."
 
-#: main-window.c:258
+#: main-window.c:276
 msgid "button|Fix"
 msgstr "Ripara"
 
-#: main-window.c:261
+#: main-window.c:279
 msgid "tooltip|Repair image"
 msgstr "Ripara Immagine"
 
-#: main-window.c:261
+#: main-window.c:279
 msgid "Repairs an image. Requires image and error correction files."
 msgstr "Ripara un'immagine. Richiede i file di immagine e di correzione di errore."
 
-#: main-window.c:265
+#: main-window.c:283
 msgid "button|Compare"
 msgstr "Compara"
 
-#: main-window.c:268
+#: main-window.c:286
 msgid "tooltip|Compare files"
 msgstr "Compare file"
 
-#: main-window.c:268
+#: main-window.c:286
 msgid "Tests consistency of error correction and image files."
 msgstr "Testa la consistenza dei file di correzione errore ed immagine"
 
-#: main-window.c:272
+#: main-window.c:290
 msgid "button|Stop"
 msgstr "Ferma"
 
-#: main-window.c:275
+#: main-window.c:293
 msgid "tooltip|Abort action"
 msgstr "Ferma Operazione"
 
-#: main-window.c:275
+#: main-window.c:293
 msgid "Aborts an ongoing action."
 msgstr "Ferma una operazione in esecuzione"
 
-#: main-window.c:442
+#: main-window.c:460
 msgid "tooltip|Protocol for current action"
 msgstr "Protocollo dell'operazione corrente"
 
-#: main-window.c:443
+#: main-window.c:461
 msgid "Displays additional information created during the current or last action."
 msgstr "Visualizza informazioni addizionali create durante l'operazione corrente o precedente."
 
-#: main-window.c:452
+#: main-window.c:470
 msgid "View log"
 msgstr "Protocollo"
 
@@ -827,12 +847,12 @@ msgstr ""
 "Elenco dei metodi disponibili:\n"
 "\n"
 
-#: method.c:234 method.c:235
+#: method.c:274 method.c:275
 #, c-format
 msgid "Image file %s not present.\n"
 msgstr "File immagine %s non presente.\n"
 
-#: method.c:259 method.c:264
+#: method.c:299 method.c:304
 #, c-format
 msgid ""
 "\n"
@@ -841,7 +861,7 @@ msgstr ""
 "\n"
 "Metodo %s sconosciuto.\n"
 
-#: method.c:260 method.c:265
+#: method.c:300 method.c:305
 msgid ""
 "\n"
 "Neither ecc file nor ecc data in image found.\n"
@@ -2983,7 +3003,7 @@ msgstr ""
 msgid "Please hang on until the browser comes up!"
 msgstr "Prego attendere finchè il browser non si avvia!"
 
-#: udf.c:178
+#: udf.c:213
 msgid "Unnamed"
 msgstr "Non intestato"
 
