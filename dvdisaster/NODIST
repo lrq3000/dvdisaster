@@ -7,6 +7,12 @@ CVS
 documentation/CVS
 documentation/images/CVS
 documentation/images/*.png
+documentation/cs/images/CVS
+documentation/cs/images/*.png
+documentation/de/images/CVS
+documentation/de/images/*.png
+documentation/en/images/CVS
+documentation/en/images/*.png
 documentation/pngpack.log
 documentation/screenshots
 icons/CVS
@@ -14,5 +20,3 @@ locale/CVS
 scripts/CVS
 scripts/check.bash
 tools/CVS
-rs02*
-ecc-rs02.c

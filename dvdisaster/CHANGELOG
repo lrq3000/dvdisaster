@@ -1,3 +1,8 @@
+0.66 (rc-8)
+	- last RS02 headers were omitted when they would end up in the last
+	  two image sectors. fixed.
+	- updated Unix installation for new documentation structure
+
 0.66 (rc-7) 12-03-2006
 	- added homepage generation for SourceForge
 	- final rework of background20 in the documentation

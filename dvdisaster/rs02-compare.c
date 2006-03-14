@@ -328,7 +328,8 @@ void RS02Compare(Method *self)
    hdr_ok = hdr_missing = hdr_crc_errors = 0;
    hdr_pos = lay->firstEccHeader;
 
-   while(hdr_pos < expected_sectors - 2)
+   //   while(hdr_pos < expected_sectors - 2)
+   while(hdr_pos < expected_sectors)
    {  EccHeader eh;
       int n;
 
@@ -373,7 +374,7 @@ void RS02Compare(Method *self)
       if(total_missing && total_crc_errors)
 	PrintLog(_("* BAD image        : %lld sectors missing, %lld CRC errors\n"), 
 		 total_missing, total_crc_errors);
-      PrintLog(_("  ... ecc headers    : %lld ok, %lld CRC errrors, %lld missing\n"),
+      PrintLog(_("  ... ecc headers    : %lld ok, %lld CRC errors, %lld missing\n"),
 		 hdr_ok, hdr_crc_errors, hdr_missing);
       PrintLog(_("  ... data section   : %lld sectors missing; %lld CRC errors\n"), 
 	       data_missing, data_crc_errors);

@@ -106,11 +106,14 @@ documentation/images/open-img.png:
         else \
 	  $(MAKE) --no-print-directory -C tools; \
 	  echo -n "Unpacking images (may take a while) ... "; \
-	  cd documentation/images; \
+	  cd $(SRCDIR)/documentation/images; \
 	  $(SRCDIR)/tools/pngpack ../images-common.pngpack >../pngpack.log; \
-	  $(SRCDIR)/tools/pngpack ../images-cs.pngpack >>../pngpack.log; echo -n "cs "; \
-	  $(SRCDIR)/tools/pngpack ../images-de.pngpack >>../pngpack.log; echo -n "de ";\
-	  $(SRCDIR)/tools/pngpack ../images-en.pngpack >>../pngpack.log; echo -n "en "; \
+	  cd $(SRCDIR)/documentation/cs/images; \
+	  $(SRCDIR)/tools/pngpack ../../images-cs.pngpack >>../../pngpack.log; echo -n "cs "; \
+	  cd $(SRCDIR)/documentation/de/images; \
+	  $(SRCDIR)/tools/pngpack ../../images-de.pngpack >>../../pngpack.log; echo -n "de ";\
+	  cd $(SRCDIR)/documentation/en/images; \
+	  $(SRCDIR)/tools/pngpack ../../images-en.pngpack >>../../pngpack.log; echo -n "en "; \
 	  echo "- done"; \
         fi
 
@@ -118,12 +121,12 @@ images: documentation/images/open-img.png
 
 pack-images: tools/pngpack
 	@echo -n "Packing images (may take a while) ... "
-	@cd documentation/images; $(SRCDIR)/tools/pngpack ../images-common.pngpack open-*.png >../pngpack.log;
-	@cd documentation/images; $(SRCDIR)/tools/pngpack ../images-cs.pngpack *-cs.png >>../pngpack.log;
+	@cd documentation/images; $(SRCDIR)/tools/pngpack ../images-common.pngpack *.png >../pngpack.log;
+	@cd documentation/cs/images; $(SRCDIR)/tools/pngpack ../../images-cs.pngpack *.png >>../../pngpack.log;
 	@echo -n "cs ";
-	@cd documentation/images; $(SRCDIR)/tools/pngpack ../images-de.pngpack *-de.png >>../pngpack.log;
+	@cd documentation/de/images; $(SRCDIR)/tools/pngpack ../../images-de.pngpack *.png >>../../pngpack.log;
 	@echo -n "de ";
-	@cd documentation/images; $(SRCDIR)/tools/pngpack ../images-en.pngpack *-en.png >>../pngpack.log;
+	@cd documentation/en/images; $(SRCDIR)/tools/pngpack ../../images-en.pngpack *.png >>../../pngpack.log;
 	@echo -n "en ";
 	@echo "- done"
 
@@ -174,7 +177,7 @@ show:
 
 .PHONY : install uninstall clean distclean arch www berlios-images berlios sf sf-images srcdist bindist
 
-install: dvdisaster html
+install: dvdisaster html images
 	@echo "Installing package..."
 	install -d $(BUILDROOT)$(BINDIR)
 	install dvdisaster$(EXE_SUFFIX) $(BUILDROOT)$(BINDIR)
@@ -184,14 +187,20 @@ install: dvdisaster html
 	install -m 644 CREDITS* $(BUILDROOT)$(DOCSUBDIR)
 	install -m 644 TODO $(BUILDROOT)$(DOCSUBDIR)
 	install -d $(BUILDROOT)$(DOCSUBDIR)/cs
-	cd documentation; install -m 644 cs/* $(BUILDROOT)$(DOCSUBDIR)/cs
+	cd documentation; install -m 644 cs/*.html $(BUILDROOT)$(DOCSUBDIR)/cs
 	install -d $(BUILDROOT)$(DOCSUBDIR)/de
-	cd documentation; install -m 644 de/* $(BUILDROOT)$(DOCSUBDIR)/de
+	cd documentation; install -m 644 de/*.html $(BUILDROOT)$(DOCSUBDIR)/de
 	install -d $(BUILDROOT)$(DOCSUBDIR)/en
-	cd documentation; install -m 644 en/* $(BUILDROOT)$(DOCSUBDIR)/en
+	cd documentation; install -m 644 en/*.html $(BUILDROOT)$(DOCSUBDIR)/en
 	install -d $(BUILDROOT)$(DOCSUBDIR)/images
 	cd documentation; install -m 644 images/*.png $(BUILDROOT)$(DOCSUBDIR)/images
 	cd documentation; install -m 644 images/*.jpg $(BUILDROOT)$(DOCSUBDIR)/images
+	install -d $(BUILDROOT)$(DOCSUBDIR)/cs/images
+	cd documentation/cs; install -m 644 images/*.png $(BUILDROOT)$(DOCSUBDIR)/cs/images
+	install -d $(BUILDROOT)$(DOCSUBDIR)/de/images
+	cd documentation/de; install -m 644 images/*.png $(BUILDROOT)$(DOCSUBDIR)/de/images
+	install -d $(BUILDROOT)$(DOCSUBDIR)/en/images
+	cd documentation/en; install -m 644 images/*.png $(BUILDROOT)$(DOCSUBDIR)/en/images
 	install -d $(BUILDROOT)$(MANDIR)/man1
 	install -d $(BUILDROOT)$(MANDIR)/cs/man1
 	install -d $(BUILDROOT)$(MANDIR)/de/man1

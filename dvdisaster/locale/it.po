@@ -56,6 +56,9 @@ msgid ""
 "\n"
 "Generating random correctable erasures (for %d roots, max erasures = %d).\n"
 msgstr ""
+"\n"
+"Generazione di cancellazioni correggibili casuali (%d radici, max = %d).\n"
+
 
 #: debug.c:106 debug.c:186 debug.c:228 debug.c:488 debug.c:556
 #: rs01-common.c:54 rs02-common.c:56 rs02-compare.c:98 rs02-create.c:240
@@ -557,6 +560,8 @@ msgid ""
 "\n"
 "e-mail: carsten@dvdisaster.com   -or-   cgnoerlich@fsfe.org"
 msgstr ""
+"\n"
+"e-mail: carsten@dvdisaster.com    o   cgnoerlich@fsfe.org"
 
 #: large-io.c:402
 #, c-format
@@ -1426,7 +1431,7 @@ msgstr "Completamento immagine %s. Solo i settori mancanti saranno letti.\n"
 
 #: read-linear.c:415
 msgid "done.\n"
-msgstr ""
+msgstr "compiuto.\n"
 
 #: read-linear.c:429 scsi-layer.c:737
 #, c-format
@@ -2304,15 +2309,17 @@ msgid ""
 "- good image       : all sectors present\n"
 "- data md5sum      : %s\n"
 msgstr ""
+"- Buona immagine    : Tutti i settori presenti\n"
+"- dati md5sum       : %s\n"
 
 #: rs02-compare.c:372
 #, c-format
 msgid "* suspicious image : all sectors present, but %lld CRC errors\n"
-msgstr ""
+msgstr "* Immagine sospetta : tutti i settori presenti, ma ci sono %lld errori CRC\n"
 
 #: rs02-compare.c:376
 #, c-format
-msgid "  ... ecc headers    : %lld ok, %lld CRC errrors, %lld missing\n"
+msgid "  ... ecc headers    : %lld ok, %lld CRC errors, %lld missing\n"
 msgstr ""
 
 #: rs02-compare.c:378
@@ -2323,7 +2330,7 @@ msgstr ""
 #: rs02-compare.c:381
 #, c-format
 msgid "  ... data md5sum    : %s\n"
-msgstr ""
+msgstr "  ... dati md5sum    : %s\n"
 
 #: rs02-compare.c:382
 #, c-format
@@ -2344,32 +2351,33 @@ msgstr ""
 #: rs02-compare.c:516
 #, c-format
 msgid "- data md5sum      : %s (good)\n"
-msgstr ""
+msgstr "- dati md5sum       : %s (buona)\n"
 
 #: rs02-compare.c:517
 #, c-format
 msgid "* data md5sum      : %s (BAD)\n"
-msgstr ""
+msgstr "* dati md5sum       : %s (Difettosa)\n"
 
 #: rs02-compare.c:529
 #, c-format
 msgid "- data md5sum      : %s\n"
-msgstr ""
+msgstr "- dati md5sum       : %s\n"
+
 
 #: rs02-compare.c:540
 #, c-format
 msgid "- crc md5sum       : %s (good)\n"
-msgstr ""
+msgstr "- crc md5sum        : %s (buona)\n"
 
 #: rs02-compare.c:541
 #, c-format
 msgid "* crc md5sum       : %s (BAD)\n"
-msgstr ""
+msgstr "* crc md5sum        : %s (Difettosa)\n"
 
 #: rs02-compare.c:549
 #, c-format
 msgid "* ecc md5sum       : %s (BAD)\n"
-msgstr ""
+msgstr "* ecc md5sum        : %s (Difettosa)\n"
 
 #: rs02-create.c:104
 #, c-format
@@ -2388,7 +2396,7 @@ msgstr ""
 #: rs02-create.c:157 rs02-create.c:165
 #, c-format
 msgid "Calculating sector checksums: %3d%%"
-msgstr ""
+msgstr "Calcolo del checksum dei settori: %3d%%"
 
 #: rs02-create.c:185 rs02-fix.c:86
 #, c-format

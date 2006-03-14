@@ -221,7 +221,8 @@ RS02Layout *CalcRS02Layout(gint64 data_sectors, int requested_roots)
 
 void WriteRS02Headers(LargeFile *file, RS02Layout *lay, EccHeader *eh)
 {  guint64 hpos;
-   guint64 end = lay->eccSectors+lay->dataSectors-2;
+  //   guint64 end = lay->eccSectors+lay->dataSectors-2;
+   guint64 end = lay->eccSectors+lay->dataSectors;
    int n;
 
 #ifdef HAVE_BIG_ENDIAN

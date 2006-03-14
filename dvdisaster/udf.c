@@ -28,7 +28,7 @@
  *** Look for ecc headers in RS02 style media
  ***/
 
-static int read_footprint(DeviceHandle *dh, char *footprint, gint64 sector)
+static int read_footprint(DeviceHandle *dh, unsigned char *footprint, gint64 sector)
 {  struct MD5Context md5ctxt;
    int status;
 
