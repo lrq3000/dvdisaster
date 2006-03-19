@@ -223,13 +223,27 @@ install: dvdisaster html images
 	    install -m 644 $$i/LC_MESSAGES/dvdisaster.mo $(BUILDROOT)$(LOCALEDIR)/$$i/LC_MESSAGES; \
 	  done \
 	fi
-
+	@echo "# dvdisaster uninstaller script" > $(BINDIR)/dvdisaster-uninstall.sh
+	@echo "# Usage: sh dvdisaster-uninstall.sh" >> $(BINDIR)/dvdisaster-uninstall.sh
+	@echo >> $(BINDIR)/dvdisaster-uninstall.sh
+	@echo "rm -f $(BINDIR)/dvdisaster $(BINDIR)/dvdisaster.exe $(BINDIR)/dvdisaster-win.exe $(BINDIR)/dvdisaster-uninstall.sh" >> $(BINDIR)/dvdisaster-uninstall.sh
+	@echo "rm -rf $(DOCSUBDIR)" >> $(BINDIR)/dvdisaster-uninstall.sh
+	@echo "rm -f $(MANDIR)/man1/dvdisaster.1" >> $(BINDIR)/dvdisaster-uninstall.sh
+	@for i in cs de it; do \
+	  echo "rm $(LOCALEDIR)/$$i/LC_MESSAGES/dvdisaster.mo" >> $(BINDIR)/dvdisaster-uninstall.sh ; \
+	  echo "rm $(MANDIR)/$$i/man1/dvdisaster.1" >> $(BINDIR)/dvdisaster-uninstall.sh ; \
+	done
+	@echo "echo \"dvdisaster has been uninstalled.\"" >> $(BINDIR)/dvdisaster-uninstall.sh
+	
 uninstall:
 	@echo "Uninstalling package..."
-	rm -f $(BINDIR)/dvdisaster $(BINDIR)/dvdisaster.exe
+	rm -f $(BINDIR)/dvdisaster $(BINDIR)/dvdisaster.exe $(BINDIR)/dvdisaster-win.exe $(BINDIR)/dvdisaster-uninstall.bash
 	rm -rf $(DOCSUBDIR)
 	rm -f $(MANDIR)/man1/dvdisaster.1
-	cd locale; for i in ??; do rm $(LOCALEDIR)/$$i/LC_MESSAGES/dvdisaster.mo; done
+	for i in cs de it; do \
+	   rm $(LOCALEDIR)/$$i/LC_MESSAGES/dvdisaster.mo; \
+	   rm $(MANDIR)/$$i/man1/dvdisaster.1; \
+	done
 
 distclean: clean
 	@echo "Removing configuration files"
@@ -252,6 +266,7 @@ clean:
 	@rm -f documentation/pngpack.log
 	@rm -f version.h
 	@if test -e tools/Makefile.config; then $(MAKE) --no-print-directory -C tools clean; fi
+	@if test -e $(PKGNAME); then rm -rf $(PKGNAME); fi
 
 arch:	clean distclean
 	@cd .. ; tar -c -z -f $(PKGNAME)-arch.tgz $(PKGNAME)
@@ -286,11 +301,17 @@ bindist: dvdisaster html pack-images
 	@mkdir $(PKGNAME)
 	@mkdir $(PKGNAME)/documentation
 	@cp -r CHANGELOG COPYING CREDITS* TODO dvdisaster.exe dvdisaster-win.exe $(PKGNAME)
-	@cp -r documentation/cs documentation/de documentation/en documentation/pubkey.asc $(PKGNAME)/documentation
+	@cp documentation/pubkey.asc $(PKGNAME)/documentation
+	@for i in cs de en; do \
+	  mkdir $(PKGNAME)/documentation/$$i; \
+	  mkdir $(PKGNAME)/documentation/$$i/images; \
+	  touch $(PKGNAME)/documentation/$$i/images/placeholder; \
+	  cp documentation/$$i/*.html $(PKGNAME)/documentation/$$i; \
+	done
 	@mkdir $(PKGNAME)/documentation/images
 	@cp documentation/images/*.jpg $(PKGNAME)/documentation/images
-	@cp tools/pngpack.exe $(PKGNAME)/documentation/images
-	@mv documentation/images-*.pngpack $(PKGNAME)/documentation/images
+	@cp tools/pngpack.exe $(PKGNAME)/documentation
+	@mv documentation/images-*.pngpack $(PKGNAME)/documentation
 	@(cd $(PKGNAME); tar xzf ../../pango-subdirs.tgz)
 	@cp $(GTK_BINDIR)/libglib*.dll $(PKGNAME)
 	@cp $(GTK_BINDIR)/iconv.dll $(PKGNAME)

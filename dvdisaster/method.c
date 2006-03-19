@@ -104,7 +104,7 @@ Method *FindMethod(char *name)
  * Note that udf.c has a similar function FindHeaderInMedia().
  */
 
-static int read_footprint(LargeFile *file, char *footprint, gint64 sector)
+static int read_footprint(LargeFile *file, unsigned char *footprint, gint64 sector)
 {  struct MD5Context md5ctxt;
    int n;
 
@@ -195,11 +195,15 @@ EccHeader* FindHeaderInImage(char *filename)
 		     last_fp = eh->fpSector;
 
 		     if(!status)  /* be optimistic if footprint sector is unreadable */
-		       return eh;
+		     {  LargeClose(file);
+		        return eh;
+		     }
 		  }
 
 		  if(!memcmp(footprint, eh->mediumFP, 16))  /* good footprint */
-		    return eh;
+		  {  LargeClose(file);
+		     return eh;
+		  }
 
 		  /* might be a header from a larger previous session.
 		     discard it and continue */

@@ -120,6 +120,6 @@ void FreeGaloisTables(GaloisTables *gt)
   if(gt->enc_alpha_to) g_free(gt->enc_alpha_to);
   if(gt->gpoly)        g_free(gt->gpoly);
 
-  free(gt);
+  g_free(gt);
 }
 

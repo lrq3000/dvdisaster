@@ -372,6 +372,7 @@ void RS01Compare(Method *self)
    gint64 eh_sectors = 0;
    int n;
    char *ecc_advice = NULL;
+   int in_last = 0;
 
    idigest[0] = 0;
 
@@ -406,9 +407,18 @@ void RS01Compare(Method *self)
 	SwitchAndSetFootline(wl->cmpImageNotebook, 0, NULL, NULL);
    }
    else
-   {  PrintLog(_("present, contains %lld medium sectors.\n"), ii->sectors);
-      if(Closure->guiMode)
-	SetLabelText(GTK_LABEL(wl->cmpImageSectors), "%lld", ii->sectors);
+   {  if(ii->inLast == 2048)
+      {  PrintLog(_("present, contains %lld medium sectors.\n"), ii->sectors);
+	 if(Closure->guiMode)
+	   SetLabelText(GTK_LABEL(wl->cmpImageSectors), "%lld", ii->sectors);
+      }
+      else
+      {  PrintLog(_("present, contains %lld medium sectors and %d bytes.\n"),
+		  ii->sectors-1, ii->inLast);
+	 if(Closure->guiMode)
+	   SetLabelText(GTK_LABEL(wl->cmpImageSectors), _("%lld sectors + %d bytes"), 
+			ii->sectors-1, ii->inLast);
+      }
 
       RS01ScanImage(self, ii, ei, PRINT_MODE);
 
@@ -433,7 +443,7 @@ void RS01Compare(Method *self)
 			   ii->sectors, diff);
 	    ii->sectorsMissing += diff;
 	 }
-	 if(ii->sectors > eh_sectors+2)
+	 if(ii->sectors > eh_sectors)
 	 {  excess_sectors = ii->sectors - eh_sectors;
 	 }
       }
@@ -452,9 +462,12 @@ void RS01Compare(Method *self)
       if(excess_sectors)
       {  PrintLog(_("* image too long   : %lld excess sectors\n"), excess_sectors);
          if(Closure->guiMode)
-	   SetLabelText(GTK_LABEL(wl->cmpImageSectors), 
-			_("<span color=\"red\">%lld (%lld excess sectors)</span>"),
-			ii->sectors, excess_sectors);
+	 {   SetLabelText(GTK_LABEL(wl->cmpImageSectors), 
+			  _("<span color=\"red\">%lld (%lld excess sectors)</span>"),
+			  ii->sectors, excess_sectors);
+	     SetLabelText(GTK_LABEL(wl->cmpImageResult),
+			  _("<span color=\"red\">Bad image.</span>"));
+	 }
       } 
       else
       {  if(!ii->sectorsMissing)
@@ -608,32 +621,72 @@ void RS01Compare(Method *self)
       }
 
       eh_sectors = uchar_to_gint64(eh->sectors);
+
+      if(eh->creatorVersion >= 6600 && eh->inLast != 2048)  /* image file whose length is */
+	in_last = eh->inLast;                               /* not a multiple of 2048 */
+
       if(ii)
-      {  if(ii->sectors == eh_sectors)
-	 {      PrintLog(_("- medium sectors   : %lld (good)\n"),eh_sectors);
-	        if(Closure->guiMode)
-		  SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), "%lld", eh_sectors);
+      {  if(ii->sectors == eh_sectors && (!in_last || ii->inLast == eh->inLast))
+	 {      if(!in_last)
+	        {  PrintLog(_("- medium sectors   : %lld (good)\n"),eh_sectors);
+	           if(Closure->guiMode)
+		     SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), "%lld", eh_sectors);
+		}
+	        else
+	        {  PrintLog(_("- medium sectors   : %lld sectors + %d bytes (good)\n"),
+			    eh_sectors-1, in_last);
+	           if(Closure->guiMode)
+		     SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), 
+				  _("%lld sectors + %d bytes"), 
+				  eh_sectors-1, in_last);
+		}
 	 }
          else 
 	 { if(ii->sectors > eh_sectors && ii->sectors - eh_sectors <= 2)   
 	   {    PrintLog(_("* medium sectors   : %lld (BAD, perhaps TAO/DAO mismatch)\n"),eh_sectors);
 	        if(Closure->guiMode)
-		  SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), "<span color=\"red\">%lld</span>", eh_sectors);
+		{  if(!in_last)  
+		        SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), "<span color=\"red\">%lld</span>", eh_sectors);
+		  else SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), "<span color=\"red\">%lld sectors + %d bytes</span>", eh_sectors-1, in_last);
+		}
 	   }
            else 
-	   {    PrintLog(_("* medium sectors   : %lld (BAD)\n"),eh_sectors);
-	        if(Closure->guiMode)
-		{  SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), "<span color=\"red\">%lld</span>", eh_sectors);
-		   if(!ecc_advice)
-		     ecc_advice = g_strdup(_("<span color=\"red\">Image size does not match error correction file.</span>"));
+	   {    if(!in_last)
+	        {  PrintLog(_("* medium sectors   : %lld (BAD)\n"),eh_sectors);
+	           if(Closure->guiMode)
+		   {  SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), "<span color=\"red\">%lld</span>", eh_sectors);
+		      if(!ecc_advice)
+			ecc_advice = g_strdup(_("<span color=\"red\">Image size does not match error correction file.</span>"));
+		   }
+		}
+	        else
+	        {  PrintLog(_("* medium sectors   : %lld sectors + %d bytes (BAD)\n"),
+			    eh_sectors-1, in_last);
+	           if(Closure->guiMode)
+		   {  SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), 
+				   _("<span color=\"red\">%lld sectors + %d bytes</span>"), 
+				   eh_sectors-1, in_last);
+		      if(!ecc_advice)
+			ecc_advice = g_strdup(_("<span color=\"red\">Image size does not match error correction file.</span>"));
+		   }
 		}
 	   }
 	 }
       }
       else
-      {         PrintLog(_("- medium sectors   : %lld\n"),eh_sectors);
-         if(Closure->guiMode)
-	   SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), "%lld", eh_sectors);
+      {  if(!in_last)
+	 {  PrintLog(_("- medium sectors   : %lld\n"),eh_sectors);
+            if(Closure->guiMode)
+	      SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), "%lld", eh_sectors);
+	 }
+	 else
+	 {  PrintLog(_("- medium sectors   : %lld sectors + %d bytes\n"),
+		     eh_sectors-1, in_last);
+            if(Closure->guiMode)
+	      SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), 
+			   _("%lld sectors + %d bytes"), 
+			   eh_sectors-1, in_last);
+	 }
       }
 
       /*** Verify md5sums against image and map (if present) */

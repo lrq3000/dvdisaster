@@ -484,7 +484,11 @@ Skenování vyžaduje následující parametry (výchozí hodnoty jsou uvedeny v
 </tr>
 <tr>
 <td><a href="example90.html#ecc">-e / --ecc</a></td>
-<td>Soubor oprav chyb (medium.ecc)</td>
+<td>pouze pro <a href="background30.html">RS01</a>: Soubor oprav chyb (medium.ecc)</td>
+</tr>
+<tr>
+<td><a href="example90.html#parse-ecc">--parse-ecc</a></td>
+<td>pouze pro <a href="background30.html">RS02</a>: Použít informace z hlaviček ECC</td>
 </tr>
 <tr>
 <td><a href="example90.html#jump">-j / --jump</a></td>
@@ -543,9 +547,10 @@ Rychlá pomoc při rozhodování:<p>
 
 <b>Zůstane na médiu, které se bude vytvářet, alespoň 20% volného prostoru?</b><p>
 
-&nbsp; Ano: <a href="example21.html">Vytvořte obraz s opravnými daty.</a><p>
+&nbsp; Ano: <a href="example22.html">Přidejte do obrazu opravná data.</a><p>
 
-&nbsp; Ne: <a href="example22.html">Vytvořte soubor oprav chyb.</a><p>
+&nbsp; Ne: <a href="example21.html">Vytvořte soubor oprav chyb.</a><p>
+
 EOF
 
 }
@@ -838,9 +843,9 @@ EOF
 function example22cs()
 {  
    cat >> $1 <<EOF
-<h3>Tvorba obrazu s opravnými daty</h3>
+<h3>Přidání opravných dat do obrazu</h3>
 
-Vytváření obrazů s opravnými daty je v současné době podporováno pouze
+Přidání opravných dat do obrazu je v současné době podporováno pouze
 z příkazové řádky. Odpovídající funkce bude zabudována do grafického
 uživatelského rozhraní programu dvdisaster ve verzi 0.70.<p>
 
@@ -1081,7 +1086,15 @@ V takovém případě se program dvdisaster pokusí znovu načíst pouze chyběj
 </tr>
 <tr>
 <td><a href="example90.html#ecc">-e / --ecc</a></td>
-<td>Soubor oprav chyb (medium.ecc)</td>
+<td>pouze pro <a href="background30.html">RS01</a>: Soubor oprav chyb (medium.ecc)</td>
+</tr>
+<tr>
+<td><a href="example90.html#parse-ecc">--parse-ecc</a></td>
+<td>pouze pro <a href="background30.html">RS02</a>: Použít informace z hlaviček ECC</td>
+</tr>
+<tr>
+<td><a href="example90.html#jump">-j / --jump</a></td>
+<td>Přeskočit sektory po chybě čtení (16)</td>
 </tr>
 </table>
 <p></p>
@@ -1427,10 +1440,23 @@ Více informací o formuláři následuje níže na stránce.<p>
 <center><img src="images/prefs-general-1.png" alt="Souborový systém média a obrazu" title="Souborový systém média a obrazu"></center>
 <br clear="all">
 
+Tyto volby napravují některé problémy způsobené
+<a href="qa20.html#plusrw">hlášením nesprávné délky obrazů</a>
+některými mechanikami pro média DVD-RW/+RW.<p>
+
+<b>Použít informace z hlaviček ECC <font color="red">(1)</font>:</b>
+Velikost obrazu bude určena z hlaviček opravných informací
+<a href="background30.html">RS02</a>.
+Pokud obraz neobsahuje opravná data RS02, bude při použití této
+volby zahájení procesu čtení podstatně zpožděno.<p>
+
+<b>Použít informace ze souborového systému ISO/UDF <font color="red">(2)</font>:</b>
 Program dvdisaster určí velikost obrazu ze souborového systému ISO/UDF,
-je-li tato možnost zaškrtnuta. To napravuje některé problémy
-způsobené <a href="qa20.html#plusrw">hlášením nesprávné délky obrazů</a>
-některými mechanikami pro DVD-RW/+RW média.
+je-li tato možnost zaškrtnuta. Pokud obraz obsahuje opravné informace
+<a href="background30.html">RS02</a>, musíte také nastavit volbu
+<font color="red">(1)</font>. Jinak nebudou do obrazu opravná
+data zahrnuta.
+
 
 <p><hr><p>
 
@@ -1652,6 +1678,7 @@ v dlouhé formě, pokud není zmíněno jinak.<p>
 <tr valign=top><td></td><td><a href="#dao">--dao</a></td><td>Předpokládat médium zapsané v režimu "disk at once"</td></tr>
 <tr valign=top><td></td><td><a href="#fillunreadable">--fill-unreadable [n]</a></td><td>Vyplnit nečitelné sektory daným bajtem</td></tr>
 <tr valign=top><td></td><td><a href="#jump">-j / --jump</a></td><td>Přeskočit sektory po chybě čtení</td></tr>
+<tr valign=top><td></td><td><a href="#parse-ecc">--parse-ecc</a></td><td>Použít informace z hlaviček opravných informací</td></tr>
 <tr valign=top><td></td><td><a href="#parse-udf">--parse-udf</a></td><td>Použít informace ze souborového systému ISO/UDF</td></tr>
 <tr valign=top><td></td><td><a href="#redundancy">-n / --redundancy</a></td><td>Nastavit redundanci pro opravný kód</td></tr>
 <tr valign=top><td></td><td><a href="#method">-m / --method</a>&nbsp; &nbsp;</td><td>Zvolit metodu opravy chyb</td></tr>
@@ -1944,11 +1971,32 @@ Počet přeskočených sektorů musí být násobek 16.
 
 
 
+<a name="parse-ecc"><b>--parse-ecc: Použít informace z hlaviček opravných informací</b></a><p>
+Program dvdisaster určí velikost obrazu z hlaviček vytvořených
+<a href="background30.html">metodou RS02</a>, je-li tato volba použita. 
+Tato volba napravuje některé problémy způsobené
+<a href="qa20.html#plusrw">hlášením nesprávné délky obrazů</a>
+pro média DVD-RW/+RW.<p>
+
+Poznámka: Použijte tuto volbu jen pro načítání obrazů, do kterých byla
+přidána opravná data. Jinak bude proces čtení na začátku
+podstatně zpožděn.
+
+<div align=right><a href="#options">&uarr;</a></div><p>
+
+
+
 <a name="parse-udf"><b>--parse-udf: Použít informace ze souborového systému ISO/UDF</b></a><p>
 Program dvdisaster určí velikost obrazu z informací ze souborového systému ISO/UDF,
 je-li tato volba zapnuta. Tím se opravují některé problémy způsobené mechanikami
-<a href="qa20.html#plusrw">hlásícími nesprávné délky obrazu</a> pro
-DVD-RW/+RW média.
+<a href="qa20.html#plusrw">hlásícími nesprávné délky obrazu</a> pro média
+DVD-RW/+RW.<p>
+
+Upozornění: Vždy použijte tuto volbu spolu s <a href="#parse-ecc">--parse-ecc</a>
+k načítání obrazů, které byly rozšířeny o opravná data pomocí
+<a href="background30.html">metody RS02</a>. Jinak nebudou opravná data
+načtena.
+
 <div align=right><a href="#options">&uarr;</a></div><p>
 
 
@@ -2125,7 +2173,7 @@ U verze ve zdrojovém kódu si přečtěte <a href="download20.html">instalačn�
 <b>Vývojové verze</b> - nové a experimentální pro zkušené uživatele!<p>
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.66</b></td><td align="right">xx.03.2006</td></tr>
+<tr><td><b>dvdisaster-0.66</b></td><td align="right">25.03.2006</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
@@ -2216,7 +2264,7 @@ pokud je tvorba vyvolána bezprostředně po čtení obrazu.</li>
 Tato verze je schopna určení
 <a href="example81.html#iso">velikosti obrazu podle souborového systému UDF/ISO</a>,
 aby se zlepšila
-<a href="qa20.html#plusrw">detekce velikosti obrazu pro -RW/+RW média</a>.
+<a href="qa20.html#plusrw">detekce velikosti obrazu pro média -RW/+RW</a>.
 Načítání obrazů a vytváření odpovídajících souborů oprav chyb může být nyní vyvoláno
 společně <a href="example81.html#auto">jedním kliknutím myši</a>.
 Několik drobných vylepšení bylo vytvořeno pro podporu více mechanik CD/DVD,
@@ -2904,90 +2952,118 @@ function background20cs()
 {  cat >> $1 <<EOF
 <h3>Oprava dat na úrovni obrazu</h3>
 
-Obnova dat může probíhat na několika logických úrovních média, z nichž
-dvě jsou úroveň obrazu a úroveň souborového systému. Tato stránka
-vysvětluje, proč pracuje program dvdisaster na úrovni obrazu.<p>
+Obnova média pomocí opravných dat probíhá ve dvou krocích:
+
+<ol>
+<li>Nejprve se načte co nejvíce dat z poškozeného média.<p></p></li>
+<li>Pak se dosud chybějící data obnoví s pomocí kódu pro opravu chyb.</li>
+</ol>
+
+Množství čitelných dat (krok 1) nezávisí jenom na čtecích schopnostech
+mechaniky, ale také na jaké logické úrovni se proces čtení provádí.
+Tato stránka pojednává o logických úrovních a vysvětluje, proč program
+dvdisaster používá čtení na úrovni obrazu.<p>
+
+<b>Logické úrovně média</b><p>
+
+CD a DVD média jsou organizována v <i>datových sektorech</i> obsahujících po 2048 bajtech.
+Posloupné čtení a ukládání těchto sektorů vytvoří <i>obraz</i> média.<p>
+
+Ale práce s jednotlivými sektory je z hlediska uživatele nepraktická.
+Proto média obsahují <i>souborové systémy</i>, které kombinují datové
+sektory do <i>souborů</i>. To vyžaduje přesnou evidenci, ze kterých
+datových sektorů jsou soubory složeny a dalších atributů, jako jsou
+názvy souborů a přístupová oprávnění. Pro tuto evidenci jsou na médiu
+některé datové sektory rezervovány a vyplněny odpovídajícími datovými
+strukturami.<p>
+
+Ve výsledku média obsahují různé <i>logické úrovně</i>:
+Pohled na médium jako posloupnost datových sektorů znamená práci na úrovni
+<i>obrazu</i>. Avšak pohled na médium jako kolekci souborů je perspektiva
+<i>úrovně souborů (souborového systému)</i>.<p>
+
+Tyto dvě úrovně mají různé vlastnosti ohledně obnovy dat:<p>
 
 <a name="file"> </a>
-<b>Nevýhody obnovy dat na úrovni souborového systému pro CD/DVD.</b><p>
+<b>Nedostatky při čtení média na úrovni souborů</b><p>
 
-Obnova dat na úrovni souborového systému používá soubory (nebo souborové archivy),
-které jsou rozšířeny o opravné informace. Tak je možné obnovit chybné bajty,
-chybějící bloky dat a zkrácené soubory.<p>
+Čtení poškozeného média na <b>souborové úrovni</b> znamená pokus
+o načtení co možná nejvíce dat z každého souboru.<p>
 
-Jenomže soubory jsou také částí <i>souborového systému</i>, který je
-spravován operačním systémem. Úspěch obnovy dat závisí na předpokladu,
-že soubor a operační systém zvládají poškozená média CD/DVD, což
-obvykle není pravda. V nejhorším případě se soubor kvůli chybám čtení může
-stát nedostupný a následkem toho jsou opravné informace potřebné pro obnovu
-také ztraceny:<p>
+Problém však nastane, když jsou poškozeny sektory, které mají v souborovém
+systému evidenční funkci. Seznam souborů na médiu může být zkrácen.
+Nebo není organizace datových sektorů na soubory kompletní. Proto mohou
+být soubory nebo jejich části ztraceny, i když by byly odpovídající datové
+sektory hardwarově čitelné. To je velmi špatné, protože dokonce malé
+čitelné části poškozených souborů jsou pro kód oprav chyb cenné.<p>
 
-<ul>
-<li>Načtení velkých souborů z poškozeného média vyžaduje speciální nástroje
-a velké úsilí.<p></p></li>
-<li>Souborový systém obsahuje datové struktury, které nejsou součástí
-souborů, a nejsou proto chráněny. pokud jsou tyto struktury poškozeny,
-nebudete schopni ze souborového systému extrahovat soubory dokonce
-i v případě, že jsou datové bloky souborů dosud nedotčené.</li>
-</ul><p>
+Extrémně ošklivý případ nastane, když jsou data oprav chyb také uložena
+v souborech. Pak jsou vyžadována data oprav chyb k opravě souborového
+systému, ale poškozený souborový systém brání přístupu k datům oprav chyb.
+Znamená to úplnou ztrátu dat a vyzvihuje některé sporné otázky
+o <a href="#eccfile">nakládání se soubory oprav chyb</a>
+(o tom více později).<p>
 
-To jsou závažné nevýhody pro obnovu dat z optických médií.
-Ale abychom byli spravedliví, tak je nezbytné poznamenat, že
-obnova dat na úrovni souborů může pracovat dobře v prostředí bez
-souborového systému, jako jsou přenosy dat přes Internet.<p>
+Avšak situace se značně zlepší při použití přístupu na základě obrazu:<p>
 
 <a name="image"> </a>
-<b>Výhody obnovy dat na úrovni obrazu CD/DVD.</b><p>
+<b>Výhody čtení na úrovni obrazu</b><p>
 
-CD a DVD média jsou organizována do datových sektorů o velikosti 2048 bajtů.
-Posloupné čtení a ukládání těchto sektorů vytvoří <i>obraz</i> média.
-Obnova dat na úrovni obrazu bude číst a obnovovat tyto sektory přímo
-(v rámci obrazu).
-To má následující výhody:
+Čtení na úrovni obrazu používá přímou komunikaci s hardwarem mechaniky
+pro přístup k datovým sektorům.<p>
 
-<ul>
-<li>Načtení obrazů poškozených médií je relativně bezproblémové.<br>
-Sektory obrazu jsou čteny pomocí přímé  komunikace s ovladači mechaniky
-CD/DVD. Tyto nízkoúrovňové ovladače poskytují dobré ovládání mechaniky
-a umožňují účinné zacházení s nečitelnými sektory a dalšími chybovými
-stavy.<p>
-</li>
+Počet čitelných sektorů závisí jenom na čtecích schopnostech mechaniky,
+ale nezávisí na stavu souborového systému. Chyba čtení v jednom sektoru
+neblokuje přístup k dalším datovým sektorům. Protože jsou obnoveny
+<i>všechny</i> sektory, které jsou dosud čitelné hardwarem, poskytuje
+tato metoda nejlepší základ pro opravu chyb.<p>
 
-<li>Čtení a obnova poškozených nebo nečitelných sektorů nezávisí
-na stavu souborového systému.<p></li>
+Obraz obsahuje všechny datové sektory média. Je-li obraz úplně obnoven,
+souborový systém na něm uložený je také zcela opraven. Ochrana na úrovni
+obrazu je proto mnohem širší, než oprava chyb na úrovni souborů.<p>
 
-<li>Oprava chyb Reed-Solomon pracuje nejlépe, když se opravné informace
-rozprostírají přes velká množství dat: Je lepší chránit obraz média jako
-celek, než chránit jednotlivé soubory v jeho rámci.<p></li>
+Program dvdisaster pracuje výhradně na úrovni obrazu, aby využil výhod
+těchto vlastností. Nová <a href="background30.html">metoda RS02</a>
+dokonce umožňuje uložení dat oprav chyb na stejné médium. To je možné,
+protože čtení informací o opravě chyb na úrovni obrazu nemůže být
+blokováno chybami na jiných místech média (poškozené sektory v opravných
+datech zmenší kapacitu oprav chyb, ale neučiní obnovu nemožnou).<p>
 
-<li>Obraz obsahuje všechny informace uložené na médiu.<br>
-Po úplné obnově obrazu nejsou obnoveny jenom soubory, ale je také kompletně
-obnoven souborový systém - bez spoléhání na struktury souborového
-systému v průběhu obnovy!</li>
-</ul>
-
-Tyto výhody platí také pro obnovu médií CD/DVD. Proto program dvdisaster
-využívá výhradně formu obrazů.<p>
-
+<a href="background30.html">Metoda RS01</a> chrání média na úrovni obrazu
+také, ale ukládá data oprav chyb do souborů. Následující sekce naznačuje
+některá z toho plynoucí úskalí.<p>
 
 <a name="eccfile"> </a>
-<b>Důsledky pro ukládání souborů oprav chyb</b><p>
+<b>Důsledky pro ukládání souboru oprav chyb</b><p>
 
-Když ukládáte soubory oprav chyb, musíte také vzít v úvahu, že
-se příslušné médium také může poškodit..<p>
+Opravná data, která vytváří program dvdisaster, chrání média na úrovni
+obrazu. Jak jsou ale chráněny <i>soubory</i> oprav chyb?<p>
+ 
+Vzhledem k tomu, že soubory oprav chyb jsou čteny na souborové úrovni,
+jsou předmětem problémů zmíněných výše. Pokud se médium obsahující soubory
+oprav chyb poškodí, nemusí být možné je zpřístupnit nebo načíst úplně.
+<p>
 
-Soubory oprav chyb <i>neobsahují</i> žádnou ochranu proti poškození.
-Proto je důležité jim také poskytnout ochanu na úrovni obrazu:
-<a href="background70.html">Chraňte</a> média obsahující vaše
-soubory oprav chyb pomocí programu dvdisaster také.<p>
+<table width=100%><tr><td bgcolor=#000000 width=2><img width=1 height=1 alt=""></td><td>
+Z toho důvodu je důležité chránit soubory oprav chyb na úrovni obrazu také:
+<a href="background70.html">Média obsahující soubory oprav chyb</a> musí být
+rovněž chráněna programem dvdisaster.
+</td></tr></table><p>
 
-Zde je odůvodnění: Soubory oprav chyb mohou být samozřejmě také
-navženy tak, aby jim byla poskytnuta (omezená) schopnost obnovy dat
-v případě poškození.
-I když by byla taková vnitřní ochrana navržena, soubor oprav chyb
-by byl stále chráněn jen na úrovni souborového systému - se všemi
-nevýhodami zmíněnými výše. A výpočetní čas a redundanci užitou
-vnitřní ochranou je lepší využít pro ochranu na úrovni obrazu.<p>
+Protože se předpokládá ochrana na úrovni obrazu, soubory oprav chyb
+neobsahují <i>žádnou další ochranu proti poškození</i>! To by beztak
+moc nepomohlo: Soubory oprav chyb by mohly být vytvářeny způsobem, který
+by jim umožnil poskytovat omezenou kapacitu opravy chyb i v případě
+jejich poškození. Ale i kdyby byla takováto vnitřní ochrana navržena,
+soubory oprav chyb by byly stále chráněny jen na úrovni souborového
+systému se všemi jeho nevýhodami prodiskutovanými výše!<p>
+
+Navíc, výpočetní čas a redundanci použitou pro vnitřní ochranu je lépe
+spotřebovat na úrovni obrazu: Oprava chyb Reed-Solomon pracuje nejlépe,
+když se opravné informace rozprostírají přes velká množství dat.
+Je lepší chránit obraz média jako celek, než chránit jednotlivé soubory
+v jeho rámci.<p></li>
+
 EOF
 }
 
@@ -3014,7 +3090,7 @@ Metody se liší ve způsobu, jak je opravná informace ukládána:<p>
 <a name="file"> </a>
 RS01 vytváří <b>soubory oprav chyb</b>, které jsou uloženy odděleně
 od obrazů, ke kterým patří. Vzhledem k tomu, že je ochrana dat na
-<a href="background20.html">úrovni souborů</a> obtížná,
+<a href="background20.html#file">úrovni souborů</a> obtížná,
 musí být soubory oprav chyb uloženy na média, která jsou také chráněna
 proti ztrátě dat programem dvdisaster.<p></li>
 
@@ -3022,7 +3098,7 @@ proti ztrátě dat programem dvdisaster.<p></li>
 <a name="image"> </a>
 Metoda RS02 se použije tak, že se nejprve vytvoří obraz na pevném disku
 za použití softwaru pro vypalování CD/DVD. Než se obraz zapíše na médium,
-je rozšířen programem dvdisaster na <b>obraz s opravnými daty</b>.
+programem dvdisaster <b>rozšíří obraz</b> o opravná data.
 Takže jsou data, která se mají chránit, a informace opravy chyb umístěna
 na stejné médium. Poškozené sektory v opravných informacích snižují
 kapacitu opravy dat, ale nečiní opravu nemožnou - druhé médium pro
@@ -3031,12 +3107,12 @@ uložení nebo ochranu opravných informací není požadováno.<p></li>
 
 
 <a name="table"> </a>
-<b>Srovnání souborů oprav chyb a obrazů s opravnými daty.</b><p>
+<b>Porovnání ukládání opravných dat.</b><p>
 
 <table width="100%" border="1" cellspacing="0" cellpadding="5">
 <tr>
 <td width="50%"><i>Soubory oprav chyb</i></td>
-<td width="50%"><i>Obrazy s opravnými daty</i></td>
+<td width="50%"><i>Obrazy rozšířené o opravná data</i></td>
 </tr>
 <tr valign="top">
 <td> 
@@ -3066,14 +3142,15 @@ může snížit kapacitu opravy chyb</td>
 </tr>
 
 <tr valign="top">
-<td>Oddělení souborů oprav chyb a médií se musí zachovávat.
+<td>Musí se zachovávat přiřazení souborů oprav chyb k médiím.
 Soubory oprav chyb musí být chráněny proti poškození.</td>
 <td>Snadné řešení s jedním médiem; informace opravy chyb se
 nemusí katalogizovat nebo výlučně chránit.</td></tr>
 
 <tr valign="top">
 <td>žádné problémy s kompatibilitou v přehrávacích zařízeních</td>
-<td>média s obrazy s opravnými daty se nemusí přehrávat správně ve všech zařízeních</td>
+<td>média s rozšířenými obrazy se nemusí přehrávat správně ve
+všech zařízeních</td>
 </tr>
 </table><p>
 

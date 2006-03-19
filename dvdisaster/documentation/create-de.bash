@@ -2197,7 +2197,7 @@ der Quellkode-Version gibt es <a href="download20.html">Installationshinweise</a
 <b>Entwickler-Versionen</b> - neu und experimentell für erfahrene Benutzer!<p> 
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.66</b></td><td align="right">xx-Mar-2006</td></tr>
+<tr><td><b>dvdisaster-0.66</b></td><td align="right">25-Mär-2006</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>

@@ -152,9 +152,13 @@ void RS01ScanImage(Method *method, ImageInfo *ii, EccInfo *ei, int mode)
       /* Read the next sector */
 
       n = LargeRead(ii->file, buf, 2048);
-      if(n != 2048 && (s != ii->sectors - 1 || n != ii->inLast))
-      {  if(crcbuf) g_free(crcbuf);
-	 Stop(_("premature end in image (only %d bytes): %s\n"),n,strerror(errno));
+      if(n != 2048)
+      {  if(s != ii->sectors - 1 || n != ii->inLast)
+         {  if(crcbuf) g_free(crcbuf);
+	    Stop(_("premature end in image (only %d bytes): %s\n"),n,strerror(errno));
+         }
+	 else /* Zero unused sectors for CRC generation */
+	    memset(buf+ii->inLast, 0, 2048-ii->inLast);
       }
 
       /* Look for the dead sector marker */

@@ -309,9 +309,10 @@ typedef struct _EccHeader
    gint32 creatorVersion;      /* which dvdisaster version created this */
    gint32 neededVersion;       /* oldest version which can decode this file */
    gint32 fpSector;            /* sector used to calculate mediumFP */
-   guint32 selfCRC;            /* CRC32 of EccHeader (currently RS02 only) */
+   guint32 selfCRC;            /* CRC32 of EccHeader (currently RS02 only) -- since V0.66 --*/
    guint8 crcSum[16];          /* md5sum of crc code section of RS02 .iso file  */
-   gint8 padding[3980];        /* pad to 4096 bytes: room for future expansion */
+   gint32 inLast;              /* bytes contained in last sector */
+   gint8 padding[3976];        /* pad to 4096 bytes: room for future expansion */
 
   /* Note: Bytes 2048 and up are currently used by the RS02 codec
            for a copy of the first ecc blocks CRC sums. */

@@ -137,10 +137,16 @@ static void check_image(ecc_closure *ec)
 
       for(sectors = 0; sectors < lay->dataSectors; sectors++)
       {  unsigned char buf[2048];
-	 int n;
+	 int expected,n;
 
-	 n = LargeRead(ii->file, buf, 2048);
-	 if(n != 2048)
+	 if(sectors < ii->sectors-1) expected = 2048;
+	 else  
+	 {  memset(buf, 0, 2048);
+	    expected = ii->inLast;
+	 }
+
+	 n = LargeRead(ii->file, buf, expected);
+	 if(n != expected)
 	   Stop(_("Failed reading sector %lld in image: %s"),sectors,strerror(errno));
 
 	 if(!memcmp(buf, Closure->deadSector, n))
@@ -180,6 +186,26 @@ static void expand_image(ecc_closure *ec)
    ImageInfo *ii = ec->ii;
    int last_percent, percent;
    gint64 sectors;
+
+   /* If the file does not end at a sector boundary,
+      fill it up with zeros. */
+
+   if(ii->inLast != 2048)
+   {  int fill = 2048 - ii->inLast;
+      int n;
+      unsigned char zeros[fill];
+
+      memset(zeros, 0, fill);
+
+      if(!LargeSeek(ii->file, ii->size))
+	Stop(_("Failed seeking to end of image: %s\n"), strerror(errno));
+
+      n = LargeWrite(ii->file, zeros, fill);
+      if(n != fill)
+	Stop(_("Failed expanding the image: %s\n"), strerror(errno));
+   }
+
+   /* Now add the sectors needed for the ecc data */
 
    if(!LargeSeek(ii->file, 2048*lay->dataSectors))
      Stop(_("Failed seeking to end of image: %s\n"), strerror(errno));
@@ -324,6 +350,7 @@ static void prepare_header(ecc_closure *ec)
    eh->creatorVersion  = Closure->version;
    eh->neededVersion   = 6600;
    eh->fpSector        = FOOTPRINT_SECTOR;
+   eh->inLast          = ii->inLast;
 
    eh->selfCRC = 0x4c5047;
    eh->selfCRC = Crc32((unsigned char*)eh, sizeof(EccHeader));
@@ -373,6 +400,9 @@ static gint32 *enc_alpha_to;
      }
 #endif
 
+   /*** Adjust image bounds to include the CRC sectors */
+
+   ec->ii->sectors = lay->protectedSectors;
 
    /*** Create table for Galois field math */
 
@@ -930,6 +960,10 @@ static gint32 *enc_alpha_to;
    MD5Init(&ec->md5Ctxt[0]);
    MD5Update(&ec->md5Ctxt[0], ec->md5Sum, 16*nroots);
    MD5Final(ec->eccSum, &ec->md5Ctxt[0]);
+
+   /*** Restore image bounds to data portion */
+
+   ec->ii->sectors = lay->dataSectors;
 }
 
 /***

@@ -244,7 +244,7 @@ static void random_error2(EccHeader *eh, char *prefix, char *arg)
 	n_errors);
 
    FreeImageInfo(ii);
-
+   g_free(lay);
 }
 
 void RandomError(char *prefix, char *arg)

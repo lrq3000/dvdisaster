@@ -66,8 +66,11 @@ ImageInfo* OpenImageFile(EccHeader *eh, int mode)
    CalcSectors(img_size, &ii->sectors, &ii->inLast);
 
    if(!(mode & PRINT_MODE))
-     PrintLog(_(": %lld medium sectors.\n"), ii->sectors);
-
+   { if(ii->inLast == 2048)
+          PrintLog(_(": %lld medium sectors.\n"), ii->sectors);
+     else PrintLog(_(": %lld medium sectors and %d bytes.\n"), 
+		   ii->sectors-1, ii->inLast);
+   }
 
    /*** Calculate md5sum of the footprint sector.
 	Use sector specified by .ecc file if possible, 

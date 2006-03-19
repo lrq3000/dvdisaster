@@ -411,6 +411,8 @@ void FreeClosure()
    if(Closure->guiMode)
      update_dotfile();
 
+   ClearCrcCache();
+
    cond_free(Closure->cookedVersion);
    cond_free(Closure->device);
    cond_free_ptr_array(Closure->deviceNames);

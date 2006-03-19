@@ -30,6 +30,7 @@
 
 typedef struct
 {  RS02Widgets *wl;
+   RS02Layout *lay;
    GaloisTables *gt;
    int earlyTermination;
    char *msg;
@@ -66,6 +67,8 @@ static void fix_cleanup(gpointer data)
       if(fc->eccIdx[i])
 	 g_free(fc->eccIdx[i]); 
    }
+
+   if(fc->lay) g_free(fc->lay);
 
    if(fc->gt) FreeGaloisTables(fc->gt);
 
@@ -131,13 +134,11 @@ void RS02Fix(Method *self)
    int crc_idx, ecc_idx;
    int cache_size, cache_sector, cache_offset;
    int erasure_count,erasure_list[255],erasure_map[255];
+   int error_count;
    int percent, last_percent;
    int worst_ecc = 0, local_plot_max = 0;
    int i,j;
    gint64 crc_errors=0;
-   gint64 dead_data=0;
-   gint64 dead_ecc=0;
-   gint64 dead_crc=0;
    gint64 data_count=0;
    gint64 ecc_count=0;
    gint64 crc_count=0;
@@ -161,7 +162,7 @@ void RS02Fix(Method *self)
 
    eh  = self->lastEh;  /* will always be present */
    ii  = fc->ii = OpenImageFile(eh, WRITEABLE_IMAGE);
-   lay = CalcRS02Layout(uchar_to_gint64(eh->sectors), eh->eccBytes); 
+   lay = fc->lay = CalcRS02Layout(uchar_to_gint64(eh->sectors), eh->eccBytes); 
 
    ndata  = lay->ndata;
    nroots = lay->nroots;
@@ -350,7 +351,7 @@ void RS02Fix(Method *self)
 
      /* Look for erasures based on the "dead sector" marker and CRC sums */
 
-     erasure_count = 0;
+     erasure_count = error_count = 0;
 
      for(i=0; i<lay->ndata; i++)  /* Check the data sectors */
      {  
@@ -361,7 +362,6 @@ void RS02Fix(Method *self)
 	  {  erasure_map[i] = 1;
 	     erasure_list[erasure_count++] = i;
 	     damaged_sectors++;
-	     dead_data++;
           }
 
 	  if(block_idx[i] < lay->dataSectors)     /* only data sectors have CRCs */
@@ -400,22 +400,10 @@ void RS02Fix(Method *self)
 	{  erasure_map[i] = 1;
 	   erasure_list[erasure_count++] = i;
 	   damaged_sectors++;
-	   dead_ecc++;
 	}
 
 	ecc_count++;
      }
-
-     if(erasure_count)
-       damaged_eccsecs++;
-
-     if(erasure_count>worst_ecc)
-       worst_ecc = erasure_count;
-
-     if(erasure_count>local_plot_max)
-       local_plot_max = erasure_count;
-
-//printf("Entering error correction for block %lld; %lld / %lld\n", s, dead_data, dead_ecc);
 
      /* Trivially reject uncorrectable ecc block */
 
@@ -473,7 +461,6 @@ void RS02Fix(Method *self)
 	else continue;
 
 //printf("Syndrome error for ecc block %lld, byte %d\n",s,bi);
-
 
 	/* If we have found any erasures, 
 	   initialize lambda to be the erasure locator polynomial */
@@ -644,7 +631,7 @@ void RS02Fix(Method *self)
 		 {  msg = _("-> Non-predicted error in sector %lld at byte %4d (value %02x '%c', expected %02x '%c')\n");
 		    if(erasure_map[location] == 0) /* remember error location */
 		    {  erasure_map[location] = 7;
-		       erasure_count++;  /* not really an erasure. */
+		       error_count++;  
 		    }
 		 }
 
@@ -665,6 +652,8 @@ void RS02Fix(Method *self)
 
      /* Write corrected sectors back to disc
         and report them */
+
+     erasure_count += error_count;  /* total errors encountered */
 
      if(erasure_count)
      {  PrintCLI(_("  %3d repaired sectors: "), erasure_count);
@@ -687,6 +676,7 @@ void RS02Fix(Method *self)
 
 	      case 7:  /* other (new) error */
 		type = 'n';
+		damaged_sectors++;
 	        break;
 	   }
 
@@ -713,6 +703,15 @@ void RS02Fix(Method *self)
 
 	PrintCLI("\n");
      }
+
+     if(erasure_count)
+       damaged_eccsecs++;
+
+     if(erasure_count>worst_ecc)
+       worst_ecc = erasure_count;
+
+     if(erasure_count>local_plot_max)
+       local_plot_max = erasure_count;
 
 skip:
      /* Advance the cache pointers */
@@ -785,24 +784,24 @@ skip:
 
    Verbose("\nSummary of processed sectors:\n");
    Verbose("%lld damaged sectors\n", damaged_sectors);
+   Verbose("%lld CRC errors\n", crc_errors);
    Verbose("%lld of %lld ecc blocks damaged (%lld / %lld sectors)\n",
 	   damaged_eccblocks, 2048*lay->sectorsPerLayer,
 	   damaged_eccsecs, lay->sectorsPerLayer);
    if(data_count != lay->dataSectors)
-        g_printf("ONLY %lld of %lld data sectors processed; %lld damaged\n", 
-		 data_count, lay->dataSectors, dead_data);
-   else Verbose("all data sectors processed; %lld damaged\n", dead_data);
+        g_printf("ONLY %lld of %lld data sectors processed\n", 
+		 data_count, lay->dataSectors);
+   else Verbose("all data sectors processed\n");
 
    if(crc_count != lay->crcSectors)
-        g_printf("%lld of %lld crc sectors processed; %lld damaged\n", 
-		 crc_count, lay->crcSectors, dead_crc);
-   else Verbose("all  crc sectors processed; %lld damaged\n", dead_crc);
+        g_printf("%lld of %lld crc sectors processed\n", 
+		 crc_count, lay->crcSectors);
+   else Verbose("all  crc sectors processed\n");
 
    if(ecc_count != lay->rsSectors)
-        g_printf("%lld of %lld ecc sectors processed; %lld damaged\n", 
-		 ecc_count, lay->rsSectors, dead_ecc);
-   else Verbose("all  ecc sectors processed; %lld damaged\n", dead_ecc);
-   Verbose("%lld CRC errors\n", crc_errors);
+        g_printf("%lld of %lld ecc sectors processed\n", 
+		 ecc_count, lay->rsSectors);
+   else Verbose("all  ecc sectors processed\n");
 
    /*** Clean up */
 

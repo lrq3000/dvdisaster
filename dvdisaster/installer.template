@@ -24,9 +24,7 @@ Name: "de"; MessagesFile: "compiler:Languages/German.isl"
 [Files]
 Source: "CHANGELOG"; DestDir: "{app}"
 Source: "COPYING"; DestDir: "{app}"
-Source: "CREDITS.en"; DestDir: "{app}"
-Source: "CREDITS.de"; DestDir: "{app}"
-Source: "CREDITS.cs"; DestDir: "{app}"
+Source: "CREDITS.*"; DestDir: "{app}"
 Source: "TODO"; DestDir: "{app}"
 Source: "*.exe"; DestDir: "{app}"
 Source: "*.dll"; DestDir: "{app}"
@@ -38,32 +36,45 @@ Source: "etc\pango\*"; DestDir: "{app}\etc\pango"
 Source: "locale\cs\LC_MESSAGES\dvdisaster.mo"; DestDir: "{app}\locale\cs\LC_MESSAGES"
 Source: "locale\de\LC_MESSAGES\dvdisaster.mo"; DestDir: "{app}\locale\de\LC_MESSAGES"
 Source: "locale\it\LC_MESSAGES\dvdisaster.mo"; DestDir: "{app}\locale\it\LC_MESSAGES"
-Source: "documentation\*"; DestDir: "{app}\documentation"
-Source: "documentation\cs\*"; DestDir: "{app}\documentation\cs"
-Source: "documentation\de\*"; DestDir: "{app}\documentation\de"
-Source: "documentation\en\*"; DestDir: "{app}\documentation\en"
+Source: "documentation\images-common.pngpack"; DestDir: "{app}\documentation"
+;Source: "documentation\pngpack.exe"; DestDir: "{app}\documentation"
+Source: "documentation\pubkey.asc"; DestDir: "{app}\documentation"
+Source: "documentation\pngpack.exe"; DestDir: "{app}\documentation"; DestName: "pngpkcs.exe"; Languages: cs
+Source: "documentation\images-cs.pngpack"; DestDir: "{app}\documentation"; Languages: cs
+Source: "documentation\cs\*"; DestDir: "{app}\documentation\cs"; Languages: cs
+Source: "documentation\cs\images\*"; DestDir: "{app}\documentation\cs\images"; Languages: cs
+Source: "documentation\pngpack.exe"; DestDir: "{app}\documentation"; DestName: "pngpkde.exe"; Languages: de
+Source: "documentation\images-de.pngpack"; DestDir: "{app}\documentation"; Languages: de
+Source: "documentation\de\*"; DestDir: "{app}\documentation\de"; Languages: de
+Source: "documentation\de\images\*"; DestDir: "{app}\documentation\de\images"; Languages: de
+Source: "documentation\pngpack.exe"; DestDir: "{app}\documentation"; DestName: "pngpken.exe"; Languages: en
+Source: "documentation\images-en.pngpack"; DestDir: "{app}\documentation"; Languages: en
+Source: "documentation\en\*"; DestDir: "{app}\documentation\en"; Languages: en
+Source: "documentation\en\images\*"; DestDir: "{app}\documentation\en\images"; Languages: en
 Source: "documentation\images\*"; DestDir: "{app}\documentation\images"
-Source: "documentation\cs\index.html"; DestDir: "{app}\documentation\cs"; DestName: "mindex.html"; Languages: cs
-Source: "documentation\de\index.html"; DestDir: "{app}\documentation\de"; DestName: "mindex.html"; Languages: de
-Source: "documentation\en\index.html"; DestDir: "{app}\documentation\en"; DestName: "mindex.html"; Languages: en
 
 [Icons]
 Name: "{group}\dvdisaster"; Filename: "{app}\dvdisaster-win.exe"; WorkingDir: "{app}"
-Name: "{group}\Uživatelská pøíruèka"; Filename: "{app}\documentation\cs\mindex.html"; Flags: createonlyiffileexists
-Name: "{group}\Handbuch"; Filename: "{app}\documentation\de\mindex.html"; Flags: createonlyiffileexists
-Name: "{group}\Manual"; Filename: "{app}\documentation\en\mindex.html"; Flags: createonlyiffileexists
+Name: "{group}\Uživatelská pøíruèka"; Filename: "{app}\documentation\cs\index.html"; Flags: createonlyiffileexists
+Name: "{group}\Handbuch"; Filename: "{app}\documentation\de\index.html"; Flags: createonlyiffileexists
+Name: "{group}\Manual"; Filename: "{app}\documentation\en\index.html"; Flags: createonlyiffileexists
 Name: "{group}\Uninstall"; Filename: "{uninstallexe}"
 Name: "{userdesktop}\dvdisaster"; Filename: "{app}\dvdisaster-win.exe"; WorkingDir: "{app}"
 
 [Run]
-Filename: "{app}\documentation\images\pngpack.exe"; Parameters: "images-common.pngpack"; Flags: runhidden 
-Filename: "{app}\documentation\images\pngpack.exe"; Parameters: "images-cs.pngpack"; Flags: runhidden 
-Filename: "{app}\documentation\images\pngpack.exe"; Parameters: "images-de.pngpack"; Flags: runhidden 
-Filename: "{app}\documentation\images\pngpack.exe"; Parameters: "images-en.pngpack"; Flags: runhidden 
+Filename: "{app}\documentation\pngpkcs.exe"; Parameters: "{app}\documentation\images-common.pngpack"; WorkingDir: "{app}\documentation\images"; Flags: runhidden skipifdoesntexist
+Filename: "{app}\documentation\pngpkde.exe"; Parameters: "{app}\documentation\images-common.pngpack"; WorkingDir: "{app}\documentation\images"; Flags: runhidden skipifdoesntexist
+Filename: "{app}\documentation\pngpken.exe"; Parameters: "{app}\documentation\images-common.pngpack"; WorkingDir: "{app}\documentation\images"; Flags: runhidden skipifdoesntexist
+Filename: "{app}\documentation\pngpkcs.exe"; Parameters: "{app}\documentation\images-cs.pngpack"; WorkingDir: "{app}\documentation\cs\images"; Flags: runhidden skipifdoesntexist
+Filename: "{app}\documentation\pngpkde.exe"; Parameters: "{app}\documentation\images-de.pngpack"; WorkingDir: "{app}\documentation\de\images"; Flags: runhidden skipifdoesntexist
+Filename: "{app}\documentation\pngpken.exe"; Parameters: "{app}\documentation\images-en.pngpack"; WorkingDir: "{app}\documentation\en\images"; Flags: runhidden skipifdoesntexist
 
 [UninstallDelete]
 Type: files; Name:"{app}\.dvdisaster"
 Type: filesandordirs; Name:"{app}\documentation\images"
-Type: files; Name:"{app}\medium.img"
+Type: filesandordirs; Name:"{app}\documentation\cs\images"
+Type: filesandordirs; Name:"{app}\documentation\de\images"
+Type: filesandordirs; Name:"{app}\documentation\en\images"
+Type: files; Name:"{app}\medium.iso"
 Type: files; Name:"{app}\medium.ecc"
 

@@ -43,7 +43,6 @@ se il supporto dovesse danneggiarsi col tempo.
 %setup -q
 
 %build
-CFLAGS="%{optflags} -fomit-frame-pointer"; export CFLAGS; \
 ./configure \
     --prefix=%{_prefix} \
     --bindir=%{_bindir} \
@@ -71,11 +70,6 @@ desktop-file-install \
   --mode=0644 \
   contrib/%{name}.desktop
 
-for man in `find $RPM_BUILD_ROOT%{_mandir} -type f -print`
-do
-    sed -i "s:%{_docdir}/dvdisaster-doc:%{_docdir}/%{name}-%{version}:g" $man
-done
-
 %find_lang %{name}
 
 %clean
@@ -88,25 +82,28 @@ done
 %doc %{_docdir}/%{name}-%{version}/CREDITS.en
 %doc %{_docdir}/%{name}-%{version}/TODO
 %doc %{_docdir}/%{name}-%{version}/en
-# common images necessary for any localization
-%doc %{_docdir}/%{name}-%{version}/images/*-en.png
-%doc %{_docdir}/%{name}-%{version}/images/*.jpg
-%doc %{_docdir}/%{name}-%{version}/images/open-*.png
-# localizations
+# common images
+%doc %{_docdir}/%{name}-%{version}/images/*
+# localized files
 %lang(cs) %doc %{_docdir}/%{name}-%{version}/CREDITS.cs
 %lang(cs) %doc %{_docdir}/%{name}-%{version}/cs
-%lang(cs) %doc %{_docdir}/%{name}-%{version}/images/*-cs.png
 %lang(de) %doc %{_docdir}/%{name}-%{version}/CREDITS.de
 %lang(de) %doc %{_docdir}/%{name}-%{version}/de
-%lang(de) %doc %{_docdir}/%{name}-%{version}/images/*-de.png
+# common
 %{_bindir}//dvdisaster
 %{_datadir}/applications/*.desktop
 %{_datadir}/pixmaps/%{name}*.png
 %{_mandir}/man1/dvdisaster.*
+# localized files
 %lang(cs) %{_mandir}/cs/man1/dvdisaster.*
 %lang(de) %{_mandir}/de/man1/dvdisaster.*
 %lang(it) %{_mandir}/it/man1/dvdisaster.*
 
 %changelog
+* Thu Mar 16 2006 Luboš Staněk <lubek@users.sourceforge.net> - 0.66
+- Spec update.
+  - Remove unneeded CFLAGS modification.
+  - Remove manpage's documentation path modification.
+  - fix file list
 * Thu Feb 23 2006 Luboš Staněk <lubek@users.sourceforge.net> - 0.66-rc2
 - Spec file skeleton.

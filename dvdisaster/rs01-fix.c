@@ -159,8 +159,12 @@ void RS01Fix(Method *method)
 
    /*** Do some trivial comparisons between the .ecc file and the image file */
 
+   if(!eh->inLast)       /* field is unused/zero in versions prior to 0.66 */
+     eh->inLast = 2048;
+
    if(ii->sectors > ei->sectors)
    { gint64 diff = ii->sectors - ei->sectors;
+     gint64 wanted_size = 2048LL*(ei->sectors-1LL) + (gint64)eh->inLast;
      char *trans = _("The image file is %lld sectors longer as noted in the\n"
 		     "ecc file. This might simply be zero padding, especially\n"
 		     "on dual layer DVD media, but could also mean that\n"
@@ -182,8 +186,9 @@ void RS01Fix(Method *method)
 	}
 
         ii->sectors -= diff;
+	ii->inLast = eh->inLast;
 
-        if(!LargeTruncate(ii->file, (gint64)(2048*ii->sectors)))
+        if(!LargeTruncate(ii->file, wanted_size))
 	  Stop(_("Could not truncate %s: %s\n"),Closure->imageName,strerror(errno));
      }
      
@@ -202,8 +207,9 @@ void RS01Fix(Method *method)
        }
 
        ii->sectors -= diff;
+       ii->inLast = eh->inLast;
 
-       if(!LargeTruncate(ii->file, (gint64)(2048*ii->sectors)))
+       if(!LargeTruncate(ii->file, wanted_size))
 	 Stop(_("Could not truncate %s: %s\n"),Closure->imageName,strerror(errno));
 
        PrintLog(_("Image has been truncated by %lld sectors.\n"), diff);
@@ -217,12 +223,47 @@ void RS01Fix(Method *method)
 		  "to have the superfluous sectors removed."));
 
          ii->sectors -= diff;
+	 ii->inLast = eh->inLast;
 
-	 if(!LargeTruncate(ii->file, (gint64)(2048*ii->sectors)))
+	 if(!LargeTruncate(ii->file, wanted_size))
 	   Stop(_("Could not truncate %s: %s\n"),Closure->imageName,strerror(errno));
 
 	 PrintLog(_("Image has been truncated by %lld sectors.\n"), diff);
      }
+   }
+
+   if(ii->sectors == ei->sectors && ii->inLast > eh->inLast)
+   {  int difference = ii->inLast - eh->inLast;
+      gint64 wanted_size = 2048LL*(ei->sectors-1LL) + (gint64)eh->inLast;
+
+      if(Closure->guiMode)
+      {  int answer = ModalDialog(GTK_MESSAGE_QUESTION, GTK_BUTTONS_OK_CANCEL, NULL,
+				  _("The image file is %d bytes longer than noted\n"
+				    "in the ecc file. Shall the superflous bytes\n"
+				    "be removed from the image file?\n"),
+				    difference);
+
+	 if(!answer)
+	 {  SwitchAndSetFootline(fc->wl->fixNotebook, 1,
+				 fc->wl->fixFootline,
+				 _("<span color=\"red\">Aborted by user request!</span>")); 
+	    fc->earlyTermination = FALSE;  /* suppress respective error message */
+	    goto terminate;
+	 }
+      }
+
+      if(!Closure->guiMode && !Closure->truncate)
+        Stop(_("The image file is %d bytes longer than noted\n"
+	       "in the ecc file.\n"
+               "Add the --truncate option to the program call\n"
+	       "to have the superfluous sectors removed."),
+	     difference);
+      
+      if(!LargeTruncate(ii->file, wanted_size))
+	Stop(_("Could not truncate %s: %s\n"),Closure->imageName,strerror(errno));
+
+      PrintLog(_("Image has been truncated by %d bytes.\n"), difference);
+      ii->inLast = eh->inLast;
    }
 
    if(ii->sectors < ei->sectors)
@@ -649,7 +690,7 @@ void RS01Fix(Method *method)
 		  idx, "FW", strerror(errno));
 
 	   if(idx < ei->sectors-1) length = 2048;
-	   else length = ii->inLast;  /* error: use inLast calculated from eh->sectors */
+	   else length = eh->inLast;
 
 	   n = LargeWrite(ii->file, cache_offset+fc->imgBlock[erasure_list[i]], length);
 	   if(n != length)

@@ -27,11 +27,10 @@
  *** Read an image sector from the .iso file.
  ****
  * Reading sectors beyond lay->protectedSectors always returns a zero padding sector.
- * TODO: Graceful handling of truncated images
  */
 
 void RS02ReadSector(ImageInfo *ii, RS02Layout *lay, unsigned char *buf, gint64 s)
-{  int n,expected;
+{  int n;
 
   /* Padding sector for ecc calculation */  
 
@@ -50,25 +49,21 @@ void RS02ReadSector(ImageInfo *ii, RS02Layout *lay, unsigned char *buf, gint64 s
      return;
   }
 
+  /* Reading beyond the image returns dead sectors */
+
+  if(s >= ii->sectors)
+  {  memcpy(buf, Closure->deadSector, 2048);  
+     return;
+  }
+
   /* Read a real sector */
 
   if(!LargeSeek(ii->file, (gint64)(2048*s)))
     Stop(_("Failed seeking to sector %lld in image: %s"),
 	 s, strerror(errno));
 
-  /* Prepare for short reads at the last image sector.
-     Doesn't happen for CD and DVD media, but perhaps for future media? */
-
-  if(s < ii->sectors-1) expected = 2048;
-  else  
-  {  memset(buf, 0, 2048);
-     expected = ii->inLast;
-  }
-
-  /* Finally, read the sector */
-
-  n = LargeRead(ii->file, buf, expected);
-  if(n != expected)
+  n = LargeRead(ii->file, buf, 2048);
+  if(n != 2048)
     Stop(_("Failed reading sector %lld in image: %s"),s,strerror(errno));
 }
 

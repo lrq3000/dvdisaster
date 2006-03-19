@@ -318,11 +318,26 @@ void RS01Create(Method *self)
 
    ei->eh->creatorVersion  = Closure->version;
    ei->eh->fpSector        = FOOTPRINT_SECTOR;
+   ei->eh->inLast          = ii->inLast;
 
-   /* This is unfortunate; Versions prior to 0.66 will incorrectly reject
-      ecc files as being produced by version 0.40.7 
-      if any other bit than methodFlags[0] = 1. */
-   ei->eh->neededVersion   = Closure->releaseFlags ? 6600: 5500;
+
+   /* dvdisaster 0.66 brings some extensions which are not compatible with
+      prior versions. These are:
+      - If the methodFlags contains any other bits set than methodFlags[0] == 1,
+        prior versions will incorrectly reject ecc files as being produced by
+	version 0.40.7 due to a bug in the version processing code.
+	So ecc files tagged with -devel or -rc status will not work with prior
+	versions. But they are experimental version available only through CVS, 
+	so this issue is not a big as it appears.
+      - Version 0.66 records the inLast value in the ecc file to facilitate
+        processing non-image files. Previous versions do not use this field
+	and may round up file length to the next multiple of 2048 when doing
+	error correction.
+   */
+
+   if(Closure->releaseFlags || ii->inLast != 2048)
+        ei->eh->neededVersion = 6600;
+   else ei->eh->neededVersion = 5500;
 
    memcpy(ei->eh->mediumFP, ii->mediumFP, 16);
    memcpy(ei->eh->mediumSum, ii->mediumSum, 16);

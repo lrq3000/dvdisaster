@@ -167,7 +167,7 @@ void RS02Compare(Method *self)
    struct MD5Context meta_md5;
    unsigned char ecc_sum[16];
    unsigned char medium_sum[16];
-   char digest[33];
+   char data_digest[33], hdr_digest[33], digest[33];
    gint64 s, image_sectors, crc_idx;
    int last_percent = 0;
    unsigned char buf[2048];
@@ -197,8 +197,10 @@ void RS02Compare(Method *self)
    PrintLog(_("present, contains %lld medium sectors.\n"),image_sectors);
 
    eh  = self->lastEh;  /* will always be present */
-   lay = CalcRS02Layout(uchar_to_gint64(eh->sectors), eh->eccBytes); 
+   lay = cc->lay = CalcRS02Layout(uchar_to_gint64(eh->sectors), eh->eccBytes); 
    expected_sectors = lay->eccSectors+lay->dataSectors;
+   if(!eh->inLast)      /* 0.66 pre-releases did not set this */
+     eh->inLast = 2048;
 
    /*** Read the CRC portion */ 
 
@@ -223,7 +225,7 @@ void RS02Compare(Method *self)
    ecc_slice  = 0;
 
    for(s=0; s<expected_sectors; s++)
-   {  int n,percent,current_missing;
+   {  int percent,current_missing;
 
       /* Check for user interruption */
 
@@ -232,16 +234,22 @@ void RS02Compare(Method *self)
 
       /* Read the next sector */
 
-      n = LargeRead(image, buf, 2048);
-      if(n != 2048)
-	 Stop(_("premature end in image (only %d bytes): %s\n"),n,strerror(errno));
+      if(s < image_sectors)  /* image may be truncated */
+      {  int n = LargeRead(image, buf, 2048);
+         if(n != 2048)
+	    Stop(_("premature end in image (only %d bytes): %s\n"),n,strerror(errno));
+      }
+      else memcpy(buf, Closure->deadSector, 2048);
 
       if(s < lay->dataSectors)
-	MD5Update(&image_md5, buf, n);
+      {  if(s < lay->dataSectors - 1)
+	      MD5Update(&image_md5, buf, 2048);
+	 else MD5Update(&image_md5, buf, eh->inLast);
+      }
 
       /* Look for the dead sector marker */
 
-      current_missing = !memcmp(buf, Closure->deadSector, n);
+      current_missing = !memcmp(buf, Closure->deadSector, 2048);
       if(current_missing)
       {  if(first_missing < 0) first_missing = s;
          last_missing = s;
@@ -316,7 +324,7 @@ void RS02Compare(Method *self)
    /* The image md5sum is only useful if all blocks have been successfully read. */
 
    MD5Final(medium_sum, &image_md5);
-   AsciiDigest(digest, medium_sum);
+   AsciiDigest(data_digest, medium_sum);
 
    MD5Final(ecc_sum, &meta_md5); 
 	    
@@ -331,14 +339,18 @@ void RS02Compare(Method *self)
    //   while(hdr_pos < expected_sectors - 2)
    while(hdr_pos < expected_sectors)
    {  EccHeader eh;
-      int n;
 
-      if(!LargeSeek(image, 2048*hdr_pos))
-	Stop(_("Failed seeking to ecc header at %lld: %s\n"), hdr_pos, strerror(errno));
+      if(hdr_pos < image_sectors)
+      {  int n;
 
-      n = LargeRead(image, &eh, sizeof(EccHeader));
-      if(n != sizeof(EccHeader))
-	Stop(_("Failed reading ecc header at %lld: %s\n"), hdr_pos, strerror(errno));
+	 if(!LargeSeek(image, 2048*hdr_pos))
+	   Stop(_("Failed seeking to ecc header at %lld: %s\n"), hdr_pos, strerror(errno));
+
+	 n = LargeRead(image, &eh, sizeof(EccHeader));
+	 if(n != sizeof(EccHeader))
+	   Stop(_("Failed reading ecc header at %lld: %s\n"), hdr_pos, strerror(errno));
+      }
+      else memset(&eh, 0, sizeof(EccHeader));
 
       if(!strncmp((char*)eh.cookie, "*dvdisaster*", 12))
       {  guint32 recorded_crc = eh.selfCRC;
@@ -364,7 +376,7 @@ void RS02Compare(Method *self)
 
    if(!total_missing && !hdr_missing)
       PrintLog(_("- good image       : all sectors present\n"
-		 "- data md5sum      : %s\n"),digest);
+		 "- data md5sum      : %s\n"),data_digest);
    else
    {  gint64 total_crc_errors = data_crc_errors + hdr_crc_errors;
       if(!total_crc_errors)
@@ -379,7 +391,7 @@ void RS02Compare(Method *self)
       PrintLog(_("  ... data section   : %lld sectors missing; %lld CRC errors\n"), 
 	       data_missing, data_crc_errors);
       if(!data_missing)
-	PrintLog(_("  ... data md5sum    : %s\n"), digest); 
+	PrintLog(_("  ... data md5sum    : %s\n"), data_digest); 
       PrintLog(_("  ... crc section    : %lld sectors missing\n"), crc_missing);
       PrintLog(_("  ... ecc section    : %lld sectors missing\n"), ecc_missing);
    }
@@ -511,11 +523,13 @@ void RS02Compare(Method *self)
 
    /* image md5sum as stored in the ecc header */
 
+   AsciiDigest(hdr_digest, eh->mediumSum);
+
    if(!data_missing)
    {  int n = !memcmp(eh->mediumSum, medium_sum, 16);
 
-      if(n) PrintLog(_("- data md5sum      : %s (good)\n"),digest);
-      else  PrintLog(_("* data md5sum      : %s (BAD)\n"),digest);
+      if(n) PrintLog(_("- data md5sum      : %s (good)\n"),hdr_digest);
+      else  PrintLog(_("* data md5sum      : %s (BAD)\n"),hdr_digest);
 #if 0
       if(Closure->guiMode)
       {  if(n) SetLabelText(GTK_LABEL(Closure->cmpEccImgMd5Sum), "%s", edigest);
@@ -527,7 +541,7 @@ void RS02Compare(Method *self)
 #endif
    }
    else 
-   {  PrintLog(_("- data md5sum      : %s\n"),digest);
+   {  PrintLog(_("- data md5sum      : %s\n"),hdr_digest);
 #if 0
       if(Closure->guiMode)
 	SetLabelText(GTK_LABEL(Closure->cmpEccImgMd5Sum), "%s", edigest);

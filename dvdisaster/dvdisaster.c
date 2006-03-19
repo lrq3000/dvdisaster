@@ -374,7 +374,9 @@ int main(int argc, char *argv[])
 		   }
 	           break;
          case 'p': if(optarg) 
-	           {  Closure->eccName = g_malloc(strlen(optarg)+5);
+		   {  g_free(Closure->imageName);
+		      g_free(Closure->eccName);
+		      Closure->eccName = g_malloc(strlen(optarg)+5);
 		      Closure->imageName = g_malloc(strlen(optarg)+5);
 		      g_sprintf(Closure->eccName,"%s.ecc",optarg);
 		      g_sprintf(Closure->imageName,"%s.iso",optarg);
