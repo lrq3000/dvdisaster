@@ -329,10 +329,15 @@ void ShowHTML(char *target)
       else target = g_strdup_printf("%s/en/index.html",Closure->docDir); 
       
       if(stat(target, &mystat) == -1)
-      {  CreateMessage(_("Documentation file\n%s\nnot found.\n"), GTK_MESSAGE_ERROR, target);
-         g_free(bi);
-	 g_free(target);
-         return;
+      {  g_free(target);  /* the local dir is Windows specific */
+         target = g_strdup_printf("%s/local/index.html",Closure->docDir);
+
+	 if(stat(target, &mystat) == -1)
+	 {  CreateMessage(_("Documentation file\n%s\nnot found.\n"), GTK_MESSAGE_ERROR, target);
+            g_free(bi);
+	    g_free(target);
+	    return;
+	 }
       }
       
       bi->url = target;
