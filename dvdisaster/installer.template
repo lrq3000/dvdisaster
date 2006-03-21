@@ -21,6 +21,9 @@ Name: "en"; MessagesFile: "compiler:Default.isl"
 Name: "cs"; MessagesFile: "compiler:Languages/Czech.isl"
 Name: "de"; MessagesFile: "compiler:Languages/German.isl"
 
+[Dirs]
+Name: "{app}\documentation\local\images"
+
 [Files]
 Source: "CHANGELOG"; DestDir: "{app}"
 Source: "COPYING"; DestDir: "{app}"
@@ -42,13 +45,10 @@ Source: "documentation\pubkey.asc"; DestDir: "{app}\documentation"
 Source: "documentation\images\*"; DestDir: "{app}\documentation\images"
 Source: "documentation\images-cs.pngpack"; DestDir: "{app}\documentation"; Languages: cs
 Source: "documentation\cs\*"; DestDir: "{app}\documentation\local"; Languages: cs
-Source: "documentation\cs\images\*"; DestDir: "{app}\documentation\local\images"; Languages: cs
 Source: "documentation\images-de.pngpack"; DestDir: "{app}\documentation"; Languages: de
 Source: "documentation\de\*"; DestDir: "{app}\documentation\local"; Languages: de
-Source: "documentation\de\images\*"; DestDir: "{app}\documentation\local\images"; Languages: de
 Source: "documentation\images-en.pngpack"; DestDir: "{app}\documentation"; Languages: en
 Source: "documentation\en\*"; DestDir: "{app}\documentation\local"; Languages: en
-Source: "documentation\en\images\*"; DestDir: "{app}\documentation\local\images"; Languages: en
 
 [Icons]
 Name: "{group}\dvdisaster"; Filename: "{app}\dvdisaster-win.exe"; WorkingDir: "{app}"

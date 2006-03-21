@@ -304,8 +304,6 @@ bindist: dvdisaster html pack-images
 	@cp documentation/pubkey.asc $(PKGNAME)/documentation
 	@for i in cs de en; do \
 	  mkdir $(PKGNAME)/documentation/$$i; \
-	  mkdir $(PKGNAME)/documentation/$$i/images; \
-	  touch $(PKGNAME)/documentation/$$i/images/placeholder; \
 	  cp documentation/$$i/*.html $(PKGNAME)/documentation/$$i; \
 	done
 	@mkdir $(PKGNAME)/documentation/images
