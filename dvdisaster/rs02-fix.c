@@ -132,6 +132,7 @@ void RS02Fix(Method *self)
    gint64 crc_sector_byte;
    int nroots,ndata;
    int crc_idx, ecc_idx;
+   int crc_valid = TRUE;
    int cache_size, cache_sector, cache_offset;
    int erasure_count,erasure_list[255],erasure_map[255];
    int error_count;
@@ -376,9 +377,10 @@ void RS02Fix(Method *self)
 
 		crc_sector_byte += 2048;
 		crc_idx = 0;
+		crc_valid = memcmp(crc_buf, Closure->deadSector, 2048);
 	     }
 
-	     if(!erasure_map[i] && crc != crc_buf[crc_idx])
+	     if(crc_valid && !erasure_map[i] && crc != crc_buf[crc_idx])
 	     {  erasure_map[i] = 3;
 	        erasure_list[erasure_count++] = i;
 	        PrintCLI(_("CRC error in sector %lld\n"),block_idx[i]);
@@ -409,11 +411,13 @@ void RS02Fix(Method *self)
 
      if(erasure_count>lay->nroots)   /* uncorrectable */
      {  if(!Closure->guiMode)
-	{  PrintCLI(_("* Ecc block %4d: %3d unrepairable sectors: "), s, erasure_count);
+	{  PrintCLI(_("* Ecc block %lld: %3d unrepairable sectors: "), s, erasure_count);
 
 	   for(i=0; i<erasure_count; i++)
-	     PrintCLI("%lld ", block_idx[erasure_list[i]]);
-
+	   {  gint64 loc = erasure_list[i];
+	      PrintCLI("%lld ", 
+		       loc < ndata ? block_idx[loc] : fc->eccIdx[loc-ndata][cache_sector]);
+	   }
 	   PrintCLI("\n");
 	}
 
@@ -567,9 +571,9 @@ void RS02Fix(Method *self)
 	{  PrintLog(_("Decoder problem (%d != %d) for %d sectors: "), deg_lambda, count, erasure_count);
 
 	   for(i=0; i<erasure_count; i++)
-	   {  gint64 idx = block_idx[erasure_list[i]];
-	       
-	      PrintLog("%lld ", idx);
+	   {  gint64 loc = erasure_list[i];
+	      PrintLog("%lld ", 
+		       loc < ndata ? block_idx[loc] : fc->eccIdx[loc-ndata][cache_sector]);
 	   }
 	   PrintLog("\n");
 	   break;
@@ -704,6 +708,9 @@ void RS02Fix(Method *self)
 	PrintCLI("\n");
      }
 
+skip:
+     /* Collect some damage statistics */
+     
      if(erasure_count)
        damaged_eccsecs++;
 
@@ -713,7 +720,6 @@ void RS02Fix(Method *self)
      if(erasure_count>local_plot_max)
        local_plot_max = erasure_count;
 
-skip:
      /* Advance the cache pointers */
 
      cache_sector++;

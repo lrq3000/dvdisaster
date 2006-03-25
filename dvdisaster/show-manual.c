@@ -186,13 +186,13 @@ static void try_browser(browser_info*);
 
 static char *browsers[] = 
 {  "user-selection",
-   "gnome-open",
-   "htmlview",
-   "firefox",
-   "mozilla",
-   "konqueror",
-   "netscape",
-   "opera",
+   "xgnome-open",
+   "xhtmlview",
+   "xfirefox",
+   "xmozilla",
+   "xkonqueror",
+   "xnetscape",
+   "xopera",
    NULL
 };
 
@@ -327,22 +327,24 @@ void ShowHTML(char *target)
       else if(!strncmp(lang, "de", 2)) 
 	   target = g_strdup_printf("%s/de/index.html",Closure->docDir); 
       else target = g_strdup_printf("%s/en/index.html",Closure->docDir); 
-      
+
+#ifdef SYS_MINGW      
       if(stat(target, &mystat) == -1)
       {  g_free(target);  /* the local dir is Windows specific */
          target = g_strdup_printf("%s/local/index.html",Closure->docDir);
-
-	 if(stat(target, &mystat) == -1)
-	 {  CreateMessage(_("Documentation file\n%s\nnot found.\n"), GTK_MESSAGE_ERROR, target);
-            g_free(bi);
-	    g_free(target);
-	    return;
-	 }
       }
+#endif
       
       bi->url = target;
    }
    else bi->url = target;
+
+   if(stat(target, &mystat) == -1)
+   {  CreateMessage(_("Documentation file\n%s\nnot found.\n"), GTK_MESSAGE_ERROR, target);
+      g_free(bi);
+      g_free(target);
+      return;
+   }
 
    /* Lock the help button and show a message for 10 seconds. */
 

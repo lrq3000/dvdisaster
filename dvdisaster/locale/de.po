@@ -2555,8 +2555,8 @@ msgstr ""
 
 #: rs02-fix.c:412
 #, c-format
-msgid "* Ecc block %4d: %3d unrepairable sectors: "
-msgstr "* Ecc-Bereich %4d: %3d unreparierbare Sektoren: "
+msgid "* Ecc block %lld: %3d unrepairable sectors: "
+msgstr "* Ecc-Bereich %lld: %3d unreparierbare Sektoren: "
 
 #: rs02-fix.c:628
 #, c-format

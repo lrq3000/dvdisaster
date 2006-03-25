@@ -1,4 +1,4 @@
-0.66  19-03-2006
+0.66  25-03-2006
 	- last RS02 headers were omitted when they would end up in the last
 	  two image sectors. fixed.
 	- updated installation scripts for new documentation structure
@@ -8,6 +8,7 @@
 	  non-image files with RS02
 	- fixed handling of truncated images in RS02
 	- fixed incorrect erasure count in RS02 decoder
+	- fixed false CRC errors for unreadable CRC sectors in RS02 decoder
 
 0.66 (rc-7) 12-03-2006
 	- added homepage generation for SourceForge

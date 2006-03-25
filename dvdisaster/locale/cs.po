@@ -2546,8 +2546,8 @@ msgstr ""
 
 #: rs02-fix.c:412
 #, c-format
-msgid "* Ecc block %4d: %3d unrepairable sectors: "
-msgstr "* Blok ecc %4d: %3d neopravitelných sektorů: "
+msgid "* Ecc block %lld: %3d unrepairable sectors: "
+msgstr "* Blok ecc %lld: %3d neopravitelných sektorů: "
 
 #: rs02-fix.c:628
 #, c-format

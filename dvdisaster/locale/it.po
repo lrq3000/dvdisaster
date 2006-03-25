@@ -2509,7 +2509,7 @@ msgstr ""
 
 #: rs02-fix.c:412
 #, c-format
-msgid "* Ecc block %4d: %3d unrepairable sectors: "
+msgid "* Ecc block %lld: %3d unrepairable sectors: "
 msgstr ""
 
 #: rs02-fix.c:628
