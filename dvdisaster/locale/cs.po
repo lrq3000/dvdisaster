@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-20 20:31+0100\n"
+"POT-Creation-Date: 2006-03-25 16:50+0100\n"
 "PO-Revision-Date: 2006-03-16 20:40+0100\n"
 "Last-Translator: Luboš Staněk <lubek@users.sourceforge.net>\n"
 "Language-Team: čeština <cs@li.org>\n"
@@ -64,7 +64,7 @@ msgstr ""
 
 #: debug.c:106 debug.c:186 debug.c:228 debug.c:488 debug.c:556
 #: rs01-common.c:54 rs02-common.c:62 rs02-compare.c:98 rs02-create.c:266
-#: rs02-create.c:923 rs02-create.c:943 rs02-fix.c:337
+#: rs02-create.c:923 rs02-create.c:943 rs02-fix.c:338
 #, c-format
 msgid "Failed seeking to sector %lld in image: %s"
 msgstr "Selhalo vystavení na sektor %lld v obrazu: %s"
@@ -149,8 +149,8 @@ msgid "Truncating image to %lld sectors.\n"
 msgstr "Zkrácení obrazu na %lld sektorů.\n"
 
 #: debug.c:387 read-linear.c:829 rs01-fix.c:192 rs01-fix.c:213 rs01-fix.c:229
-#: rs01-fix.c:263 rs02-create.c:110 rs02-fix.c:209 rs02-fix.c:230
-#: rs02-fix.c:245
+#: rs01-fix.c:263 rs02-create.c:110 rs02-fix.c:210 rs02-fix.c:231
+#: rs02-fix.c:246
 #, c-format
 msgid "Could not truncate %s: %s\n"
 msgstr "Nelze zkrátit %s: %s\n"
@@ -1261,7 +1261,7 @@ msgstr "Vyplňování oblasti obrazu [%lld..%lld]"
 
 #: read-adaptive.c:834 read-adaptive.c:967 read-adaptive.c:1102
 #: read-linear.c:357 read-linear.c:482 read-linear.c:584 read-linear.c:639
-#: rs01-fix.c:431 rs01-fix.c:689 rs02-fix.c:692
+#: rs01-fix.c:431 rs01-fix.c:689 rs02-fix.c:696
 #, c-format
 msgid "Failed seeking to sector %lld in image [%s]: %s"
 msgstr "Selhalo vystavení na sektor %lld v obrazu [%s]: %s"
@@ -1295,12 +1295,12 @@ msgstr ""
 "Nemusí být možné se zotavit po této chybě.\n"
 "Má čtení pokračovat a ignorovat tuto chybu?"
 
-#: read-adaptive.c:990 rs01-fix.c:38 rs02-fix.c:372
+#: read-adaptive.c:990 rs01-fix.c:38 rs02-fix.c:373
 #, c-format
 msgid "Failed seeking in crc area: %s"
 msgstr "Selhalo vystavení na oblast crc: %s"
 
-#: read-adaptive.c:1006 rs01-fix.c:385 rs02-fix.c:384
+#: read-adaptive.c:1006 rs01-fix.c:385 rs02-fix.c:386
 #, c-format
 msgid "CRC error in sector %lld\n"
 msgstr "Chyba CRC v sektoru %lld\n"
@@ -1430,7 +1430,7 @@ msgstr ""
 
 #: read-linear.c:163 rs01-compare.c:427 rs01-compare.c:776 rs01-create.c:635
 #: rs01-fix.c:183 rs01-fix.c:204 rs01-fix.c:249 rs01-fix.c:278 rs01-fix.c:294
-#: rs01-fix.c:343 rs02-create.c:499 rs02-fix.c:201 rs02-fix.c:222
+#: rs01-fix.c:343 rs02-create.c:499 rs02-fix.c:202 rs02-fix.c:223
 msgid "<span color=\"red\">Aborted by user request!</span>"
 msgstr "<span color=\"red\">Zrušeno uživatelem!</span>"
 
@@ -1601,7 +1601,7 @@ msgstr "Již přítomen"
 msgid "Speed"
 msgstr "Rychlost"
 
-#: rs01-common.c:70 rs02-common.c:67 rs02-create.c:150 rs02-fix.c:340
+#: rs01-common.c:70 rs02-common.c:67 rs02-create.c:150 rs02-fix.c:341
 #, c-format
 msgid "Failed reading sector %lld in image: %s"
 msgstr "Selhalo čtení sektoru %lld v obrazu: %s"
@@ -2087,12 +2087,12 @@ msgstr ""
 "Soubor oprav chyb byl úspěšně vytvořen.\n"
 "Zajistěte, aby byl tento soubor uložen na spolehlivém médiu."
 
-#: rs01-fix.c:43 rs02-compare.c:135 rs02-fix.c:375
+#: rs01-fix.c:43 rs02-compare.c:135 rs02-fix.c:376
 #, c-format
 msgid "problem reading crc data: %s"
 msgstr "problém při čtení dat crc: %s"
 
-#: rs01-fix.c:133 rs02-fix.c:159
+#: rs01-fix.c:133 rs02-fix.c:160
 msgid "Repairing of image aborted"
 msgstr "Opravování obrazu zrušeno"
 
@@ -2139,7 +2139,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: rs01-fix.c:175 rs02-fix.c:193
+#: rs01-fix.c:175 rs02-fix.c:194
 #, c-format
 msgid ""
 "Image file is %lld sectors longer than expected.\n"
@@ -2150,16 +2150,16 @@ msgstr ""
 "Předpokládám, že jde o médium v režimu TAO.\n"
 "%lld sektor(y/ů) na konci obrazu bude odebráno.\n"
 
-#: rs01-fix.c:199 rs02-fix.c:217
+#: rs01-fix.c:199 rs02-fix.c:218
 msgid "Is it okay to remove the superfluous sectors?"
 msgstr "Můžeme bez obav odstranit přebytečné sektory?"
 
-#: rs01-fix.c:215 rs01-fix.c:231 rs02-fix.c:232 rs02-fix.c:247
+#: rs01-fix.c:215 rs01-fix.c:231 rs02-fix.c:233 rs02-fix.c:248
 #, c-format
 msgid "Image has been truncated by %lld sectors.\n"
 msgstr "Obraz byl zkrácen o %lld sektorů.\n"
 
-#: rs01-fix.c:222 rs02-fix.c:239
+#: rs01-fix.c:222 rs02-fix.c:240
 msgid ""
 "Add the --truncate option to the program call\n"
 "to have the superfluous sectors removed."
@@ -2216,7 +2216,7 @@ msgstr ""
 "Nelze číst soubor ecc:\n"
 "%s"
 
-#: rs01-fix.c:596 rs02-fix.c:567
+#: rs01-fix.c:596 rs02-fix.c:571
 #, c-format
 msgid "Decoder problem (%d != %d) for %d sectors: "
 msgstr "Problém dekodéru (%d != %d) pro %d sectorů: "
@@ -2236,12 +2236,12 @@ msgstr "Neočekávaná chyba bajtu v sektoru %lld, bajt %d\n"
 msgid "Bad error location %d; corrupted .ecc file?\n"
 msgstr "Závažná chyba polohy %d; poškozený soubor .ecc?\n"
 
-#: rs01-fix.c:678 rs02-fix.c:659
+#: rs01-fix.c:678 rs02-fix.c:663
 #, c-format
 msgid "  %3d repaired sectors: "
 msgstr "  %3d opravených sektorů: "
 
-#: rs01-fix.c:697 rs02-fix.c:700
+#: rs01-fix.c:697 rs02-fix.c:704
 #, c-format
 msgid ""
 "could not write medium sector %lld:\n"
@@ -2250,12 +2250,12 @@ msgstr ""
 "nelze zapsat sektor média %lld:\n"
 "%s"
 
-#: rs01-fix.c:723 rs02-fix.c:737
+#: rs01-fix.c:723 rs02-fix.c:743
 #, c-format
 msgid "Ecc progress: %3d.%1d%%"
 msgstr "Průběh ecc: %3d.%1d%%"
 
-#: rs01-fix.c:735 rs02-fix.c:751
+#: rs01-fix.c:735 rs02-fix.c:757
 #, c-format
 msgid "Ecc progress: 100.0%%\n"
 msgstr "Průběh ecc: 100.0%%\n"
@@ -2265,30 +2265,30 @@ msgstr "Průběh ecc: 100.0%%\n"
 msgid "Repaired sectors: %lld     \n"
 msgstr "Opraveno sektorů: %lld     \n"
 
-#: rs01-fix.c:738 rs02-fix.c:756
+#: rs01-fix.c:738 rs02-fix.c:762
 #, c-format
 msgid "Unrepaired sectors: %lld\n"
 msgstr "Neopraveno sektorů: %lld\n"
 
-#: rs01-fix.c:741 rs02-fix.c:760
+#: rs01-fix.c:741 rs02-fix.c:766
 #, c-format
 msgid "Image sectors could not be fully restored (%lld repaired; <span color=\"red\">%lld unrepaired</span>)"
 msgstr "Sektory obrazu nelze úplně obnovit (%lld opraveno; <span color=\"red\">%lld neopraveno</span>)"
 
-#: rs01-fix.c:747 rs02-fix.c:767
+#: rs01-fix.c:747 rs02-fix.c:773
 msgid "Good! All sectors are already present."
 msgstr "V pořádku! Všechny sektory jsou již přítomny."
 
-#: rs01-fix.c:751 rs02-fix.c:771
+#: rs01-fix.c:751 rs02-fix.c:777
 msgid "Good! All sectors are repaired."
 msgstr "V pořádku! Všechny sektory jsou opraveny."
 
-#: rs01-fix.c:756 rs02-fix.c:776
+#: rs01-fix.c:756 rs02-fix.c:782
 #, c-format
 msgid "Erasure counts per ecc block:  avg =  %.1f; worst = %d.\n"
 msgstr "Počet výmazů na blok ecc:  průměr =  %.1f; nejvíce = %d.\n"
 
-#: rs01-fix.c:761 rs02-fix.c:782
+#: rs01-fix.c:761 rs02-fix.c:788
 msgid "Repair results:"
 msgstr "Výsledky opravy:"
 
@@ -2527,7 +2527,7 @@ msgstr ""
 "Do obrazu byla přidána opravná data.\n"
 "Nová velikost obrazu je %lld sektorů.\n"
 
-#: rs02-fix.c:186
+#: rs02-fix.c:187
 #, c-format
 msgid ""
 "The image file is %lld sectors longer as noted in the\n"
@@ -2544,22 +2544,22 @@ msgstr ""
 "\n"
 "%s"
 
-#: rs02-fix.c:412
+#: rs02-fix.c:414
 #, c-format
 msgid "* Ecc block %lld: %3d unrepairable sectors: "
 msgstr "* Blok ecc %lld: %3d neopravitelných sektorů: "
 
-#: rs02-fix.c:628
+#: rs02-fix.c:632
 #, c-format
 msgid "-> CRC-predicted error in sector %lld at byte %4d (value %02x '%c', expected %02x '%c')\n"
 msgstr "-> Předpokládaná chyb CRC v sektoru %lld bajtu %4d (hodnota %02x '%c', očekáváno %02x '%c')\n"
 
-#: rs02-fix.c:631
+#: rs02-fix.c:635
 #, c-format
 msgid "-> Non-predicted error in sector %lld at byte %4d (value %02x '%c', expected %02x '%c')\n"
 msgstr "-> Neočekávaná chyba v sektoru %lld bajtu %4d (hodnota %02x '%c', očekáváno %02x '%c')\n"
 
-#: rs02-fix.c:753
+#: rs02-fix.c:759
 #, c-format
 msgid "Repaired sectors: %lld (%lld data, %lld ecc)\n"
 msgstr "Opravených sektorů: %lld (data %lld, ecc %lld)\n"
@@ -3086,7 +3086,7 @@ msgstr "Najít"
 msgid "Documentation not installed."
 msgstr "Dokumentace není nainstalována."
 
-#: show-manual.c:336
+#: show-manual.c:343
 #, c-format
 msgid ""
 "Documentation file\n"
@@ -3097,7 +3097,7 @@ msgstr ""
 "%s\n"
 "nebyl nalezen.\n"
 
-#: show-manual.c:350
+#: show-manual.c:352
 msgid "Please hang on until the browser comes up!"
 msgstr "Vydržte prosím, až se spustí prohlížeč!"
 

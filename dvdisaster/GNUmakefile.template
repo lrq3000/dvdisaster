@@ -278,19 +278,19 @@ www:
 
 sf:
 	@cd documentation ; ./create.bash sf $(VERSION) ; \
-	tar czf ../../sf.tgz pubkey.asc cs de en
+	tar cjf ../../sf.tar.bz2 pubkey.asc cs/*.html de/*.html en/*.html
 
 sf-images:
 	@cd documentation ; ./create.bash sf $(VERSION) ; \
-	tar czf ../../sf.tgz cs de en images
+	tar cjf ../../sf.tar.bz2 cs/*.html de/*.html en/*.html images/*.jpg images/*.png cs/images/*.png de/images/*.png en/images/*.png
 
 berlios:
 	@cd documentation ; ./create.bash berlios $(VERSION) ; \
-	tar czf ../../berlios.tgz pubkey.asc cs de en
+	tar cjf ../../berlios.tar.bz2 pubkey.asc cs/*.html de/*.html en/*.html
 
 berlios-images:
 	@cd documentation ; ./create.bash berlios $(VERSION) ; \
-	tar czf ../../berlios.tgz cs de en images
+	tar cjf ../../berlios.tar.bz2 cs/*.html de/*.html en/*.html images/*.jpg images/*.png cs/images/*.png de/images/*.png en/images/*.png
 
 srcdist: pack-images clean distclean 
 	@cd .. ; tar -c -j -X $(PKGNAME)/NODIST -f $(PKGNAME).tar.bz2 $(PKGNAME)

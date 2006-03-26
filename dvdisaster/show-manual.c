@@ -186,13 +186,13 @@ static void try_browser(browser_info*);
 
 static char *browsers[] = 
 {  "user-selection",
-   "xgnome-open",
-   "xhtmlview",
-   "xfirefox",
-   "xmozilla",
-   "xkonqueror",
-   "xnetscape",
-   "xopera",
+   "gnome-open",
+   "htmlview",
+   "firefox",
+   "mozilla",
+   "konqueror",
+   "netscape",
+   "opera",
    NULL
 };
 

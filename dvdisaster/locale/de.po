@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-20 20:31+0100\n"
+"POT-Creation-Date: 2006-03-25 16:50+0100\n"
 "PO-Revision-Date: 2004-11-30 19:48+0100\n"
 "Last-Translator: Carsten Gnörlich <carsten@dvdisaster.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -63,7 +63,7 @@ msgstr ""
 
 #: debug.c:106 debug.c:186 debug.c:228 debug.c:488 debug.c:556
 #: rs01-common.c:54 rs02-common.c:62 rs02-compare.c:98 rs02-create.c:266
-#: rs02-create.c:923 rs02-create.c:943 rs02-fix.c:337
+#: rs02-create.c:923 rs02-create.c:943 rs02-fix.c:338
 #, c-format
 msgid "Failed seeking to sector %lld in image: %s"
 msgstr "Ansteuern von Sektor %lld im Abbild fehlgeschlagen: %s"
@@ -149,8 +149,8 @@ msgid "Truncating image to %lld sectors.\n"
 msgstr "Verkürze das Abbild auf %lld Sektoren.\n"
 
 #: debug.c:387 read-linear.c:829 rs01-fix.c:192 rs01-fix.c:213 rs01-fix.c:229
-#: rs01-fix.c:263 rs02-create.c:110 rs02-fix.c:209 rs02-fix.c:230
-#: rs02-fix.c:245
+#: rs01-fix.c:263 rs02-create.c:110 rs02-fix.c:210 rs02-fix.c:231
+#: rs02-fix.c:246
 #, c-format
 msgid "Could not truncate %s: %s\n"
 msgstr "Konnte %s nicht abschneiden: %s\n"
@@ -1258,7 +1258,7 @@ msgstr "Auffüllen des Abbild-Bereichs [%lld..%lld]"
 
 #: read-adaptive.c:834 read-adaptive.c:967 read-adaptive.c:1102
 #: read-linear.c:357 read-linear.c:482 read-linear.c:584 read-linear.c:639
-#: rs01-fix.c:431 rs01-fix.c:689 rs02-fix.c:692
+#: rs01-fix.c:431 rs01-fix.c:689 rs02-fix.c:696
 #, c-format
 msgid "Failed seeking to sector %lld in image [%s]: %s"
 msgstr "Ansteuern von Sektor %lld im Abbild fehlgeschlagen [%s]: %s"
@@ -1292,12 +1292,12 @@ msgstr ""
 "Eine Fortsetzung ist gegebenenfalls nicht mehr möglich.\n"
 "Soll der Fehler nicht beachtet und weiter gelesen werden?"
 
-#: read-adaptive.c:990 rs01-fix.c:38 rs02-fix.c:372
+#: read-adaptive.c:990 rs01-fix.c:38 rs02-fix.c:373
 #, c-format
 msgid "Failed seeking in crc area: %s"
 msgstr "Suchen im CRC-Abschnitt fehlgeschlagen: %s"
 
-#: read-adaptive.c:1006 rs01-fix.c:385 rs02-fix.c:384
+#: read-adaptive.c:1006 rs01-fix.c:385 rs02-fix.c:386
 #, c-format
 msgid "CRC error in sector %lld\n"
 msgstr "Prüfsummen-Fehler in Sektor %lld\n"
@@ -1427,7 +1427,7 @@ msgstr ""
 
 #: read-linear.c:163 rs01-compare.c:427 rs01-compare.c:776 rs01-create.c:635
 #: rs01-fix.c:183 rs01-fix.c:204 rs01-fix.c:249 rs01-fix.c:278 rs01-fix.c:294
-#: rs01-fix.c:343 rs02-create.c:499 rs02-fix.c:201 rs02-fix.c:222
+#: rs01-fix.c:343 rs02-create.c:499 rs02-fix.c:202 rs02-fix.c:223
 msgid "<span color=\"red\">Aborted by user request!</span>"
 msgstr "<span color=\"red\">Abbruch auf Benutzeranforderung!</span>"
 
@@ -1598,7 +1598,7 @@ msgstr "Bereits vorhanden"
 msgid "Speed"
 msgstr "Geschwindigkeit"
 
-#: rs01-common.c:70 rs02-common.c:67 rs02-create.c:150 rs02-fix.c:340
+#: rs01-common.c:70 rs02-common.c:67 rs02-create.c:150 rs02-fix.c:341
 #, c-format
 msgid "Failed reading sector %lld in image: %s"
 msgstr "Lesen von Sektor %lld im Abbild fehlgeschlagen: %s"
@@ -2085,12 +2085,12 @@ msgstr ""
 "Die Fehlerkorrektur-Datei wurde erfolgreich erzeugt.\n"
 "Verwahren Sie die Datei auf einem zuverlässigen Datenträger."
 
-#: rs01-fix.c:43 rs02-compare.c:135 rs02-fix.c:375
+#: rs01-fix.c:43 rs02-compare.c:135 rs02-fix.c:376
 #, c-format
 msgid "problem reading crc data: %s"
 msgstr "Problem beim Lesen der CRC-Daten: %s"
 
-#: rs01-fix.c:133 rs02-fix.c:159
+#: rs01-fix.c:133 rs02-fix.c:160
 msgid "Repairing of image aborted"
 msgstr "Reparatur des Abbildes abgebrochen"
 
@@ -2138,7 +2138,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: rs01-fix.c:175 rs02-fix.c:193
+#: rs01-fix.c:175 rs02-fix.c:194
 #, c-format
 msgid ""
 "Image file is %lld sectors longer than expected.\n"
@@ -2149,16 +2149,16 @@ msgstr ""
 "Es wird ein TAO-Datenträger angenommen.\n"
 "%lld Sektoren werden vom Ende des Abbildes abgeschnitten.\n"
 
-#: rs01-fix.c:199 rs02-fix.c:217
+#: rs01-fix.c:199 rs02-fix.c:218
 msgid "Is it okay to remove the superfluous sectors?"
 msgstr "Dürfen die überflüssigen Sektoren abgeschnitten werden?"
 
-#: rs01-fix.c:215 rs01-fix.c:231 rs02-fix.c:232 rs02-fix.c:247
+#: rs01-fix.c:215 rs01-fix.c:231 rs02-fix.c:233 rs02-fix.c:248
 #, c-format
 msgid "Image has been truncated by %lld sectors.\n"
 msgstr "Die Abbild-Datei wurde um %lld Sektoren verkürzt.\n"
 
-#: rs01-fix.c:222 rs02-fix.c:239
+#: rs01-fix.c:222 rs02-fix.c:240
 msgid ""
 "Add the --truncate option to the program call\n"
 "to have the superfluous sectors removed."
@@ -2222,7 +2222,7 @@ msgstr ""
 "Kann nicht aus der Fehlerkorrektur-Datei lesen:\n"
 "%s"
 
-#: rs01-fix.c:596 rs02-fix.c:567
+#: rs01-fix.c:596 rs02-fix.c:571
 #, c-format
 msgid "Decoder problem (%d != %d) for %d sectors: "
 msgstr "Dekodierungsproblem (%d != %d) für %d Sektoren: "
@@ -2242,12 +2242,12 @@ msgstr "Unerwarteter Byte-Fehler in Sektor %lld, Byte %d\n"
 msgid "Bad error location %d; corrupted .ecc file?\n"
 msgstr "Ungültige Fehlerposition %d; beschädigte .ecc-Datei?\n"
 
-#: rs01-fix.c:678 rs02-fix.c:659
+#: rs01-fix.c:678 rs02-fix.c:663
 #, c-format
 msgid "  %3d repaired sectors: "
 msgstr "  %3d reparierte Sektoren: "
 
-#: rs01-fix.c:697 rs02-fix.c:700
+#: rs01-fix.c:697 rs02-fix.c:704
 #, c-format
 msgid ""
 "could not write medium sector %lld:\n"
@@ -2256,12 +2256,12 @@ msgstr ""
 "Konnte Abbild-Sektor %lld nicht schreiben:\n"
 "%s"
 
-#: rs01-fix.c:723 rs02-fix.c:737
+#: rs01-fix.c:723 rs02-fix.c:743
 #, c-format
 msgid "Ecc progress: %3d.%1d%%"
 msgstr "Reparatur-Fortschritt: %3d.%1d%%"
 
-#: rs01-fix.c:735 rs02-fix.c:751
+#: rs01-fix.c:735 rs02-fix.c:757
 #, c-format
 msgid "Ecc progress: 100.0%%\n"
 msgstr "Reparatur-Fortschritt: 100.0%%\n"
@@ -2271,30 +2271,30 @@ msgstr "Reparatur-Fortschritt: 100.0%%\n"
 msgid "Repaired sectors: %lld     \n"
 msgstr "Reparierte Sektoren: %lld    \n"
 
-#: rs01-fix.c:738 rs02-fix.c:756
+#: rs01-fix.c:738 rs02-fix.c:762
 #, c-format
 msgid "Unrepaired sectors: %lld\n"
 msgstr "Nicht reparierbare Sektoren: %lld\n"
 
-#: rs01-fix.c:741 rs02-fix.c:760
+#: rs01-fix.c:741 rs02-fix.c:766
 #, c-format
 msgid "Image sectors could not be fully restored (%lld repaired; <span color=\"red\">%lld unrepaired</span>)"
 msgstr "Keine vollständige Reparatur möglich (%lld Sektoren repariert; <span color=\"red\">%lld nicht reparierbar</span>)"
 
-#: rs01-fix.c:747 rs02-fix.c:767
+#: rs01-fix.c:747 rs02-fix.c:773
 msgid "Good! All sectors are already present."
 msgstr "Gut! Alle Sektoren sind bereits vorhanden."
 
-#: rs01-fix.c:751 rs02-fix.c:771
+#: rs01-fix.c:751 rs02-fix.c:777
 msgid "Good! All sectors are repaired."
 msgstr "Gut! Alle Sektoren wurden repariert."
 
-#: rs01-fix.c:756 rs02-fix.c:776
+#: rs01-fix.c:756 rs02-fix.c:782
 #, c-format
 msgid "Erasure counts per ecc block:  avg =  %.1f; worst = %d.\n"
 msgstr "Auslöschungen pro Ecc-Bereich: Mittelwert = %.1f; Schlechtester = %d.\n"
 
-#: rs01-fix.c:761 rs02-fix.c:782
+#: rs01-fix.c:761 rs02-fix.c:788
 msgid "Repair results:"
 msgstr "Reparaturergebnis:"
 
@@ -2535,7 +2535,7 @@ msgstr ""
 "Das Abbild wurde um Fehlerkorrektur-Informationen erweitert.\n"
 "Die neue Abbild-Größe ist %lld Sektoren.\n"
 
-#: rs02-fix.c:186
+#: rs02-fix.c:187
 #, c-format
 msgid ""
 "The image file is %lld sectors longer as noted in the\n"
@@ -2553,22 +2553,22 @@ msgstr ""
 "\n"
 "%s"
 
-#: rs02-fix.c:412
+#: rs02-fix.c:414
 #, c-format
 msgid "* Ecc block %lld: %3d unrepairable sectors: "
 msgstr "* Ecc-Bereich %lld: %3d unreparierbare Sektoren: "
 
-#: rs02-fix.c:628
+#: rs02-fix.c:632
 #, c-format
 msgid "-> CRC-predicted error in sector %lld at byte %4d (value %02x '%c', expected %02x '%c')\n"
 msgstr "-> CRC-erkannter Fehler in Sektor %lld, Bytepos. %4d (Wert %02x '%c', erwartet %02x '%c')\n"
 
-#: rs02-fix.c:631
+#: rs02-fix.c:635
 #, c-format
 msgid "-> Non-predicted error in sector %lld at byte %4d (value %02x '%c', expected %02x '%c')\n"
 msgstr "-> Nicht erwarteter Fehler in Sektor %lld, Bytepos. %4d (Wert %02x '%c', erwartet %02x '%c')\n"
 
-#: rs02-fix.c:753
+#: rs02-fix.c:759
 #, c-format
 msgid "Repaired sectors: %lld (%lld data, %lld ecc)\n"
 msgstr "Reparierte Sektoren: %lld (%lld Daten, %lld Fehlerkorrektur)\n"
@@ -3107,7 +3107,7 @@ msgstr "Auswählen"
 msgid "Documentation not installed."
 msgstr "Handbuch wurde nicht installiert."
 
-#: show-manual.c:336
+#: show-manual.c:343
 #, c-format
 msgid ""
 "Documentation file\n"
@@ -3118,7 +3118,7 @@ msgstr ""
 "%s\n"
 "nicht gefunden.\n"
 
-#: show-manual.c:350
+#: show-manual.c:352
 msgid "Please hang on until the browser comes up!"
 msgstr "Bitte warten Sie bis der HTML-Betrachter erscheint!"
 
