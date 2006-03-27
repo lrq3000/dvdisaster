@@ -3497,7 +3497,9 @@ function imprint0en()
    <a href="http://www.dvdisaster.com">www.dvdisaster.com</a>, &nbsp;
    <a href="http://www.dvdisaster.de">www.dvdisaster.de</a>, &nbsp;
    <a href="http://www.dvdisaster.org">www.dvdisaster.org</a><br>
-   and under the subdomain <a href="http://dvdisaster.berlios.de">dvdisaster.berlios.de</a>.
+   and under the subdomains
+   <a href="http://dvdisaster.berlios.de">dvdisaster.berlios.de</a> and
+   <a href="http://dvdisaster.sourceforge.net">dvdisaster.sourceforge.net</a>.
 
 EOF
 }

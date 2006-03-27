@@ -105,7 +105,7 @@ static image *load_png(char *name)
    struct stat mystat;
    image *pi; 
    png_byte *pb;
-   char buf[256];
+   unsigned char buf[256];
    unsigned int depth,size,i;
    png_color_16p background;
       

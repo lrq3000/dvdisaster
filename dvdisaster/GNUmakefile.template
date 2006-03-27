@@ -223,17 +223,17 @@ install: dvdisaster html images
 	    install -m 644 $$i/LC_MESSAGES/dvdisaster.mo $(BUILDROOT)$(LOCALEDIR)/$$i/LC_MESSAGES; \
 	  done \
 	fi
-	@echo "# dvdisaster uninstaller script" > $(BINDIR)/dvdisaster-uninstall.sh
-	@echo "# Usage: sh dvdisaster-uninstall.sh" >> $(BINDIR)/dvdisaster-uninstall.sh
-	@echo >> $(BINDIR)/dvdisaster-uninstall.sh
-	@echo "rm -f $(BINDIR)/dvdisaster $(BINDIR)/dvdisaster.exe $(BINDIR)/dvdisaster-win.exe $(BINDIR)/dvdisaster-uninstall.sh" >> $(BINDIR)/dvdisaster-uninstall.sh
-	@echo "rm -rf $(DOCSUBDIR)" >> $(BINDIR)/dvdisaster-uninstall.sh
-	@echo "rm -f $(MANDIR)/man1/dvdisaster.1" >> $(BINDIR)/dvdisaster-uninstall.sh
+	@echo "# dvdisaster uninstaller script" > $(BUILDROOT)$(BINDIR)/dvdisaster-uninstall.sh
+	@echo "# Usage: sh dvdisaster-uninstall.sh" >> $(BUILDROOT)$(BINDIR)/dvdisaster-uninstall.sh
+	@echo >> $(BUILDROOT)$(BINDIR)/dvdisaster-uninstall.sh
+	@echo "rm -f $(BINDIR)/dvdisaster $(BINDIR)/dvdisaster.exe $(BINDIR)/dvdisaster-win.exe $(BINDIR)/dvdisaster-uninstall.sh" >> $(BUILDROOT)$(BINDIR)/dvdisaster-uninstall.sh
+	@echo "rm -rf $(DOCSUBDIR)" >> $(BUILDROOT)$(BINDIR)/dvdisaster-uninstall.sh
+	@echo "rm -f $(MANDIR)/man1/dvdisaster.1" >> $(BUILDROOT)$(BINDIR)/dvdisaster-uninstall.sh
 	@for i in cs de it; do \
-	  echo "rm $(LOCALEDIR)/$$i/LC_MESSAGES/dvdisaster.mo" >> $(BINDIR)/dvdisaster-uninstall.sh ; \
-	  echo "rm $(MANDIR)/$$i/man1/dvdisaster.1" >> $(BINDIR)/dvdisaster-uninstall.sh ; \
+	  echo "rm $(LOCALEDIR)/$$i/LC_MESSAGES/dvdisaster.mo" >> $(BUILDROOT)$(BINDIR)/dvdisaster-uninstall.sh ; \
+	  echo "rm $(MANDIR)/$$i/man1/dvdisaster.1" >> $(BUILDROOT)$(BINDIR)/dvdisaster-uninstall.sh ; \
 	done
-	@echo "echo \"dvdisaster has been uninstalled.\"" >> $(BINDIR)/dvdisaster-uninstall.sh
+	@echo "echo \"dvdisaster has been uninstalled.\"" >> $(BUILDROOT)$(BINDIR)/dvdisaster-uninstall.sh
 	
 uninstall:
 	@echo "Uninstalling package..."
