@@ -14,7 +14,13 @@ dvdisaster24.png
 dvdisaster32.png
 dvdisaster48.png
 dvdisaster64.png
-	The dvdisaster desktop icon in several common sizes.
+dvdisaster16.xpm
+dvdisaster24.xpm
+dvdisaster32.xpm
+dvdisaster48.xpm
+dvdisaster64.xpm
+	The dvdisaster desktop icon in several common sizes
+	and formats.
 
 dvdisaster.desktop
 	meant to be a starting point for Gnome or KDE desktop integration.
