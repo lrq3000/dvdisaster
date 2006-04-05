@@ -438,6 +438,7 @@ static void scale_cb(GtkWidget *widget, gpointer data)
    {  case PREF_CACHE:
 	value = gtk_range_get_value(GTK_RANGE(widget));
         Closure->cacheMB = cache_size[value];
+	UpdateMethodPreferences();
 	break;
       case PREF_NROOTS:
 	value = gtk_range_get_value(GTK_RANGE(widget));
@@ -496,6 +497,16 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
    }
 }
 
+void ResetRS01PrefsPage(Method *method)
+{  RS01Widgets *wl = (RS01Widgets*)method->widgetList;
+   int index;
+
+   for(index = 0; index < sizeof(cache_size)/sizeof(int); index++)
+     if(cache_size[index] > Closure->cacheMB)
+       break;
+
+   gtk_range_set_value(GTK_RANGE(wl->cacheScale), index > 0 ? index-1 : index);
+}
 
 void CreateRS01PrefsPage(Method *method, GtkWidget *parent)
 {  RS01Widgets *wl = (RS01Widgets*)method->widgetList;
@@ -508,7 +519,7 @@ void CreateRS01PrefsPage(Method *method, GtkWidget *parent)
    frame = gtk_frame_new(_utf("Redundancy for new error correction files"));
    gtk_box_pack_start(GTK_BOX(parent), frame, FALSE, FALSE, 0);
 
-   vbox = gtk_vbox_new(FALSE, 20);
+   vbox = gtk_vbox_new(FALSE, 10);
    gtk_container_set_border_width(GTK_CONTAINER(vbox), 10);
    gtk_container_add(GTK_CONTAINER(frame), vbox);
 
@@ -600,7 +611,7 @@ void CreateRS01PrefsPage(Method *method, GtkWidget *parent)
      if(cache_size[index] > Closure->cacheMB)
        break;
 
-   scale = gtk_hscale_new_with_range(0,16,1);
+   scale = wl->cacheScale = gtk_hscale_new_with_range(0,16,1);
    gtk_scale_set_value_pos(GTK_SCALE(scale), GTK_POS_RIGHT);
    gtk_range_set_increments(GTK_RANGE(scale), 1, 1);
    gtk_range_set_value(GTK_RANGE(scale), index > 0 ? index-1 : index);

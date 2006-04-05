@@ -38,7 +38,8 @@ void register_rs01(void)
    /*** Standard infomation and methods */ 
 
    strncpy(method->name, "RS01", 4);
-   method->description = _("Classic Reed-Solomon method based on polynomial arithmetic"); 
+   method->menuEntry = g_strdup(_("Error correction file (RS01)"));
+   method->description = g_strdup(_("Classic Reed-Solomon method based on polynomial arithmetic"));
    method->create  = RS01Create;
    method->fix     = RS01Fix;
    method->compare = RS01Compare;
@@ -52,6 +53,7 @@ void register_rs01(void)
    method->resetFixWindow    = ResetRS01FixWindow;
 
    method->createPrefsPage   = CreateRS01PrefsPage;
+   method->resetPrefsPage    = ResetRS01PrefsPage;
 
    /*** Linkage to rs01-compare.c */
 

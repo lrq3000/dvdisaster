@@ -49,6 +49,9 @@ typedef struct
    GtkWidget *jumpScale;
    GtkWidget *byteEntry, *byteCheck;
    GtkWidget *readAndCreateButton;
+   GtkWidget *mainNotebook;
+   GtkWidget *methodChooser;
+   GtkWidget *methodNotebook;
 
    non_linear_info *jumpScaleInfo;
 } prefs_context;
@@ -75,6 +78,10 @@ static gboolean delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
 
 void HidePreferences(void)
 {  prefs_context *pc = (prefs_context*)Closure->prefsContext;
+   Method *method;
+   int method_index;
+
+   /* Get reading range values */
 
    if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pc->rangeToggle)))   
    {     
@@ -82,6 +89,8 @@ void HidePreferences(void)
       Closure->readEnd   = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(pc->rangeSpin2));
    }
    else Closure->readStart = Closure->readEnd = 0;
+
+   /* Get fill byte and recalculate the dead sector marker */
 
    if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pc->byteCheck)))   
    {  const char *value = gtk_entry_get_text(GTK_ENTRY(pc->byteEntry));
@@ -95,6 +104,16 @@ void HidePreferences(void)
 	Closure->fillUnreadable = 255;
    }
    PrepareDeadSector();
+
+   /* Ask currently selected method to update its settings
+      from the preferences */
+
+   method_index = gtk_notebook_get_current_page(GTK_NOTEBOOK(pc->methodNotebook));
+   method = g_ptr_array_index(Closure->methodList, method_index);
+   if(method->readPreferences)
+     method->readPreferences(method);
+
+   /* hide preferences and finish */
 
    gtk_widget_hide(GTK_WIDGET(Closure->prefsWindow));
 }
@@ -377,16 +396,79 @@ static void bytefill_check_cb(GtkWidget *widget, gpointer data)
 }
 
 /***
+ *** Error correction method selection
+ ***/
+
+static void method_select_cb(GtkWidget *widget, gpointer data)
+{  Method *method;
+   prefs_context *pc = (prefs_context*)data;
+   int n;
+
+#if GTK_MINOR_VERSION >= 4
+   n = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+#else
+   n = gtk_option_menu_get_history(GTK_OPTION_MENU(widget));
+#endif
+
+   if(n<0 || !pc->methodNotebook)
+     return;
+
+   method = g_ptr_array_index(Closure->methodList, n);
+
+   /* Switch methods if selection changed */
+
+   if(strncmp(Closure->methodName, method->name, 4))
+   {  strncpy(Closure->methodName, method->name, 4);
+      gtk_notebook_set_current_page(GTK_NOTEBOOK(pc->methodNotebook), n);
+   }
+}
+
+/*
+ * Setting the notebook page does not work at creation time.
+ */
+
+static gboolean notebook_idle_func(gpointer data)
+{  prefs_context *pc = (prefs_context*)data;
+   int n;
+
+#if GTK_MINOR_VERSION >= 4
+   n = gtk_combo_box_get_active(GTK_COMBO_BOX(pc->methodChooser));
+#else
+   n = gtk_option_menu_get_history(GTK_OPTION_MENU(pc->methodChooser));
+#endif
+
+   if(n>=0)
+     gtk_notebook_set_current_page(GTK_NOTEBOOK(pc->methodNotebook), n);
+
+   gtk_notebook_set_current_page(GTK_NOTEBOOK(pc->mainNotebook), 0);
+
+   return FALSE;
+}
+
+/***
  *** Assemble and open the preferences window.
  ***/
+
+void UpdateMethodPreferences(void)
+{  int i;
+   
+   for(i=0; i<Closure->methodList->len; i++)
+   {  Method *method = g_ptr_array_index(Closure->methodList, i);
+
+      method->resetPrefsPage(method);
+   }
+}
 
 void CreatePreferencesWindow(void)
 {  
    if(!Closure->prefsWindow)  /* No window to reuse? */
    {  GtkWidget *window, *outer_box, *hbox, *vbox, *vbox2, *notebook, *space, *button, *scale, *frame;
       GtkWidget *lab, *spin, *radio1, *radio2, *check, *entry;
+#if GTK_MINOR_VERSION < 4
+      GtkWidget *option_menu_strip;
+#endif
       prefs_context *pc = g_malloc0(sizeof(prefs_context));
-      Method *method;
+      int i, method_idx = 0;
  
       Closure->prefsContext = pc;
  
@@ -407,7 +489,7 @@ void CreatePreferencesWindow(void)
       outer_box = gtk_vbox_new(FALSE, 0);
       gtk_container_add(GTK_CONTAINER(window), outer_box);
 
-      notebook = gtk_notebook_new();
+      notebook = pc->mainNotebook = gtk_notebook_new();
       gtk_box_pack_start(GTK_BOX(outer_box), notebook, TRUE, TRUE, 0);
 
       space = gtk_image_new();
@@ -629,12 +711,81 @@ void CreatePreferencesWindow(void)
 
       /*** "Error correction" page */
 
+      /* Method chooser menu */
+
       vbox = create_page(notebook, _utf("Error correction"));
 
-      method = FindMethod(Closure->methodName); 
-      if(method) method->createPrefsPage(method, vbox);
+      hbox = gtk_hbox_new(FALSE, 4);
+      lab = gtk_label_new(_utf("Storage method:")); 
+      gtk_box_pack_start(GTK_BOX(hbox), lab, FALSE, FALSE, 0);
+      gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 
-      gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 1);
+#if GTK_MINOR_VERSION >= 4
+      pc->methodChooser = gtk_combo_box_new_text();
+
+      g_signal_connect(G_OBJECT(pc->methodChooser), "changed", G_CALLBACK(method_select_cb), pc);
+
+      for(i=0; i<Closure->methodList->len; i++)
+      {  Method *method = g_ptr_array_index(Closure->methodList, i);
+
+	 gtk_combo_box_append_text(GTK_COMBO_BOX(pc->methodChooser), method->menuEntry); 
+
+	 if(!strncmp(Closure->methodName, method->name, 4))
+	   method_idx = i;
+      }
+
+
+      gtk_combo_box_set_active(GTK_COMBO_BOX(pc->methodChooser), method_idx);
+      gtk_box_pack_start(GTK_BOX(hbox), pc->methodChooser, FALSE, FALSE, 0);
+#else
+      pc->methodChooser = gtk_option_menu_new();
+
+      g_signal_connect(G_OBJECT(pc->methodChooser), "changed", G_CALLBACK(method_select_cb), pc);
+      option_menu_strip = gtk_menu_new(); 
+
+      for(i=0; i<Closure->methodList->len; i++)
+      {  Method *method = g_ptr_array_index(Closure->methodList, i);
+	 GtkWidget *item;
+
+	 item = gtk_menu_item_new_with_label(method->menuEntry);
+	 gtk_menu_shell_append(GTK_MENU_SHELL(option_menu_strip), item);
+
+	 if(!strncmp(Closure->methodName, method->name, 4))
+	   method_idx = i;
+      }
+
+      gtk_option_menu_set_menu(GTK_OPTION_MENU(pc->methodChooser), option_menu_strip);
+      gtk_option_menu_set_history(GTK_OPTION_MENU(pc->methodChooser), method_idx);
+      gtk_box_pack_start(GTK_BOX(hbox), pc->methodChooser, FALSE, FALSE, 0);
+#endif
+
+      /* sub pages for individual method configuration */
+      
+      pc->methodNotebook = gtk_notebook_new();
+      gtk_notebook_set_show_tabs(GTK_NOTEBOOK(pc->methodNotebook), FALSE);
+      gtk_notebook_set_show_border(GTK_NOTEBOOK(pc->methodNotebook), FALSE);
+      gtk_box_pack_start(GTK_BOX(vbox), pc->methodNotebook, TRUE, TRUE, 0);
+
+      for(i=0; i<Closure->methodList->len; i++)
+      {  Method *method = g_ptr_array_index(Closure->methodList, i);
+	 GtkWidget *vbox2 = gtk_vbox_new(FALSE, 0);
+	 GtkWidget *ignore = gtk_label_new("method_tab");
+
+	 if(method->createPrefsPage)
+	    method->createPrefsPage(method, vbox2);
+	 else
+	 {  GtkWidget *lab;
+
+	    lab = gtk_label_new("This method has no configuration options.");
+	    gtk_box_pack_start(GTK_BOX(vbox2), lab, TRUE, TRUE, 0);
+	 }
+
+	 gtk_notebook_append_page(GTK_NOTEBOOK(pc->methodNotebook), vbox2, ignore);
+	 if(i==method_idx)
+      gtk_notebook_set_current_page(GTK_NOTEBOOK(pc->methodNotebook), method_idx);
+      }
+
+      g_idle_add(notebook_idle_func, pc);
    }
 
    /* Show the created / reused window */

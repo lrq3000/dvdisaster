@@ -106,11 +106,6 @@ gint64 RS02EccSectorIndex(RS02Layout *lay, gint64 slice, gint64 n)
  *** Calculation of the image layout
  ***/
 
-#define CDR_SIZE (351*1024)
-#define DVD_SL 	 2295104  /* DVD+R/RW size used at least common denominator */
-#define DVD_DASH 2294922  /* DVD-R/RW, 2,298,496 seems to be more common */
-#define DVD_DL 	 4171712  /* also seen: 4148992 4173824  */
-
 RS02Layout *CalcRS02Layout(gint64 data_sectors, int requested_roots)
 {  RS02Layout *lay = g_malloc0(sizeof(RS02Layout));
    guint64 medium_capacity;
@@ -122,11 +117,11 @@ RS02Layout *CalcRS02Layout(gint64 data_sectors, int requested_roots)
    if(Closure->mediumSize)
      medium_capacity = Closure->mediumSize;
    else
-   {  if(data_sectors < CDR_SIZE)
-            medium_capacity = CDR_SIZE; /* 80min CDR */
-      else if(data_sectors < DVD_SL)
-            medium_capacity = DVD_SL;   /* Single layered DVD */
-      else  medium_capacity = DVD_DL;   /* Double layered DVD */
+   {  if(data_sectors < Closure->cdSize)
+            medium_capacity = Closure->cdSize;   /* CDR */
+      else if(data_sectors < Closure->dvdSize1)
+            medium_capacity = Closure->dvdSize1; /* Single layered DVD */
+      else  medium_capacity = Closure->dvdSize2; /* Double layered DVD */
    }
 
    lay->dataSectors      = data_sectors;

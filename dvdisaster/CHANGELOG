@@ -1,3 +1,8 @@
+0.67 (devel-1) 02-04-2006
+	- added preferences settings for RS02
+	- linked RS02 image creation with graphical user interface
+	- suppressed error message when adjusting reading range without medium in drive
+
 0.66 (pl-2) 28-03-2006
 	- added .xpm icons in contrib
 

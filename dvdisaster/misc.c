@@ -406,7 +406,8 @@ static void vlog_warning(char *format, va_list argp)
       UpdateLog();
    }
    else
-   {  g_fprintf(stderr, "%s", str->str);
+   {  print_greetings(stderr);
+      g_fprintf(stderr, "%s", str->str);
       fflush(stderr);   /* at least needed for Windows */
    }
 

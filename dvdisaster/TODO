@@ -12,6 +12,7 @@ TODO  (with no particular order / schedule)
 
 - let user select the number of reading passes so that a defective
   medium can be read in several passed overnight
+  a user-specified pause between passes should also be included
 
 - provide a function for searching directories for suitable .ecc files 
   for the current image

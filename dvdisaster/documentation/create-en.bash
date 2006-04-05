@@ -871,7 +871,7 @@ dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
 
 Opening /dvd/image.iso: 284234 medium sectors.<p>
 
-Appending image with Method RS02: 555M data, 143M ecc (52 roots; 25.6% redundancy)<br>
+Augmenting image with Method RS02: 555M data, 143M ecc (52 roots; 25.6% redundancy)<br>
 Calculating sector checksums: 100%<br>
 Expanding image: 100%<br>
 Ecc generation: 100.0%<br>

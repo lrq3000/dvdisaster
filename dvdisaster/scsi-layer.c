@@ -28,7 +28,7 @@
  *** Forward declarations
  ***/
 
-static int query_type(DeviceHandle*);
+static int query_type(DeviceHandle*, int);
 static unsigned int query_size(DeviceHandle*);
 static int query_copyright(DeviceHandle*);
 
@@ -134,7 +134,7 @@ int InquireDevice(DeviceHandle *dh, int probe_only)
  * Find out what type of disc has been inserted.
  */
 
-static int query_type(DeviceHandle *dh)
+static int query_type(DeviceHandle *dh, int probe_only)
 {  static char sbuf[32];
    Sense sense;
    unsigned char cmd[MAX_CDB_SIZE];
@@ -271,8 +271,9 @@ assume_cd:
    cmd[8] = 2;
 
    if(SendPacket(dh, cmd, 10, buf, 2, &sense, DATA_READ)<0)
-   {  Stop(_("%s\nCould not query TOC length.\n"),
-	   GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
+   {  if(!probe_only)
+        Stop(_("%s\nCould not query TOC length.\n"),
+	     GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
       return FALSE;
    }
 
@@ -708,16 +709,103 @@ gint64 CurrentImageSize()
 
    dh = OpenDevice(Closure->device);
    if(!dh) return 0;
-   if(InquireDevice(dh, 0) != 0x05) 
-     return 0;
+   if(InquireDevice(dh, 1) != 0x05) 
+   {  CloseDevice(dh);
+      return 0;
+   }
 
-   if(!query_type(dh))
-     return 0;
+   if(!query_type(dh, 1))
+   {  CloseDevice(dh);
+      return 0;
+   }
 
    size = query_size(dh);
    CloseDevice(dh);
 
    return size;
+}
+
+/*
+ * Return capacity of current medium (if any)
+ */
+
+gint64 CurrentImageCapacity()
+{  DeviceHandle *dh = NULL;
+   Sense sense;
+   unsigned char cmd[MAX_CDB_SIZE];
+   unsigned char *buf = Closure->scratchBuf; 
+   gint64 cmc_size;
+   int i,idx, n_lists;
+
+#ifdef SYS_UNKNOWN
+   return 0;
+#endif
+
+   dh = OpenDevice(Closure->device);
+   if(!dh) return 0;
+   if(InquireDevice(dh, 1) != 0x05) 
+   {  CloseDevice(dh);
+      return 0;
+   }
+
+   /* Get size by doing READ CAPACITY */
+
+   memset(cmd, 0, MAX_CDB_SIZE);
+   cmd[0] = 0x23;  /* READ FORMAT CAPACITIES */
+   cmd[7] = 1;     /* 256 bytes of buffer (32*8 lists maximum) */
+
+   if(SendPacket(dh, cmd, 10, buf, 256, &sense, DATA_READ)<0)
+      return 0;
+
+//   printf("Cap list length %d\n", buf[3]);
+
+   CloseDevice(dh);
+
+   /* Current/Maximum capacacity descriptor */
+
+   cmc_size = (gint64)(buf[4]<<24 | buf[5]<<16 | buf[6]<<8 | buf[7]);
+
+   n_lists = buf[3] / 8;
+   n_lists--;
+
+   if(!n_lists) return cmc_size;
+
+#if 0
+   printf("CMC descriptor: %lld blocks\n", cmc_size);
+
+   switch(buf[8] & 3)
+   {  case 1: /* unformatted */
+        printf("unformatted\n");
+        break;
+      case 2: /* formatted */
+        printf("formatted\n");
+        break;
+      case 3: /* no medium */
+        printf("%d no medium\n", buf[8]);
+        break;
+      default: /* b0rked */
+        printf("b0rked\n");
+        break;
+   }
+#endif
+
+   /* Now go through all capacity lists */
+
+   for(i=0, idx=12; i<n_lists; i++, idx+=8)
+   {  //printf("Cap list %d - type %d\n", i, buf[idx+4]>>2);
+      //size = (gint64)(buf[idx]<<24 | buf[idx+1]<<16 | buf[idx+2]<<8 | buf[idx+3]);
+      //printf(".. size %lld\n", size);
+
+      switch(buf[idx+4]>>2)  /* format type */
+      {  case 0x00:
+         case 0x10:  /* blank CD-RW capacity */
+         case 0x26:  /* blank DVD+RW capacity */
+	     return (gint64)(buf[idx]<<24 | buf[idx+1]<<16 | buf[idx+2]<<8 | buf[idx+3]);
+	     break;
+      }
+   }
+   
+   return 0;
 }
 
 /*
@@ -938,7 +1026,7 @@ DeviceHandle* OpenAndQueryDevice(char *device)
 		  device, dh->aspiUsed ? "ASPI" : "SPTI", dh->devinfo);
 #endif
 
-   query_type(dh);
+   query_type(dh, 0);
 
    if(Closure->parseUDF)
      ExamineUDF(dh);

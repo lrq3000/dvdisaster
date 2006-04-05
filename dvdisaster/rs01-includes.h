@@ -82,6 +82,7 @@ typedef struct
    GtkWidget *radio4Label;
    GtkWidget *redundancyScale;
    GtkWidget *redundancySpin;
+   GtkWidget *cacheScale;
 
    /*** Some state vars used during fixing */
 
@@ -102,6 +103,7 @@ void CreateRS01FWindow(Method*, GtkWidget*);
 void CreateRS01PrefsPage(Method*, GtkWidget*);
 void ResetRS01EncodeWindow(Method*);
 void ResetRS01FixWindow(Method*);
+void ResetRS01PrefsPage(Method*);
 
 void RS01ShowCurveButton(Method*);
 

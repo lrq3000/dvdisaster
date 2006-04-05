@@ -44,7 +44,8 @@ void register_rs02(void)
    /*** Standard infomation and methods */ 
 
    strncpy(method->name, "RS02", 4);
-   method->description = _("Reed-Solomon method with improved tolerance for defective ecc data"); 
+   method->menuEntry = g_strdup(_("Augmented image (RS02)"));
+   method->description = g_strdup(_("Reed-Solomon method with improved tolerance for defective ecc data"));
    method->create  = RS02Create;
    method->fix     = RS02Fix;
    method->compare = RS02Compare;
@@ -57,7 +58,9 @@ void register_rs02(void)
    method->resetCreateWindow = ResetRS02EncWindow;
    method->resetFixWindow    = ResetRS02FixWindow;
 
-   method->createPrefsPage   = NULL;
+   method->createPrefsPage   = CreateRS02PrefsPage;
+   method->resetPrefsPage    = ResetRS02PrefsPage;
+   method->readPreferences   = ReadRS02Preferences;
 
    /*** Linkage to rs01-compare.c */
 

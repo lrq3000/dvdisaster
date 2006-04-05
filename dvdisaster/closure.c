@@ -203,12 +203,18 @@ void ReadDotfile()
       if(!strcmp(symbol, "adaptive-read"))   { Closure->adaptiveRead   = atoi(value); continue; }
       if(!strcmp(symbol, "auto-suffix"))     { Closure->autoSuffix  = atoi(value); continue; }
       if(!strcmp(symbol, "cache-size"))      { Closure->cacheMB     = atoi(value); continue; }
+      if(!strcmp(symbol, "cd-size"))         { Closure->cdSize = Closure->savedCDSize = atoll(value); continue; }
       if(!strcmp(symbol, "dao"))             { Closure->noTruncate  = atoi(value); continue; }
+      if(!strcmp(symbol, "dvd-size1"))       { Closure->dvdSize1 = Closure->savedDVDSize1 = atoll(value); continue; }
+      if(!strcmp(symbol, "dvd-size2"))       { Closure->dvdSize2 = Closure->savedDVDSize2 = atoll(value); continue; }
       if(!strcmp(symbol, "fill-unreadable")) { Closure->fillUnreadable = atoi(value); 
 	                                       PrepareDeadSector();
 	                                       continue; 
                                              }
       if(!strcmp(symbol, "jump"))            { Closure->sectorSkip  = atoi(value); continue; }
+      if(!strcmp(symbol, "medium-size"))     { Closure->mediumSize  = atoll(value); continue; }
+      if(!strcmp(symbol, "method-name"))     { if(Closure->methodName) g_free(Closure->methodName);
+	                                       Closure->methodName = g_strdup(value); continue; }
       if(!strcmp(symbol, "parse-ecc"))       { Closure->parseEcc  = atoi(value); continue; }
       if(!strcmp(symbol, "parse-udf"))       { Closure->parseUDF  = atoi(value); continue; }
       if(!strcmp(symbol, "read-and-create")) { Closure->readAndCreate = atoi(value); continue; }
@@ -259,9 +265,14 @@ static void update_dotfile()
    g_fprintf(dotfile, "adaptive-read:   %d\n", Closure->adaptiveRead);
    g_fprintf(dotfile, "auto-suffix:     %d\n", Closure->autoSuffix);
    g_fprintf(dotfile, "cache-size:      %d\n", Closure->cacheMB);
+   g_fprintf(dotfile, "cd-size:         %lld\n", Closure->cdSize);
    g_fprintf(dotfile, "dao:             %d\n", Closure->noTruncate);
+   g_fprintf(dotfile, "dvd-size1:       %lld\n", Closure->dvdSize1);
+   g_fprintf(dotfile, "dvd-size2:       %lld\n", Closure->dvdSize2);
    g_fprintf(dotfile, "fill-unreadable: %d\n", Closure->fillUnreadable);
    g_fprintf(dotfile, "jump:            %d\n", Closure->sectorSkip);
+   g_fprintf(dotfile, "medium-size:     %lld\n", Closure->mediumSize);
+   g_fprintf(dotfile, "method-name:     %s\n", Closure->methodName);
    g_fprintf(dotfile, "parse-ecc:       %d\n", Closure->parseEcc);
    g_fprintf(dotfile, "parse-udf:       %d\n", Closure->parseUDF);
    g_fprintf(dotfile, "read-and-create: %d\n", Closure->readAndCreate);
@@ -342,6 +353,12 @@ void InitClosure()
    Closure->sectorSkip  = 16;
    Closure->spinupDelay = 5;
    Closure->fillUnreadable = -1;
+
+   /* default sizes for typical CD and DVD media */
+
+   Closure->cdSize   = Closure->savedCDSize   = CDR_SIZE;
+   Closure->dvdSize1 = Closure->savedDVDSize1 = DVD_SL_SIZE;
+   Closure->dvdSize2 = Closure->savedDVDSize2 = DVD_DL_SIZE;
 
    /*** Align the buffer at a 4096 boundary.
 	Might be needed by some SCSI drivers. */

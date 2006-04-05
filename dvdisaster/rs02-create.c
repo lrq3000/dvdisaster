@@ -73,11 +73,6 @@ static void ecc_cleanup(gpointer data)
      if(ec->slice[i])
        g_free(ec->slice[i]);
 
-   if(Closure->enableCurveSwitch)
-   {  Closure->enableCurveSwitch = FALSE;
-     //      RS01ShowCurveButton(ec->self);
-   }
-
    g_free(ec);
 
    g_thread_exit(0);
@@ -86,6 +81,30 @@ static void ecc_cleanup(gpointer data)
 /***
  *** Some sub tasks to be done during encoding
  ***/
+
+/*
+ * Abort encoding
+ */
+
+static void abort_encoding(ecc_closure *ec, int truncate)
+{  RS02Widgets *wl = ec->wl;
+
+   if(truncate && ec->lay)
+   {  if(!LargeTruncate(ec->ii->file, (gint64)(2048*ec->lay->dataSectors)))
+	Stop(_("Could not truncate %s: %s\n"),Closure->imageName,strerror(errno));
+
+      SetLabelText(GTK_LABEL(wl->encFootline), 
+		   _("<span color=\"red\">Aborted by user request!</span> (partial ecc data removed from image)")); 
+   }
+   else
+   {  SetLabelText(GTK_LABEL(wl->encFootline), 
+		   _("<span color=\"red\">Aborted by user request!</span>")); 
+   }
+
+   ec->earlyTermination = FALSE;   /* suppress respective error message */
+
+   ecc_cleanup((gpointer)ec);
+}
 
 
 /*
@@ -100,10 +119,17 @@ static void remove_old_ecc(ecc_closure *ec)
    if(old_eh)
    {  gint64 data_sectors = uchar_to_gint64(old_eh->sectors);
       LargeFile *tmp;
+      int answer;
 
-      PrintLog(_("* Image \"%s\" already contains error correction information.\n"
-		 "* Truncating image to data part (%lld sectors).\n"),
-	       Closure->imageName, data_sectors);
+      g_free(old_eh);
+
+      answer = ModalWarning(GTK_MESSAGE_WARNING, GTK_BUTTONS_OK_CANCEL, NULL,
+			    _("Image \"%s\" already contains error correction information.\n"
+			      "Truncating image to data part (%lld sectors).\n"),
+			    Closure->imageName, data_sectors);
+
+      if(!answer)
+	abort_encoding(ec, FALSE);
 
       tmp = LargeOpen(Closure->imageName, O_RDWR, IMG_PERMS);
       if(!tmp || !LargeTruncate(tmp, (gint64)(2048*data_sectors)))
@@ -122,57 +148,58 @@ static void check_image(ecc_closure *ec)
    RS02Layout *lay = ec->lay;
    ImageInfo *ii = ec->ii;
    gint64 sectors;
+   guint32 *crcptr;
    int last_percent, percent;
 
-   if(!Closure->crcCache)
-   {  guint32 *crcptr;
+   if(Closure->crcCache)
+     ClearCrcCache();
 
-      last_percent = 0;
-      MD5Init(&image_md5);
+   last_percent = 0;
+   MD5Init(&image_md5);
    
-      Closure->crcCache = crcptr = g_malloc(sizeof(guint32) * lay->dataSectors);
+   Closure->crcCache = crcptr = g_malloc(sizeof(guint32) * lay->dataSectors);
 
-      if(!LargeSeek(ii->file, 0))
-	Stop(_("Failed seeking to start of image: %s\n"), strerror(errno));
+   if(!LargeSeek(ii->file, 0))
+     Stop(_("Failed seeking to start of image: %s\n"), strerror(errno));
 
-      for(sectors = 0; sectors < lay->dataSectors; sectors++)
-      {  unsigned char buf[2048];
-	 int expected,n;
+   for(sectors = 0; sectors < lay->dataSectors; sectors++)
+   {  unsigned char buf[2048];
+      int expected,n;
 
-	 if(sectors < ii->sectors-1) expected = 2048;
-	 else  
-	 {  memset(buf, 0, 2048);
-	    expected = ii->inLast;
-	 }
+      if(Closure->stopActions) /* User hit the Stop button */
+	abort_encoding(ec, FALSE);
 
-	 n = LargeRead(ii->file, buf, expected);
-	 if(n != expected)
-	   Stop(_("Failed reading sector %lld in image: %s"),sectors,strerror(errno));
-
-	 if(!memcmp(buf, Closure->deadSector, n))
-	   Stop(_("Image contains unread(able) sectors.\n"
-		  "Error correction information can only be\n"
-	       "appended to complete (undamaged) images.\n"));
-
-	 *crcptr++ = Crc32(buf, 2048);
-	 MD5Update(&image_md5, buf, n);
-
-	 percent = (100*sectors)/lay->dataSectors;
-
-	 if(last_percent != percent) 
-	 {  PrintProgress(_("Calculating sector checksums: %3d%%") ,percent);
-	   
-	    last_percent = percent;
-	 }
+      if(sectors < ii->sectors-1) expected = 2048;
+      else  
+      {  memset(buf, 0, 2048);
+	 expected = ii->inLast;
       }
 
-      MD5Final(ii->mediumSum, &image_md5);
+      n = LargeRead(ii->file, buf, expected);
+      if(n != expected)
+	Stop(_("Failed reading sector %lld in image: %s"),sectors,strerror(errno));
 
-      PrintProgress(_("Calculating sector checksums: %3d%%"), 100);
-      PrintProgress("\n");
+      if(!memcmp(buf, Closure->deadSector, n))
+	Stop(_("Image contains unread(able) sectors.\n"
+	       "Error correction information can only be\n"
+	       "appended to complete (undamaged) images.\n"));
+
+      *crcptr++ = Crc32(buf, 2048);
+      MD5Update(&image_md5, buf, n);
+
+      percent = (100*sectors)/(lay->eccSectors + lay->dataSectors);
+
+      if(last_percent != percent) 
+      {  PrintProgress(_("Preparing image (checksums, adding space): %3d%%") ,percent);
+
+	 if(Closure->guiMode)
+	   SetProgress(ec->wl->encPBar1, percent, 100);
+	   
+	 last_percent = percent;
+      }
    }
-   else
-     Stop("fill in stuff from Closure->md5Cache etc.\n");
+
+   MD5Final(ii->mediumSum, &image_md5);
 }
 
 
@@ -214,25 +241,29 @@ static void expand_image(ecc_closure *ec)
    for(sectors = 0; sectors < lay->eccSectors; sectors++)
    {  int n;
 
+      if(Closure->stopActions) /* User hit the Stop button */
+	abort_encoding(ec, TRUE);
+
       n = LargeWrite(ii->file, Closure->deadSector, 2048);
       if(n != 2048)
 	Stop(_("Failed expanding the image: %s\n"), strerror(errno));
 
-      percent = (100*sectors) / lay->eccSectors;
+      percent = (100*(sectors+lay->dataSectors)) / (lay->eccSectors + lay->dataSectors);
       if(last_percent != percent)
-      {  if(Closure->guiMode)
-	  ;
-	 else PrintProgress(_("Expanding image: %3d%%"), percent);
+      {  PrintProgress(_("Preparing image (checksums, adding space): %3d%%"), percent);
+
+	 if(Closure->guiMode)
+	   SetProgress(ec->wl->encPBar1, percent, 100);
+
 	 last_percent = percent; 
       }
    }
 
+   PrintProgress(_("Preparing image (checksums, adding space): %3d%%"), 100);
+   PrintProgress("\n");
+
    if(Closure->guiMode)
-     ;
-   else 
-   {  PrintProgress(_("Expanding image: %3d%%"), 100);
-      PrintProgress("\n");
-   }
+     SetProgress(ec->wl->encPBar1, 100, 100);
 }
 
 /*
@@ -281,11 +312,6 @@ static void write_crc(ecc_closure *ec)
  
 	    if(layer_sector == lay->sectorsPerLayer - 1)
 	      *crc_boot_ptr++ = Closure->crcCache[layer_index];
-#if 0
-     printf("layer sector %lld, layer %3d: sector %lld, byte %8x, writepos %d\n",
-	    layer_index - i*lay->sectorsPerLayer, i,
-	    layer_index, crc_buf[crc_idx-1], writepos);
-#endif
 
             if(crc_idx >= 512)
 	    {  int n = LargeWrite(ii->file, crc_buf, 2048);
@@ -302,7 +328,6 @@ static void write_crc(ecc_closure *ec)
 	 }
       }
    }
-   //   printf("%d CRC sums written.\n",writepos);
 
    /* flush last CRC sector */
 
@@ -375,30 +400,10 @@ static gint32 *gf_index_of;    /* These need to be static globals */
 static gint32 *gf_gpoly;       /* for optimization reasons. */
 static gint32 *enc_alpha_to;
 
-#if 0
- int j,secs[100000];
- gint64 cnt=0,x,hpos;
- for(i=0; i<100000; i++) secs[i] = 0;
+   /*** Show the second progress bar */
 
- for(j=0; j<lay->sectorsPerLayer; j++)
-   for(i=0; i<lay->nroots; i++)  /* layers */
-   {  x = RS02EccSectorIndex(lay, i, j);
-      secs[x]++;
-      cnt++;
-   }
-
- for(i=lay->protectedSectors; i<lay->eccSectors+lay->dataSectors; i++)
-   if(secs[i] != 1)
-     printf("Sector %d: %d\n", i, secs[i]);
- printf("%lld secs total written\n", cnt);
-
-   hpos = (lay->protectedSectors + lay->headerModulo - 1) / lay->headerModulo;
-   hpos *= lay->headerModulo;
-   while(hpos < lay->dataSectors+lay->eccSectors)
-     {  printf("Ecc header: %lld\n", hpos);
-       hpos += lay->headerModulo;
-     }
-#endif
+   ShowWidget(ec->wl->encPBar2);
+   ShowWidget(ec->wl->encLabel2);
 
    /*** Adjust image bounds to include the CRC sectors */
 
@@ -493,17 +498,9 @@ static gint32 *enc_alpha_to;
       {  int offset = 0;
          unsigned char *par_idx = ec->parity;
 
-#if 0
-	    if(Closure->stopActions) /* User hit the Stop button */
-	    {  SetLabelText(GTK_LABEL(wl->encFootline), 
-			    _("<span color=\"red\">Aborted by user request!</span>")); 
-	       ec->earlyTermination = FALSE;   /* suppress respective error message */
-	       LargeClose(ei->file);
-	       ei->file = NULL;
-	       LargeUnlink(Closure->eccName);  /* Do not leave partial .ecc file behind */
-	       goto terminate;
-	    }
-#endif
+	 if(Closure->stopActions) /* User hit the Stop button */
+	   abort_encoding(ec, TRUE);
+
          /* Read the next data sectors of this layer. */
 
    	 for(i=0; i<actual_layer_sectors; i++)
@@ -889,12 +886,10 @@ static gint32 *enc_alpha_to;
 	 percent = (1000*progress)/max_percent;
 	 if(last_percent != percent) 
 	 {
-#if 0
 	     if(Closure->guiMode)
-	       SetProgress(wl->encPBar2, percent, 1000);
-	     else
-#endif
-	       PrintProgress(_("Ecc generation: %3d.%1d%%"), percent/10, percent%10);
+	          SetProgress(ec->wl->encPBar2, percent, 1000);
+	     else PrintProgress(_("Ecc generation: %3d.%1d%%"), percent/10, percent%10);
+
 	    last_percent = percent;
 	 }
       }
@@ -928,27 +923,6 @@ static gint32 *enc_alpha_to;
 	    MD5Update(&ec->md5Ctxt[k], ec->slice[k]+idx, 2048);
 	}
       }
-
-#if 0
-      for(i=0; i<actual_layer_sectors; i++)
-      {  for(j=0; j<2048; j++)
-	 {  for(k=0; k<nroots; k++)
-	      ec->slice[k][j] = *par_ptr++;
-	 }
-
- 	 for(k=0; k<nroots; k++)
-	 {  gint64 s = RS02EccSectorIndex(lay, k, chunk + i);
-
-	    if(!LargeSeek(file, 2048*s))
-	      Stop(_("Failed seeking to sector %lld in image: %s"), s, strerror(errno));
-
-	    if(LargeWrite(file, ec->slice[k], 2048) != 2048)
-	      Stop(_("Failed writing to sector %lld in image: %s"), s, strerror(errno));
-
-	    MD5Update(&ec->md5Ctxt[k], ec->slice[k], 2048);
-	}
-      }
-#endif
    }
 
    /*** We can store only one md5sum in the header,
@@ -984,7 +958,12 @@ void RS02Create(Method *method)
    ec->earlyTermination = TRUE;
    ec->timer   = g_timer_new();
 
-   RegisterCleanup(_("Error correction file creation aborted"), ecc_cleanup, ec);
+   RegisterCleanup(_("Error correction data creation aborted"), ecc_cleanup, ec);
+
+   if(Closure->guiMode)  /* Preliminary fill text for the head line */
+     SetLabelText(GTK_LABEL(wl->encHeadline),
+		  _("<big>Augmenting the image with error correction data.</big>\n<i>%s</i>"), 
+		  _("- checking image -"));
 
    /*** If the image already contains error correction information, remove it. */
 
@@ -996,27 +975,43 @@ void RS02Create(Method *method)
 
    lay = ec->lay = CalcRS02Layout(ii->sectors, 0);
 
-   if(lay->nroots < 8)
-     Stop(_("Not enough space on medium left for error correction data.\n"
-	    "If reducing the image size or using a larger medium is\n"
-	    "not an option, please create a separate error correction\n"
-	    "file using the RS01 method.\n"));
-
    /*** Announce what we are going to do */
 
-   if(!Closure->guiMode)
-   {  PrintLog("* Experimental codec: Do not use for production releases.\n"
-	       "* Generated error correction files and images may not work.\n"
-	       "* Files generated by this codec may not be compatible\n"
-	       "* with the final release.\n\n");
+   if(Closure->guiMode)  /* Preliminary fill text for the head line */
+   {  ec->msg = g_strdup_printf(_("Encoding with Method RS02: %lld MB data, %lld MB ecc (%d roots; %4.1f%% redundancy)."),
+				lay->dataSectors/512, lay->eccSectors/512, lay->nroots, lay->redundancy);
+
+      SetLabelText(GTK_LABEL(wl->encHeadline),
+		   _("<big>Augmenting the image with error correction data.</big>\n<i>%s</i>"), 
+		   ec->msg);
+   }
+   else
+   {  ec->msg = g_strdup_printf(_("Augmenting image with Method RS02:\n %lld MB data, %lld MB ecc (%d roots; %4.1f%% redundancy)."),
+				 lay->dataSectors/512, lay->eccSectors/512, lay->nroots, lay->redundancy);
+
+      PrintLog("%s\n",ec->msg);
    }
 
-   ec->msg = g_strdup_printf(_("Appending image with Method RS02: %lldM data, %lldM ecc (%d roots; %4.1f%% redundancy)"),
-			     lay->dataSectors/512, lay->eccSectors/512, lay->nroots, lay->redundancy);
-   PrintLog("%s\n",ec->msg);
+   /*** Warn if there is not enough space for ecc data */
+
+   if(lay->nroots < 8)
+     Stop(_("Not enough space on medium left for error correction data.\n"
+	    "Data portion of image: %lldM; maximum possible size: %lldM.\n"
+	    "If reducing the image size or using a larger medium is\n"
+	    "not an option, please create a separate error correction\n"
+	    "file using the RS01 method.\n"),
+	  lay->dataSectors, Closure->mediumSize);
+
    if(lay->redundancy < 20)
-     PrintLog(_("* Warning: Using redundancies below 20%% may not give\n"
-		"*          the expected data loss protection.\n"));
+   {  int answer;
+
+      answer = ModalWarning(GTK_MESSAGE_WARNING, GTK_BUTTONS_OK_CANCEL, NULL,
+			    _("Using redundancies below 20%% may not give\n"
+			      "the expected data loss protection.\n"));
+
+      if(!answer)
+	abort_encoding(ec, FALSE);
+   }
 
    /*** Check image for completeness and fetch its CRC sums */
 
@@ -1044,19 +1039,19 @@ void RS02Create(Method *method)
 
    PrintProgress(_("Ecc generation: 100.0%%\n"));
    PrintLog(_("Image has been appended with error correction data.\n"
-	      "New image size is %lld sectors.\n"),
-	      lay->eccSectors+lay->dataSectors);
+	      "New image size is %lld MB (%lld sectors).\n"),
+	    (lay->dataSectors + lay->eccSectors)/512,
+	    lay->dataSectors+lay->eccSectors);
    
-#if 0
    if(Closure->guiMode)
    {  SetProgress(wl->encPBar2, 100, 100);
 
       SetLabelText(GTK_LABEL(wl->encFootline), 
-		   _("The error correction file has been successfully created.\n"
-		     "Make sure to keep this file on a reliable medium."),
-		   Closure->eccName); 
+		   _("Image has been appended with error correction data.\n"
+		     "New image size is %lld MB (%lld sectors).\n"),
+		   (lay->dataSectors + lay->eccSectors)/512,
+		   lay->dataSectors+lay->eccSectors);
    }
-#endif
 
    /*** Clean up */
 

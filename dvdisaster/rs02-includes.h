@@ -35,7 +35,6 @@ typedef struct
    GtkWidget *encPBar2;
    GtkWidget *encFootline;
    GtkWidget *encFootline2;
-   GtkWidget *curveButton;
 
    /*** Widgets for RS02 fixing */
 
@@ -51,10 +50,11 @@ typedef struct
 
    /*** Widgets in the Preferences window */
 
-   GtkWidget *radio1,*radio2,*radio3,*radio4;
-   GtkWidget *radio4Label;
-   GtkWidget *redundancyScale;
-   GtkWidget *redundancySpin;
+   GtkWidget *radio1,*radio2;
+   GtkWidget *cdButton, *dvdButton1, *dvdButton2;
+   GtkWidget *cdUndoButton, *dvdUndoButton1, *dvdUndoButton2;
+   GtkWidget *cdEntry, *dvdEntry1, *dvdEntry2, *otherEntry;
+   GtkWidget *cacheScale;
 
    /*** Some state vars used during fixing */
 
@@ -72,9 +72,11 @@ typedef struct
 
 void CreateRS02EncWindow(Method*, GtkWidget*);
 void CreateRS02FixWindow(Method*, GtkWidget*);
-//void CreateRS02PrefsPage(Method*, GtkWidget*);
+void CreateRS02PrefsPage(Method*, GtkWidget*);
 void ResetRS02EncWindow(Method*);
 void ResetRS02FixWindow(Method*);
+void ResetRS02PrefsPage(Method*);
+void ReadRS02Preferences(Method*);
 
 void ResetRS02CompareWindow(Method*);
 void CreateRS02CompareWindow(Method*, GtkWidget*);
@@ -124,6 +126,5 @@ void RS02Create(Method*);
 void RS02Fix(Method*);
 
 /* rs02-window.c */
-
 
 #endif

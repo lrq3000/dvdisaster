@@ -93,6 +93,12 @@
  #define round(x) rint(x)
 #endif
 
+/* Some standard media sizes */
+
+#define CDR_SIZE         (351*1024)
+#define DVD_SL_SIZE      2295104  /* DVD+R/RW size used at least common denominator */
+#define DVD_DL_SIZE 	 4171712  /* also seen: 4148992 4173824  */
+
 /***
  *** Our global closure (encapsulation of global variables)
  ***/
@@ -110,6 +116,12 @@ typedef struct _GlobalClosure
    char *methodName;    /* Name of currently selected codec */
    gint64 readStart;    /* Range to read */
    gint64 readEnd;
+   gint64 cdSize;       /* Maximum cd size (for RS02 type images) */
+   gint64 dvdSize1;     /* Maximum 1-layer dvd size (for RS02 type images) */
+   gint64 dvdSize2;     /* Maximum 2-layer dvd size (for RS02 type images) */
+   gint64 savedCDSize;  /* Undo values for above */
+   gint64 savedDVDSize1;
+   gint64 savedDVDSize2;
    gint64 mediumSize;   /* Maximum medium size (for RS02 type images) */
    int cacheMB;         /* Cache setting for the parity codec, in megabytes */
    int sectorSkip;      /* Number of sectors to skip after read error occurs */
@@ -580,6 +592,7 @@ GtkWidget* CreateToolBar(GtkWidget*);
 typedef struct _Method
 {  char name[4];                     /* Method name tag */
    char *description;                /* Fulltext description */
+   char *menuEntry;                  /* Text for use in preferences menu */
    void (*create)(struct _Method*);  /* Creates an error correction file */
    void (*fix)(struct _Method*);     /* Fixes a damaged image */
    void (*compare)(struct _Method*); /* Compares image against ecc information */
@@ -590,6 +603,8 @@ typedef struct _Method
    void (*resetCompareWindow)(struct _Method*);
    void (*resetCreateWindow)(struct _Method*);
    void (*resetFixWindow)(struct _Method*);
+   void (*resetPrefsPage)(struct _Method*);
+   void (*readPreferences)(struct _Method*);
    void (*destroy)(struct _Method*);
    int  tabWindowIndex;              /* our position in the (invisible) notebook */
    void *widgetList;                 /* linkage to window system */
@@ -654,6 +669,7 @@ void TimedInsensitive(GtkWidget*, int);
  ***/
 
 void CreatePreferencesWindow(void);
+void UpdateMethodPreferences(void);
 void HidePreferences(void);
 void FreePreferences(void*);
 
@@ -727,6 +743,7 @@ void ListAspiDrives(void);
 
 char* DefaultDevice(void);
 gint64 CurrentImageSize(void);
+gint64 CurrentImageCapacity(void);
 
 int SendReadCDB(char*, unsigned char*, int, int);
 

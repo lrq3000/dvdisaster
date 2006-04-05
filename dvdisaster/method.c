@@ -73,6 +73,8 @@ void CallMethodDestructors(void)
    {  Method *method = g_ptr_array_index(Closure->methodList, i);
  
       method->destroy(method);
+      if(method->menuEntry) g_free(method->menuEntry);
+      if(method->description) g_free(method->description);
       if(method->lastEh)
 	g_free(method->lastEh);
    }
