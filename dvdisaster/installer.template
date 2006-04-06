@@ -4,6 +4,7 @@
 [Setup]
 AppName=dvdisaster
 AppVerName=dvdisaster-%version%
+AppMutex=dvdisaster
 DefaultDirName={pf}\dvdisaster
 DefaultGroupName=dvdisaster
 UninstallDisplayIcon={app}\dvdisaster.exe

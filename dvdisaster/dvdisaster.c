@@ -164,6 +164,15 @@ int main(int argc, char *argv[])
     atexit(check_memleaks);
 #endif
 
+#ifdef SYS_MINGW
+    /*** Create a named mutex so that the installer can detect
+	 that we are running. A malicious user may cause this 
+	 to fail be reserving the mutex for himself, 
+	 so we do not care if the mutex can not be created. */
+
+    CreateMutex(NULL, FALSE, "dvdisaster");
+#endif
+
     /*** Setup the global closure. */
 
     InitClosure();

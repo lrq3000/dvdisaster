@@ -1,3 +1,6 @@
+0.67 (devel-2)
+	- added named mutex as proposed by Lubos
+
 0.67 (devel-1) 02-04-2006
 	- added preferences settings for RS02
 	- linked RS02 image creation with graphical user interface
