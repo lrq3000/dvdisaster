@@ -205,6 +205,7 @@ void ReadDotfile()
       if(!strcmp(symbol, "cache-size"))      { Closure->cacheMB     = atoi(value); continue; }
       if(!strcmp(symbol, "cd-size"))         { Closure->cdSize = Closure->savedCDSize = atoll(value); continue; }
       if(!strcmp(symbol, "dao"))             { Closure->noTruncate  = atoi(value); continue; }
+      if(!strcmp(symbol, "dotfile-version")) { Closure->dotFileVersion = atoi(value); continue; }
       if(!strcmp(symbol, "dvd-size1"))       { Closure->dvdSize1 = Closure->savedDVDSize1 = atoll(value); continue; }
       if(!strcmp(symbol, "dvd-size2"))       { Closure->dvdSize2 = Closure->savedDVDSize2 = atoll(value); continue; }
       if(!strcmp(symbol, "fill-unreadable")) { Closure->fillUnreadable = atoi(value); 
@@ -223,6 +224,7 @@ void ReadDotfile()
       if(!strcmp(symbol, "spinup-delay"))    { Closure->spinupDelay = atoi(value); continue; }
       if(!strcmp(symbol, "split-files"))     { Closure->splitFiles  = atoi(value); continue; }
       if(!strcmp(symbol, "unlink"))          { Closure->unlinkImage = atoi(value); continue; }
+      if(!strcmp(symbol, "welcome-msg"))     { Closure->welcomeMessage = atoi(value); continue; }
    }
 
    if(fclose(dotfile))
@@ -267,6 +269,7 @@ static void update_dotfile()
    g_fprintf(dotfile, "cache-size:      %d\n", Closure->cacheMB);
    g_fprintf(dotfile, "cd-size:         %lld\n", Closure->cdSize);
    g_fprintf(dotfile, "dao:             %d\n", Closure->noTruncate);
+   g_fprintf(dotfile, "dotfile-version: %d\n", Closure->dotFileVersion);
    g_fprintf(dotfile, "dvd-size1:       %lld\n", Closure->dvdSize1);
    g_fprintf(dotfile, "dvd-size2:       %lld\n", Closure->dvdSize2);
    g_fprintf(dotfile, "fill-unreadable: %d\n", Closure->fillUnreadable);
@@ -281,6 +284,7 @@ static void update_dotfile()
    g_fprintf(dotfile, "spinup-delay:    %d\n", Closure->spinupDelay);
    g_fprintf(dotfile, "split-files:     %d\n", Closure->splitFiles);
    g_fprintf(dotfile, "unlink:          %d\n", Closure->unlinkImage);
+   g_fprintf(dotfile, "welcome-msg:     %d\n", Closure->welcomeMessage);
 
    if(fclose(dotfile))
      g_fprintf(stderr, _("Error closing configuration file %s: %s\n"), 
@@ -353,6 +357,7 @@ void InitClosure()
    Closure->sectorSkip  = 16;
    Closure->spinupDelay = 5;
    Closure->fillUnreadable = -1;
+   Closure->welcomeMessage = 1;
 
    /* default sizes for typical CD and DVD media */
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-02 18:34+0200\n"
+"POT-Creation-Date: 2006-04-09 19:15+0200\n"
 "PO-Revision-Date: 2004-11-30 19:48+0100\n"
 "Last-Translator: Carsten Gnörlich <carsten@dvdisaster.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -17,17 +17,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: closure.c:229 closure.c:286
+#: closure.c:231 closure.c:290
 #, c-format
 msgid "Error closing configuration file %s: %s\n"
 msgstr "Fehler beim Schließen der Konfigurations-Datei %s: %s\n"
 
-#: closure.c:249
+#: closure.c:251
 #, c-format
 msgid "Could not open configuration file %s: %s\n"
 msgstr "Konnte Konfigurations-Datei %s nicht öffnen: %s\n"
 
-#: closure.c:255
+#: closure.c:257
 #, c-format
 msgid ""
 "# dvdisaster-%s configuration file\n"
@@ -237,24 +237,24 @@ msgstr "RS01-Methode zum Überprüfen der Dateien nicht verfügbar."
 #. TRANSLATORS:
 #. This is a dummy entry which is supposed to translate into "ok".
 #. Please do not return anything else here.
-#: dvdisaster.c:230 dvdisaster.c:242 dvdisaster.c:255
+#: dvdisaster.c:239 dvdisaster.c:251 dvdisaster.c:264
 msgid "test phrase for verifying the locale installation"
 msgstr "ok"
 
-#: dvdisaster.c:273
+#: dvdisaster.c:282
 #, c-format
 msgid "sizeof(EccHeader) is %d, but must be 4096.\n"
 msgstr "sizeof(EccHeader) ist %d, muß aber 4096 sein.\n"
 
-#: dvdisaster.c:404
+#: dvdisaster.c:413
 msgid "--cache-size must at least be 1MB; 16MB or higher is recommended."
 msgstr "--cache-size muß mindestens 1MB sein; 16MB oder mehr werden empfohlen."
 
-#: dvdisaster.c:406
+#: dvdisaster.c:415
 msgid "--cache-size maximum is 2048MB."
 msgstr "Die Maximalgröße von --cache-size ist 2048MB."
 
-#: dvdisaster.c:453
+#: dvdisaster.c:462
 #, c-format
 msgid ""
 "\n"
@@ -265,14 +265,14 @@ msgstr ""
 "dvdisaster Version %s\n"
 "\n"
 
-#: dvdisaster.c:485
+#: dvdisaster.c:494
 #, c-format
 msgid "?? illegal getopt return value %d\n"
 msgstr "?? ungültiger Rückgabewert von getopt: %d\n"
 
 #. TRANSLATORS: Program options like -r and --read are not to be translated
 #. to avoid confusion when discussing the program in international forums.
-#: dvdisaster.c:610
+#: dvdisaster.c:619
 msgid ""
 "\n"
 "Common usage examples:\n"
@@ -296,7 +296,7 @@ msgstr ""
 "  dvdisaster -u,--unlink # Löscht .iso - Dateien nach Beenden der vorherigen Aktionen.\n"
 "\n"
 
-#: dvdisaster.c:619
+#: dvdisaster.c:628
 #, c-format
 msgid ""
 "Drive and file specification:\n"
@@ -311,7 +311,7 @@ msgstr ""
 "  -i,--image  Name       - Name der Abbild - Datei        (Standard: medium.iso)\n"
 "  -e,--ecc    Name       - Name der Fehlerkorrektur-Datei (Standard: medium.ecc)\n"
 
-#: dvdisaster.c:627
+#: dvdisaster.c:636
 msgid ""
 "  -l,--list              - list drives available under ASPI manager\n"
 "\n"
@@ -319,7 +319,7 @@ msgstr ""
 "  -l,--list              - zeigt unter ASPI verfügbare Laufwerke\n"
 "\n"
 
-#: dvdisaster.c:632
+#: dvdisaster.c:641
 #, c-format
 msgid ""
 "Tweaking options (see manual before using!)\n"
@@ -359,7 +359,7 @@ msgstr ""
 "  --split-files          - Abbild in mehrere Dateien <= 2GB aufteilen\n"
 "\n"
 
-#: dvdisaster.c:650
+#: dvdisaster.c:659
 msgid ""
 "Graphical user interface options\n"
 "  --keep-style           - do not override the style settings\n"
@@ -369,7 +369,7 @@ msgstr ""
 "  --keep-style           - Style-Einstellungen nicht überschreiben\n"
 "\n"
 
-#: dvdisaster.c:654
+#: dvdisaster.c:663
 msgid ""
 "Debugging options (purposefully undocumented and possibly harmful)\n"
 "  --debug           - enables the following options\n"
@@ -538,15 +538,15 @@ msgstr ""
 "%s\n"
 "nicht vorhanden"
 
-#: help-dialogs.c:357
+#: help-dialogs.c:438
 msgid "windowtitle|About dvdisaster"
 msgstr "Kurzinformation"
 
-#: help-dialogs.c:375
+#: help-dialogs.c:456
 msgid "Copyright 2004-2006 Carsten Gnoerlich"
 msgstr "Copyright 2004-2006 Carsten Gnörlich"
 
-#: help-dialogs.c:381
+#: help-dialogs.c:462
 msgid ""
 "dvdisaster provides a margin of safety against data loss\n"
 "on CD and DVD media caused by aging or scratches.\n"
@@ -558,7 +558,7 @@ msgstr ""
 "Es erzeugt Fehlerkorrekturdaten, um bei nachfolgenden Datenträger-\n"
 "Problemen unlesbare Sektoren zu rekonstruieren.\n"
 
-#: help-dialogs.c:386
+#: help-dialogs.c:467
 msgid ""
 "This software comes with  <b>absolutely no warranty</b>.\n"
 "This is free software and you are welcome to redistribute it\n"
@@ -567,7 +567,7 @@ msgstr ""
 "dvdisaster ist <b>freie Software</b>; es gelten die Bedingungen\n"
 "der [GNU General Public License] .\n"
 
-#: help-dialogs.c:399
+#: help-dialogs.c:480
 msgid ""
 "\n"
 "e-mail: carsten@dvdisaster.com   -or-   cgnoerlich@fsfe.org"
@@ -3177,11 +3177,11 @@ msgstr ""
 msgid "Search"
 msgstr "Auswählen"
 
-#: show-manual.c:318
+#: show-manual.c:324
 msgid "Documentation not installed."
 msgstr "Handbuch wurde nicht installiert."
 
-#: show-manual.c:343
+#: show-manual.c:349
 #, c-format
 msgid ""
 "Documentation file\n"
@@ -3192,13 +3192,59 @@ msgstr ""
 "%s\n"
 "nicht gefunden.\n"
 
-#: show-manual.c:352
+#: show-manual.c:358
 msgid "Please hang on until the browser comes up!"
 msgstr "Bitte warten Sie bis der HTML-Betrachter erscheint!"
 
 #: udf.c:213
 msgid "Unnamed"
 msgstr "Unbenannt"
+
+#: welcome-window.c:85
+#, c-format
+msgid ""
+"- RS02 error correction method fully supported\n"
+"<span color=\"#%s\">-</span> in the graphical user interface.\n"
+msgstr ""
+"- Das RS02-Fehlerkorrektur-Verfahren wird vollständig\n"
+"<span color=\"#%s\">-</span> in der graphischen Benutzeroberfläche unterstützt.\n"
+
+#: welcome-window.c:91
+msgid "Show this message again"
+msgstr "Diesen Text erneut anzeigen"
+
+#: welcome-window.c:133
+msgid "<span weight=\"bold\" size=\"xx-large\">Welcome to dvdisaster!</span>"
+msgstr "<span weight=\"bold\" size=\"xx-large\">Willkommen bei dvdisaster!</span>"
+
+#: welcome-window.c:135
+msgid ""
+"\n"
+"dvdisaster creates error correction data to protect\n"
+"CD and DVD media against data loss.\n"
+msgstr ""
+"\n"
+"dvdisaster erzeugt Fehlerkorrektur-Daten um CD- und\n"
+"DVD-Datenträger gegen Datenverlust zu schützen.\n"
+
+#: welcome-window.c:138
+msgid ""
+"Please see the manual for [typical uses] of dvdisaster.\n"
+"\n"
+msgstr ""
+"Im Handbuch sind [typische Anwendungen] beschrieben.\n"
+"\n"
+
+#: welcome-window.c:141
+msgid "<i>New in this Version:</i>"
+msgstr "<i>Neu in dieser Version:</i>"
+
+#~ msgid ""
+#~ "- RS02 error correction method fully supported\n"
+#~ "<span color=\"#%s\">-</span> in the graphical user interface."
+#~ msgstr ""
+#~ "- RS02-Fehlerkorrektur-Verfahren wird vollständig\n"
+#~ "<span color=\"#%s\">-</span> in der graphischen Benutzeroberfläche unterstützt."
 
 #~ msgid "Calculating sector checksums: %3d%%"
 #~ msgstr "Berechne Sektoren-Prüfsummen: %3d%%"

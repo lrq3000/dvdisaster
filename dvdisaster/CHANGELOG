@@ -1,5 +1,7 @@
-0.67 (devel-2)
+0.67 (devel-2) 09-04-2006
 	- added named mutex as proposed by Lubos
+	- I felt silly so I changed the empty welcome window to actually
+	  display a welcome message ;-)
 
 0.67 (devel-1) 02-04-2006
 	- added preferences settings for RS02

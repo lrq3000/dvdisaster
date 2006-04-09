@@ -142,6 +142,8 @@ typedef struct _GlobalClosure
    int parseEcc;        /* use information from the RS02 headers */
    int readAndCreate;   /* automatically create .ecc file after reading an image */
    int enableCurveSwitch; /* TRUE in readAndCreateMode after reading is complete */
+   int welcomeMessage;  /* just print dvdisaster logo if FALSE */
+   int dotFileVersion;  /* version of dotfile */
   
    char *deadSector;    /* Copy of our "dead sector" marker. */
    char *dotFile;       /* path to .dvdisaster file */
@@ -485,6 +487,10 @@ void ShowGPL();
 void ShowLog();
 void UpdateLog();
 void AboutDialog();
+
+void AboutText(GtkWidget*, char*, ...);
+void AboutLink(GtkWidget*, char*, char*);
+void AboutTextWithLink(GtkWidget*, char*, char*);
 
 /***
  *** icon-factory.c

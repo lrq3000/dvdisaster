@@ -309,10 +309,16 @@ void ShowHTML(char *target)
 {  browser_info *bi = g_malloc0(sizeof(browser_info));
    struct stat mystat;
    const char *lang;
-
+   char *path;
+   int http_url;
+   
    /* If no target is given, select between translations of the manual. */
 
-   if(!target)
+   if(!target) target = g_strdup("index.html");
+
+   http_url = strlen(target) > 4 && !strncmp(target, "http", 4);
+
+   if(!http_url && !strchr(target, '/'))  /* create full path */
    { 
       if(!Closure->docDir)
       {  CreateMessage(_("Documentation not installed."), GTK_MESSAGE_ERROR);
@@ -323,26 +329,26 @@ void ShowHTML(char *target)
       lang = g_getenv("LANG");
       
       if(!strncmp(lang, "cs", 2)) 
-	   target = g_strdup_printf("%s/cs/index.html",Closure->docDir); 
+	   path = g_strdup_printf("%s/cs/%s",Closure->docDir,target); 
       else if(!strncmp(lang, "de", 2)) 
-	   target = g_strdup_printf("%s/de/index.html",Closure->docDir); 
-      else target = g_strdup_printf("%s/en/index.html",Closure->docDir); 
+	   path = g_strdup_printf("%s/de/%s",Closure->docDir,target); 
+      else path = g_strdup_printf("%s/en/%s",Closure->docDir,target); 
 
 #ifdef SYS_MINGW      
-      if(stat(target, &mystat) == -1)
-      {  g_free(target);  /* the local dir is Windows specific */
-         target = g_strdup_printf("%s/local/index.html",Closure->docDir);
+      if(stat(path, &mystat) == -1)
+      {  g_free(path);  /* the local dir is Windows specific */
+	 path = g_strdup_printf("%s/local/%s",Closure->docDir,target);
       }
 #endif
-      
-      bi->url = target;
+      g_free(target);
+      bi->url = path;
    }
    else bi->url = target;
 
-   if(stat(target, &mystat) == -1)
-   {  CreateMessage(_("Documentation file\n%s\nnot found.\n"), GTK_MESSAGE_ERROR, target);
+   if(!http_url && stat(bi->url, &mystat) == -1)
+   {  CreateMessage(_("Documentation file\n%s\nnot found.\n"), GTK_MESSAGE_ERROR, bi->url);
       g_free(bi);
-      g_free(target);
+      g_free(bi->url);
       return;
    }
 
@@ -355,7 +361,7 @@ void ShowHTML(char *target)
 #ifdef SYS_MINGW
    /* Okay, Billy wins big time here ;-) */
 
-   ShellExecute(NULL, "open", target, NULL, NULL, SW_SHOWNORMAL);
+   ShellExecute(NULL, "open", bi->url, NULL, NULL, SW_SHOWNORMAL);
    g_timeout_add(1000, browser_timeout_func, (gpointer)bi);
 #endif
 

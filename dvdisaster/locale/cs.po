@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-02 18:34+0200\n"
+"POT-Creation-Date: 2006-04-09 19:15+0200\n"
 "PO-Revision-Date: 2006-03-16 20:40+0100\n"
 "Last-Translator: Luboš Staněk <lubek@users.sourceforge.net>\n"
 "Language-Team: čeština <cs@li.org>\n"
@@ -18,17 +18,17 @@ msgstr ""
 "X-Generator: KBabel 1.11.1\n"
 "Plural-Forms:  nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: closure.c:229 closure.c:286
+#: closure.c:231 closure.c:290
 #, c-format
 msgid "Error closing configuration file %s: %s\n"
 msgstr "Chyba při zavírání konfiguračního souboru %s: %s\n"
 
-#: closure.c:249
+#: closure.c:251
 #, c-format
 msgid "Could not open configuration file %s: %s\n"
 msgstr "Nelze otevřít konfigurační soubor %s: %s\n"
 
-#: closure.c:255
+#: closure.c:257
 #, c-format
 msgid ""
 "# dvdisaster-%s configuration file\n"
@@ -237,24 +237,24 @@ msgstr "Metoda RS01 není dostupná pro porovnání souborů."
 #. TRANSLATORS:
 #. This is a dummy entry which is supposed to translate into "ok".
 #. Please do not return anything else here.
-#: dvdisaster.c:230 dvdisaster.c:242 dvdisaster.c:255
+#: dvdisaster.c:239 dvdisaster.c:251 dvdisaster.c:264
 msgid "test phrase for verifying the locale installation"
 msgstr "ok"
 
-#: dvdisaster.c:273
+#: dvdisaster.c:282
 #, c-format
 msgid "sizeof(EccHeader) is %d, but must be 4096.\n"
 msgstr "velikost(EccHlavička) je %d, ale musí být 4096.\n"
 
-#: dvdisaster.c:404
+#: dvdisaster.c:413
 msgid "--cache-size must at least be 1MB; 16MB or higher is recommended."
 msgstr "--cache-size musí být alespoň 1MB; je doporučeno 16MB nebo větší."
 
-#: dvdisaster.c:406
+#: dvdisaster.c:415
 msgid "--cache-size maximum is 2048MB."
 msgstr "--cache-size maximum je 2048MB."
 
-#: dvdisaster.c:453
+#: dvdisaster.c:462
 #, c-format
 msgid ""
 "\n"
@@ -265,14 +265,14 @@ msgstr ""
 "dvdisaster, verze %s\n"
 "\n"
 
-#: dvdisaster.c:485
+#: dvdisaster.c:494
 #, c-format
 msgid "?? illegal getopt return value %d\n"
 msgstr "?? neplatná návratová hodnota getopt %d\n"
 
 #. TRANSLATORS: Program options like -r and --read are not to be translated
 #. to avoid confusion when discussing the program in international forums.
-#: dvdisaster.c:610
+#: dvdisaster.c:619
 msgid ""
 "\n"
 "Common usage examples:\n"
@@ -296,7 +296,7 @@ msgstr ""
 "  dvdisaster -u,--unlink # Smaže soubor .iso (když se dokončí další akce)\n"
 "\n"
 
-#: dvdisaster.c:619
+#: dvdisaster.c:628
 #, c-format
 msgid ""
 "Drive and file specification:\n"
@@ -311,7 +311,7 @@ msgstr ""
 "  -i,--image  imagefile  - název souboru obrazu     (výchozí: medium.iso)\n"
 "  -e,--ecc    eccfile    - název souboru ecc        (výchozí: medium.ecc)\n"
 
-#: dvdisaster.c:627
+#: dvdisaster.c:636
 msgid ""
 "  -l,--list              - list drives available under ASPI manager\n"
 "\n"
@@ -319,7 +319,7 @@ msgstr ""
 "  -l,--list              - vypíše seznam mechanik dostupných pod ASPI\n"
 "\n"
 
-#: dvdisaster.c:632
+#: dvdisaster.c:641
 #, c-format
 msgid ""
 "Tweaking options (see manual before using!)\n"
@@ -360,7 +360,7 @@ msgstr ""
 "  --split-files          - rozdělit obraz na soubory <= 2 GB\n"
 "\n"
 
-#: dvdisaster.c:650
+#: dvdisaster.c:659
 msgid ""
 "Graphical user interface options\n"
 "  --keep-style           - do not override the style settings\n"
@@ -370,7 +370,7 @@ msgstr ""
 "  --keep-style           - nepřepisovat nastavení\n"
 "\n"
 
-#: dvdisaster.c:654
+#: dvdisaster.c:663
 msgid ""
 "Debugging options (purposefully undocumented and possibly harmful)\n"
 "  --debug           - enables the following options\n"
@@ -539,17 +539,17 @@ msgstr ""
 "%s\n"
 "není přítomen"
 
-#: help-dialogs.c:357
+#: help-dialogs.c:438
 msgid "windowtitle|About dvdisaster"
 msgstr "O aplikaci dvdisaster"
 
-#: help-dialogs.c:375
+#: help-dialogs.c:456
 msgid "Copyright 2004-2006 Carsten Gnoerlich"
 msgstr ""
 "Copyright 2004-2006 Carsten Gnörlich\n"
 "Česká lokalizace 2006 Luboš Staněk"
 
-#: help-dialogs.c:381
+#: help-dialogs.c:462
 msgid ""
 "dvdisaster provides a margin of safety against data loss\n"
 "on CD and DVD media caused by aging or scratches.\n"
@@ -561,7 +561,7 @@ msgstr ""
 "Vytváří data oprav chyb, která se použijí k obnovení\n"
 "nečitelných sektorů, pokud se disk později poškodí.\n"
 
-#: help-dialogs.c:386
+#: help-dialogs.c:467
 msgid ""
 "This software comes with  <b>absolutely no warranty</b>.\n"
 "This is free software and you are welcome to redistribute it\n"
@@ -571,7 +571,7 @@ msgstr ""
 "Jedná se o svobodný software a můžete jej šířit\n"
 "za podmínek [Všeobecné veřejné licence GNU].\n"
 
-#: help-dialogs.c:399
+#: help-dialogs.c:480
 msgid ""
 "\n"
 "e-mail: carsten@dvdisaster.com   -or-   cgnoerlich@fsfe.org"
@@ -3149,11 +3149,11 @@ msgstr ""
 msgid "Search"
 msgstr "Najít"
 
-#: show-manual.c:318
+#: show-manual.c:324
 msgid "Documentation not installed."
 msgstr "Dokumentace není nainstalována."
 
-#: show-manual.c:343
+#: show-manual.c:349
 #, c-format
 msgid ""
 "Documentation file\n"
@@ -3164,13 +3164,45 @@ msgstr ""
 "%s\n"
 "nebyl nalezen.\n"
 
-#: show-manual.c:352
+#: show-manual.c:358
 msgid "Please hang on until the browser comes up!"
 msgstr "Vydržte prosím, až se spustí prohlížeč!"
 
 #: udf.c:213
 msgid "Unnamed"
 msgstr "Nepojmenovaný"
+
+#: welcome-window.c:85
+#, c-format
+msgid ""
+"- RS02 error correction method fully supported\n"
+"<span color=\"#%s\">-</span> in the graphical user interface.\n"
+msgstr ""
+
+#: welcome-window.c:91
+msgid "Show this message again"
+msgstr ""
+
+#: welcome-window.c:133
+msgid "<span weight=\"bold\" size=\"xx-large\">Welcome to dvdisaster!</span>"
+msgstr ""
+
+#: welcome-window.c:135
+msgid ""
+"\n"
+"dvdisaster creates error correction data to protect\n"
+"CD and DVD media against data loss.\n"
+msgstr ""
+
+#: welcome-window.c:138
+msgid ""
+"Please see the manual for [typical uses] of dvdisaster.\n"
+"\n"
+msgstr ""
+
+#: welcome-window.c:141
+msgid "<i>New in this Version:</i>"
+msgstr ""
 
 #~ msgid ""
 #~ "Image has been appended with error correction data.\n"

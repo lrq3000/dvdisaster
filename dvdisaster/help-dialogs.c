@@ -238,9 +238,11 @@ static gint about_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
    char *label = (char*)data;
    char text[strlen(label)+80];
    char *utf;
+   static int inside;
 
    switch(event->type)
    {  case GDK_BUTTON_PRESS: 
+        if(!inside) return FALSE; /* Bug in Gtk for Windows? */
         if(!strcmp(label,"GPL")) ShowGPL(); 
         else ShowHTML(g_strdup(label));
 	break; 
@@ -249,12 +251,14 @@ static gint about_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
 	utf = g_locale_to_utf8(text, -1, NULL, NULL, NULL);
 	gtk_label_set_markup(GTK_LABEL(lab), utf);
 	g_free(utf);
+	inside = TRUE;
 	break;
       case GDK_LEAVE_NOTIFY: 
 	g_sprintf(text, "<span color=\"blue\">%s</span>", label);
 	utf = g_locale_to_utf8(text, -1, NULL, NULL, NULL);
 	gtk_label_set_markup(GTK_LABEL(lab), utf); 
 	g_free(utf);
+	inside = FALSE;
 	break;
       default: break;
    }
@@ -262,20 +266,27 @@ static gint about_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
    return FALSE;
 }
 
-static void about_text(GtkWidget *parent, char *text)
+void AboutText(GtkWidget *parent, char *format, ...)
 {  GtkWidget *lab;
-   char *utf_text;
+   char *tmp, *utf_text;
+   va_list argp;
+
+   va_start(argp, format);
 
    lab = gtk_label_new(NULL);
-   utf_text = g_locale_to_utf8(text, -1, NULL, NULL, NULL);
+   tmp = g_strdup_vprintf(format, argp);
+   utf_text = g_locale_to_utf8(tmp, -1, NULL, NULL, NULL);
    gtk_label_set_markup(GTK_LABEL(lab), utf_text);
    gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
    gtk_box_pack_start(GTK_BOX(parent), lab, FALSE, FALSE, 0);
 
+   g_free(tmp);
    g_free(utf_text);
+
+   va_end(argp);
 }
 
-static void about_link(GtkWidget *parent, char *label, char *action)
+void AboutLink(GtkWidget *parent, char *label, char *action)
 {  GtkWidget *ebox,*lab;
    char text[strlen(label)+80];
    char *label_copy = strdup(label);
@@ -297,7 +308,7 @@ static void about_link(GtkWidget *parent, char *label, char *action)
    g_free(utf);
 }
 
-static void about_text_with_link(GtkWidget *parent, char *text, char *action)
+void AboutTextWithLink(GtkWidget *parent, char *text, char *action)
 {  char *copy,*head,*end_of_line;
    char *link_start,*link_end; 
    char *utf;
@@ -327,7 +338,7 @@ static void about_text_with_link(GtkWidget *parent, char *text, char *action)
 	    g_free(utf);
 	 }
 
-         about_link(hbox, link_start, action);
+         AboutLink(hbox, link_start, action);
 
          if(*link_end) 
          {  GtkWidget *lab = gtk_label_new(NULL);
@@ -338,13 +349,83 @@ static void about_text_with_link(GtkWidget *parent, char *text, char *action)
 	    g_free(utf);
 	 }
       }
-      else about_text(parent, head);
+      else AboutText(parent, head);
 
       if(end_of_line) head = end_of_line+1;
       else break;
    }
 
    g_free(copy);
+}
+
+void AboutTextWithLink2(GtkWidget *parent, char *text, char *actions)
+{  char *copy,*head,*end_of_line;
+   char *link_start,*link_end; 
+   char *utf;
+   char *action_separator;
+   char *action,*action_copy;
+
+   head = copy = g_strdup(text);
+   action = action_copy = g_strdup(actions);
+
+   while(*head)
+   {  end_of_line = strchr(head, '\n');
+      if(end_of_line && *end_of_line == '\n')
+        *end_of_line = 0;
+
+      link_start = strchr(head, '[');
+      link_end = strchr(head, ']');
+
+      if(!link_start || !link_end)
+	   AboutText(parent, head);
+      else
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
+
+         gtk_box_pack_start(GTK_BOX(parent), hbox, FALSE, FALSE, 0);
+
+	 while(1)
+	 {  *link_start++ = *link_end++ = 0;
+
+	    if(*head) 
+	    {  GtkWidget *lab = gtk_label_new(NULL);
+
+	       utf = g_locale_to_utf8(head, -1, NULL, NULL, NULL);
+	       gtk_label_set_markup(GTK_LABEL(lab), utf);
+	       gtk_box_pack_start(GTK_BOX(hbox), lab, FALSE, FALSE, 0);
+	       g_free(utf);
+	    }
+
+	    action_separator = strchr(action, ',');
+	    if(action_separator) *action_separator = 0;
+	    AboutLink(hbox, link_start, g_strdup(action));
+	    if(action_separator) action = action_separator+1;
+
+	    head = link_end;
+	    if(head >= end_of_line) break;
+
+	    link_start = strchr(head, '[');   /* more links in this line? */
+	    link_end = strchr(head, ']');
+	    if(link_start && link_end)
+	      continue;
+	    
+	    if(*head)  /* no more links, but perhaps trailing text in this line */
+	    {  GtkWidget *lab = gtk_label_new(NULL);
+
+	       utf = g_locale_to_utf8(head, -1, NULL, NULL, NULL);
+	       gtk_label_set_markup(GTK_LABEL(lab), utf);
+	       gtk_box_pack_start(GTK_BOX(hbox), lab, FALSE, FALSE, 0);
+	       g_free(utf);
+	       break;
+	    }
+	 } 
+      }
+
+      if(end_of_line) head = end_of_line+1;
+      else break;
+   }
+
+   g_free(copy);
+   g_free(action_copy);
 }
 
 void AboutDialog()
@@ -369,34 +450,34 @@ void AboutDialog()
    translation = "<span weight=\"bold\" size=\"xx-large\">dvdisaster</span><i> Version %s</i>";
    text = g_malloc(strlen(translation)+10);
    g_sprintf(text, translation, Closure->cookedVersion);
-   about_text(vbox, text);
+   AboutText(vbox, text);
    g_free(text);
 
-   about_text(vbox, _("Copyright 2004-2006 Carsten Gnoerlich"));
+   AboutText(vbox, _("Copyright 2004-2006 Carsten Gnoerlich"));
 
    sep = gtk_hseparator_new();
    gtk_box_pack_start(GTK_BOX(vbox), sep, FALSE, FALSE, 10);
 
 
-   about_text(vbox, _("dvdisaster provides a margin of safety against data loss\n"
+   AboutText(vbox, _("dvdisaster provides a margin of safety against data loss\n"
 		      "on CD and DVD media caused by aging or scratches.\n"
 		      "It creates error correction data which is used to recover\n"
 		      "unreadable sectors if the disc becomes damaged later on.\n"));
 
-   about_text_with_link(vbox, _("This software comes with  <b>absolutely no warranty</b>.\n"
+   AboutTextWithLink(vbox, _("This software comes with  <b>absolutely no warranty</b>.\n"
 				"This is free software and you are welcome to redistribute it\n"
 				"under the conditions of the [GNU General Public License].\n"), 
 			"GPL");
 
    lang = g_getenv("LANG");
    if(lang && !strncmp(lang, "de", 2))
-   {    about_text_with_link(vbox, "\n[http://www.dvdisaster.de]", "http://www.dvdisaster.de");
+   {    AboutTextWithLink(vbox, "\n[http://www.dvdisaster.de]", "http://www.dvdisaster.de");
    }
    else 
-   {    about_text_with_link(vbox, "\n[http://www.dvdisaster.com]", "http://www.dvdisaster.com");
+   {    AboutTextWithLink(vbox, "\n[http://www.dvdisaster.com]", "http://www.dvdisaster.com");
    }
 
-   about_text(vbox, _("\ne-mail: carsten@dvdisaster.com   -or-   cgnoerlich@fsfe.org")); 
+   AboutText(vbox, _("\ne-mail: carsten@dvdisaster.com   -or-   cgnoerlich@fsfe.org")); 
 
    /* Show it */
 
