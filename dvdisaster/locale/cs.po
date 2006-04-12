@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-09 19:15+0200\n"
+"POT-Creation-Date: 2006-04-12 20:01+0200\n"
 "PO-Revision-Date: 2006-03-16 20:40+0100\n"
 "Last-Translator: Luboš Staněk <lubek@users.sourceforge.net>\n"
 "Language-Team: čeština <cs@li.org>\n"
@@ -63,7 +63,7 @@ msgstr ""
 "Generuji náhodné opravitelné výmazy (pro %d kořenů, max. výmazů = %d).\n"
 
 #: debug.c:106 debug.c:186 debug.c:228 debug.c:488 debug.c:556
-#: rs01-common.c:54 rs02-common.c:62 rs02-compare.c:98 rs02-create.c:297
+#: rs01-common.c:54 rs02-common.c:62 rs02-compare.c:114 rs02-create.c:297
 #: rs02-create.c:918 rs02-fix.c:338
 #, c-format
 msgid "Failed seeking to sector %lld in image: %s"
@@ -118,7 +118,7 @@ msgstr "Hodnota bajtu musí být v rozsahu [0..255]"
 msgid "Setting byte %d in sector %lld to value %d.\n"
 msgstr "Nastavování bajtu %d v sektoru %lld na hodnotu %d.\n"
 
-#: debug.c:309 debug.c:348 rs02-compare.c:213 rs02-create.c:163
+#: debug.c:309 debug.c:348 rs02-compare.c:235 rs02-create.c:163
 #, c-format
 msgid "Failed seeking to start of image: %s\n"
 msgstr "Selhalo vystavení na začátek obrazu: %s\n"
@@ -615,102 +615,87 @@ msgstr ""
 "\n"
 "dvdisaster -i%s -f"
 
-#: main-window.c:175
-#, c-format
-msgid ""
-"Comparing RS02 augmented images is not yet supported\n"
-"in the graphical user interface.\n"
-"You can do it in the command line by typing:\n"
-"\n"
-"dvdisaster -i%s -t"
-msgstr ""
-"Porovnání rošířených obrazů RS02 dosud není podporováno\n"
-"v grafickém uživatelském rozhraní.\n"
-"Můžete je provést z příkazové řádky zadáním:\n"
-"\n"
-"dvdisaster -i%s -t"
-
-#: main-window.c:245
+#: main-window.c:236
 msgid "button|Read"
 msgstr "Načíst"
 
-#: main-window.c:248
+#: main-window.c:239
 msgid "tooltip|Read Image"
 msgstr "Čtení obrazu"
 
-#: main-window.c:248
+#: main-window.c:239
 msgid "Reads a CD/DVD image into a file (or tries to complete an existing image file)."
 msgstr "Načte CD/DVD obraz do souboru (nebo se pokusí doplnit existující soubor obrazu)."
 
-#: main-window.c:262
+#: main-window.c:253
 msgid "button|Create"
 msgstr "Vytvořit"
 
-#: main-window.c:265
+#: main-window.c:256
 msgid "tooltip|Create error correction file"
 msgstr "Vytvoření souboru oprav chyb"
 
-#: main-window.c:265
+#: main-window.c:256
 msgid "Creates an error correction file. Requires an image file."
 msgstr "Vytvoří soubor oprav chyb. Vyžaduje soubor obrazu."
 
-#: main-window.c:269
+#: main-window.c:260
 msgid "button|Scan"
 msgstr "Skenovat"
 
-#: main-window.c:272
+#: main-window.c:263
 msgid "tooltip|Scan medium"
 msgstr "Skenovat médium"
 
-#: main-window.c:272
+#: main-window.c:263
 msgid "Scans medium for unreadable sectors."
 msgstr "Skenuje médium na nečitelné sektory."
 
-#: main-window.c:276
+#: main-window.c:267
 msgid "button|Fix"
 msgstr "Opravit"
 
-#: main-window.c:279
+#: main-window.c:270
 msgid "tooltip|Repair image"
 msgstr "Opravit obraz"
 
-#: main-window.c:279
+#: main-window.c:270
 msgid "Repairs an image. Requires image and error correction files."
 msgstr "Opraví obraz. Vyžaduje soubor obrazu a soubor oprav chyb."
 
-#: main-window.c:283
+#: main-window.c:274
 msgid "button|Compare"
 msgstr "Porovnat"
 
-#: main-window.c:286
+#: main-window.c:277
 msgid "tooltip|Compare files"
 msgstr "Porovnat soubory"
 
-#: main-window.c:286
+#: main-window.c:277
 msgid "Tests consistency of error correction and image files."
 msgstr "Porovná konzistenci souboru obrazu a souboru oprav chyb."
 
-#: main-window.c:290
+#: main-window.c:281
 msgid "button|Stop"
 msgstr "Zastavit"
 
-#: main-window.c:293
+#: main-window.c:284
 msgid "tooltip|Abort action"
 msgstr "Přerušit akci"
 
-#: main-window.c:293
+#: main-window.c:284
 msgid "Aborts an ongoing action."
 msgstr "Přeruší probíhající akci."
 
-#: main-window.c:460
+#: main-window.c:451
 msgid "tooltip|Protocol for current action"
 msgstr "Protokol aktuální akce"
 
-#: main-window.c:461
+#: main-window.c:452
 msgid "Displays additional information created during the current or last action."
 msgstr "Zobrazí další informace vytvořené v průběhu aktuální nebo poslední akce."
 
-#: main-window.c:470
+#: main-window.c:461
 msgid "View log"
 msgstr "Zobrazit záznam"
 
@@ -1228,7 +1213,7 @@ msgstr "Selhalo přeskočení hlavičky ecc: %s"
 msgid "Analysing existing image file"
 msgstr "Analyzování existujícího souboru obrazu"
 
-#: read-adaptive.c:638 rs01-common.c:158 rs02-compare.c:240
+#: read-adaptive.c:638 rs01-common.c:158 rs02-compare.c:262
 #, c-format
 msgid "premature end in image (only %d bytes): %s\n"
 msgstr "předčasný konec obrazu (pouze %d bajtů): %s\n"
@@ -1487,7 +1472,7 @@ msgstr "neočekávaná chyba čtení obrazu v sektoru %lld"
 msgid "Sector %lld: %s Skipping %d sectors.\n"
 msgstr "Sektor %lld: %s Přeskakuji %d sektorů.\n"
 
-#: read-linear.c:668 rs01-common.c:227 rs02-compare.c:280
+#: read-linear.c:668 rs01-common.c:227 rs02-compare.c:302
 #, c-format
 msgid "* CRC error, sector: %lld\n"
 msgstr "* Chyba CRC, sektor: %lld\n"
@@ -1617,7 +1602,7 @@ msgstr "Rychlost"
 msgid "Failed reading sector %lld in image: %s"
 msgstr "Selhalo čtení sektoru %lld v obrazu: %s"
 
-#: rs01-common.c:132 rs02-compare.c:306 rs02-compare.c:332
+#: rs01-common.c:132 rs02-compare.c:328 rs02-compare.c:354
 #, c-format
 msgid "- testing sectors  : %3d%%"
 msgstr "- testování sektorů  : %3d%%"
@@ -1627,12 +1612,12 @@ msgstr "- testování sektorů  : %3d%%"
 msgid "Scanning image sectors: %3d%%"
 msgstr "Skenuji sektory obrazu: %3d%%"
 
-#: rs01-common.c:179 rs02-compare.c:267
+#: rs01-common.c:179 rs02-compare.c:289
 #, c-format
 msgid "* missing sector   : %lld\n"
 msgstr "* chybějící sektor   : %lld\n"
 
-#: rs01-common.c:180 rs02-compare.c:268
+#: rs01-common.c:180 rs02-compare.c:290
 #, c-format
 msgid "* missing sectors  : %lld - %lld\n"
 msgstr "* chybějící sektory  : %lld - %lld\n"
@@ -1710,7 +1695,7 @@ msgstr "Bloky Ecc:"
 msgid "Ecc checksum:"
 msgstr "Kontrolní součet Ecc:"
 
-#: rs01-compare.c:381 rs02-compare.c:185
+#: rs01-compare.c:381 rs02-compare.c:202
 msgid "Comparison aborted"
 msgstr "Porovnání zrušeno"
 
@@ -1718,7 +1703,7 @@ msgstr "Porovnání zrušeno"
 msgid "Comparing image and error correction files."
 msgstr "Porovnávání souborů obrazu a oprav chyb."
 
-#: rs01-compare.c:388
+#: rs01-compare.c:388 rs02-compare.c:216
 msgid "- Checking image file -"
 msgstr "- Kontrola souboru obrazu -"
 
@@ -1726,7 +1711,7 @@ msgstr "- Kontrola souboru obrazu -"
 msgid "not present\n"
 msgstr "nedostupný\n"
 
-#: rs01-compare.c:411 rs02-compare.c:197
+#: rs01-compare.c:411 rs02-compare.c:219
 #, c-format
 msgid "present, contains %lld medium sectors.\n"
 msgstr "přítomen, obsahuje %lld sektorů média.\n"
@@ -1791,12 +1776,12 @@ msgstr ""
 msgid "<span color=\"red\">Image complete, but contains checksum errors!</span>"
 msgstr "<span color=\"red\">Obraz je kompletní, avšak obsahuje chyby kontrolního součtu!</span>"
 
-#: rs01-compare.c:497 rs02-compare.c:383
+#: rs01-compare.c:497 rs02-compare.c:405
 #, c-format
 msgid "* BAD image        : %lld sectors missing\n"
 msgstr "* VADNÝ obraz        : %lld chybějících sektorů\n"
 
-#: rs01-compare.c:498 rs02-compare.c:387
+#: rs01-compare.c:498 rs02-compare.c:409
 #, c-format
 msgid "* BAD image        : %lld sectors missing, %lld CRC errors\n"
 msgstr "* VADNÝ obraz        : %lld chybějících sektorů, %lld chyb CRC\n"
@@ -1814,11 +1799,11 @@ msgstr "Žádný soubor oprav chyb není dostupný."
 msgid "Could not open %s: %s"
 msgstr "Nelze otevřít %s: %s"
 
-#: rs01-compare.c:562 rs02-compare.c:420
+#: rs01-compare.c:562 rs02-compare.c:442
 msgid "created by dvdisaster"
 msgstr "vytvořil dvdisaster"
 
-#: rs01-compare.c:574 rs02-compare.c:433
+#: rs01-compare.c:574 rs02-compare.c:455
 #, c-format
 msgid "created by dvdisaster-%d.%d\n"
 msgstr "vytvořil dvdisaster-%d.%d\n"
@@ -1827,22 +1812,22 @@ msgstr "vytvořil dvdisaster-%d.%d\n"
 msgid "created by dvdisaster-0.41.x.\n"
 msgstr "vytvořil dvdisaster-0.41.x.\n"
 
-#: rs01-compare.c:589 rs02-compare.c:448
+#: rs01-compare.c:589 rs02-compare.c:470
 #, c-format
 msgid "- method           : %4s, %d roots, %4.1f%% redundancy.\n"
 msgstr "- metoda           : %4s, %d kořenů, redundance %4.1f%%.\n"
 
-#: rs01-compare.c:593 rs02-compare.c:454
+#: rs01-compare.c:593 rs02-compare.c:476
 #, c-format
 msgid "%4s, %d roots, %4.1f%% redundancy"
 msgstr "%4s, %d kořenů, redundance %4.1f%%"
 
-#: rs01-compare.c:598 rs02-compare.c:462
+#: rs01-compare.c:598 rs02-compare.c:484
 #, c-format
 msgid "- requires         : dvdisaster-%d.%d (good)\n"
 msgstr "- vyžaduje         : dvdisaster-%d.%d (v pořádku)\n"
 
-#: rs01-compare.c:607 rs02-compare.c:474
+#: rs01-compare.c:607 rs02-compare.c:496
 #, c-format
 msgid ""
 "* requires         : dvdisaster-%d.%d (BAD)\n"
@@ -1853,11 +1838,11 @@ msgstr ""
 "* Varování          : Následující výstup nemusí být správný.\n"
 "*                  : Navštivte prosím http://www.dvdisaster.com kvůli aktualizaci.\n"
 
-#: rs01-compare.c:619 rs02-compare.c:487
+#: rs01-compare.c:619 rs02-compare.c:509
 msgid "<span color=\"red\">Please upgrade your version of dvdisaster!</span>"
 msgstr "<span color=\"red\">Aktualizujte prosím vaši verzi programu dvdisaster!</span>"
 
-#: rs01-compare.c:631 rs02-compare.c:495
+#: rs01-compare.c:631 rs02-compare.c:517
 #, c-format
 msgid "- medium sectors   : %lld (good)\n"
 msgstr "- sektorů média    : %lld (v pořádku)\n"
@@ -1867,17 +1852,17 @@ msgstr "- sektorů média    : %lld (v pořádku)\n"
 msgid "- medium sectors   : %lld sectors + %d bytes (good)\n"
 msgstr ""
 
-#: rs01-compare.c:646 rs02-compare.c:503
+#: rs01-compare.c:646 rs02-compare.c:525
 #, c-format
 msgid "* medium sectors   : %lld (BAD, perhaps TAO/DAO mismatch)\n"
 msgstr "* sektorů média   : %lld (ŠPATNĚ, pravděpodobně rozdíl TAO/DAO)\n"
 
-#: rs01-compare.c:655 rs02-compare.c:512
+#: rs01-compare.c:655 rs02-compare.c:534
 #, c-format
 msgid "* medium sectors   : %lld (BAD)\n"
 msgstr "* sektorů média   : %lld (SPATNĚ)\n"
 
-#: rs01-compare.c:659 rs01-compare.c:670 rs02-compare.c:518
+#: rs01-compare.c:659 rs01-compare.c:670 rs02-compare.c:540
 msgid "<span color=\"red\">Image size does not match error correction file.</span>"
 msgstr "<span color=\"red\">Velikost obrazu neodpovídá souboru oprav chyb.</span>"
 
@@ -1976,7 +1961,7 @@ msgstr "<span color=\"red\">chybný</span>"
 msgid "<span color=\"red\">Error correction file may be damaged!</span>"
 msgstr "<span color=\"red\">Soubor oprav chyb může být poškozen!</span>"
 
-#: rs01-compare.c:792 rs02-compare.c:563
+#: rs01-compare.c:792 rs02-compare.c:585
 #, c-format
 msgid "- ecc md5sum       : %s (good)\n"
 msgstr "- md5suma ecc      : %s (v pořádku)\n"
@@ -2098,7 +2083,7 @@ msgstr ""
 "Soubor oprav chyb byl úspěšně vytvořen.\n"
 "Zajistěte, aby byl tento soubor uložen na spolehlivém médiu."
 
-#: rs01-fix.c:43 rs02-compare.c:135 rs02-fix.c:376
+#: rs01-fix.c:43 rs02-compare.c:151 rs02-fix.c:376
 #, c-format
 msgid "problem reading crc data: %s"
 msgstr "problém při čtení dat crc: %s"
@@ -2372,7 +2357,7 @@ msgstr "Využití paměti"
 msgid "Use"
 msgstr "Použít"
 
-#: rs02-common.c:223 rs02-common.c:235 rs02-compare.c:347
+#: rs02-common.c:223 rs02-common.c:235 rs02-compare.c:369
 #, c-format
 msgid "Failed seeking to ecc header at %lld: %s\n"
 msgstr "Skok na hlavičku ecc selhal na %lld: %s\n"
@@ -2382,12 +2367,16 @@ msgstr "Skok na hlavičku ecc selhal na %lld: %s\n"
 msgid "Failed writing ecc header at %lld: %s\n"
 msgstr "Selhal zápis hlavičky ecc na %lld: %s\n"
 
-#: rs02-compare.c:351
+#: rs02-compare.c:215
+msgid "Checking integrity of RS02 augmented image file."
+msgstr ""
+
+#: rs02-compare.c:373
 #, c-format
 msgid "Failed reading ecc header at %lld: %s\n"
 msgstr "Selhalo načtení hlavičky ecc na %lld: %s\n"
 
-#: rs02-compare.c:378
+#: rs02-compare.c:400
 #, c-format
 msgid ""
 "- good image       : all sectors present\n"
@@ -2396,37 +2385,37 @@ msgstr ""
 "- dobrý obraz      : všechny sektory přítomny\n"
 "- md5suma dat      : %s\n"
 
-#: rs02-compare.c:385
+#: rs02-compare.c:407
 #, c-format
 msgid "* suspicious image : all sectors present, but %lld CRC errors\n"
 msgstr "* podezřelý obraz  : všechny sektory přítomny, ale %lld chyb CRC\n"
 
-#: rs02-compare.c:389
+#: rs02-compare.c:411
 #, c-format
 msgid "  ... ecc headers    : %lld ok, %lld CRC errors, %lld missing\n"
 msgstr ""
 
-#: rs02-compare.c:391
+#: rs02-compare.c:413
 #, c-format
 msgid "  ... data section   : %lld sectors missing; %lld CRC errors\n"
 msgstr "  ... datová sekce   : %lld sektorů chybí; %lld chyb CRC\n"
 
-#: rs02-compare.c:394
+#: rs02-compare.c:416
 #, c-format
 msgid "  ... data md5sum    : %s\n"
 msgstr "  ... md5suma dat    : %s\n"
 
-#: rs02-compare.c:395
+#: rs02-compare.c:417
 #, c-format
 msgid "  ... crc section    : %lld sectors missing\n"
 msgstr "  ... sekce crc      : %lld sektorů chybí\n"
 
-#: rs02-compare.c:396
+#: rs02-compare.c:418
 #, c-format
 msgid "  ... ecc section    : %lld sectors missing\n"
 msgstr "  ... sekce ecc      : %lld sektorů chybí\n"
 
-#: rs02-compare.c:401
+#: rs02-compare.c:423
 msgid ""
 "\n"
 "Error correction data: "
@@ -2434,32 +2423,32 @@ msgstr ""
 "\n"
 "Data oprav chyb: "
 
-#: rs02-compare.c:531
+#: rs02-compare.c:553
 #, c-format
 msgid "- data md5sum      : %s (good)\n"
 msgstr "- md5suma dat      : %s (v pořádku)\n"
 
-#: rs02-compare.c:532
+#: rs02-compare.c:554
 #, c-format
 msgid "* data md5sum      : %s (BAD)\n"
 msgstr "* md5suma dat      : %s (ŠPATNĚ)\n"
 
-#: rs02-compare.c:544
+#: rs02-compare.c:566
 #, c-format
 msgid "- data md5sum      : %s\n"
 msgstr "- md5suma dat      : %s\n"
 
-#: rs02-compare.c:555
+#: rs02-compare.c:577
 #, c-format
 msgid "- crc md5sum       : %s (good)\n"
 msgstr "- md5suma crc      : %s (v pořádku)\n"
 
-#: rs02-compare.c:556
+#: rs02-compare.c:578
 #, c-format
 msgid "* crc md5sum       : %s (BAD)\n"
 msgstr "* md5suma crc      : %s (ŠPATNĚ)\n"
 
-#: rs02-compare.c:564
+#: rs02-compare.c:586
 #, c-format
 msgid "* ecc md5sum       : %s (BAD)\n"
 msgstr "* md5suma ecc      : %s (ŠPATNĚ)\n"
@@ -3203,6 +3192,19 @@ msgstr ""
 #: welcome-window.c:141
 msgid "<i>New in this Version:</i>"
 msgstr ""
+
+#~ msgid ""
+#~ "Comparing RS02 augmented images is not yet supported\n"
+#~ "in the graphical user interface.\n"
+#~ "You can do it in the command line by typing:\n"
+#~ "\n"
+#~ "dvdisaster -i%s -t"
+#~ msgstr ""
+#~ "Porovnání rošířených obrazů RS02 dosud není podporováno\n"
+#~ "v grafickém uživatelském rozhraní.\n"
+#~ "Můžete je provést z příkazové řádky zadáním:\n"
+#~ "\n"
+#~ "dvdisaster -i%s -t"
 
 #~ msgid ""
 #~ "Image has been appended with error correction data.\n"

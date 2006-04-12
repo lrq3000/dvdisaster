@@ -48,6 +48,17 @@ typedef struct
    GtkWidget *fixUncorrected;
    Curve  *fixCurve;
 
+   /*** Widgets for RS02 compare action */
+
+   GtkWidget *cmpHeadline;
+   GtkWidget *cmpDrawingArea;
+
+   GtkWidget *cmpChkSumErrors;
+   GtkWidget *cmpMissingSectors;
+
+   Spiral    *cmpSpiral;
+   PangoLayout *cmpLayout;
+
    /*** Widgets in the Preferences window */
 
    GtkWidget *radio1,*radio2;

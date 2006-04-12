@@ -28,7 +28,114 @@
  ***/
 
 void ResetRS02CompareWindow(Method *self)
-{  
+{  RS02Widgets *wl = (RS02Widgets*)self->widgetList;
+  
+   Closure->percent = 0;
+   Closure->lastPercent = 0;
+
+   FillSpiral(wl->cmpSpiral, Closure->background);
+   DrawSpiral(wl->cmpSpiral);
+}
+
+/***
+ *** Manage the image spiral
+ ***/
+
+/*
+ * Update part of the spiral
+ */
+
+typedef struct _spiral_idle_info
+{  Spiral *cmpSpiral;
+   GdkColor *segColor;
+} spiral_idle_info;
+
+static gboolean spiral_idle_func(gpointer data)
+{  spiral_idle_info *sii = (spiral_idle_info*)data;
+   int i;
+
+   for(i=Closure->lastPercent+1; i<=Closure->percent; i++)
+     DrawSpiralSegment(sii->cmpSpiral, sii->segColor, i-1);
+
+   Closure->lastPercent = Closure->percent;
+
+   g_free(sii);
+   return FALSE;
+}
+
+static void add_compare_values(Method *method, int percent, 
+/*			       gint64 totalMissing, gint64 totalCrcErrors, */
+			       gint64 newMissing, gint64 newCrcErrors)
+{  RS02Widgets *wl = (RS02Widgets*)method->widgetList;
+   spiral_idle_info *sii = g_malloc(sizeof(spiral_idle_info));
+
+   if(percent < 0 || percent > COMPARE_IMAGE_SEGMENTS)
+     return;
+
+   /*
+   if(newMissing) 
+     SetLabelText(GTK_LABEL(wl->cmpMissingSectors), "<span color=\"red\">%lld</span>", totalMissing);
+
+   if(newCrcErrors) 
+     SetLabelText(GTK_LABEL(wl->cmpChkSumErrors), "<span color=\"red\">%lld</span>", totalCrcErrors);
+   */
+
+   sii->cmpSpiral = wl->cmpSpiral;
+
+   sii->segColor = Closure->green;
+   if(newCrcErrors) sii->segColor = Closure->yellow;
+   if(newMissing) sii->segColor = Closure->red;
+
+   Closure->percent = percent;
+
+   g_idle_add(spiral_idle_func, sii);
+}
+
+/*
+ * Redraw whole spiral
+ */
+
+static void redraw_spiral(RS02Widgets *wl)
+{  int x = wl->cmpSpiral->mx - wl->cmpSpiral->diameter/2 + 10;
+
+   DrawSpiralLabel(wl->cmpSpiral, wl->cmpLayout,
+		   _("Good sectors"), Closure->green, x, 1);
+
+   DrawSpiralLabel(wl->cmpSpiral, wl->cmpLayout,
+		   _("Sectors with CRC errors"), Closure->yellow, x, 2);
+
+   DrawSpiralLabel(wl->cmpSpiral, wl->cmpLayout,
+		   _("Missing sectors"), Closure->red, x, 3);
+
+   DrawSpiral(wl->cmpSpiral);
+}
+
+/*
+ * expose event handler for the spiral
+ */
+
+static gboolean expose_cb(GtkWidget *widget, GdkEventExpose *event, gpointer data)
+{  RS02Widgets *wl = (RS02Widgets*)data;
+   GtkAllocation *a = &widget->allocation;
+   int w,h,size;
+
+   /* Finish spiral initialization */
+
+   if(!wl->cmpLayout)
+   {  SetSpiralWidget(wl->cmpSpiral, widget);
+      wl->cmpLayout = gtk_widget_create_pango_layout(widget, NULL); REMEMBER(wl->cmpLayout);
+   }
+
+   SetText(wl->cmpLayout, _("Missing sectors"), &w, &h);
+   size = wl->cmpSpiral->diameter + 20 + 3*(10+h);  /* approx. size of spiral + labels */
+
+   wl->cmpSpiral->mx = a->width / 2;
+   wl->cmpSpiral->my = (wl->cmpSpiral->diameter + a->height - size)/2;
+
+   if(!event->count)      /* Exposure compression */
+     redraw_spiral(wl);   /* Redraw the spiral */
+
+   return TRUE;
 }
 
 /***
@@ -36,7 +143,50 @@ void ResetRS02CompareWindow(Method *self)
  ***/
 
 void CreateRS02CompareWindow(Method *self, GtkWidget *parent)
-{  
+{  RS02Widgets *wl = (RS02Widgets*)self->widgetList;
+   GtkWidget *sep,*table,*table2,*ignore,*lab,*frame,*d_area;
+
+   wl->cmpHeadline = gtk_label_new(NULL);
+   gtk_misc_set_alignment(GTK_MISC(wl->cmpHeadline), 0.0, 0.0); 
+   gtk_misc_set_padding(GTK_MISC(wl->cmpHeadline), 5, 0);
+   gtk_box_pack_start(GTK_BOX(parent), wl->cmpHeadline, FALSE, FALSE, 3);
+
+   sep = gtk_hseparator_new();
+   gtk_box_pack_start(GTK_BOX(parent), sep, FALSE, FALSE, 0);
+
+   sep = gtk_hseparator_new();
+   gtk_box_pack_start(GTK_BOX(parent), sep, FALSE, FALSE, 0);
+
+   table = gtk_table_new(2, 2, FALSE);
+   gtk_container_set_border_width(GTK_CONTAINER(table), 5);
+   gtk_box_pack_start(GTK_BOX(parent), table, TRUE, TRUE, 0);
+
+   /*** Image info */
+
+   frame = gtk_frame_new(_utf("Image file summary"));
+   gtk_table_attach(GTK_TABLE(table), frame, 0, 1, 0, 1, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+
+   ignore = gtk_label_new("This space for rent :-)\n");
+   gtk_container_add(GTK_CONTAINER(frame), ignore);
+
+   /*** Image spiral */
+
+   frame = gtk_frame_new(_utf("Image state"));
+   gtk_table_attach(GTK_TABLE(table), frame, 1, 2, 0, 2, GTK_SHRINK | GTK_FILL, GTK_EXPAND | GTK_FILL, 5, 5);
+
+   wl->cmpSpiral = CreateSpiral(Closure->grid, Closure->background, 10, 5, COMPARE_IMAGE_SEGMENTS-1);
+   d_area = wl->cmpDrawingArea = gtk_drawing_area_new();
+   gtk_widget_set_size_request(d_area, wl->cmpSpiral->diameter+20, -1);
+   gtk_container_add(GTK_CONTAINER(frame), d_area);
+   g_signal_connect(G_OBJECT(d_area), "expose_event", G_CALLBACK(expose_cb), (gpointer)wl);
+
+   /*** Ecc data info */
+
+   frame = gtk_frame_new(_utf("Error correction data"));
+   gtk_table_attach(GTK_TABLE(table), frame, 0, 1, 1, 2, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 5, 5);
+   ignore = gtk_label_new("Remember this is a development version");
+   gtk_container_add(GTK_CONTAINER(frame), ignore);
+
 }
 
 /***
@@ -159,6 +309,7 @@ static void read_crc(compare_closure *cc, RS02Layout *lay)
 
 void RS02Compare(Method *self)
 {  compare_closure *cc = g_malloc0(sizeof(compare_closure));
+   RS02Widgets *wl = self->widgetList;
    LargeFile *image;
    EccHeader *eh;
    RS02Layout *lay;
@@ -173,6 +324,7 @@ void RS02Compare(Method *self)
    unsigned char buf[2048];
    gint64 first_missing, last_missing;
    gint64 total_missing,data_missing,crc_missing,ecc_missing,hdr_missing;
+   gint64 new_missing = 0, new_crc_errors = 0;
    gint64 data_crc_errors,hdr_crc_errors;
    gint64 hdr_ok,hdr_pos;
    gint64 ecc_sector,expected_sectors;
@@ -192,6 +344,11 @@ void RS02Compare(Method *self)
 
    if(!image)  /* Failing here is unlikely since caller could open it */
      Stop("Could not open %s: %s",Closure->imageName, strerror(errno));
+
+   if(Closure->guiMode)
+     SetLabelText(GTK_LABEL(wl->cmpHeadline), "<big>%s</big>\n<i>%s</i>",
+		  _("Checking integrity of RS02 augmented image file."),
+		  _("- Checking image file -"));
 
    PrintLog("\n%s: ",Closure->imageName);
    PrintLog(_("present, contains %lld medium sectors.\n"),image_sectors);
@@ -254,6 +411,7 @@ void RS02Compare(Method *self)
       {  if(first_missing < 0) first_missing = s;
          last_missing = s;
 	 total_missing++;
+	 new_missing++;
 	 if(s < lay->dataSectors) data_missing++;
 	 else if(s < lay->protectedSectors) crc_missing++;
 	 else ecc_missing++;
@@ -279,6 +437,7 @@ void RS02Compare(Method *self)
 	 if(cc->crcValid[crc_idx] && crc != cc->crcBuf[crc_idx])
 	 {  PrintCLI(_("* CRC error, sector: %lld\n"), s);
 	    data_crc_errors++;
+	    new_crc_errors++;
 	 }
       }
       crc_idx++;
@@ -304,20 +463,9 @@ void RS02Compare(Method *self)
 
       if(last_percent != percent) 
       {  PrintProgress(_("- testing sectors  : %3d%%") ,percent);
-
-#if 0
-         if(pbar)
-	   SetProgress(pbar, percent, 100);
-
-	 if(Closure->guiMode && mode & PRINT_MODE)
-	 {  AddCompareValues(percent, ii->sectorsMissing, ii->crcErrors,
-			     ii->sectorsMissing - prev_missing,
-			     ii->crcErrors - prev_crc_errors);
-	    prev_missing = ii->sectorsMissing;
-	    prev_crc_errors = ii->crcErrors;
-	 }
-#endif
+	 add_compare_values(self, percent, new_missing, new_crc_errors); 
 	 last_percent = percent;
+	 new_missing = new_crc_errors = 0;
       }
    }
 

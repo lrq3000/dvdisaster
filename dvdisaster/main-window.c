@@ -171,15 +171,6 @@ static void action_cb(GtkWidget *widget, gpointer data)
 	  if(!(method = FindMethod("RS01")))
 	     break;
 
-	if(!strncmp(method->name, "RS02", 4))
-	{  CreateMessage(_("Comparing RS02 augmented images is not yet supported\n"
-			   "in the graphical user interface.\n"
-			   "You can do it in the command line by typing:\n\n"
-			   "dvdisaster -i%s -t"), 
-			 GTK_MESSAGE_ERROR, Closure->imageName);
-	   break;
-	}
-
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(Closure->notebook), method->tabWindowIndex+2);
 	method->resetCompareWindow(method);
 	AllowActions(FALSE);
