@@ -434,7 +434,7 @@ void ReadMediumAdaptive(gpointer data)
         (only if the .ecc file is available) */
 
    if(rc->ei)
-   {  //status = ReadSectors(rc->dh, buf+2048, FOOTPRINT_SECTOR, 1);
+   {  //status = ReadSectors(rc->dh, buf+2048, FINGERPRINT_SECTOR, 1);
       status = ReadSectors(rc->dh, buf+2048, rc->ei->eh->fpSector, 1);
 
       if(status) 
@@ -459,7 +459,7 @@ void ReadMediumAdaptive(gpointer data)
 	 MD5Final(buf, &image_md5);
 
 	 if(memcmp(buf, eh->mediumFP, 16))
-	   Stop(_("Footprints of image and ecc file do not match.\n"
+	   Stop(_("Fingerprints of image and ecc file do not match.\n"
 		  "Image and ecc file do not belong together.\n"));
       }
    }
@@ -523,7 +523,7 @@ reopen_image:
    }
    else  /* examine the existing image file */
    {  char *t = _("Completing existing medium image.");
-      int unknown_footprint = FALSE;
+      int unknown_fingerprint = FALSE;
       int last_percent = 0;
       int tail_included = FALSE;
       gint64 first_missing, last_missing, current_missing;
@@ -534,19 +534,19 @@ reopen_image:
       if(!(rc->image = LargeOpen(Closure->imageName, O_RDWR, IMG_PERMS)))
 	Stop(_("Can't open %s:\n%s"),Closure->imageName,strerror(errno));
 
-      /* See if the media and image footprints match. */
+      /* See if the media and image fingerprints match. */
 
-      if(!LargeSeek(rc->image, (gint64)(2048*FOOTPRINT_SECTOR)))
-	unknown_footprint = TRUE;
+      if(!LargeSeek(rc->image, (gint64)(2048*FINGERPRINT_SECTOR)))
+	unknown_fingerprint = TRUE;
       else
       {  n = LargeRead(rc->image, buf, 2048);
-	 status = ReadSectors(rc->dh, buf+2048, FOOTPRINT_SECTOR, 1);
+	 status = ReadSectors(rc->dh, buf+2048, FINGERPRINT_SECTOR, 1);
 
 	 if(n != 2048 || status || !memcmp(buf, Closure->deadSector, 2048))
-	   unknown_footprint = TRUE;
+	   unknown_fingerprint = TRUE;
       }
 
-      if(!unknown_footprint && memcmp(buf, buf+2048, 2048))
+      if(!unknown_fingerprint && memcmp(buf, buf+2048, 2048))
       {  	  
 	 if(!Closure->guiMode)
 	   Stop(_("Image file does not match the CD/DVD."));

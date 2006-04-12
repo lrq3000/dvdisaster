@@ -374,7 +374,7 @@ static void prepare_header(ecc_closure *ec)
 
    eh->creatorVersion  = Closure->version;
    eh->neededVersion   = 6600;
-   eh->fpSector        = FOOTPRINT_SECTOR;
+   eh->fpSector        = FINGERPRINT_SECTOR;
    eh->inLast          = ii->inLast;
 
    eh->selfCRC = 0x4c5047;

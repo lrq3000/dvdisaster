@@ -72,12 +72,12 @@ ImageInfo* OpenImageFile(EccHeader *eh, int mode)
 		   ii->sectors-1, ii->inLast);
    }
 
-   /*** Calculate md5sum of the footprint sector.
+   /*** Calculate md5sum of the fingerprint sector.
 	Use sector specified by .ecc file if possible, 
 	else use built-in default  */
 
    if(!eh)
-        fp_sector = FOOTPRINT_SECTOR;
+        fp_sector = FINGERPRINT_SECTOR;
    else fp_sector = eh->fpSector;
 
    LargeSeek(ii->file, fp_sector*2048);

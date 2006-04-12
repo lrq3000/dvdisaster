@@ -189,17 +189,17 @@ void ReadMediumLinear(gpointer data)
    /*** See if the current ecc file belongs to the medium */
 
    rc->ei = OpenEccFile(READABLE_ECC | PRINT_MODE);
-   if(rc->ei) /* Compare the footprint sectors */
+   if(rc->ei) /* Compare the fingerprint sectors */
    {  struct MD5Context md5ctxt;
-      guint8 footprint[16];
+      guint8 fingerprint[16];
 
       status = ReadSectors(rc->dh, buf, rc->ei->eh->fpSector, 1);
 
       MD5Init(&md5ctxt);
       MD5Update(&md5ctxt, buf, 2048);
-      MD5Final(footprint, &md5ctxt);
+      MD5Final(fingerprint, &md5ctxt);
 
-      if(!status && !memcmp(footprint, rc->ei->eh->mediumFP, 16))
+      if(!status && !memcmp(fingerprint, rc->ei->eh->mediumFP, 16))
 	Closure->checkCrc = TRUE;
    }
 
@@ -275,7 +275,7 @@ reopen_image:
      }
      else
      {  char *t = _("Completing existing medium image.");
-        int unknown_footprint = FALSE;
+        int unknown_fingerprint = FALSE;
 
         /* Use the existing file as a starting point.
 	   Set the read_marker at the end of the file
@@ -288,19 +288,19 @@ reopen_image:
         rereading = 1;
 	read_marker = image_size / 2048;
 
-	/* See if the media and image footprints match */
+	/* See if the media and image fingerprints match */
 
-	if(!LargeSeek(rc->image, (gint64)(2048*FOOTPRINT_SECTOR)))
-	  unknown_footprint = TRUE;
+	if(!LargeSeek(rc->image, (gint64)(2048*FINGERPRINT_SECTOR)))
+	  unknown_fingerprint = TRUE;
 	else
 	{  n = LargeRead(rc->image, buf, 2048);
-	   status = ReadSectors(rc->dh, buf+2048, FOOTPRINT_SECTOR, 1);
+	   status = ReadSectors(rc->dh, buf+2048, FINGERPRINT_SECTOR, 1);
 
 	   if(n != 2048 || status || !memcmp(buf, Closure->deadSector, 2048))
-	     unknown_footprint = TRUE;
+	     unknown_fingerprint = TRUE;
         }
 
-	if(!unknown_footprint && memcmp(buf, buf+2048, 2048))
+	if(!unknown_fingerprint && memcmp(buf, buf+2048, 2048))
 	{  	  
 	   if(!Closure->guiMode)
 	     Stop(_("Image file does not match the CD/DVD."));
@@ -812,14 +812,14 @@ step_counter:
         answer = ModalWarning(GTK_MESSAGE_WARNING, GTK_BUTTONS_OK_CANCEL, NULL,
 			      _("%d sectors missing at the end of the disc.\n"
 				"This is okay if the CD was written in TAO (track at once) mode.\n"
-				"The Image will be trimmed accordingly. See the manual for details.\n"),
+				"The Image will be truncated accordingly. See the manual for details.\n"),
 			      tao_tail);
       else 
         answer = ModalWarning(GTK_MESSAGE_WARNING, GTK_BUTTONS_OK_CANCEL, NULL,
 			      _("%d sectors missing at the end of the disc.\n"
 				"This is okay if the CD was written in TAO (track at once) mode.\n"
-				"The Image will be trimmed accordingly. See the manual for details.\n"
-				"Use the --dao option to disable image trimming.\n"),
+				"The Image will be truncated accordingly. See the manual for details.\n"
+				"Use the --dao option to disable image truncating.\n"),
 			      tao_tail);
      
       sectors -= tao_tail;

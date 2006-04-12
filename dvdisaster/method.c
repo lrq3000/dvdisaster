@@ -106,7 +106,7 @@ Method *FindMethod(char *name)
  * Note that udf.c has a similar function FindHeaderInMedia().
  */
 
-static int read_footprint(LargeFile *file, unsigned char *footprint, gint64 sector)
+static int read_fingerprint(LargeFile *file, unsigned char *fingerprint, gint64 sector)
 {  struct MD5Context md5ctxt;
    int n;
 
@@ -122,7 +122,7 @@ static int read_footprint(LargeFile *file, unsigned char *footprint, gint64 sect
 
    MD5Init(&md5ctxt);
    MD5Update(&md5ctxt, Closure->scratchBuf, 2048);
-   MD5Final(footprint, &md5ctxt);
+   MD5Final(fingerprint, &md5ctxt);
 
    return TRUE;
 }
@@ -134,7 +134,7 @@ EccHeader* FindHeaderInImage(char *filename)
    gint64 length,sectors,pos;
    gint64 header_modulo;
    gint64 last_fp = -1;
-   unsigned char footprint[16];
+   unsigned char fingerprint[16];
 
    if(!LargeStat(filename, &length))
      return NULL;
@@ -193,16 +193,16 @@ EccHeader* FindHeaderInImage(char *filename)
 		  if(last_fp != eh->fpSector)
 		  {  int status;
 
-		     status = read_footprint(file, footprint, eh->fpSector);
+		     status = read_fingerprint(file, fingerprint, eh->fpSector);
 		     last_fp = eh->fpSector;
 
-		     if(!status)  /* be optimistic if footprint sector is unreadable */
+		     if(!status)  /* be optimistic if fingerprint sector is unreadable */
 		     {  LargeClose(file);
 		        return eh;
 		     }
 		  }
 
-		  if(!memcmp(footprint, eh->mediumFP, 16))  /* good footprint */
+		  if(!memcmp(fingerprint, eh->mediumFP, 16))  /* good fingerprint */
 		  {  LargeClose(file);
 		     return eh;
 		  }

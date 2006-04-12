@@ -28,7 +28,7 @@
  *** Look for ecc headers in RS02 style media
  ***/
 
-static int read_footprint(DeviceHandle *dh, unsigned char *footprint, gint64 sector)
+static int read_fingerprint(DeviceHandle *dh, unsigned char *fingerprint, gint64 sector)
 {  struct MD5Context md5ctxt;
    int status;
 
@@ -38,7 +38,7 @@ static int read_footprint(DeviceHandle *dh, unsigned char *footprint, gint64 sec
 
    MD5Init(&md5ctxt);
    MD5Update(&md5ctxt, Closure->scratchBuf, 2048);
-   MD5Final(footprint, &md5ctxt);
+   MD5Final(fingerprint, &md5ctxt);
 
    return TRUE;
 }
@@ -48,7 +48,7 @@ static EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
 {  EccHeader *eh = NULL;
    gint64 pos;
    gint64 header_modulo;
-   unsigned char footprint[16];
+   unsigned char fingerprint[16];
    gint64 last_fp = -1;
 
    header_modulo = (gint64)1<<62;
@@ -90,14 +90,14 @@ static EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
 	       if(last_fp != eh->fpSector)
 	       {  int status;
 
-		  status = read_footprint(dh, footprint, eh->fpSector);
+		  status = read_fingerprint(dh, fingerprint, eh->fpSector);
 		  last_fp = eh->fpSector;
 
-		  if(!status)  /* be optimistic if footprint sector is unreadable */
+		  if(!status)  /* be optimistic if fingerprint sector is unreadable */
 		    return eh;
 	       }
 
-	       if(!memcmp(footprint, eh->mediumFP, 16))  /* good footprint */
+	       if(!memcmp(fingerprint, eh->mediumFP, 16))  /* good fingerprint */
 		 return eh;
 
 	       /* might be a header from a larger previous session.

@@ -317,7 +317,7 @@ void RS01Create(Method *self)
    ei->eh->eccBytes        = nroots;
 
    ei->eh->creatorVersion  = Closure->version;
-   ei->eh->fpSector        = FOOTPRINT_SECTOR;
+   ei->eh->fpSector        = FINGERPRINT_SECTOR;
    ei->eh->inLast          = ii->inLast;
 
 

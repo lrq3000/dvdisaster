@@ -301,7 +301,7 @@ typedef struct _EccInfo
  *** The .ecc file header
  ***/
 
-#define FOOTPRINT_SECTOR 16   /* Sector currently used to calculate the footprint. */
+#define FINGERPRINT_SECTOR 16 /* Sector currently used to calculate the fingerprint. */
                               /* This is the ISO filesystem root sector which contains */
                               /* the volume label and creation time stamps. */
                               /* Versions upto 0.64 used sector 257, */
@@ -314,7 +314,7 @@ typedef struct _EccHeader
 {  gint8 cookie[12];           /* "*dvdisaster*" */
    gint8 method[4];            /* e.g. "RS01" */
    gint8 methodFlags[4];       /* 0-2 for free use by the respective methods; 3 see above */
-   guint8 mediumFP[16];        /* fingerprint of FOOTPRINT SECTOR */ 
+   guint8 mediumFP[16];        /* fingerprint of FINGERPRINT SECTOR */ 
    guint8 mediumSum[16];       /* complete md5sum of whole medium */
    guint8 eccSum[16];          /* md5sum of ecc code section of .ecc file */
    guint8 sectors[8];          /* number of sectors medium is supposed to have */
