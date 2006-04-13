@@ -297,7 +297,7 @@ void RS01Fix(Method *method)
       }
    }
    else if(memcmp(ii->mediumFP, eh->mediumFP, 16))
-          Stop(_("Footprints of image and ecc file do not match.\n"
+          Stop(_("Fingerprints of image and ecc file do not match.\n"
 	         "Image and ecc file do not belong together.\n"));
 
    /*** Set up the Galois field arithmetic */

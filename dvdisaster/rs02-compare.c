@@ -30,6 +30,16 @@
 void ResetRS02CompareWindow(Method *self)
 {  RS02Widgets *wl = (RS02Widgets*)self->widgetList;
   
+   SetLabelText(GTK_LABEL(wl->cmpEccCreatedBy), "dvdisaster");
+   SetLabelText(GTK_LABEL(wl->cmpEccMethod), "");
+   SetLabelText(GTK_LABEL(wl->cmpEccRequires), "");
+   SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), "");
+   SetLabelText(GTK_LABEL(wl->cmpDataMd5Sum), "");
+   SetLabelText(GTK_LABEL(wl->cmpCrcMd5Sum), "");
+   SetLabelText(GTK_LABEL(wl->cmpEccMd5Sum), "");
+
+   SwitchAndSetFootline(wl->cmpEccNotebook, 0, NULL, NULL);
+
    Closure->percent = 0;
    Closure->lastPercent = 0;
 
@@ -144,7 +154,7 @@ static gboolean expose_cb(GtkWidget *widget, GdkEventExpose *event, gpointer dat
 
 void CreateRS02CompareWindow(Method *self, GtkWidget *parent)
 {  RS02Widgets *wl = (RS02Widgets*)self->widgetList;
-   GtkWidget *sep,*table,*table2,*ignore,*lab,*frame,*d_area;
+   GtkWidget *sep,*notebook,*table,*table2,*ignore,*lab,*frame,*d_area;
 
    wl->cmpHeadline = gtk_label_new(NULL);
    gtk_misc_set_alignment(GTK_MISC(wl->cmpHeadline), 0.0, 0.0); 
@@ -184,8 +194,81 @@ void CreateRS02CompareWindow(Method *self, GtkWidget *parent)
 
    frame = gtk_frame_new(_utf("Error correction data"));
    gtk_table_attach(GTK_TABLE(table), frame, 0, 1, 1, 2, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 5, 5);
-   ignore = gtk_label_new("Remember this is a development version");
-   gtk_container_add(GTK_CONTAINER(frame), ignore);
+
+   notebook = wl->cmpEccNotebook = gtk_notebook_new();
+   gtk_notebook_set_show_tabs(GTK_NOTEBOOK(notebook), FALSE);
+   gtk_notebook_set_show_border(GTK_NOTEBOOK(notebook), FALSE);
+   gtk_container_add(GTK_CONTAINER(frame), notebook);
+
+   ignore = gtk_label_new(NULL);
+   lab = gtk_label_new("");
+   gtk_notebook_append_page(GTK_NOTEBOOK(notebook), lab, ignore);
+
+   table2 = gtk_table_new(2, 8, FALSE);
+   //   gtk_container_add(GTK_CONTAINER(frame), table2);
+   ignore = gtk_label_new("ecc info");
+   gtk_notebook_append_page(GTK_NOTEBOOK(notebook), table2, ignore);
+   gtk_container_set_border_width(GTK_CONTAINER(table2), 5);
+
+   lab = gtk_label_new(NULL);
+   gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
+   SetLabelText(GTK_LABEL(lab), _("Created by:"));
+   gtk_table_attach(GTK_TABLE(table2), lab, 0, 1, 0, 1, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 2 );
+   lab = wl->cmpEccCreatedBy = gtk_label_new(NULL);
+   gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
+   gtk_table_attach(GTK_TABLE(table2), lab, 1, 2, 0, 1, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
+
+   lab = gtk_label_new(NULL);
+   gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
+   SetLabelText(GTK_LABEL(lab), _("Method:"));
+   gtk_table_attach(GTK_TABLE(table2), lab, 0, 1, 1, 2, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 2 );
+   lab = wl->cmpEccMethod = gtk_label_new(NULL);
+   gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
+   gtk_table_attach(GTK_TABLE(table2), lab, 1, 2, 1, 2, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
+
+   lab = gtk_label_new(NULL);
+   gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
+   SetLabelText(GTK_LABEL(lab), _("Requires:"));
+   gtk_table_attach(GTK_TABLE(table2), lab, 0, 1, 2, 3, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 2 );
+   lab = wl->cmpEccRequires = gtk_label_new(NULL);
+   gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
+   gtk_table_attach(GTK_TABLE(table2), lab, 1, 2, 2, 3, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
+
+   lab = gtk_label_new(NULL);
+   gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
+   SetLabelText(GTK_LABEL(lab), _("Medium sectors:"));
+   gtk_table_attach(GTK_TABLE(table2), lab, 0, 1, 3, 4, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 2 );
+   lab = wl->cmpEccMediumSectors = gtk_label_new(NULL);
+   gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
+   gtk_table_attach(GTK_TABLE(table2), lab, 1, 2, 3, 4, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
+
+   lab = gtk_label_new(NULL);
+   gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
+   SetLabelText(GTK_LABEL(lab), _("Data checksum:"));
+   gtk_table_attach(GTK_TABLE(table2), lab, 0, 1, 4, 5, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 2 );
+   lab = wl->cmpDataMd5Sum = gtk_label_new(NULL);
+   gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
+   gtk_table_attach(GTK_TABLE(table2), lab, 1, 2, 4, 5, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
+
+   lab = gtk_label_new(NULL);
+   gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
+   SetLabelText(GTK_LABEL(lab), _("CRC checksum:"));
+   gtk_table_attach(GTK_TABLE(table2), lab, 0, 1, 5, 6, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 2 );
+   lab = wl->cmpCrcMd5Sum = gtk_label_new(NULL);
+   gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
+   gtk_table_attach(GTK_TABLE(table2), lab, 1, 2, 5, 6, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
+   lab = gtk_label_new(NULL);
+
+   gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
+   SetLabelText(GTK_LABEL(lab), _("Ecc checksum:"));
+   gtk_table_attach(GTK_TABLE(table2), lab, 0, 1, 6, 7, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 2 );
+   lab = wl->cmpEccMd5Sum = gtk_label_new(NULL);
+   gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
+   gtk_table_attach(GTK_TABLE(table2), lab, 1, 2, 6, 7, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
+
+   lab = wl->cmpEccResult = gtk_label_new(NULL);
+   gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0);
+   gtk_table_attach(GTK_TABLE(table2), lab, 0, 2, 7, 8, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 4);
 
 }
 
@@ -331,6 +414,7 @@ void RS02Compare(Method *self)
    int ecc_slice;
    int major,minor,pl;
    char method[5];
+   char *ecc_advice = NULL;
 
    /*** Prepare for early termination */
 
@@ -569,24 +653,20 @@ void RS02Compare(Method *self)
       PrintLog("\n");
 
       if(!color_format) color_format = format;
-#if 0
       if(Closure->guiMode)
 	SwitchAndSetFootline(wl->cmpEccNotebook, 1,
 			     wl->cmpEccCreatedBy, 
 			     color_format, "dvdisaster",
 			     major, minor, pl);
-#endif
    }
    else
    {  PrintLog(_("created by dvdisaster-%d.%d\n"), 
 	       major, minor);
 
-#if 0
       if(Closure->guiMode)
 	SwitchAndSetFootline(wl->cmpEccNotebook, 1,
 			     wl->cmpEccCreatedBy, "dvdisaster-%d.%d",
 			     major, minor);
-#endif
    }
 
    /* Error correction method */
@@ -597,12 +677,10 @@ void RS02Compare(Method *self)
 	    method, eh->eccBytes, 
 	    ((double)eh->eccBytes*100.0)/(double)eh->dataBytes);
 
-#if 0
    if(Closure->guiMode)
-     SetLabelText(GTK_LABEL(Closure->cmpEccMethod), _("%4s, %d roots, %4.1f%% redundancy"),
+     SetLabelText(GTK_LABEL(wl->cmpEccMethod), _("%4s, %d roots, %4.1f%% redundancy"),
 		  method, eh->eccBytes, 
 		  ((double)eh->eccBytes*100.0)/(double)eh->dataBytes);
-#endif
 
    /* required dvdisaster version */
 
@@ -611,12 +689,11 @@ void RS02Compare(Method *self)
 	       eh->neededVersion/10000,
 	       (eh->neededVersion%10000)/100);
 
-#if 0
+
       if(Closure->guiMode)
-	SetLabelText(GTK_LABEL(Closure->cmpEccRequires), "dvdisaster-%d.%d",
+	SetLabelText(GTK_LABEL(wl->cmpEccRequires), "dvdisaster-%d.%d",
 		     eh->neededVersion/10000,
 		     (eh->neededVersion%10000)/100);
-#endif
    }
    else 
    {  PrintLog(_("* requires         : dvdisaster-%d.%d (BAD)\n"
@@ -625,47 +702,43 @@ void RS02Compare(Method *self)
 	       eh->neededVersion/10000,
 	       (eh->neededVersion%10000)/100);
 
-#if 0
+
      if(Closure->guiMode)
-     {  SetLabelText(GTK_LABEL(Closure->cmpEccRequires), 
+     {  SetLabelText(GTK_LABEL(wl->cmpEccRequires), 
 		     "<span color=\"red\">dvdisaster-%d.%d</span>",
 		     eh->neededVersion/10000,
 		     (eh->neededVersion%10000)/100);
         if(!ecc_advice) 
 	  ecc_advice = g_strdup(_("<span color=\"red\">Please upgrade your version of dvdisaster!</span>"));
      }
-#endif
    }
 
    /* Number of sectors medium is supposed to have */
 
    if(image_sectors == expected_sectors)
    {  PrintLog(_("- medium sectors   : %lld (good)\n"), expected_sectors);
-#if 0
+
       if(Closure->guiMode)
 	SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), "%lld", expected_sectors);
-#endif
    }
    else 
    {  if(image_sectors > expected_sectors && image_sectors - expected_sectors <= 2)   
       {  PrintLog(_("* medium sectors   : %lld (BAD, perhaps TAO/DAO mismatch)\n"),
 		  expected_sectors);
-#if 0
+
 	 if(Closure->guiMode)
 	   SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), 
 			"<span color=\"red\">%lld</span>", expected_sectors);
-#endif
       }
       else 
       {  PrintLog(_("* medium sectors   : %lld (BAD)\n"),expected_sectors);
-#if 0
+
 	 if(Closure->guiMode)
 	 {  SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), 
 			 "<span color=\"red\">%lld</span>", expected_sectors);
 	    if(!ecc_advice)
-	      ecc_advice = g_strdup(_("<span color=\"red\">Image size does not match error correction file.</span>"));
+	      ecc_advice = g_strdup(_("<span color=\"red\">Image size does not match recorded size.</span>"));
 	 }
-#endif
       }
    }
 
@@ -678,38 +751,68 @@ void RS02Compare(Method *self)
 
       if(n) PrintLog(_("- data md5sum      : %s (good)\n"),hdr_digest);
       else  PrintLog(_("* data md5sum      : %s (BAD)\n"),hdr_digest);
-#if 0
+
       if(Closure->guiMode)
-      {  if(n) SetLabelText(GTK_LABEL(Closure->cmpEccImgMd5Sum), "%s", edigest);
+      {  if(n) SetLabelText(GTK_LABEL(wl->cmpDataMd5Sum), "%s", hdr_digest);
 	 else  
-	 {  SetLabelText(GTK_LABEL(Closure->cmpEccImgMd5Sum), "<span color=\"red\">%s</span>", edigest);
-	    SetLabelText(GTK_LABEL(Closure->cmpImageMd5Sum), "<span color=\"red\">%s</span>", idigest);
+	 {  SetLabelText(GTK_LABEL(wl->cmpDataMd5Sum), "<span color=\"red\">%s</span>", hdr_digest);
+#if 0
+	    SetLabelText(GTK_LABEL(wl->cmpImageMd5Sum), "<span color=\"red\">%s</span>", idigest);
+#endif
 	 }
       }
-#endif
    }
    else 
    {  PrintLog(_("- data md5sum      : %s\n"),hdr_digest);
-#if 0
+
       if(Closure->guiMode)
-	SetLabelText(GTK_LABEL(Closure->cmpEccImgMd5Sum), "%s", edigest);
-#endif
+	SetLabelText(GTK_LABEL(wl->cmpDataMd5Sum), "%s", hdr_digest);
    }
 
    /*** md5sum of the crc portion */
 
    AsciiDigest(digest, cc->crcSum);
    if(!memcmp(eh->crcSum, cc->crcSum, 16))
-        PrintLog(_("- crc md5sum       : %s (good)\n"),digest);
-   else PrintLog(_("* crc md5sum       : %s (BAD)\n"),digest);
-
+   {    PrintLog(_("- crc md5sum       : %s (good)\n"),digest);
+        if(Closure->guiMode)
+	  SetLabelText(GTK_LABEL(wl->cmpCrcMd5Sum), "%s", digest);
+   }
+   else 
+   {    PrintLog(_("* crc md5sum       : %s (BAD)\n"),digest);
+        if(Closure->guiMode)
+	{  SetLabelText(GTK_LABEL(wl->cmpCrcMd5Sum), "<span color=\"red\">%s</span>", digest);
+	   if(!ecc_advice)
+	     ecc_advice = g_strdup(_("<span color=\"red\">Damaged CRC data.</span>"));
+	}
+   }
 
    /*** meta md5sum of the ecc slices */
 
    AsciiDigest(digest, ecc_sum);
    if(!memcmp(eh->eccSum, ecc_sum, 16))
-        PrintLog(_("- ecc md5sum       : %s (good)\n"),digest);
-   else PrintLog(_("* ecc md5sum       : %s (BAD)\n"),digest);
+   {    PrintLog(_("- ecc md5sum       : %s (good)\n"),digest);
+        if(Closure->guiMode)
+	  SetLabelText(GTK_LABEL(wl->cmpEccMd5Sum), "%s", digest);
+   }
+   else 
+   {    PrintLog(_("* ecc md5sum       : %s (BAD)\n"),digest);
+        if(Closure->guiMode)
+	{  SetLabelText(GTK_LABEL(wl->cmpEccMd5Sum), "<span color=\"red\">%s</span>", digest);
+	   if(!ecc_advice)
+	     ecc_advice = g_strdup(_("<span color=\"red\">Damaged Ecc data.</span>"));
+	}
+   }
+
+   /*** Print final results */
+
+   if(Closure->guiMode)
+   {  if(ecc_advice) 
+      {  SetLabelText(GTK_LABEL(wl->cmpEccResult), ecc_advice);
+         g_free(ecc_advice);
+      }
+      else SetLabelText(GTK_LABEL(wl->cmpEccResult),
+		        _("<span color=\"#008000\">Good error correction data.</span>"));
+   }
 
    /*** Close and clean up */
 

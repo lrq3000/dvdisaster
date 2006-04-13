@@ -59,6 +59,16 @@ typedef struct
    Spiral    *cmpSpiral;
    PangoLayout *cmpLayout;
 
+   GtkWidget *cmpEccNotebook;
+   GtkWidget *cmpEccCreatedBy;
+   GtkWidget *cmpEccMethod;
+   GtkWidget *cmpEccRequires;
+   GtkWidget *cmpEccMediumSectors;
+   GtkWidget *cmpDataMd5Sum;
+   GtkWidget *cmpCrcMd5Sum;
+   GtkWidget *cmpEccMd5Sum;
+   GtkWidget *cmpEccResult;
+
    /*** Widgets in the Preferences window */
 
    GtkWidget *radio1,*radio2;
