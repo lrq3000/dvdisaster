@@ -402,8 +402,10 @@ static gint32 *enc_alpha_to;
 
    /*** Show the second progress bar */
 
-   ShowWidget(ec->wl->encPBar2);
-   ShowWidget(ec->wl->encLabel2);
+   if(Closure->guiMode)
+   {  ShowWidget(ec->wl->encPBar2);
+      ShowWidget(ec->wl->encLabel2);
+   }
 
    /*** Adjust image bounds to include the CRC sectors */
 
@@ -1006,7 +1008,7 @@ void RS02Create(Method *method)
    {  int answer;
 
       answer = ModalWarning(GTK_MESSAGE_WARNING, GTK_BUTTONS_OK_CANCEL, NULL,
-			    _("Using redundancies below 20%% may not give\n"
+			    _("Using redundancies below 20%%%% may not give\n"
 			      "the expected data loss protection.\n"));
 
       if(!answer)

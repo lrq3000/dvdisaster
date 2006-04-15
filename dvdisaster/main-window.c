@@ -274,7 +274,7 @@ static GtkWidget* create_action_bar(GtkNotebook *notebook)
    Closure->testButton = wid = create_button(_("button|Compare"), "dvdisaster-compare");
    g_signal_connect(G_OBJECT(wid), "clicked", G_CALLBACK(action_cb), (gpointer)ACTION_COMPARE);
    gtk_box_pack_start(GTK_BOX(vbox), wid, FALSE, FALSE, 0);
-   AttachTooltip(wid, _("tooltip|Compare files"), _("Tests consistency of error correction and image files."));
+   AttachTooltip(wid, _("tooltip|Compare files"), _("Tests consistency of error correction data and image files."));
 
    /*** Stop */
 

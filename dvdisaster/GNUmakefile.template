@@ -51,7 +51,7 @@ OFILES = $(CFG_OFILES)
 # Compilation related
 ######################################################################
 
-.PHONY : all show locale html images pack-images
+.PHONY : all show locale html images pack-images lock-images
 
 .c.o:
 	@echo "Compiling:" $*.c
@@ -118,6 +118,10 @@ documentation/images/open-img.png:
         fi
 
 images: documentation/images/open-img.png
+
+lock-images:
+	touch documentation/MAKE_SRCDIST
+
 
 pack-images: tools/pngpack
 	@echo -n "Packing images (may take a while) ... "
@@ -262,7 +266,7 @@ clean:
 	@find . -name \*\~ -print | xargs rm -f;
 	@find . -name \*.mo -print | xargs rm -f;
 	@rm -rf documentation/cs/*.html documentation/de/*.html documentation/en/*.html
-#	@if test -e THESE_ARE_THE_DEVEL_SOURCES; then rm -f documentation/images*.pngpack; fi
+	@if test -e THESE_ARE_THE_DEVEL_SOURCES && ! test -e documentation/MAKE_SRCDIST; then rm -f documentation/images-*.pngpack; fi
 	@rm -f documentation/pngpack.log
 	@rm -f version.h
 	@if test -e tools/Makefile.config; then $(MAKE) --no-print-directory -C tools clean; fi
@@ -292,10 +296,10 @@ berlios-images:
 	@cd documentation ; ./create.bash berlios $(VERSION) ; \
 	tar cjf ../../berlios.tar.bz2 cs/*.html de/*.html en/*.html images/*.jpg images/*.png cs/images/*.png de/images/*.png en/images/*.png
 
-srcdist: pack-images clean distclean 
+srcdist: pack-images lock-images clean distclean 
 	@cd .. ; tar -c -j -X $(PKGNAME)/NODIST -f $(PKGNAME).tar.bz2 $(PKGNAME)
 	@cd .. ; gpg --default-key 091ad320 --detach-sign --armor $(PKGNAME).tar.bz2
-	@rm -f documentation/images-*.pngpack
+	@rm -f documentation/images-*.pngpack documentation/MAKE_SRCDIST
 
 bindist: dvdisaster html pack-images
 	@mkdir $(PKGNAME)

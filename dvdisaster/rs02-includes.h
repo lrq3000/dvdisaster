@@ -59,6 +59,14 @@ typedef struct
    Spiral    *cmpSpiral;
    PangoLayout *cmpLayout;
 
+   GtkWidget *cmpImageSectors;
+   GtkWidget *cmpImageMd5Sum;
+   GtkWidget *cmpEccHeaders;
+   GtkWidget *cmpDataSection;
+   GtkWidget *cmpCrcSection;
+   GtkWidget *cmpEccSection;
+   GtkWidget *cmpImageResult;
+
    GtkWidget *cmpEccNotebook;
    GtkWidget *cmpEccCreatedBy;
    GtkWidget *cmpEccMethod;
