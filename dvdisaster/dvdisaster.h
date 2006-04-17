@@ -340,7 +340,7 @@ void PrepareDeadSector(void);
 
 void CreateEcc(void);
 void FixEcc(void);
-void Compare(void);
+void Verify(void);
 
 /***
  *** closure.c
@@ -523,7 +523,7 @@ typedef enum
    ACTION_STOP,      /* ----   does not have a window */
    ACTION_READ,      /* Tab 1 (linear); Tab 2 (adaptive)*/
    ACTION_SCAN,      /* Tab 1 (linear); Tab 2 (adaptive)*/
-   ACTION_COMPARE,   /* COMPARE, CREATE and FIX have separate windows assigned */
+   ACTION_VERIFY,    /* VERIFY, CREATE and FIX have separate windows assigned */
    ACTION_CREATE,    /* for each method. */
    ACTION_CREATE_CONT,
    ACTION_FIX        
@@ -601,12 +601,12 @@ typedef struct _Method
    char *menuEntry;                  /* Text for use in preferences menu */
    void (*create)(struct _Method*);  /* Creates an error correction file */
    void (*fix)(struct _Method*);     /* Fixes a damaged image */
-   void (*compare)(struct _Method*); /* Compares image against ecc information */
-   void (*createCompareWindow)(struct _Method*, GtkWidget*);
+   void (*verify)(struct _Method*);  /* Verifies image with ecc data */
+   void (*createVerifyWindow)(struct _Method*, GtkWidget*);
    void (*createCreateWindow)(struct _Method*, GtkWidget*);
    void (*createFixWindow)(struct _Method*, GtkWidget*);
    void (*createPrefsPage)(struct _Method*, GtkWidget*);
-   void (*resetCompareWindow)(struct _Method*);
+   void (*resetVerifyWindow)(struct _Method*);
    void (*resetCreateWindow)(struct _Method*);
    void (*resetFixWindow)(struct _Method*);
    void (*resetPrefsPage)(struct _Method*);

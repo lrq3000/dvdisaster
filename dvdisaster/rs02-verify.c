@@ -24,10 +24,10 @@
 #include "rs02-includes.h"
 
 /***
- *** Reset the compare output window
+ *** Reset the verify output window
  ***/
 
-void ResetRS02CompareWindow(Method *self)
+void ResetRS02VerifyWindow(Method *self)
 {  RS02Widgets *wl = (RS02Widgets*)self->widgetList;
 
    SetLabelText(GTK_LABEL(wl->cmpImageSectors), "");
@@ -81,13 +81,13 @@ static gboolean spiral_idle_func(gpointer data)
    return FALSE;
 }
 
-static void add_compare_values(Method *method, int percent, 
+static void add_verify_values(Method *method, int percent, 
 /*			       gint64 totalMissing, gint64 totalCrcErrors, */
 			       gint64 newMissing, gint64 newCrcErrors)
 {  RS02Widgets *wl = (RS02Widgets*)method->widgetList;
    spiral_idle_info *sii = g_malloc(sizeof(spiral_idle_info));
 
-   if(percent < 0 || percent > COMPARE_IMAGE_SEGMENTS)
+   if(percent < 0 || percent > VERIFY_IMAGE_SEGMENTS)
      return;
 
    /*
@@ -157,10 +157,10 @@ static gboolean expose_cb(GtkWidget *widget, GdkEventExpose *event, gpointer dat
 }
 
 /***
- *** Create the notebook contents for the compare output
+ *** Create the notebook contents for the verify output
  ***/
 
-void CreateRS02CompareWindow(Method *self, GtkWidget *parent)
+void CreateRS02VerifyWindow(Method *self, GtkWidget *parent)
 {  RS02Widgets *wl = (RS02Widgets*)self->widgetList;
    GtkWidget *sep,*notebook,*table,*table2,*ignore,*lab,*frame,*d_area;
 
@@ -246,7 +246,7 @@ void CreateRS02CompareWindow(Method *self, GtkWidget *parent)
    frame = gtk_frame_new(_utf("Image state"));
    gtk_table_attach(GTK_TABLE(table), frame, 1, 2, 0, 2, GTK_SHRINK | GTK_FILL, GTK_EXPAND | GTK_FILL, 5, 5);
 
-   wl->cmpSpiral = CreateSpiral(Closure->grid, Closure->background, 10, 5, COMPARE_IMAGE_SEGMENTS-1);
+   wl->cmpSpiral = CreateSpiral(Closure->grid, Closure->background, 10, 5, VERIFY_IMAGE_SEGMENTS-1);
    d_area = wl->cmpDrawingArea = gtk_drawing_area_new();
    gtk_widget_set_size_request(d_area, wl->cmpSpiral->diameter+20, -1);
    gtk_container_add(GTK_CONTAINER(frame), d_area);
@@ -347,10 +347,10 @@ typedef struct
    guint32 *crcBuf;
    gint8   *crcValid;
    unsigned char crcSum[16];
-} compare_closure;
+} verify_closure;
 
 static void cleanup(gpointer data)
-{  compare_closure *cc = (compare_closure*)data;
+{  verify_closure *cc = (verify_closure*)data;
 
    Closure->cleanupProc = NULL;
 
@@ -372,7 +372,7 @@ static void cleanup(gpointer data)
  *** into ascending sector order. 
  */
 
-static void read_crc(compare_closure *cc, RS02Layout *lay)
+static void read_crc(verify_closure *cc, RS02Layout *lay)
 {  struct MD5Context crc_md5;
    gint64 block_idx[256];
    guint32 crc_buf[512];
@@ -448,11 +448,11 @@ static void read_crc(compare_closure *cc, RS02Layout *lay)
 }
 
 /*
- * The compare action
+ * The verify action
  */
 
-void RS02Compare(Method *self)
-{  compare_closure *cc = g_malloc0(sizeof(compare_closure));
+void RS02Verify(Method *self)
+{  verify_closure *cc = g_malloc0(sizeof(verify_closure));
    RS02Widgets *wl = self->widgetList;
    LargeFile *image;
    EccHeader *eh;
@@ -670,13 +670,13 @@ void RS02Compare(Method *self)
       }
 
       if(Closure->guiMode) 
-	    percent = (COMPARE_IMAGE_SEGMENTS*s)/expected_sectors;
+	    percent = (VERIFY_IMAGE_SEGMENTS*s)/expected_sectors;
       else  percent = (100*s)/expected_sectors;
 
       if(last_percent != percent) 
       {  PrintProgress(_("- testing sectors  : %3d%%") ,percent);
 	 if(Closure->guiMode)
-	 {  add_compare_values(self, percent, new_missing, new_crc_errors); 
+	 {  add_verify_values(self, percent, new_missing, new_crc_errors); 
 	    if(data_missing || data_crc_errors)
 	      SetLabelText(GTK_LABEL(wl->cmpDataSection), 
 			   _("<span color=\"red\">%lld sectors missing; %lld CRC errors</span>"),

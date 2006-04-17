@@ -78,12 +78,12 @@ dvdisaster: version.h inlined-icons.h $(OFILES)
 	else $(MAKE) --no-print-directory -C locale; \
 	fi
 
-inlined-icons.h: icons/read.png icons/create.png icons/scan.png icons/fix.png icons/compare.png
+inlined-icons.h: icons/read.png icons/create.png icons/scan.png icons/fix.png icons/verify.png
 	@gdk-pixbuf-csource --raw --name=dvdisaster_read     icons/read.png      >inlined-icons.h
 	@gdk-pixbuf-csource --raw --name=dvdisaster_create   icons/create.png   >>inlined-icons.h
 	@gdk-pixbuf-csource --raw --name=dvdisaster_scan     icons/scan.png     >>inlined-icons.h
 	@gdk-pixbuf-csource --raw --name=dvdisaster_fix      icons/fix.png      >>inlined-icons.h
-	@gdk-pixbuf-csource --raw --name=dvdisaster_compare  icons/compare.png  >>inlined-icons.h
+	@gdk-pixbuf-csource --raw --name=dvdisaster_verify   icons/verify.png   >>inlined-icons.h
 	@gdk-pixbuf-csource --raw --name=dvdisaster_open_ecc icons/open-ecc.png >>inlined-icons.h
 	@gdk-pixbuf-csource --raw --name=dvdisaster_open_img icons/open-img.png >>inlined-icons.h
 

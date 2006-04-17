@@ -49,7 +49,7 @@ typedef struct
    GtkWidget *fixUncorrected;
    Curve  *fixCurve;
 
-   /*** Widgets for RS01 compare action */
+   /*** Widgets for RS01 verify action */
 
    GtkWidget *cmpHeadline;
 
@@ -107,8 +107,8 @@ void ResetRS01PrefsPage(Method*);
 
 void RS01ShowCurveButton(Method*);
 
-void ResetRS01CompareWindow(Method*);
-void CreateRS01CompareWindow(Method*, GtkWidget*);
+void ResetRS01VerifyWindow(Method*);
+void CreateRS01VerifyWindow(Method*, GtkWidget*);
 
 /*
  * These are exported (resp. only used) in ecc-rs01.c and rs01*.c
@@ -123,13 +123,6 @@ void CreateRS01CompareWindow(Method*, GtkWidget*);
 void RS01ReadSector(ImageInfo*, EccHeader*, unsigned char*, gint64);
 void RS01ScanImage(Method*, ImageInfo*, EccInfo*, int);
 
-/* rs01-compare.c */
-
-#define COMPARE_IMAGE_SEGMENTS 1000
-
-void RS01Compare(Method*);
-void RS01AddCompareValues(Method*, int, gint64, gint64, gint64, gint64);
-
 /* rs01-create.c */
 
 void RS01Create(Method*);
@@ -140,8 +133,15 @@ void RS01Fix(Method*);
 
 /* rs01-window.c */
 
-void AddFixValues(RS01Widgets*, int, int);
-void SetFixMaxValues(RS01Widgets*, int, int, gint64);
-void UpdateFixResults(RS01Widgets*, gint64, gint64);
+void RS01AddFixValues(RS01Widgets*, int, int);
+void RS01SetFixMaxValues(RS01Widgets*, int, int, gint64);
+void RS01UpdateFixResults(RS01Widgets*, gint64, gint64);
+
+/* rs01-verify.c */
+
+#define VERIFY_IMAGE_SEGMENTS 1000
+
+void RS01Verify(Method*);
+void RS01AddVerifyValues(Method*, int, gint64, gint64, gint64, gint64);
 
 #endif

@@ -167,7 +167,7 @@ static gboolean set_max_idle_func(gpointer data)
    return FALSE;
 }
 
-void SetFixMaxValues(RS01Widgets *wl, int data_bytes, int ecc_bytes, gint64 sectors)
+void RS01SetFixMaxValues(RS01Widgets *wl, int data_bytes, int ecc_bytes, gint64 sectors)
 {
    wl->dataBytes = data_bytes;
    wl->eccBytes  = ecc_bytes;
@@ -192,7 +192,7 @@ static gboolean results_idle_func(gpointer data)
    return FALSE;
 }
 
-void UpdateFixResults(RS01Widgets *wl, gint64 corrected, gint64 uncorrected)
+void RS01UpdateFixResults(RS01Widgets *wl, gint64 corrected, gint64 uncorrected)
 {
    wl->corrected = corrected;
    wl->uncorrected = uncorrected;
@@ -254,7 +254,7 @@ static gboolean curve_idle_func(gpointer data)
  * Add one new data point 
  */
 
-void AddFixValues(RS01Widgets *wl, int percent, int ecc_max)
+void RS01AddFixValues(RS01Widgets *wl, int percent, int ecc_max)
 {
    if(percent < 0 || percent > 1000)
      return;
@@ -327,7 +327,7 @@ void ResetRS01FixWindow(Method *method)
    gtk_notebook_set_current_page(GTK_NOTEBOOK(wl->fixNotebook), 0);
 
    ZeroCurve(wl->fixCurve);
-   UpdateFixResults(wl, 0, 0);
+   RS01UpdateFixResults(wl, 0, 0);
 
    if(wl->fixCurve && wl->fixCurve->widget)
    {  gdk_window_clear(wl->fixCurve->widget->window);

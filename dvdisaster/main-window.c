@@ -140,15 +140,6 @@ static void action_cb(GtkWidget *widget, gpointer data)
 	if(!(method = EccFileMethod(TRUE)))
 	   break;
 
-	if(!strncmp(method->name, "RS02", 4))
-	{  CreateMessage(_("Repairing RS02 augmented images is not yet supported\n"
-			   "in the graphical user interface.\n"
-			   "You can do it in the command line by typing:\n\n"
-			   "dvdisaster -i%s -f"), 
-			 GTK_MESSAGE_ERROR, Closure->imageName);
-	   break;
-	}
-
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(Closure->notebook),  method->tabWindowIndex+1);
 	method->resetFixWindow(method);
 	AllowActions(FALSE);
@@ -163,18 +154,18 @@ static void action_cb(GtkWidget *widget, gpointer data)
 	CreateGThread((GThreadFunc)ReadMediumLinear, (gpointer)1);
         break;
 
-      case ACTION_COMPARE:  
+      case ACTION_VERIFY:  
 	/* If something is wrong with the .iso or .ecc files
-	   we fall back to the RS01 method for comparing since it is robust
+	   we fall back to the RS01 method for verifying since it is robust
 	   against missing files. */
 	if(!(method = EccFileMethod(FALSE)))
 	  if(!(method = FindMethod("RS01")))
 	     break;
 
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(Closure->notebook), method->tabWindowIndex+2);
-	method->resetCompareWindow(method);
+	method->resetVerifyWindow(method);
 	AllowActions(FALSE);
-	CreateGThread((GThreadFunc)method->compare, (gpointer)method);
+	CreateGThread((GThreadFunc)method->verify, (gpointer)method);
         break;
    }
 }
@@ -267,14 +258,14 @@ static GtkWidget* create_action_bar(GtkNotebook *notebook)
    Closure->fixButton = wid = create_button(_("button|Fix"), "dvdisaster-fix");
    g_signal_connect(G_OBJECT(wid), "clicked", G_CALLBACK(action_cb), (gpointer)ACTION_FIX);
    gtk_box_pack_start(GTK_BOX(vbox), wid, FALSE, FALSE, 0);
-   AttachTooltip(wid, _("tooltip|Repair image"), _("Repairs an image. Requires image and error correction files."));
+   AttachTooltip(wid, _("tooltip|Repair image"), _("Repairs an image. Requires an image file and error correction data."));
 
-   /*** Compare */
+   /*** Verify */
 
-   Closure->testButton = wid = create_button(_("button|Compare"), "dvdisaster-compare");
-   g_signal_connect(G_OBJECT(wid), "clicked", G_CALLBACK(action_cb), (gpointer)ACTION_COMPARE);
+   Closure->testButton = wid = create_button(_("button|Verify"), "dvdisaster-verify");
+   g_signal_connect(G_OBJECT(wid), "clicked", G_CALLBACK(action_cb), (gpointer)ACTION_VERIFY);
    gtk_box_pack_start(GTK_BOX(vbox), wid, FALSE, FALSE, 0);
-   AttachTooltip(wid, _("tooltip|Compare files"), _("Tests consistency of error correction data and image files."));
+   AttachTooltip(wid, _("tooltip|Consistency check"), _("Tests consistency of error correction data and image file."));
 
    /*** Stop */
 
@@ -312,12 +303,12 @@ static GtkWidget* create_action_bar(GtkNotebook *notebook)
       gtk_notebook_append_page(notebook, content, ignore);
       method->createFixWindow(method, content);
 
-      /* Compare window */
+      /* Verify window */
 
       content = gtk_vbox_new(FALSE, 0);
-      ignore = gtk_label_new("compare_tab");
+      ignore = gtk_label_new("verify_tab");
       gtk_notebook_append_page(notebook, content, ignore);
-      method->createCompareWindow(method, content);
+      method->createVerifyWindow(method, content);
 
    }
 

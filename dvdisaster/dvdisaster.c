@@ -87,10 +87,10 @@ void FixEcc(void)
 }
 
 /*
- * Compare the image against ecc data 
+ * Verfiy the image against ecc data 
  */
 
-void Compare(void)
+void Verify(void)
 {  Method *method; 
    
   /* If something is wrong with the .iso or .ecc files
@@ -103,7 +103,7 @@ void Compare(void)
  
    /* Dispatch to the proper method */
 
-   method->compare(method);
+   method->verify(method);
 }
 
 /*
@@ -116,7 +116,7 @@ typedef enum
    MODE_CREATE,
    MODE_HELP,
    MODE_FIX,
-   MODE_PRINT, 
+   MODE_VERIFY, 
    MODE_READ, 
    MODE_SCAN,
    MODE_SEQUENCE, 
@@ -354,7 +354,7 @@ int main(int argc, char *argv[])
 		   break;
          case 'c': mode = MODE_SEQUENCE; sequence |= 1<<MODE_CREATE; break;
          case 'f': mode = MODE_SEQUENCE; sequence |= 1<<MODE_FIX; break;
-         case 't': mode = MODE_SEQUENCE; sequence |= 1<<MODE_PRINT; break;
+         case 't': mode = MODE_SEQUENCE; sequence |= 1<<MODE_VERIFY; break;
          case 'u': Closure->unlinkImage = TRUE; break;
          case 'h': mode = MODE_HELP; break;
          case 'i': if(optarg) 
@@ -562,8 +562,8 @@ int main(int argc, char *argv[])
 	if(sequence & 1<<MODE_FIX)
 	  FixEcc();
 
-	if(sequence & 1<<MODE_PRINT)
-	  Compare();
+	if(sequence & 1<<MODE_VERIFY)
+	  Verify();
 	break;
 
       case MODE_BYTESET:

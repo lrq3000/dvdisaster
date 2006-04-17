@@ -48,7 +48,7 @@ void register_rs02(void)
    method->description = g_strdup(_("Reed-Solomon method with improved tolerance for defective ecc data"));
    method->create  = RS02Create;
    method->fix     = RS02Fix;
-   method->compare = RS02Compare;
+   method->verify  = RS02Verify;
 
    /*** Linkage to rs02-window.c */
 
@@ -62,10 +62,10 @@ void register_rs02(void)
    method->resetPrefsPage    = ResetRS02PrefsPage;
    method->readPreferences   = ReadRS02Preferences;
 
-   /*** Linkage to rs01-compare.c */
+   /*** Linkage to rs01-verify.c */
 
-   method->createCompareWindow = CreateRS02CompareWindow;
-   method->resetCompareWindow  = ResetRS02CompareWindow;
+   method->createVerifyWindow = CreateRS02VerifyWindow;
+   method->resetVerifyWindow  = ResetRS02VerifyWindow;
 
    /*** Register ourself */
 

@@ -356,6 +356,7 @@ void InitClosure()
    Closure->cacheMB     = 32;
    Closure->sectorSkip  = 16;
    Closure->spinupDelay = 5;
+   Closure->parseEcc    = 1;
    Closure->fillUnreadable = -1;
    Closure->welcomeMessage = 1;
 

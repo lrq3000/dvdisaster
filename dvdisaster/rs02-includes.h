@@ -48,7 +48,7 @@ typedef struct
    GtkWidget *fixUncorrected;
    Curve  *fixCurve;
 
-   /*** Widgets for RS02 compare action */
+   /*** Widgets for RS02 verify action */
 
    GtkWidget *cmpHeadline;
    GtkWidget *cmpDrawingArea;
@@ -107,8 +107,8 @@ void ResetRS02FixWindow(Method*);
 void ResetRS02PrefsPage(Method*);
 void ReadRS02Preferences(Method*);
 
-void ResetRS02CompareWindow(Method*);
-void CreateRS02CompareWindow(Method*, GtkWidget*);
+void ResetRS02VerifyWindow(Method*);
+void CreateRS02VerifyWindow(Method*, GtkWidget*);
 
 /*
  * These are exported (resp. only used) in ecc-rs02.c and rs02*.c
@@ -117,12 +117,6 @@ void CreateRS02CompareWindow(Method*, GtkWidget*);
  * If you need similar functions in your own codec,
  * please copy these functions over to the respective plug-in.
  */
-
-/* rs02-compare.c */
-
-#define COMPARE_IMAGE_SEGMENTS 1000
-
-void RS02Compare(Method*);
 
 /* rs02-common.c */
 
@@ -155,5 +149,15 @@ void RS02Create(Method*);
 void RS02Fix(Method*);
 
 /* rs02-window.c */
+
+void RS02AddFixValues(RS02Widgets*, int, int);
+void RS02SetFixMaxValues(RS02Widgets*, int, int, gint64);
+void RS02UpdateFixResults(RS02Widgets*, gint64, gint64);
+
+/* rs02-verify.c */
+
+#define VERIFY_IMAGE_SEGMENTS 1000
+
+void RS02Verify(Method*);
 
 #endif

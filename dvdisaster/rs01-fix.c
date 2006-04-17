@@ -152,7 +152,7 @@ void RS01Fix(Method *method)
    if(Closure->guiMode)
    {  SetLabelText(GTK_LABEL(wl->fixHeadline),
 		  _("<big>Repairing the image.</big>\n<i>%s</i>"),fc->msg);
-      SetFixMaxValues(wl, eh->dataBytes, eh->eccBytes, ii->sectors);
+      RS01SetFixMaxValues(wl, eh->dataBytes, eh->eccBytes, ii->sectors);
    }    
 
    PrintLog(_("\nFix mode: Repairable sectors will be fixed in the image.\n"));
@@ -714,11 +714,11 @@ skip:
      if(last_percent != percent) 
      {  if(Closure->guiMode)
 	{  
-	   AddFixValues(wl, percent, local_plot_max);
+	   RS01AddFixValues(wl, percent, local_plot_max);
 	   local_plot_max = 0;
 
 	   //if(last_corrected != corrected || last_uncorrected != uncorrected) 
-	   UpdateFixResults(wl, corrected, uncorrected);
+	   RS01UpdateFixResults(wl, corrected, uncorrected);
 	}
         else PrintProgress(_("Ecc progress: %3d.%1d%%"),percent/10,percent%10);
         last_percent = percent;

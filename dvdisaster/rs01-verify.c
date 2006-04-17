@@ -24,10 +24,10 @@
 #include "rs01-includes.h"
 
 /***
- *** Reset the compare output window
+ *** Reset the verify output window
  ***/
 
-void ResetRS01CompareWindow(Method *self)
+void ResetRS01VerifyWindow(Method *self)
 {  RS01Widgets *wl = (RS01Widgets*)self->widgetList;
 
    SetLabelText(GTK_LABEL(wl->cmpChkSumErrors), "-");
@@ -81,13 +81,13 @@ static gboolean spiral_idle_func(gpointer data)
    return FALSE;
 }
 
-void RS01AddCompareValues(Method *method, int percent, 
-			  gint64 totalMissing, gint64 totalCrcErrors,
-			  gint64 newMissing, gint64 newCrcErrors)
+void RS01AddVerifyValues(Method *method, int percent, 
+			 gint64 totalMissing, gint64 totalCrcErrors,
+			 gint64 newMissing, gint64 newCrcErrors)
 {  RS01Widgets *wl = (RS01Widgets*)method->widgetList;
    spiral_idle_info *sii = g_malloc(sizeof(spiral_idle_info));
 
-   if(percent < 0 || percent > COMPARE_IMAGE_SEGMENTS)
+   if(percent < 0 || percent > VERIFY_IMAGE_SEGMENTS)
      return;
 
    if(newMissing) 
@@ -161,10 +161,10 @@ static gboolean expose_cb(GtkWidget *widget, GdkEventExpose *event, gpointer dat
 
 
 /***
- *** Create the notebook contents for the compare output
+ *** Create the notebook contents for the verify output
  ***/
 
-void CreateRS01CompareWindow(Method *self, GtkWidget *parent)
+void CreateRS01VerifyWindow(Method *self, GtkWidget *parent)
 {  RS01Widgets *wl = (RS01Widgets*)self->widgetList;
    GtkWidget *sep,*notebook,*table,*table2,*ignore,*lab,*frame,*d_area;
 
@@ -243,7 +243,7 @@ void CreateRS01CompareWindow(Method *self, GtkWidget *parent)
    frame = gtk_frame_new(_utf("Image state"));
    gtk_table_attach(GTK_TABLE(table), frame, 1, 2, 0, 2, GTK_SHRINK | GTK_FILL, GTK_EXPAND | GTK_FILL, 5, 5);
 
-   wl->cmpSpiral = CreateSpiral(Closure->grid, Closure->background, 10, 5, COMPARE_IMAGE_SEGMENTS-1);
+   wl->cmpSpiral = CreateSpiral(Closure->grid, Closure->background, 10, 5, VERIFY_IMAGE_SEGMENTS-1);
    d_area = wl->cmpDrawingArea = gtk_drawing_area_new();
    gtk_widget_set_size_request(d_area, wl->cmpSpiral->diameter+20, -1);
    gtk_container_add(GTK_CONTAINER(frame), d_area);
@@ -338,16 +338,16 @@ void CreateRS01CompareWindow(Method *self, GtkWidget *parent)
 }
 
 /***
- *** Compare the prefix.* files
+ *** Verify the prefix.* files
  ***/
 
 typedef struct
 {  ImageInfo *ii;
    EccInfo   *ei;
-} compare_closure;
+} verify_closure;
 
 static void cleanup(gpointer data)
-{  compare_closure *cc = (compare_closure*)data;
+{  verify_closure *cc = (verify_closure*)data;
 
    Closure->cleanupProc = NULL;
 
@@ -362,9 +362,9 @@ static void cleanup(gpointer data)
    g_thread_exit(0);
 }
 
-void RS01Compare(Method *self)
+void RS01Verify(Method *self)
 {  RS01Widgets *wl = (RS01Widgets*)self->widgetList;
-   compare_closure *cc = g_malloc0(sizeof(compare_closure));
+   verify_closure *cc = g_malloc0(sizeof(verify_closure));
    ImageInfo *ii;
    EccInfo *ei;
    char idigest[33],edigest[33]; 

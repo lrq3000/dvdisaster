@@ -42,7 +42,7 @@ void register_rs01(void)
    method->description = g_strdup(_("Classic Reed-Solomon method based on polynomial arithmetic"));
    method->create  = RS01Create;
    method->fix     = RS01Fix;
-   method->compare = RS01Compare;
+   method->verify  = RS01Verify;
 
    /*** Linkage to rs01-window.c */
 
@@ -55,10 +55,10 @@ void register_rs01(void)
    method->createPrefsPage   = CreateRS01PrefsPage;
    method->resetPrefsPage    = ResetRS01PrefsPage;
 
-   /*** Linkage to rs01-compare.c */
+   /*** Linkage to rs01-verify.c */
 
-   method->createCompareWindow = CreateRS01CompareWindow;
-   method->resetCompareWindow  = ResetRS01CompareWindow;
+   method->createVerifyWindow = CreateRS01VerifyWindow;
+   method->resetVerifyWindow  = ResetRS01VerifyWindow;
 
    /*** Register ourself */
 

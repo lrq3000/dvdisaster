@@ -52,5 +52,5 @@ void CreateIconFactory()
    Closure->windowIcon = create_icon(ifact, "dvdisaster-create", dvdisaster_create);
    create_icon(ifact, "dvdisaster-scan",   dvdisaster_scan);
    create_icon(ifact, "dvdisaster-fix",    dvdisaster_fix);
-   create_icon(ifact, "dvdisaster-compare",    dvdisaster_compare);
+   create_icon(ifact, "dvdisaster-verify", dvdisaster_verify);
 }

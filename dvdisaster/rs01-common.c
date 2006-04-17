@@ -233,7 +233,7 @@ void RS01ScanImage(Method *method, ImageInfo *ii, EccInfo *ei, int mode)
       MD5Update(&image_md5, buf, n);  /* update image md5sum */
 
       if(Closure->guiMode && mode & PRINT_MODE) 
-	    percent = (COMPARE_IMAGE_SEGMENTS*s)/ii->sectors;
+	    percent = (VERIFY_IMAGE_SEGMENTS*s)/ii->sectors;
       else  percent = (100*s)/ii->sectors;
       if(last_percent != percent) 
       {  PrintProgress(msg,percent);
@@ -242,9 +242,9 @@ void RS01ScanImage(Method *method, ImageInfo *ii, EccInfo *ei, int mode)
 	   SetProgress(wl->encPBar1, percent, 100);
 
 	 if(Closure->guiMode && mode & PRINT_MODE)
-	 {  RS01AddCompareValues(method, percent, ii->sectorsMissing, ii->crcErrors,
-				 ii->sectorsMissing - prev_missing,
-				 ii->crcErrors - prev_crc_errors);
+	 {  RS01AddVerifyValues(method, percent, ii->sectorsMissing, ii->crcErrors,
+				ii->sectorsMissing - prev_missing,
+				ii->crcErrors - prev_crc_errors);
 	    prev_missing = ii->sectorsMissing;
 	    prev_crc_errors = ii->crcErrors;
 	 }

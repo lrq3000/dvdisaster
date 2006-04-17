@@ -45,7 +45,6 @@ static void fix_cleanup(gpointer data)
 
    Closure->cleanupProc = NULL;
 
-#if 0
    if(Closure->guiMode)
    {  if(fc->earlyTermination)
          SwitchAndSetFootline(fc->wl->fixNotebook, 1,
@@ -53,7 +52,6 @@ static void fix_cleanup(gpointer data)
 			      _("<span color=\"red\">Aborted by unrecoverable error.</span>")); 
       AllowActions(TRUE);
    }
-#endif
 
    /** Clean up */
 
@@ -151,7 +149,7 @@ void RS02Fix(Method *self)
    gint64 damaged_eccblocks=0;
    gint64 damaged_eccsecs=0;
    gint64 expected_sectors;
-   char *t;
+   char *t=NULL,*msg;
 
    /*** Register the cleanup procedure for GUI mode */
 
@@ -160,6 +158,11 @@ void RS02Fix(Method *self)
    RegisterCleanup(_("Repairing of image aborted"), fix_cleanup, fc);
 
    /*** Open the image file */
+
+   if(Closure->guiMode)
+     SetLabelText(GTK_LABEL(wl->fixHeadline),
+		  _("<big>Repairing the image.</big>\n<i>%s</i>"),
+		  _("Opening files..."));
 
    eh  = self->lastEh;  /* will always be present */
    ii  = fc->ii = OpenImageFile(eh, WRITEABLE_IMAGE);
@@ -179,6 +182,21 @@ void RS02Fix(Method *self)
    expected_sectors = lay->eccSectors+lay->dataSectors;
    if(ii->sectors < expected_sectors)
      expand_image(ii, expected_sectors);
+
+   /*** Announce what we going to do */
+
+   msg = g_strdup_printf(_("Image contains error correction data: Method RS02, %d roots, %4.1f%% redundancy."),
+			 eh->eccBytes, 
+			 ((double)eh->eccBytes*100.0)/(double)eh->dataBytes);
+
+   if(Closure->guiMode)
+   {  SetLabelText(GTK_LABEL(wl->fixHeadline),
+		  _("<big>Repairing the image.</big>\n<i>%s</i>"), msg);
+      RS02SetFixMaxValues(wl, eh->dataBytes, eh->eccBytes, expected_sectors);
+      g_free(msg);
+   }    
+
+   PrintLog(_("\nFix mode: Repairable sectors will be fixed in the image.\n"));
 
    /*** Truncate an image with trailing garbage */
 
@@ -210,7 +228,6 @@ void RS02Fix(Method *self)
 	  Stop(_("Could not truncate %s: %s\n"),Closure->imageName,strerror(errno));
      }
      
-#if 0
      if(diff>2 && Closure->guiMode)
      {  int answer = ModalDialog(GTK_MESSAGE_QUESTION, GTK_BUTTONS_OK_CANCEL, NULL,
 				 trans,
@@ -232,7 +249,7 @@ void RS02Fix(Method *self)
 
        PrintLog(_("Image has been truncated by %lld sectors.\n"), diff);
      }
-#endif
+
      if(diff>2 && !Closure->guiMode)
      {  if(!Closure->truncate)
 	   Stop(trans, 
@@ -248,7 +265,6 @@ void RS02Fix(Method *self)
 	 PrintLog(_("Image has been truncated by %lld sectors.\n"), diff);
      }
    }
-
 
    /*** Rewrite all headers from the one which was given us as a reference */
 
@@ -297,6 +313,16 @@ void RS02Fix(Method *self)
    for(s=0; s<lay->sectorsPerLayer; s++)
    { gint64 si = (s + lay->firstCrcLayerIndex) % lay->sectorsPerLayer;
      int bi;
+
+     /* See if user hit the Stop button */
+
+     if(Closure->stopActions) 
+     {   SwitchAndSetFootline(fc->wl->fixNotebook, 1,
+			      fc->wl->fixFootline,
+			      _("<span color=\"red\">Aborted by user request!</span>")); 
+         fc->earlyTermination = FALSE;  /* suppress respective error message */
+	 goto terminate;
+     }
 
      /* Make sure to wrap the block_idx[] ptr properly */
 
@@ -732,13 +758,11 @@ skip:
      if(last_percent != percent) 
      {  if(Closure->guiMode)
 	{  
-#if 0
-	   AddFixValues(wl, percent, local_plot_max);
+	   RS02AddFixValues(wl, percent, local_plot_max);
 	   local_plot_max = 0;
 
 	   //if(last_corrected != corrected || last_uncorrected != uncorrected) 
-	   UpdateFixResults(wl, corrected, uncorrected);
-#endif
+	   RS02UpdateFixResults(wl, corrected, uncorrected);
 	}
         else PrintProgress(_("Ecc progress: %3d.%1d%%"),percent/10,percent%10);
         last_percent = percent;
@@ -760,13 +784,11 @@ skip:
 			      corrected, data_corr, ecc_corr);
    if(uncorrected > 0) 
    {  PrintLog(_("Unrepaired sectors: %lld\n"), uncorrected);      
-#if 0
       if(Closure->guiMode)
         SwitchAndSetFootline(wl->fixNotebook, 1, wl->fixFootline,
 			     _("Image sectors could not be fully restored "
 			       "(%lld repaired; <span color=\"red\">%lld unrepaired</span>)"),
 			     corrected, uncorrected);
-#endif
    }
    else
    {  if(!corrected)
@@ -782,11 +804,9 @@ skip:
      PrintLog(_("Erasure counts per ecc block:  avg =  %.1f; worst = %d.\n"),
 	     (double)damaged_sectors/(double)damaged_eccsecs,worst_ecc);
 
-#if 0
    if(Closure->guiMode && t)
      SwitchAndSetFootline(wl->fixNotebook, 1, wl->fixFootline,
 			  "%s %s", _("Repair results:"), t);
-#endif
 
    Verbose("\nSummary of processed sectors:\n");
    Verbose("%lld damaged sectors\n", damaged_sectors);

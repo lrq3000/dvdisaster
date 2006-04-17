@@ -24,9 +24,15 @@
 #include "rs02-includes.h"
 
 /***
- *** The RS02 codec is not yet integrated into the graphical
- *** user interface.
- */
+ *** Forward declarations
+ ***/
+
+static void redraw_curve(RS02Widgets*);
+static void update_geometry(RS02Widgets*);
+
+/***
+ *** Encoding window
+ ***/
 
 void ResetRS02EncWindow(Method *method)
 {  RS02Widgets *wl = (RS02Widgets*)method->widgetList;
@@ -39,11 +45,6 @@ void ResetRS02EncWindow(Method *method)
 
    gtk_label_set_text(GTK_LABEL(wl->encFootline), "");
    gtk_label_set_text(GTK_LABEL(wl->encFootline2), "");
-}
-
-void ResetRS02FixWindow(Method *method)
-{
-  g_printf("RS02 codec -- ResetRS02FixWindow() called\n");
 }
 
 void CreateRS02EncWindow(Method *method, GtkWidget *parent)
@@ -99,9 +100,197 @@ void CreateRS02EncWindow(Method *method, GtkWidget *parent)
    gtk_box_pack_start(GTK_BOX(parent), wl->encFootline2, FALSE, FALSE, 3);
 }
 
+/***
+ *** Fix window
+ ***/
+
+/*
+ * Set the media size and ecc capacity
+ */
+
+static gboolean set_max_idle_func(gpointer data)
+{  RS02Widgets *wl = (RS02Widgets*)data;
+
+   redraw_curve(wl);
+
+   return FALSE;
+}
+
+void RS02SetFixMaxValues(RS02Widgets *wl, int data_bytes, int ecc_bytes, gint64 sectors)
+{
+   wl->dataBytes = data_bytes;
+   wl->eccBytes  = ecc_bytes;
+   wl->nSectors  = sectors;
+   wl->fixCurve->maxX = 100;
+   wl->fixCurve->maxY = ecc_bytes - (ecc_bytes % 5) + 5;
+
+   g_idle_add(set_max_idle_func, wl);
+}
+
+/*
+ * Update the corrected / uncorrected numbers
+ */
+
+static gboolean results_idle_func(gpointer data)
+{  RS02Widgets *wl = (RS02Widgets*)data;
+
+   SetLabelText(GTK_LABEL(wl->fixCorrected), _("Repaired: %lld"), wl->corrected); 
+   SetLabelText(GTK_LABEL(wl->fixUncorrected), _("Unrepairable: <span color=\"red\">%lld</span>"), wl->uncorrected); 
+   SetLabelText(GTK_LABEL(wl->fixProgress), _("Progress: %3d.%1d%%"), wl->percent/10, wl->percent%10);
+
+   return FALSE;
+}
+
+void RS02UpdateFixResults(RS02Widgets *wl, gint64 corrected, gint64 uncorrected)
+{
+   wl->corrected = corrected;
+   wl->uncorrected = uncorrected;
+
+   g_idle_add(results_idle_func, wl);
+}
+
+/*
+ * Update the error curve 
+ */
+
+static gboolean curve_idle_func(gpointer data)
+{  RS02Widgets *wl = (RS02Widgets*)data;
+   gint x0 = CurveX(wl->fixCurve, (double)wl->lastPercent);
+   gint x1 = CurveX(wl->fixCurve, (double)wl->percent);
+   gint y = CurveY(wl->fixCurve, wl->fixCurve->ivalue[wl->percent]);
+   gint i;
+
+   /*** Mark unused ecc values */
+
+   for(i=wl->lastPercent+1; i<wl->percent; i++)
+      wl->fixCurve->ivalue[i] = wl->fixCurve->ivalue[wl->percent];
+
+   /*** Resize the Y axes if error values exceeds current maximum */
+
+   if(wl->fixCurve->ivalue[wl->percent] > wl->fixCurve->maxY)
+   {  wl->fixCurve->maxY = wl->fixCurve->ivalue[wl->percent];
+      wl->fixCurve->maxY = wl->fixCurve->maxY - (wl->fixCurve->maxY % 5) + 5;
+
+      update_geometry(wl);
+      gdk_window_clear(wl->fixCurve->widget->window);
+      redraw_curve(wl);
+      wl->lastPercent = wl->percent;
+
+      return FALSE;
+   }
+
+   /*** Draw the error value */
+
+   if(wl->fixCurve->ivalue[wl->percent] > 0)
+   {  gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->red);
+      gdk_draw_rectangle(wl->fixCurve->widget->window,
+			 Closure->drawGC, TRUE,
+			 x0, y, x0==x1 ? 1 : x1-x0, wl->fixCurve->bottomY-y);
+   }
+   wl->lastPercent = wl->percent;
+
+   /* Redraw the ecc capacity threshold line */
+
+   y = CurveY(wl->fixCurve, wl->eccBytes);  
+   gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->green);
+   gdk_draw_line(wl->fixCurve->widget->window,
+		 Closure->drawGC,
+		 wl->fixCurve->leftX-6, y, wl->fixCurve->rightX+6, y);
+   return FALSE;
+}
+
+/* 
+ * Add one new data point 
+ */
+
+void RS02AddFixValues(RS02Widgets *wl, int percent, int ecc_max)
+{
+   if(percent < 0 || percent > 1000)
+     return;
+
+   wl->fixCurve->ivalue[percent] = ecc_max;
+   wl->percent = percent;
+   g_idle_add(curve_idle_func, wl);
+}
+  
+/*
+ * Redraw the whole curve
+ */
+
+/* Calculate the geometry of the curve and spiral */
+
+static void update_geometry(RS02Widgets *wl)
+{  
+   /* Curve geometry */ 
+
+   UpdateCurveGeometry(wl->fixCurve, "999", 20);
+
+   /* Label positions in the foot line */
+
+   gtk_box_set_child_packing(GTK_BOX(wl->fixFootlineBox), wl->fixCorrected,
+			     TRUE, TRUE, wl->fixCurve->leftX, GTK_PACK_START);
+   gtk_box_set_child_packing(GTK_BOX(wl->fixFootlineBox), wl->fixUncorrected, 
+			     TRUE, TRUE, wl->fixCurve->leftX, GTK_PACK_START);
+}
+
+static void redraw_curve(RS02Widgets *wl)
+{  int y;
+
+   /* Redraw the curve */
+
+   RedrawAxes(wl->fixCurve);
+   RedrawCurve(wl->fixCurve, wl->percent, REDRAW_ICURVE);
+
+   /* Ecc capacity threshold line */
+
+   y = CurveY(wl->fixCurve, wl->eccBytes);  
+   gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->green);
+   gdk_draw_line(wl->fixCurve->widget->window,
+		 Closure->drawGC,
+		 wl->fixCurve->leftX-6, y, wl->fixCurve->rightX+6, y);
+}
+
+/*
+ * Expose callback
+ */
+
+static gboolean expose_cb(GtkWidget *widget, GdkEventExpose *event, gpointer data)
+{  RS02Widgets *wl = (RS02Widgets*)data; 
+
+   if(event->count) /* Exposure compression */
+     return TRUE;
+
+   update_geometry(wl);
+   redraw_curve(wl);
+
+   return TRUE;
+}
+
+void ResetRS02FixWindow(Method *method)
+{  RS02Widgets *wl = (RS02Widgets*)method->widgetList;
+
+   gtk_notebook_set_current_page(GTK_NOTEBOOK(wl->fixNotebook), 0);
+
+   ZeroCurve(wl->fixCurve);
+   RS02UpdateFixResults(wl, 0, 0);
+
+   if(wl->fixCurve && wl->fixCurve->widget)
+   {  gdk_window_clear(wl->fixCurve->widget->window);
+      redraw_curve(wl);
+   }
+
+   wl->percent = 0;
+   wl->lastPercent = 0;
+}
+
+/*
+ * Create the Fix window contents
+ */
+
+
 void CreateRS02FixWindow(Method *method, GtkWidget *parent)
-{  GtkWidget *lab,*sep;
-   RS02Widgets *wl;
+{  RS02Widgets *wl;
+   GtkWidget *sep,*ignore,*d_area,*notebook,*hbox;
 
    if(!method->widgetList)
    {  wl = g_malloc0(sizeof(RS02Widgets));
@@ -109,17 +298,50 @@ void CreateRS02FixWindow(Method *method, GtkWidget *parent)
    }
    else wl = method->widgetList;
 
-   lab = gtk_label_new(NULL);
-   SetLabelText(GTK_LABEL(lab), "<big>Fixing with RS02 method</big>\n<i>nothing useful will happen</i>");
-   gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
-   gtk_misc_set_padding(GTK_MISC(lab), 5, 0);
-   gtk_box_pack_start(GTK_BOX(parent), lab, FALSE, FALSE, 3);
+   wl->fixHeadline = gtk_label_new(NULL);
+   gtk_misc_set_alignment(GTK_MISC(wl->fixHeadline), 0.0, 0.0); 
+   gtk_misc_set_padding(GTK_MISC(wl->fixHeadline), 5, 0);
+   gtk_box_pack_start(GTK_BOX(parent), wl->fixHeadline, FALSE, FALSE, 3);
 
    sep = gtk_hseparator_new();
    gtk_box_pack_start(GTK_BOX(parent), sep, FALSE, FALSE, 0);
 
    sep = gtk_hseparator_new();
    gtk_box_pack_start(GTK_BOX(parent), sep, FALSE, FALSE, 0);
+
+   d_area = wl->fixDrawingArea = gtk_drawing_area_new();
+   gtk_box_pack_start(GTK_BOX(parent), d_area, TRUE, TRUE, 0);
+   g_signal_connect(G_OBJECT (d_area), "expose_event", G_CALLBACK(expose_cb), (gpointer)wl);
+   
+   notebook = wl->fixNotebook = gtk_notebook_new();
+   gtk_notebook_set_show_tabs(GTK_NOTEBOOK(notebook), FALSE);
+   gtk_notebook_set_show_border(GTK_NOTEBOOK(notebook), FALSE);
+   gtk_box_pack_end(GTK_BOX(parent), notebook, FALSE, FALSE, 0);
+
+   hbox = wl->fixFootlineBox = gtk_hbox_new(TRUE, 0);
+
+   wl->fixCorrected = gtk_label_new(NULL);
+   gtk_misc_set_alignment(GTK_MISC(wl->fixCorrected), 0.0, 0.0); 
+   gtk_box_pack_start(GTK_BOX(hbox), wl->fixCorrected, TRUE, TRUE, 0);
+
+   wl->fixProgress = gtk_label_new(NULL);
+   gtk_misc_set_alignment(GTK_MISC(wl->fixProgress), 0.5, 0.0); 
+   gtk_box_pack_start(GTK_BOX(hbox), wl->fixProgress, TRUE, TRUE, 0);
+
+   wl->fixUncorrected = gtk_label_new(NULL);
+   gtk_misc_set_alignment(GTK_MISC(wl->fixUncorrected), 1.0, 0.0); 
+   gtk_box_pack_start(GTK_BOX(hbox), wl->fixUncorrected, TRUE, TRUE, 0);
+
+   ignore = gtk_label_new("progress_tab");
+   gtk_notebook_append_page(GTK_NOTEBOOK(notebook), hbox, ignore);
+
+   wl->fixFootline = gtk_label_new("Footline");
+   gtk_misc_set_alignment(GTK_MISC(wl->fixFootline), 0.0, 0.5); 
+   gtk_misc_set_padding(GTK_MISC(wl->fixFootline), 5, 0);
+   ignore = gtk_label_new("footer_tab");
+   gtk_notebook_append_page(GTK_NOTEBOOK(notebook), wl->fixFootline, ignore);
+
+   wl->fixCurve  = CreateCurve(d_area, _("Errors/Ecc block"), "%d", 1000, CURVE_PERCENT);
 }
 
 /***
@@ -342,15 +564,15 @@ void CreateRS02PrefsPage(Method *method, GtkWidget *parent)
    gtk_entry_set_width_chars(GTK_ENTRY(wl->dvdEntry2), 9);
    gtk_table_attach(GTK_TABLE(table), wl->dvdEntry2, 1, 2, 3, 4, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
 
-   wl->cdButton = gtk_button_new_with_label(_("query medium"));
+   wl->cdButton = gtk_button_new_with_label(_utf("query medium"));
    g_signal_connect(G_OBJECT(wl->cdButton), "clicked", G_CALLBACK(query_cb), wl);
    gtk_table_attach(GTK_TABLE(table), wl->cdButton, 2, 3, 1, 2, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
 
-   wl->dvdButton1 = gtk_button_new_with_label(_("query medium"));
+   wl->dvdButton1 = gtk_button_new_with_label(_utf("query medium"));
    g_signal_connect(G_OBJECT(wl->dvdButton1), "clicked", G_CALLBACK(query_cb), wl);
    gtk_table_attach(GTK_TABLE(table), wl->dvdButton1, 2, 3, 2, 3, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
 
-   wl->dvdButton2 = gtk_button_new_with_label(_("query medium"));
+   wl->dvdButton2 = gtk_button_new_with_label(_utf("query medium"));
    g_signal_connect(G_OBJECT(wl->dvdButton2), "clicked", G_CALLBACK(query_cb), wl);
    gtk_table_attach(GTK_TABLE(table), wl->dvdButton2, 2, 3, 3, 4, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
 
