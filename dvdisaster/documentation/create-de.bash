@@ -142,7 +142,7 @@ rekonstruiert.
 Die maximale Kapazität der Fehlerkorrektur ist einstellbar.<p></li>
 
 <li>dvdisaster arbeitet auf der <a href="background20.html">Abbild-Ebene</a> und ist dadurch
-vom Dateisystem unabhängig.</li>
+vom Dateisystem unabhängig.<p></li>
 </ul>
 
 Wenn Sie die Fehlerkorrektur-Daten rechtzeitig erzeugen und gut aufheben,

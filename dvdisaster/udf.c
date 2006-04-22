@@ -78,12 +78,19 @@ static EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
 
 //printf(" header at %lld: magic cookie found\n", (long long int)pos);
 
+#ifdef HAVE_BIG_ENDIAN
+	    eh->selfCRC = 0x47504c00;
+#else
 	    eh->selfCRC = 0x4c5047;
+#endif
 	    real_crc = Crc32((unsigned char*)eh, sizeof(EccHeader));
 
 	    if(real_crc == recorded_crc)
 	    {  eh = g_malloc(sizeof(EccHeader));
 	       memcpy(eh, Closure->scratchBuf, sizeof(EccHeader));
+#ifdef HAVE_BIG_ENDIAN
+	       SwapEccHeaderBytes(eh);
+#endif
 	       eh->selfCRC = recorded_crc;
 //printf(" --> CRC okay, using it\n");
 

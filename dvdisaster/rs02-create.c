@@ -335,8 +335,11 @@ static void write_crc(ecc_closure *ec)
    {  int n; 
 
       for(n=crc_idx; n<512; n++) /* pad unused portion of CRC buffer */
+#ifdef HAVE_BIG_ENDIAN
+	crc_buf[n] = 0x47504c00;
+#else
 	crc_buf[n] = 0x4c5047;
-
+#endif
       n = LargeWrite(ii->file, crc_buf, 2048);
 
       if(n != 2048)
@@ -378,6 +381,12 @@ static void prepare_header(ecc_closure *ec)
    eh->inLast          = ii->inLast;
 
    eh->selfCRC = 0x4c5047;
+
+#ifdef HAVE_BIG_ENDIAN
+   SwapEccHeaderBytes(eh);
+   eh->selfCRC = 0x47504c00;
+#endif
+
    eh->selfCRC = Crc32((unsigned char*)eh, sizeof(EccHeader));
 }
 

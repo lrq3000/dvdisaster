@@ -122,6 +122,9 @@ void RS02Fix(Method *self)
    fix_closure *fc = g_malloc0(sizeof(fix_closure)); 
    ImageInfo *ii = NULL;
    EccHeader *eh;
+#ifdef HAVE_BIG_ENDIAN
+   EccHeader *eh_swapped;
+#endif
    gint32 *gf_index_of;
    gint32 *gf_alpha_to;
    gint64 block_idx[255];
@@ -268,7 +271,15 @@ void RS02Fix(Method *self)
 
    /*** Rewrite all headers from the one which was given us as a reference */
 
+#ifdef HAVE_BIG_ENDIAN
+   eh_swapped = g_malloc(sizeof(EccHeader));
+   memcpy(eh_swapped, eh, sizeof(EccHeader));
+   SwapEccHeaderBytes(eh_swapped);
+   WriteRS02Headers(ii->file, lay, eh_swapped);
+   g_free(eh_swapped);
+#else
    WriteRS02Headers(ii->file, lay, eh);
+#endif
 
    /*** Prepare buffers for ecc code processing.
 	The first lay->protecedSectors are protected by ecc information.

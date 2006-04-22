@@ -7,6 +7,9 @@ Harald Bögeholz (hwb@heise.de)
    suggestions and ideas; he had implemented a similar strategy 
    before and published in issue 16/2005 of the german periodical "c't".
 
+Julian Einwag (julian@einwag.de).
+   provides and maintains the Mac OS X / Darwin port.
+
 Phil Karn 
    wrote an excellent library for creating and decoding Reed-Solomon 
    codes. This project draws a lot of inspiration - and even code - 

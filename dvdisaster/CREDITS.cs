@@ -7,6 +7,9 @@ Harald Bögeholz (hwb@heise.de)
    na jeho doporučeních a nápadech; implementoval podobnou strategii
    předtím a publikoval ji v čísle 16/2005 německého periodika "c't".
 
+Julian Einwag (julian@einwag.de).
+   provides and maintains the Mac OS X / Darwin port.
+
 Phil Karn 
    napsal vynikající knihovnu pro tvorbu a dekódování kódu Reed-Solomon.
    Tento projekt si vzal hodně inspirace - a dokonce kódu - 

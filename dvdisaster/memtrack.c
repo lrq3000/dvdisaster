@@ -21,8 +21,8 @@
 
 #define _GNU_SOURCE
 
-#ifndef SYS_FREEBSD   /* FreeBSD declares malloc() in stdlib.h */
-#include <malloc.h>
+#if !defined(SYS_FREEBSD) && !defined(SYS_DARWIN)   /* FreeBSD declares malloc() in stdlib.h */
+ #include <malloc.h>
 #endif
 #include <stdio.h>
 #include <stdlib.h>

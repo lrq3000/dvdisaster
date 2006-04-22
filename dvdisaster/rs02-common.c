@@ -215,10 +215,6 @@ void WriteRS02Headers(LargeFile *file, RS02Layout *lay, EccHeader *eh)
    guint64 end = lay->eccSectors+lay->dataSectors;
    int n;
 
-#ifdef HAVE_BIG_ENDIAN
-   SwapEccHeaderBytes(eh);
-#endif
-
    if(!LargeSeek(file, 2048*lay->firstEccHeader))
      Stop(_("Failed seeking to ecc header at %lld: %s\n"), lay->firstEccHeader, strerror(errno));
    

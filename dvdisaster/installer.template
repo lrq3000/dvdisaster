@@ -60,10 +60,10 @@ Name: "{group}\Uninstall"; Filename: "{uninstallexe}"
 Name: "{userdesktop}\dvdisaster"; Filename: "{app}\dvdisaster-win.exe"; WorkingDir: "{app}"
 
 [Run]
-Filename: "{app}\documentation\pngpack.exe"; Parameters: "{app}\documentation\images-common.pngpack"; WorkingDir: "{app}\documentation\images"; Flags: runhidden 
-Filename: "{app}\documentation\pngpack.exe"; Parameters: "{app}\documentation\images-cs.pngpack"; WorkingDir: "{app}\documentation\local\images"; Flags: runhidden; Languages: cs
-Filename: "{app}\documentation\pngpack.exe"; Parameters: "{app}\documentation\images-de.pngpack"; WorkingDir: "{app}\documentation\local\images"; Flags: runhidden; Languages: de
-Filename: "{app}\documentation\pngpack.exe"; Parameters: "{app}\documentation\images-en.pngpack"; WorkingDir: "{app}\documentation\local\images"; Flags: runhidden; Languages: en
+Filename: "{app}\documentation\pngpack.exe"; Parameters: """{app}\documentation\images-common.pngpack"""; WorkingDir: "{app}\documentation\images"; Flags: runhidden 
+Filename: "{app}\documentation\pngpack.exe"; Parameters: """{app}\documentation\images-cs.pngpack"""; WorkingDir: "{app}\documentation\local\images"; Flags: runhidden; Languages: cs
+Filename: "{app}\documentation\pngpack.exe"; Parameters: """{app}\documentation\images-de.pngpack"""; WorkingDir: "{app}\documentation\local\images"; Flags: runhidden; Languages: de
+Filename: "{app}\documentation\pngpack.exe"; Parameters: """{app}\documentation\images-en.pngpack"""; WorkingDir: "{app}\documentation\local\images"; Flags: runhidden; Languages: en
 
 [UninstallDelete]
 Type: files; Name:"{app}\.dvdisaster"

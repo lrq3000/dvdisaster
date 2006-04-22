@@ -479,6 +479,10 @@ void AboutDialog()
 
    AboutText(vbox, _("\ne-mail: carsten@dvdisaster.com   -or-   cgnoerlich@fsfe.org")); 
 
+#ifdef SYS_DARWIN
+   AboutText(vbox, _("\nDarwin port (Mac OS X): Julian Einwag &lt;julian@einwag.de&gt;")); 
+#endif
+
    /* Show it */
 
    gtk_widget_show_all(about);

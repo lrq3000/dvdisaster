@@ -109,7 +109,7 @@ static void get_base_dirs()
 	Windows has binary distributions with no prior known installation place,
 	but luckily it provides a way for figuring out that location. */
 
-#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_UNKNOWN)
+#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_UNKNOWN) || defined(SYS_DARWIN)
    if(!stat(BINDIR, &mystat))
      Closure->binDir = g_strdup(BINDIR);
 
@@ -127,7 +127,7 @@ find_dotfile:
 
    /*** The location of the dotfile depends on the operating system. */
 
-#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_UNKNOWN)
+#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_UNKNOWN) || defined(SYS_DARWIN)
    Closure->dotFile = g_strdup_printf("%s/.dvdisaster", g_getenv("HOME"));
 #endif
 #ifdef SYS_MINGW

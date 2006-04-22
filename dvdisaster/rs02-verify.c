@@ -543,7 +543,12 @@ void RS02Verify(Method *self)
       {  guint32 recorded_crc = eh.selfCRC;
  	 guint32 real_crc;
 
- 	 eh.selfCRC = 0x4c5047;
+#ifdef HAVE_BIG_ENDIAN
+	 eh.selfCRC = 0x47504c00;
+#else
+	 eh.selfCRC = 0x4c5047;
+#endif
+
          real_crc = Crc32((unsigned char*)&eh, sizeof(EccHeader));
 
 	 if(real_crc == recorded_crc)

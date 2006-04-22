@@ -142,7 +142,7 @@ Afterwards unreadable sectors are recovered using the previously created
 error correction data. The maximum error correction capacity is user-selectable.<p>
 </li>
 <li>dvdisaster operates at the <a href="background20.html">image level</a> 
-and does not depend on the file system.</li>
+and does not depend on the file system.<p></li>
 </ul>
 
 If you create the error correction data in time and keep it at a safe place,

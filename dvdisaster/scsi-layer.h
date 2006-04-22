@@ -36,6 +36,19 @@
 #include <camlib.h>
 #endif
 
+#ifdef SYS_DARWIN
+#define REAL_VERSION VERSION
+#undef VERSION
+#include <CoreFoundation/CoreFoundation.h>
+#include <IOKit/IOKitLib.h>
+#include <IOKit/scsi-commands/SCSITaskLib.h>
+#include <IOKit/storage/IODVDTypes.h>
+#include <mach/mach.h>
+#include <string.h>
+#include <stdlib.h>
+#define VERSION REAL_VERSION
+#endif
+
 /***
  *** Define the Sense data structure.
  ***/
@@ -130,6 +143,32 @@ typedef struct request_sense {
 } Sense;
 #endif
 
+#ifdef SYS_DARWIN
+#define MAX_CDB_SIZE 16   /* longest possible SCSI command */
+
+/* This is actually the little endian version of the
+ * Linux Sense struct. 
+ */
+
+typedef struct request_sense {
+	guint8 error_code		: 7;
+	guint8 valid			: 1;
+	guint8 segment_number;
+	guint8 sense_key		: 4;
+	guint8 reserved2		: 1;
+	guint8 ili			: 1;
+	guint8 reserved1		: 2;
+	guint8 information[4];
+	guint8 add_sense_len;
+	guint8 command_info[4];
+	guint8 asc;
+	guint8 ascq;
+	guint8 fruc;
+	guint8 sks[3];
+	guint8 asb[46];
+} Sense;
+#endif
+
 /***
  *** A data base for keeping track of specific drive oddities
  ***/
@@ -165,6 +204,13 @@ typedef struct _DeviceHandle
    HANDLE fd;                 /* Windows file handle for the device (SPTI case) */
    int aspiUsed;	      /* TRUE is device is accessed via ASPI */
    int ha,target,lun;         /* ASPI way of describing drives */ 
+#endif
+#ifdef SYS_DARWIN
+   IOCFPlugInInterface **plugInInterface;
+   MMCDeviceInterface **mmcDeviceInterface;
+   SCSITaskDeviceInterface **scsiTaskDeviceInterface;
+   SCSITaskInterface **taskInterface;
+   IOVirtualRange *range;
 #endif
    char *device;
    char devinfo[34];          /* whole device info string */
@@ -225,7 +271,5 @@ int InquireDevice(DeviceHandle*, int);
 void SpinupDevice(DeviceHandle*);
 int ReadSectors(DeviceHandle*, unsigned char*, gint64, int);
 void CloseDevice(DeviceHandle*);
-
-
 
 #endif /* SCSI_LAYER_H */

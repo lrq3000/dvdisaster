@@ -89,6 +89,9 @@ void print_ecc_header(EccHeader *eh)
    PrintCLI("creatorVersion   %8x\n", eh->creatorVersion);
    PrintCLI("neededVersion    %8x\n", eh->neededVersion);
    PrintCLI("fpSector         %8x\n", eh->fpSector);
+   PrintCLI("selfCRC          %8x\n", eh->selfCRC);
+   print_hex("crcSum           ", eh->crcSum, 16);
+   PrintCLI("inLast           %8x\n", eh->inLast);
 
    PrintCLI("\n");
 }
@@ -111,7 +114,7 @@ void SwapEccHeaderBytes(EccHeader *eh)
   eh->creatorVersion = SwapBytes32(eh->creatorVersion);
   eh->neededVersion = SwapBytes32(eh->neededVersion);
   eh->fpSector = SwapBytes32(eh->fpSector);
-
+  eh->inLast = SwapBytes32(eh->inLast);
 #ifdef VERBOSE
   printf("after swap:\n");
   print_ecc_header(eh);

@@ -1,3 +1,8 @@
+0.67 (devel-5)
+	- Julian Einwag started working on the Mac OS X / Darwin SCSI layer.
+	  Thanks :-)
+	- fixed RS02 for big endian architectures
+
 0.67 (devel-4) 17-04-2006
 	- completed graphical fix action for RS02. 
 	  RS02 is now fully integrated with the GUI.
