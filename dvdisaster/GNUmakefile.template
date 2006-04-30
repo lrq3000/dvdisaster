@@ -66,9 +66,9 @@ dvdisaster: version.h inlined-icons.h $(OFILES)
 	then echo "Linking  : dvdisaster-win, dvdisaster"; \
 	     windres -v winres.rc -O coff -o winres.o >/dev/null ; \
 	     $(CC) $(COPTS) -c dvdisaster.c ; \
-	     $(CC) $(LOPTS) $(OFILES) winres.o $(LIBS) -mwindows -o dvdisaster-win; \
+	     $(CC) $(LOPTS) $(OFILES) winres.o $(LIBS) -lole32 -mwindows -o dvdisaster-win; \
 	     $(CC) $(COPTS) -DWIN_CONSOLE -c dvdisaster.c ; \
-	     $(CC) $(LOPTS) $(OFILES) $(LIBS) -o dvdisaster; \
+	     $(CC) $(LOPTS) $(OFILES) $(LIBS) -lole32 -o dvdisaster; \
 	else echo "Linking  : dvdisaster"; \
 	     $(CC) $(LOPTS) $(OFILES) $(LIBS) -o dvdisaster; \
 	fi
@@ -297,9 +297,10 @@ berlios-images:
 	tar cjf ../../berlios.tar.bz2 cs/*.html de/*.html en/*.html images/*.jpg images/*.png cs/images/*.png de/images/*.png en/images/*.png
 
 srcdist: pack-images lock-images clean distclean 
+	@rm -f documentation/MAKE_SRCDIST
 	@cd .. ; tar -c -j -X $(PKGNAME)/NODIST -f $(PKGNAME).tar.bz2 $(PKGNAME)
 	@cd .. ; gpg --default-key 091ad320 --detach-sign --armor $(PKGNAME).tar.bz2
-	@rm -f documentation/images-*.pngpack documentation/MAKE_SRCDIST
+	@rm -f documentation/images-*.pngpack
 
 bindist: dvdisaster html pack-images
 	@mkdir $(PKGNAME)

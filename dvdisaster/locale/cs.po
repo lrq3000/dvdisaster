@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-22 12:38+0200\n"
+"POT-Creation-Date: 2006-04-30 15:55+0200\n"
 "PO-Revision-Date: 2006-03-16 20:40+0100\n"
 "Last-Translator: Luboš Staněk <lubek@users.sourceforge.net>\n"
 "Language-Team: čeština <cs@li.org>\n"
@@ -18,17 +18,17 @@ msgstr ""
 "X-Generator: KBabel 1.11.1\n"
 "Plural-Forms:  nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: closure.c:231 closure.c:290
+#: closure.c:306 closure.c:365
 #, c-format
 msgid "Error closing configuration file %s: %s\n"
 msgstr "Chyba při zavírání konfiguračního souboru %s: %s\n"
 
-#: closure.c:251
+#: closure.c:326
 #, c-format
 msgid "Could not open configuration file %s: %s\n"
 msgstr "Nelze otevřít konfigurační soubor %s: %s\n"
 
-#: closure.c:257
+#: closure.c:332
 #, c-format
 msgid ""
 "# dvdisaster-%s configuration file\n"
@@ -778,75 +778,75 @@ msgstr "Výběr souboru obrazu"
 msgid "windowtitle|Error correction file selection"
 msgstr "Výběr souboru oprav chyb"
 
-#: menubar.c:431 menubar.c:456 menubar.c:482
+#: menubar.c:438 menubar.c:463 menubar.c:489
 msgid "tooltip|Drive selection"
 msgstr "Výběr jednotky"
 
-#: menubar.c:431
+#: menubar.c:438
 msgid "Use the nearby drop-down list to select the input drive."
 msgstr "Použijte vedlejší rozbalovací seznam k volbě vstupní mechaniky."
 
-#: menubar.c:450 menubar.c:474
+#: menubar.c:457 menubar.c:481
 msgid "No drives found"
 msgstr "Žádné mechaniky nenalezeny"
 
-#: menubar.c:456 menubar.c:482
+#: menubar.c:463 menubar.c:489
 msgid "Selects the input drive for reading images."
 msgstr "Vyberte vstupní mechaniku pro čtení obrazů."
 
-#: menubar.c:513
+#: menubar.c:520
 msgid "tooltip|Image file selection"
 msgstr "Výběr souboru obrazu"
 
-#: menubar.c:513
+#: menubar.c:520
 msgid "Selects a new image file."
 msgstr "Vybere nový soubor obrazu."
 
-#: menubar.c:514
+#: menubar.c:521
 msgid "tooltip|Current image file"
 msgstr "Aktuální soubor obrazu"
 
-#: menubar.c:514
+#: menubar.c:521
 msgid "Shows the name of the current image file."
 msgstr "Zobrazuje název aktuálního souboru obrazu."
 
-#: menubar.c:538
+#: menubar.c:545
 msgid "tooltip|Error correction file selection"
 msgstr "Výběr souboru oprav chyb"
 
-#: menubar.c:538
+#: menubar.c:545
 msgid "Selects a new error correction file."
 msgstr "Vybere nový soubor oprav chyb."
 
-#: menubar.c:539
+#: menubar.c:546
 msgid "tooltip|Current error correction file"
 msgstr "Aktuální soubor oprav chyb"
 
-#: menubar.c:539
+#: menubar.c:546
 msgid "Shows the name of the current error correction file."
 msgstr "Zobrazuje název aktuálního souboru oprav chyb."
 
-#: menubar.c:550
+#: menubar.c:557
 msgid "tooltip|Preferences"
 msgstr "Nastavení"
 
-#: menubar.c:550
+#: menubar.c:557
 msgid "Customize settings for creating images, error correction files and other stuff."
 msgstr "Přizpůsobení nastavení pro vytváření obrazů, souborů oprav chyb a dalších věcí."
 
-#: menubar.c:560
+#: menubar.c:567
 msgid "tooltip|User manual"
 msgstr "Uživatelská příručka"
 
-#: menubar.c:560
+#: menubar.c:567
 msgid "Displays the user manual (external HTML browser required)."
 msgstr "Zobrazí uživatelskou příručku (vyžaduje externí prohlížeč HTML)."
 
-#: menubar.c:570
+#: menubar.c:577
 msgid "tooltip|Quit"
 msgstr "Konec"
 
-#: menubar.c:570
+#: menubar.c:577
 msgid "Quit dvdisaster"
 msgstr "Ukončí dvdisaster"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-22 12:38+0200\n"
+"POT-Creation-Date: 2006-04-30 15:55+0200\n"
 "PO-Revision-Date: 2005-01-01 14:24+0100\n"
 "Last-Translator: Andrea Polverini <polve@polve.com>\n"
 "Language-Team: Italian <>\n"
@@ -17,17 +17,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: closure.c:231 closure.c:290
+#: closure.c:306 closure.c:365
 #, c-format
 msgid "Error closing configuration file %s: %s\n"
 msgstr "Errore durante la chiusura del file di configurazione %s: %s\n"
 
-#: closure.c:251
+#: closure.c:326
 #, c-format
 msgid "Could not open configuration file %s: %s\n"
 msgstr "Non posso aprire il file di configurazione %s: %s\n"
 
-#: closure.c:257
+#: closure.c:332
 #, c-format
 msgid ""
 "# dvdisaster-%s configuration file\n"
@@ -768,75 +768,75 @@ msgstr "Selezione dei file immagine"
 msgid "windowtitle|Error correction file selection"
 msgstr "Selezione del file di correzione degli errori"
 
-#: menubar.c:431 menubar.c:456 menubar.c:482
+#: menubar.c:438 menubar.c:463 menubar.c:489
 msgid "tooltip|Drive selection"
 msgstr "Seleziona Drive"
 
-#: menubar.c:431
+#: menubar.c:438
 msgid "Use the nearby drop-down list to select the input drive."
 msgstr "Usa il menu a tendina qui vicino per selezionare il drive di input."
 
-#: menubar.c:450 menubar.c:474
+#: menubar.c:457 menubar.c:481
 msgid "No drives found"
 msgstr "Nessun drive trovato"
 
-#: menubar.c:456 menubar.c:482
+#: menubar.c:463 menubar.c:489
 msgid "Selects the input drive for reading images."
 msgstr "Seleziona il drive di input per leggere le immagini."
 
-#: menubar.c:513
+#: menubar.c:520
 msgid "tooltip|Image file selection"
 msgstr "Selezione dei file immagine"
 
-#: menubar.c:513
+#: menubar.c:520
 msgid "Selects a new image file."
 msgstr "Seleziona un nuovo file immagine."
 
-#: menubar.c:514
+#: menubar.c:521
 msgid "tooltip|Current image file"
 msgstr "File immagine corrente"
 
-#: menubar.c:514
+#: menubar.c:521
 msgid "Shows the name of the current image file."
 msgstr "Mostra il nome del file immagine corrente."
 
-#: menubar.c:538
+#: menubar.c:545
 msgid "tooltip|Error correction file selection"
 msgstr "Selezione del file di correzione degli errori"
 
-#: menubar.c:538
+#: menubar.c:545
 msgid "Selects a new error correction file."
 msgstr "Seleziona un nuovo file di correzione errori."
 
-#: menubar.c:539
+#: menubar.c:546
 msgid "tooltip|Current error correction file"
 msgstr "File di correzione errori corrente"
 
-#: menubar.c:539
+#: menubar.c:546
 msgid "Shows the name of the current error correction file."
 msgstr "Mostra il nome del file di correzione errori corrente."
 
-#: menubar.c:550
+#: menubar.c:557
 msgid "tooltip|Preferences"
 msgstr "Preferenze"
 
-#: menubar.c:550
+#: menubar.c:557
 msgid "Customize settings for creating images, error correction files and other stuff."
 msgstr "Personalizza i settaggi della creazione di immagini, file di correzione degli errori ad altra roba."
 
-#: menubar.c:560
+#: menubar.c:567
 msgid "tooltip|User manual"
 msgstr "Manuale utente"
 
-#: menubar.c:560
+#: menubar.c:567
 msgid "Displays the user manual (external HTML browser required)."
 msgstr "Mostra il manuale utente (è richiesto un Browser HTML esterno)"
 
-#: menubar.c:570
+#: menubar.c:577
 msgid "tooltip|Quit"
 msgstr "Esci"
 
-#: menubar.c:570
+#: menubar.c:577
 msgid "Quit dvdisaster"
 msgstr "Chiudi dvdisaster"
 

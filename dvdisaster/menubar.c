@@ -370,10 +370,17 @@ void set_path(GtkWidget *entry, char *path)
       gtk_editable_set_position(GTK_EDITABLE(entry), -1);
    }
    else
-     {  char buf[PATH_MAX + strlen(path) + 2];
+   {  char buf[PATH_MAX + strlen(path) + 2];
 
+#ifdef SYS_MINGW
+      if(Closure->winMyFiles)
+	   strcpy(buf, Closure->winMyFiles);
+      else getcwd(buf, PATH_MAX);
+      strcat(buf,"\\");
+#else
       getcwd(buf, PATH_MAX);
       strcat(buf,"/");
+#endif
       strcat(buf,path);
       gtk_entry_set_text(GTK_ENTRY(entry), buf);
       gtk_editable_set_position(GTK_EDITABLE(entry), -1);

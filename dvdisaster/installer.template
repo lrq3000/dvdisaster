@@ -3,8 +3,11 @@
 
 [Setup]
 AppName=dvdisaster
-AppVerName=dvdisaster-%version%
+AppCopyright=GNU Public License
 AppMutex=dvdisaster
+AppPublisher=dvdisaster project
+AppPublisherURL=http://www.dvdisaster.org
+AppVerName=dvdisaster-%version%
 DefaultDirName={pf}\dvdisaster
 DefaultGroupName=dvdisaster
 UninstallDisplayIcon={app}\dvdisaster.exe
@@ -14,6 +17,7 @@ SourceDir=dvdisaster-%version%
 OutputDir=.
 OutputManifestFile=manifest.txt
 OutputBaseFilename=dvdisaster-%version%-setup
+PrivilegesRequired=poweruser
 AllowNoIcons=yes
 ;SetupIconFile=setup.ico
 

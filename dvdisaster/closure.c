@@ -25,11 +25,55 @@
  #include <windows.h>
  #include <tlhelp32.h>
  #include <psapi.h>
+ #include <shlobj.h>
+#endif
+
+#if 0
+ #define Verbose g_printf
+#else
+ #define Verbose(format, ...)
 #endif
 
 /***
  *** Locate the binary and documentation directory
  ***/
+
+/* 
+ * Find location of special windows diretories.
+ * Copied from glib sources since they have declared it static.
+ * Windows only.
+ */ 
+
+#ifdef SYS_MINGW
+static gchar *get_special_folder(int csidl)
+{
+  union 
+  { char c[MAX_PATH+1];
+    wchar_t wc[MAX_PATH+1];
+  } path;
+
+  HRESULT hr;
+  LPITEMIDLIST pidl = NULL;
+  BOOL b;
+  gchar *retval = NULL;
+
+  hr = SHGetSpecialFolderLocation(NULL, csidl, &pidl);
+  if(hr == S_OK)
+  {  if (G_WIN32_HAVE_WIDECHAR_API())
+     {  b = SHGetPathFromIDListW(pidl, path.wc);
+	if(b)
+	  retval = g_utf16_to_utf8(path.wc, -1, NULL, NULL, NULL);
+     }
+     else
+     {  b = SHGetPathFromIDListA(pidl, path.c);
+        if(b)
+	  retval = g_locale_to_utf8(path.c, -1, NULL, NULL, NULL);
+     }
+     CoTaskMemFree(pidl);
+  }
+  return retval;
+}
+#endif
 
 /*
  * Find the place of our executable
@@ -94,6 +138,9 @@ static char* get_exe_path()
 
 static void get_base_dirs()
 {  struct stat mystat;
+#ifdef SYS_MINGW
+   char *appdata;
+#endif
 
    /*** The source directory is supposed to hold the most recent files,
 	so try this first. */
@@ -131,18 +178,46 @@ find_dotfile:
    Closure->dotFile = g_strdup_printf("%s/.dvdisaster", g_getenv("HOME"));
 #endif
 #ifdef SYS_MINGW
-   Closure->dotFile = g_strdup_printf("%s/.dvdisaster", Closure->binDir);
+   /* See if there is a dvdisaster subdirectory in the user's
+      application directory first. */
+
+   appdata = get_special_folder(CSIDL_APPDATA);
+   Verbose("Windows specific paths:\n"
+	   "- CSIDL_APPDATA: %s\n",
+	   appdata ? appdata : "NULL");
+
+   if(appdata)
+   {  char *our_dir = g_strdup_printf("%s\\dvdisaster", appdata);
+      g_free(appdata);
+
+      Verbose("- dotfile path : %s\n", our_dir);
+
+      if(!stat(our_dir, &mystat))
+      {  Closure->dotFile = g_strdup_printf("%s\\.dvdisaster", our_dir);
+	 Verbose("- dotfile directory: present\n");
+      }
+      Verbose("- dotfile directory: does not exist\n");
+
+      g_free(our_dir);
+   }
+
+   /* Fallback: Expect .dvdisaster file in binDir */
+
+   if(!Closure->dotFile)
+     Closure->dotFile = g_strdup_printf("%s/.dvdisaster", Closure->binDir);
+
+   Closure->winMyFiles = get_special_folder(CSIDL_PERSONAL);
+   Verbose("- CSIDL_PERSONAL: %s\n", Closure->winMyFiles ? Closure->winMyFiles : "NULL");
 #endif
 
-#if 0
-   g_printf("* File locations:\n*\n"
-	    "* Bin dir: %s\n"
-	    "* Doc dir: %s\n"
-	    "* dotfile: %s\n\n",
-	    Closure->binDir,
-	    Closure->docDir,
-	    Closure->dotFile);   
-#endif
+
+   Verbose("File locations:\n"
+	   "- Bin dir: %s\n"
+	   "- Doc dir: %s\n"
+	   "- dotfile: %s\n\n",
+	   Closure->binDir,
+	   Closure->docDir,
+	   Closure->dotFile);   
 }
 
 /***

@@ -1,3 +1,7 @@
+0.67 (devel-6)
+	- .dvdisaster and .iso/.ecc files are placed in user writeable places
+	  under Windows if possible
+
 0.67 (devel-5)
 	- Julian Einwag started working on the Mac OS X / Darwin SCSI layer.
 	  Thanks :-)
