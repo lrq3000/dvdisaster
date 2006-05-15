@@ -13,7 +13,7 @@ DefaultGroupName=dvdisaster
 UninstallDisplayIcon={app}\dvdisaster.exe
 Compression=lzma
 SolidCompression=yes
-SourceDir=dvdisaster-%version%
+SourceDir=win-build-dir
 OutputDir=.
 OutputManifestFile=manifest.txt
 OutputBaseFilename=dvdisaster-%version%-setup
@@ -71,8 +71,11 @@ Filename: "{app}\documentation\pngpack.exe"; Parameters: """{app}\documentation\
 
 [UninstallDelete]
 Type: files; Name:"{app}\.dvdisaster"
+;Type: filesandordirs; Name:"{userappdata}\dvdisaster"
 Type: filesandordirs; Name:"{app}\documentation\images"
 Type: filesandordirs; Name:"{app}\documentation\local\images"
 Type: files; Name:"{app}\medium.iso"
 Type: files; Name:"{app}\medium.ecc"
+Type: files; Name:"{app}\medium.img"
+
 

@@ -179,7 +179,7 @@ show:
 # Distribution management
 ######################################################################
 
-.PHONY : install uninstall clean distclean arch www berlios-images berlios sf sf-images srcdist bindist
+.PHONY : install uninstall clean distclean arch www berlios-images berlios sf sf-images srcdist innodist
 
 install: dvdisaster html images
 	@echo "Installing package..."
@@ -302,33 +302,34 @@ srcdist: pack-images lock-images clean distclean
 	@cd .. ; gpg --default-key 091ad320 --detach-sign --armor $(PKGNAME).tar.bz2
 	@rm -f documentation/images-*.pngpack
 
-bindist: dvdisaster html pack-images
-	@mkdir $(PKGNAME)
-	@mkdir $(PKGNAME)/documentation
-	@cp -r CHANGELOG COPYING CREDITS* TODO dvdisaster.exe dvdisaster-win.exe $(PKGNAME)
-	@cp documentation/pubkey.asc $(PKGNAME)/documentation
+innodist: dvdisaster html pack-images
+	@if test -e win-build-dir; then rm -rf win-build-dir; fi
+	@mkdir win-build-dir
+	@mkdir win-build-dir/documentation
+	@cp -r CHANGELOG COPYING CREDITS* TODO dvdisaster.exe dvdisaster-win.exe win-build-dir
+	@cp documentation/pubkey.asc win-build-dir/documentation
 	@for i in cs de en; do \
-	  mkdir $(PKGNAME)/documentation/$$i; \
-	  cp documentation/$$i/*.html $(PKGNAME)/documentation/$$i; \
+	  mkdir win-build-dir/documentation/$$i; \
+	  cp documentation/$$i/*.html win-build-dir/documentation/$$i; \
 	done
-	@mkdir $(PKGNAME)/documentation/images
-	@cp documentation/images/*.jpg $(PKGNAME)/documentation/images
-	@cp tools/pngpack.exe $(PKGNAME)/documentation
-	@mv documentation/images-*.pngpack $(PKGNAME)/documentation
-	@(cd $(PKGNAME); tar xzf ../../pango-subdirs.tgz)
-	@cp $(GTK_BINDIR)/libglib*.dll $(PKGNAME)
-	@cp $(GTK_BINDIR)/iconv.dll $(PKGNAME)
-	@cp $(GTK_BINDIR)/intl.dll $(PKGNAME)
-	@cp $(GTK_BINDIR)/libatk*.dll $(PKGNAME)
-	@cp $(GTK_BINDIR)/libpango*.dll $(PKGNAME)
-	@cp $(GTK_BINDIR)/libgmodule*.dll $(PKGNAME)
-	@cp $(GTK_BINDIR)/libgobject*.dll $(PKGNAME)
-	@cp $(GTK_BINDIR)/libgthread*.dll $(PKGNAME)
-	@cp $(GTK_BINDIR)/libgdk_pixbuf*.dll $(PKGNAME)
-	@cp $(GTK_BINDIR)/libgdk-win*.dll $(PKGNAME)
-	@cp $(GTK_BINDIR)/libgtk-win*.dll $(PKGNAME)
-	@mkdir $(PKGNAME)/locale
-	@cp -r locale/?? $(PKGNAME)/locale
+	@mkdir win-build-dir/documentation/images
+	@cp documentation/images/*.jpg win-build-dir/documentation/images
+	@cp tools/pngpack.exe win-build-dir/documentation
+	@mv documentation/images-*.pngpack win-build-dir/documentation
+	@(cd win-build-dir; tar xzf ../../pango-subdirs.tgz)
+	@cp $(GTK_BINDIR)/libglib*.dll win-build-dir
+	@cp $(GTK_BINDIR)/iconv.dll win-build-dir
+	@cp $(GTK_BINDIR)/intl.dll win-build-dir
+	@cp $(GTK_BINDIR)/libatk*.dll win-build-dir
+	@cp $(GTK_BINDIR)/libpango*.dll win-build-dir
+	@cp $(GTK_BINDIR)/libgmodule*.dll win-build-dir
+	@cp $(GTK_BINDIR)/libgobject*.dll win-build-dir
+	@cp $(GTK_BINDIR)/libgthread*.dll win-build-dir
+	@cp $(GTK_BINDIR)/libgdk_pixbuf*.dll win-build-dir
+	@cp $(GTK_BINDIR)/libgdk-win*.dll win-build-dir
+	@cp $(GTK_BINDIR)/libgtk-win*.dll win-build-dir
+	@mkdir win-build-dir/locale
+	@cp -r locale/?? win-build-dir/locale
 	@sed 's/dvdisaster-%version%/$(PKGNAME)/' <installer.template >installer.iss
 	@iscc installer.iss
 

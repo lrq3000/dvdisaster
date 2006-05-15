@@ -32,6 +32,7 @@ typedef struct _IsoInfo
 
 void FreeIsoInfo(IsoInfo*);
 
+EccHeader* FindHeaderInMedium(DeviceHandle*, gint64);
 gint64 MediumLengthFromRS02(DeviceHandle*, gint64);
 
 int ExamineUDF(DeviceHandle*);

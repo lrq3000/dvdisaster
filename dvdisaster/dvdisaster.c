@@ -140,8 +140,7 @@ typedef enum
    MODIFIER_DEBUG,
    MODIFIER_FILL_UNREADABLE,
    MODIFIER_KEEP_STYLE,
-   MODIFIER_PARSE_UDF,
-   MODIFIER_PARSE_ECC,
+   MODIFIER_QUERY_SIZE,
    MODIFIER_RANDOM_SEED,
    MODIFIER_SPEED_WARNING, 
    MODIFIER_SPINUP_DELAY, 
@@ -157,7 +156,12 @@ int main(int argc, char *argv[])
    char *default_device;
    char *read_range = NULL;
 #ifdef WITH_NLS_YES
-   char *locale_test,src_locale_path[strlen(SRCDIR)+10];
+   char *locale_test;
+ #ifndef SYS_MINGW
+   char src_locale_path[strlen(SRCDIR)+10];
+ #else
+   char *bin_locale_path = NULL;
+ #endif
 #endif
 
 #ifdef WITH_MEMDEBUG_YES
@@ -208,7 +212,8 @@ int main(int argc, char *argv[])
 #ifdef WIN_CONSOLE
 	     g_setenv("OUTPUT_CHARSET", "CP850", 1);
 #else
-	     g_setenv("OUTPUT_CHARSET", "iso-8859-1", 1);
+     //	     g_setenv("OUTPUT_CHARSET", "iso-8859-1", 1);
+	     g_setenv("OUTPUT_CHARSET", "CP1252", 1);
 #endif
 	     break;
 
@@ -217,7 +222,8 @@ int main(int argc, char *argv[])
 #ifdef WIN_CONSOLE
 	     g_setenv("OUTPUT_CHARSET", "CP850", 1);
 #else
-	     g_setenv("OUTPUT_CHARSET", "iso-8859-1", 1);
+     //	     g_setenv("OUTPUT_CHARSET", "iso-8859-1", 1);
+	     g_setenv("OUTPUT_CHARSET", "CP1252", 1);
 #endif
 	     break;
        }
@@ -228,11 +234,12 @@ int main(int argc, char *argv[])
     setlocale(LC_MESSAGES, "");
     textdomain("dvdisaster");
 
+#ifndef SYS_MINGW
     /* Try local source directory first */
 
     g_sprintf(src_locale_path,"%s/locale",SRCDIR);
     bindtextdomain("dvdisaster", src_locale_path);
-
+printf("testing src %s\n", src_locale_path);
     /* TRANSLATORS: 
        This is a dummy entry which is supposed to translate into "ok".
        Please do not return anything else here. */
@@ -247,25 +254,28 @@ int main(int argc, char *argv[])
        if(getcwd(buf, 256))
        {  char locale_path[strlen(buf)+20];
           g_sprintf(locale_path,"%s/locale", buf);
+printf("testing cwd %s\n", locale_path);
           bindtextdomain("dvdisaster", locale_path);
 	  locale_test = gettext("test phrase for verifying the locale installation");
        }
     }
+#endif
 
 #ifdef SYS_MINGW
     /* Try the directory where our executable comes from.
-       Only possible under Windows. */
+       This only possible under Windows, and should cover all cases. */
 
-    if(strcmp(locale_test, "ok"))
-    {  char locale_path[strlen(Closure->binDir)+20];
-
-       g_sprintf(locale_path,"%s/locale", Closure->binDir);
-       bindtextdomain("dvdisaster", locale_path);
-       locale_test = gettext("test phrase for verifying the locale installation");
-    }
+    bin_locale_path = g_strdup_printf("%s\\locale", Closure->binDir);
+printf("testing bin %s\n", bin_locale_path);
+    bindtextdomain("dvdisaster", bin_locale_path);
+    locale_test = gettext("test phrase for verifying the locale installation");
+    g_free(bin_locale_path);
 #endif
 
     /* Last resort: fall back to global locale */
+
+    if(strcmp(locale_test, "ok"))
+      printf("fallback used\n");
 
     if(strcmp(locale_test, "ok"))
       bindtextdomain("dvdisaster", LOCALEDIR);  
@@ -315,8 +325,7 @@ int main(int argc, char *argv[])
 	{"list", 0, 0, 'l' },
 #endif
 	{"method", 2, 0, 'm' },
-	{"parse-ecc", 0, 0, MODIFIER_PARSE_ECC },
-	{"parse-udf", 0, 0, MODIFIER_PARSE_UDF },
+	{"query-size", 1, 0, MODIFIER_QUERY_SIZE },
         {"prefix", 1, 0, 'p'},
 	{"random-errors", 1, 0, MODE_RANDOM_ERR },
 	{"random-image", 1, 0, MODE_RANDOM_IMAGE },
@@ -433,11 +442,11 @@ int main(int argc, char *argv[])
          case MODIFIER_DEBUG:
 	   Closure->debugMode = TRUE;
 	   break;
-         case MODIFIER_PARSE_ECC:
-	   Closure->parseEcc = TRUE;
-	   break;
-         case MODIFIER_PARSE_UDF:
-	   Closure->parseUDF = TRUE;
+         case MODIFIER_QUERY_SIZE:
+	        if(!strcmp(optarg, "drive")) Closure->querySize = 0;
+	   else if(!strcmp(optarg, "udf"))   Closure->querySize = 1;
+	   else if(!strcmp(optarg, "ecc"))   Closure->querySize = 2;
+           else Stop("--query-size requires one of these arguments: drive udf ecc\n");
 	   break;
          case MODIFIER_RANDOM_SEED:
 	   if(optarg) Closure->randomSeed = atoi(optarg);
@@ -650,8 +659,7 @@ int main(int argc, char *argv[])
 	     "  --dao                  - assume DAO disc; do not trim image end\n"
 	     "  --fill-unreadable n    - fill unreadable sectors with byte n\n"
 	     "  --medium-size          - max. possible image size on medium (in sectors)\n"
-	     "  --parse-ecc            - use information from ecc headers\n"
-	     "  --parse-udf            - use information from ISO/UDF filesystem\n"
+      	     "  --query-size n         - query drive/udf/ecc for image size (default: ecc)\n"         
 	     "  --speed-warning n      - print warning if speed changes by more than n percent\n"
 	     "  --spinup-delay n       - wait n seconds for drive to spin up\n"
 	     "  --split-files          - split image into files <= 2GB\n\n"));

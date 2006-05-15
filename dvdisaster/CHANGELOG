@@ -1,8 +1,21 @@
-0.67 (devel-6)
+NOTE: Adaptive reading is being reworked and currently not usable!
+
+0.67 (devel-9) 15-05-2006
+	- replaced --parse-udf and --parse-ecc with --query-size
+
+0.67 (devel-8) 14-05-2006
+	- added log file option to debug the online manual crashes
+	- again some fixes in the Windows initialization
+
+0.67 (devel-7) 14-05-2006
+	- reviewed and fixed Windows path initalization codes
+	  (thanks to Lubos!)
+	
+0.67 (devel-6) 30-04-2006
 	- .dvdisaster and .iso/.ecc files are placed in user writeable places
 	  under Windows if possible
 
-0.67 (devel-5)
+0.67 (devel-5) 23-04-2006
 	- Julian Einwag started working on the Mac OS X / Darwin SCSI layer.
 	  Thanks :-)
 	- fixed RS02 for big endian architectures

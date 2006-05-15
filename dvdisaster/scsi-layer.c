@@ -418,7 +418,7 @@ static int query_copyright(DeviceHandle *dh)
       return TRUE;
    }
 
-   return buf[4];
+   return buf[4] & 1;
 }
 
 /*
@@ -495,9 +495,9 @@ static unsigned int query_size(DeviceHandle *dh)
 {  Sense sense;
    unsigned char cmd[MAX_CDB_SIZE];
    unsigned char *buf = Closure->scratchBuf; 
-   gint64 size;
+   gint64 read_capacity;
 
-   /* Get size by doing READ CAPACITY */
+   /*** Query size by doing READ CAPACITY */
 
    memset(cmd, 0, MAX_CDB_SIZE);
    cmd[0] = 0x25;  /* READ CAPACITY */
@@ -508,95 +508,71 @@ static unsigned int query_size(DeviceHandle *dh)
       return 0;
    }
 
-   size = (gint64)(buf[0]<<24 | buf[1]<<16 | buf[2]<<8 | buf[3]);
+   read_capacity = (gint64)(buf[0]<<24 | buf[1]<<16 | buf[2]<<8 | buf[3]);
 
+
+   /*** If RS02 header search is enabled and we can find an appropriate header,
+	use it as an authoritative source for the medium size. */
+
+   if(Closure->querySize >= 2)
+   {  dh->rs02Size = MediumLengthFromRS02(dh, MAX(read_capacity, dh->userAreaSize));
+      if(dh->rs02Size) 
+      {  Verbose("Medium size obtained from ECC header: %lld sectors\n", dh->rs02Size);  
+	 return dh->rs02Size;
+      }
+      else Verbose("Medium size could NOT be determined from ECC header.\n");
+   } else Verbose("Skipping medium size determination from ECC header.\n");
+
+   /*** If ISO/UDF filesystem parsing is enabled try this next. */
+
+   if(Closure->querySize >= 1)
+   {  if(dh->isoInfo)
+      {  Verbose("Medium size obtained from ISO/UDF file system: %d sectors\n", 
+		 dh->isoInfo->volumeSize);  
+	 return dh->isoInfo->volumeSize;
+      }
+      else Verbose("Medium size could NOT be determined from ISO/UDF filesystem.\n");
+   } else Verbose("Skipping medium size determination from ISO/UDF filesystem.\n");
+
+   /*** If everything else fails, query the drive. */
+   
    /* For CD media, thats all we have to do */
 
    if(dh->mainType == CD)
-     return size+1;  /* size is the number of the last sector, starting with 0 */
-
-   /* If RS02 header search is enabled and we can find an appropriate header,
-      use it as an authoritative source for the medium size. */
-
-   if(Closure->parseEcc)
-   {  dh->rs02Size = MediumLengthFromRS02(dh, MAX(size, dh->userAreaSize));
-      if(dh->rs02Size) return dh->rs02Size;
+   {  Verbose("CD medium - using size from READ CAPACITY: %lld sectors\n", read_capacity+1);
+      return read_capacity+1;  /* size is the number of the last sector, starting with 0 */
    }
 
    /* For DVD media, READ CAPACITY should give the real image size.
       READ DVD STRUCTURE may be same value or the unformatted size.
-      But some older drives appear to have both functions reversed,
+      But some drives appear to have both functions reversed,
       so we have to be careful here. */
 
-   if(   (size != dh->userAreaSize)
-      || (dh->isoInfo && dh->isoInfo->volumeSize != size))
+   if(read_capacity == dh->userAreaSize)  /* If they are equal just return one */
+   {  Verbose("READ CAPACITY and READ DVD STRUCTUE agree: %lld sectors\n", read_capacity+1);
+      return read_capacity+1;  
+   }
+   else                                   /* Tricky case. Try some heuristics. */
    {  int last_valid, first_out;
       gint test_sector;
       int cap_result,strct_result,decision;
       char *cap_msg, *strct_msg, *decision_msg;
       GString *warning;
 
-      /*** If not in debug mode, skip the probing stage
-	   if the drive is already in the data base. */
-
-      if(!Closure->debugMode)
-      {  
-	 warning = g_string_sized_new(1024);
-	 g_string_printf(warning,
-			 _("Different media sizes depending on query method:\n"
-			   "READ CAPACITY:      %lld sectors\n"
-			   "READ DVD STRUCTURE: %lld sectors\n"),
-			 size+1, dh->userAreaSize+1);
-
-	 if(dh->isoInfo)
-	 {  g_string_append_printf(warning, _("ISO file system   : %d sectors\n\n"
-					      "Using size specified by ISO file system.\n\n"),
-				   dh->isoInfo->volumeSize); 
-
-	    LogWarning(warning->str);
-	    g_string_free(warning, TRUE);
-
-	    return dh->isoInfo->volumeSize;
-	 }
-
-	 g_string_append_printf(warning, "\n"); 
-
-	 if(dh->db && dh->db->dvdFlags & GET_SIZE_FROM_READ_CAPACITY)
-	 {  g_string_append_printf(warning, 
-				   _("Drive data base suggests using READ CAPACITY.\n\n"));
-
-	    LogWarning(warning->str);
-	    g_string_free(warning, TRUE);
-
-	    return size+1;
-	 }
-
-	 if(dh->db && dh->db->dvdFlags & GET_SIZE_FROM_DVD_STRUCT)
-	 {  g_string_append_printf(warning, 
-				   _("Drive data base suggests using READ DVD STRUCTURE.\n\n"));
-
-	    LogWarning(warning->str);
-	    g_string_free(warning, TRUE);
-
-	    return dh->userAreaSize+1;
-	 }
-      }
-
-      /*** Else try to find out the correct value empirically. */
+      /*** Try to find out the correct value empirically. */
 
       warning = g_string_sized_new(1024);
       g_string_printf(warning,
 		      _("Different media sizes depending on query method:\n"
 			"READ CAPACITY:      %lld sectors\n"
-			"READ DVD STRUCTURE: %lld sectors\n"),
-		      size+1, dh->userAreaSize+1);
+			"READ DVD STRUCTURE: %lld sectors\n\n"),
+		      read_capacity+1, dh->userAreaSize+1);
 
-      g_string_append_printf(warning, "\n"); 
       g_string_append_printf(warning, _("Evaluation of returned medium sizes:\n\n"));
 
       /*** Look at READ CAPACITY results */
 
-      test_sector = size;
+      test_sector = read_capacity;
       last_valid = check_sector(dh, warning, test_sector,   1);
       first_out  = check_sector(dh, warning, test_sector+1, 1);
 
@@ -655,11 +631,11 @@ static unsigned int query_size(DeviceHandle *dh)
       }
 
       if(!decision)
-      {  if(!size) decision = 2;
+      {  if(!read_capacity) decision = 2;
          if(!dh->userAreaSize) decision = 1;
 
-	 if(size && dh->userAreaSize)
-	   decision = size < dh->userAreaSize ? 1 : 2;
+	 if(read_capacity && dh->userAreaSize)
+	   decision = read_capacity < dh->userAreaSize ? 1 : 2;
 
 	 decision_msg = _("FAILED to determine image size.\n"
 			  "Using smaller value as this is right on >90%% of all drives,\n"
@@ -667,24 +643,12 @@ static unsigned int query_size(DeviceHandle *dh)
       }
 
       g_string_append_printf(warning, _("Final decision: %s\n\n"), decision_msg);
-      
-      if(!decision)
-	g_string_append_printf(warning, 
-			       _("If you can verify that one of the above image sizes is correct,\n"));
-      else
-	g_string_append_printf(warning,
-			       _("If you can verify that this image size is correct,\n"));
-
-      g_string_append_printf(warning,
-			     _("please send in the whole dvdisaster output upto this line\n"
-			       "to have your drive included in the internal data base.\n"));
-
       LogWarning(warning->str);
 
       g_string_free(warning, TRUE);
 
       switch(decision)
-      {  case 1  : return size+1;
+      {  case 1  : return read_capacity+1;
          case 2  : return dh->userAreaSize+1;
          default : Stop(_("Failed to determine image size.\n"
 			  "Try using a different drive."));
@@ -692,7 +656,7 @@ static unsigned int query_size(DeviceHandle *dh)
       }
    }
 
-   return size+1;  /* If they are equal just return one */
+   return 0;
 }
 
 /*
@@ -1028,7 +992,7 @@ DeviceHandle* OpenAndQueryDevice(char *device)
 
    query_type(dh, 0);
 
-   if(Closure->parseUDF)
+   if(Closure->querySize >= 1)  /* parseUDF or better requested */
      ExamineUDF(dh);
 
    dh->sectors = query_size(dh);
@@ -1071,22 +1035,21 @@ DeviceHandle* OpenAndQueryDevice(char *device)
 
  	 strcpy(td, dh->typedescr);
 	 CloseDevice(dh);
-
-       	 Stop(_("Medium type \"%s\" not supported."), td);
-	 return NULL;
+       	 Stop(_("This software does not support \"%s\" type media."), td);
+       	 return NULL;
       }
    }
 
    if(dh->mainType == DVD && query_copyright(dh))
    {  CloseDevice(dh);
-      Stop(_("Can not continue: Encrypted medium.\n"));
+      Stop(_("This software does not support encrypted media.\n"));
    }
 
    if(dh->sessions>1)
    {  int sessions = dh->sessions;
 
       CloseDevice(dh);
-      Stop(_("Multisession (%d sessions) not supported."), sessions);
+      Stop(_("This software does not support multisession (%d sessions) media."), sessions);
       return NULL;
    }
 

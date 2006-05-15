@@ -57,6 +57,7 @@ typedef enum
 
 static void menu_cb(GtkWidget *widget, gpointer data)
 {  
+PrintLogFile("Entering menu_cb(%d)\n", GPOINTER_TO_INT(data));
    switch(GPOINTER_TO_INT(data))
    {  case MENU_FILE_IMAGE:
       case MENU_FILE_ECC:
@@ -119,6 +120,7 @@ static void menu_cb(GtkWidget *widget, gpointer data)
         break;
   }
 
+PrintLogFile("Leaving menu_cb(%d)\n", GPOINTER_TO_INT(data));
 }
 
 /***
@@ -365,7 +367,7 @@ static void file_select_cb(GtkWidget *widget, gpointer data)
 
 void set_path(GtkWidget *entry, char *path)
 {
-   if(path[0] == '/' || path[1] == ':')
+   if(path[0] == '/' || path[0] == '\\' || path[1] == ':')
    {  gtk_entry_set_text(GTK_ENTRY(entry), path);
       gtk_editable_set_position(GTK_EDITABLE(entry), -1);
    }
@@ -373,9 +375,7 @@ void set_path(GtkWidget *entry, char *path)
    {  char buf[PATH_MAX + strlen(path) + 2];
 
 #ifdef SYS_MINGW
-      if(Closure->winMyFiles)
-	   strcpy(buf, Closure->winMyFiles);
-      else getcwd(buf, PATH_MAX);
+      getcwd(buf, PATH_MAX);
       strcat(buf,"\\");
 #else
       getcwd(buf, PATH_MAX);

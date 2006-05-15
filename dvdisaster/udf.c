@@ -44,7 +44,7 @@ static int read_fingerprint(DeviceHandle *dh, unsigned char *fingerprint, gint64
 }
 
 
-static EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
+EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
 {  EccHeader *eh = NULL;
    gint64 pos;
    gint64 header_modulo;

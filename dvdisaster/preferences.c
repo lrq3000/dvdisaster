@@ -43,6 +43,7 @@ typedef struct
    char *formatLinear;
    char *formatAdaptive;
 
+  GtkWidget *radioDrive, *radioISO, *radioECC;
    GtkWidget *radioLinear, *radioAdaptive;
    GtkWidget *rangeToggle, *rangeLab;
    GtkWidget *rangeSpin1, *rangeSpin2;
@@ -128,9 +129,7 @@ static void close_cb(GtkWidget *widget, gpointer data)
  */
 
 enum 
-{  TOGGLE_ECC,
-   TOGGLE_UDF,
-   TOGGLE_READ_CREATE,
+{  TOGGLE_READ_CREATE,
    TOGGLE_UNLINK,
    TOGGLE_SUFFIX,
    TOGGLE_DAO,
@@ -168,15 +167,7 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
    prefs_context *pc = (prefs_context*)Closure->prefsContext;
 
    switch(action)
-   {  case TOGGLE_ECC:
-	Closure->parseEcc = state;
-	break;
-
-      case TOGGLE_UDF:
-	Closure->parseUDF = state;
-	break;
-
-      case TOGGLE_READ_CREATE:
+   {  case TOGGLE_READ_CREATE:
 	Closure->readAndCreate = state;
 	if(state && Closure->adaptiveRead)  /* set reading strategy to linear */
 	{  prefs_context *pc = Closure->prefsContext;
@@ -312,6 +303,21 @@ static GtkWidget* non_linear_scale(non_linear_info **nli_ptr, int action, int *v
    g_signal_connect(scale, "value-changed", G_CALLBACK(non_linear_cb), nli);
 
    return scale;
+}
+
+/*
+ * Image size query method selection 
+ */
+
+static void imgsize_cb(GtkWidget *widget, gpointer data)
+{  int state  = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+   prefs_context *pc = (prefs_context*)data;
+
+   if(state == TRUE)
+   {  if(pc->radioDrive == widget) Closure->querySize = 0;
+      if(pc->radioISO   == widget) Closure->querySize = 1;
+      if(pc->radioECC   == widget) Closure->querySize = 2;
+   }
 }
 
 /*
@@ -463,7 +469,7 @@ void CreatePreferencesWindow(void)
 {  
    if(!Closure->prefsWindow)  /* No window to reuse? */
    {  GtkWidget *window, *outer_box, *hbox, *vbox, *vbox2, *notebook, *space, *button, *scale, *frame;
-      GtkWidget *lab, *spin, *radio1, *radio2, *check, *entry;
+     GtkWidget *lab, *spin, *radio1, *radio2, *radio3, *check, *entry;
 #if GTK_MINOR_VERSION < 4
       GtkWidget *option_menu_strip;
 #endif
@@ -515,15 +521,38 @@ void CreatePreferencesWindow(void)
       gtk_container_set_border_width(GTK_CONTAINER(vbox2), 10);
       gtk_container_add(GTK_CONTAINER(frame), vbox2);
 
-      button = gtk_check_button_new_with_label(_utf("Use information from ECC headers"));
-      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->parseEcc);
-      g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_ECC));
-      gtk_box_pack_start(GTK_BOX(vbox2), button, FALSE, FALSE, 0);
+      hbox = gtk_hbox_new(FALSE, 4);
 
-      button = gtk_check_button_new_with_label(_utf("Use information from ISO/UDF filesystem (experimental)"));
-      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->parseUDF);
-      g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_UDF));
-      gtk_box_pack_start(GTK_BOX(vbox2), button, FALSE, FALSE, 0);
+      lab = gtk_label_new(_utf("Get Image size from: ")); 
+      gtk_box_pack_start(GTK_BOX(hbox), lab, FALSE, FALSE, 0);
+
+      radio1 = pc->radioDrive = gtk_radio_button_new(NULL);
+      g_signal_connect(G_OBJECT(radio1), "toggled", G_CALLBACK(imgsize_cb), pc);
+      gtk_box_pack_start(GTK_BOX(hbox), radio1, FALSE, FALSE, 0);
+      lab = gtk_label_new(_utf("Drive"));
+      gtk_container_add(GTK_CONTAINER(radio1), lab);
+
+      radio2 = pc->radioISO = gtk_radio_button_new_from_widget(GTK_RADIO_BUTTON(radio1));
+      g_signal_connect(G_OBJECT(radio2), "toggled", G_CALLBACK(imgsize_cb), pc);
+      gtk_box_pack_start(GTK_BOX(hbox), radio2, FALSE, FALSE, 0);
+      lab = gtk_label_new(_utf("ISO/UDF"));
+      gtk_container_add(GTK_CONTAINER(radio2), lab);
+
+      radio3 = pc->radioECC = gtk_radio_button_new_from_widget(GTK_RADIO_BUTTON(radio2));
+      g_signal_connect(G_OBJECT(radio3), "toggled", G_CALLBACK(imgsize_cb), pc);
+      gtk_box_pack_start(GTK_BOX(hbox), radio3, FALSE, FALSE, 0);
+      lab = gtk_label_new(_utf("ECC/RS02"));
+      gtk_container_add(GTK_CONTAINER(radio3), lab);
+
+      switch(Closure->querySize)
+      {  case 0: gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio1), TRUE); break;
+         case 1: gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio2), TRUE); break;
+         case 2: gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio3), TRUE); break;
+      }
+
+      gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+
+
 
       /* file extension */
 

@@ -293,7 +293,34 @@ void Verbose(char *format, ...)
 }
 
 /*
- * Print timing results to console and log window */
+ * Print a message to the log file.
+ * Tries hard to make the log messages survive a system crash.
+ */
+
+#ifdef WITH_LOGFILE_YES
+void PrintLogFile(char *format, ...)
+{  FILE *file;
+   va_list argp;
+
+   va_start(argp, format);
+
+   file = fopen(Closure->logFile, "a");
+   if(!file)
+     return;
+
+   g_vfprintf(file, format, argp);
+   fflush(file);
+   fclose(file);
+
+   va_end(argp);
+}
+#else
+void PrintLogFile(char *format, ...) { }
+#endif
+
+/*
+ * Print timing results to console and log window 
+ */
 
 void PrintTimeToLog(GTimer *timer, char *format, ...)
 {  va_list argp;

@@ -247,7 +247,9 @@ static gboolean browser_timeout_func(gpointer data)
 static gboolean browser_timeout_func(gpointer data)
 {  browser_info *bi = (browser_info*)data;
    
+PrintLogFile("browser_timeout_func() entered\n");
    bi->seconds++;
+PrintLogFile("  %d seconds waited\n", bi->seconds);
    if(bi->seconds >= 10)
    {  if(bi->msg)
       {  gtk_widget_destroy(bi->msg);
@@ -255,9 +257,11 @@ static gboolean browser_timeout_func(gpointer data)
       }
       if(bi->url) g_free(bi->url);
       g_free(bi);
+PrintLogFile("  cleaned up\n");
       return FALSE;
    }
 
+PrintLogFile("  continuing\n");
    return TRUE;
 }
 #endif /* SYS_MINGW */
@@ -309,61 +313,104 @@ void ShowHTML(char *target)
 {  browser_info *bi = g_malloc0(sizeof(browser_info));
    struct stat mystat;
    const char *lang;
-   char *path;
+   char *path = NULL;
    int http_url;
-   
+
+PrintLogFile("ShowHTML(%s) called\n", target ? target : "NULL/okay");
+
    /* If no target is given, select between translations of the manual. */
 
    if(!target) target = g_strdup("index.html");
+PrintLogFile("  target is now: %s\n", target);
 
    http_url = strlen(target) > 4 && !strncmp(target, "http", 4);
+PrintLogFile("  http_url: %d\n", http_url);
 
    if(!http_url && !strchr(target, '/'))  /* create full path */
    { 
+PrintLogFile("  beginning full path assembly\n");
       if(!Closure->docDir)
-      {  CreateMessage(_("Documentation not installed."), GTK_MESSAGE_ERROR);
+      {  
+PrintLogFile("  no Closure->docDir\n");
+	 CreateMessage(_("Documentation not installed."), GTK_MESSAGE_ERROR);
          g_free(bi);
+PrintLogFile("  exiting\n");
          return;
       }
-
+PrintLogFile("  Closure->docDir = %s\n", Closure->docDir);
       lang = g_getenv("LANG");
-      
-      if(!strncmp(lang, "cs", 2)) 
-	   path = g_strdup_printf("%s/cs/%s",Closure->docDir,target); 
-      else if(!strncmp(lang, "de", 2)) 
-	   path = g_strdup_printf("%s/de/%s",Closure->docDir,target); 
-      else path = g_strdup_printf("%s/en/%s",Closure->docDir,target); 
+      PrintLogFile("  lang = %s\n", lang ? lang : "NULL");
+      if(lang)
+      {  if(!strncmp(lang, "cs", 2)) 
+#ifdef SYS_MINGW
+	     path = g_strdup_printf("%s\\cs\\%s",Closure->docDir,target); 
+#else
+	     path = g_strdup_printf("%s/cs/%s",Closure->docDir,target); 
+#endif
+         else if(!strncmp(lang, "de", 2)) 
+#ifdef SYS_MINGW
+	     path = g_strdup_printf("%s\\de\\%s",Closure->docDir,target); 
+#else
+	     path = g_strdup_printf("%s/de/%s",Closure->docDir,target); 
+#endif
+      }
+
+      if(!path)
+      {
+PrintLogFile("  lang unset or unknown - using english\n");
+#ifdef SYS_MINGW
+         path = g_strdup_printf("%s\\en\\%s",Closure->docDir,target); 
+#else
+         path = g_strdup_printf("%s/en/%s",Closure->docDir,target); 
+#endif
+      }
+
+PrintLogFile("  path = %s\n", path);
 
 #ifdef SYS_MINGW      
       if(stat(path, &mystat) == -1)
-      {  g_free(path);  /* the local dir is Windows specific */
-	 path = g_strdup_printf("%s/local/%s",Closure->docDir,target);
+      {  
+PrintLogFile("  couldn't stat path\n");
+	 g_free(path);  /* the local dir is Windows specific */
+	 path = g_strdup_printf("%s\\local\\%s",Closure->docDir,target);
+PrintLogFile("  fallback: %s\n", path);
       }
+else PrintLogFile("  could stat path\n");
 #endif
       g_free(target);
       bi->url = path;
    }
    else bi->url = target;
+PrintLogFile("  bi->url = %s\n", bi->url);
 
    if(!http_url && stat(bi->url, &mystat) == -1)
-   {  CreateMessage(_("Documentation file\n%s\nnot found.\n"), GTK_MESSAGE_ERROR, bi->url);
+   {  
+PrintLogFile("  could not stat bi->url\n");
+      CreateMessage(_("Documentation file\n%s\nnot found.\n"), GTK_MESSAGE_ERROR, bi->url);
       g_free(bi);
       g_free(bi->url);
+PrintLogFile("  exiting\n");
       return;
    }
 
    /* Lock the help button and show a message for 10 seconds. */
 
+PrintLogFile("\n  Locking the help button\n");
    TimedInsensitive(Closure->helpButton, 10000);
+PrintLogFile("  Creating the wait message\n");
    bi->msg = CreateMessage(_("Please hang on until the browser comes up!"), GTK_MESSAGE_INFO);
+PrintLogFile("  Connecting with %x\n", (int)bi->msg);
    g_signal_connect(G_OBJECT(bi->msg), "destroy", G_CALLBACK(msg_destroy_cb), bi);
 
 #ifdef SYS_MINGW
    /* Okay, Billy wins big time here ;-) */
 
+PrintLogFile("  Doing the ShellExecute()\n");
    ShellExecute(NULL, "open", bi->url, NULL, NULL, SW_SHOWNORMAL);
+PrintLogFile("  Adding the timeout idle\n");
    g_timeout_add(1000, browser_timeout_func, (gpointer)bi);
 #endif
+PrintLogFile("ShowHTML() finished.\n");
 
 #ifdef SYS_LINUX
    /* Try the first browser */

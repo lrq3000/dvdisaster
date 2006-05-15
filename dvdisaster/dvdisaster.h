@@ -112,7 +112,6 @@ typedef struct _GlobalClosure
    GPtrArray *deviceNodes;  /* List of device nodes (C: or /dev/foo) */
    char *imageName;     /* complete path of current image file */
    char *eccName;       /* complete path of current ecc file */
-   char *winMyFiles;    /* MyFiles folder from Windows */
    GPtrArray *methodList; /* List of available methods */
    char *methodName;    /* Name of currently selected codec */
    gint64 readStart;    /* Range to read */
@@ -139,8 +138,7 @@ typedef struct _GlobalClosure
    int verbose;         /* may activate additional messages */
    int splitFiles;      /* limit image files to 2GB */
    int autoSuffix;      /* automatically extend files with suffices .iso/.ecc */
-   int parseUDF;        /* use information from the ISO/UDF filesystems */
-   int parseEcc;        /* use information from the RS02 headers */
+   int querySize;       /* what sources are used for image size queries */
    int readAndCreate;   /* automatically create .ecc file after reading an image */
    int enableCurveSwitch; /* TRUE in readAndCreateMode after reading is complete */
    int welcomeMessage;  /* just print dvdisaster logo if FALSE */
@@ -148,6 +146,7 @@ typedef struct _GlobalClosure
   
    char *deadSector;    /* Copy of our "dead sector" marker. */
    char *dotFile;       /* path to .dvdisaster file */
+   char *logFile;       /* path to logfile */
    char *binDir;        /* place where the binary resides */
    char *docDir;        /* place where our documentation resides */
    char *browser;       /* Name of preferred WEB browser */
@@ -643,6 +642,7 @@ void CalcSectors(gint64, gint64*, int*);
 
 void PrintCLI(char*, ...);
 void PrintLog(char*, ...);
+void PrintLogFile(char*, ...);
 void Verbose(char*, ...);
 void PrintTimeToLog(GTimer*, char*, ...);
 void PrintProgress(char*, ...);

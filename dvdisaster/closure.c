@@ -21,6 +21,10 @@
 
 #include "dvdisaster.h"
 
+#ifdef WITH_LOGFILE_YES
+ #include <time.h>
+#endif
+
 #ifdef SYS_MINGW
  #include <windows.h>
  #include <tlhelp32.h>
@@ -28,7 +32,7 @@
  #include <shlobj.h>
 #endif
 
-#if 0
+#if 1
  #define Verbose g_printf
 #else
  #define Verbose(format, ...)
@@ -42,6 +46,7 @@
  * Find location of special windows diretories.
  * Copied from glib sources since they have declared it static.
  * Windows only.
+ * CHECKME: Is it okay to return UTF8?
  */ 
 
 #ifdef SYS_MINGW
@@ -82,104 +87,79 @@ static gchar *get_special_folder(int csidl)
 
 #ifdef SYS_MINGW
 static char* get_exe_path()
-{  DWORD pid = GetCurrentProcessId();
-   HANDLE handle;
-   PROCESSENTRY32 pe32;
-   HINSTANCE lib;
-   DWORD (*GetModuleFileNameExA)(HANDLE,HMODULE,LPSTR,DWORD);
+{  char path[MAX_PATH];
+   int n = GetModuleFileNameA(NULL, path, MAX_PATH);
 
-   /* The psapi functions are only available under Win2000 and later. */
+   if(n>0 && n<MAX_PATH-1)
+   {  char *backslash = strrchr(path, '\\');
 
-   if((lib = LoadLibrary("PSAPI.DLL")))
-   {  if((GetModuleFileNameExA = (DWORD(*)(HANDLE,HMODULE,LPSTR,DWORD))GetProcAddress(lib, "GetModuleFileNameExA")))
-      {  handle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, 0, pid);
-         if(handle)
-         {  char path[MAX_PATH];
-            int n = GetModuleFileNameExA(handle, 0, path, MAX_PATH);
-	    
-            CloseHandle(handle);
-	    FreeLibrary(lib);
-
-	    if(n>0)
-            {  char *backslash = strrchr(path, '\\');
-
-               if(backslash) *backslash=0;
-	       return g_strdup(path);
-            } 
-	    else return NULL;
-         }
-       }
+      if(backslash) *backslash=0;
+      
+      return g_strdup(path);
    }
-
-   /* The following only works for Windows 98 */
-       
-   handle = CreateToolhelp32Snapshot(TH32CS_SNAPALL, 0);
-   if(handle)
-   {  pe32.dwSize = sizeof(PROCESSENTRY32);
-      if(Process32First(handle, &pe32))
-      {  do
-         {  if(pe32.th32ProcessID == pid)	
-	    {  char *backslash,path[MAX_PATH];
-	        
-               strcpy(path, pe32.szExeFile);
-               backslash = strrchr(path, '\\');
-               if(backslash) *backslash=0;
-
-	       return strdup(path);
-            }
-	 } while(Process32Next(handle, &pe32));
-      }
-      CloseHandle(handle);
-   }
-
+ 
    return NULL;
 }
 #endif
 
 static void get_base_dirs()
 {  struct stat mystat;
+#ifdef WITH_LOGFILE_YES
+   time_t now;
+#endif
 #ifdef SYS_MINGW
    char *appdata;
 #endif
 
    /*** The source directory is supposed to hold the most recent files,
-	so try this first. */
+	so try this first. Not necessary under Windows as it will always
+	use the directory the binary has been called from. */
 
+#ifndef SYS_MINGW
    if(!stat(SRCDIR, &mystat))
    {  Closure->binDir = g_strdup(SRCDIR);
       Closure->docDir = g_strdup_printf("%s/documentation",SRCDIR);
+      Verbose("Using paths from SRCDIR = %s\n", SRCDIR);
       goto find_dotfile;
    } 
+#endif
 
    /*** Otherwise try the installation directory. 
 	On Linux this is a hardcoded directory.
 	Windows has binary distributions with no prior known installation place,
 	but luckily it provides a way for figuring out that location. */
 
-#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_UNKNOWN) || defined(SYS_DARWIN)
+#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_DARWIN) || defined(SYS_UNKNOWN)
    if(!stat(BINDIR, &mystat))
      Closure->binDir = g_strdup(BINDIR);
 
    if(!stat(DOCDIR, &mystat))
      Closure->docDir = g_strdup(DOCDIR);
+   Verbose("Using hardcoded BINDIR = %s, DOCDIR = %s\n", BINDIR, DOCDIR);
 #endif
 
 #ifdef SYS_MINGW
    Closure->binDir = get_exe_path();
+
    if(Closure->binDir)
-      Closure->docDir = g_strdup_printf("%s/documentation", Closure->binDir);
+      Closure->docDir = g_strdup_printf("%s\\documentation", Closure->binDir);
+   Verbose("Using path from get_exe_path() = %s\n", Closure->binDir);
 #endif
 
+   /*** The location of the dotfile depends on the operating system. 
+	Under Unix the users home directory is used. */
+
+#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_DARWIN) || defined(SYS_UNKNOWN)
 find_dotfile:
 
-   /*** The location of the dotfile depends on the operating system. */
-
-#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_UNKNOWN) || defined(SYS_DARWIN)
    Closure->dotFile = g_strdup_printf("%s/.dvdisaster", g_getenv("HOME"));
+   Closure->logFile = g_strdup_printf("%s/.dvdisaster.log", g_getenv("HOME"));
 #endif
+
 #ifdef SYS_MINGW
-   /* See if there is a dvdisaster subdirectory in the user's
-      application directory first. */
+   /* For Windows the user's application directory in the roaming
+      profile is preferred; 
+      if it does not exist we use the installation directory.  */
 
    appdata = get_special_folder(CSIDL_APPDATA);
    Verbose("Windows specific paths:\n"
@@ -188,36 +168,55 @@ find_dotfile:
 
    if(appdata)
    {  char *our_dir = g_strdup_printf("%s\\dvdisaster", appdata);
-      g_free(appdata);
 
-      Verbose("- dotfile path : %s\n", our_dir);
+      if(!stat(appdata, &mystat)) /* CSIDL_APPDATA present? */
+      { 
+	 Verbose("- dotfile path : %s\n", our_dir);
 
-      if(!stat(our_dir, &mystat))
-      {  Closure->dotFile = g_strdup_printf("%s\\.dvdisaster", our_dir);
-	 Verbose("- dotfile directory: present\n");
+	 if(!stat(our_dir, &mystat))
+	 {  Closure->dotFile = g_strdup_printf("%s\\.dvdisaster", our_dir);
+	    Closure->logFile = g_strdup_printf("%s\\logfile.txt", our_dir);
+	    Verbose("- dotfile path : present\n");
+	 }
+	 else if(!mkdir(our_dir)) /* Note: Windows! */
+	 {  Closure->dotFile = g_strdup_printf("%s\\.dvdisaster", our_dir);
+	    Closure->logFile = g_strdup_printf("%s\\logfile.txt", our_dir);
+	    Verbose("- dotfile path : - created -\n");
+	 }
       }
-      Verbose("- dotfile directory: does not exist\n");
+      else Verbose("- dotfile path : *can not be used*\n");
 
       g_free(our_dir);
+      g_free(appdata);
    }
 
    /* Fallback: Expect .dvdisaster file in binDir */
 
    if(!Closure->dotFile)
-     Closure->dotFile = g_strdup_printf("%s/.dvdisaster", Closure->binDir);
+      Closure->dotFile = g_strdup_printf("%s\\.dvdisaster", Closure->binDir);
 
-   Closure->winMyFiles = get_special_folder(CSIDL_PERSONAL);
-   Verbose("- CSIDL_PERSONAL: %s\n", Closure->winMyFiles ? Closure->winMyFiles : "NULL");
+   if(!Closure->logFile)
+      Closure->logFile = g_strdup_printf("%s\\logfile.txt", Closure->binDir);
 #endif
 
-
-   Verbose("File locations:\n"
+   Verbose("\nUsing file locations:\n"
 	   "- Bin dir: %s\n"
 	   "- Doc dir: %s\n"
-	   "- dotfile: %s\n\n",
+	   "- dotfile: %s\n"
+	   "- logfile: %s\n\n",
 	   Closure->binDir,
 	   Closure->docDir,
-	   Closure->dotFile);   
+	   Closure->dotFile,
+	   Closure->logFile);   
+
+#ifdef WITH_LOGFILE_YES
+   if(!stat(Closure->logFile, &mystat))
+     unlink(Closure->logFile);
+
+   time(&now);
+   PrintLogFile("dvdisaster-%s logging started at %s\n",
+		Closure->cookedVersion, ctime(&now));
+#endif
 }
 
 /***
@@ -291,8 +290,7 @@ void ReadDotfile()
       if(!strcmp(symbol, "medium-size"))     { Closure->mediumSize  = atoll(value); continue; }
       if(!strcmp(symbol, "method-name"))     { if(Closure->methodName) g_free(Closure->methodName);
 	                                       Closure->methodName = g_strdup(value); continue; }
-      if(!strcmp(symbol, "parse-ecc"))       { Closure->parseEcc  = atoi(value); continue; }
-      if(!strcmp(symbol, "parse-udf"))       { Closure->parseUDF  = atoi(value); continue; }
+      if(!strcmp(symbol, "query-size"))      { Closure->querySize  = atoi(value); continue; }
       if(!strcmp(symbol, "read-and-create")) { Closure->readAndCreate = atoi(value); continue; }
       if(!strcmp(symbol, "redundancy"))      { if(Closure->redundancy) g_free(Closure->redundancy);
                                                Closure->redundancy  = g_strdup(value); continue; }
@@ -351,8 +349,7 @@ static void update_dotfile()
    g_fprintf(dotfile, "jump:            %d\n", Closure->sectorSkip);
    g_fprintf(dotfile, "medium-size:     %lld\n", Closure->mediumSize);
    g_fprintf(dotfile, "method-name:     %s\n", Closure->methodName);
-   g_fprintf(dotfile, "parse-ecc:       %d\n", Closure->parseEcc);
-   g_fprintf(dotfile, "parse-udf:       %d\n", Closure->parseUDF);
+   g_fprintf(dotfile, "query-size:      %d\n", Closure->querySize);
    g_fprintf(dotfile, "read-and-create: %d\n", Closure->readAndCreate);
    if(Closure->redundancy)
      g_fprintf(dotfile, "redundancy:    %s\n", Closure->redundancy);
@@ -431,7 +428,7 @@ void InitClosure()
    Closure->cacheMB     = 32;
    Closure->sectorSkip  = 16;
    Closure->spinupDelay = 5;
-   Closure->parseEcc    = 1;
+   Closure->querySize   = 2;
    Closure->fillUnreadable = -1;
    Closure->welcomeMessage = 1;
 
