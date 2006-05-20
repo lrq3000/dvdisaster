@@ -36,6 +36,7 @@ function dictionary_en()
 
    trans_fdl="Verbatim copying and distribution of this entire article is permitted in any medium, provided this notice is preserved."
    trans_copyright="Copyright 2004-2006 Carsten Gnörlich."
+   trans_modified="Information in this handbook relates to the original version of dvdisaster and may not be applicable."
 }
 
 
@@ -871,7 +872,7 @@ dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
 
 Opening /dvd/image.iso: 284234 medium sectors.<p>
 
-Augmenting image with Method RS02: 555M data, 143M ecc (52 roots; 25.6% redundancy)<br>
+Augmending image with Method RS02: 555M data, 143M ecc (52 roots; 25.6% redundancy)<br>
 Calculating sector checksums: 100%<br>
 Expanding image: 100%<br>
 Ecc generation: 100.0%<br>
@@ -2135,9 +2136,9 @@ For the source code version see the <a href="download20.html">installation instr
     <tr><td align="right">Digital signature:&nbsp;</td>
         <td><a href="${tar_0_66_sig}">dvdisaster-0.66.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Binary for Windows:&nbsp;</td>
-        <td><a href="${setup_0_66}">dvdisaster-0.66-setup.exe</a></td></tr>
+        <td><a href="${setup_0_66}">dvdisaster-0.66.3-setup.exe</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="${setup_0_66_sig}">dvdisaster-0.66-setup.exe.gpg</a></td></tr>
+        <td><a href="${setup_0_66_sig}">dvdisaster-0.66.3-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
@@ -2154,8 +2155,15 @@ This method is still experimental and currently only available in the
 command line. Please visit 
 the <a href="http://sourceforge.net/cvs/?group_id=157550">CVS archive</a>
 to follow development of the new method (requires some skills in building
-programs from source).
+programs from source).<p>
+
+<b>Patches</b> (small changes after version 0.66; files above have been updated):<br>
+
+<b>pl3</b> fixes incomplete installation of the user manual under some versions
+of Windows. Other operating systems are not affected.
 </td></tr></table><p>
+
+<pre> </pre>
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.65</b></td><td align="right">14-Jan-2006</td></tr>

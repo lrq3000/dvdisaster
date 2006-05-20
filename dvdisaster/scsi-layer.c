@@ -36,21 +36,6 @@ static int read_dvd_sector(DeviceHandle*, unsigned char*, int, int);
 static int read_cd_sector(DeviceHandle*, unsigned char*, int, int);
 
 /***
- *** Data base of drive specific oddities
- ***/
-
-DriveDatabase drive_db[] =
-{  {"ATAPI DVD+RW 8X4X12",      1, GET_SIZE_FROM_DVD_STRUCT},     /* Benq DRW800A */
-   {"NEC DVD_RW ND-2500A",      1, GET_SIZE_FROM_DVD_STRUCT},
-   {"_NEC DVD_RW ND-2500A",     1, GET_SIZE_FROM_DVD_STRUCT},     /* patched FW? */
-   {"PIONEER DVD-ROM DVD-105F", 2, GET_SIZE_FROM_READ_CAPACITY},
-   {"PIONEER DVD-ROM DVD-304",  2, GET_SIZE_FROM_READ_CAPACITY},
-   {"HL-DT-STDVDRAM GSA-4163B", 3, GET_SIZE_FROM_DVD_STRUCT},     /* LG GSA-4163B */
-   {"PLEXTOR DVDR PX-716A",     3, GET_SIZE_FROM_DVD_STRUCT},
-   {NULL, 0, 0}
-};
-
-/***
  *** CD and DVD query routines.
  *** Everything below should be system independent.
  ***/
@@ -64,7 +49,6 @@ int InquireDevice(DeviceHandle *dh, int probe_only)
    char *ibuf,*vbuf;
    unsigned char cmd[MAX_CDB_SIZE];
    unsigned char *buf = Closure->scratchBuf;
-   int i;
 
    /*** Try to learn something about the device vendor */
 
@@ -120,12 +104,6 @@ int InquireDevice(DeviceHandle *dh, int probe_only)
 	 else       Stop(_("Device %s (%s) is a hard disk."),dh->device,ibuf);
       }
    }
-
-   /*** See if drive is in our data base */
-
-   for(i=0; drive_db[i].model; i++)
-     if(!strcmp(dh->vendor, drive_db[i].model))
-         dh->db = &drive_db[i];
 
    return buf[0] & 0x1f;  /* return the SCSI peripheral device type */
 }
@@ -976,18 +954,12 @@ DeviceHandle* OpenAndQueryDevice(char *device)
    InquireDevice(dh, 0);
 
 #ifdef SYS_LINUX
-   if(dh->db) 
-        PrintLog(_("\nDevice: %s, %s [Note %d]\n"),device, dh->devinfo, dh->db->category);
-   else PrintLog(_("\nDevice: %s, %s\n"),device, dh->devinfo);
+   PrintLog(_("\nDevice: %s, %s\n"),device, dh->devinfo);
 #endif
 
 #ifdef SYS_MINGW
-   if(dh->db) 
-        PrintLog(_("\nDevice: %s (%s), %s [Note %d]\n"),
-		  device, dh->aspiUsed ? "ASPI" : "SPTI", dh->devinfo,
-		  dh->db->category);
-   else PrintLog(_("\nDevice: %s (%s), %s\n"),
-		  device, dh->aspiUsed ? "ASPI" : "SPTI", dh->devinfo);
+   PrintLog(_("\nDevice: %s (%s), %s\n"),
+	    device, dh->aspiUsed ? "ASPI" : "SPTI", dh->devinfo);
 #endif
 
    query_type(dh, 0);

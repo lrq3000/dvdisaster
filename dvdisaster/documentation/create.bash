@@ -26,9 +26,17 @@ IDXCOLOR="bgcolor=\"#f0f0f0\""    # Background of index
 BGCOLOR1="bgcolor=\"#e8e8e8\""    # used in example section
 BGCOLOR2="bgcolor=\"#f0f0f0\""    # used in exmaple section
 
-major_mode=$1
-workdir=`pwd`
+case $1 in
+  local-mod) major_mode="local"
+             modified_source="true"
+             ;;
+  local-orig) major_mode="local"
+             ;;
+  *) major_mode=$1
+     ;;
+esac
 
+workdir=`pwd`
 project_title=dvdisaster
 project_version=$2
 cooked_version=`echo $2 | sed -e "s/pl[0-9]/ \(&\)/"`
@@ -231,6 +239,11 @@ function footer()
   <td align="center">
    <font size="-1">
     <i> $trans_copyright<br>
+EOF
+if test "$modified_source" = "true"; then
+  echo "        $trans_modified<br>" >>$file
+fi
+cat >> $file <<EOF
         $trans_fdl
     </i>
    </font>
@@ -452,7 +465,10 @@ function create_subpages()
    done
 }
 
-SECTIONS="index example download qa background imprint"
+if test $major_mode = "local"
+then SECTIONS="index example download qa background"
+else SECTIONS="index example download qa background imprint"
+fi
 
 # Prepare entry links for each section
 
@@ -473,7 +489,10 @@ create_subpages example de "0 10 20 21 22 30 40 50 80 81 82 83 90"
 create_subpages download de "0 10 20"
 create_subpages qa de "0 10 20"
 create_subpages background de "0 10 20 30 40 50 60 70"
-create_subpages imprint de "0"
+
+if ! test $major_mode = "local"; then
+  create_subpages imprint de "0"
+fi
 
 # English translation
 
@@ -492,7 +511,10 @@ create_subpages example en "0 10 20 21 22 30 40 50 80 81 82 83 90"
 create_subpages download en "0 10 20"
 create_subpages qa en "0 10 20"
 create_subpages background en "0 10 20 30 40 50 60 70"
-create_subpages imprint en "0"
+
+if ! test $major_mode = "local"; then
+  create_subpages imprint en "0"
+fi
 
 # Czech translation
 
@@ -511,4 +533,7 @@ create_subpages example cs "0 10 20 21 22 30 40 50 80 81 82 83 90"
 create_subpages download cs "0 10 20"
 create_subpages qa cs "0 10 20"
 create_subpages background cs "0 10 20 30 40 50 60 70"
-create_subpages imprint cs "0"
+
+if ! test $major_mode = "local"; then
+  create_subpages imprint cs "0"
+fi

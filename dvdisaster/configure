@@ -21,7 +21,7 @@ fi
 
 PACKAGE dvdisaster 0.67
 
-DEFINE_STRING RELEASE_MICRO "9"
+DEFINE_STRING RELEASE_MICRO "10"
 #DEFINE_STRING RELEASE_STATUS "-"
 #DEFINE_STRING RELEASE_STATUS "patch"
 DEFINE_STRING RELEASE_STATUS "devel"
@@ -180,6 +180,18 @@ done
 
 echo "}" >> method-link.c
 echo 
+
+# Check sources for modifications
+
+if test -e fingerprints.md5; then
+  md5sum *.h *.c documentation/*.bash | sort -k2 >tmp.md5
+  if ! cmp fingerprints.md5 tmp.md5 >/dev/null; then
+    CFG_OTHER_OPTIONS="$CFG_OTHER_OPTIONS -DMODIFIED_SOURCE"
+  fi
+  rm tmp.md5
+else
+  CFG_OTHER_OPTIONS="$CFG_OTHER_OPTIONS -DMODIFIED_SOURCE"
+fi
 
 # Okay, hopefully we've got everything together now.
 

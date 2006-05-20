@@ -170,22 +170,6 @@ typedef struct request_sense {
 #endif
 
 /***
- *** A data base for keeping track of specific drive oddities
- ***/
-
-typedef enum
-{  GET_SIZE_FROM_DVD_STRUCT    = (1<<0),
-   GET_SIZE_FROM_READ_CAPACITY = (1<<1),
-} dvd_flags;
-
-typedef struct _drive_database
-{  char *model;
-   int category;
-   guint32 dvdFlags;
-} DriveDatabase;
-
-
-/***
  ***  The DeviceHandle is pretty much our device abstraction layer. 
  ***
  * It contains info about the opened device and the inserted medium
@@ -216,7 +200,6 @@ typedef struct _DeviceHandle
    char devinfo[34];          /* whole device info string */
    char vendor[34];           /* vendor and product info only */
    int category;
-   DriveDatabase *db;         /* see drive database above */
    int (*read)(struct _DeviceHandle*, unsigned char*, int, int);
    Sense sense;               /* sense data from last operation */
    gint64 userAreaSize;       /* size of user area according to DVD Info struct */

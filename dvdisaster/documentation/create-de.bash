@@ -36,6 +36,7 @@ function dictionary_de()
 
    trans_fdl="Die unveränderte Wiedergabe und Verteilung dieses gesamten Textes in beliebiger Form ist gestattet, sofern dieser Hinweis erhalten bleibt."
    trans_copyright="Copyright 2004-2006 Carsten Gnörlich."
+   trans_modified="Die Informationen in diesem Handbuch beziehen sich auf die Originalversion von dvdisaster und sind möglicherweise nicht zutreffend."
 }
 
 
@@ -2197,18 +2198,18 @@ der Quellkode-Version gibt es <a href="download20.html">Installationshinweise</a
 <b>Entwickler-Versionen</b> - neu und experimentell für erfahrene Benutzer!<p> 
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.66</b></td><td align="right">25-Mär-2006</td></tr>
+<tr><td><b>dvdisaster-0.66</b></td><td align="right">21-Mai-2006</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Quellkode für alle Betriebssysteme:&nbsp;</td>
-        <td><a href="${tar_0_66}">dvdisaster-0.66.tar.bz2</a></td></tr>
+        <td><a href="${tar_0_66}">dvdisaster-0.66.4.tar.bz2</a></td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><a href="${tar_0_66_sig}">dvdisaster-0.66.tar.bz2.gpg</a></td></tr>
+        <td><a href="${tar_0_66_sig}">dvdisaster-0.66.4.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Binärversion für Windows:&nbsp;</td>
-        <td><a href="${setup_0_66}">dvdisaster-0.66-setup.exe</a></td></tr>
+        <td><a href="${setup_0_66}">dvdisaster-0.66.4-setup.exe</a></td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><a href="${setup_0_66_sig}">dvdisaster-0.66-setup.exe.gpg</a></td></tr>
+        <td><a href="${setup_0_66_sig}">dvdisaster-0.66.4-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
@@ -2224,8 +2225,16 @@ Das Verfahren ist noch experimentell und in dieser Version nur in der
 Kommandozeile verfügbar. Schauen Sie auch in 
 das <a href="http://sourceforge.net/cvs/?group_id=157550">CVS-Archiv</a>,
 um die Weiterentwicklung des neuen Verfahrens zu verfolgen (benötigt Kenntnisse
-zum Erzeugen von Programmen aus dem Quellkode).
+zum Erzeugen von Programmen aus dem Quellkode).<p>
+
+<b>Patches</b> (kleine Änderungen nach Version 0.66; die obigen Dateien wurden erneuert):<br>
+<b>pl3</b> behebt eine fehlerhafte Installation des Benutzerhandbuchs
+unter bestimmten Windows-Versionen. Andere Betriebssysteme sind nicht betroffen.<br>
+<b>pl4</b> behebt Absturz beim Aufruf des Handbuchs aus der Benutzeroberfläche 
+bei bestimmten Spracheinstellungen und verbessert die Kompatibilität mit -RW-Datenträgern.
 </td></tr></table><p>
+
+<pre> </pre>
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.65</b></td><td align="right">14-Jan-2006</td></tr>

@@ -57,7 +57,6 @@ typedef enum
 
 static void menu_cb(GtkWidget *widget, gpointer data)
 {  
-PrintLogFile("Entering menu_cb(%d)\n", GPOINTER_TO_INT(data));
    switch(GPOINTER_TO_INT(data))
    {  case MENU_FILE_IMAGE:
       case MENU_FILE_ECC:
@@ -119,8 +118,6 @@ PrintLogFile("Entering menu_cb(%d)\n", GPOINTER_TO_INT(data));
         g_print("Menu/Toolbar action %d\n",GPOINTER_TO_INT(data));
         break;
   }
-
-PrintLogFile("Leaving menu_cb(%d)\n", GPOINTER_TO_INT(data));
 }
 
 /***

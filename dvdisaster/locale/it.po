@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-15 20:40+0200\n"
+"POT-Creation-Date: 2006-05-20 14:50+0200\n"
 "PO-Revision-Date: 2005-01-01 14:24+0100\n"
 "Last-Translator: Andrea Polverini <polve@polve.com>\n"
 "Language-Team: Italian <>\n"
@@ -661,11 +661,11 @@ msgstr "Visualizza informazioni addizionali create durante l'operazione corrente
 msgid "View log"
 msgstr "Protocollo"
 
-#: menubar.c:98
+#: menubar.c:97
 msgid "windowtitle|Change log"
 msgstr "Change log"
 
-#: menubar.c:99
+#: menubar.c:98
 msgid ""
 "<big>Change log</big>\n"
 "<i>Major differences from earlier program versions.</i>"
@@ -673,11 +673,11 @@ msgstr ""
 "<big>Change log</big>\n"
 "<i>Maggiori differenze dalle versioni più recenti.</i>"
 
-#: menubar.c:105
+#: menubar.c:104
 msgid "windowtitle|Credits"
 msgstr "Ringraziamenti"
 
-#: menubar.c:106
+#: menubar.c:105
 msgid ""
 "<big>Credits</big>\n"
 "<i>Thanks go out to...</i>"
@@ -685,11 +685,11 @@ msgstr ""
 "<big>Ringraziamenti</big>\n"
 "<i>I nostri ringraziamenti a...</i>"
 
-#: menubar.c:112
+#: menubar.c:111
 msgid "windowtitle|To do list"
 msgstr "Da fare"
 
-#: menubar.c:113
+#: menubar.c:112
 msgid ""
 "<big>To do list</big>\n"
 "<i>A sneak preview of coming features ... perhaps ;-)</i>"
@@ -697,127 +697,127 @@ msgstr ""
 "<big>Da fare</big>\n"
 "<i>Un'anticipazione sulle nuove funzioni... magari ;-)</i>"
 
-#: menubar.c:180
+#: menubar.c:177
 msgid "menu|Select Image"
 msgstr "Seleziona Immagine"
 
-#: menubar.c:181
+#: menubar.c:178
 msgid "menu|Select Parity File"
 msgstr "Seleziona File di Parità"
 
-#: menubar.c:182
+#: menubar.c:179
 msgid "menu|Quit"
 msgstr "Esci"
 
-#: menubar.c:184
+#: menubar.c:181
 msgid "menu|File"
 msgstr "File"
 
-#: menubar.c:192
+#: menubar.c:189
 msgid "menu|About"
 msgstr "Info"
 
-#: menubar.c:193
+#: menubar.c:190
 msgid "menu|User manual"
 msgstr "Manuale utente"
 
-#: menubar.c:197
+#: menubar.c:194
 msgid "menu|Credits"
 msgstr "Ringraziamenti"
 
-#: menubar.c:198
+#: menubar.c:195
 msgid "menu|Licence (GPL)"
 msgstr "Licenza (GPL)"
 
-#: menubar.c:202
+#: menubar.c:199
 msgid "menu|Change log"
 msgstr "Change Log"
 
-#: menubar.c:203
+#: menubar.c:200
 msgid "menu|To do list"
 msgstr "Da fare"
 
-#: menubar.c:205
+#: menubar.c:202
 msgid "menu|Help"
 msgstr "Aiuto"
 
-#: menubar.c:290
+#: menubar.c:287
 msgid "windowtitle|Image file selection"
 msgstr "Selezione dei file immagine"
 
-#: menubar.c:327
+#: menubar.c:324
 msgid "windowtitle|Error correction file selection"
 msgstr "Selezione del file di correzione degli errori"
 
-#: menubar.c:438 menubar.c:463 menubar.c:489
+#: menubar.c:435 menubar.c:460 menubar.c:486
 msgid "tooltip|Drive selection"
 msgstr "Seleziona Drive"
 
-#: menubar.c:438
+#: menubar.c:435
 msgid "Use the nearby drop-down list to select the input drive."
 msgstr "Usa il menu a tendina qui vicino per selezionare il drive di input."
 
-#: menubar.c:457 menubar.c:481
+#: menubar.c:454 menubar.c:478
 msgid "No drives found"
 msgstr "Nessun drive trovato"
 
-#: menubar.c:463 menubar.c:489
+#: menubar.c:460 menubar.c:486
 msgid "Selects the input drive for reading images."
 msgstr "Seleziona il drive di input per leggere le immagini."
 
-#: menubar.c:520
+#: menubar.c:517
 msgid "tooltip|Image file selection"
 msgstr "Selezione dei file immagine"
 
-#: menubar.c:520
+#: menubar.c:517
 msgid "Selects a new image file."
 msgstr "Seleziona un nuovo file immagine."
 
-#: menubar.c:521
+#: menubar.c:518
 msgid "tooltip|Current image file"
 msgstr "File immagine corrente"
 
-#: menubar.c:521
+#: menubar.c:518
 msgid "Shows the name of the current image file."
 msgstr "Mostra il nome del file immagine corrente."
 
-#: menubar.c:545
+#: menubar.c:542
 msgid "tooltip|Error correction file selection"
 msgstr "Selezione del file di correzione degli errori"
 
-#: menubar.c:545
+#: menubar.c:542
 msgid "Selects a new error correction file."
 msgstr "Seleziona un nuovo file di correzione errori."
 
-#: menubar.c:546
+#: menubar.c:543
 msgid "tooltip|Current error correction file"
 msgstr "File di correzione errori corrente"
 
-#: menubar.c:546
+#: menubar.c:543
 msgid "Shows the name of the current error correction file."
 msgstr "Mostra il nome del file di correzione errori corrente."
 
-#: menubar.c:557
+#: menubar.c:554
 msgid "tooltip|Preferences"
 msgstr "Preferenze"
 
-#: menubar.c:557
+#: menubar.c:554
 msgid "Customize settings for creating images, error correction files and other stuff."
 msgstr "Personalizza i settaggi della creazione di immagini, file di correzione degli errori ad altra roba."
 
-#: menubar.c:567
+#: menubar.c:564
 msgid "tooltip|User manual"
 msgstr "Manuale utente"
 
-#: menubar.c:567
+#: menubar.c:564
 msgid "Displays the user manual (external HTML browser required)."
 msgstr "Mostra il manuale utente (è richiesto un Browser HTML esterno)"
 
-#: menubar.c:577
+#: menubar.c:574
 msgid "tooltip|Quit"
 msgstr "Esci"
 
-#: menubar.c:577
+#: menubar.c:574
 msgid "Quit dvdisaster"
 msgstr "Chiudi dvdisaster"
 
@@ -926,97 +926,97 @@ msgstr ""
 msgid "ECC/RS02"
 msgstr ""
 
-#: preferences.c:551
+#: preferences.c:559
 msgid "Local files (on hard disc)"
 msgstr "File locali (sul disco rigido)"
 
-#: preferences.c:558
+#: preferences.c:566
 msgid "Automatically add .iso and .ecc file suffixes"
 msgstr "Aggiungi automaticamente i suffissi .iso e .ecc"
 
-#: preferences.c:565
+#: preferences.c:573
 msgid "Split files into segments <= 2GB"
 msgstr "Suddividere l'immagine in file <= 2GB"
 
-#: preferences.c:572
+#: preferences.c:580
 msgid "Automatic file creation and deletion"
 msgstr "Creazione e cancellazione file automatica"
 
-#: preferences.c:581
+#: preferences.c:589
 msgid "Create error correction file after reading image"
 msgstr "Creazione del file di correzione errore dopo la lettura dell'immagine"
 
-#: preferences.c:589
+#: preferences.c:597
 msgid "Remove image after error correction file creation"
 msgstr "Rimuovi l'immagine dopo la creazione del file di correzione degli errori"
 
-#: preferences.c:596
+#: preferences.c:604
 msgid "Read & Scan"
 msgstr "Leggi e Scansiona"
 
-#: preferences.c:600
+#: preferences.c:608
 msgid "Reading preferences"
 msgstr "Preferenze di Lettura"
 
-#: preferences.c:611
+#: preferences.c:619
 msgid "Reading strategy: "
 msgstr "Strategia di lettura:"
 
-#: preferences.c:617
+#: preferences.c:625
 msgid "Linear"
 msgstr "Lineare"
 
-#: preferences.c:623
+#: preferences.c:631
 msgid "Adaptive (for defective media)"
 msgstr "Adattiva (per supporti difettosi)"
 
-#: preferences.c:635
+#: preferences.c:643
 msgid "Read/Scan from sector"
 msgstr "Leggi/Scansiona dal settore"
 
-#: preferences.c:644
+#: preferences.c:652
 msgid "to sector"
 msgstr "al settore"
 
-#: preferences.c:658
+#: preferences.c:666
 #, c-format
 msgid "Skip %d sectors after read error"
 msgstr "Salta %d settori dopo l'errore di lettura"
 
-#: preferences.c:659
+#: preferences.c:667
 #, c-format
 msgid "Stop reading when unreadable intervals < %d"
 msgstr "Ferma la lettura quando gli intervalli non leggibili sono < %d"
 
-#: preferences.c:671
+#: preferences.c:679
 msgid "Image properties"
 msgstr "Proprietà dell'immagine"
 
-#: preferences.c:680
+#: preferences.c:688
 msgid "Assume image to be written in DAO mode (don't truncate)"
 msgstr "Assumi che l'immagine verrà scritta in modalità DAO (non troncare)"
 
-#: preferences.c:692
+#: preferences.c:700
 msgid "Fill unreadable sectors with byte:"
 msgstr "Riempi i settori illeggibili con il byte:"
 
-#: preferences.c:714
+#: preferences.c:722
 msgid "Drive initialisation"
 msgstr "Inizializzazione del drive"
 
-#: preferences.c:721
+#: preferences.c:729
 msgid "Wait"
 msgstr "Attendere"
 
-#: preferences.c:730
+#: preferences.c:738
 msgid "seconds for drive to spin up"
 msgstr "secondi per far avviare il drive"
 
-#: preferences.c:737
+#: preferences.c:745
 msgid "Error correction"
 msgstr "Correzione dell'errore"
 
-#: preferences.c:740
+#: preferences.c:748
 msgid "Storage method:"
 msgstr ""
 
@@ -1274,12 +1274,12 @@ msgstr ""
 msgid "CRC error in sector %lld\n"
 msgstr "Errore CRC nel settore %lld\n"
 
-#: read-adaptive.c:1151 scsi-layer.c:455
+#: read-adaptive.c:1151 scsi-layer.c:433
 #, c-format
 msgid "Sectors %lld-%lld: %s\n"
 msgstr "Settori %lld-%lld: %s\n"
 
-#: read-adaptive.c:1154 read-linear.c:624 scsi-layer.c:454
+#: read-adaptive.c:1154 read-linear.c:624 scsi-layer.c:432
 #, c-format
 msgid "Sector %lld: %s\n"
 msgstr "Settore %lld: %s\n"
@@ -1332,7 +1332,7 @@ msgstr "Modo di lettura adattivo:"
 msgid "Sectors processed"
 msgstr "Settori processati"
 
-#: read-adaptive-window.c:118 scsi-layer.c:436
+#: read-adaptive-window.c:118 scsi-layer.c:414
 msgid "readable"
 msgstr "Leggibile"
 
@@ -1426,7 +1426,7 @@ msgstr "Completamento immagine %s. Solo i settori mancanti saranno letti.\n"
 msgid "done.\n"
 msgstr "compiuto.\n"
 
-#: read-linear.c:429 scsi-layer.c:789
+#: read-linear.c:429 scsi-layer.c:767
 #, c-format
 msgid "Waiting %d seconds for drive to spin up...\n"
 msgstr "Attendere %d secondi per far avviare il drive...\n"
@@ -2750,11 +2750,11 @@ msgstr ""
 msgid "Could not allocate ccb for %s"
 msgstr ""
 
-#: scsi-layer.c:78
+#: scsi-layer.c:62
 msgid "unknown"
 msgstr "sconosciuto"
 
-#: scsi-layer.c:82
+#: scsi-layer.c:66
 #, c-format
 msgid ""
 "Can open %s, but INQUIRY fails.\n"
@@ -2768,22 +2768,22 @@ msgstr ""
 "Oppure prova ad usare /dev/scd? o /dev/sr?,\n"
 "oppure disabilita l'emulazione ide-scsi.\n"
 
-#: scsi-layer.c:90
+#: scsi-layer.c:74
 #, c-format
 msgid "INQUIRY failed. Something is wrong with drive %s.\n"
 msgstr "INQUIRY fallita. Qualcosa non va con il drive %s.\n"
 
-#: scsi-layer.c:119
+#: scsi-layer.c:103
 #, c-format
 msgid "Device %s (%s) is not a CDROM drive."
 msgstr "La periferica %s (%s) non è un CDROM."
 
-#: scsi-layer.c:120
+#: scsi-layer.c:104
 #, c-format
 msgid "Device %s (%s) is a hard disk."
 msgstr "La periferica %s (%s) è un disco rigido."
 
-#: scsi-layer.c:171
+#: scsi-layer.c:149
 #, c-format
 msgid ""
 "%s\n"
@@ -2792,12 +2792,12 @@ msgstr ""
 "%s\n"
 "Non posso identificare la lunghezza della struttura del dvd.\n"
 
-#: scsi-layer.c:181
+#: scsi-layer.c:159
 #, c-format
 msgid "Could not query dvd physical structure - implausible packet length %d\n"
 msgstr "Non riesco ad identificare la struttura fisica del dvd - lunghezza pachetto non plausibile %d\n"
 
-#: scsi-layer.c:195
+#: scsi-layer.c:173
 #, c-format
 msgid ""
 "%s\n"
@@ -2806,7 +2806,7 @@ msgstr ""
 "%s\n"
 "Non riesco ad identificare la struttura fisica del dvd\n"
 
-#: scsi-layer.c:275
+#: scsi-layer.c:253
 #, c-format
 msgid ""
 "%s\n"
@@ -2815,12 +2815,12 @@ msgstr ""
 "%s\n"
 "Non riesco ad indentificare lunghezza della TOC.\n"
 
-#: scsi-layer.c:283 scsi-layer.c:327
+#: scsi-layer.c:261 scsi-layer.c:305
 #, c-format
 msgid "TOC info too long (%d), probably multisession.\n"
 msgstr "TOC info troppo lunga (%d), probabile multisessione.\n"
 
-#: scsi-layer.c:295
+#: scsi-layer.c:273
 #, c-format
 msgid ""
 "%s\n"
@@ -2829,7 +2829,7 @@ msgstr ""
 "%s\n"
 "Non riesco a leggere la TOC.\n"
 
-#: scsi-layer.c:315
+#: scsi-layer.c:293
 #, c-format
 msgid ""
 "%s\n"
@@ -2838,12 +2838,12 @@ msgstr ""
 "%s\n"
 "Non riesco a leggere tutta la lunghezza della TOC.\n"
 
-#: scsi-layer.c:323
+#: scsi-layer.c:301
 #, c-format
 msgid "TOC info too short, length %d.\n"
 msgstr "TOC info troppo corta, lunghezza %d.\n"
 
-#: scsi-layer.c:339
+#: scsi-layer.c:317
 #, c-format
 msgid ""
 "%s\n"
@@ -2852,7 +2852,7 @@ msgstr ""
 "%s\n"
 "Non riesco a leggere tutta la TOC.\n"
 
-#: scsi-layer.c:346
+#: scsi-layer.c:324
 #, c-format
 msgid ""
 "\n"
@@ -2861,31 +2861,31 @@ msgstr ""
 "\n"
 "formato TOC inatteso (lunghezza %d):\n"
 
-#: scsi-layer.c:352
+#: scsi-layer.c:330
 msgid "Consider sending a bug report.\n"
 msgstr "Considera di inviare una comunicazione di errore.\n"
 
-#: scsi-layer.c:360
+#: scsi-layer.c:338
 msgid "Data CD mode 1"
 msgstr "CD Data Modo 1"
 
-#: scsi-layer.c:361
+#: scsi-layer.c:339
 msgid "CD-I"
 msgstr "CD-I"
 
-#: scsi-layer.c:362
+#: scsi-layer.c:340
 msgid "CD XA form 1"
 msgstr "CD XA Form 1"
 
-#: scsi-layer.c:363
+#: scsi-layer.c:341
 msgid "Unknown"
 msgstr "Sconosciuto"
 
-#: scsi-layer.c:366
+#: scsi-layer.c:344
 msgid "CD Audio"
 msgstr "CD Audio"
 
-#: scsi-layer.c:393
+#: scsi-layer.c:371
 #, c-format
 msgid ""
 "%s\n"
@@ -2894,14 +2894,14 @@ msgstr ""
 "%s\n"
 "Non posso identificare la lunghezza della struttura dvd per il format code 1.\n"
 
-#: scsi-layer.c:402
+#: scsi-layer.c:380
 #, c-format
 msgid "Could not query dvd copyright info - implausible packet length %d\n"
 msgstr ""
 "Non posso identificare le informazioni del copyright del dvd\n"
 "- lunghezza del pacchetto non plausibile %d\n"
 
-#: scsi-layer.c:416
+#: scsi-layer.c:394
 #, c-format
 msgid ""
 "%s\n"
@@ -2910,23 +2910,23 @@ msgstr ""
 "%s\n"
 "Non posso identificare le informazioni del copyright.\n"
 
-#: scsi-layer.c:470
+#: scsi-layer.c:448
 msgid "is undecideable because of read error"
 msgstr "Illeggibile per errori di lettura"
 
-#: scsi-layer.c:476
+#: scsi-layer.c:454
 msgid "looks GOOD"
 msgstr "sembra BUONA"
 
-#: scsi-layer.c:482
+#: scsi-layer.c:460
 msgid "gives unformatted size (UNUSABLE)"
 msgstr "rende la dimensione non formattata (INUTILIZZABILE)"
 
-#: scsi-layer.c:487
+#: scsi-layer.c:465
 msgid "is UNUSABLE"
 msgstr "è UTILIZZABILE"
 
-#: scsi-layer.c:506
+#: scsi-layer.c:484
 #, c-format
 msgid ""
 "%s\n"
@@ -2935,7 +2935,7 @@ msgstr ""
 "%s\n"
 "Non riesco ad indentificare la dimensione del supporto.\n"
 
-#: scsi-layer.c:566
+#: scsi-layer.c:544
 #, c-format
 msgid ""
 "Different media sizes depending on query method:\n"
@@ -2944,7 +2944,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: scsi-layer.c:571
+#: scsi-layer.c:549
 msgid ""
 "Evaluation of returned medium sizes:\n"
 "\n"
@@ -2952,15 +2952,15 @@ msgstr ""
 "Valutazione della dimensione del media:\n"
 "\n"
 
-#: scsi-layer.c:626
+#: scsi-layer.c:604
 msgid "Using value from READ CAPACITY"
 msgstr "Usa il valore dalla READ CAPACITY"
 
-#: scsi-layer.c:630
+#: scsi-layer.c:608
 msgid "Using value from READ DVD STRUCTURE"
 msgstr "Usa il valore dalla READ DVD STRUCTURE"
 
-#: scsi-layer.c:640
+#: scsi-layer.c:618
 #, c-format
 msgid ""
 "FAILED to determine image size.\n"
@@ -2972,7 +2972,7 @@ msgstr ""
 "ma CONTINUATE A VOSTRO RISCHIO (l'immagine potrebbe essere\n"
 "incompleta o illeggibile)."
 
-#: scsi-layer.c:645
+#: scsi-layer.c:623
 #, c-format
 msgid ""
 "Final decision: %s\n"
@@ -2981,7 +2981,7 @@ msgstr ""
 "Decisione finale: %s\n"
 "\n"
 
-#: scsi-layer.c:653
+#: scsi-layer.c:631
 msgid ""
 "Failed to determine image size.\n"
 "Try using a different drive."
@@ -2989,25 +2989,16 @@ msgstr ""
 "Impossibile determinare la dimensione dell'immagine.\n"
 "Provare ad utilizzare un drive diverso."
 
-#: scsi-layer.c:845
+#: scsi-layer.c:823
 msgid "Setting the drive speed failed:\n"
 msgstr "Settaggio della velocità del drive fallito:\n"
 
-#: scsi-layer.c:956
+#: scsi-layer.c:934
 #, c-format
 msgid "Retrying Sector %lld because of: %s\n"
 msgstr "Riprovo il settore %lld per causa di: %s\n"
 
-#: scsi-layer.c:980
-#, c-format
-msgid ""
-"\n"
-"Device: %s, %s [Note %d]\n"
-msgstr ""
-"\n"
-"Periferica: %s, %s [n.b. %d]\n"
-
-#: scsi-layer.c:981
+#: scsi-layer.c:957
 #, c-format
 msgid ""
 "\n"
@@ -3016,16 +3007,7 @@ msgstr ""
 "\n"
 "Periferica: %s, %s\n"
 
-#: scsi-layer.c:986
-#, c-format
-msgid ""
-"\n"
-"Device: %s (%s), %s [Note %d]\n"
-msgstr ""
-"\n"
-"Periferica: %s (%s), %s [n.b. %d]\n"
-
-#: scsi-layer.c:989
+#: scsi-layer.c:961
 #, c-format
 msgid ""
 "\n"
@@ -3034,36 +3016,36 @@ msgstr ""
 "\n"
 "Periferica: %s (%s), %s\n"
 
-#: scsi-layer.c:1003
+#: scsi-layer.c:975
 #, c-format
 msgid "Medium: %s, %lld sectors%s %d layer(s)"
 msgstr "Supporto: %s, %lld settori%s %d strato(i)"
 
-#: scsi-layer.c:1008
+#: scsi-layer.c:980
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s %d layer(s), created %s"
 msgstr "Supporto \"%s\": %s, %lld settori%s %d strato(i), creato %s"
 
-#: scsi-layer.c:1020
+#: scsi-layer.c:992
 #, c-format
 msgid "Medium: %s, %lld sectors%s"
 msgstr "Supporto: %s, %lld Settori%s"
 
-#: scsi-layer.c:1024
+#: scsi-layer.c:996
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s created %s"
 msgstr "Supporto \"%s\": %s, %lld settori%s creato %s"
 
-#: scsi-layer.c:1038
+#: scsi-layer.c:1010
 #, c-format
 msgid "This software does not support \"%s\" type media."
 msgstr ""
 
-#: scsi-layer.c:1045
+#: scsi-layer.c:1017
 msgid "This software does not support encrypted media.\n"
 msgstr ""
 
-#: scsi-layer.c:1052
+#: scsi-layer.c:1024
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr ""
@@ -3198,11 +3180,11 @@ msgstr ""
 msgid "Search"
 msgstr "Cerca"
 
-#: show-manual.c:335
+#: show-manual.c:326
 msgid "Documentation not installed."
 msgstr ""
 
-#: show-manual.c:389
+#: show-manual.c:371
 #, c-format
 msgid ""
 "Documentation file\n"
@@ -3213,7 +3195,7 @@ msgstr ""
 "%s\n"
 "non trovati.\n"
 
-#: show-manual.c:401
+#: show-manual.c:380
 msgid "Please hang on until the browser comes up!"
 msgstr "Prego attendere finchè il browser non si avvia!"
 
@@ -3252,6 +3234,20 @@ msgstr ""
 #: welcome-window.c:141
 msgid "<i>New in this Version:</i>"
 msgstr ""
+
+#~ msgid ""
+#~ "\n"
+#~ "Device: %s, %s [Note %d]\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Periferica: %s, %s [n.b. %d]\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Device: %s (%s), %s [Note %d]\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Periferica: %s (%s), %s [n.b. %d]\n"
 
 #~ msgid "Use information from ISO/UDF filesystem (experimental)"
 #~ msgstr "Utilizzo le informazioni dal filesystem ISO/UDF (sperimentale)"

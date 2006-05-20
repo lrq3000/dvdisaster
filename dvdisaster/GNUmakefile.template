@@ -35,7 +35,7 @@ EFENCE_LIBS   = $(CFG_EFENCE_LIBS)
 SYS_OPTIONS  = $(CFG_SYS_OPTIONS)
 HAVE_OPTIONS = $(CFG_HAVE_OPTIONS)
 WITH_OPTIONS = $(CFG_WITH_OPTIONS)
-OTHER_OPTIONS = $(CFG_OTHER_OPTIONS)
+OTHER_OPTIONS = $(CFG_OTHER_OPTIONS) -DVERSION=\"$(VERSION)\"
 EXE_SUFFIX   = $(CFG_EXE_SUFFIX)
 
 LOCATIONS = -DSRCDIR=\"$(SRCDIR)\" -DBINDIR=\"$(BINDIR)\" -DDOCDIR=\"$(DOCSUBDIR)\" -DLOCALEDIR=\"$(LOCALEDIR)\"
@@ -61,7 +61,7 @@ all: dvdisaster html images
 
 # Building the dvdisaster binary
 
-dvdisaster: version.h inlined-icons.h $(OFILES) 
+dvdisaster: inlined-icons.h $(OFILES) 
 	@if test $(CFG_SYS_OPTIONS) == -DSYS_MINGW; \
 	then echo "Linking  : dvdisaster-win, dvdisaster"; \
 	     windres -v winres.rc -O coff -o winres.o >/dev/null ; \
@@ -90,13 +90,13 @@ inlined-icons.h: icons/read.png icons/create.png icons/scan.png icons/fix.png ic
 locale:
 	@$(MAKE) --no-print-directory -C locale
 
-version.h:
-	@echo "#define VERSION \"$(VERSION)\"" > version.h
-
 # Stuff needed to generate or prepare the documentation
 
 documentation/de/index.html: documentation/create.bash documentation/create-cs.bash documentation/create-de.bash documentation/create-en.bash
-	@cd documentation ; bash create.bash local $(VERSION) $(PKGNAME)
+	@if echo $(CFG_OTHER_OPTIONS) | grep MODIFIED >/dev/null; \
+	then cd documentation ; bash create.bash local-mod $(VERSION) $(PKGNAME); \
+	else cd documentation ; bash create.bash local-orig $(VERSION) $(PKGNAME); \
+	fi
 
 html: documentation/de/index.html
 
@@ -268,9 +268,11 @@ clean:
 	@rm -rf documentation/cs/*.html documentation/de/*.html documentation/en/*.html
 	@if test -e THESE_ARE_THE_DEVEL_SOURCES && ! test -e documentation/MAKE_SRCDIST; then rm -f documentation/images-*.pngpack; fi
 	@rm -f documentation/pngpack.log
-	@rm -f version.h
 	@if test -e tools/Makefile.config; then $(MAKE) --no-print-directory -C tools clean; fi
 	@if test -e $(PKGNAME); then rm -rf $(PKGNAME); fi
+	@if test -e ~/.dvdisaster-original-author; then \
+	  md5sum *.h *.c documentation/*.bash | sort -k2 >fingerprints.md5; \
+	fi
 
 arch:	clean distclean
 	@cd .. ; tar -c -z -f $(PKGNAME)-arch.tgz $(PKGNAME)

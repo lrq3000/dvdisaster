@@ -38,6 +38,7 @@ function dictionary_cs()
 
    trans_fdl="Doslovné kopírování a distribuce celého tohoto článku jsou pro jakékoli médium povoleny za předpokladu, že tato poznámka zůstane zachována."
    trans_copyright="Autorská práva 2004-2006 Carsten Gnörlich, k překladu 2006 Luboš Staněk."
+   trans_modified="Information in this handbook relates to the original version of dvdisaster and may not be applicable."
 }
 
 # ----- These are the "inlined" html pages.
@@ -2182,9 +2183,9 @@ U verze ve zdrojovém kódu si přečtěte <a href="download20.html">instalačn�
     <tr><td align="right">Digitální podpis:&nbsp;</td>
         <td><a href="${tar_0_66_sig}">dvdisaster-0.66.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Binární verze pro Windows:&nbsp;</td>
-        <td><a href="${setup_0_66}">dvdisaster-0.66-setup.exe</a></td></tr>
+        <td><a href="${setup_0_66}">dvdisaster-0.66.3-setup.exe</a></td></tr>
     <tr><td align="right">Digitální podpis:&nbsp;</td>
-        <td><a href="${setup_0_66_sig}">dvdisaster-0.66-setup.exe.gpg</a></td></tr>
+        <td><a href="${setup_0_66_sig}">dvdisaster-0.66.3-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
@@ -2200,8 +2201,15 @@ ještě experimentální a v současnosti je dostupná pouze na příkazové
 řádce. Navštivte prosím
 the <a href="http://sourceforge.net/cvs/?group_id=157550">Archiv CVS</a>
 a sledujte vývoj nové metody (vyžaduje určité zkušenosti se sestavováním
-programů ze zdroje).
+programů ze zdroje).<p>
+
+<b>Záplaty</b> (malé změny proti verzi 0.66; soubory nahoře byly aktualizovány):<br>
+
+<b>pl3</b> fixes incomplete installation of the user manual under some versions
+of Windows. Other operating systems are not affected.
 </td></tr></table><p>
+
+<pre> </pre>
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.65</b></td><td align="right">14.01.2006</td></tr>
@@ -3439,7 +3447,7 @@ function background70cs()
 {  cat >> $1 <<EOF
 <h3>Tipy pro ukládání souborů oprav chyb</h3>
 
-V současné době existuje málo technologií pro výměnná média,
+V současné dob� existuje málo technologií pro výměnná média,
 které mohou být cenově efektivní alternativou pro různé formáty CD/DVD.
 Z toho důvodu budete pravděpodobně používat CD/DVD nejen pro archivaci,
 ale budete na CD/DVD také ukládat odpovídající soubory oprav chyb.<p>

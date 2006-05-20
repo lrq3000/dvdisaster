@@ -66,7 +66,6 @@
 #endif
 
 #include "md5.h"
-#include "version.h"
 
 #ifndef G_THREADS_ENABLED
  #error "need multithreading glib2"
