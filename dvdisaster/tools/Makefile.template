@@ -33,6 +33,8 @@ LIBS = $(EFENCE_LIBS) $(BZ2_LIBS) $(PNG_LIBS) -lm
 CFILES = $(CFG_CFILES)
 OFILES = $(CFG_OFILES)
 
+DLLWRAP = dllwrap  # temporary
+
 ######################################################################
 # Compilation related
 ######################################################################
@@ -51,6 +53,11 @@ pngpack: $(OFILES)
 	@echo "Linking  : pngpack";
 	@if test $(CFG_SYS_OPTIONS) == -DSYS_MINGW; \
 	then $(CC) $(LOPTS) $(OFILES) $(LIBS) -lz --static -o pngpack; \
+	     echo "Creating DLL"; \
+	     $(CC) $(COPTS) -DPNGPACK -DBUILD_DLL -c pngpack.c -o unpngpack.o; \
+	     $(DLLWRAP) --driver-name $(CC) -mdll -s --def unpngpack.def \
+	                $(LOPTS) md5.o unpngpack.o $(LIBS) -DBUILD_DLL -lz \
+	                --static -o unpngpack.dll -Wl,--out-implib,unpngpack.dll.a;\
 	else $(CC) $(LOPTS) $(OFILES) $(LIBS) -o pngpack; \
 	fi
 
@@ -102,5 +109,5 @@ distclean:
 
 clean:
 	@echo "Removing rebuildable files in ./tools"
-	@rm -rf *.o pngpack *.exe core *.stackdump
+	@rm -rf *.o pngpack *.exe *.dll *.dll.a core *.stackdump
 	@find . -name \*\~ -print | xargs rm -f;

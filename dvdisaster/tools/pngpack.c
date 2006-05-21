@@ -1,6 +1,9 @@
 /*  pngpack: lossless image compression for a series of screen shots
  *  Copyright (C) 2005,2006 Carsten Gnoerlich.
  *
+ *  NSIS library wrapper for pngpack
+ *  Copyright (C) 2006 Lubos Stanek.
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -23,6 +26,7 @@
  */
 
 #define VERSION "0.00"
+#define UNPNGPACK_VERSION "0.01"
 #define FILEFORMAT 1
 #define MAX_TILE_SIZE 32
 
@@ -44,6 +48,13 @@
 #include <png.h>
 
 #include "md5.h"
+
+#ifdef BUILD_DLL
+  #define MINGW_EXPORT __declspec(dllexport)
+  #include <windows.h>
+  #include "exdll.h"
+#endif
+
 
 /*
  * Tell user that current action was aborted due to a serious error.
@@ -89,7 +100,7 @@ typedef struct
 
 } image;
 
-static void free_image(image *i)
+void free_image(image *i)
 {
    if(i->image) free(i->image);
    if(i->file) fclose(i->file);
@@ -100,7 +111,7 @@ static void free_image(image *i)
    free(i);
 }
 
-static image *load_png(char *name)
+image *load_png(char *name)
 {  struct MD5Context md5ctxt;
    struct stat mystat;
    image *pi; 
@@ -223,7 +234,7 @@ static image *load_png(char *name)
    return pi;
 }
 
-static void save_png(image *pi, char *name)
+void save_png(image *pi, char *name)
 {  png_byte *pb;
    unsigned int i; 
    png_color_16 background;
@@ -337,7 +348,7 @@ void save_ppm(image *pi, char *name)
  *** Find most used color 
  ***/
 
-static void find_background(image *pi)
+void find_background(image *pi)
 {  unsigned int *pixel,*count,*color,size,t_used,t_max,i,max_color;
 
    color = calloc(4, sizeof(unsigned int)); 
@@ -417,13 +428,14 @@ unsigned int db_n,db_max;
 opcode *oc_list;
 unsigned int oc_n,oc_max;
 
-static void init_tile_database()
+void init_tile_database()
 {
    img_max = db_max = oc_max = 4;
    img_list  = malloc(sizeof(image*)*img_max);
    tile_db   = malloc(sizeof(tile*)*db_max);
    oc_list   = malloc(sizeof(opcode)*oc_max);
 }
+
 
 void add_image(image *pi)
 {
@@ -497,7 +509,7 @@ unsigned int clr[] = { 0xff0000, 0x00ff00, 0xffff00, 0x00ffff, 0x0000ff };
 
 #define PIXEL(pi,px,py) (pi->image[(px)+(py)*pi->width])
 
-static void create_tile(image *pi, work_tile *t, unsigned int x, unsigned int y)
+void create_tile(image *pi, work_tile *t, unsigned int x, unsigned int y)
 {  
    /* Stop recursion if background or maximal tile size is reached */ 
 
@@ -529,7 +541,7 @@ static void create_tile(image *pi, work_tile *t, unsigned int x, unsigned int y)
 }
 
 
-static void create_tiles(image *pi)
+void create_tiles(image *pi)
 {  work_tile *wt = malloc(sizeof(work_tile));
    tile *t = malloc(sizeof(tile));
    unsigned int x,y;
@@ -610,7 +622,7 @@ static void create_tiles(image *pi)
  *** .ppk format loading and saving
  ***/
 
-static void bz_write(BZFILE *b, void *buf, int size)
+void bz_write(BZFILE *b, void *buf, int size)
 {  int bzerror;
 
    BZ2_bzWrite(&bzerror, b, buf, size);
@@ -621,7 +633,7 @@ static void bz_write(BZFILE *b, void *buf, int size)
    }
 }
 
-static void save_int(BZFILE *file, int value)
+void save_int(BZFILE *file, int value)
 {  unsigned char buf[4];
    int bzerror;
 
@@ -638,7 +650,7 @@ static void save_int(BZFILE *file, int value)
    }
 }
 
-static void save_uint(BZFILE *file, unsigned int value)
+void save_uint(BZFILE *file, unsigned int value)
 {  unsigned char buf[4];
    int bzerror;
 
@@ -655,7 +667,7 @@ static void save_uint(BZFILE *file, unsigned int value)
    }
 }
 
-static void save_ppk(char *name)
+void save_ppk(char *name)
 {  FILE *file;
    BZFILE *bzfile; 
    unsigned int i; 
@@ -745,7 +757,7 @@ static void save_ppk(char *name)
 
 }
 
-static void bz_read(BZFILE *b, void *buf, int size)
+void bz_read(BZFILE *b, void *buf, int size)
 {  int bzerror,ignore;
 
    BZ2_bzRead(&bzerror, b, buf, size);
@@ -770,7 +782,7 @@ static int load_int(BZFILE *file)
    return buf[0]<<24 | buf[1]<<16 | buf[2]<<8 | buf[3];
 }
 
-static unsigned int load_uint(BZFILE *file)
+unsigned int load_uint(BZFILE *file)
 {  unsigned char buf[4];
    int bzerror,ignore; 
 
@@ -964,6 +976,7 @@ static void render_image(image *pi)
  *** main()
  ***/
 
+#ifndef BUILD_DLL
 int main(int argc, char *argv[])
 {  
    fprintf(stdout, "pngpack-0.10 *** Copyright 2005,2006 Carsten Gnoerlich.\n"
@@ -1042,3 +1055,86 @@ int main(int argc, char *argv[])
 
    return EXIT_SUCCESS;
 }
+#endif /* not building the .dll */
+
+/***
+ *** Build the .dll for direct inclusion into the NSIS installer
+ ***
+ *   Copyright (C) 2006 Lubos Stanek.
+ */
+
+#ifdef BUILD_DLL
+HINSTANCE g_hInstance;
+
+HWND g_hwndParent;
+
+void ExtractAll(HWND hwndParent, int string_size,
+                char *variables, stack_t **stacktop,
+                extra_parameters *extra)
+{
+  int Result;
+  FILE *stream;
+
+  g_hwndParent=hwndParent;
+
+  EXDLL_INIT();
+
+ 	unsigned int i;
+ 	char source[MAX_PATH+1];
+ 	
+ 	popstring((char *) source);
+
+  Result = 0;
+
+  if((stream = freopen("unpngpack.log", "w", stdout)) == NULL)
+  {
+      pushstring("error");
+      return;
+  }
+
+  fprintf(stdout, "pngpack-0.10 *** Copyright 2005,2006 Carsten Gnoerlich.\n");
+  fprintf(stdout, "NSIS library wrapper %s *** Copyright 2006 Lubos Stanek.\n", UNPNGPACK_VERSION); 
+	fprintf(stdout, "This software comes with  ABSOLUTELY NO WARRANTY.  This\n"
+	                "is free software and you are welcome to redistribute it\n"
+		              "under the conditions of the GNU GENERAL PUBLIC LICENSE.\n"  
+		              "See the file \"COPYING\" for further information.\n\n");
+
+  init_tile_database();
+
+	load_ppk(source);
+
+  for(i=0; i<img_n; i++)
+  {
+    image *pi = img_list[i];
+
+    fprintf(stdout, "rendering %s (opcodes %d - %d)",pi->name,pi->first_opcode,pi->last_opcode);
+
+	  pi->bytesize = sizeof(unsigned int) * pi->width*pi->height;
+	  pi->image = malloc(pi->bytesize);
+	  if(!pi->image)
+	  {
+	  	/* probably out of memory - try other images */
+	  	Result++;
+	  	continue;
+	  }
+	  render_image(pi);
+	  save_png(pi, pi->name);
+	  free(pi->image);
+  }
+
+  stream = freopen("CON", "w", stdout);
+
+  if(Result > 0)
+    pushstring("error");
+  else
+    pushstring("success");
+}
+
+
+BOOL WINAPI DllMain(HANDLE hInst, ULONG ul_reason_for_call, LPVOID lpReserved)
+{
+  g_hInstance=hInst;
+	return TRUE;
+}
+
+#endif
