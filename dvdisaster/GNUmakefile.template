@@ -179,7 +179,9 @@ show:
 # Distribution management
 ######################################################################
 
-.PHONY : install uninstall clean distclean arch www berlios-images berlios sf sf-images srcdist innodist
+.PHONY : install uninstall clean distclean arch www 
+.PHONY : berlios-images berlios sf sf-images 
+.PHONY : srcdist innodist nsisdist zipdist
 
 install: dvdisaster html images
 	@echo "Installing package..."
@@ -261,8 +263,9 @@ distclean: clean
 
 clean:
 	@echo "Removing rebuildable files"
-	@rm -rf *.o medium.* dvdisaster *.exe .dvdisaster core *.core *.stackdump
+	@rm -rf *.o medium.* dvdisaster *.exe *.zip .dvdisaster core *.core *.stackdump
 	@rm -f inlined-icons.h installer.iss
+	@rm -f wininst/version.nsh
 	@find . -name \*\~ -print | xargs rm -f;
 	@find . -name \*.mo -print | xargs rm -f;
 	@rm -rf documentation/cs/*.html documentation/de/*.html documentation/en/*.html
@@ -304,7 +307,7 @@ srcdist: pack-images lock-images clean distclean
 	@cd .. ; gpg --default-key 091ad320 --detach-sign --armor $(PKGNAME).tar.bz2
 	@rm -f documentation/images-*.pngpack
 
-innodist: dvdisaster html pack-images
+prepare-dist:
 	@if test -e win-build-dir; then rm -rf win-build-dir; fi
 	@mkdir win-build-dir
 	@mkdir win-build-dir/documentation
@@ -318,7 +321,6 @@ innodist: dvdisaster html pack-images
 	@cp documentation/images/*.jpg win-build-dir/documentation/images
 	@cp tools/pngpack.exe win-build-dir/documentation
 	@mv documentation/images-*.pngpack win-build-dir/documentation
-	@(cd win-build-dir; tar xzf ../../pango-subdirs.tgz)
 	@cp $(GTK_BINDIR)/libglib*.dll win-build-dir
 	@cp $(GTK_BINDIR)/iconv.dll win-build-dir
 	@cp $(GTK_BINDIR)/intl.dll win-build-dir
@@ -332,6 +334,51 @@ innodist: dvdisaster html pack-images
 	@cp $(GTK_BINDIR)/libgtk-win*.dll win-build-dir
 	@mkdir win-build-dir/locale
 	@cp -r locale/?? win-build-dir/locale
+
+	@mkdir -p win-build-dir/etc/gtk-2.0
+	@echo "# GdkPixbuf Image Loader Modules file" >  win-build-dir/etc/gtk-2.0/gdk-pixbuf.loaders
+
+	@mkdir -p win-build-dir/etc/pango
+	@cp $(GTK_BINDIR)/../etc/pango/pango.aliases win-build-dir/etc/pango
+	@echo "# Pango Modules file" > win-build-dir/etc/pango/pango.modules
+	@echo "#" >> win-build-dir/etc/pango/pango.modules
+	@echo "pango-basic-win32.dll BasicScriptEngineWin32 PangoEngineShape PangoRenderWin32 common:" >> win-build-dir/etc/pango/pango.modules
+
+	@mkdir -p win-build-dir/lib/locale
+	@for i in cs de it; do \
+	  mkdir -p win-build-dir/lib/locale/$$i/LC_MESSAGES; \
+	  cp $(GTK_BINDIR)/../lib/locale/$$i/LC_MESSAGES/atk*.mo win-build-dir/lib/locale/$$i/LC_MESSAGES; \
+	  cp $(GTK_BINDIR)/../lib/locale/$$i/LC_MESSAGES/glib*.mo win-build-dir/lib/locale/$$i/LC_MESSAGES; \
+	  cp $(GTK_BINDIR)/../lib/locale/$$i/LC_MESSAGES/gtk*.mo win-build-dir/lib/locale/$$i/LC_MESSAGES; \
+	done
+
+wininst/version.nsh:
+	@echo ";NSIS install script definitions" > wininst/version.nsh
+	@echo ";Do not change manually." >> wininst/version.nsh
+	@echo ";These are automatically created by the configure." >> wininst/version.nsh
+	@echo ";" >> wininst/version.nsh
+	@echo ";!define CFG_PACKAGE \"$(CFG_PACKAGE)\"" >> wininst/version.nsh
+	@echo "!define CFG_VERSION \"$(CFG_VERSION)\"" >> wininst/version.nsh
+	@if test "$(RELEASE_MICRO)" == ""; \
+	then echo "!define RELEASE_MICRO \"0\"" >> wininst/version.nsh; \
+	else echo "!define RELEASE_MICRO \"$(RELEASE_MICRO)\"" >> wininst/version.nsh; \
+	fi
+	@if test "$(RELEASE_STATUS)" == ""; \
+	then echo "!define RELEASE_STATUS \"stable\"" >> wininst/version.nsh; \
+	else echo "!define RELEASE_STATUS \"$(RELEASE_STATUS)\"" >> wininst/version.nsh; \
+	fi
+	@echo "!define CFG_PKGNAME \"$(PKGNAME)\"" >> wininst/version.nsh
+
+
+innodist: dvdisaster html pack-images prepare-dist
 	@sed 's/dvdisaster-%version%/$(PKGNAME)/' <installer.template >installer.iss
 	@iscc installer.iss
+
+nsisdist: prepare-dist wininst/version.nsh
+	@echo "Making NSIS package"
+	@cd wininst; makensis dvdisaster.nsi > dvdisaster.nsi.log
+
+zipdist: prepare-dist
+	@echo "Packaging with zip"
+	@echo "MS Windows standalone distribution of $(PKGNAME)." | zip -S9rqoz $(PKGNAME).zip $(PKGNAME)
 
