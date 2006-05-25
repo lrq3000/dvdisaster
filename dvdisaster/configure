@@ -110,6 +110,13 @@ if ! EXECUTE_PROGRAM "gdk-pixbuf-csource --help" gdk_pixbuf_csource ; then
   exit 1
 fi
 
+if test $CFG_SYS_OPTIONS == -DSYS_MINGW; then
+  if ! EXECUTE_PROGRAM "dllwrap -version" dllwrap ; then
+    echo "* dllwrap not installed or path to it is missing."
+    echo "* You can build dvdisaster, but not the windows installer."
+  fi
+fi
+
 # Evaluate the --with* customization options
 
 PRINT_MESSAGE "\nAdditional configuration options:"

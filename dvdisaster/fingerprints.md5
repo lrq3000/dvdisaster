@@ -28,7 +28,7 @@ eecfd7e236c89cc36e1de2062754ac2e  method-link.c
 eaf0dd9c3565ed109c17e497a19b2343  preferences.c
 84409f1a92c0588fd8da02f8a4e76e03  print-sense.c
 cdde449dd2a8f64b560ff18a36f86234  random.c
-646f0e7e3ffc9e8f65ed30f6e21dc245  read-adaptive.c
+26105605ec5b090f1dfaa206b79e09ba  read-adaptive.c
 9bb305966c7274275817471192e8570d  read-adaptive-window.c
 9a52b91c58bfdb6493ecd2cd2bf36d9a  read-linear.c
 da98dceeccc81bfbf0f1fd10755bfc88  read-linear-window.c

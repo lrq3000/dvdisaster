@@ -404,6 +404,72 @@ static void check_size(read_closure *rc)
 	 rc->earlyTermination = FALSE;
 	 cleanup((gpointer)rc);
       }
+
+      rc->sectors = rc->dh->sectors;
+   }
+}
+
+static void get_reading_range(read_closure *rc, gint64 *first_sector, gint64 *last_sector)
+{
+   if(Closure->readStart || Closure->readEnd)
+   {  if(!Closure->guiMode) /* more range checks are made below */ 
+      {  *first_sector = Closure->readStart;
+         *last_sector  = Closure->readEnd < 0 ? rc->sectors-1 : Closure->readEnd;
+      }
+      else  /* be more permissive in GUI mode */
+      {  *first_sector = 0;
+ 	 *last_sector  = rc->sectors-1;
+
+	 if(Closure->readStart <= Closure->readEnd)
+	 {  *first_sector = Closure->readStart < rc->sectors ? Closure->readStart : rc->sectors-1;
+	    *last_sector  = Closure->readEnd   < rc->sectors ? Closure->readEnd   : rc->sectors-1;
+	 }
+      }
+
+      if(*first_sector>*last_sector || *first_sector < 0 || *last_sector >= rc->sectors)
+	Stop(_("Sectors must be in range [0..%lld].\n"),rc->sectors-1);
+
+      PrintLog(_("Limiting sector range to [%lld,%lld].\n"),*first_sector,*last_sector);
+   }
+   else 
+   {  *first_sector = 0; *last_sector = rc->sectors-1;
+   }
+}
+
+/*
+ * Compare image fingerprint against fingerprint stored in error correction file 
+ */
+
+static void check_fingerprint(read_closure *rc)
+{  unsigned char digest[16];
+   int status;
+   
+   status = ReadSectors(rc->dh, Closure->scratchBuf, rc->eh->fpSector, 1);
+
+   if(status) /* Not readable. Bad luck. */
+   {  int answer;
+
+      answer = ModalWarning(GTK_MESSAGE_WARNING, GTK_BUTTONS_OK_CANCEL, NULL,
+			    _("Sector %d is missing. Can not compare image and ecc fingerprints.\n"
+			      "Double check that image and ecc file belong together.\n"),
+			    rc->eh->fpSector);
+
+      if(!answer)
+      {  SetAdaptiveReadFootline(_("Aborted by user request!"), Closure->red);
+	 rc->earlyTermination = FALSE;
+	 cleanup((gpointer)rc);
+      }
+   }
+   else 
+   {  struct MD5Context image_md5;
+
+      MD5Init(&image_md5);
+      MD5Update(&image_md5, (unsigned char*)Closure->scratchBuf, 2048);
+      MD5Final(digest, &image_md5);
+
+      if(memcmp(digest, rc->eh->mediumFP, 16))
+	Stop(_("Fingerprints of image and ecc file do not match.\n"
+	       "Image and ecc file do not belong together.\n"));
    }
 }
 
@@ -457,72 +523,18 @@ void ReadMediumAdaptive(gpointer data)
    
    check_size(rc);
 
-   goto terminate;   
+   /*** Limit the read range from users choice */
 
-   /*** See if user wants to limit the read range. */
-
-   if(Closure->readStart || Closure->readEnd)
-   {  if(!Closure->guiMode)
-      {  first_sector = Closure->readStart;
-         last_sector  = Closure->readEnd < 0 ? rc->sectors-1 : Closure->readEnd;
-      }
-      else  /* be more permissive in GUI mode */
-      {  first_sector = 0;
- 	 last_sector  = rc->sectors-1;
-
-	 if(Closure->readStart <= Closure->readEnd)
-	 {  first_sector = Closure->readStart < rc->sectors ? Closure->readStart : rc->sectors-1;
-	    last_sector  = Closure->readEnd   < rc->sectors ? Closure->readEnd   : rc->sectors-1;
-	 }
-      }
-
-      if(first_sector>last_sector || first_sector < 0 || last_sector >= rc->sectors)
-	Stop(_("Sectors must be in range [0..%lld].\n"),rc->sectors-1);
-
-      PrintLog(_("Limiting sector range to [%lld,%lld].\n"),first_sector,last_sector);
-   }
-   else 
-   {  first_sector = 0; last_sector = rc->sectors-1;
-   }
-
-   if(last_sector > rc->sectors-1) /* pathological case when medium has less sectors */
-     last_sector = rc->sectors-1;  /* than recorded in the error correction file */
-
+   get_reading_range(rc, &first_sector, &last_sector);
    start = first_sector;
    end   = last_sector;
 
-   /*** Compare image and ecc fingerprints
-        (only if the .ecc file is available) */
+   /*** Compare image and ecc fingerprints (only if RS01 type .ecc is available) */
 
-   if(rc->ei)
-   {  status = ReadSectors(rc->dh, buf+2048, rc->eh->fpSector, 1);
+   if(rc->readMode == ECC_IN_FILE)
+     check_fingerprint(rc);
 
-      if(status) 
-      {  int answer;
-
-	 answer = ModalWarning(GTK_MESSAGE_WARNING, GTK_BUTTONS_OK_CANCEL, NULL,
-			       _("Sector %d is missing. Can not compare image and ecc fingerprints.\n"
-				 "Double check that image and ecc file belong together.\n"),
-			       rc->eh->fpSector);
-
-	 if(!answer)
-	 {  SetAdaptiveReadFootline(_("Aborted by user request!"), Closure->red);
- 	    rc->earlyTermination = FALSE;
-	    goto terminate;
-	 }
-      }
-      else 
-      {  struct MD5Context image_md5;
-
-	 MD5Init(&image_md5);
-	 MD5Update(&image_md5, (unsigned char*)buf+2048, 2048);
-	 MD5Final(buf, &image_md5);
-
-	 if(memcmp(buf, rc->eh->mediumFP, 16))
-	   Stop(_("Fingerprints of image and ecc file do not match.\n"
-		  "Image and ecc file do not belong together.\n"));
-      }
-   }
+   goto terminate;
 
    /*** Initialize ecc stripe bitmaps
         (only if the .ecc file is available) */
