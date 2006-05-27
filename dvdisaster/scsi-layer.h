@@ -214,6 +214,7 @@ typedef struct _DeviceHandle
    int maxRate;               /* guessed maximum transfer rate */
    char *mediumDescr;         /* textual description of medium */
    struct _IsoInfo *isoInfo;  /* Information gathered from ISO filesystem */
+   Bitmap *defects;           /* for defect simulation */
 } DeviceHandle;
 
 /* These seem not to be standardized anywhere,

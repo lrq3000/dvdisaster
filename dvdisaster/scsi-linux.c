@@ -114,6 +114,8 @@ void CloseDevice(DeviceHandle *dh)
     g_free(dh->mediumDescr);
   if(dh->isoInfo)
     FreeIsoInfo(dh->isoInfo);
+  if(dh->defects)
+    FreeBitmap(dh->defects);
   g_free(dh);
 }
 

@@ -638,3 +638,39 @@ void SendCDB(char *cdb_raw)
       hexdump(Closure->scratchBuf, alloc_len, 16);
    }
 }
+
+/***
+ *** Create a bitmap of simulated defects
+ ***/
+
+Bitmap* SimulateDefects(gint64 size)
+{  Bitmap *bm = CreateBitmap(size);
+   int defects = (size*Closure->simulateDefects)/100;
+   
+   SRandom(Closure->randomSeed);
+
+   /* Create sequences of n sectors until the number of defects is reached. */ 
+
+   while(defects)
+   {  double scale, size_scale;
+      int n, bit;
+
+      scale = (double)defects/((double)MY_RAND_MAX+1.0);
+      if(defects > 32)
+	    n = (int)(scale*(double)Random());
+      else  n = defects;
+
+      size_scale = (double)(size-n)/((double)MY_RAND_MAX+1.0);
+      bit = (int)(size_scale*(double)Random());
+
+      while(n--)
+      {	if(!GetBit(bm, bit))
+	{  SetBit(bm, bit);
+	   defects--;
+	}
+	bit++;
+      }
+   }
+
+   return bm;
+}

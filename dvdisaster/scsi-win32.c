@@ -108,10 +108,14 @@ void CloseDevice(DeviceHandle *dh)
   if(!dh->aspiUsed)             /* SPTI cleanup */
   {  CloseHandle(dh->fd);
   }
+
   if(dh->mediumDescr) 
      g_free(dh->mediumDescr);
   if(dh->isoInfo)
     FreeIsoInfo(dh->isoInfo);
+  if(dh->defects)
+    FreeBitmap(dh->defects);
+
   g_free(dh->device);
   g_free(dh);
 }

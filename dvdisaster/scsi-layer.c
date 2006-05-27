@@ -925,6 +925,23 @@ int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
 int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
 {  int retry,status;
 
+   /* See if we are in a simulated defective area */ 
+
+   if(dh->defects)
+   {  gint64 i,idx;
+
+     for(idx=s,i=0; i<nsectors; idx++,i++)
+       if(GetBit(dh->defects, idx))
+       {  dh->sense.sense_key = 3;
+	  dh->sense.asc       = 255;
+	  dh->sense.ascq      = 255;
+	  RememberSense(dh->sense.sense_key, dh->sense.asc, dh->sense.ascq);
+	  return TRUE;
+       }
+   }
+
+   /* Try normal read */
+
    for(retry=3; retry; retry--)
    {  status = dh->read(dh, buf, s, nsectors);
 
@@ -1024,6 +1041,11 @@ DeviceHandle* OpenAndQueryDevice(char *device)
       Stop(_("This software does not support multisession (%d sessions) media."), sessions);
       return NULL;
    }
+
+   /* Create the bitmap of simulated defects */
+
+   if(Closure->simulateDefects)
+     dh->defects = SimulateDefects(dh->sectors);
 
    return dh;
 }

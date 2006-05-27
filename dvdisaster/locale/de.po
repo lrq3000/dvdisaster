@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-20 14:50+0200\n"
+"POT-Creation-Date: 2006-05-27 14:20+0200\n"
 "PO-Revision-Date: 2004-11-30 19:48+0100\n"
 "Last-Translator: Carsten Gnörlich <carsten@dvdisaster.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -127,7 +127,7 @@ msgstr "Ansteuern des Abbild-Anfangs fehlgeschlagen: %s\n"
 msgid "Could not write the new byte value"
 msgstr "Konnte den neuen Byte-Wert nicht schreiben"
 
-#: debug.c:341 read-adaptive.c:480 read-linear.c:224
+#: debug.c:341 read-adaptive.c:430 read-linear.c:224
 #, c-format
 msgid "Sectors must be in range [0..%lld].\n"
 msgstr "Sektoren müssen im Intervall [0..%lld] liegen.\n"
@@ -154,8 +154,8 @@ msgstr "Verkürze das Abbild auf %lld Sektoren.\n"
 msgid "Could not truncate %s: %s\n"
 msgstr "Konnte %s nicht abschneiden: %s\n"
 
-#: debug.c:412 file.c:59 file.c:125 file.c:145 read-adaptive.c:577
-#: read-adaptive.c:595 read-linear.c:261 read-linear.c:286
+#: debug.c:412 file.c:59 file.c:125 file.c:145 read-adaptive.c:589
+#: read-adaptive.c:607 read-linear.c:261 read-linear.c:286
 #, c-format
 msgid ""
 "Can't open %s:\n"
@@ -237,24 +237,24 @@ msgstr "RS01-Methode zum Überprüfen der Dateien nicht verfügbar."
 #. TRANSLATORS:
 #. This is a dummy entry which is supposed to translate into "ok".
 #. Please do not return anything else here.
-#: dvdisaster.c:246 dvdisaster.c:259 dvdisaster.c:271
+#: dvdisaster.c:247 dvdisaster.c:260 dvdisaster.c:272
 msgid "test phrase for verifying the locale installation"
 msgstr "ok"
 
-#: dvdisaster.c:292
+#: dvdisaster.c:293
 #, c-format
 msgid "sizeof(EccHeader) is %d, but must be 4096.\n"
 msgstr "sizeof(EccHeader) ist %d, muß aber 4096 sein.\n"
 
-#: dvdisaster.c:422
+#: dvdisaster.c:424
 msgid "--cache-size must at least be 1MB; 16MB or higher is recommended."
 msgstr "--cache-size muß mindestens 1MB sein; 16MB oder mehr werden empfohlen."
 
-#: dvdisaster.c:424
+#: dvdisaster.c:426
 msgid "--cache-size maximum is 2048MB."
 msgstr "Die Maximalgröße von --cache-size ist 2048MB."
 
-#: dvdisaster.c:471
+#: dvdisaster.c:477
 #, c-format
 msgid ""
 "\n"
@@ -265,14 +265,14 @@ msgstr ""
 "dvdisaster Version %s\n"
 "\n"
 
-#: dvdisaster.c:503
+#: dvdisaster.c:509
 #, c-format
 msgid "?? illegal getopt return value %d\n"
 msgstr "?? ungültiger Rückgabewert von getopt: %d\n"
 
 #. TRANSLATORS: Program options like -r and --read are not to be translated
 #. to avoid confusion when discussing the program in international forums.
-#: dvdisaster.c:628
+#: dvdisaster.c:634
 msgid ""
 "\n"
 "Common usage examples:\n"
@@ -296,7 +296,7 @@ msgstr ""
 "  dvdisaster -u,--unlink # Löscht .iso - Dateien nach Beenden der vorherigen Aktionen.\n"
 "\n"
 
-#: dvdisaster.c:637
+#: dvdisaster.c:643
 #, c-format
 msgid ""
 "Drive and file specification:\n"
@@ -311,7 +311,7 @@ msgstr ""
 "  -i,--image  Name       - Name der Abbild - Datei        (Standard: medium.iso)\n"
 "  -e,--ecc    Name       - Name der Fehlerkorrektur-Datei (Standard: medium.ecc)\n"
 
-#: dvdisaster.c:645
+#: dvdisaster.c:651
 msgid ""
 "  -l,--list              - list drives available under ASPI manager\n"
 "\n"
@@ -319,7 +319,7 @@ msgstr ""
 "  -l,--list              - zeigt unter ASPI verfügbare Laufwerke\n"
 "\n"
 
-#: dvdisaster.c:650
+#: dvdisaster.c:656
 #, c-format
 msgid ""
 "Tweaking options (see manual before using!)\n"
@@ -341,7 +341,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: dvdisaster.c:667
+#: dvdisaster.c:673
 msgid ""
 "Graphical user interface options\n"
 "  --keep-style           - do not override the style settings\n"
@@ -351,7 +351,8 @@ msgstr ""
 "  --keep-style           - Style-Einstellungen nicht überschreiben\n"
 "\n"
 
-#: dvdisaster.c:671
+#: dvdisaster.c:677
+#, fuzzy, c-format
 msgid ""
 "Debugging options (purposefully undocumented and possibly harmful)\n"
 "  --debug           - enables the following options\n"
@@ -360,9 +361,10 @@ msgid ""
 "  --erase n-m       - erase sectors n - m, inclusively\n"
 "  --random-errors r,e seed image with (correctable) random errors\n"
 "  --random-image n  - create image with n sectors of random numbers\n"
-"  --random-seed n   - random seed for above function\n"
+"  --random-seed n   - random seed for built-in random number generator\n"
 "  --send-cdb arg    - executes given cdb at drive; kills system if used wrong\n"
 "  --show-sector n   - shows hexdump of the given sector\n"
+"  --sim-defects n   - simulate n% defective sectors on medium\n"
 "  --truncate n      - truncates image to n sectors\n"
 "  --zero-unreadable - replace the \"unreadable sector\" markers with zeros\n"
 "\n"
@@ -374,9 +376,10 @@ msgstr ""
 "  --erase n-m       - Löscht die Sektoren n - m (einschließlich n,m)\n"
 "  --random-errors r,e Füllt Abbild mit zufälligen reparierbaren Fehlern\n"
 "  --random-image n  - Erzeugt Abbild mit n Sektoren aus Zufallszahlen\n"
-"  --random-seed n   - Anfangswert für den Zufallszahlengenerator\n"
+"  --random-seed n   - Anfangswert für den eingebauten Zufallszahlengenerator\n"
 "  --send-cdb arg    - führt cdb im Laufwerk aus; schrottet System bei Fehleingabe\n"
 "  --show-sector n   - Zeigt hexadezimale Darstellung des Sektor-Inhalts\n"
+"  --sim-defects n   - simuliere n% beschädigte Sektoren auf dem Datenträger\n"
 "  --truncate n      - Verkürzt Abbild auf n Sektoren Länge\n"
 "  --zero-unreadable - Ersetzt die \"unlesbare Sektoren\"-Markierungen durch Nullen\n"
 "\n"
@@ -1029,22 +1032,22 @@ msgstr "Fehlerkorrektur"
 msgid "Storage method:"
 msgstr "Abspeichern in:"
 
-#: print-sense.c:568
+#: print-sense.c:573
 #, c-format
 msgid "Sense error (0x%02x); "
 msgstr "Laufwerk meldet Fehler 0x%02x; "
 
-#: print-sense.c:570
+#: print-sense.c:575
 #, c-format
 msgid "Sense error: %s; "
 msgstr "Laufwerk meldet Fehler: %s; "
 
-#: print-sense.c:584
+#: print-sense.c:589
 #, c-format
 msgid "unknown asc/ascq code (0x%02x, 0x%02x)."
 msgstr "unbekannter asc/ascq-Kode (0x%02x, 0x%02x)."
 
-#: read-adaptive.c:76 read-adaptive.c:1012
+#: read-adaptive.c:76 read-adaptive.c:1024
 msgid "Aborted by unrecoverable error."
 msgstr "Abbruch durch nicht behebbaren Fehler."
 
@@ -1095,9 +1098,9 @@ msgstr ""
 "(Datenträger: %lld Sektoren; in der .ecc-Datei erwartet: %lld Sektoren).\n"
 "Nur die ersten %lld Datenträger-Sektoren werden bearbeitet.\n"
 
-#: read-adaptive.c:387 read-adaptive.c:403 read-adaptive.c:509
-#: read-adaptive.c:650 read-adaptive.c:689 read-adaptive.c:905
-#: read-adaptive.c:945
+#: read-adaptive.c:387 read-adaptive.c:403 read-adaptive.c:458
+#: read-adaptive.c:662 read-adaptive.c:701 read-adaptive.c:917
+#: read-adaptive.c:957
 msgid "Aborted by user request!"
 msgstr "Abbruch auf Benutzeranforderung!"
 
@@ -1110,24 +1113,12 @@ msgstr ""
 "Der Datenträger enthält %lld Sektoren weniger als in der .ecc-Datei verzeichnet sind.\n"
 "(Datenträger: %lld Sektoren; in der .ecc-Datei erwartet: %lld Sektoren).\n"
 
-#: read-adaptive.c:446 read-linear.c:144
-msgid "Reading aborted"
-msgstr "Lesevorgang abgebrochen"
-
-#: read-adaptive.c:449 read-linear.c:147
-msgid "Preparing for reading the medium image."
-msgstr "Bereite Lesen des Datenträger-Abbilds vor."
-
-#: read-adaptive.c:450 read-linear.c:141 read-linear.c:148
-msgid "Medium: not yet determined"
-msgstr "Datenträger: Typ noch nicht bestimmt"
-
-#: read-adaptive.c:482 read-linear.c:226
+#: read-adaptive.c:432 read-linear.c:226
 #, c-format
 msgid "Limiting sector range to [%lld,%lld].\n"
 msgstr "Begrenze Sektor-Bereich auf [%lld,%lld].\n"
 
-#: read-adaptive.c:504 rs01-fix.c:288
+#: read-adaptive.c:453 rs01-fix.c:288
 #, c-format
 msgid ""
 "Sector %d is missing. Can not compare image and ecc fingerprints.\n"
@@ -1137,7 +1128,7 @@ msgstr ""
 "Fehlerkorrekturdatei nicht vergleichen.\n"
 "Vergewissern Sie sich, daß beide Dateien zusammengehören.\n"
 
-#: read-adaptive.c:522 rs01-fix.c:300
+#: read-adaptive.c:471 rs01-fix.c:300
 msgid ""
 "Fingerprints of image and ecc file do not match.\n"
 "Image and ecc file do not belong together.\n"
@@ -1145,24 +1136,36 @@ msgstr ""
 "Fingerabdrücke von Abbild- und Fehlerkorrekturdatei sind unterschiedlich.\n"
 "Abbild und Fehlerkorrekturdatei passen nicht zusammen.\n"
 
-#: read-adaptive.c:572 read-linear.c:256
+#: read-adaptive.c:512 read-linear.c:144
+msgid "Reading aborted"
+msgstr "Lesevorgang abgebrochen"
+
+#: read-adaptive.c:515 read-linear.c:147
+msgid "Preparing for reading the medium image."
+msgstr "Bereite Lesen des Datenträger-Abbilds vor."
+
+#: read-adaptive.c:516 read-linear.c:141 read-linear.c:148
+msgid "Medium: not yet determined"
+msgstr "Datenträger: Typ noch nicht bestimmt"
+
+#: read-adaptive.c:584 read-linear.c:256
 msgid "Reading new medium image."
 msgstr "Einlesen eines neuen Abbilds."
 
-#: read-adaptive.c:579 read-linear.c:263
+#: read-adaptive.c:591 read-linear.c:263
 #, c-format
 msgid "Creating new %s image.\n"
 msgstr "Erzeuge neues Abbild %s.\n"
 
-#: read-adaptive.c:585 read-linear.c:277
+#: read-adaptive.c:597 read-linear.c:277
 msgid "Completing existing medium image."
 msgstr "Vervollständigen eines bestehenden Abbilds."
 
-#: read-adaptive.c:612 read-linear.c:306
+#: read-adaptive.c:624 read-linear.c:306
 msgid "Image file does not match the CD/DVD."
 msgstr "Abbild-Datei paßt nicht zu der CD/DVD."
 
-#: read-adaptive.c:615 read-linear.c:309
+#: read-adaptive.c:627 read-linear.c:309
 msgid ""
 "Image file already exists and does not match the CD/DVD.\n"
 "The existing image file will be deleted."
@@ -1170,11 +1173,11 @@ msgstr ""
 "Die bereits vorhandene Abbild-Datei paßt nicht zu der CD/DVD.\n"
 "Soll die Abbild-Datei gelöscht werden?"
 
-#: read-adaptive.c:620
+#: read-adaptive.c:632
 msgid "Reading aborted. Please select a different image file."
 msgstr "Einlesen abgebrochen. Bitte wählen Sie eine andere Abbild-Datei."
 
-#: read-adaptive.c:644
+#: read-adaptive.c:656
 #, c-format
 msgid ""
 "Image file is %lld sectors longer than inserted medium\n"
@@ -1183,47 +1186,47 @@ msgstr ""
 "Abbild-Datei ist %lld Sektoren länger als der Datenträger\n"
 "(Abbild-Datei: %lld Sektoren; Datenträger: %lld Sektoren).\n"
 
-#: read-adaptive.c:664 read-linear.c:401 rs01-common.c:119 rs01-create.c:236
+#: read-adaptive.c:676 read-linear.c:401 rs01-common.c:119 rs01-create.c:236
 #: rs01-verify.c:759
 #, c-format
 msgid "Failed skipping the ecc header: %s"
 msgstr "Überspringen des Ecc-Vorspanns fehlgeschlagen: %s"
 
-#: read-adaptive.c:677
+#: read-adaptive.c:689
 msgid "Analysing existing image file"
 msgstr "Untersuche vorhandenes Abbild"
 
-#: read-adaptive.c:698 rs01-common.c:158 rs02-verify.c:614
+#: read-adaptive.c:710 rs01-common.c:158 rs02-verify.c:614
 #, c-format
 msgid "premature end in image (only %d bytes): %s\n"
 msgstr "Vorzeitiges Ende im Abbild (nur %d Bytes): %s\n"
 
-#: read-adaptive.c:720 read-adaptive.c:1053 read-linear.c:409
+#: read-adaptive.c:732 read-adaptive.c:1065 read-linear.c:409
 #: rs01-common.c:221
 #, c-format
 msgid "Error reading CRC information: %s"
 msgstr "Fehler beim Lesen der CRC-Information: %s"
 
-#: read-adaptive.c:773
+#: read-adaptive.c:785
 #, c-format
 msgid "Analysing existing image file: %2d%%"
 msgstr "Untersuche vorhandenes Abbild: %2d%%"
 
-#: read-adaptive.c:796
+#: read-adaptive.c:808
 msgid "Determining correctable sectors"
 msgstr "Ermittle korrigierbare Sektoren"
 
-#: read-adaptive.c:824
+#: read-adaptive.c:836
 #, c-format
 msgid "Analysing existing image file: %lld readable, %lld correctable, %lld still missing.\n"
 msgstr "Untersuche vorhandenes Abbild: %lld lesbar, %lld korrigierbar, %lld noch fehlend.\n"
 
-#: read-adaptive.c:826
+#: read-adaptive.c:838
 #, c-format
 msgid "Analysing existing image file: %lld readable, %lld still missing.\n"
 msgstr "Untersuche vorhandenes Abbild: %lld lesbar, %lld noch fehlend.\n"
 
-#: read-adaptive.c:837 read-adaptive.c:1138
+#: read-adaptive.c:849 read-adaptive.c:1150
 msgid ""
 "\n"
 "Sufficient data for reconstructing the image is available.\n"
@@ -1231,26 +1234,26 @@ msgstr ""
 "\n"
 "Genügend Daten zur Wiederherstellung des Abbildes vorhanden.\n"
 
-#: read-adaptive.c:884
+#: read-adaptive.c:896
 #, c-format
 msgid "Filling image area [%lld..%lld]"
 msgstr "Auffüllen des Abbild-Bereichs [%lld..%lld]"
 
-#: read-adaptive.c:894 read-adaptive.c:1027 read-adaptive.c:1162
+#: read-adaptive.c:906 read-adaptive.c:1039 read-adaptive.c:1174
 #: read-linear.c:357 read-linear.c:482 read-linear.c:584 read-linear.c:639
 #: rs01-fix.c:431 rs01-fix.c:689 rs02-fix.c:733
 #, c-format
 msgid "Failed seeking to sector %lld in image [%s]: %s"
 msgstr "Ansteuern von Sektor %lld im Abbild fehlgeschlagen [%s]: %s"
 
-#: read-adaptive.c:900 read-adaptive.c:1071 read-adaptive.c:1079
-#: read-adaptive.c:1092 read-adaptive.c:1168 read-linear.c:363
+#: read-adaptive.c:912 read-adaptive.c:1083 read-adaptive.c:1091
+#: read-adaptive.c:1104 read-adaptive.c:1180 read-linear.c:363
 #: read-linear.c:590 read-linear.c:647 rs01-fix.c:436
 #, c-format
 msgid "Failed writing to sector %lld in image [%s]: %s"
 msgstr "Schreiben von Sektor %lld im Abbild fehlgeschlagen [%s]: %s"
 
-#: read-adaptive.c:999 read-linear.c:531
+#: read-adaptive.c:1011 read-linear.c:531
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -1259,7 +1262,7 @@ msgstr ""
 "Sektor %lld: %s\n"
 "Keine Fortsetzung nach vorangegangenem Fehler möglich."
 
-#: read-adaptive.c:1003 read-linear.c:535
+#: read-adaptive.c:1015 read-linear.c:535
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -1272,32 +1275,32 @@ msgstr ""
 "Eine Fortsetzung ist gegebenenfalls nicht mehr möglich.\n"
 "Soll der Fehler nicht beachtet und weiter gelesen werden?"
 
-#: read-adaptive.c:1050 rs01-fix.c:38 rs02-fix.c:410
+#: read-adaptive.c:1062 rs01-fix.c:38 rs02-fix.c:410
 #, c-format
 msgid "Failed seeking in crc area: %s"
 msgstr "Suchen im CRC-Abschnitt fehlgeschlagen: %s"
 
-#: read-adaptive.c:1066 rs01-fix.c:385 rs02-fix.c:423
+#: read-adaptive.c:1078 rs01-fix.c:385 rs02-fix.c:423
 #, c-format
 msgid "CRC error in sector %lld\n"
 msgstr "Prüfsummen-Fehler in Sektor %lld\n"
 
-#: read-adaptive.c:1151 scsi-layer.c:433
+#: read-adaptive.c:1163 scsi-layer.c:433
 #, c-format
 msgid "Sectors %lld-%lld: %s\n"
 msgstr "Sektoren %lld-%lld: %s\n"
 
-#: read-adaptive.c:1154 read-linear.c:624 scsi-layer.c:432
+#: read-adaptive.c:1166 read-linear.c:624 scsi-layer.c:432
 #, c-format
 msgid "Sector %lld: %s\n"
 msgstr "Sektor %lld: %s\n"
 
-#: read-adaptive.c:1274
+#: read-adaptive.c:1286
 #, c-format
 msgid "Only %2d.%1d%% of the image are readable or correctable"
 msgstr "Nur %2d.%1d%% des Abbilds sind lesbar oder korrigierbar"
 
-#: read-adaptive.c:1277
+#: read-adaptive.c:1289
 #, c-format
 msgid ""
 "\n"
@@ -1308,7 +1311,7 @@ msgstr ""
 "%s\n"
 "(%lld lesbar,  %lld korrigierbar,  %lld noch fehlend).\n"
 
-#: read-adaptive.c:1289
+#: read-adaptive.c:1301
 msgid ""
 "\n"
 "Good! All sectors have been read.\n"
@@ -1316,12 +1319,12 @@ msgstr ""
 "\n"
 "Gut! Alle Sektoren wurden eingelesen.\n"
 
-#: read-adaptive.c:1296
+#: read-adaptive.c:1308
 #, c-format
 msgid "No unreadable intervals with >= %d sectors left."
 msgstr "Keine unlesbaren Bereiche mit >= %d Sektoren übrig."
 
-#: read-adaptive.c:1299
+#: read-adaptive.c:1311
 #, c-format
 msgid ""
 "\n"
@@ -2754,20 +2757,20 @@ msgstr ""
 msgid "Couldn't create taskInterface\n"
 msgstr ""
 
-#: scsi-darwin.c:212 scsi-freebsd.c:169 scsi-linux.c:136 scsi-win32.c:603
+#: scsi-darwin.c:218 scsi-freebsd.c:171 scsi-linux.c:138 scsi-win32.c:607
 #, c-format
 msgid "illegal data_mode: %d"
 msgstr "data_mode unzulässig: %d"
 
-#: scsi-darwin.c:219
+#: scsi-darwin.c:225
 msgid "Couldn't allocate range\n"
 msgstr ""
 
-#: scsi-darwin.c:226
+#: scsi-darwin.c:232
 msgid "Couldn't set command descriptor block\n"
 msgstr ""
 
-#: scsi-darwin.c:231
+#: scsi-darwin.c:237
 msgid "Couldn't set scatter-gather\n"
 msgstr ""
 
@@ -3037,12 +3040,12 @@ msgstr ""
 msgid "Setting the drive speed failed:\n"
 msgstr "Konnte Laufwerksgeschwindigkeit nicht verändern:\n"
 
-#: scsi-layer.c:934
+#: scsi-layer.c:951
 #, c-format
 msgid "Retrying Sector %lld because of: %s\n"
 msgstr "Erneuter Leseversuch von Sektor %lld wegen: %s\n"
 
-#: scsi-layer.c:957
+#: scsi-layer.c:974
 #, c-format
 msgid ""
 "\n"
@@ -3051,7 +3054,7 @@ msgstr ""
 "\n"
 "Laufwerk: %s, %s\n"
 
-#: scsi-layer.c:961
+#: scsi-layer.c:978
 #, c-format
 msgid ""
 "\n"
@@ -3060,36 +3063,36 @@ msgstr ""
 "\n"
 "Laufwerk: %s (%s), %s\n"
 
-#: scsi-layer.c:975
+#: scsi-layer.c:992
 #, c-format
 msgid "Medium: %s, %lld sectors%s %d layer(s)"
 msgstr "Datenträger: %s, %lld Sektoren%s %d Schicht(en)"
 
-#: scsi-layer.c:980
+#: scsi-layer.c:997
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s %d layer(s), created %s"
 msgstr "Datenträger \"%s\": %s, %lld Sektoren%s %d Schicht(en), erzeugt %s"
 
-#: scsi-layer.c:992
+#: scsi-layer.c:1009
 #, c-format
 msgid "Medium: %s, %lld sectors%s"
 msgstr "Datenträger: %s, %lld Sektoren%s"
 
-#: scsi-layer.c:996
+#: scsi-layer.c:1013
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s created %s"
 msgstr "Datenträger \"%s\": %s, %lld Sektoren%s erzeugt %s"
 
-#: scsi-layer.c:1010
+#: scsi-layer.c:1027
 #, c-format
 msgid "This software does not support \"%s\" type media."
 msgstr "Dieses Programm unterstützt keine Datenträger vom Typ \"%s\"."
 
-#: scsi-layer.c:1017
+#: scsi-layer.c:1034
 msgid "This software does not support encrypted media.\n"
 msgstr "Dieses Programm unterstützt keine verschlüsselten Datenträger.\n"
 
-#: scsi-layer.c:1024
+#: scsi-layer.c:1041
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr ""
@@ -3104,38 +3107,38 @@ msgstr ""
 "* Nicht unterstütztes Betriebssystem - keine SCSI-Schicht verfügbar.\n"
 "* Keine Laufwerke können verwendet werden.\n"
 
-#: scsi-win32.c:209
+#: scsi-win32.c:213
 msgid "GetASPI32SupportInfo() not available."
 msgstr "GetASPI32SupportInfo() nicht vorhanden."
 
-#: scsi-win32.c:218
+#: scsi-win32.c:222
 msgid "SendASPI32Command() not available."
 msgstr "SendASPI32Command() nicht vorhanden."
 
-#: scsi-win32.c:277
+#: scsi-win32.c:281
 msgid "Could not determine number of host adapters\n"
 msgstr "Anzahl der Laufwerksanschlüsse nicht ermittelbar\n"
 
-#: scsi-win32.c:298
+#: scsi-win32.c:302
 #, c-format
 msgid "ASPI warning: Could not query host adapter %d\n"
 msgstr "ASPI-Warnung: Laufwerksanschluß %d antwortet nicht\n"
 
-#: scsi-win32.c:319
+#: scsi-win32.c:323
 #, c-format
 msgid "ASPI alignment = %d requested; can't handle that.\n"
 msgstr "ASPI Speicherausrichtung = %d wird nicht unterstützt.\n"
 
-#: scsi-win32.c:329
+#: scsi-win32.c:333
 #, c-format
 msgid "ASPI max xfer length = %d; can't handle that.\n"
 msgstr "ASPI-maximale Übertragungslänge = %d wird nicht unterstützt.\n"
 
-#: scsi-win32.c:397
+#: scsi-win32.c:401
 msgid "ASPI manager present, but no CD/DVD drives managed.\n"
 msgstr "ASPI-Manager vorhanden, aber keine CD/DVD zugeordnet.\n"
 
-#: scsi-win32.c:399
+#: scsi-win32.c:403
 #, c-format
 msgid ""
 "%d SPTI drives, but %d ASPI drives.\n"
@@ -3144,7 +3147,7 @@ msgstr ""
 "%d SPTI Laufwerke und %d ASPI Laufwerke.\n"
 "Die Buchstaben-Zuordnung für ASPI-Laufwerke stimmt wahrscheinlich nicht.\n"
 
-#: scsi-win32.c:417
+#: scsi-win32.c:421
 msgid ""
 "\n"
 "List of ASPI CD/DVD drives:\n"
@@ -3152,7 +3155,7 @@ msgstr ""
 "\n"
 "Liste der ASPI CD/DVD-Laufwerke:\n"
 
-#: scsi-win32.c:422
+#: scsi-win32.c:426
 msgid ""
 "\n"
 "To force ASPI usage over SPTI, refer to the drive by the\n"
@@ -3163,24 +3166,24 @@ msgstr ""
 "verwenden Sie die obigen Laufwerksnummern,\n"
 "also 1:, 2:,... anstelle von C:, D:,...\n"
 
-#: scsi-win32.c:427
+#: scsi-win32.c:431
 msgid "ASPI manager not available or installed.\n"
 msgstr "ASPI-Manager nicht verfügbar oder nicht installiert.\n"
 
-#: scsi-win32.c:457
+#: scsi-win32.c:461
 #, c-format
 msgid "illegal data_mode for ASPI: %d"
 msgstr "data_mode unzulässig für ASPI: %d"
 
-#: scsi-win32.c:493
+#: scsi-win32.c:497
 msgid "ASPI layer: Target busy.\n"
 msgstr "ASPI-Schicht: Zielgerät beschäftigt.\n"
 
-#: scsi-win32.c:497
+#: scsi-win32.c:501
 msgid "ASPI layer: Reservation conflict.\n"
 msgstr "ASPI-Schicht: Reservierungs-Konflikt.\n"
 
-#: scsi-win32.c:551
+#: scsi-win32.c:555
 #, c-format
 msgid ""
 "\n"
@@ -3189,7 +3192,7 @@ msgstr ""
 "\n"
 "Unzulässiger Laufwerksname \"%s\" (verwenden Sie die Laufwerke \"C:\" ... \"Z:\")"
 
-#: scsi-win32.c:641
+#: scsi-win32.c:645
 #, c-format
 msgid ""
 "\n"

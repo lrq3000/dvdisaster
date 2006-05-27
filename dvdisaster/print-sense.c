@@ -534,6 +534,11 @@ static struct error_info additional[] =
   {0x73,0x04,R,"Program memory area update failure"},
   {0x73,0x05,R,"Program memory area is full"},
   {0x73,0x06,R,"RMA/PMA is full"},
+  /*
+   * Faked error by defect simulation mode
+   */
+  {0xff,0xff,R,"Simulated medium defect"},
+
   {0, 0, 0, NULL}
 };
 

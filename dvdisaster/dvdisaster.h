@@ -142,6 +142,7 @@ typedef struct _GlobalClosure
    int enableCurveSwitch; /* TRUE in readAndCreateMode after reading is complete */
    int welcomeMessage;  /* just print dvdisaster logo if FALSE */
    int dotFileVersion;  /* version of dotfile */
+   int simulateDefects; /* if >0, this is the percentage of simulated media defects */
   
    char *deadSector;    /* Copy of our "dead sector" marker. */
    char *dotFile;       /* path to .dvdisaster file */
@@ -342,6 +343,23 @@ void FixEcc(void);
 void Verify(void);
 
 /***
+ *** bitmap.c
+ ***/
+
+typedef struct _Bitmap
+{  guint32 *bitmap;
+   gint32 size;
+   gint32 words;
+} Bitmap;
+
+Bitmap* CreateBitmap(int);
+#define GetBit(bm,bit) (bm->bitmap[(bit)>>5] & (1<<((bit)&31))) 
+#define SetBit(bm,bit) bm->bitmap[(bit)>>5] |= (1<<((bit)&31)) 
+#define ClearBit(bm,bit) bm->bitmap[(bit)>>5] &= ~(1<<((bit)&31)) 
+int CountBits(Bitmap*);
+void FreeBitmap(Bitmap*);
+
+/***
  *** closure.c
  ***/
 
@@ -404,6 +422,7 @@ void RandomError(char*, char*);
 void RandomImage(char*, char*);
 void SendCDB(char*);
 void ShowSector(char*);
+Bitmap* SimulateDefects(gint64);
 void TruncateImage(char*);
 void ZeroUnreadable(void);
 

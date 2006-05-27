@@ -1,12 +1,16 @@
 NOTE: Adaptive reading is being reworked and currently not usable!
 
+0.67 (devel-11) 27-05-2006
+	- added defect medium simulation via --sim-defects n command line
+	  option
+
 0.67 (devel-10) 25-05-2006
 	- removed drive database
 	- Windows online manual crash fixed (thanks to Rob B.for helping
 	  to track this down!)
 	- online manual debugging code removed
 	- version.h replaced with bbc variable
-	- added GNUMakefile.template from Lubos
+	- added changes to GNUMakefile.template from Lubos
 
 0.67 (devel-9) 15-05-2006
 	- replaced --parse-udf and --parse-ecc with --query-size

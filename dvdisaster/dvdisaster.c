@@ -142,6 +142,7 @@ typedef enum
    MODIFIER_KEEP_STYLE,
    MODIFIER_QUERY_SIZE,
    MODIFIER_RANDOM_SEED,
+   MODIFIER_SIMULATE_DEFECTS,
    MODIFIER_SPEED_WARNING, 
    MODIFIER_SPINUP_DELAY, 
    MODIFIER_SPLIT_FILES,
@@ -335,6 +336,7 @@ printf("testing bin %s\n", bin_locale_path);
 	{"scan", 2, 0,'s'},
 	{"send-cdb", 1, 0, MODE_SEND_CDB},
 	{"show-sector", 1, 0, MODE_SHOW_SECTOR},
+	{"sim-defects", 1, 0, MODIFIER_SIMULATE_DEFECTS},
 	{"speed-warning", 2, 0, MODIFIER_SPEED_WARNING},
 	{"spinup-delay", 1, 0, MODIFIER_SPINUP_DELAY},
 	{"split-files", 0, 0, MODIFIER_SPLIT_FILES},
@@ -450,6 +452,10 @@ printf("testing bin %s\n", bin_locale_path);
 	   break;
          case MODIFIER_RANDOM_SEED:
 	   if(optarg) Closure->randomSeed = atoi(optarg);
+	   break;
+         case MODIFIER_SIMULATE_DEFECTS:
+	   if(optarg) Closure->simulateDefects = atoi(optarg);
+	   else Closure->simulateDefects = 10;
 	   break;
          case MODIFIER_SPINUP_DELAY:
 	   if(optarg) Closure->spinupDelay = atoi(optarg);
@@ -675,9 +681,10 @@ printf("testing bin %s\n", bin_locale_path);
 	     "  --erase n-m       - erase sectors n - m, inclusively\n"
 	     "  --random-errors r,e seed image with (correctable) random errors\n"
 	     "  --random-image n  - create image with n sectors of random numbers\n"
-	     "  --random-seed n   - random seed for above function\n"
+	     "  --random-seed n   - random seed for built-in random number generator\n"
  	     "  --send-cdb arg    - executes given cdb at drive; kills system if used wrong\n"  
 	     "  --show-sector n   - shows hexdump of the given sector\n"
+	     "  --sim-defects n   - simulate n% defective sectors on medium\n"
 	     "  --truncate n      - truncates image to n sectors\n"
 	     "  --zero-unreadable - replace the \"unreadable sector\" markers with zeros\n\n"));
 #endif

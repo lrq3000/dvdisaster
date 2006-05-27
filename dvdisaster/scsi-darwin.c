@@ -188,6 +188,12 @@ void CloseDevice(DeviceHandle *dh)
   if(dh->range) {
     g_free(dh->range);
   }
+
+  if(dh->isoInfo)
+    FreeIsoInfo(dh->isoInfo);
+  if(dh->defects)
+    FreeBitmap(dh->defects);
+
   g_free(dh);
  
 }
