@@ -69,7 +69,9 @@ void RS02ReadSector(ImageInfo *ii, RS02Layout *lay, unsigned char *buf, gint64 s
 
 /***
  *** Calculate position of n-th Ecc sector of the given slice in the image.
- ***/
+ ***
+ * Deprecated; use RS02SectorIndex() instead.
+ */
 
 gint64 RS02EccSectorIndex(RS02Layout *lay, gint64 slice, gint64 n)
 {  gint64 ecc_idx;
@@ -100,6 +102,108 @@ gint64 RS02EccSectorIndex(RS02Layout *lay, gint64 slice, gint64 n)
    s += ecc_idx;         /* add ecc sector index */
    s += 2*nh;            /* add two for each interleaved header crossed */ 
    return s;
+}
+
+/***
+ *** Calculate position of n-th sector of the given slice in the image.
+ ***/
+
+gint64 RS02SectorIndex(RS02Layout *lay, gint64 slice, gint64 n)
+{  gint64 ecc_idx;
+   gint64 fr,base;
+   gint64 s,nh;
+
+   /* Easy case: Sector is a data or crc sector */
+
+   if(slice < lay->ndata)
+     return slice*lay->sectorsPerLayer + n;
+
+   /* else calculate position of ecc sector */
+
+   slice -= lay->ndata;
+
+   /* Index of ecc sectors if numbering were continuos and starting from 0 */
+
+   ecc_idx = slice*lay->sectorsPerLayer + n;
+
+   /* Index of first Ecc header which is interleaved with ecc sectors */
+
+   fr = (lay->protectedSectors + lay->headerModulo - 1) / lay->headerModulo;
+   fr *= lay->headerModulo;
+
+   /* Number of ecc sectors before first interleaved Ecc header */
+
+   base = fr - lay->protectedSectors;
+
+   if(ecc_idx < base)
+     return lay->protectedSectors + ecc_idx;
+
+   /* Calculate index of ecc sectors with interleaved headers taken into account */
+
+   s = fr+2;             /* first available ecc sector behind first interleaved header */
+   ecc_idx -= base;      /* number of ecc sectors behind first interleaved header */
+   nh = ecc_idx/(lay->headerModulo-2); /* number of interleaved headers crossed */
+   s += ecc_idx;         /* add ecc sector index */
+   s += 2*nh;            /* add two for each interleaved header crossed */ 
+   return s;
+}
+
+/***
+ *** Calculate position of given sector within its Ecc slice.
+ ***
+ * E.g. if s = RS02SectorIndex(lay, slice, n)
+ * then    RS02SliceIndex(lay, s, &slice, &n)
+ * returns the slice and n values for s.
+ */
+
+void RS02SliceIndex(RS02Layout *lay, gint64 sector, gint64 *slice, gint64 *n)
+{  gint64 remainder;
+   gint64 first_repeat;
+   gint64 base;
+
+   /* Sector comes from data or crc section */ 
+
+   if(sector < lay->protectedSectors)
+   {  *slice = sector / lay->sectorsPerLayer; 
+      *n     = sector % lay->sectorsPerLayer;
+      return;
+   }
+
+   /* Position of first ecc header repeat */
+
+   first_repeat = (lay->protectedSectors + lay->headerModulo - 1) / lay->headerModulo;
+   first_repeat *= lay->headerModulo;
+
+   /* Querying a header returns -1 for the slice 
+      and the header repeat number in n */
+
+   remainder = sector % lay->headerModulo;
+   if(remainder < 2)
+   {  
+     *slice = -1;
+      *n = (sector-first_repeat) / lay->headerModulo;
+      return;
+   }
+
+   /* Sector is an ecc sector and lies before first interleaved Ecc header */
+
+   if(sector < first_repeat)
+   {  *slice = lay->ndata + (sector-lay->protectedSectors)/lay->sectorsPerLayer;
+      *n = (sector - lay->protectedSectors) % lay->sectorsPerLayer;
+      return;
+   }
+
+   /* Sector is an ecc sector and lies behind the first interleaved Ecc header */
+
+   base = first_repeat - lay->protectedSectors; /* ecc sectors before first repeat */
+
+   sector -= first_repeat;
+   sector -= 2;                                 /* subtract first repeated header */
+   sector -= 2*(sector/(lay->headerModulo-0));  /* and other crossed repeats      */
+   sector += base;                              /* add sectors before first repeat */
+
+   *slice = lay->ndata + sector / lay->sectorsPerLayer;
+   *n     = sector % lay->sectorsPerLayer;
 }
 
 /***

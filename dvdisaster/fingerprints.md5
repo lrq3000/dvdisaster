@@ -29,7 +29,7 @@ eecfd7e236c89cc36e1de2062754ac2e  method-link.c
 eaf0dd9c3565ed109c17e497a19b2343  preferences.c
 6dac7ee940b2c2e8094f2cbd6bf23e74  print-sense.c
 cdde449dd2a8f64b560ff18a36f86234  random.c
-26105605ec5b090f1dfaa206b79e09ba  read-adaptive.c
+49ee60bb7dad8478dbf32f8ba92c3df0  read-adaptive.c
 9bb305966c7274275817471192e8570d  read-adaptive-window.c
 9a52b91c58bfdb6493ecd2cd2bf36d9a  read-linear.c
 da98dceeccc81bfbf0f1fd10755bfc88  read-linear-window.c
@@ -39,10 +39,10 @@ da98dceeccc81bfbf0f1fd10755bfc88  read-linear-window.c
 bcc539132868e8c92929302de62ef434  rs01-includes.h
 f43b8cd09eb9962db083478b83ee34ea  rs01-verify.c
 f2a5659cf67864e7395949acacbb5858  rs01-window.c
-96f07b4d2db7e4c3169a0484cbabca18  rs02-common.c
+47639d2f0e609a6afac1d13415014d8f  rs02-common.c
 7f0e58548035c2cebda91af66eb55c85  rs02-create.c
 9ee3c47f85342cc4b6086fab519d2634  rs02-fix.c
-7c8302534e13c6942f7a8890eb1477de  rs02-includes.h
+8ffe0380e10a45a6956c5f734e639eaa  rs02-includes.h
 de0ee09fe314598db96d723ded70350e  rs02-verify.c
 6a12091704c2ded29f3f7ef64c6e1dab  rs02-window.c
 a485449b5131db612ba50010951b0131  scsi-darwin.c

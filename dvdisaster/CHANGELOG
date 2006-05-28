@@ -1,4 +1,9 @@
-NOTE: Adaptive reading is being reworked and currently not usable!
+
+0.67 (devel-12) 28-05-2006
+	- Major rewrite of adaptive reading strategy.
+	  RS02 images are now handled correctly so that reading
+	  stops when enough data for error correction has been
+	  gathered. 
 
 0.67 (devel-11) 27-05-2006
 	- added defect medium simulation via --sim-defects n command line

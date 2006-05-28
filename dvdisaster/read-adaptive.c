@@ -26,7 +26,6 @@
 
 #include "rs02-includes.h"
 
-//#define VERBOSE 1
 //#define CHECK_VISITED 1        /* This gives only reasonable output            */
                                  /* when the .ecc file is present while reading! */ 
 
@@ -37,37 +36,56 @@
 enum { IMAGE_ONLY, ECC_IN_FILE, ECC_IN_IMAGE };
 
 typedef struct
-{  LargeFile *image;
-   EccInfo *ei;
-   EccHeader *eh;
-   DeviceHandle *dh;
-   RS02Layout *lay;
-   int readMode;
-   gint64 sectors;
-   gint64 *intervals;
-   gint64 max_intervals;
-   gint64 n_intervals;
-   unsigned char *bufbase;
-   guint32 *crcbuf;
-   int earlyTermination;
-   gint64 readable, unreadable, correctable;
-   gint64 interval_start, interval_size;
-   guint32 *eccStripe[256];
-   int eccStripeLen;
-   char progressMsg[256];
+{  DeviceHandle *dh;            /* device we are reading from */
+   gint64 sectors;              /* sectors in medium (maybe cooked value from file system) */
+   LargeFile *image;            /* image file */
+   int readMode;                /* see above enum for choices */
+   EccInfo *ei;                 /* ecc info and header struct */
+   EccHeader *eh;               /* if ecc information is present */
+   int rs01LayerSectors;        /* length of each RS01 ecc layer in sectors */
+   RS02Layout *lay;             /* layout of RS02 type ecc data */
+
+   Bitmap *map;                 /* bitmap for keeping track of read sectors */
+   guint32 *crcbuf;             /* crc sum buffer space */
+
+   gint64 readable;             /* current outcome of reading process */
+   gint64 unreadable;
+   gint64 correctable;
+
+   gint64 firstSector;          /* user limited reading range */
+   gint64 lastSector;
+
+   gint64 *intervals;           /* queue for keeping track of unread intervals */
+   gint64 maxIntervals;
+   gint64 nIntervals;
+
+   gint64 intervalStart;        /* information about currently processed interval */
+   gint64 intervalEnd;
+   gint64 intervalSize;
+   gint64 maxImageSector;       /* current size of image file */ 
+ 
+   char progressMsg[256];       /* message output related */
    char progressBs[256];
    char progressSp[256];
-   int progressMsgLen;
-   char *subtitle;
-   int sectorsPerSegment;
-   int *segmentState;
-   int lastPercent;
-   gint64 lastUnreadable, lastCorrectable;
+   int  progressMsgLen;
+   int  lastPercent;            /* used to determine next progress update */
+   gint64 lastUnreadable;       /* used to find out whether something changed */
+   gint64 lastCorrectable;      /* since last progress output */
+   char *subtitle;              /* description of reading mode */
+ 
+   int sectorsPerSegment;       /* number of sectors per spiral segment */
+   int *segmentState;           /* tracks whether all sectors within segment are processed */
+
+   int earlyTermination;        /* information about termination cause */
+
+#ifdef CHECK_VISITED
+   char *count;
+#endif
+
 } read_closure;
 
 static void cleanup(gpointer data)
 {  read_closure *rc = (read_closure*)data;
-   int i;
 
    Closure->cleanupProc = NULL;
 
@@ -88,13 +106,11 @@ static void cleanup(gpointer data)
    if(rc->subtitle) g_free(rc->subtitle);
    if(rc->segmentState) g_free(rc->segmentState);
 
-   for(i=0; i<255; i++)
-     if(rc->eccStripe[i])
-       g_free(rc->eccStripe[i]);
-
    if(rc->intervals) g_free(rc->intervals);
-   if(rc->bufbase) g_free(rc->bufbase);
    if(rc->crcbuf) g_free(rc->crcbuf);
+
+   if(rc->map)
+     FreeBitmap(rc->map);
 
    g_free(rc);
 
@@ -114,33 +130,33 @@ static void add_interval(read_closure *rc, gint64 start, gint64 size)
   
   /* Trivial case: empty interval list */
 
-  if(rc->n_intervals == 0)
+  if(rc->nIntervals == 0)
   {  rc->intervals[0] = start;
      rc->intervals[1] = size;
-     rc->n_intervals++;
+     rc->nIntervals++;
      return;
   }
 
   /* Find insertion place in list */
 
-  for(i=0,si=0; i<rc->n_intervals; i++,si+=2)
+  for(i=0,si=0; i<rc->nIntervals; i++,si+=2)
     if(size > rc->intervals[si+1])
       break;
 
   /* Make sure we have enough space in the array */
 
-  rc->n_intervals++;
-  if(rc->n_intervals > rc->max_intervals)
-  {  rc->max_intervals *= 2;
+  rc->nIntervals++;
+  if(rc->nIntervals > rc->maxIntervals)
+  {  rc->maxIntervals *= 2;
      
-     rc->intervals = g_realloc(rc->intervals, rc->max_intervals*2*sizeof(gint64));
+     rc->intervals = g_realloc(rc->intervals, rc->maxIntervals*2*sizeof(gint64));
   }
 
 
   /* Shift unless we insert at the list tail */
 
-  if(i<rc->n_intervals-1)
-    memmove(rc->intervals+si+2, rc->intervals+si, 2*sizeof(gint64)*(int)(rc->n_intervals-i-1));
+  if(i<rc->nIntervals-1)
+    memmove(rc->intervals+si+2, rc->intervals+si, 2*sizeof(gint64)*(int)(rc->nIntervals-i-1));
 
   /* Add new pair into the list */
   
@@ -154,9 +170,9 @@ static void add_interval(read_closure *rc, gint64 start, gint64 size)
 
 static void pop_interval(read_closure *rc)
 {  
-  if(rc->n_intervals > 0)
-  {  rc->n_intervals--;
-    memmove(rc->intervals, rc->intervals+2, 2*sizeof(gint64)*(int)rc->n_intervals);
+  if(rc->nIntervals > 0)
+  {  rc->nIntervals--;
+     memmove(rc->intervals, rc->intervals+2, 2*sizeof(gint64)*(int)rc->nIntervals);
   }
 }
 
@@ -167,8 +183,8 @@ static void pop_interval(read_closure *rc)
 void print_intervals(read_closure *rc)
 {  int i;
 
-   printf("%lld Intervals:\n", (long long int)rc->n_intervals);
-   for(i=0; i<rc->n_intervals; i++)
+   printf("%lld Intervals:\n", (long long int)rc->nIntervals);
+   for(i=0; i<rc->nIntervals; i++)
      printf("%7lld [%7lld..%7lld]\n",
 	    (long long int)rc->intervals[2*i+1], 
 	    (long long int)rc->intervals[2*i], 
@@ -176,7 +192,7 @@ void print_intervals(read_closure *rc)
 }
 
 /***
- *** Convenience function for printing the progress message
+ *** Convenience functions for printing the progress message
  ***/
 
 static void print_progress(read_closure *rc, int immediate)
@@ -201,12 +217,12 @@ static void print_progress(read_closure *rc, int immediate)
      n = g_snprintf(rc->progressMsg, 256,
 		    _("Repairable: %2d.%1d%% (correctable: %lld; now reading [%lld..%lld], size %lld)"),
 		    percent/10, percent%10, rc->correctable, 
-		    rc->interval_start, rc->interval_start+rc->interval_size-1, rc->interval_size);
+		    rc->intervalStart, rc->intervalStart+rc->intervalSize-1, rc->intervalSize);
    else
      n = g_snprintf(rc->progressMsg, 256,
 		    _("Repairable: %2d.%1d%% (missing: %lld; now reading [%lld..%lld], size %lld)"),
 		    percent/10, percent%10, rc->sectors-rc->readable, 
-		    rc->interval_start, rc->interval_start+rc->interval_size-1, rc->interval_size);
+		    rc->intervalStart, rc->intervalStart+rc->intervalSize-1, rc->intervalSize);
 
    if(n>255) n = 255;
 
@@ -290,18 +306,8 @@ static void mark_sector(read_closure *rc, gint64 sector, GdkColor *color)
 }
 
 /***
- *** Try reading the medium and create the image and map.
+ *** Basic device and image handling and sanity checks.
  ***/
-
-#define CRCBUFSIZE (1024*256)
-
-static void insert_buttons(GtkDialog *dialog)
-{  
-  gtk_dialog_add_buttons(dialog, 
-			 _("Ignore once"), 1,
-			 _("Ignore always"), 2,
-			 _("Abort"), 0, NULL);
-} 
 
 /*
  * Open CD/DVD device and .ecc file.
@@ -318,7 +324,28 @@ static void open_and_determine_mode(read_closure *rc)
    rc->eh = FindHeaderInMedium(rc->dh, rc->dh->sectors-1);
    if(rc->eh)
    {  rc->readMode = ECC_IN_IMAGE;
-      rc->lay = CalcRS02Layout(uchar_to_gint64(rc->eh->sectors), rc->eh->eccBytes); 
+      rc->lay = CalcRS02Layout(uchar_to_gint64(rc->eh->sectors), rc->eh->eccBytes);
+ 
+#if 1 /* remove me ! */
+      { gint64 s,sinv,slice,idx;
+	for(s=0; s<rc->dh->sectors-1; s++)
+	{  RS02SliceIndex(rc->lay, s, &slice, &idx);
+	   sinv = RS02SectorIndex(rc->lay, slice, idx);
+	   /*
+	   if(s<rc->lay->protectedSectors) sinv = slice*rc->lay->sectorsPerLayer + idx;
+	   else  sinv = RS02EccSectorIndex(rc->lay, slice-rc->lay->ndata, idx);
+	   */
+
+	   if(slice == -1)
+	     printf("Header %lld found at sector %lld\n", idx, s);
+           else
+	   if(s != sinv) Stop("Failed for sector %lld / %lld:\n"
+			      "slice %lld, idx %lld\n",
+			      s, sinv, slice, idx);
+	}
+	printf("RS02SliceIndex() is okay\n");
+      }
+#endif
    }
 
    /* else check the current ecc file */
@@ -327,6 +354,8 @@ static void open_and_determine_mode(read_closure *rc)
       if(rc->ei)
       {  rc->readMode = ECC_IN_FILE;
 	 rc->eh = rc->ei->eh;
+
+	 rc->rs01LayerSectors = (rc->ei->sectors+rc->eh->dataBytes-1)/rc->eh->dataBytes;
       }
    }
 
@@ -345,8 +374,6 @@ static void open_and_determine_mode(read_closure *rc)
 	PrintLog(_("Adaptive reading: %s\n"), rc->subtitle);  
 	break;
    }
-
-   Verbose("Read mode: %d\n", rc->readMode);
 }
 
 /*
@@ -409,30 +436,34 @@ static void check_size(read_closure *rc)
    }
 }
 
-static void get_reading_range(read_closure *rc, gint64 *first_sector, gint64 *last_sector)
+/*
+ * Limit reading to user selected range
+ */
+
+static void get_reading_range(read_closure *rc)
 {
    if(Closure->readStart || Closure->readEnd)
    {  if(!Closure->guiMode) /* more range checks are made below */ 
-      {  *first_sector = Closure->readStart;
-         *last_sector  = Closure->readEnd < 0 ? rc->sectors-1 : Closure->readEnd;
+      {  rc->firstSector = Closure->readStart;
+         rc->lastSector  = Closure->readEnd < 0 ? rc->sectors-1 : Closure->readEnd;
       }
       else  /* be more permissive in GUI mode */
-      {  *first_sector = 0;
- 	 *last_sector  = rc->sectors-1;
+      {  rc->firstSector = 0;
+ 	 rc->lastSector  = rc->sectors-1;
 
 	 if(Closure->readStart <= Closure->readEnd)
-	 {  *first_sector = Closure->readStart < rc->sectors ? Closure->readStart : rc->sectors-1;
-	    *last_sector  = Closure->readEnd   < rc->sectors ? Closure->readEnd   : rc->sectors-1;
+	 {  rc->firstSector = Closure->readStart < rc->sectors ? Closure->readStart : rc->sectors-1;
+	    rc->lastSector  = Closure->readEnd   < rc->sectors ? Closure->readEnd   : rc->sectors-1;
 	 }
       }
 
-      if(*first_sector>*last_sector || *first_sector < 0 || *last_sector >= rc->sectors)
+      if(rc->firstSector > rc->lastSector || rc->firstSector < 0 || rc->lastSector >= rc->sectors)
 	Stop(_("Sectors must be in range [0..%lld].\n"),rc->sectors-1);
 
-      PrintLog(_("Limiting sector range to [%lld,%lld].\n"),*first_sector,*last_sector);
+      PrintLog(_("Limiting sector range to [%lld,%lld].\n"),rc->firstSector,rc->lastSector);
    }
    else 
-   {  *first_sector = 0; *last_sector = rc->sectors-1;
+   {  rc->firstSector = 0; rc->lastSector = rc->sectors-1;
    }
 }
 
@@ -474,31 +505,412 @@ static void check_fingerprint(read_closure *rc)
 }
 
 /*
- * Main routine for adaptive reading
+ * Compare image fingerprint with medium.
+ */
+
+int check_image_fingerprint(read_closure *rc)
+{  gint32 fingerprint_sector;
+   int status,n;
+  
+   /* Determine fingerprint sector */
+
+   if(rc->eh)  /* If ecc information is present get fp sector number from there */
+        fingerprint_sector = rc->eh->fpSector;
+   else fingerprint_sector = FINGERPRINT_SECTOR;
+
+   /* Try to read fingerprint sectors from medium and image */
+
+   if(!LargeSeek(rc->image, (gint64)(2048*fingerprint_sector)))
+     return 0; /* can't tell, assume okay */
+
+   n = LargeRead(rc->image, Closure->scratchBuf, 2048);
+   status = ReadSectors(rc->dh, Closure->scratchBuf+2048, fingerprint_sector, 1);
+
+   if(n != 2048 || status || !memcmp(Closure->scratchBuf, Closure->deadSector, 2048))
+     return 0; /* can't tell, assume okay */
+
+   /* If both could be read, compare them */
+
+   if(memcmp(Closure->scratchBuf, Closure->scratchBuf+2048, 2048))
+   {  	  
+     if(!Closure->guiMode)
+       Stop(_("Image file does not match the CD/DVD."));
+     else
+     {  int answer = ModalDialog(GTK_MESSAGE_QUESTION, GTK_BUTTONS_OK_CANCEL, NULL,
+				 _("Image file already exists and does not match the CD/DVD.\n"
+				   "The existing image file will be deleted."));
+	   
+        if(!answer)
+	{  rc->earlyTermination = FALSE;
+	   SetAdaptiveReadFootline(_("Reading aborted. Please select a different image file."), 
+				   Closure->red);
+	   cleanup((gpointer)rc);
+	}
+	else
+	{  LargeClose(rc->image);
+	   LargeUnlink(Closure->imageName);
+	   return TRUE; /* causes reopen of image in caller */
+	} 
+     }
+   }
+
+   return 0;  /* okay */
+}
+
+/*
+ * Compare image size with medium.
+ * TODO: image with byte sizes being not a multiple of 2048.
+ */
+
+void check_image_size(read_closure *rc, gint64 image_file_sectors)
+{  
+   if(image_file_sectors > rc->sectors)
+   {  int answer;
+	 
+      answer = ModalWarning(GTK_MESSAGE_WARNING, GTK_BUTTONS_OK_CANCEL, NULL,
+			    _("Image file is %lld sectors longer than inserted medium\n"
+			      "(Image file: %lld sectors; medium: %lld sectors).\n"),
+			    image_file_sectors-rc->sectors, image_file_sectors, rc->sectors);
+
+      if(!answer)
+      {  SetAdaptiveReadFootline(_("Aborted by user request!"), Closure->red);
+	 rc->earlyTermination = FALSE;
+	 cleanup((gpointer)rc);
+      }
+
+      rc->maxImageSector = rc->sectors;
+   }
+   else rc->maxImageSector = image_file_sectors;
+}
+
+/***
+ *** Examine existing image file.
+ ***
+ * Build an initial interval list from it.
+ */
+
+#define CRCBUFSIZE (1024*256)
+
+void build_interval_from_image(read_closure *rc)
+{  gint64 s;
+   gint64 first_missing, last_missing, current_missing;
+   int tail_included = FALSE;
+   guint32 crc;
+   int crcidx = CRCBUFSIZE;
+   int last_percent = 0;
+
+   /*** If we have a separate ecc file we can compare against the
+        CRC sum it contains. Position ecc file behind the ecc header. */
+  
+   if(rc->readMode == ECC_IN_FILE)
+   {
+     if(!LargeSeek(rc->ei->file, (gint64)sizeof(EccHeader)))
+       Stop(_("Failed skipping the ecc header: %s"),strerror(errno));
+   }
+  
+   /*** Rewind image file */
+
+   LargeSeek(rc->image, 0);
+   first_missing = last_missing = -1;
+
+   /*** Go through all sectors in the image file.
+	Check them for "dead sector markers" 
+	and for checksum failures if ecc data is present. */
+   
+   if(Closure->guiMode)
+     SetAdaptiveReadSubtitle(_("Analysing existing image file"));
+
+   for(s=0; s<rc->maxImageSector; s++)
+   {  int n,percent;
+
+      /* Check for user interruption. */
+
+      if(Closure->stopActions)   
+      {  SetAdaptiveReadFootline(_("Aborted by user request!"), Closure->red);
+	 rc->earlyTermination = FALSE;
+	 cleanup((gpointer)rc);
+      }
+
+      /* Read the next sector */
+
+      n = LargeRead(rc->image, Closure->scratchBuf, 2048);
+      if(n != 2048) /* && (s != rc->sectors - 1 || n != ii->inLast)) */
+	Stop(_("premature end in image (only %d bytes): %s\n"),n,strerror(errno));
+
+      /* Look for the dead sector marker */
+
+      current_missing = !memcmp(Closure->scratchBuf, Closure->deadSector, n);
+
+      if(current_missing)
+	mark_sector(rc, s, Closure->red);
+
+      /* Compare checksums if available */
+
+      if(rc->readMode == ECC_IN_FILE)
+      {
+	/* If the CRC buf is exhausted, refill it. */
+
+	 if(crcidx >= CRCBUFSIZE)
+	 {  int remain = rc->maxImageSector-s;
+	    int size;
+
+	    if(remain < CRCBUFSIZE)
+	         size = remain*sizeof(guint32);
+	    else size = CRCBUFSIZE*sizeof(guint32);
+
+	    if(LargeRead(rc->ei->file, rc->crcbuf, size) != size)
+	      Stop(_("Error reading CRC information: %s"),strerror(errno));
+
+	    crcidx = 0;
+	 }
+
+	 /* compare the checksums */
+
+	 crc = Crc32(Closure->scratchBuf, 2048); 
+	 if(crc != rc->crcbuf[crcidx++] && !current_missing)
+	 {  current_missing = 1;
+	    mark_sector(rc, s, Closure->yellow);
+	 }
+      }
+
+      /* Remember sector state */
+
+      if(current_missing)  /* Remember defect sector in current interval */
+      {  if(first_missing < 0) first_missing = s;
+	    last_missing = s;
+      }
+      else                 /* Remember good sector in eccStripe bitmap */
+      {  rc->readable++;
+	 if(rc->map)
+	   SetBit(rc->map, s);
+
+	 mark_sector(rc, s, Closure->green);
+
+#ifdef CHECK_VISITED
+	 rc->count[s]++;
+#endif
+      }
+
+      /* Determine end of current interval and write it out */
+
+      if((!current_missing || s>=rc->maxImageSector-1) && first_missing>=0)
+      {  if(s>=rc->maxImageSector-1)       /* special case: interval end = image end */
+	 {  last_missing = rc->lastSector; /* may happen when image is truncated */
+	    tail_included = TRUE;
+	 }
+
+	 /* Clip interval by user selected read range */
+
+	 if(first_missing < rc->firstSector)  
+	   first_missing = rc->firstSector;
+	 if(last_missing > rc->lastSector)
+	   last_missing = rc->lastSector;
+
+	 /* add interval to list */
+
+	 if(first_missing <= last_missing)
+	   add_interval(rc, first_missing, last_missing-first_missing+1);
+
+	 first_missing = -1;
+      }
+
+      /* Visualize the progress */
+
+      percent = (100*s)/rc->maxImageSector;
+      if(last_percent != percent) 
+      {  if(!Closure->guiMode)
+	    PrintProgress(_("Analysing existing image file: %2d%%"),percent);
+
+	 last_percent = percent;
+      }
+   }
+
+   /*** If the image is shorter than the medium and the missing part
+	was not already included in the last interval,
+	insert another interval for the missing portion. */
+
+   if(s<rc->lastSector && !tail_included)  /* truncated image? */
+     add_interval(rc, s, rc->lastSector-s+1);
+
+   /*** Now that all readable sectors are known,
+	determine those which can already be corrected. */
+
+   if(Closure->guiMode)
+     SetAdaptiveReadSubtitle(_("Determining correctable sectors"));
+
+   /* RS01 type error correction. */
+
+   if(rc->readMode == ECC_IN_FILE)
+   {  for(s=0; s<rc->rs01LayerSectors; s++)
+      {  gint64 layer_idx;
+	 int j,present=0;
+
+	 /* Count available sectors in each layer */
+	 
+	 layer_idx = s;
+	 for(j=0; j<rc->eh->dataBytes; j++)
+	 {  if(   layer_idx >= rc->ei->sectors  /* padding sector */
+	       || GetBit(rc->map, layer_idx))
+	       present++;
+
+	    layer_idx += rc->rs01LayerSectors;
+	 }
+
+	 /* See if remaining sectors are correctable */
+
+	 if(rc->eh->dataBytes-present <= rc->eh->eccBytes)
+	 {  layer_idx = s;
+	    for(j=0; j<rc->eh->dataBytes; j++)   /* mark them as visited */
+	    {  if(   layer_idx < rc->ei->sectors  /* skip padding sectors */
+	          && !GetBit(rc->map, layer_idx))
+	       {  SetBit(rc->map, layer_idx);
+		  rc->correctable++;
+#ifdef CHECK_VISITED
+		  count[layer_idx]++;
+#endif
+	       }
+
+	       layer_idx += rc->rs01LayerSectors;
+	    }
+	 }
+      }
+   }
+
+   /*** Tell user results of image file analysis */
+
+   if(rc->readMode == ECC_IN_FILE || rc->readMode == ECC_IN_IMAGE)
+        PrintLog(_("Analysing existing image file: %lld readable, %lld correctable, %lld still missing.\n"),
+		 rc->readable, rc->correctable, rc->sectors-rc->readable-rc->correctable);
+   else PrintLog(_("Analysing existing image file: %lld readable, %lld still missing.\n"),
+		 rc->readable, rc->sectors-rc->readable-rc->correctable);
+
+   if(Closure->guiMode)
+     UpdateAdaptiveResults(rc->readable, rc->correctable, 
+			   rc->sectors-rc->readable-rc->correctable,
+			   (int)((1000LL*(rc->readable+rc->correctable))/rc->sectors));
+}
+
+/***
+ *** Main routine for adaptive reading
+ ***/
+
+static void insert_buttons(GtkDialog *dialog)
+{  
+  gtk_dialog_add_buttons(dialog, 
+			 _("Ignore once"), 1,
+			 _("Ignore always"), 2,
+			 _("Abort"), 0, NULL);
+} 
+
+/*
+ * Fill the gap between rc->intervalStart and rc->maxImageSectors
+ * with dead sector markers. These are needed in case the user aborts the operation; 
+ * otherwise the gap will just be zero-filled and we don't know its contents
+ * are unprocessed if we try to re-read the image later.
+ * Also, this prevents fragmentation under most filesystems.
+ */
+
+void fill_gap(read_closure *rc)
+{  char *anim[] = { ": |*.........|\b\b\b\b\b\b\b\b\b\b\b\b\b\b",
+		    ": |.*........|\b\b\b\b\b\b\b\b\b\b\b\b\b\b",
+		    ": |..*.......|\b\b\b\b\b\b\b\b\b\b\b\b\b\b",
+		    ": |...*......|\b\b\b\b\b\b\b\b\b\b\b\b\b\b",
+		    ": |....*.....|\b\b\b\b\b\b\b\b\b\b\b\b\b\b",
+		    ": |.....*....|\b\b\b\b\b\b\b\b\b\b\b\b\b\b",
+		    ": |......*...|\b\b\b\b\b\b\b\b\b\b\b\b\b\b",
+		    ": |.......*..|\b\b\b\b\b\b\b\b\b\b\b\b\b\b",
+		    ": |........*.|\b\b\b\b\b\b\b\b\b\b\b\b\b\b",
+		    ": |.........*|\b\b\b\b\b\b\b\b\b\b\b\b\b\b"};
+  char *t;
+  gint64 i,j;
+
+  /*** TODO: this is fishy. */
+
+  if(rc->firstSector==0 || rc->maxImageSector > 0)
+    rc->maxImageSector++;
+
+  /*** Tell user what's going on */
+
+  t = g_strdup_printf(_("Filling image area [%lld..%lld]"), 
+		      rc->maxImageSector, rc->intervalStart-1);
+  clear_progress(rc);
+  if(Closure->guiMode)
+  {  SetAdaptiveReadSubtitle(t);
+     ChangeSpiralCursor(-1); 
+  }
+  PrintCLI(t);
+  g_free(t);
+
+  /*** Seek to end of image */
+
+  if(!LargeSeek(rc->image, (gint64)(2048*rc->maxImageSector)))
+    Stop(_("Failed seeking to sector %lld in image [%s]: %s"),
+	 rc->maxImageSector, "fill", strerror(errno));
+
+  /*** Fill image with dead sector markers until rc->intervalStart */
+
+  for(i=rc->maxImageSector, j=0; i<rc->intervalStart; i++)
+  {  int n;
+
+     /* Write next sector */ 
+    
+     n = LargeWrite(rc->image, Closure->deadSector, 2048);
+     if(n != 2048)
+       Stop(_("Failed writing to sector %lld in image [%s]: %s"),
+	    rc->maxImageSector, "fill", strerror(errno));
+
+     /* Check whether user hit the Stop button */
+	     
+     if(Closure->stopActions)
+     {  if(Closure->guiMode)
+	 SetAdaptiveReadFootline(_("Aborted by user request!"), Closure->red);
+
+        rc->earlyTermination = FALSE;  /* suppress respective error message */
+	cleanup((gpointer)rc);
+     }
+
+     /* Cycle the progress animation */
+
+     if(j++ % 2000)
+     {  int seq = (j/2000)%10;
+       
+        PrintCLI(anim[seq]);
+     }
+	
+     /* Show progress in the spiral */
+    
+     if(Closure->guiMode)
+     {  int segment = i / rc->sectorsPerSegment;
+       
+        if(Closure->readAdaptiveSpiral->segmentColor[segment] == Closure->background)
+	  ChangeSegmentColor(Closure->white, segment);
+     }
+  }
+
+  PrintCLI("               \n");
+  rc->maxImageSector = rc->intervalStart-1;
+
+  if(Closure->guiMode)  /* remove temporary fill markers */
+  {  RemoveFillMarkers();
+     SetAdaptiveReadSubtitle(rc->subtitle);
+  }
+}
+
+/*
+ * The adaptive read strategy 
  */
 
 void ReadMediumAdaptive(gpointer data)
 {  read_closure *rc;
    int crcidx = 0;
-   gint64 start,size,end,s;
-   gint64 first_sector, last_sector;
-   gint64 image_file_size,image_file_sectors;
-   gint64 max_sector = 0;
-   unsigned char *buf = NULL;
+   gint64 s;
+   gint64 image_file_size;
    guint32 *crcbuf;
    int status,i,n;
-#ifdef CHECK_VISITED
-   char *count;
-#endif
 
-   /*** Initialize the read closure.
-	Align the read buffer at a 4096 boundary.
-	Might be needed by some SCSI drivers. */
+   /*** Initialize the read closure. */
 
    rc = g_malloc0(sizeof(read_closure));
-
-   rc->bufbase = g_malloc(32768 + 4096);
-   buf = rc->bufbase + (4096 - ((unsigned long)rc->bufbase & 4095));
 
    crcbuf = rc->crcbuf = g_malloc(sizeof(guint32)*CRCBUFSIZE);
 
@@ -525,42 +937,26 @@ void ReadMediumAdaptive(gpointer data)
 
    /*** Limit the read range from users choice */
 
-   get_reading_range(rc, &first_sector, &last_sector);
-   start = first_sector;
-   end   = last_sector;
+   get_reading_range(rc);
+   rc->intervalStart = rc->firstSector;
+   rc->intervalEnd   = rc->lastSector;
+   rc->intervalSize  = rc->intervalEnd - rc->intervalStart + 1;
 
    /*** Compare image and ecc fingerprints (only if RS01 type .ecc is available) */
 
    if(rc->readMode == ECC_IN_FILE)
      check_fingerprint(rc);
 
-   goto terminate;
+   /*** Initialize the sector bitmap if ecc information is present.
+	This is used to stop when sufficient data for error correction
+	becomes available. */
 
-   /*** Initialize ecc stripe bitmaps
-        (only if the .ecc file is available) */
-
-   if(rc->ei)
-   {  rc->eccStripeLen = (rc->sectors+rc->eh->dataBytes-1)/rc->eh->dataBytes;
-      for(i=0; i<rc->eh->dataBytes; i++)
-	rc->eccStripe[i] = g_malloc0(4+rc->eccStripeLen/8);
-
-      for(i=rc->sectors%rc->eccStripeLen; i<rc->eccStripeLen; i++)
-      {  int idx  = i/32;
-	 guint32 mask = 1<<(i&31);
-	 rc->eccStripe[rc->eh->dataBytes-1][idx] |= mask;  /* mark the zero padding sectors */
-      }
-   }
-   else rc->eccStripeLen = 1;  /* avoids division by zero */
+   if(   rc->readMode == ECC_IN_FILE
+      || rc->readMode == ECC_IN_IMAGE)
+      rc->map = CreateBitmap(rc->sectors);
 
 #ifdef CHECK_VISITED
-   if(!rc->ei)
-   {  count = g_malloc((int)rc->sectors+160);
-      memset(count, 0, (int)rc->sectors+160);
-   }
-   else
-   {  count = g_malloc((int)rc->sectors+160);
-      memset(count, 0, (int)rc->sectors+160);
-   }
+   rc->count = g_malloc0((int)rc->sectors+160);
 #endif
 
    /*** Initialize segment state counters (only in GUI mode) */
@@ -571,279 +967,82 @@ void ReadMediumAdaptive(gpointer data)
       ClipReadAdaptiveSpiral(rc->sectors/rc->sectorsPerSegment);
    }
 
+   /*** Mark RS02 header sectors as correctable.
+        These are not part of any ecc block and have no influence on
+	the decision when enough data has been gathered for error correction.
+	Since they are needed for recognizing the image we will rewrite all
+	them from the copy we got in rc->eh, but this can only be done when
+	the image file has been fully created. */
+
+   if(rc->readMode == ECC_IN_IMAGE)
+   {  gint64 hpos, end;
+
+      hpos = (rc->lay->protectedSectors + rc->lay->headerModulo - 1) / rc->lay->headerModulo;
+      hpos *= rc->lay->headerModulo;
+      end  = rc->lay->eccSectors + rc->lay->dataSectors - 2;
+
+      while(hpos < end)
+      {  SetBit(rc->map, hpos);
+	 SetBit(rc->map, hpos+1);
+	 mark_sector(rc, hpos, Closure->green);
+	 mark_sector(rc, hpos+1, Closure->green);
+	 hpos += rc->lay->headerModulo;
+	 rc->correctable+=2;
+      }
+   }
+
    /*** Initialize the interval list */
 
    rc->intervals = g_malloc(8*sizeof(gint64));
-   rc->max_intervals = 4; 
-   rc->n_intervals = 0; 
+   rc->maxIntervals = 4; 
+   rc->nIntervals = 0; 
 
-   /*** See if we already have an image file. */
+   /*** Start with a fresh image file if none is already present. */
 
 reopen_image:
    if(!LargeStat(Closure->imageName, &image_file_size))
-   {  char *t = _("Reading new medium image.");
-
-      /* Start with a fresh file. */
-
-      if(!(rc->image = LargeOpen(Closure->imageName, O_RDWR | O_CREAT, IMG_PERMS)))
+   {  if(!(rc->image = LargeOpen(Closure->imageName, O_RDWR | O_CREAT, IMG_PERMS)))
 	Stop(_("Can't open %s:\n%s"),Closure->imageName,strerror(errno));
 
       PrintLog(_("Creating new %s image.\n"),Closure->imageName);
       if(Closure->guiMode)
 	SetLabelText(GTK_LABEL(Closure->readAdaptiveHeadline),
-		     "<big>%s</big>\n<i>%s</i>",t,rc->dh->mediumDescr);
+		     "<big>%s</big>\n<i>%s</i>",
+		     _("Reading new medium image."),
+		     rc->dh->mediumDescr);
    }
-   else  /* examine the existing image file */
-   {  char *t = _("Completing existing medium image.");
-      int unknown_fingerprint = FALSE;
-      int last_percent = 0;
-      int tail_included = FALSE;
-      gint64 first_missing, last_missing, current_missing;
-      guint32 crc;
 
-      /* Open the existing file. */
+   /*** else examine the existing image file ***/
+
+   else 
+   {  int reopen;
+
+      if(Closure->guiMode)
+	SetLabelText(GTK_LABEL(Closure->readAdaptiveHeadline),
+		     "<big>%s</big>\n<i>%s</i>",
+		     _("Completing existing medium image."),
+		     rc->dh->mediumDescr);
+
+      /* Open the existing image file. */
 
       if(!(rc->image = LargeOpen(Closure->imageName, O_RDWR, IMG_PERMS)))
 	Stop(_("Can't open %s:\n%s"),Closure->imageName,strerror(errno));
 
-      /* See if the media and image fingerprints match. */
+      /* See if the image fingerprint matches the medium */
 
-      if(!LargeSeek(rc->image, (gint64)(2048*FINGERPRINT_SECTOR)))
-	unknown_fingerprint = TRUE;
-      else
-      {  n = LargeRead(rc->image, buf, 2048);
-	 status = ReadSectors(rc->dh, buf+2048, FINGERPRINT_SECTOR, 1);
+      reopen = check_image_fingerprint(rc);
+      if(reopen) 
+	goto reopen_image;  /* no match, user wants to erase old image */
 
-	 if(n != 2048 || status || !memcmp(buf, Closure->deadSector, 2048))
-	   unknown_fingerprint = TRUE;
-      }
+      /* Compare length of image and medium. */
 
-      if(!unknown_fingerprint && memcmp(buf, buf+2048, 2048))
-      {  	  
-	 if(!Closure->guiMode)
-	   Stop(_("Image file does not match the CD/DVD."));
-	 else
-	 {  int answer = ModalDialog(GTK_MESSAGE_QUESTION, GTK_BUTTONS_OK_CANCEL, NULL,
-				     _("Image file already exists and does not match the CD/DVD.\n"
-				       "The existing image file will be deleted."));
-	   
-	    if(!answer)
-	    {  rc->earlyTermination = FALSE;
-	       SetAdaptiveReadFootline(_("Reading aborted. Please select a different image file."), Closure->red);
-	       goto terminate;
-	    }
-	    else
-	    {  LargeClose(rc->image);
-	       LargeUnlink(Closure->imageName);
-	       goto reopen_image;
-	    } 
-	 }
-      }
+      check_image_size(rc, image_file_size / 2048);
 
-      if(Closure->guiMode)
-	SetLabelText(GTK_LABEL(Closure->readAdaptiveHeadline),
-		     "<big>%s</big>\n<i>%s</i>",t,rc->dh->mediumDescr);
+      /* Build the interval list */
 
-      /*** Compare length of image and medium.
-	   Still to do: image with byte sizes being not a multiple of 2048 */
+      build_interval_from_image(rc);
 
-      image_file_sectors = image_file_size / 2048;
-
-      if(image_file_sectors > rc->sectors)
-      {  int answer;
-	 
-	 answer = ModalWarning(GTK_MESSAGE_WARNING, GTK_BUTTONS_OK_CANCEL, NULL,
-			       _("Image file is %lld sectors longer than inserted medium\n"
-				 "(Image file: %lld sectors; medium: %lld sectors).\n"),
-			       image_file_sectors-rc->sectors, image_file_sectors, rc->sectors);
-	 max_sector = rc->sectors;
-
-	 if(!answer)
-	 {  SetAdaptiveReadFootline(_("Aborted by user request!"), Closure->red);
- 	    rc->earlyTermination = FALSE;
-	    goto terminate;
-	 }
-      }
-      else max_sector = image_file_sectors;
-
-      /*** Build the interval list */
-
-      /* Position ecc file behind the header,
-	 initialize CRC buffer pointers if the .ecc file is available. */
-
-      if(rc->ei)
-      {  if(!LargeSeek(rc->ei->file, (gint64)sizeof(EccHeader)))
-	    Stop(_("Failed skipping the ecc header: %s"),strerror(errno));
-
-	 crcidx = CRCBUFSIZE;
-      }
-
-      LargeSeek(rc->image, 0);            /* rewind image file */   
-      
-      first_missing = last_missing = -1;
-
-      /* Go through all sectors in the image file.
-	 Check them for "dead sector markers" and checksum failures. */
-   
-      if(Closure->guiMode)
-	SetAdaptiveReadSubtitle(_("Analysing existing image file"));
-
-      for(s=0; s<max_sector; s++)
-      {  int ecc_stripe = s / rc->eccStripeLen;
-	 int stripe_idx = s % rc->eccStripeLen;
-	 int idx = stripe_idx / 32;
-	 guint32 mask = 1<<(stripe_idx & 31);
-         int n,percent;
-
-	 /* Check for user interruption. */
-
-	 if(Closure->stopActions)   
-	 {  SetAdaptiveReadFootline(_("Aborted by user request!"), Closure->red);
- 	    rc->earlyTermination = FALSE;
-	    goto terminate;
-	 }
-
-	 /* Read the next sector */
-
-	 n = LargeRead(rc->image, buf, 2048);
-	 if(n != 2048) /* && (s != rc->sectors - 1 || n != ii->inLast)) */
-	   Stop(_("premature end in image (only %d bytes): %s\n"),n,strerror(errno));
-
-	 /* Look for the dead sector marker */
-
-	 current_missing = !memcmp(buf, Closure->deadSector, n);
-
-	 if(current_missing)
-	   mark_sector(rc, s, Closure->red);
-
-	 /* If the CRC buf is exhausted, refill it. Then compare checksums.
-	    (only if the .ecc file is available) */
-
-	 if(rc->ei)
-	 {  if(crcidx >= CRCBUFSIZE)
-	    {  size_t remain = max_sector-s;
-	       size_t size;
-
-	       if(remain < CRCBUFSIZE)
-	            size = remain*sizeof(guint32);
-	       else size = CRCBUFSIZE*sizeof(guint32);
-
-	       if(LargeRead(rc->ei->file, crcbuf, size) != size)
-		 Stop(_("Error reading CRC information: %s"),strerror(errno));
-
-	       crcidx = 0;
-	    }
-
-	   crc = Crc32(buf, 2048); 
-	   if(crc != crcbuf[crcidx++] && !current_missing)
-	   {  current_missing = 1;
-	      mark_sector(rc, s, Closure->yellow);
-	   }
-	 }
-
-	 if(current_missing)  /* Remember defect sector in current interval */
-	 {  if(first_missing < 0) first_missing = s;
-	    last_missing = s;
-	 }
-	 else                 /* Remember good sector in eccStripe bitmap */
-	 {  
-	    rc->readable++;
-	    if(rc->ei)
-	      rc->eccStripe[ecc_stripe][idx] |= mask;
-
-	    mark_sector(rc, s, Closure->green);
-
-#ifdef CHECK_VISITED
-	    count[s]++;
-#endif
-	 }
-
-	 /* Determine end of current interval and write it out */
-
-	 if((!current_missing || s>=max_sector-1) && first_missing>=0)
-	 {  if(s>=max_sector-1)  /* special case: interval end = image end */
-	    {  last_missing = last_sector;  /* may happen when image is truncated */
-	       tail_included = TRUE;
-	    }
-
-	    if(first_missing < first_sector)  /* user may limit the read range */
-	      first_missing = first_sector;
-	    if(last_missing > last_sector)
-	      last_missing = last_sector;
-
-	    if(first_missing <= last_missing)
-	      add_interval(rc, first_missing, last_missing-first_missing+1);
-
-	    first_missing = -1;
-	 }
-
-	 /* Visualize the progress */
-
-	 percent = (100*s)/max_sector;
-	 if(last_percent != percent) 
-	 {  if(!Closure->guiMode)
-	      PrintProgress(_("Analysing existing image file: %2d%%"),percent);
-#if 0
-	   else UpdateAdaptiveResults(rc->readable, rc->correctable, 
-				      rc->sectors-rc->readable,
-				      (int)((1000LL*(rc->readable+rc->correctable))/rc->sectors));
-#endif
-
-	   last_percent = percent;
-	 }
-      }
-
-      /* If the image is shorter than the medium and the missing part
-	 was not already included in the last interval,
-	 insert another interval for the missing portion. */
-
-      if(s<last_sector && !tail_included)  /* truncated image? */
-	add_interval(rc, s, last_sector-s+1);
-
-      /*** Now that all readable sectors are known,
-	   determine those which can already be corrected.
-           (only if the .ecc file is available) */
-
-      if(Closure->guiMode)
-	SetAdaptiveReadSubtitle(_("Determining correctable sectors"));
-
-      if(rc->ei)
-      {  for(s=0; s<rc->sectors; s++)
-	 {  int stripe_idx = s % rc->eccStripeLen;
-	    int idx = stripe_idx / 32;
-	    guint32 mask = 1<<(stripe_idx & 31);
-	    int j,present=0;
-
-	    for(j=0; j<rc->eh->dataBytes; j++)            /* Count available sectors */
-	      if(rc->eccStripe[j][idx] & mask)
-		present++;
-
-	    if(rc->eh->dataBytes-present <= rc->eh->eccBytes) /* remaining sectors are correctable */
-	      for(j=0; j<rc->eh->dataBytes; j++)          /* mark them as visited */
-		if(!(rc->eccStripe[j][idx] & mask))
-		  {  rc->eccStripe[j][idx] |= mask;
-		    rc->correctable++;
-#ifdef CHECK_VISITED
-		    count[rc->eccStripeLen*j+stripe_idx]++;
-#endif
-		  }
-	 }
-      }
-
-      /*** Tell user results of image file analysis */
-
-      if(rc->ei)
-	   PrintLog(_("Analysing existing image file: %lld readable, %lld correctable, %lld still missing.\n"),
-		     rc->readable, rc->correctable, rc->sectors-rc->readable-rc->correctable);
-      else PrintLog(_("Analysing existing image file: %lld readable, %lld still missing.\n"),
-		     rc->readable, rc->sectors-rc->readable-rc->correctable);
-
-      if(Closure->guiMode)
-	UpdateAdaptiveResults(rc->readable, rc->correctable, 
-			      rc->sectors-rc->readable-rc->correctable,
-			      (int)((1000LL*(rc->readable+rc->correctable))/rc->sectors));
-
-      /*** Already enough information available? */
+      /* Already enough information available? */
 	 
       if(rc->readable + rc->correctable >= rc->sectors)
       {  char *t = _("\nSufficient data for reconstructing the image is available.\n");
@@ -853,19 +1052,16 @@ reopen_image:
 	 goto finished;
       }
 
-      /*** Nope, begin with first interval */
+      /* Nope, begin with first interval */
 
-      if(!rc->n_intervals)  /* may happen when reading range is restricted too much */
+      if(!rc->nIntervals)  /* may happen when reading range is restricted too much */
 	goto finished;
 
-      start = rc->intervals[0];
-      size  = rc->intervals[1];
-      end = start+size-1;
+      rc->intervalStart = rc->intervals[0];
+      rc->intervalSize  = rc->intervals[1];
+      rc->intervalEnd   = rc->intervalStart + rc->intervalSize - 1;
       pop_interval(rc);
    }
-
-   rc->interval_size  = end-start+1;
-   rc->interval_start = start;
 
    /*** Read the medium image. */
 
@@ -874,85 +1070,21 @@ reopen_image:
 
    for(;;)
    {  
-      /*** If we jumped beyond the max_sector, fill the gap with dead sector markers. */
+      /* If we jumped beyond the max_sector, fill the gap with dead sector markers. */
 
-      if(start > max_sector+1)
-      {  char *anim[] = { ": |*.........|\b\b\b\b\b\b\b\b\b\b\b\b\b\b",
-			  ": |.*........|\b\b\b\b\b\b\b\b\b\b\b\b\b\b",
-			  ": |..*.......|\b\b\b\b\b\b\b\b\b\b\b\b\b\b",
-			  ": |...*......|\b\b\b\b\b\b\b\b\b\b\b\b\b\b",
-			  ": |....*.....|\b\b\b\b\b\b\b\b\b\b\b\b\b\b",
-			  ": |.....*....|\b\b\b\b\b\b\b\b\b\b\b\b\b\b",
-			  ": |......*...|\b\b\b\b\b\b\b\b\b\b\b\b\b\b",
-			  ": |.......*..|\b\b\b\b\b\b\b\b\b\b\b\b\b\b",
-			  ": |........*.|\b\b\b\b\b\b\b\b\b\b\b\b\b\b",
-			  ": |.........*|\b\b\b\b\b\b\b\b\b\b\b\b\b\b"};
- 	 char *t;
-	 gint64 i,j;
-
-	 if(first_sector==0 || max_sector > 0)
-	   max_sector++;
-
-         t = g_strdup_printf(_("Filling image area [%lld..%lld]"), max_sector, start-1);
-	 clear_progress(rc);
-	 if(Closure->guiMode)
-	 {  SetAdaptiveReadSubtitle(t);
-	    ChangeSpiralCursor(-1); 
-	 }
-         PrintCLI(t);
-	 g_free(t);
-
-	 if(!LargeSeek(rc->image, (gint64)(2048*max_sector)))
-	   Stop(_("Failed seeking to sector %lld in image [%s]: %s"),
-		max_sector, "fill", strerror(errno));
-
-	 for(i=max_sector, j=0; i<start; i++)
-	 {  n = LargeWrite(rc->image, Closure->deadSector, 2048);
-	    if(n != 2048)
-	      Stop(_("Failed writing to sector %lld in image [%s]: %s"),
-		   max_sector, "fill", strerror(errno));
-	     
-	    if(Closure->stopActions)   /* somebody hit the Stop button */
-	    {  if(Closure->guiMode)
-		 SetAdaptiveReadFootline(_("Aborted by user request!"), Closure->red);
-
-	       rc->earlyTermination = FALSE;  /* suppress respective error message */
-	       goto terminate;
-	    }
-
-	    if(j++ % 2000)
-	    {  int seq = (j/2000)%10;
-
-	       PrintCLI(anim[seq]);
-	    }
-	    
-	    if(Closure->guiMode)
-	    {  int segment = i / rc->sectorsPerSegment;
-
- 	       if(Closure->readAdaptiveSpiral->segmentColor[segment] == Closure->background)
-		 ChangeSegmentColor(Closure->white, segment);
-	    }
-	 }
-
-	 PrintCLI("               \n");
-	 max_sector = start-1;
-
-	 if(Closure->guiMode)
-	 {  RemoveFillMarkers();
-	    SetAdaptiveReadSubtitle(rc->subtitle);
-	 }
-      }
+      if(rc->intervalStart > rc->maxImageSector+1)
+	fill_gap(rc);
 
       /*** Try reading the next interval */
 
       print_progress(rc, TRUE);
       crcidx = CRCBUFSIZE;
 
-      for(s=start; s<=end; )
+      for(s=rc->intervalStart; s<=rc->intervalEnd; ) /* s is incremented elsewhere */
       {  int nsectors,cnt;
 	 int ignore_fatal = 0;
  
-	 if(Closure->stopActions)   /* somebody hit the Stop button */
+	 if(Closure->stopActions)          /* somebody hit the Stop button */
 	 {  if(Closure->guiMode)
 	       SetAdaptiveReadFootline(_("Aborted by user request!"), Closure->red);
 
@@ -963,48 +1095,51 @@ reopen_image:
 	 if(Closure->guiMode)
 	   ChangeSpiralCursor(s / rc->sectorsPerSegment);
 	    
-	 /*** Try reading the next <nsectors> sector(s). */
+	 /* Determine number of sectors to read. Read the next 16 sectors
+	    unless we're at the end of the interval or at a position which is
+	    not divideable by 16. */
 
 	 if(s & 15)
                nsectors = 1;
 	 else  nsectors = 16;
 
-	 if(s+nsectors > end) nsectors = end-s+1;
+	 if(s+nsectors > rc->intervalEnd) nsectors = rc->intervalEnd-s+1;
 
-	 if(rc->ei)   /* skip sectors which can be calculated from .ecc file */
+	 /* Skip sectors which have been marked as correctable by
+	    ecc information. */
+
+	 if(rc->map)
 	 {  for(i=cnt=0; i<nsectors; i++)  /* sectors already present? */
-	    {  int ecc_stripe = (s+i) / rc->eccStripeLen;
-	       int stripe_idx = (s+i) % rc->eccStripeLen; 
-	       int idx = stripe_idx / 32;
-	       guint32 mask = 1<<(stripe_idx & 31);
+	    {  int idx = s+i;
 
-	       if(rc->eccStripe[ecc_stripe][idx] & mask)
+	       if(GetBit(rc->map, idx))
 		 cnt++;
 	    }
 
-	    if(cnt) /* switch down to 1 sector per read to avoid double reads */ 
-	    {  int ecc_stripe = s / rc->eccStripeLen;
-	       int stripe_idx = s % rc->eccStripeLen; 
-	       int idx = stripe_idx / 32;
-	       guint32 mask = 1<<(stripe_idx & 31);
+	    /* Shift the outer loop down to 1 sector per read.
+	       Short circuit the outer loop if the sector is already present. */
 
-	       nsectors = 1;
+	    if(cnt) 
+	    {  nsectors = 1;
 
-	       if(rc->eccStripe[ecc_stripe][idx] & mask)
+	       if(GetBit(rc->map, s))
 	       {  s++;
-		  if(rc->ei) crcidx++;
-		  continue;
+		  crcidx++;
+		  continue;  /* restart reading loop with next sector */
 	       }
 	    }
 	 }
 
-	 status = ReadSectors(rc->dh, buf, s, nsectors);
+	 /* Try to actually read the next sector(s) */
+
+	 status = ReadSectors(rc->dh, Closure->scratchBuf, s, nsectors);
 
 	 /* Medium Error (3) and Illegal Request (5) may result from 
 	    a medium read problem, but other errors are regarded as fatal. */
 
 	 if(status && !ignore_fatal
-	    && rc->dh->sense.sense_key && rc->dh->sense.sense_key != 3 && rc->dh->sense.sense_key != 5)
+	    && rc->dh->sense.sense_key 
+	    && rc->dh->sense.sense_key != 3 && rc->dh->sense.sense_key != 5)
 	 {  int answer;
 
 	    if(!Closure->guiMode)
@@ -1028,31 +1163,28 @@ reopen_image:
 	    }
 	 }
 
-	 /*** Reading was successful */
+	 /* Reading was successful. */
 
 	 if(!status)   
 	 {  gint64 b;
-
-	    /* Store sector(s) in the image file */
 
 	    if(!LargeSeek(rc->image, (gint64)(2048*s)))
 	      Stop(_("Failed seeking to sector %lld in image [%s]: %s"),
 		   s,"store",strerror(errno));
 
-	    for(i=0, b=s; i<nsectors; i++,b++)
-	    {  int ecc_stripe = b / rc->eccStripeLen;
-	       int stripe_idx = b % rc->eccStripeLen;
-	       int idx = stripe_idx / 32;
-	       guint32 mask = 1<<(stripe_idx & 31);
-	       guint32 crc;
+	    /* Store sector(s) in the image file if they pass the CRC test,
+	       otherwise treat them as unprocessed. */
 
-	       if(rc->ei)  /* we have crc information available */
+	    for(i=0, b=s; i<nsectors; i++,b++)
+	    {  guint32 crc;
+
+	       if(rc->readMode == ECC_IN_FILE) /* we have crc information */
 	       { 
 		 /* If the CRC buf is exhausted, refill it. */
 
 		 if(crcidx >= CRCBUFSIZE)  
-		 {  size_t remain = rc->sectors-b;
-		    size_t size;
+		 {  int remain = rc->sectors-b;
+		    int size;
 
 		    if(remain < CRCBUFSIZE)
 		         size = remain*sizeof(guint32);
@@ -1071,9 +1203,9 @@ reopen_image:
 		    Sectors with bad CRC sums are marked unvisited,
 		    but do not terminate the current interval. */
 
-		 crc = Crc32(buf+i*2048, 2048); 
+		 crc = Crc32(Closure->scratchBuf+i*2048, 2048); 
 
-		 if(crc != crcbuf[crcidx++])
+		 if(crc != crcbuf[crcidx++])  /* failed CRC test */
 		 {  PrintCLI("\n");
 		    PrintCLI(_("CRC error in sector %lld\n"),b);
 		    print_progress(rc, TRUE);
@@ -1081,17 +1213,17 @@ reopen_image:
 		    n = LargeWrite(rc->image, Closure->deadSector, 2048);
 		    if(n != 2048)
 		      Stop(_("Failed writing to sector %lld in image [%s]: %s"),
-			   s, "unv", strerror(errno));
+			   b, "unv", strerror(errno));
 
 		    mark_sector(rc, b, Closure->yellow);
 		 }
-		 else 
-		 {  n = LargeWrite(rc->image, buf+i*2048, 2048);
+		 else /* good sector */
+		 {  n = LargeWrite(rc->image, Closure->scratchBuf+i*2048, 2048);
 		    if(n != 2048)
 		      Stop(_("Failed writing to sector %lld in image [%s]: %s"),
-			   s, "store", strerror(errno));
+			   b, "store", strerror(errno));
 
-		    rc->eccStripe[ecc_stripe][idx] |= mask;
+		    SetBit(rc->map, b);
 		    rc->readable++;
 
 		    mark_sector(rc, b, Closure->green);
@@ -1099,52 +1231,99 @@ reopen_image:
 	       }
 
 	       else /* no crc information available */
-	       {  n = LargeWrite(rc->image, buf+i*2048, 2048);
+	       {  n = LargeWrite(rc->image, Closure->scratchBuf+i*2048, 2048);
 		  if(n != 2048)
 		    Stop(_("Failed writing to sector %lld in image [%s]: %s"),
-			 s, "store", strerror(errno));
+			 b, "store", strerror(errno));
 
+		  if(rc->map)
+		    SetBit(rc->map, b);
 		  rc->readable++;
 
 		  mark_sector(rc, b, Closure->green);
 	       }
 	    }
 
-	    /* See if additional sectors become correctable */
+	    /* See if additional sectors become correctable. */
 	    
-	    if(rc->ei)
-	    {  for(i=0; i<nsectors; i++) 
-	       {  //int ecc_stripe = (s+i) / rc->eccStripeLen;
-		  int stripe_idx = (s+i) % rc->eccStripeLen;
-		  int idx = stripe_idx / 32;
-		  guint32 mask = 1<<(stripe_idx & 31);
-
-		  int j,present=0;
+	    if(rc->readMode == ECC_IN_FILE)  /* RS01 type ecc data */
+	    {  for(i=0, b=s; i<nsectors; i++,b++) 
+	       {  int j,present=0;
+		  gint64 layer_idx;
 
 #ifdef CHECK_VISITED
-		  count[s+i]++;
+		  count[b]++;
 #endif
+		  /* Count available sectors. */
 
-		  for(j=0; j<rc->eh->dataBytes; j++) /* Count available sectors */
-		    if(rc->eccStripe[j][idx] & mask)
-		      present++;
+		  layer_idx = b % rc->rs01LayerSectors;
+		  for(j=0; j<rc->eh->dataBytes; j++) 
+		  {  if(   layer_idx >= rc->ei->sectors /* padding sector */
+			|| GetBit(rc->map, layer_idx))
+			present++;
+		     layer_idx += rc->rs01LayerSectors;
+		  }
 
-		  if(rc->eh->dataBytes-present <= rc->eh->eccBytes) /* remaining sectors are correctable */
-		    for(j=0; j<rc->eh->dataBytes; j++)          /* mark them as visited */
-		      if(!(rc->eccStripe[j][idx] & mask))
-		      {  rc->eccStripe[j][idx] |= mask;
-			 rc->correctable++;
-			 
-			 mark_sector(rc, rc->eccStripeLen*j+stripe_idx, Closure->green);
+		  /* If the remaining sectors are correctable,
+		     mark them as visited. */
+
+		  if(rc->eh->dataBytes-present <= rc->eh->eccBytes)
+		  {  layer_idx = b % rc->rs01LayerSectors;
+
+		     for(j=0; j<rc->eh->dataBytes; j++)
+		     {  if(   layer_idx < rc->ei->sectors /* skip padding sector */
+			   && !GetBit(rc->map, layer_idx))
+			{  SetBit(rc->map, layer_idx);
+			   rc->correctable++;
+			   mark_sector(rc, layer_idx, Closure->green);
 #ifdef CHECK_VISITED
-			 count[rc->eccStripeLen*j+stripe_idx]++;
+			   count[layer_idx]++;
 #endif
-		      }
+			}
+		        layer_idx += rc->rs01LayerSectors;
+		     }
+		  }
 	       }
 	    }
 
+	    if(rc->readMode == ECC_IN_IMAGE)  /* RS02 type ecc data */
+	    {  for(i=0, b=s; i<nsectors; i++,b++) 
+	       {  int j,present=0;
+		  gint64 slice_idx, ignore, sector;
+
+		  /* Count available sectors. */
+
+		  RS02SliceIndex(rc->lay, b, &ignore, &slice_idx);
+		  for(j=0; j<255; j++) 
+		  {  sector = RS02SectorIndex(rc->lay, j, slice_idx);
+		     if(GetBit(rc->map, sector))
+			present++;
+		  }
+
+		  /* If the remaining sectors are correctable,
+		     mark them as visited. */
+
+		  if(255-present <= rc->eh->eccBytes)
+		  {  for(j=0; j<255; j++)
+		     {  sector = RS02SectorIndex(rc->lay, j, slice_idx);
+		        if(!GetBit(rc->map, sector))
+			{  SetBit(rc->map, sector);
+			   rc->correctable++;
+			   mark_sector(rc, sector, Closure->green);
+			}
+		     }
+		  }
+	       }
+	    }
+
+	    /* Increment sector counters. Adjust max image sector
+	       if we added sectors beyond the image size. */
+
 	    s+=nsectors;
-	    if(s>max_sector) max_sector=s-1;
+	    if(s>rc->maxImageSector) rc->maxImageSector=s-1;
+
+	    /* Stop reading if enough data for error correction
+	       has benn gathered */
 
 	    if(rc->readable + rc->correctable >= rc->sectors)
 	    {  char *t = _("\nSufficient data for reconstructing the image is available.\n");
@@ -1155,7 +1334,7 @@ reopen_image:
 		 SetAdaptiveReadFootline(t, Closure->black);
 	       goto finished;
 	    }
-	 }  /* end of if(!status) */
+	 }  /* end of if(!status) (successful reading of sector(s)) */
 
 	 else  /* Process the read error. */
 	 {  PrintCLI("\n");
@@ -1183,75 +1362,76 @@ reopen_image:
 	       mark_sector(rc, s+i, Closure->red);
 	    }
 
-	    if(max_sector < s+nsectors)
-	      max_sector = s+nsectors-1;
+	    if(rc->maxImageSector < s+nsectors)
+	      rc->maxImageSector = s+nsectors-1;
 
-	    /* find out how to continue */
+	    /* Reading of the interval ends at the first read error.
+	       Store the remainder of the current interval in the queue. */
 
-	    if(s+nsectors-1 >= end)  /* Interval used up */
-	    {  
-#ifdef VERBOSE
-	       printf("... Interval [%lld..%lld] used up\n", start, end);
-#endif
+	    if(s+nsectors-1 >= rc->intervalEnd)  /* This was the last sector; interval used up */
+	    {  Verbose("... Interval [%lld..%lld] used up\n", rc->intervalStart, rc->intervalEnd);
 	    }
-	    else                   /* Insert rest of interval into queue */
-	    {  
-	       start = s+nsectors;
-	       size  = end-start+1;
+	    else  /* Insert remainder of interval into queue */
+	    {  rc->intervalStart = s+nsectors;
+	       rc->intervalSize  = rc->intervalEnd-rc->intervalStart+1;
 
-#ifdef VERBOSE
-	       printf("... Interval %lld [%lld..%lld] added\n", size, start, start+size-1);
-#endif
-	       add_interval(rc, start, size);
+	       Verbose("... Interval %lld [%lld..%lld] added\n", 
+		       rc->intervalSize, rc->intervalStart, rc->intervalStart+rc->intervalSize-1);
 
-#ifdef VERBOSE
-	       print_intervals(rc);
-#endif
+	       add_interval(rc, rc->intervalStart, rc->intervalSize);
+	       if(Closure->verbose) print_intervals(rc);
 	    }
-	    break;
+	    break; /* fall out of reading loop */
 	 }
 
 	 print_progress(rc, FALSE);
       }
 
-      if(s>=end)
+      /* If we reach this, the current interval has either been read completely
+	 or the loop was terminated early by a read error. 
+         In both cases, the current interval has already been remove from the queue
+         and the queue contains only the still unprocessed intervals. */
+
+      if(s>=rc->intervalEnd) /* we fell out of the reading loop with interval completed */
       {  print_progress(rc, TRUE);
 	 PrintCLI("\n");
       }
 
-      /* Pop and prepare next interval */
+      /* Pop the next interval from the queue,
+         prepare one half from it for processing
+         and push the other half back on the queue. */
 
-      if(rc->n_intervals <= 0)
+      if(rc->nIntervals <= 0)
 	goto finished;
 
-      start = rc->intervals[0];
-      size  = rc->intervals[1];
+      rc->intervalStart = rc->intervals[0];
+      rc->intervalSize  = rc->intervals[1];
       pop_interval(rc);
 
-      if(size>1)
-      {  
-#ifdef VERBOSE
-         printf("*** Splitting [%lld..%lld]\n",start,start+size-1);
-#endif
-	 add_interval(rc, start, size/2);
-	 end = start+size-1;
-	 start = start+size/2;
+      /* Split the new interval */
+
+      if(rc->intervalSize>1)
+      {  Verbose("*** Splitting [%lld..%lld]\n",
+		 rc->intervalStart,rc->intervalStart+rc->intervalSize-1);
+
+	 add_interval(rc, rc->intervalStart, rc->intervalSize/2);
+	 rc->intervalEnd = rc->intervalStart+rc->intervalSize-1;
+	 rc->intervalStart = rc->intervalStart+rc->intervalSize/2;
       }
-      else 
+      else /* 1 sector intervals can't be split further */
       {  
-	 end = start;
-#ifdef VERBOSE
-         printf("*** Popped [%lld]\n",start);
-#endif
+	 rc->intervalEnd = rc->intervalStart;
+	 Verbose("*** Popped [%lld]\n",rc->intervalStart);
       }
 
-#ifdef VERBOSE
-      print_intervals(rc);
-#endif
+      if(Closure->verbose) print_intervals(rc);
 
-      rc->interval_size  = end-start+1;
-      rc->interval_start = start;
-      if(!rc->ei && rc->interval_size < Closure->sectorSkip)
+      rc->intervalSize  = rc->intervalEnd-rc->intervalStart+1;
+
+      /* Apply interval size termination criterion */
+
+      if(   rc->readMode == IMAGE_ONLY
+	 && rc->intervalSize < Closure->sectorSkip)
 	 goto finished;
    }
 
@@ -1275,12 +1455,19 @@ finished:
    }
 #endif
 
+   /* Force output of final results */
+
    if(Closure->guiMode)
    {  ChangeSpiralCursor(-1);
-      mark_sector(rc, 0, NULL);  /* force output of final results */
+      mark_sector(rc, 0, NULL);
    }
 
-   if(rc->ei && (rc->readable + rc->correctable < rc->sectors))
+   /*** Summarize results. */
+
+   /* We were in ECC_IN_FILE or ECC_IN_IMAGE mode,
+      but did not recover sufficient data. */
+
+   if(rc->map && (rc->readable + rc->correctable < rc->sectors))
    {  int total = rc->readable+rc->correctable;
       int percent = (int)((1000LL*(long long)total)/rc->sectors);
       char *t = g_strdup_printf(_("Only %2d.%1d%% of the image are readable or correctable"),
@@ -1296,7 +1483,9 @@ finished:
       exitCode = EXIT_FAILURE;
    }
 
-   if(!rc->ei)
+   /* Results for reading in IMAGE_ONLY mode */
+
+   if(rc->readMode == IMAGE_ONLY)
    {  if(rc->readable == rc->sectors)
       {  char *t = _("\nGood! All sectors have been read.\n"); 
 	 PrintLog(t);
@@ -1319,7 +1508,16 @@ finished:
       }
    }
 
+#if 0
+   for(i=0; i<rc->sectors; i++)
+     if(!GetBit(rc->map, i))
+       printf("Missing: %d\n", i);
+#endif
+
    /*** Close and clean up */
+
+   if(rc->readMode == ECC_IN_IMAGE)   /* rewrite the header sectors */
+     WriteRS02Headers(rc->image, rc->lay, rc->eh);
 
    rc->earlyTermination = FALSE;
 

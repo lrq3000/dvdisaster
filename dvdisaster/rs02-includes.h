@@ -137,6 +137,8 @@ typedef struct _RS02Layout
 
 void RS02ReadSector(ImageInfo*, RS02Layout*, unsigned char*, gint64);
 gint64 RS02EccSectorIndex(RS02Layout*, gint64, gint64);
+gint64 RS02SectorIndex(RS02Layout*, gint64, gint64);
+void RS02SliceIndex(RS02Layout*, gint64, gint64*, gint64*);
 RS02Layout *CalcRS02Layout(gint64, int);
 void WriteRS02Headers(LargeFile*, RS02Layout*, EccHeader*);
 
