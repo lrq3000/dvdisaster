@@ -89,6 +89,41 @@ static void cleanup(gpointer data)
 
    Closure->cleanupProc = NULL;
 
+   /* Rewrite the header sectors if we were reading an RS02 image;
+      otherwise the image will not be recognized later. */
+
+   if(rc->readMode == ECC_IN_IMAGE)   
+   {  RS02Layout *lay = rc->lay;
+      guint64 hpos;
+      guint64 end = lay->eccSectors+lay->dataSectors;
+
+      if(rc->maxImageSector < end)  /* image may have been partially read */
+	end = rc->maxImageSector;
+
+      /* Careful: we must not call Stop() here to avoid infinite
+	 recursion in error situations. */
+
+      if(!LargeSeek(rc->image, 2048*lay->firstEccHeader))
+	goto bail_out;
+   
+      if(LargeWrite(rc->image, rc->eh, sizeof(EccHeader)) != sizeof(EccHeader))
+	goto bail_out;
+
+      hpos = (lay->protectedSectors + lay->headerModulo - 1) / lay->headerModulo;
+      hpos *= lay->headerModulo;
+
+      while(hpos < end)
+      {  if(!LargeSeek(rc->image, 2048*hpos))
+	  break;
+
+	if(LargeWrite(rc->image, rc->eh, sizeof(EccHeader)) != sizeof(EccHeader))
+	  break;
+
+	hpos += lay->headerModulo;
+      }
+   }
+
+bail_out:
    if(Closure->guiMode)
    {  if(rc->earlyTermination)
         SetAdaptiveReadFootline(_("Aborted by unrecoverable error."), Closure->red);
@@ -321,9 +356,10 @@ static void open_and_determine_mode(read_closure *rc)
 
    /* See if the medium contains RS02 type ecc information */
 
-   rc->eh = FindHeaderInMedium(rc->dh, rc->dh->sectors-1);
-   if(rc->eh)
+   //   rc->eh = FindHeaderInMedium(rc->dh, rc->dh->sectors-1);
+   if(rc->dh->rs02Header)
    {  rc->readMode = ECC_IN_IMAGE;
+      rc->eh  = rc->dh->rs02Header;
       rc->lay = CalcRS02Layout(uchar_to_gint64(rc->eh->sectors), rc->eh->eccBytes);
  
 #if 1 /* remove me ! */
@@ -776,6 +812,34 @@ void build_interval_from_image(read_closure *rc)
       }
    }
 
+   /* RS02 type error correction. */
+
+   if(rc->readMode == ECC_IN_IMAGE)
+   {  for(s=0; s<rc->lay->sectorsPerLayer; s++)
+      {  int j,sector,present=0;
+
+	 /* Count available sectors in each slice */
+	 
+	 for(j=0; j<255; j++)
+	 {  sector = RS02SectorIndex(rc->lay, j, s);
+	    if(GetBit(rc->map, sector))
+	      present++;
+	 }
+
+	 /* See if remaining sectors are correctable */
+
+	 if(255-present <= rc->eh->eccBytes)
+	 {  for(j=0; j<255; j++)   /* mark them as visited */
+	    {  sector = RS02SectorIndex(rc->lay, j, s);
+	       if(!GetBit(rc->map, sector))
+	       {  SetBit(rc->map, sector);
+		  rc->correctable++;
+	       }
+	    }
+	 }
+      }
+   }
+
    /*** Tell user results of image file analysis */
 
    if(rc->readMode == ECC_IN_FILE || rc->readMode == ECC_IN_IMAGE)
@@ -788,6 +852,38 @@ void build_interval_from_image(read_closure *rc)
      UpdateAdaptiveResults(rc->readable, rc->correctable, 
 			   rc->sectors-rc->readable-rc->correctable,
 			   (int)((1000LL*(rc->readable+rc->correctable))/rc->sectors));
+}
+
+   /*** Mark RS02 header sectors as correctable.
+        These are not part of any ecc block and have no influence on
+	the decision when enough data has been gathered for error correction.
+	Since they are needed for recognizing the image we will rewrite all
+	them from the copy we got in rc->eh, but this can only be done when
+	the image file has been fully created. */
+
+static void mark_rs02_headers(read_closure *rc)
+{  gint64 hpos, end;
+
+   if(rc->readMode != ECC_IN_IMAGE) return;
+
+   hpos = (rc->lay->protectedSectors + rc->lay->headerModulo - 1) / rc->lay->headerModulo;
+   hpos *= rc->lay->headerModulo;
+   end  = rc->lay->eccSectors + rc->lay->dataSectors - 2;
+
+   while(hpos < end)
+   {  if(!GetBit(rc->map, hpos))
+      {  SetBit(rc->map, hpos);
+	 mark_sector(rc, hpos, Closure->green);
+	 rc->correctable++;
+      }
+      if(!GetBit(rc->map, hpos+1))
+      {  SetBit(rc->map, hpos+1);
+         mark_sector(rc, hpos+1, Closure->green);
+	 rc->correctable++;
+      }
+
+      hpos += rc->lay->headerModulo;
+   }
 }
 
 /***
@@ -967,30 +1063,6 @@ void ReadMediumAdaptive(gpointer data)
       ClipReadAdaptiveSpiral(rc->sectors/rc->sectorsPerSegment);
    }
 
-   /*** Mark RS02 header sectors as correctable.
-        These are not part of any ecc block and have no influence on
-	the decision when enough data has been gathered for error correction.
-	Since they are needed for recognizing the image we will rewrite all
-	them from the copy we got in rc->eh, but this can only be done when
-	the image file has been fully created. */
-
-   if(rc->readMode == ECC_IN_IMAGE)
-   {  gint64 hpos, end;
-
-      hpos = (rc->lay->protectedSectors + rc->lay->headerModulo - 1) / rc->lay->headerModulo;
-      hpos *= rc->lay->headerModulo;
-      end  = rc->lay->eccSectors + rc->lay->dataSectors - 2;
-
-      while(hpos < end)
-      {  SetBit(rc->map, hpos);
-	 SetBit(rc->map, hpos+1);
-	 mark_sector(rc, hpos, Closure->green);
-	 mark_sector(rc, hpos+1, Closure->green);
-	 hpos += rc->lay->headerModulo;
-	 rc->correctable+=2;
-      }
-   }
-
    /*** Initialize the interval list */
 
    rc->intervals = g_malloc(8*sizeof(gint64));
@@ -1010,6 +1082,10 @@ reopen_image:
 		     "<big>%s</big>\n<i>%s</i>",
 		     _("Reading new medium image."),
 		     rc->dh->mediumDescr);
+
+   /* Mark RS02 header sectors as correctable. */
+
+      mark_rs02_headers(rc);
    }
 
    /*** else examine the existing image file ***/
@@ -1041,6 +1117,10 @@ reopen_image:
       /* Build the interval list */
 
       build_interval_from_image(rc);
+
+      /* Mark still missing RS02 header sectors as correctable. */
+
+      mark_rs02_headers(rc);
 
       /* Already enough information available? */
 	 
@@ -1516,12 +1596,8 @@ finished:
 
    /*** Close and clean up */
 
-   if(rc->readMode == ECC_IN_IMAGE)   /* rewrite the header sectors */
-     WriteRS02Headers(rc->image, rc->lay, rc->eh);
-
    rc->earlyTermination = FALSE;
 
 terminate:
    cleanup((gpointer)rc);
 }
-

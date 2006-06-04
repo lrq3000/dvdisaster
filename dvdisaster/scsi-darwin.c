@@ -189,6 +189,8 @@ void CloseDevice(DeviceHandle *dh)
     g_free(dh->range);
   }
 
+  if(dh->rs02Header)
+    g_free(dh->rs02Header);
   if(dh->isoInfo)
     FreeIsoInfo(dh->isoInfo);
   if(dh->defects)

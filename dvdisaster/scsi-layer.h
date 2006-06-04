@@ -204,6 +204,7 @@ typedef struct _DeviceHandle
    Sense sense;               /* sense data from last operation */
    gint64 userAreaSize;       /* size of user area according to DVD Info struct */
    gint64 rs02Size;           /* size reported in RS02 header */
+   EccHeader *rs02Header;     /* copy of RS02 header */
    int sessions;
    int layers;
    int mainType;

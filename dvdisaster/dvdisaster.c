@@ -203,7 +203,6 @@ int main(int argc, char *argv[])
 #ifdef WIN_CONSOLE
 	     g_setenv("OUTPUT_CHARSET", "CP852", 1);
 #else
-     //	     g_setenv("OUTPUT_CHARSET", "iso-8859-2", 1);
 	     g_setenv("OUTPUT_CHARSET", "CP1250", 1);
 #endif
 	     break;
@@ -213,7 +212,6 @@ int main(int argc, char *argv[])
 #ifdef WIN_CONSOLE
 	     g_setenv("OUTPUT_CHARSET", "CP850", 1);
 #else
-     //	     g_setenv("OUTPUT_CHARSET", "iso-8859-1", 1);
 	     g_setenv("OUTPUT_CHARSET", "CP1252", 1);
 #endif
 	     break;
@@ -223,7 +221,6 @@ int main(int argc, char *argv[])
 #ifdef WIN_CONSOLE
 	     g_setenv("OUTPUT_CHARSET", "CP850", 1);
 #else
-     //	     g_setenv("OUTPUT_CHARSET", "iso-8859-1", 1);
 	     g_setenv("OUTPUT_CHARSET", "CP1252", 1);
 #endif
 	     break;
@@ -240,7 +237,7 @@ int main(int argc, char *argv[])
 
     g_sprintf(src_locale_path,"%s/locale",SRCDIR);
     bindtextdomain("dvdisaster", src_locale_path);
-printf("testing src %s\n", src_locale_path);
+//printf("testing src %s\n", src_locale_path);
     /* TRANSLATORS: 
        This is a dummy entry which is supposed to translate into "ok".
        Please do not return anything else here. */
@@ -255,7 +252,7 @@ printf("testing src %s\n", src_locale_path);
        if(getcwd(buf, 256))
        {  char locale_path[strlen(buf)+20];
           g_sprintf(locale_path,"%s/locale", buf);
-printf("testing cwd %s\n", locale_path);
+//printf("testing cwd %s\n", locale_path);
           bindtextdomain("dvdisaster", locale_path);
 	  locale_test = gettext("test phrase for verifying the locale installation");
        }
@@ -267,7 +264,7 @@ printf("testing cwd %s\n", locale_path);
        This only possible under Windows, and should cover all cases. */
 
     bin_locale_path = g_strdup_printf("%s\\locale", Closure->binDir);
-printf("testing bin %s\n", bin_locale_path);
+//printf("testing bin %s\n", bin_locale_path);
     bindtextdomain("dvdisaster", bin_locale_path);
     locale_test = gettext("test phrase for verifying the locale installation");
     g_free(bin_locale_path);

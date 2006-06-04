@@ -1,3 +1,8 @@
+0.67 (devel-13) 04-06-2006
+	- some more fine tuning of adaptive reading for RS02
+	- remove some debugging output from locale and path search
+	- optimized image type detection for RS02 media
+	- added wininst directory for NSIS installer related files
 
 0.67 (devel-12) 28-05-2006
 	- Major rewrite of adaptive reading strategy.

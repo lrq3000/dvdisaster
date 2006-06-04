@@ -43,13 +43,121 @@ static int read_fingerprint(DeviceHandle *dh, unsigned char *fingerprint, gint64
    return TRUE;
 }
 
+enum { HEADER_FOUND, TRY_NEXT_HEADER, TRY_NEXT_MODULO};
+
+static int try_sector(DeviceHandle *dh, gint64 pos, EccHeader **ehptr)
+{  EccHeader *eh;
+   unsigned char fingerprint[16];
+   guint32 recorded_crc;
+   guint32 real_crc;
+   gint64 last_fp = -1;
+
+   /* Try reading the sector */
+
+   Verbose("udf/try_sector: trying sector %lld\n", pos);
+
+   if(ReadSectors(dh, Closure->scratchBuf, pos, 2))
+   {  Verbose("udf/try_sector: read error, trying next header\n");
+      return TRY_NEXT_HEADER;
+   }
+
+   eh = (EccHeader*)Closure->scratchBuf;
+
+   /* See if the magic cookie is there */
+
+   if(strncmp((char*)eh->cookie, "*dvdisaster*", 12))
+   {  Verbose("udf/try_sector: no cookie, skipping current modulo\n");
+      return TRY_NEXT_MODULO;
+   }
+   else Verbose("udf/try_sector: header at %lld: magic cookie found\n", (long long int)pos);
+
+   /* Calculate CRC */
+
+   recorded_crc = eh->selfCRC;
+
+#ifdef HAVE_BIG_ENDIAN
+   eh->selfCRC = 0x47504c00;
+#else
+   eh->selfCRC = 0x4c5047;
+#endif
+   real_crc = Crc32((unsigned char*)eh, sizeof(EccHeader));
+
+   if(real_crc != recorded_crc)
+   {  Verbose("udf/try_sector: CRC failed, skipping header\n");
+      return TRY_NEXT_HEADER;
+   }
+
+   eh = g_malloc(sizeof(EccHeader));
+   memcpy(eh, Closure->scratchBuf, sizeof(EccHeader));
+#ifdef HAVE_BIG_ENDIAN
+   SwapEccHeaderBytes(eh);
+#endif
+   eh->selfCRC = recorded_crc;
+
+   Verbose("udf/try_sector: CRC okay\n");
+
+   /* Compare medium fingerprint with that recorded in Ecc header */
+
+   if(last_fp != eh->fpSector)  /* fingerprint in different sector as before? */
+   {  int status;
+
+      /* read new fingerprint */
+
+      status = read_fingerprint(dh, fingerprint, eh->fpSector);
+      last_fp = eh->fpSector;
+		  
+      if(!status)  /* be optimistic if fingerprint sector is unreadable */
+      {  *ehptr = eh;
+	 Verbose("udf/try_sector: read error in fingerprint sector\n");
+	 return HEADER_FOUND;
+      }
+
+      if(!memcmp(fingerprint, eh->mediumFP, 16))  /* good fingerprint */
+      {  *ehptr = eh;
+	 Verbose("udf/try_sector: fingerprint okay, header good\n");
+	 return HEADER_FOUND;
+      }
+
+      /* This might be a header from a larger previous session.
+	 Discard it and continue */
+
+      Verbose("udf/try_sector: fingerprint mismatch, skipping sector\n");
+      g_free(eh);
+   }
+   
+   return TRY_NEXT_HEADER;
+}
 
 EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
 {  EccHeader *eh = NULL;
    gint64 pos;
    gint64 header_modulo;
-   unsigned char fingerprint[16];
-   gint64 last_fp = -1;
+   int result;
+
+   /*** Quick search at fixed offsets relative to ISO filesystem */
+
+   if(!max_sectors && dh->isoInfo)
+   {  gint64 iso_size = dh->isoInfo->volumeSize; 
+
+      /* Iso size is correct; look for root sector at +2 */
+
+      if(try_sector(dh, iso_size, &eh) == HEADER_FOUND)
+      {  Verbose("Root sector search at +0 successful\n");
+	 return eh;
+      }
+
+      /* Strange stuff. Sometimes the iso size is increased by 150
+	 sectors by the burning software. */
+
+      if(try_sector(dh, iso_size-150, &eh) == HEADER_FOUND)
+      {  Verbose("Root sector search at -150 successful\n");
+	 return eh;
+      }
+
+      return NULL;
+   }
+
+   /*** Normal exhaustive search */
 
    header_modulo = (gint64)1<<62;
 
@@ -58,71 +166,23 @@ EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
    while(header_modulo >= 32)
    {  pos = max_sectors & ~(header_modulo - 1);
 
-//printf("Trying modulo %lld\n", header_modulo);
+      Verbose("FindHeaderInMedium: Trying modulo %lld\n", header_modulo);
 
       while(pos > 0)
       {  
-	 /* Try reading the sector */
-//printf(" trying sector %lld\n", pos);
-	 if(ReadSectors(dh, Closure->scratchBuf, pos, 2))
-	   goto check_next_header;  /* read error */
-
-	 eh = (EccHeader*)Closure->scratchBuf;
-
-
-	 /* See if the magic cookie is there */
-
-	 if(!strncmp((char*)eh->cookie, "*dvdisaster*", 12))
-	 {  guint32 recorded_crc = eh->selfCRC;
-	    guint32 real_crc;
-
-//printf(" header at %lld: magic cookie found\n", (long long int)pos);
-
-#ifdef HAVE_BIG_ENDIAN
-	    eh->selfCRC = 0x47504c00;
-#else
-	    eh->selfCRC = 0x4c5047;
-#endif
-	    real_crc = Crc32((unsigned char*)eh, sizeof(EccHeader));
-
-	    if(real_crc == recorded_crc)
-	    {  eh = g_malloc(sizeof(EccHeader));
-	       memcpy(eh, Closure->scratchBuf, sizeof(EccHeader));
-#ifdef HAVE_BIG_ENDIAN
-	       SwapEccHeaderBytes(eh);
-#endif
-	       eh->selfCRC = recorded_crc;
-//printf(" --> CRC okay, using it\n");
-
-	       if(last_fp != eh->fpSector)
-	       {  int status;
-
-		  status = read_fingerprint(dh, fingerprint, eh->fpSector);
-		  last_fp = eh->fpSector;
-
-		  if(!status)  /* be optimistic if fingerprint sector is unreadable */
-		    return eh;
-	       }
-
-	       if(!memcmp(fingerprint, eh->mediumFP, 16))  /* good fingerprint */
-		 return eh;
-
-	       /* might be a header from a larger previous session.
-		  discard it and continue */
-
-	       g_free(eh);
-	    }
-//printf(" CRC failed, skipping it\n");
-	    goto check_next_header;
-	 }
-	 else
-	 {
-//printf(" no cookie, skipping current modulo\n");
-	   goto check_next_modulo;
-	 }
+	result = try_sector(dh, pos, &eh);
+	
+	switch(result)
+	{  case TRY_NEXT_HEADER:
+	      goto check_next_header;
+	   case TRY_NEXT_MODULO:
+	      goto check_next_modulo;
+	   case HEADER_FOUND:
+	      return eh;
+	}
 
       check_next_header:
-	 pos -= header_modulo;
+	pos -= header_modulo;
       }
 
    check_next_modulo:
@@ -139,11 +199,11 @@ gint64 MediumLengthFromRS02(DeviceHandle *dh, gint64 max_size)
 
    eh = FindHeaderInMedium(dh, max_size);
    if(eh) 
-   {  
+   {  dh->rs02Header = eh;
+
       lay = CalcRS02Layout(uchar_to_gint64(eh->sectors), eh->eccBytes); 
       real_size = lay->eccSectors+lay->dataSectors;
 
-      g_free(eh);
       g_free(lay);
 
       return real_size;
@@ -379,6 +439,10 @@ int ExamineUDF(DeviceHandle *dh)
 
    Verbose(" Examining the UDF file system...\n");
    Verbose("  not yet implemented.\n\n");
+
+   /* Try to find the root header at a fixed offset to the ISO filesystem end. */
+
+   dh->rs02Size = MediumLengthFromRS02(dh, 0);
 
    return TRUE;
 }

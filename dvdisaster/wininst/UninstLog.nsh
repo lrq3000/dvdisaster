@@ -1,0 +1,1 @@
+; Uninstall Log Macros & Functions

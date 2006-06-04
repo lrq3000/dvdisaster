@@ -32,7 +32,7 @@
  #include <shlobj.h>
 #endif
 
-#if 1
+#if 0
  #define Verbose g_printf
 #else
  #define Verbose(format, ...)

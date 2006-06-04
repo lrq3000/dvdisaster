@@ -103,7 +103,7 @@ Method *FindMethod(char *name)
 
 /*
  * Search for ecc headers in RS02 style image files.
- * Note that udf.c has a similar function FindHeaderInMedia().
+ * Note that udf.c has a similar function FindHeaderInMedium().
  */
 
 static int read_fingerprint(LargeFile *file, unsigned char *fingerprint, gint64 sector)

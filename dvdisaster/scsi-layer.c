@@ -493,13 +493,23 @@ static unsigned int query_size(DeviceHandle *dh)
 	use it as an authoritative source for the medium size. */
 
    if(Closure->querySize >= 2)
-   {  dh->rs02Size = MediumLengthFromRS02(dh, MAX(read_capacity, dh->userAreaSize));
-      if(dh->rs02Size) 
+   {  if(dh->rs02Size <= 0)
+	 dh->rs02Size = MediumLengthFromRS02(dh, MAX(read_capacity, dh->userAreaSize));
+      else Verbose("Root header search succeeded!\n"); 
+      if(dh->rs02Size > 0) 
       {  Verbose("Medium size obtained from ECC header: %lld sectors\n", dh->rs02Size);  
 	 return dh->rs02Size;
       }
       else Verbose("Medium size could NOT be determined from ECC header.\n");
-   } else Verbose("Skipping medium size determination from ECC header.\n");
+   } 
+   else 
+   {   if(dh->rs02Size > 0) 
+      {  Verbose("Exhaustive ECC header search disabled, but root header search succeeded!\n"); 
+	 Verbose("Medium size obtained from ECC header: %lld sectors\n", dh->rs02Size);  
+	 return dh->rs02Size;
+      }
+      Verbose("Skipping medium size determination from ECC header.\n");
+   }
 
    /*** If ISO/UDF filesystem parsing is enabled try this next. */
 
@@ -893,35 +903,6 @@ static int read_cd_sector(DeviceHandle *dh, unsigned char *buf, int lba, int nse
  * so we check for them and do up to 3 retries for the user's convenience.
  */
 
-#if 0  /* simulate damaged medium */
-int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
-{
-  if(s>=300000 && s < 320000  || s>=5000 && s<10000 || s>=30000 && s<40000)
-  //if(nsectors > 1 && s>=307360 && s<307376 || nsectors == 1 && s==307369)
-  {  dh->sense.sense_key = 3;
-     dh->sense.asc       = 17;
-     dh->sense.ascq      = 0;
-
-     RememberSense(dh->sense.sense_key, dh->sense.asc, dh->sense.ascq);
-     return TRUE;
-  }
-
-#if 0 /* simulate checksum error */
-  if(s>=1600 && s<1610)  /* simulate CRC error */
-  {  int i;
-     int status = dh->read(dh, buf, s, nsectors);
-
-     for(i=0; i<nsectors; i++) 
-      buf[2048*i] = buf[2048*i] ^ 0xff;
-
-     return status;
-  }
-#endif
-
-  return dh->read(dh, buf, s, nsectors);
-  //return FALSE;
-}
-#else
 int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
 {  int retry,status;
 
@@ -956,7 +937,6 @@ int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
 
    return status;
 }
-#endif
 
 /*** 
  *** Open the device and query some of its properties.
@@ -988,7 +968,7 @@ DeviceHandle* OpenAndQueryDevice(char *device)
 
    switch(dh->subType)
    {  case DVD:
-        if(!dh->isoInfo)
+        if(!dh->isoInfo || dh->rs02Size > 0)
 	  dh->mediumDescr = g_strdup_printf(_("Medium: %s, %lld sectors%s %d layer(s)"),
 					    dh->typedescr, dh->sectors, 
 					    dh->rs02Size ? ", Ecc," : ",",
@@ -1005,7 +985,7 @@ DeviceHandle* OpenAndQueryDevice(char *device)
 
       case DATA1:
       case XA21:
-        if(!dh->isoInfo)
+        if(!dh->isoInfo || dh->rs02Size > 0)
 	  dh->mediumDescr = g_strdup_printf(_("Medium: %s, %lld sectors%s"),
 					    dh->typedescr, dh->sectors,
 					    dh->rs02Size ? ", Ecc" : " ");
