@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-05 14:59+0200\n"
+"POT-Creation-Date: 2006-06-05 19:18+0200\n"
 "PO-Revision-Date: 2006-03-16 20:40+0100\n"
 "Last-Translator: Luboš Staněk <lubek@users.sourceforge.net>\n"
 "Language-Team: čeština <cs@li.org>\n"
@@ -2436,7 +2436,7 @@ msgstr ""
 #: rs02-create.c:1052 rs02-create.c:1061
 #, c-format
 msgid ""
-"Image has been appended with error correction data.\n"
+"Image has been augmented with error correction data.\n"
 "New image size is %lld MB (%lld sectors).\n"
 msgstr ""
 

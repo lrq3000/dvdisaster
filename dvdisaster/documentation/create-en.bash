@@ -735,7 +735,7 @@ The <img src="../images/open-ecc.png" alt="filechooser button" align="middle"> s
 Configure the error correction.<p>
 Choose "Storage method: Error correction file (RS01)."<p>
 </td>
-<td><a href="example83.html"><img src="images/prefs-ecc.png" alt="screen shot" width="200"></a></td>
+<td><a href="example83.html"><img src="images/prefs-ecc-0.png" alt="screen shot" width="200"></a></td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
