@@ -220,8 +220,8 @@ int VerifyVersion(EccHeader *eh, int fatal)
 {  
    if(Closure->version < eh->neededVersion)
    {  if(fatal)
-       Stop(_("\n* This .ecc file requires dvdisaster V%d.%d.%d or higher.\n"
-	      "* Please visit http://www.dvdisaster.com for an upgrade."),
+       Stop(_("This .ecc file requires dvdisaster V%d.%d.%d or higher.\n"
+	      "Please visit http://www.dvdisaster.com for an upgrade."),
 	    eh->neededVersion/10000,
 	    (eh->neededVersion%10000)/100,
 	    eh->neededVersion%100);

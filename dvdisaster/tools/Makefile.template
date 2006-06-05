@@ -33,7 +33,7 @@ LIBS = $(EFENCE_LIBS) $(BZ2_LIBS) $(PNG_LIBS) -lm
 CFILES = $(CFG_CFILES)
 OFILES = $(CFG_OFILES)
 
-DLLWRAP = dllwrap  # temporary
+DLLWRAP = dllwrap
 
 ######################################################################
 # Compilation related

@@ -472,50 +472,6 @@ fi
 
 # Prepare entry links for each section
 
-# German translation
-
-dictionary_de
-
-for sect in $SECTIONS; do
-  link_title=error
-  eval "${sect}_contents_de ignore link ignore de"
-  eval "${sect}_link=\"$link_title\""
-done
-
-if ! test -e $workdir/de; then mkdir $workdir/de; fi
-cd $workdir/de
-create_subpages index de "0 10 20 30"
-create_subpages example de "0 10 20 21 22 30 40 50 80 81 82 83 90"
-create_subpages download de "0 10 20"
-create_subpages qa de "0 10 20"
-create_subpages background de "0 10 20 30 40 50 60 70"
-
-if ! test $major_mode = "local"; then
-  create_subpages imprint de "0"
-fi
-
-# English translation
-
-dictionary_en
-
-for sect in $SECTIONS; do
-  link_title=error
-  eval "${sect}_contents_en ignore link ignore en"
-  eval "${sect}_link=\"$link_title\""
-done
-
-if ! test -e $workdir/en; then mkdir $workdir/en; fi
-cd $workdir/en
-create_subpages index en "0 10 20 30"
-create_subpages example en "0 10 20 21 22 30 40 50 80 81 82 83 90"
-create_subpages download en "0 10 20"
-create_subpages qa en "0 10 20"
-create_subpages background en "0 10 20 30 40 50 60 70"
-
-if ! test $major_mode = "local"; then
-  create_subpages imprint en "0"
-fi
-
 # Czech translation
 
 dictionary_cs
@@ -537,3 +493,48 @@ create_subpages background cs "0 10 20 30 40 50 60 70"
 if ! test $major_mode = "local"; then
   create_subpages imprint cs "0"
 fi
+
+# German translation
+
+dictionary_de
+
+for sect in $SECTIONS; do
+  link_title=error
+  eval "${sect}_contents_de ignore link ignore de"
+  eval "${sect}_link=\"$link_title\""
+done
+
+if ! test -e $workdir/de; then mkdir $workdir/de; fi
+cd $workdir/de
+create_subpages index de "0 10 20 30"
+create_subpages example de "0 10 20 21 22 30 40 50 80 81 82 83 84 90"
+create_subpages download de "0 10 20"
+create_subpages qa de "0 10 20"
+create_subpages background de "0 10 20 30 40 50 60 70"
+
+if ! test $major_mode = "local"; then
+  create_subpages imprint de "0"
+fi
+
+# English translation
+
+dictionary_en
+
+for sect in $SECTIONS; do
+  link_title=error
+  eval "${sect}_contents_en ignore link ignore en"
+  eval "${sect}_link=\"$link_title\""
+done
+
+if ! test -e $workdir/en; then mkdir $workdir/en; fi
+cd $workdir/en
+create_subpages index en "0 10 20 30"
+create_subpages example en "0 10 20 21 22 30 40 50 80 81 82 83 84 90"
+create_subpages download en "0 10 20"
+create_subpages qa en "0 10 20"
+create_subpages background en "0 10 20 30 40 50 60 70"
+
+if ! test $major_mode = "local"; then
+  create_subpages imprint en "0"
+fi
+

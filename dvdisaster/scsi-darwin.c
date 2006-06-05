@@ -101,7 +101,7 @@ char *DefaultDevice()
   }
   if(Closure->deviceNodes->len)
     return g_strdup(g_ptr_array_index(Closure->deviceNodes, 0));
-  else { PrintLog(_("No CD/DVD drives found\n"));
+  else { PrintLog(_("No CD/DVD drives found.\n"));
     return NULL;
   }
 		    
@@ -127,7 +127,7 @@ DeviceHandle* OpenDevice(char *device)
   scsiObjectIterator = getDVDIterator(realdevice);
   if (scsiObjectIterator == (io_iterator_t) NULL) {
     g_free(dh);
-    Stop(_("Couldn not get SCSI-Iterator"));
+    Stop(_("Could not get SCSI-Iterator."));
     return NULL;
   }
   /* look up handle for the selected device */
@@ -140,29 +140,29 @@ DeviceHandle* OpenDevice(char *device)
   dh->plugInInterface = getPlugInInterface(scsiDevice);
   if (dh->plugInInterface == NULL) {
     g_free(dh);
-    Stop(_("Could not get PlugInInterface"));
+    Stop(_("Could not get PlugInInterface."));
     return NULL;
   }
   dh->mmcDeviceInterface = getMMCInterface(dh->plugInInterface);
   if (dh->mmcDeviceInterface == NULL) {
     g_free(dh);
-    Stop(_("Could not get MMCDeviceInterface"));
+    Stop(_("Could not get MMCDeviceInterface."));
     return NULL;    
   }
   (dh->scsiTaskDeviceInterface)  = (*dh->mmcDeviceInterface)->GetSCSITaskDeviceInterface(dh->mmcDeviceInterface);
   if (dh->scsiTaskDeviceInterface == NULL) {
     g_free(dh);
-    Stop(_("Could not get SCSITaskDeviceInterface"));
+    Stop(_("Could not get SCSITaskDeviceInterface."));
     return NULL;
   }
   ioReturnValue = (*dh->scsiTaskDeviceInterface)->ObtainExclusiveAccess(dh->scsiTaskDeviceInterface);
   if (ioReturnValue != kIOReturnSuccess) { 
-    Stop(_("Couldn't obtain exclusive access\n"));
+    Stop(_("Couldn't obtain exclusive access to drive."));
     return NULL;
   }
   dh->taskInterface = (*dh->scsiTaskDeviceInterface)->CreateSCSITask(dh->scsiTaskDeviceInterface);
   if (dh->taskInterface == NULL) {
-    Stop(_("Couldn't create taskInterface\n"));
+    Stop(_("Could not create taskInterface."));
     return NULL;
   }
   (*dh->taskInterface)->SetTimeoutDuration(dh->taskInterface, 120*1000);
@@ -223,20 +223,17 @@ int SendPacket(DeviceHandle *dh, unsigned char *cmd, int cdb_size, unsigned char
   taskInterface = dh->taskInterface;
   if (flags == kSCSIDataTransfer_FromTargetToInitiator || flags == kSCSIDataTransfer_FromInitiatorToTarget) {
     dh->range = (IOVirtualRange *) g_malloc(sizeof(IOVirtualRange));
-    if (dh->range == NULL) {
-      Stop(_("Couldn't allocate range\n"));
-    }
     dh->range->address = (IOVirtualAddress) buf;
     dh->range->length = size;
   }
   ioReturnValue = (*taskInterface)->SetCommandDescriptorBlock(taskInterface, cmd, cdb_size);
   if (ioReturnValue != kIOReturnSuccess) {
-    Stop(_("Couldn't set command descriptor block\n"));
+    Stop(_("Couldn't set command descriptor block."));
   }
   if (flags == kSCSIDataTransfer_FromTargetToInitiator || flags == kSCSIDataTransfer_FromInitiatorToTarget) {
     ioReturnValue = (*taskInterface)->SetScatterGatherEntries(taskInterface, dh->range, 1, size, flags);
     if (ioReturnValue != kIOReturnSuccess) {
-      Stop(_("Couldn't set scatter-gather\n"));     
+      Stop(_("Couldn't set scatter-gather."));     
     }
   }
   ioReturnValue = (*taskInterface)->ExecuteTaskSync(taskInterface, (SCSI_Sense_Data*) sense, &taskStatus, NULL);

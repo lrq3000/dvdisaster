@@ -272,8 +272,8 @@ int main(int argc, char *argv[])
 
     /* Last resort: fall back to global locale */
 
-    if(strcmp(locale_test, "ok"))
-      printf("fallback used\n");
+//    if(strcmp(locale_test, "ok"))
+//      printf("fallback used\n");
 
     if(strcmp(locale_test, "ok"))
       bindtextdomain("dvdisaster", LOCALEDIR);  

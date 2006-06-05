@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-04 15:38+0200\n"
+"POT-Creation-Date: 2006-06-05 14:59+0200\n"
 "PO-Revision-Date: 2006-03-16 20:40+0100\n"
 "Last-Translator: Luboš Staněk <lubek@users.sourceforge.net>\n"
 "Language-Team: čeština <cs@li.org>\n"
@@ -237,24 +237,24 @@ msgstr "Metoda RS01 není dostupná pro porovnání souborů."
 #. TRANSLATORS:
 #. This is a dummy entry which is supposed to translate into "ok".
 #. Please do not return anything else here.
-#: dvdisaster.c:247 dvdisaster.c:260 dvdisaster.c:272
+#: dvdisaster.c:244 dvdisaster.c:257 dvdisaster.c:269
 msgid "test phrase for verifying the locale installation"
 msgstr "ok"
 
-#: dvdisaster.c:293
+#: dvdisaster.c:290
 #, c-format
 msgid "sizeof(EccHeader) is %d, but must be 4096.\n"
 msgstr "velikost(EccHlavička) je %d, ale musí být 4096.\n"
 
-#: dvdisaster.c:424
+#: dvdisaster.c:421
 msgid "--cache-size must at least be 1MB; 16MB or higher is recommended."
 msgstr "--cache-size musí být alespoň 1MB; je doporučeno 16MB nebo větší."
 
-#: dvdisaster.c:426
+#: dvdisaster.c:423
 msgid "--cache-size maximum is 2048MB."
 msgstr "--cache-size maximum je 2048MB."
 
-#: dvdisaster.c:477
+#: dvdisaster.c:474
 #, c-format
 msgid ""
 "\n"
@@ -265,14 +265,14 @@ msgstr ""
 "dvdisaster, verze %s\n"
 "\n"
 
-#: dvdisaster.c:509
+#: dvdisaster.c:506
 #, c-format
 msgid "?? illegal getopt return value %d\n"
 msgstr "?? neplatná návratová hodnota getopt %d\n"
 
 #. TRANSLATORS: Program options like -r and --read are not to be translated
 #. to avoid confusion when discussing the program in international forums.
-#: dvdisaster.c:634
+#: dvdisaster.c:631
 msgid ""
 "\n"
 "Common usage examples:\n"
@@ -296,7 +296,7 @@ msgstr ""
 "  dvdisaster -u,--unlink # Smaže soubor .iso (když se dokončí další akce)\n"
 "\n"
 
-#: dvdisaster.c:643
+#: dvdisaster.c:640
 #, c-format
 msgid ""
 "Drive and file specification:\n"
@@ -311,7 +311,7 @@ msgstr ""
 "  -i,--image  imagefile  - název souboru obrazu     (výchozí: medium.iso)\n"
 "  -e,--ecc    eccfile    - název souboru ecc        (výchozí: medium.ecc)\n"
 
-#: dvdisaster.c:651
+#: dvdisaster.c:648
 msgid ""
 "  -l,--list              - list drives available under ASPI manager\n"
 "\n"
@@ -319,7 +319,7 @@ msgstr ""
 "  -l,--list              - vypíše seznam mechanik dostupných pod ASPI\n"
 "\n"
 
-#: dvdisaster.c:656
+#: dvdisaster.c:653
 #, c-format
 msgid ""
 "Tweaking options (see manual before using!)\n"
@@ -341,7 +341,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: dvdisaster.c:673
+#: dvdisaster.c:670
 msgid ""
 "Graphical user interface options\n"
 "  --keep-style           - do not override the style settings\n"
@@ -351,7 +351,7 @@ msgstr ""
 "  --keep-style           - nepřepisovat nastavení\n"
 "\n"
 
-#: dvdisaster.c:677
+#: dvdisaster.c:674
 #, c-format
 msgid ""
 "Debugging options (purposefully undocumented and possibly harmful)\n"
@@ -462,13 +462,9 @@ msgstr ""
 #: file.c:223
 #, c-format
 msgid ""
-"\n"
-"* This .ecc file requires dvdisaster V%d.%d.%d or higher.\n"
-"* Please visit http://www.dvdisaster.com for an upgrade."
+"This .ecc file requires dvdisaster V%d.%d.%d or higher.\n"
+"Please visit http://www.dvdisaster.com for an upgrade."
 msgstr ""
-"\n"
-"* Tento soubor oprav vyžaduje dvdisaster V%d.%d.%d nebo vyšší.\n"
-"* Navštivte prosím http://www.dvdisaster.com kvůli aktualizaci."
 
 #: file.c:240 file.c:244
 #, c-format
@@ -1437,7 +1433,7 @@ msgstr "Kompletace obrazu %s. Budou se načítat pouze chybějící sektory.\n"
 msgid "done.\n"
 msgstr "hotovo.\n"
 
-#: read-linear.c:429 scsi-layer.c:767
+#: read-linear.c:429 scsi-layer.c:777
 #, c-format
 msgid "Waiting %d seconds for drive to spin up...\n"
 msgstr "Čekám %d sekund na roztočení disku...\n"
@@ -2709,31 +2705,31 @@ msgid "sectors."
 msgstr ""
 
 #: scsi-darwin.c:104
-msgid "No CD/DVD drives found\n"
+msgid "No CD/DVD drives found.\n"
 msgstr ""
 
 #: scsi-darwin.c:130
-msgid "Couldn not get SCSI-Iterator"
+msgid "Could not get SCSI-Iterator."
 msgstr ""
 
 #: scsi-darwin.c:143
-msgid "Could not get PlugInInterface"
+msgid "Could not get PlugInInterface."
 msgstr ""
 
 #: scsi-darwin.c:149
-msgid "Could not get MMCDeviceInterface"
+msgid "Could not get MMCDeviceInterface."
 msgstr ""
 
 #: scsi-darwin.c:155
-msgid "Could not get SCSITaskDeviceInterface"
+msgid "Could not get SCSITaskDeviceInterface."
 msgstr ""
 
 #: scsi-darwin.c:160
-msgid "Couldn't obtain exclusive access\n"
+msgid "Couldn't obtain exclusive access to drive."
 msgstr ""
 
 #: scsi-darwin.c:165
-msgid "Couldn't create taskInterface\n"
+msgid "Could not create taskInterface."
 msgstr ""
 
 #: scsi-darwin.c:220 scsi-freebsd.c:173 scsi-linux.c:140 scsi-win32.c:609
@@ -2741,16 +2737,12 @@ msgstr ""
 msgid "illegal data_mode: %d"
 msgstr "neplatný data_mode: %d"
 
-#: scsi-darwin.c:227
-msgid "Couldn't allocate range\n"
+#: scsi-darwin.c:231
+msgid "Couldn't set command descriptor block."
 msgstr ""
 
-#: scsi-darwin.c:234
-msgid "Couldn't set command descriptor block\n"
-msgstr ""
-
-#: scsi-darwin.c:239
-msgid "Couldn't set scatter-gather\n"
+#: scsi-darwin.c:236
+msgid "Couldn't set scatter-gather."
 msgstr ""
 
 #: scsi-freebsd.c:42 scsi-linux.c:42
@@ -2956,7 +2948,7 @@ msgstr ""
 "%s\n"
 "Nelze se dotázat na velikost média.\n"
 
-#: scsi-layer.c:544
+#: scsi-layer.c:554
 #, c-format
 msgid ""
 "Different media sizes depending on query method:\n"
@@ -2965,7 +2957,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: scsi-layer.c:549
+#: scsi-layer.c:559
 msgid ""
 "Evaluation of returned medium sizes:\n"
 "\n"
@@ -2973,15 +2965,15 @@ msgstr ""
 "Vyhodnocení vrácených velikostí médií:\n"
 "\n"
 
-#: scsi-layer.c:604
+#: scsi-layer.c:614
 msgid "Using value from READ CAPACITY"
 msgstr "Používám hodnotu z READ CAPACITY"
 
-#: scsi-layer.c:608
+#: scsi-layer.c:618
 msgid "Using value from READ DVD STRUCTURE"
 msgstr "Používám hodnotu z READ DVD STRUCTURE"
 
-#: scsi-layer.c:618
+#: scsi-layer.c:628
 #, c-format
 msgid ""
 "FAILED to determine image size.\n"
@@ -2992,7 +2984,7 @@ msgstr ""
 "Používám menší hodnotu, protože je to správně pro >90%% všech mechanik,\n"
 "ale POKRAČUJTE NA VLASTNÍ NEBEZPEČÍ (obraz může být neúplný/nepoužitelný)"
 
-#: scsi-layer.c:623
+#: scsi-layer.c:633
 #, c-format
 msgid ""
 "Final decision: %s\n"
@@ -3001,7 +2993,7 @@ msgstr ""
 "Konečné rozhodnutí: %s\n"
 "\n"
 
-#: scsi-layer.c:631
+#: scsi-layer.c:641
 msgid ""
 "Failed to determine image size.\n"
 "Try using a different drive."
@@ -3009,16 +3001,16 @@ msgstr ""
 "Selhalo určení velikosti obrazu.\n"
 "Zkuste použít jinou mechaniku."
 
-#: scsi-layer.c:823
+#: scsi-layer.c:833
 msgid "Setting the drive speed failed:\n"
 msgstr "Nastavení rychlosti mechaniky se nepodařilo:\n"
 
-#: scsi-layer.c:951
+#: scsi-layer.c:932
 #, c-format
 msgid "Retrying Sector %lld because of: %s\n"
 msgstr "Opakování sektoru %lld kvůli: %s\n"
 
-#: scsi-layer.c:974
+#: scsi-layer.c:954
 #, c-format
 msgid ""
 "\n"
@@ -3027,7 +3019,7 @@ msgstr ""
 "\n"
 "Zařízení: %s, %s\n"
 
-#: scsi-layer.c:978
+#: scsi-layer.c:958
 #, c-format
 msgid ""
 "\n"
@@ -3036,36 +3028,36 @@ msgstr ""
 "\n"
 "Zařízení: %s (%s), %s\n"
 
-#: scsi-layer.c:992
+#: scsi-layer.c:972
 #, c-format
 msgid "Medium: %s, %lld sectors%s %d layer(s)"
 msgstr "Médium: %s, %lld sektorů%s %d vrstva(y)"
 
-#: scsi-layer.c:997
+#: scsi-layer.c:977
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s %d layer(s), created %s"
 msgstr "Médium \"%s\": %s, %lld sektorů%s %d vrstva(y), vytvořeno %s"
 
-#: scsi-layer.c:1009
+#: scsi-layer.c:989
 #, c-format
 msgid "Medium: %s, %lld sectors%s"
 msgstr "Médium: %s, %lld sektorů%s"
 
-#: scsi-layer.c:1013
+#: scsi-layer.c:993
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s created %s"
 msgstr "Médium \"%s\": %s, %lld sektorů%s vytvořeno %s"
 
-#: scsi-layer.c:1027
+#: scsi-layer.c:1007
 #, c-format
 msgid "This software does not support \"%s\" type media."
 msgstr ""
 
-#: scsi-layer.c:1034
+#: scsi-layer.c:1014
 msgid "This software does not support encrypted media.\n"
 msgstr ""
 
-#: scsi-layer.c:1041
+#: scsi-layer.c:1021
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr ""
@@ -3220,7 +3212,7 @@ msgstr ""
 msgid "Please hang on until the browser comes up!"
 msgstr "Vydržte prosím, až se spustí prohlížeč!"
 
-#: udf.c:220
+#: udf.c:280
 msgid "Unnamed"
 msgstr "Nepojmenovaný"
 
@@ -3229,32 +3221,42 @@ msgstr "Nepojmenovaný"
 msgid ""
 "- RS02 error correction method fully supported\n"
 "<span color=\"#%s\">-</span> in the graphical user interface.\n"
+"- Adaptive reading supports RS02 images.\n"
 msgstr ""
 
-#: welcome-window.c:91
+#: welcome-window.c:92
 msgid "Show this message again"
 msgstr ""
 
-#: welcome-window.c:133
+#: welcome-window.c:134
 msgid "<span weight=\"bold\" size=\"xx-large\">Welcome to dvdisaster!</span>"
 msgstr ""
 
-#: welcome-window.c:135
+#: welcome-window.c:136
 msgid ""
 "\n"
 "dvdisaster creates error correction data to protect\n"
 "CD and DVD media against data loss.\n"
 msgstr ""
 
-#: welcome-window.c:138
+#: welcome-window.c:139
 msgid ""
 "Please see the manual for [typical uses] of dvdisaster.\n"
 "\n"
 msgstr ""
 
-#: welcome-window.c:141
+#: welcome-window.c:142
 msgid "<i>New in this Version:</i>"
 msgstr ""
+
+#~ msgid ""
+#~ "\n"
+#~ "This .ecc file requires dvdisaster V%d.%d.%d or higher.\n"
+#~ "Please visit http://www.dvdisaster.com for an upgrade."
+#~ msgstr ""
+#~ "\n"
+#~ "Tento soubor oprav vyžaduje dvdisaster V%d.%d.%d nebo vyšší.\n"
+#~ "Navštivte prosím http://www.dvdisaster.com kvůli aktualizaci."
 
 #~ msgid ""
 #~ "\n"

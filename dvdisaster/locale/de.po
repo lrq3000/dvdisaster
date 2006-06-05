@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-04 15:38+0200\n"
+"POT-Creation-Date: 2006-06-05 18:10+0200\n"
 "PO-Revision-Date: 2004-11-30 19:48+0100\n"
 "Last-Translator: Carsten Gnörlich <carsten@dvdisaster.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -237,24 +237,24 @@ msgstr "RS01-Methode zum Überprüfen der Dateien nicht verfügbar."
 #. TRANSLATORS:
 #. This is a dummy entry which is supposed to translate into "ok".
 #. Please do not return anything else here.
-#: dvdisaster.c:247 dvdisaster.c:260 dvdisaster.c:272
+#: dvdisaster.c:244 dvdisaster.c:257 dvdisaster.c:269
 msgid "test phrase for verifying the locale installation"
 msgstr "ok"
 
-#: dvdisaster.c:293
+#: dvdisaster.c:290
 #, c-format
 msgid "sizeof(EccHeader) is %d, but must be 4096.\n"
 msgstr "sizeof(EccHeader) ist %d, muß aber 4096 sein.\n"
 
-#: dvdisaster.c:424
+#: dvdisaster.c:421
 msgid "--cache-size must at least be 1MB; 16MB or higher is recommended."
 msgstr "--cache-size muß mindestens 1MB sein; 16MB oder mehr werden empfohlen."
 
-#: dvdisaster.c:426
+#: dvdisaster.c:423
 msgid "--cache-size maximum is 2048MB."
 msgstr "Die Maximalgröße von --cache-size ist 2048MB."
 
-#: dvdisaster.c:477
+#: dvdisaster.c:474
 #, c-format
 msgid ""
 "\n"
@@ -265,14 +265,14 @@ msgstr ""
 "dvdisaster Version %s\n"
 "\n"
 
-#: dvdisaster.c:509
+#: dvdisaster.c:506
 #, c-format
 msgid "?? illegal getopt return value %d\n"
 msgstr "?? ungültiger Rückgabewert von getopt: %d\n"
 
 #. TRANSLATORS: Program options like -r and --read are not to be translated
 #. to avoid confusion when discussing the program in international forums.
-#: dvdisaster.c:634
+#: dvdisaster.c:631
 msgid ""
 "\n"
 "Common usage examples:\n"
@@ -296,7 +296,7 @@ msgstr ""
 "  dvdisaster -u,--unlink # Löscht .iso - Dateien nach Beenden der vorherigen Aktionen.\n"
 "\n"
 
-#: dvdisaster.c:643
+#: dvdisaster.c:640
 #, c-format
 msgid ""
 "Drive and file specification:\n"
@@ -311,7 +311,7 @@ msgstr ""
 "  -i,--image  Name       - Name der Abbild - Datei        (Standard: medium.iso)\n"
 "  -e,--ecc    Name       - Name der Fehlerkorrektur-Datei (Standard: medium.ecc)\n"
 
-#: dvdisaster.c:651
+#: dvdisaster.c:648
 msgid ""
 "  -l,--list              - list drives available under ASPI manager\n"
 "\n"
@@ -319,7 +319,7 @@ msgstr ""
 "  -l,--list              - zeigt unter ASPI verfügbare Laufwerke\n"
 "\n"
 
-#: dvdisaster.c:656
+#: dvdisaster.c:653
 #, c-format
 msgid ""
 "Tweaking options (see manual before using!)\n"
@@ -340,8 +340,25 @@ msgid ""
 "  --split-files          - split image into files <= 2GB\n"
 "\n"
 msgstr ""
+"Feineinstellung (Beachten Sie die Hinweise in der Dokumentation!):\n"
+"  -j,--jump n            - überspringe n Sektoren nach einem Lesefehler (Standard: 16)\n"
+"  -m n                   - Fehlerkorrektur-Methoden anzeigen/auswählen (Standard: RS01)\n"
+"  -n,--redundancy n%%     - Redundanz der Fehlerkorrektur-Dateien (in Prozent), oder\n"
+"                           höchstmögliche Größe für Fehlerkorrektur-Abbilder (in Sektoren)\n"
+"  -v,--verbose           - mehr erläuternde Ausgaben\n"
+"  --adaptive-read        - verwende optimiertes Leseverfahren für defekte Datenträger\n"
+"  --auto-suffix          - automatisches Anfügen der .iso- und .ecc-Dateiendungen\n"
+"  --cache-size n         - Zwischenspeicher in MB bei .ecc-Datei-Erzeugung (Standard: 32MB)\n"
+"  --dao                  - unterstelle DAO; Abbild am Ende nicht kürzen\n"
+"  --fill-unreadable n    - fülle unlesbare Sektoren mit Byte n\n"
+"  --medium-size          - nutzbare Datenträger-Größe für RS02 (in Sektoren)\n"
+"  --query-size n         - Abbildgröße ermitteln durch: drive/udf/ecc (Standard: ecc)\n"
+"  --speed-warning n      - warnt bei Geschwindigkeitsänderung um mehr als n Prozent\n"
+"  --spinup-delay n       - gibt dem Laufwerk n Sekunden Zeit zum Hochlaufen\n"
+"  --split-files          - Abbild in mehrere Dateien <= 2GB aufteilen\n"
+"\n"
 
-#: dvdisaster.c:673
+#: dvdisaster.c:670
 msgid ""
 "Graphical user interface options\n"
 "  --keep-style           - do not override the style settings\n"
@@ -351,7 +368,7 @@ msgstr ""
 "  --keep-style           - Style-Einstellungen nicht überschreiben\n"
 "\n"
 
-#: dvdisaster.c:677
+#: dvdisaster.c:674
 #, fuzzy, c-format
 msgid ""
 "Debugging options (purposefully undocumented and possibly harmful)\n"
@@ -462,13 +479,11 @@ msgstr ""
 #: file.c:223
 #, c-format
 msgid ""
-"\n"
-"* This .ecc file requires dvdisaster V%d.%d.%d or higher.\n"
-"* Please visit http://www.dvdisaster.com for an upgrade."
+"This .ecc file requires dvdisaster V%d.%d.%d or higher.\n"
+"Please visit http://www.dvdisaster.com for an upgrade."
 msgstr ""
-"\n"
-"* Diese .ecc-Datei benötigt dvdisaster V%d.%d.%d oder höher.\n"
-"* Bitte besuchen Sie http://www.dvdisaster.de für eine neuere Version."
+"Diese .ecc-Datei benötigt mindestens Version %d.%d.%d von dvdisaster.\n"
+"Bitte holen Sie sich von http://www.dvdisaster.de eine neuere Version."
 
 #: file.c:240 file.c:244
 #, c-format
@@ -924,19 +939,19 @@ msgstr "Dateisystem-Einstellungen für Datenträger und Abbilder"
 
 #: preferences.c:526
 msgid "Get Image size from: "
-msgstr ""
+msgstr "Abbild-Größe ermitteln durch:"
 
 #: preferences.c:532
 msgid "Drive"
-msgstr ""
+msgstr "Laufwerk"
 
 #: preferences.c:538
 msgid "ISO/UDF"
-msgstr ""
+msgstr "ISO/UDF"
 
 #: preferences.c:544
 msgid "ECC/RS02"
-msgstr ""
+msgstr "ECC/RS02"
 
 #: preferences.c:559
 msgid "Local files (on hard disc)"
@@ -1437,7 +1452,7 @@ msgstr "Vervollständige Abbild %s. Nur die fehlenden Sektoren werden gelesen.\n
 msgid "done.\n"
 msgstr "fertig.\n"
 
-#: read-linear.c:429 scsi-layer.c:767
+#: read-linear.c:429 scsi-layer.c:777
 #, c-format
 msgid "Waiting %d seconds for drive to spin up...\n"
 msgstr "Warte %d Sekunden auf das Hochdrehen des Laufwerks...\n"
@@ -2458,7 +2473,7 @@ msgstr ""
 #: rs02-create.c:1052 rs02-create.c:1061
 #, c-format
 msgid ""
-"Image has been appended with error correction data.\n"
+"Image has been augmented with error correction data.\n"
 "New image size is %lld MB (%lld sectors).\n"
 msgstr ""
 "Das Abbild wurde um Fehlerkorrektur-Daten erweitert.\n"
@@ -2730,49 +2745,45 @@ msgid "sectors."
 msgstr "Sektoren."
 
 #: scsi-darwin.c:104
-msgid "No CD/DVD drives found\n"
+msgid "No CD/DVD drives found.\n"
 msgstr ""
 
 #: scsi-darwin.c:130
-msgid "Couldn not get SCSI-Iterator"
+msgid "Could not get SCSI-Iterator."
 msgstr ""
 
 #: scsi-darwin.c:143
-msgid "Could not get PlugInInterface"
-msgstr ""
+msgid "Could not get PlugInInterface."
+msgstr "PlugInInterface nicht verfügbar."
 
 #: scsi-darwin.c:149
-msgid "Could not get MMCDeviceInterface"
+msgid "Could not get MMCDeviceInterface."
 msgstr ""
 
 #: scsi-darwin.c:155
-msgid "Could not get SCSITaskDeviceInterface"
+msgid "Could not get SCSITaskDeviceInterface."
 msgstr ""
 
 #: scsi-darwin.c:160
-msgid "Couldn't obtain exclusive access\n"
-msgstr ""
+msgid "Couldn't obtain exclusive access to drive."
+msgstr "Ausschließlicher Zugriff auf Laufwerk nicht möglich."
 
 #: scsi-darwin.c:165
-msgid "Couldn't create taskInterface\n"
-msgstr ""
+msgid "Could not create taskInterface."
+msgstr "taskInterface kann nicht erzeugt werden."
 
 #: scsi-darwin.c:220 scsi-freebsd.c:173 scsi-linux.c:140 scsi-win32.c:609
 #, c-format
 msgid "illegal data_mode: %d"
 msgstr "data_mode unzulässig: %d"
 
-#: scsi-darwin.c:227
-msgid "Couldn't allocate range\n"
-msgstr ""
+#: scsi-darwin.c:231
+msgid "Couldn't set command descriptor block."
+msgstr "Konnte command descriptor block nicht setzen."
 
-#: scsi-darwin.c:234
-msgid "Couldn't set command descriptor block\n"
-msgstr ""
-
-#: scsi-darwin.c:239
-msgid "Couldn't set scatter-gather\n"
-msgstr ""
+#: scsi-darwin.c:236
+msgid "Couldn't set scatter-gather."
+msgstr "Konnte scatter-gather nicht setzen."
 
 #: scsi-freebsd.c:42 scsi-linux.c:42
 msgid ""
@@ -2983,7 +2994,7 @@ msgstr ""
 "%s\n"
 "Konnte Datenträger-Größe nicht ermitteln.\n"
 
-#: scsi-layer.c:544
+#: scsi-layer.c:554
 #, c-format
 msgid ""
 "Different media sizes depending on query method:\n"
@@ -2991,8 +3002,12 @@ msgid ""
 "READ DVD STRUCTURE: %lld sectors\n"
 "\n"
 msgstr ""
+"Widersprüchliche Angaben zur Länge des Datenträger-Inhaltes:\n"
+"READ CAPACITY:      %lld Sektoren\n"
+"READ DVD STRUCTURE: %lld Sektoren\n"
+"\n"
 
-#: scsi-layer.c:549
+#: scsi-layer.c:559
 msgid ""
 "Evaluation of returned medium sizes:\n"
 "\n"
@@ -3000,15 +3015,15 @@ msgstr ""
 "Untersuchung der beiden Angaben:\n"
 "\n"
 
-#: scsi-layer.c:604
+#: scsi-layer.c:614
 msgid "Using value from READ CAPACITY"
 msgstr "Verwende den Wert von READ CAPACITY."
 
-#: scsi-layer.c:608
+#: scsi-layer.c:618
 msgid "Using value from READ DVD STRUCTURE"
 msgstr "Verwende den Wert von READ DVD STRUCTURE."
 
-#: scsi-layer.c:618
+#: scsi-layer.c:628
 #, c-format
 msgid ""
 "FAILED to determine image size.\n"
@@ -3019,7 +3034,7 @@ msgstr ""
 "Verwende den kleineren Wert (funktioniert bei 90%% aller Laufwerke).\n"
 "Weitermachen auf EIGENE GEFAHR: das Abbild kann unvollständig/unbrauchbar sein."
 
-#: scsi-layer.c:623
+#: scsi-layer.c:633
 #, c-format
 msgid ""
 "Final decision: %s\n"
@@ -3028,7 +3043,7 @@ msgstr ""
 "Abschließende Entscheidung: %s\n"
 "\n"
 
-#: scsi-layer.c:631
+#: scsi-layer.c:641
 msgid ""
 "Failed to determine image size.\n"
 "Try using a different drive."
@@ -3036,16 +3051,16 @@ msgstr ""
 "Größe des Datenträger-Inhaltes ist unbestimmbar.\n"
 "Probieren Sie ein anderes Laufwerk."
 
-#: scsi-layer.c:823
+#: scsi-layer.c:833
 msgid "Setting the drive speed failed:\n"
 msgstr "Konnte Laufwerksgeschwindigkeit nicht verändern:\n"
 
-#: scsi-layer.c:951
+#: scsi-layer.c:932
 #, c-format
 msgid "Retrying Sector %lld because of: %s\n"
 msgstr "Erneuter Leseversuch von Sektor %lld wegen: %s\n"
 
-#: scsi-layer.c:974
+#: scsi-layer.c:954
 #, c-format
 msgid ""
 "\n"
@@ -3054,7 +3069,7 @@ msgstr ""
 "\n"
 "Laufwerk: %s, %s\n"
 
-#: scsi-layer.c:978
+#: scsi-layer.c:958
 #, c-format
 msgid ""
 "\n"
@@ -3063,36 +3078,36 @@ msgstr ""
 "\n"
 "Laufwerk: %s (%s), %s\n"
 
-#: scsi-layer.c:992
+#: scsi-layer.c:972
 #, c-format
 msgid "Medium: %s, %lld sectors%s %d layer(s)"
 msgstr "Datenträger: %s, %lld Sektoren%s %d Schicht(en)"
 
-#: scsi-layer.c:997
+#: scsi-layer.c:977
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s %d layer(s), created %s"
 msgstr "Datenträger \"%s\": %s, %lld Sektoren%s %d Schicht(en), erzeugt %s"
 
-#: scsi-layer.c:1009
+#: scsi-layer.c:989
 #, c-format
 msgid "Medium: %s, %lld sectors%s"
 msgstr "Datenträger: %s, %lld Sektoren%s"
 
-#: scsi-layer.c:1013
+#: scsi-layer.c:993
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s created %s"
 msgstr "Datenträger \"%s\": %s, %lld Sektoren%s erzeugt %s"
 
-#: scsi-layer.c:1027
+#: scsi-layer.c:1007
 #, c-format
 msgid "This software does not support \"%s\" type media."
 msgstr "Dieses Programm unterstützt keine Datenträger vom Typ \"%s\"."
 
-#: scsi-layer.c:1034
+#: scsi-layer.c:1014
 msgid "This software does not support encrypted media.\n"
 msgstr "Dieses Programm unterstützt keine verschlüsselten Datenträger.\n"
 
-#: scsi-layer.c:1041
+#: scsi-layer.c:1021
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr ""
@@ -3251,7 +3266,7 @@ msgstr ""
 msgid "Please hang on until the browser comes up!"
 msgstr "Bitte warten Sie bis der HTML-Betrachter erscheint!"
 
-#: udf.c:220
+#: udf.c:280
 msgid "Unnamed"
 msgstr "Unbenannt"
 
@@ -3260,19 +3275,21 @@ msgstr "Unbenannt"
 msgid ""
 "- RS02 error correction method fully supported\n"
 "<span color=\"#%s\">-</span> in the graphical user interface.\n"
+"- Adaptive reading supports RS02 images.\n"
 msgstr ""
 "- Das RS02-Fehlerkorrektur-Verfahren wird vollständig\n"
 "<span color=\"#%s\">-</span> in der graphischen Benutzeroberfläche unterstützt.\n"
+"- Das optimierte Leseverfahren verarbeitet RS02-Abbilder.\n"
 
-#: welcome-window.c:91
+#: welcome-window.c:92
 msgid "Show this message again"
 msgstr "Diesen Text erneut anzeigen"
 
-#: welcome-window.c:133
+#: welcome-window.c:134
 msgid "<span weight=\"bold\" size=\"xx-large\">Welcome to dvdisaster!</span>"
 msgstr "<span weight=\"bold\" size=\"xx-large\">Willkommen bei dvdisaster!</span>"
 
-#: welcome-window.c:135
+#: welcome-window.c:136
 msgid ""
 "\n"
 "dvdisaster creates error correction data to protect\n"
@@ -3282,7 +3299,7 @@ msgstr ""
 "dvdisaster erzeugt Fehlerkorrektur-Daten um CD- und\n"
 "DVD-Datenträger gegen Datenverlust zu schützen.\n"
 
-#: welcome-window.c:138
+#: welcome-window.c:139
 msgid ""
 "Please see the manual for [typical uses] of dvdisaster.\n"
 "\n"
@@ -3290,113 +3307,18 @@ msgstr ""
 "Im Handbuch sind [typische Anwendungen] beschrieben.\n"
 "\n"
 
-#: welcome-window.c:141
+#: welcome-window.c:142
 msgid "<i>New in this Version:</i>"
 msgstr "<i>Neu in dieser Version:</i>"
 
-#~ msgid ""
-#~ "\n"
-#~ "Device: %s, %s [Note %d]\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Laufwerk: %s, %s [Hinweis %d]\n"
+#~ msgid "No CD/DVD drives found."
+#~ msgstr "Keine CD/DVD-Laufwerke gefunden."
 
-#~ msgid ""
-#~ "\n"
-#~ "Device: %s (%s), %s [Note %d]\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Laufwerk: %s (%s), %s [Hinweis %d]\n"
+#~ msgid "Couldn not get SCSI-Iterator."
+#~ msgstr "SCSI-Iterator nicht verfügbar."
 
-#~ msgid "Use information from ECC headers"
-#~ msgstr "Fehlerkorrektur-Vorspann auswerten"
+#~ msgid "Could not get MMCDeviceInterface"
+#~ msgstr "MMCDeviceInterface nicht verfügbar."
 
-#~ msgid "Use information from ISO/UDF filesystem (experimental)"
-#~ msgstr "ISO/UDF-Dateisystem auswerten (experimentell)"
-
-#~ msgid ""
-#~ "Different media sizes depending on query method:\n"
-#~ "READ CAPACITY:      %lld sectors\n"
-#~ "READ DVD STRUCTURE: %lld sectors\n"
-#~ msgstr ""
-#~ "Widersprüchliche Angaben zur Länge des Datenträger-Inhaltes:\n"
-#~ "READ CAPACITY:      %lld Sektoren\n"
-#~ "READ DVD STRUCTURE: %lld Sektoren\n"
-
-#~ msgid ""
-#~ "ISO file system   : %d sectors\n"
-#~ "\n"
-#~ "Using size specified by ISO file system.\n"
-#~ "\n"
-#~ msgstr ""
-#~ "ISO-Dateisystem   : %d Sektoren\n"
-#~ "\n"
-#~ "Verwende den Wert aus dem ISO-Dateisystem.\n"
-#~ "\n"
-
-#~ msgid ""
-#~ "Drive data base suggests using READ CAPACITY.\n"
-#~ "\n"
-#~ msgstr ""
-#~ "Laufwerksdatenbank empfiehlt Verwendung von READ CAPACITY.\n"
-#~ "\n"
-
-#~ msgid ""
-#~ "Drive data base suggests using READ DVD STRUCTURE.\n"
-#~ "\n"
-#~ msgstr ""
-#~ "Laufwerksdatenbank empfiehlt Verwendung von READ DVD STRUCTURE.\n"
-#~ "\n"
-
-#~ msgid "If you can verify that one of the above image sizes is correct,\n"
-#~ msgstr ""
-#~ "Wenn Sie sicher sind, daß eine der beiden oben\n"
-#~ "angegebenen Abbild-Größen korrekt ist,\n"
-
-#~ msgid "If you can verify that this image size is correct,\n"
-#~ msgstr "Wenn Sie sicher sind, daß diese Abbild-Größe stimmt,\n"
-
-#~ msgid ""
-#~ "please send in the whole dvdisaster output upto this line\n"
-#~ "to have your drive included in the internal data base.\n"
-#~ msgstr ""
-#~ "senden Sie bitte die gesamte Ausgabe von dvdisaster bis zu dieser Zeile ein\n"
-#~ "damit Ihr Laufwerk in die interne Datenbank aufgenommen wird.\n"
-
-#~ msgid ""
-#~ "Tweaking options (see manual before using!)\n"
-#~ "  -j,--jump n            - jump n sectors forward after a read error (default: 16)\n"
-#~ "  -m n                   - list/select error correction methods (default: RS01)\n"
-#~ "  -n,--redundancy n%%     - error correction file redundancy (in percent), or\n"
-#~ "                           maximum error correction image size (in sectors)\n"
-#~ "  -v,--verbose           - more diagnostic messages\n"
-#~ "  --adaptive-read        - use optimized strategy for reading damaged media\n"
-#~ "  --auto-suffix          - automatically add .iso and .ecc file suffixes\n"
-#~ "  --cache-size n         - image cache size in MB during -c mode (default: 32MB)\n"
-#~ "  --dao                  - assume DAO disc; do not trim image end\n"
-#~ "  --fill-unreadable n    - fill unreadable sectors with byte n\n"
-#~ "  --medium-size          - max. possible image size on medium (in sectors)\n"
-#~ "  --parse-ecc            - use information from ecc headers\n"
-#~ "  --parse-udf            - use information from ISO/UDF filesystem\n"
-#~ "  --speed-warning n      - print warning if speed changes by more than n percent\n"
-#~ "  --spinup-delay n       - wait n seconds for drive to spin up\n"
-#~ "  --split-files          - split image into files <= 2GB\n"
-#~ "\n"
-#~ msgstr ""
-#~ "Feineinstellung (Beachten Sie die Hinweise in der Dokumentation!):\n"
-#~ "  -j,--jump n            - überspringe n Sektoren nach einem Lesefehler (Standard: 16)\n"
-#~ "  -m n                   - Fehlerkorrektur-Methoden anzeigen/auswählen (Standard: RS01)\n"
-#~ "  -n,--redundancy n%%     - Redundanz der Fehlerkorrektur-Dateien (in Prozent), oder\n"
-#~ "                           höchstmögliche Größe für Fehlerkorrektur-Abbilder (in Sektoren)\n"
-#~ "  -v,--verbose           - mehr erläuternde Ausgaben\n"
-#~ "  --adaptive-read        - verwende optimiertes Leseverfahren für defekte Datenträger\n"
-#~ "  --auto-suffix          - automatisches Anfügen der .iso- und .ecc-Dateiendungen\n"
-#~ "  --cache-size n         - Zwischenspeicher in MB bei .ecc-Datei-Erzeugung - (Standard: 32MB)\n"
-#~ "  --dao                  - unterstelle DAO; Abbild am Ende nicht kürzen\n"
-#~ "  --fill-unreadable n    - fülle unlesbare Sektoren mit Byte n\n"
-#~ "  --parse-ecc            - Informationen aus Fehlerkorrektur-Vorspann auswerten\n"
-#~ "  --parse-udf            - Informationen aus ISO/UDF-Dateisystem auswerten\n"
-#~ "  --speed-warning n      - warnt bei Geschwindigkeitsänderung um mehr als n Prozent\n"
-#~ "  --spinup-delay n       - gibt dem Laufwerk n Sekunden Zeit zum Hochlaufen\n"
-#~ "  --split-files          - Abbild in mehrere Dateien <= 2GB aufteilen\n"
-#~ "\n"
+#~ msgid "Could not get SCSITaskDeviceInterface"
+#~ msgstr "SCSITaskDeviceInterface nicht verfügbar."

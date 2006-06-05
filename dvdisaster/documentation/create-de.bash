@@ -283,7 +283,8 @@ function example_contents_de()
    link80)   link_title="Einstellmöglichkeiten" ;;
    link81)   link_title="Allgemein" ;;
    link82)   link_title="Lesen und Prüfen" ;;
-   link83)   link_title="Fehlerkorrektur" ;;
+   link83)   link_title="Fehlerkorrektur/Dateien" ;;
+   link84)   link_title="Fehlerkorrektur/Abbilder" ;;
 
    link90)   link_title="Aufrufmöglichkeiten" ;;
 
@@ -368,7 +369,8 @@ als eigenständige Datei abgelegt werden.
 <ul>
 <li><a href="example81.html">Allgemeine Einstellungen</a><p></li>
 <li><a href="example82.html">Einstellungen zum Lesen und Prüfen</a><p></li>
-<li><a href="example83.html">Einstellungen zur Fehlerkorrektur</a><p></li>
+<li><a href="example83.html">Einstellungen zum Erzeugen von Fehlerkorrektur-Dateien</a><p></li>
+<li><a href="example84.html">Einstellungen zum Erweitern von Abbildern mit Fehlerkorrektur-Daten</a><p></li>
 </ul>
 
 <li><a href="example90.html">Aufrufmöglichkeiten (Kommandozeile)</a><p></li>
@@ -446,8 +448,9 @@ gehen Sie wie folgt vor: <p>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
-<td>3.</td>
-<td>Falls Sie für den Datenträger eine passende Fehlerkorrektur-Datei besitzen,
+<td>3a.</td>
+<td>nur bei Verwendung von Fehlerkorrektur-Dateien (RS01):<p>
+Falls Sie für den Datenträger eine passende Fehlerkorrektur-Datei besitzen,
 geben Sie ihren Namen ein.
 Der Prüfvorgang benötigt nicht zwingend eine 
 Fehlerkorrektur-Datei, kann aber die darin
@@ -457,12 +460,23 @@ Das <img src="../images/open-ecc.png" alt="Dateiauswahl-Knopf" align="middle">-S
 </tr>
  
 <tr valign="top" $BGCOLOR2>
+<td>3b.</td>
+<td>
+nur bei Verwendung von erweiterten Abbildern (RS02):<p>
+
+Wählen Sie "ECC/RS02" bei den Einstellungen zur Ermittlung der Abbild-Größe,
+damit der Datenträger vollständig überprüft wird.<p>
+</td>
+<td><a href="example81.html#imagesize"><img src="images/prefs-general.png" alt="Bildschirmfoto" width="200"></a></td>
+</tr>
+
+<tr valign="top" $BGCOLOR1>
 <td>4.</td>
 <td>Beginnen Sie die Überprüfung mit dem "Prüfen"-Knopf.</td>
 <td><img src="images/btn-scan.png" alt="Prüfen-Knopf"></td>
 </tr>
 
-<tr valign="top" $BGCOLOR1>
+<tr valign="top" $BGCOLOR2>
 <td>5.</td>
 <td>Verfolgen Sie den Fortschritt der Überprüfung in der graphischen Darstellung.</td>
 <td><a href="example1.html"><img src="images/ex-scan.png" alt="Bildschirmfoto" width="200"></a><p>
@@ -507,10 +521,6 @@ In der Kommandozeilen-Betriebsart benötigen Sie die folgenden Parameter
 <tr>
 <td><a href="example90.html#ecc">-e / --ecc</a></td>
 <td>nur für <a href="background30.html">RS01</a>: Fehlerkorrektur-Datei auswählen (medium.ecc)</td>
-</tr>
-<tr>
-<td><a href="example90.html#parse-ecc">--parse-ecc</a></td>
-<td>nur für <a href="background30.html">RS02</a>: Fehlerkorrektur-Vorspann auswerten</td>
 </tr>
 <tr>
 <td><a href="example90.html#jump">-j / --jump</a></td>
@@ -603,6 +613,33 @@ einem <a href="background70.html">zuverlässigen Speichermedium</a>!
 </li>
 
 <li>Überprüfen Sie danach den Datenträger regelmäßig auf Lesefehler.</li>
+
+</ul>
+</td></tr>
+
+
+EOF
+}
+
+function example7de()
+{  cat >> $1 <<EOF
+
+<tr align="center"><td>
+<h3>Bildschirmfoto: Abbild mit Fehlerkorrektur-Daten erweitern</h3><p></td></tr>
+<tr align="center"><td>
+<center><img src="images/ex-create-rs02.png" alt="Bildschirmfoto"></center>
+<br clear="all">
+</td></tr>
+
+<tr><td>
+Die Verarbeitungsgeschwindigkeit hängt vom vorhandenen Platz auf dem
+Datenträger ab. Auf einem durchschnittlichen 2Ghz-Rechner werden ungefähr
+10 bis 20 Minuten für eine volle einschichtige DVD benötigt.<p>
+
+<b>Hinweis</b>:
+
+<ul>
+<li>Überprüfen Sie den Datenträger nach dem Brennen regelmäßig auf Lesefehler.</li>
 
 </ul>
 </td></tr>
@@ -717,8 +754,9 @@ Das <img src="../images/open-ecc.png" alt="Dateiauswahl-Knopf" align="middle">-S
 <td>3.</td>
 <td>
 Stellen Sie die Fehlerkorrektur nach Ihren Wünschen ein.<p>
+Wählen Sie "Abspeichern in: Fehlerkorrektur-Datei (RS01)".</li>
 </td>
-<td><a href="example83.html"><img src="images/prefs-ecc.png" alt="Bildschirmfoto" width="200"></a></td>
+<td><a href="example83.html"><img src="images/prefs-ecc-0.png" alt="Bildschirmfoto" width="200"></a></td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
@@ -846,18 +884,77 @@ EOF
 }
 
 function example22de()
-{  
+{  create_inline example de 7 example22.html "zum Erstellen der Fehlerkorrektur-Daten"
+  
    cat >> $1 <<EOF
 <h3>Abbild um Fehlerkorrektur-Daten erweitern</h3>
 
-Das Erweitern von Abbildern um Fehlerkorrektur-Daten  wird in der vorliegenden
-Version nur in der Kommandozeile unterstützt. Ab Version 0.70 werden die
-entsprechenden Funktionen auch mit der Maus bedienbar.<p>
+Das <a href="background30.html#image">RS02-Fehlerkorrektur-Verfahren</a> ermöglicht es,
+Nutzdaten und Fehlerkorrektur-Daten auf dem gleichen Datenträger unterzubringen.<br>
+
+Dazu müssen Sie das Abbild vor dem Brennen mit dvdisaster bearbeiten.
+
+Erzeugen Sie zunächst ein Abbild mit Ihrer Brennsoftware und legen es auf der Festplatte
+ab. Erweitern Sie danach das Abbild mit dvdisaster um Fehlerkorrektur-Informationen 
+und brennen Sie das erweiterte Abbild schließlich auf einen Datenträger:<p>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+<tr valign="top" $BGCOLOR1>
+<td>1.</td>
+<td>
+Verwenden Sie eine handelsübliche Brennsoftware, 
+um ein ISO- oder UDF-Abbild auf der Festplatte zu erzeugen.
+Andere Abbild-Typen führen zum Datenverlust!
+</td>
+<td></td>
+</tr>
+
+<tr valign="top" $BGCOLOR2>
+<td>2.</td>
+<td>
+Wählen Sie die erzeugte Abbild-Datei aus.<p>
+</td>
+<td><img src="../images/btn-image.png" alt="Abbild-Datei-Auswahl"><p>
+Das <img src="../images/open-img.png" alt="Dateiauswahl-Knopf" align="middle">-Symbol öffnet die Dateiauswahl.</td>
+</tr>
+
+<tr valign="top" $BGCOLOR1>
+<td>3.</td>
+<td>
+Stellen Sie die Fehlerkorrektur nach Ihren Wünschen ein.<p>
+Wählen Sie "Abspeichern in: Erweitertes Abbild (RS02)".</li>
+</td>
+<td><a href="example84.html"><img src="images/prefs-rs02-0.png" alt="Bildschirmfoto" width="200"></a></td>
+</tr>
+
+<tr valign="top" $BGCOLOR2>
+<td>4.</td>
+<td>Erstellen Sie die Fehlerkorrektur-Daten durch Klick auf den "Erzeugen"-Knopf.</td>
+<td><img src="images/btn-create.png" alt="Erzeugen-Knopf"></td>
+</tr>
+
+<tr valign="top" $BGCOLOR1>
+<td>5.</td>
+<td>Verfolgen Sie den Fortschritt des Vorgangs.</td>
+<td><a href="example7.html"><img src="images/ex-create-rs02.png" alt="Bildschirmfoto" width="200"></a><p>
+</td>
+</tr>
+
+<tr valign="top" $BGCOLOR2>
+<td>6.</td>
+<td>Schreiben Sie das erweiterte Abbild mit Ihrer Brennsoftware auf einen Datenträger.</td>
+<td></td>
+</tr>
+</table><p>
+
+<pre> </pre>
+
+<h3>Abbild um Fehlerkorrektur-Daten erweitern (mit der Kommandozeile)</h3>
 
 <b>Erstellen Sie ein Abbild mit den zu sichernden Daten.</b><p>
 
-Verwenden Sie eine handelsübliche Brennsoftware, um die zu sichernden
-Daten auszuwählen und in ein ISO- oder UDF-Abbild zu schreiben. 
+Verwenden Sie eine handelsübliche Brennsoftware, 
+um ein ISO- oder UDF-Abbild auf der Festplatte zu erzeugen.
 Andere Abbild-Typen führen zum Datenverlust!<p>
 
 <b>Erweitern Sie das Abbild um die Fehlerkorrektur-Informationen.</b><p>
@@ -1427,7 +1524,15 @@ Einstellungen zum Lesen und Prüfen
 <center>
 <a href="example83.html">
 <img src="images/prefs-ecc.png" alt="Bildschirmfoto"><br>
-Einstellungen zur Fehlerkorrektur
+Einstellungen zum Erstellen von Fehlerkorrektur-Dateien
+</a>
+</center>
+<br clear="all">
+
+<center>
+<a href="example84.html">
+<img src="images/prefs-rs02.png" alt="Bildschirmfoto"><br>
+Einstellungen zum Erweitern von Abbildern mit Fehlerkorrektur-Daten
 </a>
 </center>
 
@@ -1448,7 +1553,7 @@ weiter unten.<p>
 
 <p><hr><p>
 
-<a name="iso"></a>
+<a name="imagesize"></a>
 <b>Dateisystem-Einstellungen für Datenträger und Abbilder</b><p>
 
 <center><img src="images/prefs-general-1.png" alt="Bildschirmfoto"></center>
@@ -1582,7 +1687,7 @@ EOF
 
 function example83de()
 {  cat >> $1 <<EOF
-<h3>Einstellungen zur Fehlerkorrektur</h3>
+<h3>Einstellungen zum Erzeugen von Fehlerkorrektur-Dateien</h3>
 
 Mehr Informationen über die Reiterkarte zur Fehlerkorrektur befinden sich
 weiter unten.<p>
@@ -1637,6 +1742,62 @@ Zwischenspeicher optimiert. Die Voreinstellung von 32MB ist für die meisten Syst
 EOF
 }
 
+function example84de()
+{  cat >> $1 <<EOF
+<h3>Einstellungen zum Erweitern von Abbildern mit Fehlerkorrektur-Daten</h3>
+
+Mehr Informationen über die Reiterkarte zur Fehlerkorrektur befinden sich
+weiter unten.<p>
+
+<center><img src="images/prefs-ecc.png" alt="Fehlerkorrektur-Einstellungen"></center><br clear="all">
+
+<p><hr><p>
+
+
+<a name="redundancy"></a>
+<b>Redundanz für neu erstellte Fehlerkorrekturdateien</b> <p>
+
+<center><img src="images/prefs-ecc-1.png"  alt="Bildschirmfoto"></center><br clear="all">
+
+Die Redundanz gibt an, wieviel Prozent der 
+Originaldaten <a href="background10.html">im günstigsten Fall</a>
+korrigiert werden können. Da der Idealfall natürlich selten eintritt, sollten
+Sie die Redundanz großzügig mit einer der folgenden Möglichkeiten auswählen:<p>
+
+<font color="red">(1)</font> / <font color="red">(2)</font> Die Voreinstellungen
+<b>normal</b> und <b>hoch</b> liefern eine Redundanz von 14.3% bzw. 33.5%. 
+Mit diesen beiden Einstellungen werden Fehlerkorrektur-Dateien durch optimierten Programmcode
+besonders schnell erzeugt.<p>
+
+
+<font color="red">(3)</font> Einstellung der Redundanz in <b>Prozentwerten</b>.
+Beachten Sie dabei:
+<ul>
+<li> Eine Fehlerkorrekturdatei mit x% Redundanz benötigt 
+auch etwa x% der Größe des zugehörigen Abbilds an Speicherplatz.</li>
+<li> Die Leistung der Fehlerkorrektur hängt von der Verteilung der Lesefehler ab.
+Erst Änderungen der Redundanz um etwa 5 Prozentpunkte 
+haben einen spürbaren Einfluß auf die Fehlerkorrektur.</li>
+</ul><p>
+
+<font color="red">(4)</font> Größe der Fehlerkorrektur-Datei (in MB) vorgeben.
+In diesem Fall wählt dvdisaster eine geeignete Redundanz, damit die
+Fehlerkorrektur-Datei nicht größer als angegeben wird.<p>
+
+Vorsicht: Wenn man unterschiedlich große Abbilder 
+mit der gleichen Einstellung bearbeitet, erhalten die kleineren Abbilder 
+mehr Fehlerkorrekturinformationen als die großen Abbilder.<p>
+
+<p><hr><p>
+
+<b>Speichernutzung.</b><p>
+
+<center><img src="images/prefs-ecc-2.png"  alt="Bildschirmfoto"></center><br clear="all">
+
+Zugriffe auf die Abbild- und Fehlerkorrektur-Datei werden durch einen eigenen
+Zwischenspeicher optimiert. Die Voreinstellung von 32MB ist für die meisten Systeme passend.<p>
+EOF
+}
 
 function example90de()
 {  cat >> $1 <<EOF
@@ -2292,7 +2453,7 @@ wenn das Abbild unmittelbar vorher eingelesen wurde.</li>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
-Diese Version kann die <a href="example81.html#iso">Abbild-Größe aus dem
+Diese Version kann die <a href="example81.html#imagesize">Abbild-Größe aus dem
 UDF/ISO-Dateisystem</a> bestimmen, um 
 die <a href="qa20.html#plusrw">Größenerkennung von -RW/+RW-Medien</a> zu verbessern.
 Das Einlesen von Abbildern und das Erzeugen der zugehörigen Fehlerkorrektur-Datei
@@ -2646,7 +2807,7 @@ des Datenträger-Typs</a> ermöglichen.</li>
 
 <ul>
 <li>Einige Laufwerke liefern eine <a href="qa20.html#plusrw">falsche Abbild-Größe</a>.<br>
-Abhilfe: Option zum <a href="example81.html#iso">Verwenden von Informationen aus dem ISO/UDF-Dateisystem</a> setzen.
+Abhilfe: Option zum <a href="example81.html#imagesize">Verwenden von Informationen aus dem ISO/UDF-Dateisystem</a> setzen.
 </li>
 </ul>
 
@@ -2820,7 +2981,7 @@ die Dateien auf dem Datenträger sind aber alle vollständig.
 Mögliche Abhilfe: <p>
 
 <table width=100%><tr><td bgcolor=#000000 width=2><img width=1 height=1 alt=""></td><td>
-Setzen Sie die Option zum <a href="example81.html#iso">Verwenden von Informationen aus dem ISO/UDF-Dateisystem</a>, damit die Abbild-Größe aus dem ISO/UDF-Dateisystem ermittelt wird.
+Setzen Sie die Option zum <a href="example81.html#imagesize">Verwenden von Informationen aus dem ISO/UDF-Dateisystem</a>, damit die Abbild-Größe aus dem ISO/UDF-Dateisystem ermittelt wird.
 </td></tr></table><p>
 
 Falls bei der Bearbeitung eines beschädigten Datenträgers 

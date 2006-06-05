@@ -1049,7 +1049,7 @@ void RS02Create(Method *method)
    PrintTimeToLog(ec->timer, "for ECC generation.\n");
 
    PrintProgress(_("Ecc generation: 100.0%%\n"));
-   PrintLog(_("Image has been appended with error correction data.\n"
+   PrintLog(_("Image has been augmented with error correction data.\n"
 	      "New image size is %lld MB (%lld sectors).\n"),
 	    (lay->dataSectors + lay->eccSectors)/512,
 	    lay->dataSectors+lay->eccSectors);
@@ -1058,7 +1058,7 @@ void RS02Create(Method *method)
    {  SetProgress(wl->encPBar2, 100, 100);
 
       SetLabelText(GTK_LABEL(wl->encFootline), 
-		   _("Image has been appended with error correction data.\n"
+		   _("Image has been augmented with error correction data.\n"
 		     "New image size is %lld MB (%lld sectors).\n"),
 		   (lay->dataSectors + lay->eccSectors)/512,
 		   lay->dataSectors+lay->eccSectors);

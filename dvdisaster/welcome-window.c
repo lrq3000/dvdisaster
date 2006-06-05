@@ -83,7 +83,8 @@ static gboolean expose_cb(GtkWidget *widget, GdkEventExpose *event, gpointer dat
 	 snprintf(color, 16, "%04x%04x%04x", bg->red, bg->green, bg->blue);
 
 	 AboutText(box, _("- RS02 error correction method fully supported\n"
-			  "<span color=\"#%s\">-</span> in the graphical user interface.\n"),
+			  "<span color=\"#%s\">-</span> in the graphical user interface.\n"
+			  "- Adaptive reading supports RS02 images.\n"),
 		   color);
 
 	 gtk_box_pack_start(GTK_BOX(box), gtk_hseparator_new(), FALSE, FALSE, 10);

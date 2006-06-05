@@ -279,7 +279,8 @@ function example_contents_en()
    link80)   link_title="Configuration" ;;
    link81)   link_title="General" ;;
    link82)   link_title="Reading" ;;
-   link83)   link_title="Error correction" ;;
+   link83)   link_title="Error correction/files" ;;
+   link84)   link_title="Error correction/images" ;;
 
    link90)   link_title="Command syntax" ;;
 
@@ -361,7 +362,8 @@ Additional topics:
 <ul>
 <li><a href="example81.html">General settings</a><p></li>
 <li><a href="example82.html">Reading preferences</a><p></li>
-<li><a href="example83.html">Error correction settings</a><p></li>
+<li><a href="example83.html">Settings for creating error correction files</a><p></li>
+<li><a href="example84.html">Settings for augmenting images with error correction data</a><p></li>
 </ul>
 
 <li><a href="example90.html">Command line syntax</a><p></li>
@@ -436,8 +438,9 @@ To check your medium for read errors carry out these steps:<p>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
-<td>3.</td>
-<td>If a suitable error correction file is available for your medium,
+<td>3a.</td>
+<td>only when error correction files are used (RS01):<p>
+If a suitable error correction file is available for your medium,
 enter its file name. Scanning does not necessarily need an error correction file, 
 but it can take advantage of some information from it.</td>
 <td><img src="../images/btn-eccfile.png" alt="ecc file selection"><p>
@@ -445,12 +448,20 @@ The <img src="../images/open-ecc.png" alt="filechooser button" align="middle"> s
 </tr>
  
 <tr valign="top" $BGCOLOR2>
+<td>3b.</td>
+<td>only when augmented images are used (RS02):<p>
+Choose "ECC/RS02" in the settings for getting the image size.<p>
+</td>
+<td><a href="example81.html#imagesize"><img src="images/prefs-general.png" alt="Screenshot" width="200"></a></td>
+</tr>
+
+<tr valign="top" $BGCOLOR1>
 <td>4.</td>
 <td>Click on the "Scan" button to begin the medium check.</td>
 <td><img src="images/btn-scan.png" alt="scan button"></td>
 </tr>
 
-<tr valign="top" $BGCOLOR1>
+<tr valign="top" $BGCOLOR2>
 <td>5.</td>
 <td>Watch the scanning progress in the graphical representation.</td>
 <td><a href="example1.html"><img src="images/ex-scan.png" alt="screen shot" width="200"></a><p>
@@ -493,10 +504,6 @@ Scanning requires the following parameters (defaults are given in parenthesis):
 <tr>
 <td><a href="example90.html#ecc">-e / --ecc</a></td>
 <td>only for <a href="background30.html">RS01</a>: Error correction file (medium.ecc)</td>
-</tr>
-<tr>
-<td><a href="example90.html#parse-ecc">--parse-ecc</a></td>
-<td>only for <a href="background30.html">RS02</a>: Use information from Ecc header</td>
 </tr>
 <tr>
 <td><a href="example90.html#jump">-j / --jump</a></td>
@@ -621,6 +628,30 @@ Always keep the error correction file on a
 </ul>
 </td></tr>
 
+EOF
+}
+
+function example7en()
+{  cat >> $1 <<EOF
+
+<tr align="center"><td>
+<h3>Screen shot: Augmenting an image with error correction data</h3><p></td></tr>
+<tr align="center"><td>
+<center><img src="images/ex-create-rs02.png" alt="screen shot"></center>
+<br clear="all">
+</td></tr>
+
+<tr><td>
+The encoding speed depends on the free space left on the medium.
+Processing a single layered DVD image will take
+about 10 to 20  minutes on an average 2Ghz system.<p>
+
+<b>Please note</b>:
+
+<ul>
+<li>From now on you should regularly scan the medium for read errors.</li>
+</ul>
+</td></tr>
 
 EOF
 }
@@ -702,6 +733,7 @@ The <img src="../images/open-ecc.png" alt="filechooser button" align="middle"> s
 <td>3.</td>
 <td>
 Configure the error correction.<p>
+Choose "Storage method: Error correction file (RS01)."<p>
 </td>
 <td><a href="example83.html"><img src="images/prefs-ecc.png" alt="screen shot" width="200"></a></td>
 </tr>
@@ -829,20 +861,78 @@ EOF
 }
 
 function example22en()
-{  
+{  create_inline example en 7 example22.html "to creating the error correction data"
+ 
    cat >> $1 <<EOF
 <h3>Augmenting the image with error correction data</h3>
 
-Augmenting images with error correction data 
-is currently only supported at the command line.
-The respective functions will be integrated into the graphical user interface
-in dvdisaster version 0.70.<p>
+Using the <a href="background30.html#image">RS02 error correction</a> method
+error correction data can be stored on the same medium with the protected data.<br>
+
+This requires the image to be processed with dvdisaster prior to writing it on the medium.
+
+Create the image on hard disk using your favourite CD/DVD writing software. 
+Then use dvdisaster to augment the image with error correction information 
+and finally write the augmented image to the medium:<p>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+<tr valign="top" $BGCOLOR1>
+<td>1.</td>
+<td>
+Use your favourite CD/DVD writing software 
+to create an ISO or UDF image on your hard disk. 
+Using other image types may lead to data loss!<p>
+<p></td>
+<td></td>
+</tr>
+
+<tr valign="top" $BGCOLOR2>
+<td>2.</td>
+<td>
+Choose the image file you have created.<p>
+</td>
+<td><img src="../images/btn-image.png" alt="image file selection"><p>
+The <img src="../images/open-img.png" alt="filechooser button" align="middle"> symbol opens the file chooser.</td>
+</tr>
+
+<tr valign="top" $BGCOLOR1>
+<td>3.</td>
+<td>
+Configure the error correction.<p>
+Choose "Storage method: Augmented image (RS02)."<p>
+</td>
+<td><a href="example84.html"><img src="images/prefs-rs02-0.png" alt="screen shot" width="200"></a></td>
+</tr>
+
+<tr valign="top" $BGCOLOR2>
+<td>4.</td>
+<td>Click on the "Create" button to generate the error correction data.</td>
+<td><img src="images/btn-create.png" alt="Create button"></td>
+</tr>
+
+<tr valign="top" $BGCOLOR1>
+<td>5.</td>
+<td>Watch the progress of the error correction file generation.</td>
+<td><a href="example7.html"><img src="images/ex-create-rs02.png" alt="screen shot" width="200"></a><p>
+</td>
+</tr>
+
+<tr valign="top" $BGCOLOR2>
+<td>6.</td>
+<td>Use your CD/DVD writing software to transfer the augmented image to the medium.</td>
+<td></td>
+</tr>
+</table><p>
+
+<pre> </pre>
+
+<h3>Augmenting the image with error correction data (using the command line)</h3>
 
 <b>Create an image of the data to be protected.</b><p>
 
-Use your favourite CD/DVD writing software to select data files
-and create an ISO or UDF image from them. Using other image types
-may lead to data loss!<p>
+Use your favourite CD/DVD writing software to create an ISO or UDF image 
+on your hard disk. 
+Using other image types may lead to data loss!<p>
 
 <b>Append the error correction data to the image.</b><p>
 
@@ -1380,9 +1470,18 @@ Reading preferences
 <center>
 <a href="example83.html">
 <img src="images/prefs-ecc.png" alt="screen shot"><br>
-Error correction settings
+Settings for creating error correction files
 </a>
 </center>
+<br clear="all">
+
+<center>
+<a href="example84.html">
+<img src="images/prefs-rs02.png" alt="screen shot"><br>
+Settings for augmenting images with error correction data
+</a>
+</center>
+
 
 EOF
 }
@@ -1399,7 +1498,7 @@ More information on this form follows down this page.<p>
 
 <p><hr><p>
 
-<a name="iso"></a>
+<a name="imagesize"></a>
 <b>Medium and Image filesystem</b><p>
 
 <center><img src="images/prefs-general-1.png" alt="screen shot"></center>
@@ -1525,6 +1624,65 @@ EOF
 }
 
 function example83en()
+{  cat >> $1 <<EOF
+
+<h3>Error correction settings</h3>
+
+More information on this form follows down this page.<p>
+
+<center><img src="images/prefs-ecc.png" alt="screen shot"></center>
+<br clear="all">
+
+<p><hr><p>
+
+<a name="redundancy"></a>
+<b>Redundancy for new error correction files</b><p>
+
+<center><img src="images/prefs-ecc-1.png" alt="screen shot"></center>
+<br clear="all">
+
+ The redundancy specifies the amount of correctable errors
+<a href="background10.html">in the best case</a>. Since the ideal case
+is rare, it is recommended to apply a reasonable margin when selecting the redundancy:<p>
+
+<font color="red">(1)</font> / <font color="red">(2)</font>
+The presets <b>normal</b> and <b>high</b> provide a redundancy 
+of 14.3% and 33.5%, respectively. They invoke optimized program code to speed up the
+error correction file creation.<p>
+
+<font color="red">(3)</font> Specify the redundancy <b>by percent</b>. Please note:
+
+<ul>
+<li>An error correction file with  x% redundancy will be approximately x% of the size
+of the corresponding image file.</li>
+<li>The error correction capability depends on the statistical distribution of read errors. 
+Only changes by 5 percentage points and more may 
+have a recognizable effect on the error correction.<p></li>
+</ul>
+
+<font color="red">(4)</font> Give the <b>maximum size</b> of the error correction file in MB.
+dvdisaster will choose a suitable redundancy setting so that
+the overall size of the error correction file does not exceed the
+given limit. <p>
+
+Advance notice: When using the same size setting for images of vastly different size,
+more error correction information is allotted to the smaller images
+and less to the larger ones.<p>
+
+<p><hr><p>
+
+<b>Memory utilization</b><p>
+
+<center><img src="images/prefs-ecc-2.png" alt="screen shot"></center>
+<br clear="all">
+
+dvdisaster optimizes access to the image and error correction files by maintaining 
+its own cache. The preset of 32MB is suitable for most systems.<p>
+
+EOF
+}
+
+function example84en()
 {  cat >> $1 <<EOF
 
 <h3>Error correction settings</h3>
@@ -2223,7 +2381,7 @@ if creation is invoked immediately after the image read.</li>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
 This version is capable of determining the
-<a href="example81.html#iso">image size from the UDF/ISO file system</a>
+<a href="example81.html#imagesize">image size from the UDF/ISO file system</a>
 to improve the
 <a href="qa20.html#plusrw">image size recognition for -RW/+RW media</a>.
 Reading images and creating the respective error correction file can now be invoked together
@@ -2565,7 +2723,7 @@ Usable media by type:<p>
 
 <ul>
 <li>Some drives report wrong <a href="qa20.html#plusrw">image sizes</a>.<br>
-Remedy: Activate <a href="example81.html#iso">"Use information from the ISO/UDF file system"</a>
+Remedy: Activate <a href="example81.html#imagesize">"Use information from the ISO/UDF file system"</a>
 </li></ul>
 
 <b>CD-R, CD-RW</b><p>
@@ -2733,7 +2891,7 @@ but all files on the medium are still readable and complete.
 Possible remedy:<p>
 
 <table width=100%><tr><td bgcolor=#000000 width=2><img width=1 height=1 alt=""></td><td>
-Activate the option  <a href="example81.html#iso">Use information from the
+Activate the option  <a href="example81.html#imagesize">Use information from the
 ISO/UDF file system</a> so that the image size will be determined from the
 ISO/UDF file system.
 </td></tr></table><p>
