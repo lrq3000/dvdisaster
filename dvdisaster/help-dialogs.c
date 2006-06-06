@@ -233,6 +233,13 @@ GtkWidget* ShowTextfile(char *title, char *explanation, char *file,
  * About dialog
  */
 
+static void show_modifying(void)
+{  ShowTextfile(_("windowtitle|Modifying dvdisaster"), 
+	       _("<big>Modifying dvdisaster</big>\n"
+		 "<i>Your changes are not ours.</i>"),
+	       "README.MODIFYING", NULL, NULL);
+}
+
 static gint about_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
 {  GtkWidget *lab = GTK_BIN(widget)->child;
    char *label = (char*)data;
@@ -244,6 +251,7 @@ static gint about_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
    {  case GDK_BUTTON_PRESS: 
         if(!inside) return FALSE; /* Bug in Gtk for Windows? */
         if(!strcmp(label,"GPL")) ShowGPL(); 
+        else if(!strcmp(label,"MODIFYING")) show_modifying(); 
         else ShowHTML(g_strdup(label));
 	break; 
       case GDK_ENTER_NOTIFY: 
@@ -430,7 +438,7 @@ void AboutTextWithLink2(GtkWidget *parent, char *text, char *actions)
 
 void AboutDialog()
 {  GtkWidget *about, *vbox, *sep;
-   char *translation,*text; 
+   char *text; 
    const char *lang;
 
    /* Create the dialog */
@@ -447,13 +455,20 @@ void AboutDialog()
 
    /* Insert the labels */
 
-   translation = "<span weight=\"bold\" size=\"xx-large\">dvdisaster</span><i> Version %s</i>";
-   text = g_malloc(strlen(translation)+10);
-   g_sprintf(text, translation, Closure->cookedVersion);
+   text = g_strdup_printf("<span weight=\"bold\" size=\"xx-large\">dvdisaster</span><i> "
+			  "Version %s</i>",
+			  Closure->cookedVersion);
    AboutText(vbox, text);
    g_free(text);
 
+#ifdef MODIFIED_SOURCE
+   AboutTextWithLink(vbox, 
+		     _("Modified version Copyright 2006 (please fill in - [directions])\n"
+		       "Copyright 2004-2006 Carsten Gnoerlich"),
+		     "MODIFYING");
+#else
    AboutText(vbox, _("Copyright 2004-2006 Carsten Gnoerlich"));
+#endif
 
    sep = gtk_hseparator_new();
    gtk_box_pack_start(GTK_BOX(vbox), sep, FALSE, FALSE, 10);
@@ -469,6 +484,14 @@ void AboutDialog()
 				"under the conditions of the [GNU General Public License].\n"), 
 			"GPL");
 
+#ifdef MODIFIED_SOURCE
+   AboutTextWithLink(vbox, _("\nThis program is <i>not the original</i>. It is based on the\n"
+			     "source code of dvdisaster, but contains third-party changes.\n\n"
+			     "Please do not bother the original authors of dvdisaster\n"
+			     "([www.dvdisaster.org]) about issues with this version.\n"),
+		             "http://www.dvdisaster.org");
+
+#else
    lang = g_getenv("LANG");
    if(lang && !strncmp(lang, "de", 2))
    {    AboutTextWithLink(vbox, "\n[http://www.dvdisaster.de]", "http://www.dvdisaster.de");
@@ -482,7 +505,7 @@ void AboutDialog()
 #ifdef SYS_DARWIN
    AboutText(vbox, _("\nDarwin port (Mac OS X): Julian Einwag &lt;julian@einwag.de&gt;")); 
 #endif
-
+#endif
    /* Show it */
 
    gtk_widget_show_all(about);

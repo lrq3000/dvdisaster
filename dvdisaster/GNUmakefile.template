@@ -274,7 +274,7 @@ clean:
 	@if test -e tools/Makefile.config; then $(MAKE) --no-print-directory -C tools clean; fi
 	@if test -e $(PKGNAME); then rm -rf $(PKGNAME); fi
 	@if test -e ~/.dvdisaster-original-author; then \
-	  md5sum *.h *.c documentation/*.bash | sort -k2 >fingerprints.md5; \
+	  md5sum *.h *.c documentation/*.bash >fingerprints.md5; \
 	fi
 
 arch:	clean distclean

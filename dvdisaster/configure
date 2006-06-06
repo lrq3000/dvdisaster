@@ -192,10 +192,11 @@ echo
 
 if test -e fingerprints.md5; then
   md5sum *.h *.c documentation/*.bash | sort -k2 >tmp.md5
-  if ! cmp fingerprints.md5 tmp.md5 >/dev/null; then
+  sort -k2 < fingerprints.md5 >tmp2.md5
+  if ! cmp tmp2.md5 tmp.md5 >/dev/null; then
     CFG_OTHER_OPTIONS="$CFG_OTHER_OPTIONS -DMODIFIED_SOURCE"
   fi
-  rm tmp.md5
+  rm tmp.md5 tmp2.md5
 else
   CFG_OTHER_OPTIONS="$CFG_OTHER_OPTIONS -DMODIFIED_SOURCE"
 fi

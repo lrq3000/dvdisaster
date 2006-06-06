@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-05 18:10+0200\n"
+"POT-Creation-Date: 2006-06-06 07:52+0200\n"
 "PO-Revision-Date: 2004-11-30 19:48+0100\n"
 "Last-Translator: Carsten Gnörlich <carsten@dvdisaster.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -538,15 +538,35 @@ msgstr ""
 "%s\n"
 "nicht vorhanden"
 
-#: help-dialogs.c:438
+#: help-dialogs.c:237
+msgid "windowtitle|Modifying dvdisaster"
+msgstr ""
+
+#: help-dialogs.c:238
+msgid ""
+"<big>Modifying dvdisaster</big>\n"
+"<i>Your changes are not ours.</i>"
+msgstr ""
+"<big>dvdisaster verändern</big>\n"
+"<i>Ihre Änderungen sind nicht unsere.</i>"
+
+#: help-dialogs.c:446
 msgid "windowtitle|About dvdisaster"
 msgstr "Kurzinformation"
 
-#: help-dialogs.c:456
+#: help-dialogs.c:466
+msgid ""
+"Modified version Copyright 2006 (please fill in - [directions])\n"
+"Copyright 2004-2006 Carsten Gnoerlich"
+msgstr ""
+"Veränderte Version Copyright 2006 (bitte eintragen - [Hinweise])\n"
+"Original-Programm Copyright 2004-2006 Carsten Gnörlich"
+
+#: help-dialogs.c:470
 msgid "Copyright 2004-2006 Carsten Gnoerlich"
 msgstr "Copyright 2004-2006 Carsten Gnörlich"
 
-#: help-dialogs.c:462
+#: help-dialogs.c:477
 msgid ""
 "dvdisaster provides a margin of safety against data loss\n"
 "on CD and DVD media caused by aging or scratches.\n"
@@ -558,7 +578,7 @@ msgstr ""
 "Es erzeugt Fehlerkorrekturdaten, um bei nachfolgenden Datenträger-\n"
 "Problemen unlesbare Sektoren zu rekonstruieren.\n"
 
-#: help-dialogs.c:467
+#: help-dialogs.c:482
 msgid ""
 "This software comes with  <b>absolutely no warranty</b>.\n"
 "This is free software and you are welcome to redistribute it\n"
@@ -567,7 +587,23 @@ msgstr ""
 "dvdisaster ist <b>freie Software</b>; es gelten die Bedingungen\n"
 "der [GNU General Public License] .\n"
 
-#: help-dialogs.c:480
+#: help-dialogs.c:488
+msgid ""
+"\n"
+"This program is <i>not the original</i>. It is based on the\n"
+"source code of dvdisaster, but contains third-party changes.\n"
+"\n"
+"Please do not bother the original authors of dvdisaster\n"
+"([www.dvdisaster.org]) about issues with this version.\n"
+msgstr ""
+"\n"
+"Dieses Programm ist <i>nicht das Original</i>. Es basiert auf den\n"
+"Quellen von dvdisaster, wurde aber aber von Dritten verändert.\n"
+"\n"
+"Bitte behelligen Sie die ursprünglichen Autoren von dvdisaster\n"
+"([www.dvdisaster.org]) nicht wegen Problemen mit dieser Version.\n"
+
+#: help-dialogs.c:503
 msgid ""
 "\n"
 "e-mail: carsten@dvdisaster.com   -or-   cgnoerlich@fsfe.org"
@@ -575,7 +611,7 @@ msgstr ""
 "\n"
 "e-mail: carsten@dvdisaster.de   -oder-   cgnoerlich@fsfe.org"
 
-#: help-dialogs.c:483
+#: help-dialogs.c:506
 msgid ""
 "\n"
 "Darwin port (Mac OS X): Julian Einwag &lt;julian@einwag.de&gt;"
