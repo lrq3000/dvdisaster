@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-06 07:52+0200\n"
+"POT-Creation-Date: 2006-06-06 08:03+0200\n"
 "PO-Revision-Date: 2006-03-16 20:40+0100\n"
 "Last-Translator: Luboš Staněk <lubek@users.sourceforge.net>\n"
 "Language-Team: čeština <cs@li.org>\n"
@@ -1070,6 +1070,47 @@ msgstr "Chyba příkazu: %s; "
 msgid "unknown asc/ascq code (0x%02x, 0x%02x)."
 msgstr "neznámý kód asc/ascq (0x%02x, 0x%02x)."
 
+#: read-adaptive-window.c:79
+msgid "Adaptive reading:"
+msgstr "Adaptivní čtení:"
+
+#: read-adaptive-window.c:115
+msgid "Sectors processed"
+msgstr "Sektorů zpracováno"
+
+#: read-adaptive-window.c:118 scsi-layer.c:414
+msgid "readable"
+msgstr "čitelný"
+
+#: read-adaptive-window.c:122
+msgid "correctable"
+msgstr "opravitelný"
+
+#: read-adaptive-window.c:126
+msgid "missing"
+msgstr "chybějící"
+
+#: read-adaptive-window.c:130
+#, c-format
+msgid "Total recoverable: %d.%d%%"
+msgstr "Celkem opravitelných: %d.%d%%"
+
+#: read-adaptive-window.c:146 read-linear-window.c:206
+msgid "Media state"
+msgstr "Stav média"
+
+#: read-adaptive-window.c:154
+msgid "from previous run"
+msgstr "z předchozího průchodu"
+
+#: read-adaptive-window.c:157 read-linear-window.c:221
+msgid "Successfully read"
+msgstr "Úspěšně načteno"
+
+#: read-adaptive-window.c:160 read-linear-window.c:228
+msgid "Unreadable / skipped"
+msgstr "Nečitelné / přeskočeno"
+
 #: read-adaptive.c:129 read-adaptive.c:1239
 msgid "Aborted by unrecoverable error."
 msgstr "Zrušeno kvůli neopravitelné chybě."
@@ -1357,46 +1398,37 @@ msgstr ""
 "%s\n"
 "%2d.%1d%% obrazu bylo načteno (%lld sektorů).\n"
 
-#: read-adaptive-window.c:79
-msgid "Adaptive reading:"
-msgstr "Adaptivní čtení:"
-
-#: read-adaptive-window.c:115
-msgid "Sectors processed"
-msgstr "Sektorů zpracováno"
-
-#: read-adaptive-window.c:118 scsi-layer.c:414
-msgid "readable"
-msgstr "čitelný"
-
-#: read-adaptive-window.c:122
-msgid "correctable"
-msgstr "opravitelný"
-
-#: read-adaptive-window.c:126
-msgid "missing"
-msgstr "chybějící"
-
-#: read-adaptive-window.c:130
+#: read-linear-window.c:77
 #, c-format
-msgid "Total recoverable: %d.%d%%"
-msgstr "Celkem opravitelných: %d.%d%%"
+msgid "Current Speed: %d.%dx"
+msgstr "Aktuální rychlost: %d.%dx"
 
-#: read-adaptive-window.c:146 read-linear-window.c:206
-msgid "Media state"
-msgstr "Stav média"
+#: read-linear-window.c:85 read-linear.c:683
+#, c-format
+msgid "Unreadable / skipped sectors: %lld"
+msgstr "Nečitelných / přeskočených sektorů: %lld"
 
-#: read-adaptive-window.c:154
-msgid "from previous run"
-msgstr "z předchozího průchodu"
+#: read-linear-window.c:86
+#, c-format
+msgid "Unreadable / skipped sectors: %lld, CRC errors: %lld"
+msgstr "Nečitelných / přeskočených sektorů: %lld, chyb CRC: %lld"
 
-#: read-adaptive-window.c:157 read-linear-window.c:221
-msgid "Successfully read"
-msgstr "Úspěšně načteno"
+#: read-linear-window.c:183 read-linear-window.c:225 rs01-verify.c:121
+#: rs02-verify.c:123
+msgid "Sectors with CRC errors"
+msgstr "Sektory s chybami CRC"
 
-#: read-adaptive-window.c:160 read-linear-window.c:228
-msgid "Unreadable / skipped"
-msgstr "Nečitelné / přeskočeno"
+#: read-linear-window.c:214
+msgid "Not touched this time"
+msgstr "Tentokrát nedotčen"
+
+#: read-linear-window.c:218
+msgid "Already present"
+msgstr "Již přítomen"
+
+#: read-linear-window.c:314
+msgid "Speed"
+msgstr "Rychlost"
 
 #: read-linear.c:59
 #, c-format
@@ -1483,11 +1515,6 @@ msgstr "Sektor %lld: %s Přeskakuji %d sektorů.\n"
 #, c-format
 msgid "* CRC error, sector: %lld\n"
 msgstr "* Chyba CRC, sektor: %lld\n"
-
-#: read-linear.c:683 read-linear-window.c:85
-#, c-format
-msgid "Unreadable / skipped sectors: %lld"
-msgstr "Nečitelných / přeskočených sektorů: %lld"
 
 #: read-linear.c:749
 #, c-format
@@ -1577,33 +1604,6 @@ msgstr ""
 "To je v pořádku, pokud bylo CD zapsáno v režimu TAO (stopa najednou).\n"
 "Obraz bude podle toho zkrácen. Další podrobnosti najdete v příručce.\n"
 "Použijte volbu --dao pro zákaz zkrácení obrazu.\n"
-
-#: read-linear-window.c:77
-#, c-format
-msgid "Current Speed: %d.%dx"
-msgstr "Aktuální rychlost: %d.%dx"
-
-#: read-linear-window.c:86
-#, c-format
-msgid "Unreadable / skipped sectors: %lld, CRC errors: %lld"
-msgstr "Nečitelných / přeskočených sektorů: %lld, chyb CRC: %lld"
-
-#: read-linear-window.c:183 read-linear-window.c:225 rs01-verify.c:121
-#: rs02-verify.c:123
-msgid "Sectors with CRC errors"
-msgstr "Sektory s chybami CRC"
-
-#: read-linear-window.c:214
-msgid "Not touched this time"
-msgstr "Tentokrát nedotčen"
-
-#: read-linear-window.c:218
-msgid "Already present"
-msgstr "Již přítomen"
-
-#: read-linear-window.c:314
-msgid "Speed"
-msgstr "Rychlost"
 
 #: rs01-common.c:70 rs02-common.c:67 rs02-create.c:180 rs02-fix.c:378
 #, c-format

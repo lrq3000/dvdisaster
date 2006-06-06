@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-06 07:52+0200\n"
+"POT-Creation-Date: 2006-06-06 08:03+0200\n"
 "PO-Revision-Date: 2004-11-30 19:48+0100\n"
 "Last-Translator: Carsten Gnörlich <carsten@dvdisaster.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -598,7 +598,7 @@ msgid ""
 msgstr ""
 "\n"
 "Dieses Programm ist <i>nicht das Original</i>. Es basiert auf den\n"
-"Quellen von dvdisaster, wurde aber aber von Dritten verändert.\n"
+"Quellen von dvdisaster, wurde aber von Dritten verändert.\n"
 "\n"
 "Bitte behelligen Sie die ursprünglichen Autoren von dvdisaster\n"
 "([www.dvdisaster.org]) nicht wegen Problemen mit dieser Version.\n"
@@ -1098,6 +1098,47 @@ msgstr "Laufwerk meldet Fehler: %s; "
 msgid "unknown asc/ascq code (0x%02x, 0x%02x)."
 msgstr "unbekannter asc/ascq-Kode (0x%02x, 0x%02x)."
 
+#: read-adaptive-window.c:79
+msgid "Adaptive reading:"
+msgstr "Angepaßtes Leseverfahren:"
+
+#: read-adaptive-window.c:115
+msgid "Sectors processed"
+msgstr "Bearbeitete Sektoren"
+
+#: read-adaptive-window.c:118 scsi-layer.c:414
+msgid "readable"
+msgstr "lesbar"
+
+#: read-adaptive-window.c:122
+msgid "correctable"
+msgstr "korrigierbar"
+
+#: read-adaptive-window.c:126
+msgid "missing"
+msgstr "fehlend"
+
+#: read-adaptive-window.c:130
+#, c-format
+msgid "Total recoverable: %d.%d%%"
+msgstr "Insgesamt wiederherstellbar: %d.%d%%"
+
+#: read-adaptive-window.c:146 read-linear-window.c:206
+msgid "Media state"
+msgstr "Datenträger-Zustand"
+
+#: read-adaptive-window.c:154
+msgid "from previous run"
+msgstr "aus vorherigem Lauf"
+
+#: read-adaptive-window.c:157 read-linear-window.c:221
+msgid "Successfully read"
+msgstr "Erfolgreich gelesen"
+
+#: read-adaptive-window.c:160 read-linear-window.c:228
+msgid "Unreadable / skipped"
+msgstr "Unlesbar / Übersprungen"
+
 #: read-adaptive.c:129 read-adaptive.c:1239
 msgid "Aborted by unrecoverable error."
 msgstr "Abbruch durch nicht behebbaren Fehler."
@@ -1386,46 +1427,37 @@ msgstr ""
 "%s\n"
 "%2d.%1d%% des Abbilds wurden eingelesen (%lld Sektoren).\n"
 
-#: read-adaptive-window.c:79
-msgid "Adaptive reading:"
-msgstr "Angepaßtes Leseverfahren:"
-
-#: read-adaptive-window.c:115
-msgid "Sectors processed"
-msgstr "Bearbeitete Sektoren"
-
-#: read-adaptive-window.c:118 scsi-layer.c:414
-msgid "readable"
-msgstr "lesbar"
-
-#: read-adaptive-window.c:122
-msgid "correctable"
-msgstr "korrigierbar"
-
-#: read-adaptive-window.c:126
-msgid "missing"
-msgstr "fehlend"
-
-#: read-adaptive-window.c:130
+#: read-linear-window.c:77
 #, c-format
-msgid "Total recoverable: %d.%d%%"
-msgstr "Insgesamt wiederherstellbar: %d.%d%%"
+msgid "Current Speed: %d.%dx"
+msgstr "Momentane Geschwindigkeit: %d.%dx"
 
-#: read-adaptive-window.c:146 read-linear-window.c:206
-msgid "Media state"
-msgstr "Datenträger-Zustand"
+#: read-linear-window.c:85 read-linear.c:683
+#, c-format
+msgid "Unreadable / skipped sectors: %lld"
+msgstr "Unlesbare / Übersprungene Sektoren: %lld"
 
-#: read-adaptive-window.c:154
-msgid "from previous run"
-msgstr "aus vorherigem Lauf"
+#: read-linear-window.c:86
+#, c-format
+msgid "Unreadable / skipped sectors: %lld, CRC errors: %lld"
+msgstr "Unlesbare / Übersprungene Sektoren: %lld, Prüfsummen-Fehler: %lld"
 
-#: read-adaptive-window.c:157 read-linear-window.c:221
-msgid "Successfully read"
-msgstr "Erfolgreich gelesen"
+#: read-linear-window.c:183 read-linear-window.c:225 rs01-verify.c:121
+#: rs02-verify.c:123
+msgid "Sectors with CRC errors"
+msgstr "Prüfsummen-Fehler"
 
-#: read-adaptive-window.c:160 read-linear-window.c:228
-msgid "Unreadable / skipped"
-msgstr "Unlesbar / Übersprungen"
+#: read-linear-window.c:214
+msgid "Not touched this time"
+msgstr "Diesmal unberücksichtigt"
+
+#: read-linear-window.c:218
+msgid "Already present"
+msgstr "Bereits vorhanden"
+
+#: read-linear-window.c:314
+msgid "Speed"
+msgstr "Geschwindigkeit"
 
 #: read-linear.c:59
 #, c-format
@@ -1512,11 +1544,6 @@ msgstr "Sektor %lld: %s Überspringe %d Sektoren.\n"
 #, c-format
 msgid "* CRC error, sector: %lld\n"
 msgstr "* CRC-Fehler, Sektor : %lld\n"
-
-#: read-linear.c:683 read-linear-window.c:85
-#, c-format
-msgid "Unreadable / skipped sectors: %lld"
-msgstr "Unlesbare / Übersprungene Sektoren: %lld"
 
 #: read-linear.c:749
 #, c-format
@@ -1606,33 +1633,6 @@ msgstr ""
 "wenn der Datenträger im TAO (track at once)-Modus geschrieben wurde.\n"
 "Das Abbild wird entsprechend verkürzt; mehr dazu steht im Benutzerhandbuch.\n"
 "Verwenden Sie die --dao--Option um das Abschneiden zu unterdrücken.\n"
-
-#: read-linear-window.c:77
-#, c-format
-msgid "Current Speed: %d.%dx"
-msgstr "Momentane Geschwindigkeit: %d.%dx"
-
-#: read-linear-window.c:86
-#, c-format
-msgid "Unreadable / skipped sectors: %lld, CRC errors: %lld"
-msgstr "Unlesbare / Übersprungene Sektoren: %lld, Prüfsummen-Fehler: %lld"
-
-#: read-linear-window.c:183 read-linear-window.c:225 rs01-verify.c:121
-#: rs02-verify.c:123
-msgid "Sectors with CRC errors"
-msgstr "Prüfsummen-Fehler"
-
-#: read-linear-window.c:214
-msgid "Not touched this time"
-msgstr "Diesmal unberücksichtigt"
-
-#: read-linear-window.c:218
-msgid "Already present"
-msgstr "Bereits vorhanden"
-
-#: read-linear-window.c:314
-msgid "Speed"
-msgstr "Geschwindigkeit"
 
 #: rs01-common.c:70 rs02-common.c:67 rs02-create.c:180 rs02-fix.c:378
 #, c-format
