@@ -681,7 +681,7 @@ int main(int argc, char *argv[])
 	     "  --random-seed n   - random seed for built-in random number generator\n"
  	     "  --send-cdb arg    - executes given cdb at drive; kills system if used wrong\n"  
 	     "  --show-sector n   - shows hexdump of the given sector\n"
-	     "  --sim-defects n   - simulate n% defective sectors on medium\n"
+	     "  --sim-defects n   - simulate n%% defective sectors on medium\n"
 	     "  --truncate n      - truncates image to n sectors\n"
 	     "  --zero-unreadable - replace the \"unreadable sector\" markers with zeros\n\n"));
 #endif

@@ -10,7 +10,7 @@ db078bbb3bd346dba5f907644bb0cebb  closure.c
 e0c423fffb94956009695231decaa295  crc32.c
 f24e2d3ba336727f7773e476211b4162  curve.c
 bbdf17e36e64701e3c7290379e6d1d48  debug.c
-bfa40f416d1954b1b0e750eacd82724a  dvdisaster.c
+0b284935292cc3c369639e9b823a6757  dvdisaster.c
 61bd5e47034125cb7062e15eeb68c62c  ecc-rs01.c
 717006a7b52a55416d526ca5734cdf61  ecc-rs02.c
 255f47cdc89a7edb4c091a5e92379550  endian.c
@@ -43,7 +43,7 @@ f2a5659cf67864e7395949acacbb5858  rs01-window.c
 9ee3c47f85342cc4b6086fab519d2634  rs02-fix.c
 de0ee09fe314598db96d723ded70350e  rs02-verify.c
 6a12091704c2ded29f3f7ef64c6e1dab  rs02-window.c
-dbe48ab7f7ca7ed5984aff5653b7343c  scsi-darwin.c
+708a4c8d004ae09d05a53f03dc36fb39  scsi-darwin.c
 295eaaba05500233ddee5c62f95b7a7c  scsi-freebsd.c
 63e1a1d037682003bf9d0fead762b7b4  scsi-layer.c
 13cc055568e2bea3d9475f511503ff53  scsi-linux.c

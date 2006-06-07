@@ -30,6 +30,26 @@
 #include "udf.h"
 
 #ifdef SYS_DARWIN
+#include <IOKit/storage/IOStorageDeviceCharacteristics.h>
+
+char *getProductName(io_object_t device)
+{
+  CFDictionaryRef devCharacteristics;
+  CFStringRef nameRef;
+  CFIndex length;
+  char *prodName;
+
+  devCharacteristics = IORegistryEntryCreateCFProperty(device, CFSTR(kIOPropertyDeviceCharacteristicsKey), kCFAllocatorDefault, 0);
+  
+  if (CFDictionaryGetValueIfPresent(devCharacteristics, CFSTR("Product Name"), (const void **) &nameRef)) {
+    length = CFStringGetLength(nameRef)+1;
+    prodName = malloc(length);
+    CFStringGetCString(nameRef, prodName, length, 0);
+    CFRelease(nameRef);
+    return prodName;
+  } else  
+    return  NULL;
+}
 
 io_iterator_t getDVDIterator(char* ioClass) 
 {
@@ -80,14 +100,16 @@ char *DefaultDevice()
   int i;
   io_iterator_t scsiObjectIterator = (io_iterator_t) NULL;
   io_object_t scsiDevice;
-  char* deviceName;
+  char *deviceName, *prodName;
 
   scsiObjectIterator = getDVDIterator("IODVDServices");
   for (i = 1; (scsiDevice = (io_object_t) IOIteratorNext(scsiObjectIterator)) != (io_object_t) NULL; i++)  {
     deviceName = g_malloc0(80);
     sprintf(deviceName,"IODVDServices/%d",i);
+
+    prodName = getProductName(scsiDevice);
     g_ptr_array_add(Closure->deviceNodes, g_strdup(deviceName));
-    g_ptr_array_add(Closure->deviceNames, g_strdup(deviceName));
+    g_ptr_array_add(Closure->deviceNames, g_strdup(prodName));
     g_free(deviceName);
   }
   IOObjectRelease(scsiObjectIterator);
