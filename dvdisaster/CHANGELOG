@@ -1,5 +1,6 @@
-0.67 (devel-14)
+0.67 (devel-14) 10-06-2006
 	- completed german localization
+	- fixed "fuzzy line" redraw bug in reading speed curve
 
 0.67 (devel-13) 04-06-2006
 	- some more fine tuning of adaptive reading for RS02

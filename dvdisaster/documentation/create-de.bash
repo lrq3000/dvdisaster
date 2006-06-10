@@ -947,6 +947,61 @@ Wählen Sie "Abspeichern in: Erweitertes Abbild (RS02)".</li>
 </tr>
 </table><p>
 
+Einige Brennprogramme sind mit den erweiterten Abbildern nicht kompatibel
+und beschädigen die Fehlerkorrektur-Daten. Führen Sie zumindest nach dem ersten
+Brennvorgang die nachfolgende Überprüfung durch.<p>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+
+<tr valign="top" $BGCOLOR1>
+<td>1.</td>
+<td>Wählen Sie das Laufwerk aus, in dem sich der gerade gebrannte
+Datenträger befindet.</td>
+<td><img src="../images/btn-drive.png" alt="Laufwerks-Auswahl"></td>
+</tr>
+
+<tr valign="top" $BGCOLOR2>
+<td>2.</td>
+<td>Wählen Sie einen neuen Namen für die Abbild-Datei aus
+(also nicht den Namen des Abbildes, das Sie zum Brennen verwendet haben!)<p>
+</td>
+<td><img src="images/btn-new-image.png" alt="Abbild-Datei-Auswahl"><p>
+Das <img src="../images/open-img.png" alt="Dateiauswahl-Knopf" align="middle">-Symbol öffnet die Dateiauswahl.</td>
+</tr>
+
+<tr valign="top" $BGCOLOR1>
+<td>3.</td>
+<td>Beginnen Sie das Einlesen mit dem "Lesen"-Knopf.</td>
+<td><img src="images/btn-read.png" alt="Lesen-Knopf"></td>
+</tr>
+
+<tr valign="top" $BGCOLOR2>
+<td>4.</td>
+<td>Verfolgen Sie den Fortschritt des Lesevorgangs in der graphischen Darstellung.</td>
+<td><a href="example2.html"><img src="images/ex-read.png" alt="Bildschirmfoto" width="200"></a><p>
+
+</td>
+</tr>
+<tr valign="top" $BGCOLOR1>
+<td>5.</td>
+<td>Wenn das Einlesen beendet wurde, klicken Sie auf den "Vergleichen"-Knopf.
+Dies überprüft die Fehlerkorrektur-Informationen in dem zurückgelesenen Abbild. </td>
+<td><img src="images/btn-compare.png" alt="Vergleichen-Knopf"></td>
+</tr>
+
+<tr valign="top" $BGCOLOR2>
+<td>4.</td>
+<td>Verfolgen Sie den Fortschritt des Vergleichs.<p>
+Wenn der Vergleich ohne Fehlermeldungen beendet wird, ist Ihre Brennsoftware
+mit den erweiterten Abbildern kompatibel.
+</td>
+<td><a href="example6.html"><img src="images/ex-compare.png" alt="Bildschirmfoto" width="200"></a><p>
+</td>
+</tr>
+
+</table>
+
+
 <pre> </pre>
 
 <h3>Abbild um Fehlerkorrektur-Daten erweitern (mit der Kommandozeile)</h3>
@@ -1003,8 +1058,8 @@ Verwenden Sie die Brennsoftware, um das erweiterte Abbild
 auf den Datenträger zu schreiben. <p>
 
 Einige Brennprogramme sind mit den erweiterten Abbildern nicht kompatibel
-und beschädigen die Fehlerkorrektur-Daten. Führen Sie zumindest beim ersten
-Mal die nachfolgende Überprüfung durch.<p>
+und beschädigen die Fehlerkorrektur-Daten. Führen Sie zumindest 
+nach dem ersten Brennvorgang die nachfolgende Überprüfung durch.<p>
 
 Lesen Sie das Abbild nach dem Brennen mit dvdisaster wieder ein:<p>
 
@@ -2359,18 +2414,18 @@ der Quellkode-Version gibt es <a href="download20.html">Installationshinweise</a
 <b>Entwickler-Versionen</b> - neu und experimentell für erfahrene Benutzer!<p> 
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.66</b></td><td align="right">21-Mai-2006</td></tr>
+<tr><td><b>dvdisaster-0.66</b></td><td align="right">25-Mär-2006</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Quellkode für alle Betriebssysteme:&nbsp;</td>
-        <td><a href="${tar_0_66}">dvdisaster-0.66.4.tar.bz2</a></td></tr>
+        <td><a href="${tar_0_66}">dvdisaster-0.66.3.tar.bz2</a></td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><a href="${tar_0_66_sig}">dvdisaster-0.66.4.tar.bz2.gpg</a></td></tr>
+        <td><a href="${tar_0_66_sig}">dvdisaster-0.66.3.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Binärversion für Windows:&nbsp;</td>
-        <td><a href="${setup_0_66}">dvdisaster-0.66.4-setup.exe</a></td></tr>
+        <td><a href="${setup_0_66}">dvdisaster-0.66.3-setup.exe</a></td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><a href="${setup_0_66_sig}">dvdisaster-0.66.4-setup.exe.gpg</a></td></tr>
+        <td><a href="${setup_0_66_sig}">dvdisaster-0.66.3-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
@@ -2390,9 +2445,7 @@ zum Erzeugen von Programmen aus dem Quellkode).<p>
 
 <b>Patches</b> (kleine Änderungen nach Version 0.66; die obigen Dateien wurden erneuert):<br>
 <b>pl3</b> behebt eine fehlerhafte Installation des Benutzerhandbuchs
-unter bestimmten Windows-Versionen. Andere Betriebssysteme sind nicht betroffen.<br>
-<b>pl4</b> behebt Absturz beim Aufruf des Handbuchs aus der Benutzeroberfläche 
-bei bestimmten Spracheinstellungen und verbessert die Kompatibilität mit -RW-Datenträgern.
+unter bestimmten Windows-Versionen. Andere Betriebssysteme sind nicht betroffen.
 </td></tr></table><p>
 
 <pre> </pre>

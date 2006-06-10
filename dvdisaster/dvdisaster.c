@@ -625,7 +625,6 @@ int main(int argc, char *argv[])
 
    if(mode == MODE_HELP)
    {  
-#ifndef QUIET
      /* TRANSLATORS: Program options like -r and --read are not to be translated
 	to avoid confusion when discussing the program in international forums. */
       PrintCLI(_("\nCommon usage examples:\n"
@@ -671,7 +670,7 @@ int main(int argc, char *argv[])
 	     "  --keep-style           - do not override the style settings\n\n"));
 
       if(Closure->debugMode)
-	PrintCLI(_("Debugging options (purposefully undocumented and possibly harmful)\n"
+      { PrintCLI(_("Debugging options (purposefully undocumented and possibly harmful)\n"
 	     "  --debug           - enables the following options\n"
 	     "  --byteset s,i,b   - set byte i in sector s to b\n"
 	     "  --erase sector    - erase the given sector\n"
@@ -679,13 +678,12 @@ int main(int argc, char *argv[])
 	     "  --random-errors r,e seed image with (correctable) random errors\n"
 	     "  --random-image n  - create image with n sectors of random numbers\n"
 	     "  --random-seed n   - random seed for built-in random number generator\n"
- 	     "  --send-cdb arg    - executes given cdb at drive; kills system if used wrong\n"  
+	     "  --send-cdb arg    - executes given cdb at drive; kills system if used wrong\n"
 	     "  --show-sector n   - shows hexdump of the given sector\n"
-	     "  --sim-defects n   - simulate n%% defective sectors on medium\n"
+	     "  --sim-defects n   - simulate n defective sectors on medium\n"
 	     "  --truncate n      - truncates image to n sectors\n"
 	     "  --zero-unreadable - replace the \"unreadable sector\" markers with zeros\n\n"));
-#endif
-
+      }
       FreeClosure();
       exit(EXIT_FAILURE);
    }

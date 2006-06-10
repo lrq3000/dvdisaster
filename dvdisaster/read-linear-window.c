@@ -121,7 +121,6 @@ static gboolean curve_idle_func(gpointer data)
       update_geometry();
       gdk_window_clear(Closure->readLinearDrawingArea->window);
       redraw_curve();
-      //      Closure->lastPercent = Closure->percent;
       Closure->lastPercentPlotted = Closure->percent;
 
       return FALSE;
@@ -133,8 +132,6 @@ static gboolean curve_idle_func(gpointer data)
    gdk_draw_line(Closure->readLinearDrawingArea->window,
 		 Closure->drawGC,
 		x0, y0, x1, y1);
-
-   //   Closure->lastPercent = Closure->percent;
    Closure->lastPercentPlotted = Closure->percent;
 
    return FALSE;

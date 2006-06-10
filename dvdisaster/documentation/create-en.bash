@@ -924,6 +924,58 @@ Choose "Storage method: Augmented image (RS02)."<p>
 </tr>
 </table><p>
 
+Your writing software may not be compatible with the augmented
+image and destroy the error correction information. At least 
+when writing the first medium,
+perform the following check:<p>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+<tr valign="top" $BGCOLOR1>
+<td>1.</td>
+<td>Select the drive which contains the previously written medium.</td>
+<td><img src="../images/btn-drive.png" alt="drive selection"></td>
+</tr>
+
+<tr valign="top" $BGCOLOR2>
+<td>2.</td>
+<td>Select a new name for the image file (not the name of the image
+which has been written to the medium!)<p>
+</td>
+<td><img src="images/btn-new-image.png" alt="image file selection"><p>
+The <img src="../images/open-img.png" alt="filechooser button" align="middle"> symbol opens the file chooser.</td>
+</tr>
+
+<tr valign="top" $BGCOLOR1>
+<td>3.</td>
+<td>Click on the "Read" button to start the reading process.</td>
+<td><img src="images/btn-read.png" alt="Read button"></td>
+</tr>
+
+<tr valign="top" $BGCOLOR2>
+<td>4.</td>
+<td>Watch the reading progress in the graphical representation.</td>
+<td><a href="example2.html"><img src="images/ex-read.png" alt="screen shot" width="200"></a><p>
+</td>
+</tr>
+
+<tr valign="top" $BGCOLOR1>
+<td>5.</td>
+<td>When reading has finished, click the "Verify" button.<p>
+This will verify the error correction information in the image read from the medium.</td>
+<td><img src="images/btn-compare.png" alt="verify button"></td>
+</tr>
+
+<tr valign="top" $BGCOLOR2>
+<td>4.</td>
+<td>Watch the comparison progress.<p>
+If the verification finishes without error messages, your CD/DVD writing
+software is compatible with the augmented images.</td>
+<td><a href="example6.html"><img src="images/ex-compare.png" alt="screen shot" width="200"></a><p>
+</td>
+</tr>
+
+</table>
+
 <pre> </pre>
 
 <h3>Augmenting the image with error correction data (using the command line)</h3>
@@ -976,7 +1028,8 @@ New image size is 357818 sectors.
 Use your CD/DVD writing software to transfer the augmented image to the medium.<p>
 
 Your writing software may not be compatible with the augmented
-image and destroy the error correction information. At least when using it the first time,
+image and destroy the error correction information. At least 
+when writing the first medium,
 perform the following check:<p>
 
 Re-read the image with dvdisaster after burning the medium:<p>
@@ -1323,7 +1376,7 @@ function example6en()
 {  cat >> $1 <<EOF
 
 <tr align="center"><td>
-<h3>Screenshot: Comparing image and error correction files</h3><p></td></tr>
+<h3>Screenshot: Verifying image and error correction files</h3><p></td></tr>
 <tr align="center"><td>
 <center><img src="images/ex-compare.png" alt="screen shot"></center>
 <br clear="all">
@@ -1349,7 +1402,7 @@ and whether it can be processed by your version of dvdisaster.
 If the error correction file does not correspond to the image file
 or if it is damaged, warnings are printed beneath the last four entries.<p></li>
 
-<li><b>Hint:</b> The results of the compare are unreliable if the image has been read in
+<li><b>Hint:</b> The results of the verification are unreliable if the image has been read in
 by a software other than dvdisaster. Especially, all missing sectors
 will be classfied as checksum errors if a different software has been used.</li>
 </ul>
@@ -1387,13 +1440,13 @@ The <img src="../images/open-ecc.png" alt="filechooser button" align="middle"> s
 
 <tr valign="top" $BGCOLOR1>
 <td>3.</td>
-<td>Click the "Compare" button.</td>
-<td><img src="images/btn-compare.png" alt="compare button"></td>
+<td>Click the "Verify" button.</td>
+<td><img src="images/btn-compare.png" alt="verify button"></td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
 <td>4.</td>
-<td>Watch the comparison progress.</td>
+<td>Watch the verfication progress.</td>
 <td><a href="example6.html"><img src="images/ex-compare.png" alt="screen shot" width="200"></a><p>
 </td>
 </tr>
@@ -1408,7 +1461,7 @@ You will need the following parameters (defaults are given in parenthesis):
 <table>
 <tr>
 <td><a href="example90.html#test">-t/ --test</a></td>
-<td>Compare</td>
+<td>Verify</td>
 </tr>
 <tr>
 <td><a href="example90.html#image">-i / --image</a></td>
@@ -2854,7 +2907,7 @@ communicating with its mass storage devices.</li>
 
 
 If you suspect technical problems, try creating another version of the image 
-and error correction files and <a href="example50.html">compare
+and error correction files and <a href="example50.html">verify
 them again</a>.
 When the error disappears or surfaces at a different location,
 your computer may be suffering from defective memory, 
@@ -2900,7 +2953,7 @@ If the required ISO/UDF sectors are unreadable when trying to recover damaged me
 there are two possible workarounds:
 
 <ul>
-<li>Execute the <a href="example50.html">"Compare"</a> function with only
+<li>Execute the <a href="example50.html">"Verify"</a> function with only
 the error correction file being selected/given. Note down the correct image size 
 from the output and <a href="example82.html#read">restrict the
 reading range</a> accordingly.

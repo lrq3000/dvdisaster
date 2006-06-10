@@ -30,6 +30,9 @@
  #include <tlhelp32.h>
  #include <psapi.h>
  #include <shlobj.h>
+
+ /* safety margin in case we're getting UTF path names */
+ #define WIN_MAX_PATH (4*MAX_PATH)
 #endif
 
 #if 0
@@ -53,8 +56,8 @@
 static gchar *get_special_folder(int csidl)
 {
   union 
-  { char c[MAX_PATH+1];
-    wchar_t wc[MAX_PATH+1];
+  { char c[WIN_MAX_PATH+1];
+    wchar_t wc[WIN_MAX_PATH+1];
   } path;
 
   HRESULT hr;
@@ -87,10 +90,10 @@ static gchar *get_special_folder(int csidl)
 
 #ifdef SYS_MINGW
 static char* get_exe_path()
-{  char path[MAX_PATH];
-   int n = GetModuleFileNameA(NULL, path, MAX_PATH);
+{  char path[WIN_MAX_PATH];
+   int n = GetModuleFileNameA(NULL, path, WIN_MAX_PATH);
 
-   if(n>0 && n<MAX_PATH-1)
+   if(n>0 && n<WIN_MAX_PATH-1)
    {  char *backslash = strrchr(path, '\\');
 
       if(backslash) *backslash=0;

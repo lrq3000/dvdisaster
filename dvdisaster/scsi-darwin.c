@@ -123,7 +123,7 @@ char *DefaultDevice()
   }
   if(Closure->deviceNodes->len)
     return g_strdup(g_ptr_array_index(Closure->deviceNodes, 0));
-  else { PrintLog(_("No CD/DVD drives found.\n"));
+  else { PrintLog(_("No CD/DVD drives found."));
     return NULL;
   }
 		    

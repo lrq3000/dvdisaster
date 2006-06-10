@@ -151,8 +151,8 @@ static void check_image(ecc_closure *ec)
    guint32 *crcptr;
    int last_percent, percent;
 
-   if(Closure->crcCache)
-     ClearCrcCache();
+   if(Closure->crcCache) /* Discard old CRC cache no matter what it contains */
+     ClearCrcCache();    /* We will create a new one a few lines below */
 
    last_percent = 0;
    MD5Init(&image_md5);

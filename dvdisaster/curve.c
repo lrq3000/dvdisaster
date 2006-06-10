@@ -250,10 +250,12 @@ void RedrawCurve(Curve *curve, int last, int which)
       iy  = CurveY(curve, curve->ivalue[i]);
 
       if(which & REDRAW_FCURVE && curve->fvalue[i] >= 0)
-      {  gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->blue);
-         gdk_draw_line(curve->widget->window, Closure->drawGC, x0, fy0, x1, fy1);
-         x0  = x1;
-         fy0 = fy1;
+      {  if(x0 < x1)
+	 {  gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->blue);
+	    gdk_draw_line(curve->widget->window, Closure->drawGC, x0, fy0, x1, fy1);
+	    fy0 = fy1;
+	 }
+         x0  =  x1;
       }
 
       if(which & REDRAW_ICURVE)

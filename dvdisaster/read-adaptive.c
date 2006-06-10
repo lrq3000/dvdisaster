@@ -356,13 +356,12 @@ static void open_and_determine_mode(read_closure *rc)
 
    /* See if the medium contains RS02 type ecc information */
 
-   //   rc->eh = FindHeaderInMedium(rc->dh, rc->dh->sectors-1);
    if(rc->dh->rs02Header)
    {  rc->readMode = ECC_IN_IMAGE;
       rc->eh  = rc->dh->rs02Header;
       rc->lay = CalcRS02Layout(uchar_to_gint64(rc->eh->sectors), rc->eh->eccBytes);
  
-#if 1 /* remove me ! */
+#if 1 /* for testing purposes, remove me ! */
       { gint64 s,sinv,slice,idx;
 	for(s=0; s<rc->dh->sectors-1; s++)
 	{  RS02SliceIndex(rc->lay, s, &slice, &idx);
