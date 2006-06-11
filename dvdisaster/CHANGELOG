@@ -1,5 +1,6 @@
 0.67 (devel-15)
 	- fixed CreateBitmap() namespace collision under Windows
+	- fixed md5sum miscompare on source code check under Windows
 
 0.67 (devel-14) 10-06-2006
 	- completed german localization

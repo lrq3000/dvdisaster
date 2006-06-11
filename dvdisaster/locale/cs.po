@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-11 12:29+0200\n"
+"POT-Creation-Date: 2006-06-11 14:53+0200\n"
 "PO-Revision-Date: 2006-03-16 20:40+0100\n"
 "Last-Translator: Luboš Staněk <lubek@users.sourceforge.net>\n"
 "Language-Team: čeština <cs@li.org>\n"
@@ -514,23 +514,23 @@ msgid ""
 "<i>Your changes are not ours.</i>"
 msgstr ""
 
-#: help-dialogs.c:446
+#: help-dialogs.c:447
 msgid "windowtitle|About dvdisaster"
 msgstr "O aplikaci dvdisaster"
 
-#: help-dialogs.c:466
+#: help-dialogs.c:467
 msgid ""
 "Modified version Copyright 2006 (please fill in - [directions])\n"
 "Copyright 2004-2006 Carsten Gnoerlich"
 msgstr ""
 
-#: help-dialogs.c:470
+#: help-dialogs.c:471
 msgid "Copyright 2004-2006 Carsten Gnoerlich"
 msgstr ""
 "Copyright 2004-2006 Carsten Gnörlich\n"
 "Česká lokalizace 2006 Luboš Staněk"
 
-#: help-dialogs.c:477
+#: help-dialogs.c:478
 msgid ""
 "dvdisaster provides a margin of safety against data loss\n"
 "on CD and DVD media caused by aging or scratches.\n"
@@ -542,7 +542,7 @@ msgstr ""
 "Vytváří data oprav chyb, která se použijí k obnovení\n"
 "nečitelných sektorů, pokud se disk později poškodí.\n"
 
-#: help-dialogs.c:482
+#: help-dialogs.c:483
 msgid ""
 "This software comes with  <b>absolutely no warranty</b>.\n"
 "This is free software and you are welcome to redistribute it\n"
@@ -552,7 +552,7 @@ msgstr ""
 "Jedná se o svobodný software a můžete jej šířit\n"
 "za podmínek [Všeobecné veřejné licence GNU].\n"
 
-#: help-dialogs.c:488
+#: help-dialogs.c:489
 msgid ""
 "\n"
 "This program is <i>not the original</i>. It is based on the\n"
@@ -562,7 +562,7 @@ msgid ""
 "([www.dvdisaster.org]) about issues with this version.\n"
 msgstr ""
 
-#: help-dialogs.c:503
+#: help-dialogs.c:504
 msgid ""
 "\n"
 "e-mail: carsten@dvdisaster.com   -or-   cgnoerlich@fsfe.org"
@@ -571,7 +571,7 @@ msgstr ""
 "e-mail: carsten@dvdisaster.de   -nebo-   cgnoerlich@fsfe.org\n"
 "Český překlad, e-mail: lubek@users.sourceforge.net"
 
-#: help-dialogs.c:506
+#: help-dialogs.c:507
 msgid ""
 "\n"
 "Darwin port (Mac OS X): Julian Einwag &lt;julian@einwag.de&gt;"

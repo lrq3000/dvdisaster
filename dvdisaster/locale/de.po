@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-11 12:29+0200\n"
+"POT-Creation-Date: 2006-06-11 14:53+0200\n"
 "PO-Revision-Date: 2004-11-30 19:48+0100\n"
 "Last-Translator: Carsten Gnörlich <carsten@dvdisaster.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -549,11 +549,11 @@ msgstr ""
 "<big>dvdisaster verändern</big>\n"
 "<i>Ihre Änderungen sind nicht unsere.</i>"
 
-#: help-dialogs.c:446
+#: help-dialogs.c:447
 msgid "windowtitle|About dvdisaster"
 msgstr "Kurzinformation"
 
-#: help-dialogs.c:466
+#: help-dialogs.c:467
 msgid ""
 "Modified version Copyright 2006 (please fill in - [directions])\n"
 "Copyright 2004-2006 Carsten Gnoerlich"
@@ -561,11 +561,11 @@ msgstr ""
 "Veränderte Version Copyright 2006 (bitte eintragen - [Hinweise])\n"
 "Original-Programm Copyright 2004-2006 Carsten Gnörlich"
 
-#: help-dialogs.c:470
+#: help-dialogs.c:471
 msgid "Copyright 2004-2006 Carsten Gnoerlich"
 msgstr "Copyright 2004-2006 Carsten Gnörlich"
 
-#: help-dialogs.c:477
+#: help-dialogs.c:478
 msgid ""
 "dvdisaster provides a margin of safety against data loss\n"
 "on CD and DVD media caused by aging or scratches.\n"
@@ -577,7 +577,7 @@ msgstr ""
 "Es erzeugt Fehlerkorrekturdaten, um bei nachfolgenden Datenträger-\n"
 "Problemen unlesbare Sektoren zu rekonstruieren.\n"
 
-#: help-dialogs.c:482
+#: help-dialogs.c:483
 msgid ""
 "This software comes with  <b>absolutely no warranty</b>.\n"
 "This is free software and you are welcome to redistribute it\n"
@@ -586,7 +586,7 @@ msgstr ""
 "dvdisaster ist <b>freie Software</b>; es gelten die Bedingungen\n"
 "der [GNU General Public License] .\n"
 
-#: help-dialogs.c:488
+#: help-dialogs.c:489
 msgid ""
 "\n"
 "This program is <i>not the original</i>. It is based on the\n"
@@ -602,7 +602,7 @@ msgstr ""
 "Bitte behelligen Sie die ursprünglichen Autoren von dvdisaster\n"
 "([www.dvdisaster.org]) nicht wegen Problemen mit dieser Version.\n"
 
-#: help-dialogs.c:503
+#: help-dialogs.c:504
 msgid ""
 "\n"
 "e-mail: carsten@dvdisaster.com   -or-   cgnoerlich@fsfe.org"
@@ -610,7 +610,7 @@ msgstr ""
 "\n"
 "e-mail: carsten@dvdisaster.de   -oder-   cgnoerlich@fsfe.org"
 
-#: help-dialogs.c:506
+#: help-dialogs.c:507
 msgid ""
 "\n"
 "Darwin port (Mac OS X): Julian Einwag &lt;julian@einwag.de&gt;"

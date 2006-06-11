@@ -439,8 +439,9 @@ void AboutTextWithLink2(GtkWidget *parent, char *text, char *actions)
 void AboutDialog()
 {  GtkWidget *about, *vbox, *sep;
    char *text; 
+#ifndef MODIFIED_SOURCE
    const char *lang;
-
+#endif
    /* Create the dialog */
 
    about = gtk_dialog_new_with_buttons(_utf("windowtitle|About dvdisaster"), 
