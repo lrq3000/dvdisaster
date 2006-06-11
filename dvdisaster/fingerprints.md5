@@ -3,7 +3,7 @@
 f49aaa04b2be2101ae7efdf7c5882a03 *md5.h
 bcc539132868e8c92929302de62ef434 *rs01-includes.h
 8ffe0380e10a45a6956c5f734e639eaa *rs02-includes.h
-83dfebba34b854a63d766e5456b7ffb9 *scsi-layer.h
+48a04499df58f9aad0923e8c5409513b *scsi-layer.h
 7fc9a92c6f94536e7c4f5eaaac2a791c *udf.h
 daa7ec033afb7fcfa5e4591cdda6ffac *bitmap.c
 fbff5284b373b719589c4174ac4263da *closure.c
@@ -45,14 +45,14 @@ de0ee09fe314598db96d723ded70350e *rs02-verify.c
 6a12091704c2ded29f3f7ef64c6e1dab *rs02-window.c
 cc85e2cdb2d8a2b9cd9544c38bc459ed *scsi-darwin.c
 295eaaba05500233ddee5c62f95b7a7c *scsi-freebsd.c
-63e1a1d037682003bf9d0fead762b7b4 *scsi-layer.c
+dc63f7f66b79812ad9f48529657856b9 *scsi-layer.c
 13cc055568e2bea3d9475f511503ff53 *scsi-linux.c
 79a515b5dc4addb8ffbe301e5ee88b72 *scsi-unknown.c
 c377b11bed46d51a37cd161b63cad251 *scsi-win32.c
 2d0e077e999a16ebcf5517905736b039 *show-manual.c
 ef3f31cd53b5b95eddd2b549c2d1ee10 *spiral.c
 67a36aa297fba714cd68ac665ffa41e2 *style.c
-8adba8dae595614ac9ade763538d2920 *udf.c
+f3695be8726f3177bd738959bdf869b3 *udf.c
 885740e21baf96c2a30dca4237c01bbe *welcome-window.c
 ae70c69a89efb7b2fab7317427a2fc10 *documentation/create.bash
 c651c355eda999b18c35957b1ce7c264 *documentation/create-cs.bash

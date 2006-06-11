@@ -210,6 +210,7 @@ typedef struct _DeviceHandle
    int mainType;
    int subType;
    char *typedescr;
+   int rewriteable;
    gint64 sectors;            /* Number of sectors */
    double singleRate;         /* supposed KB/sec @ single speed */
    int maxRate;               /* guessed maximum transfer rate */

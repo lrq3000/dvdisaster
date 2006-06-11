@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-11 14:53+0200\n"
+"POT-Creation-Date: 2006-06-11 18:58+0200\n"
 "PO-Revision-Date: 2005-01-01 14:24+0100\n"
 "Last-Translator: Andrea Polverini <polve@polve.com>\n"
 "Language-Team: Italian <>\n"
@@ -1284,12 +1284,12 @@ msgstr ""
 msgid "CRC error in sector %lld\n"
 msgstr "Errore CRC nel settore %lld\n"
 
-#: read-adaptive.c:1421 scsi-layer.c:433
+#: read-adaptive.c:1421 scsi-layer.c:442
 #, c-format
 msgid "Sectors %lld-%lld: %s\n"
 msgstr "Settori %lld-%lld: %s\n"
 
-#: read-adaptive.c:1424 read-linear.c:624 scsi-layer.c:432
+#: read-adaptive.c:1424 read-linear.c:624 scsi-layer.c:441
 #, c-format
 msgid "Sector %lld: %s\n"
 msgstr "Settore %lld: %s\n"
@@ -1342,7 +1342,7 @@ msgstr "Modo di lettura adattivo:"
 msgid "Sectors processed"
 msgstr "Settori processati"
 
-#: read-adaptive-window.c:118 scsi-layer.c:414
+#: read-adaptive-window.c:118 scsi-layer.c:423
 msgid "readable"
 msgstr "Leggibile"
 
@@ -1436,7 +1436,7 @@ msgstr "Completamento immagine %s. Solo i settori mancanti saranno letti.\n"
 msgid "done.\n"
 msgstr "compiuto.\n"
 
-#: read-linear.c:429 scsi-layer.c:777
+#: read-linear.c:429 scsi-layer.c:786
 #, c-format
 msgid "Waiting %d seconds for drive to spin up...\n"
 msgstr "Attendere %d secondi per far avviare il drive...\n"
@@ -2812,7 +2812,7 @@ msgstr ""
 "%s\n"
 "Non riesco ad identificare la struttura fisica del dvd\n"
 
-#: scsi-layer.c:253
+#: scsi-layer.c:262
 #, c-format
 msgid ""
 "%s\n"
@@ -2821,12 +2821,12 @@ msgstr ""
 "%s\n"
 "Non riesco ad indentificare lunghezza della TOC.\n"
 
-#: scsi-layer.c:261 scsi-layer.c:305
+#: scsi-layer.c:270 scsi-layer.c:314
 #, c-format
 msgid "TOC info too long (%d), probably multisession.\n"
 msgstr "TOC info troppo lunga (%d), probabile multisessione.\n"
 
-#: scsi-layer.c:273
+#: scsi-layer.c:282
 #, c-format
 msgid ""
 "%s\n"
@@ -2835,7 +2835,7 @@ msgstr ""
 "%s\n"
 "Non riesco a leggere la TOC.\n"
 
-#: scsi-layer.c:293
+#: scsi-layer.c:302
 #, c-format
 msgid ""
 "%s\n"
@@ -2844,12 +2844,12 @@ msgstr ""
 "%s\n"
 "Non riesco a leggere tutta la lunghezza della TOC.\n"
 
-#: scsi-layer.c:301
+#: scsi-layer.c:310
 #, c-format
 msgid "TOC info too short, length %d.\n"
 msgstr "TOC info troppo corta, lunghezza %d.\n"
 
-#: scsi-layer.c:317
+#: scsi-layer.c:326
 #, c-format
 msgid ""
 "%s\n"
@@ -2858,7 +2858,7 @@ msgstr ""
 "%s\n"
 "Non riesco a leggere tutta la TOC.\n"
 
-#: scsi-layer.c:324
+#: scsi-layer.c:333
 #, c-format
 msgid ""
 "\n"
@@ -2867,31 +2867,31 @@ msgstr ""
 "\n"
 "formato TOC inatteso (lunghezza %d):\n"
 
-#: scsi-layer.c:330
+#: scsi-layer.c:339
 msgid "Consider sending a bug report.\n"
 msgstr "Considera di inviare una comunicazione di errore.\n"
 
-#: scsi-layer.c:338
+#: scsi-layer.c:347
 msgid "Data CD mode 1"
 msgstr "CD Data Modo 1"
 
-#: scsi-layer.c:339
+#: scsi-layer.c:348
 msgid "CD-I"
 msgstr "CD-I"
 
-#: scsi-layer.c:340
+#: scsi-layer.c:349
 msgid "CD XA form 1"
 msgstr "CD XA Form 1"
 
-#: scsi-layer.c:341
+#: scsi-layer.c:350
 msgid "Unknown"
 msgstr "Sconosciuto"
 
-#: scsi-layer.c:344
+#: scsi-layer.c:353
 msgid "CD Audio"
 msgstr "CD Audio"
 
-#: scsi-layer.c:371
+#: scsi-layer.c:380
 #, c-format
 msgid ""
 "%s\n"
@@ -2900,14 +2900,14 @@ msgstr ""
 "%s\n"
 "Non posso identificare la lunghezza della struttura dvd per il format code 1.\n"
 
-#: scsi-layer.c:380
+#: scsi-layer.c:389
 #, c-format
 msgid "Could not query dvd copyright info - implausible packet length %d\n"
 msgstr ""
 "Non posso identificare le informazioni del copyright del dvd\n"
 "- lunghezza del pacchetto non plausibile %d\n"
 
-#: scsi-layer.c:394
+#: scsi-layer.c:403
 #, c-format
 msgid ""
 "%s\n"
@@ -2916,23 +2916,23 @@ msgstr ""
 "%s\n"
 "Non posso identificare le informazioni del copyright.\n"
 
-#: scsi-layer.c:448
+#: scsi-layer.c:457
 msgid "is undecideable because of read error"
 msgstr "Illeggibile per errori di lettura"
 
-#: scsi-layer.c:454
+#: scsi-layer.c:463
 msgid "looks GOOD"
 msgstr "sembra BUONA"
 
-#: scsi-layer.c:460
+#: scsi-layer.c:469
 msgid "gives unformatted size (UNUSABLE)"
 msgstr "rende la dimensione non formattata (INUTILIZZABILE)"
 
-#: scsi-layer.c:465
+#: scsi-layer.c:474
 msgid "is UNUSABLE"
 msgstr "è UTILIZZABILE"
 
-#: scsi-layer.c:484
+#: scsi-layer.c:493
 #, c-format
 msgid ""
 "%s\n"
@@ -2941,7 +2941,7 @@ msgstr ""
 "%s\n"
 "Non riesco ad indentificare la dimensione del supporto.\n"
 
-#: scsi-layer.c:554
+#: scsi-layer.c:563
 #, c-format
 msgid ""
 "Different media sizes depending on query method:\n"
@@ -2950,7 +2950,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: scsi-layer.c:559
+#: scsi-layer.c:568
 msgid ""
 "Evaluation of returned medium sizes:\n"
 "\n"
@@ -2958,15 +2958,15 @@ msgstr ""
 "Valutazione della dimensione del media:\n"
 "\n"
 
-#: scsi-layer.c:614
+#: scsi-layer.c:623
 msgid "Using value from READ CAPACITY"
 msgstr "Usa il valore dalla READ CAPACITY"
 
-#: scsi-layer.c:618
+#: scsi-layer.c:627
 msgid "Using value from READ DVD STRUCTURE"
 msgstr "Usa il valore dalla READ DVD STRUCTURE"
 
-#: scsi-layer.c:628
+#: scsi-layer.c:637
 #, c-format
 msgid ""
 "FAILED to determine image size.\n"
@@ -2978,7 +2978,7 @@ msgstr ""
 "ma CONTINUATE A VOSTRO RISCHIO (l'immagine potrebbe essere\n"
 "incompleta o illeggibile)."
 
-#: scsi-layer.c:633
+#: scsi-layer.c:642
 #, c-format
 msgid ""
 "Final decision: %s\n"
@@ -2987,7 +2987,7 @@ msgstr ""
 "Decisione finale: %s\n"
 "\n"
 
-#: scsi-layer.c:641
+#: scsi-layer.c:650
 msgid ""
 "Failed to determine image size.\n"
 "Try using a different drive."
@@ -2995,16 +2995,16 @@ msgstr ""
 "Impossibile determinare la dimensione dell'immagine.\n"
 "Provare ad utilizzare un drive diverso."
 
-#: scsi-layer.c:833
+#: scsi-layer.c:842
 msgid "Setting the drive speed failed:\n"
 msgstr "Settaggio della velocità del drive fallito:\n"
 
-#: scsi-layer.c:932
+#: scsi-layer.c:941
 #, c-format
 msgid "Retrying Sector %lld because of: %s\n"
 msgstr "Riprovo il settore %lld per causa di: %s\n"
 
-#: scsi-layer.c:954
+#: scsi-layer.c:963
 #, c-format
 msgid ""
 "\n"
@@ -3013,7 +3013,7 @@ msgstr ""
 "\n"
 "Periferica: %s, %s\n"
 
-#: scsi-layer.c:958
+#: scsi-layer.c:967
 #, c-format
 msgid ""
 "\n"
@@ -3022,36 +3022,36 @@ msgstr ""
 "\n"
 "Periferica: %s (%s), %s\n"
 
-#: scsi-layer.c:972
+#: scsi-layer.c:981
 #, c-format
 msgid "Medium: %s, %lld sectors%s %d layer(s)"
 msgstr "Supporto: %s, %lld settori%s %d strato(i)"
 
-#: scsi-layer.c:977
+#: scsi-layer.c:986
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s %d layer(s), created %s"
 msgstr "Supporto \"%s\": %s, %lld settori%s %d strato(i), creato %s"
 
-#: scsi-layer.c:989
+#: scsi-layer.c:998
 #, c-format
 msgid "Medium: %s, %lld sectors%s"
 msgstr "Supporto: %s, %lld Settori%s"
 
-#: scsi-layer.c:993
+#: scsi-layer.c:1002
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s created %s"
 msgstr "Supporto \"%s\": %s, %lld settori%s creato %s"
 
-#: scsi-layer.c:1007
+#: scsi-layer.c:1016
 #, c-format
 msgid "This software does not support \"%s\" type media."
 msgstr ""
 
-#: scsi-layer.c:1014
+#: scsi-layer.c:1023
 msgid "This software does not support encrypted media.\n"
 msgstr ""
 
-#: scsi-layer.c:1021
+#: scsi-layer.c:1030
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr ""
@@ -3205,7 +3205,7 @@ msgstr ""
 msgid "Please hang on until the browser comes up!"
 msgstr "Prego attendere finchè il browser non si avvia!"
 
-#: udf.c:280
+#: udf.c:300
 msgid "Unnamed"
 msgstr "Non intestato"
 

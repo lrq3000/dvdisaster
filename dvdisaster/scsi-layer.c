@@ -190,12 +190,21 @@ static int query_type(DeviceHandle *dh, int probe_only)
    dh->subType = DVD;
 
    switch((buf[4]>>4) & 0x0f)   /* evaluate the book type */
-   {  case  1: dh->typedescr = "DVD-RAM"; break;
-      case  2: dh->typedescr = "DVD-R"; break;
-      case  3: dh->typedescr = "DVD-RW"; break;
-      case  9: dh->typedescr = "DVD+RW"; break;
-      case 10: dh->typedescr = "DVD+R"; break;
-      case 14: dh->typedescr = "DVD+R9 DL"; break;
+   {  case  1: dh->typedescr = "DVD-RAM"; 
+               dh->rewriteable = TRUE;
+               break;
+      case  2: dh->typedescr = "DVD-R"; 
+	       break;
+      case  3: dh->typedescr = "DVD-RW"; 
+               dh->rewriteable = TRUE;
+	       break;
+      case  9: dh->typedescr = "DVD+RW"; 
+               dh->rewriteable = TRUE;
+	       break;
+      case 10: dh->typedescr = "DVD+R"; 
+	       break;
+      case 14: dh->typedescr = "DVD+R9 DL"; 
+	       break;
 
       case  0: 
       {  int layer_type = buf[6] & 0x0f;

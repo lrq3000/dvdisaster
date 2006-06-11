@@ -63,11 +63,21 @@ static int try_sector(DeviceHandle *dh, gint64 pos, EccHeader **ehptr)
 
    eh = (EccHeader*)Closure->scratchBuf;
 
-   /* See if the magic cookie is there */
+   /* See if the magic cookie is there. If not, searching within
+      this modulo makes no sense for write-once media.
+      However if the medium is rewriteable, there might be trash
+      data behind the image. So finding an invalid sector
+      does not imply there is not RS02 data present. */
 
    if(strncmp((char*)eh->cookie, "*dvdisaster*", 12))
-   {  Verbose("udf/try_sector: no cookie, skipping current modulo\n");
-      return TRY_NEXT_MODULO;
+   {  if(dh->rewriteable)
+      {   Verbose("udf/try_sector: no cookie but rewriteable medium: skipping header\n");
+	  return TRY_NEXT_HEADER;
+      }
+      else
+      {   Verbose("udf/try_sector: no cookie, skipping current modulo\n");
+	  return TRY_NEXT_MODULO;
+      }
    }
    else Verbose("udf/try_sector: header at %lld: magic cookie found\n", (long long int)pos);
 
@@ -130,9 +140,9 @@ static int try_sector(DeviceHandle *dh, gint64 pos, EccHeader **ehptr)
 
 EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
 {  EccHeader *eh = NULL;
+   Bitmap *try_next_header, *try_next_modulo;
    gint64 pos;
    gint64 header_modulo;
-   int result;
 
    /*** Quick search at fixed offsets relative to ISO filesystem */
 
@@ -161,6 +171,11 @@ EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
 
    header_modulo = (gint64)1<<62;
 
+   try_next_header = CreateBitmap0(max_sectors);
+   try_next_modulo = CreateBitmap0(max_sectors);
+
+   Verbose("Medium rewriteable: %s\n", dh->rewriteable ? "TRUE" : "FALSE");
+
    /*** Search for the headers */
 
    while(header_modulo >= 32)
@@ -169,17 +184,32 @@ EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
       Verbose("FindHeaderInMedium: Trying modulo %lld\n", header_modulo);
 
       while(pos > 0)
-      {  
-	result = try_sector(dh, pos, &eh);
+      {  int result;
 	
-	switch(result)
-	{  case TRY_NEXT_HEADER:
-	      goto check_next_header;
-	   case TRY_NEXT_MODULO:
-	      goto check_next_modulo;
-	   case HEADER_FOUND:
-	      return eh;
-	}
+	 if(GetBit(try_next_header, pos))
+	 {  Verbose("Sector %lld cached; skipping\n", pos);
+	    goto check_next_header;
+	 }
+
+	 if(GetBit(try_next_modulo, pos))
+	 {  Verbose("Sector %lld cached; skipping modulo\n", pos);
+	     goto check_next_modulo;
+	 }
+
+	 result = try_sector(dh, pos, &eh);
+
+	 switch(result)
+	 {  case TRY_NEXT_HEADER:
+	       SetBit(try_next_header, pos);
+	       goto check_next_header;
+	    case TRY_NEXT_MODULO:
+	       SetBit(try_next_modulo, pos);
+	       goto check_next_modulo;
+	    case HEADER_FOUND:
+	       FreeBitmap(try_next_header);
+	       FreeBitmap(try_next_modulo);
+	       return eh;
+	 }
 
       check_next_header:
 	pos -= header_modulo;
@@ -189,6 +219,8 @@ EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
       header_modulo >>= 1;
    }
 
+   FreeBitmap(try_next_header);
+   FreeBitmap(try_next_modulo);
    return NULL;
 }
 
