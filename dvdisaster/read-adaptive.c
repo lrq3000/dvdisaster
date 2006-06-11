@@ -1048,7 +1048,7 @@ void ReadMediumAdaptive(gpointer data)
 
    if(   rc->readMode == ECC_IN_FILE
       || rc->readMode == ECC_IN_IMAGE)
-      rc->map = CreateBitmap(rc->sectors);
+      rc->map = CreateBitmap0(rc->sectors);
 
 #ifdef CHECK_VISITED
    rc->count = g_malloc0((int)rc->sectors+160);

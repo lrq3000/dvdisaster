@@ -29,7 +29,7 @@
  * Allocate the bitmap
  */
 
-Bitmap* CreateBitmap(int size)
+Bitmap* CreateBitmap0(int size)
 {  Bitmap *bm = g_malloc(sizeof(Bitmap));
 
    bm->size   = size;

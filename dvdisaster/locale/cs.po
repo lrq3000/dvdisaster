@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-08 20:54+0200\n"
+"POT-Creation-Date: 2006-06-11 12:29+0200\n"
 "PO-Revision-Date: 2006-03-16 20:40+0100\n"
 "Last-Translator: Luboš Staněk <lubek@users.sourceforge.net>\n"
 "Language-Team: čeština <cs@li.org>\n"
@@ -18,17 +18,17 @@ msgstr ""
 "X-Generator: KBabel 1.11.1\n"
 "Plural-Forms:  nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: closure.c:304 closure.c:362
+#: closure.c:307 closure.c:365
 #, c-format
 msgid "Error closing configuration file %s: %s\n"
 msgstr "Chyba při zavírání konfiguračního souboru %s: %s\n"
 
-#: closure.c:324
+#: closure.c:327
 #, c-format
 msgid "Could not open configuration file %s: %s\n"
 msgstr "Nelze otevřít konfigurační soubor %s: %s\n"
 
-#: closure.c:330
+#: closure.c:333
 #, c-format
 msgid ""
 "# dvdisaster-%s configuration file\n"
@@ -1367,7 +1367,7 @@ msgstr "chybějící"
 msgid "Total recoverable: %d.%d%%"
 msgstr "Celkem opravitelných: %d.%d%%"
 
-#: read-adaptive-window.c:146 read-linear-window.c:206
+#: read-adaptive-window.c:146 read-linear-window.c:203
 msgid "Media state"
 msgstr "Stav média"
 
@@ -1375,11 +1375,11 @@ msgstr "Stav média"
 msgid "from previous run"
 msgstr "z předchozího průchodu"
 
-#: read-adaptive-window.c:157 read-linear-window.c:221
+#: read-adaptive-window.c:157 read-linear-window.c:218
 msgid "Successfully read"
 msgstr "Úspěšně načteno"
 
-#: read-adaptive-window.c:160 read-linear-window.c:228
+#: read-adaptive-window.c:160 read-linear-window.c:225
 msgid "Unreadable / skipped"
 msgstr "Nečitelné / přeskočeno"
 
@@ -1573,20 +1573,20 @@ msgstr "Aktuální rychlost: %d.%dx"
 msgid "Unreadable / skipped sectors: %lld, CRC errors: %lld"
 msgstr "Nečitelných / přeskočených sektorů: %lld, chyb CRC: %lld"
 
-#: read-linear-window.c:183 read-linear-window.c:225 rs01-verify.c:121
+#: read-linear-window.c:180 read-linear-window.c:222 rs01-verify.c:121
 #: rs02-verify.c:123
 msgid "Sectors with CRC errors"
 msgstr "Sektory s chybami CRC"
 
-#: read-linear-window.c:214
+#: read-linear-window.c:211
 msgid "Not touched this time"
 msgstr "Tentokrát nedotčen"
 
-#: read-linear-window.c:218
+#: read-linear-window.c:215
 msgid "Already present"
 msgstr "Již přítomen"
 
-#: read-linear-window.c:314
+#: read-linear-window.c:311
 msgid "Speed"
 msgstr "Rychlost"
 

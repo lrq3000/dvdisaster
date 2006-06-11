@@ -352,7 +352,7 @@ typedef struct _Bitmap
    gint32 words;
 } Bitmap;
 
-Bitmap* CreateBitmap(int);
+Bitmap* CreateBitmap0(int);
 #define GetBit(bm,bit) (bm->bitmap[(bit)>>5] & (1<<((bit)&31))) 
 #define SetBit(bm,bit) bm->bitmap[(bit)>>5] |= (1<<((bit)&31)) 
 #define ClearBit(bm,bit) bm->bitmap[(bit)>>5] &= ~(1<<((bit)&31)) 

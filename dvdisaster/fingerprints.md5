@@ -1,15 +1,15 @@
-86f133b0a8117fd84e82d458f2f940c7  dvdisaster.h
+2970de1a39a725bd94213dbe60519254  dvdisaster.h
 1c3184967396e0586814f5fddbda6309  galois-inlines.h
 f49aaa04b2be2101ae7efdf7c5882a03  md5.h
 bcc539132868e8c92929302de62ef434  rs01-includes.h
 8ffe0380e10a45a6956c5f734e639eaa  rs02-includes.h
 83dfebba34b854a63d766e5456b7ffb9  scsi-layer.h
 7fc9a92c6f94536e7c4f5eaaac2a791c  udf.h
-c2241caaba27896c385bb2b8bf18efab  bitmap.c
+daa7ec033afb7fcfa5e4591cdda6ffac  bitmap.c
 fbff5284b373b719589c4174ac4263da  closure.c
 e0c423fffb94956009695231decaa295  crc32.c
 5cf77f9f81df23bb3dcb9899e691569b  curve.c
-bbdf17e36e64701e3c7290379e6d1d48  debug.c
+ae0ac9a0e355bd3a2b31590309d7848d  debug.c
 7e1045db813fa86f81d1102636e9c490  dvdisaster.c
 61bd5e47034125cb7062e15eeb68c62c  ecc-rs01.c
 717006a7b52a55416d526ca5734cdf61  ecc-rs02.c
@@ -29,7 +29,7 @@ eecfd7e236c89cc36e1de2062754ac2e  method-link.c
 eaf0dd9c3565ed109c17e497a19b2343  preferences.c
 6dac7ee940b2c2e8094f2cbd6bf23e74  print-sense.c
 cdde449dd2a8f64b560ff18a36f86234  random.c
-e5ee8b9b868c86294d451132df3b37b4  read-adaptive.c
+756c8047e2bba4973d700732e1f2a439  read-adaptive.c
 9bb305966c7274275817471192e8570d  read-adaptive-window.c
 9a52b91c58bfdb6493ecd2cd2bf36d9a  read-linear.c
 4d006f9908315bc24e0a842d710ee0c4  read-linear-window.c

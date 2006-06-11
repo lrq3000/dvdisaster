@@ -1,3 +1,6 @@
+0.67 (devel-15)
+	- fixed CreateBitmap() namespace collision under Windows
+
 0.67 (devel-14) 10-06-2006
 	- completed german localization
 	- fixed "fuzzy line" redraw bug in reading speed curve

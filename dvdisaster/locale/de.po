@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-08 20:54+0200\n"
+"POT-Creation-Date: 2006-06-11 12:29+0200\n"
 "PO-Revision-Date: 2004-11-30 19:48+0100\n"
 "Last-Translator: Carsten Gnörlich <carsten@dvdisaster.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -17,17 +17,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: closure.c:304 closure.c:362
+#: closure.c:307 closure.c:365
 #, c-format
 msgid "Error closing configuration file %s: %s\n"
 msgstr "Fehler beim Schließen der Konfigurations-Datei %s: %s\n"
 
-#: closure.c:324
+#: closure.c:327
 #, c-format
 msgid "Could not open configuration file %s: %s\n"
 msgstr "Konnte Konfigurations-Datei %s nicht öffnen: %s\n"
 
-#: closure.c:330
+#: closure.c:333
 #, c-format
 msgid ""
 "# dvdisaster-%s configuration file\n"
@@ -1410,7 +1410,7 @@ msgstr "fehlend"
 msgid "Total recoverable: %d.%d%%"
 msgstr "Insgesamt wiederherstellbar: %d.%d%%"
 
-#: read-adaptive-window.c:146 read-linear-window.c:206
+#: read-adaptive-window.c:146 read-linear-window.c:203
 msgid "Media state"
 msgstr "Datenträger-Zustand"
 
@@ -1418,11 +1418,11 @@ msgstr "Datenträger-Zustand"
 msgid "from previous run"
 msgstr "aus vorherigem Lauf"
 
-#: read-adaptive-window.c:157 read-linear-window.c:221
+#: read-adaptive-window.c:157 read-linear-window.c:218
 msgid "Successfully read"
 msgstr "Erfolgreich gelesen"
 
-#: read-adaptive-window.c:160 read-linear-window.c:228
+#: read-adaptive-window.c:160 read-linear-window.c:225
 msgid "Unreadable / skipped"
 msgstr "Unlesbar / Übersprungen"
 
@@ -1616,20 +1616,20 @@ msgstr "Momentane Geschwindigkeit: %d.%dx"
 msgid "Unreadable / skipped sectors: %lld, CRC errors: %lld"
 msgstr "Unlesbare / Übersprungene Sektoren: %lld, Prüfsummen-Fehler: %lld"
 
-#: read-linear-window.c:183 read-linear-window.c:225 rs01-verify.c:121
+#: read-linear-window.c:180 read-linear-window.c:222 rs01-verify.c:121
 #: rs02-verify.c:123
 msgid "Sectors with CRC errors"
 msgstr "Prüfsummen-Fehler"
 
-#: read-linear-window.c:214
+#: read-linear-window.c:211
 msgid "Not touched this time"
 msgstr "Diesmal unberücksichtigt"
 
-#: read-linear-window.c:218
+#: read-linear-window.c:215
 msgid "Already present"
 msgstr "Bereits vorhanden"
 
-#: read-linear-window.c:314
+#: read-linear-window.c:311
 msgid "Speed"
 msgstr "Geschwindigkeit"
 
@@ -3345,4 +3345,3 @@ msgstr ""
 #: welcome-window.c:142
 msgid "<i>New in this Version:</i>"
 msgstr "<i>Neu in dieser Version:</i>"
-

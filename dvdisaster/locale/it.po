@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-08 20:54+0200\n"
+"POT-Creation-Date: 2006-06-11 12:29+0200\n"
 "PO-Revision-Date: 2005-01-01 14:24+0100\n"
 "Last-Translator: Andrea Polverini <polve@polve.com>\n"
 "Language-Team: Italian <>\n"
@@ -17,17 +17,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: closure.c:304 closure.c:362
+#: closure.c:307 closure.c:365
 #, c-format
 msgid "Error closing configuration file %s: %s\n"
 msgstr "Errore durante la chiusura del file di configurazione %s: %s\n"
 
-#: closure.c:324
+#: closure.c:327
 #, c-format
 msgid "Could not open configuration file %s: %s\n"
 msgstr "Non posso aprire il file di configurazione %s: %s\n"
 
-#: closure.c:330
+#: closure.c:333
 #, c-format
 msgid ""
 "# dvdisaster-%s configuration file\n"
@@ -1359,7 +1359,7 @@ msgstr "Mancanti"
 msgid "Total recoverable: %d.%d%%"
 msgstr "Totale recuperabile: %d.%d%%"
 
-#: read-adaptive-window.c:146 read-linear-window.c:206
+#: read-adaptive-window.c:146 read-linear-window.c:203
 msgid "Media state"
 msgstr "Stato del supporto"
 
@@ -1367,11 +1367,11 @@ msgstr "Stato del supporto"
 msgid "from previous run"
 msgstr "dall'esecuzione precedente"
 
-#: read-adaptive-window.c:157 read-linear-window.c:221
+#: read-adaptive-window.c:157 read-linear-window.c:218
 msgid "Successfully read"
 msgstr "letto con successo"
 
-#: read-adaptive-window.c:160 read-linear-window.c:228
+#: read-adaptive-window.c:160 read-linear-window.c:225
 msgid "Unreadable / skipped"
 msgstr "Illeggibili / Saltati"
 
@@ -1565,20 +1565,20 @@ msgstr "Velocità corrente: %d.%dx"
 msgid "Unreadable / skipped sectors: %lld, CRC errors: %lld"
 msgstr "Settori illeggibili / saltati: %lld, errori CRC: %lld"
 
-#: read-linear-window.c:183 read-linear-window.c:225 rs01-verify.c:121
+#: read-linear-window.c:180 read-linear-window.c:222 rs01-verify.c:121
 #: rs02-verify.c:123
 msgid "Sectors with CRC errors"
 msgstr "Settori con errori CRC"
 
-#: read-linear-window.c:214
+#: read-linear-window.c:211
 msgid "Not touched this time"
 msgstr "Non toccato questa volta"
 
-#: read-linear-window.c:218
+#: read-linear-window.c:215
 msgid "Already present"
 msgstr "Già presente"
 
-#: read-linear-window.c:314
+#: read-linear-window.c:311
 msgid "Speed"
 msgstr "Velocità"
 

@@ -644,7 +644,7 @@ void SendCDB(char *cdb_raw)
  ***/
 
 Bitmap* SimulateDefects(gint64 size)
-{  Bitmap *bm = CreateBitmap(size);
+{  Bitmap *bm = CreateBitmap0(size);
    int defects = (size*Closure->simulateDefects)/100;
    
    SRandom(Closure->randomSeed);
