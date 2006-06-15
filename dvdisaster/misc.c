@@ -668,7 +668,7 @@ void ShowMessage(GtkWindow *parent, char *msg, GtkMessageType type)
 
    mi->msg    = g_strdup(msg);
    mi->type   = type;
-   mi->window = parent; //Closure->window, 
+   mi->window = parent;
 
    g_idle_add(message_idle_func, mi);
 }
@@ -715,7 +715,6 @@ typedef struct
 static gboolean label_idle_func(gpointer data)
 {  label_info *li = (label_info*)data;
 
-//gtk_label_set_text(li->label, li->text);
    gtk_label_set_markup(li->label, li->text);
 
    g_free(li->text);

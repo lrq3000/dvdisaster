@@ -220,7 +220,9 @@ typedef struct _GlobalClosure
    GdkColor  *background,*grid,*black,*white;
    GdkColor  *red,*yellow,*green,*darkgreen,*blue;
    gint      lastPercent;
-   gint      lastPercentPlotted;
+   gint      lastSegment;
+   gint      lastPlotted;
+   gint      lastPlottedY;
    gint      percent; 
 
    /*** Widgets for the linear reading/scanning action */

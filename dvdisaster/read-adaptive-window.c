@@ -78,14 +78,6 @@ static void redraw_labels(GtkWidget *widget, int erase_mask)
    h = draw_text(d, Closure->readLinearCurve->layout, 
 		 _("Adaptive reading:"), x, y, Closure->black, erase_mask & REDRAW_TITLE); 
 
-#if 0
-   y += h+h/2;
-   if(Closure->readAdaptiveSubtitle)
-     h = draw_text(d, Closure->readLinearCurve->layout, 
-		   Closure->readAdaptiveSubtitle, x, y, Closure->black, 
-		   erase_mask & REDRAW_SUBTITLE); 
-#endif
-
    y += h+h/2;
    if(Closure->readAdaptiveSubtitle)
    {  char *c = Closure->readAdaptiveSubtitle + strlen(Closure->readAdaptiveSubtitle)/2;
@@ -236,8 +228,8 @@ static gboolean segment_idle_func(gpointer data)
 {  int segment = GPOINTER_TO_INT(data);
 
    DrawSpiralSegment(Closure->readAdaptiveSpiral,
-		   Closure->readAdaptiveSpiral->segmentColor[segment],
-		   segment);
+		     Closure->readAdaptiveSpiral->segmentColor[segment],
+		     segment);
 
    return FALSE;
 }
@@ -251,7 +243,7 @@ void ChangeSegmentColor(GdkColor *color, int segment)
 }
 
 /*
- * Remove the blue markers drawn during the fill opration
+ * Remove the white markers drawn during the fill operation
  */
 
 static gboolean remove_fill_idle_func(gpointer data)
@@ -328,6 +320,7 @@ void UpdateAdaptiveResults(gint64 r, gint64 c, gint64 m, int p)
    missing = m;
    percent = p;
 
+   g_idle_remove_by_data(GINT_TO_POINTER(REDRAW_PROGRESS));
    g_idle_add(label_redraw_idle_func, GINT_TO_POINTER(REDRAW_PROGRESS));
 }   
 

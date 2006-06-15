@@ -70,7 +70,8 @@ static void cleanup(gpointer data)
    if(rc->readTimer)  g_timer_destroy(rc->readTimer);
    g_free(rc);
 
-   if(Closure->readAndCreate && Closure->guiMode && !scan_mode && !aborted)
+   if(Closure->readAndCreate && Closure->guiMode && !strncmp(Closure->methodName, "RS01", 4)
+      && !scan_mode && !aborted)
    {  if(!full_read)
       {  ModalDialog(GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, NULL,
 		     _("Automatic error correction file creation\n"

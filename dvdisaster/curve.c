@@ -244,6 +244,8 @@ void RedrawCurve(Curve *curve, int last, int which)
 
    gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->blue);
 
+   /* Draw the curve */
+
    for(i=1; i<=last; i++)
    {  x1  = CurveX(curve, i);
       fy1 = CurveY(curve, curve->fvalue[i]);

@@ -48,8 +48,7 @@ void ResetRS02VerifyWindow(Method *self)
 
    SwitchAndSetFootline(wl->cmpEccNotebook, 0, NULL, NULL);
 
-   Closure->percent = 0;
-   Closure->lastPercent = 0;
+   wl->lastPercent = 0;
 
    FillSpiral(wl->cmpSpiral, Closure->background);
    DrawSpiral(wl->cmpSpiral);
@@ -66,23 +65,21 @@ void ResetRS02VerifyWindow(Method *self)
 typedef struct _spiral_idle_info
 {  Spiral *cmpSpiral;
    GdkColor *segColor;
+   int from, to;
 } spiral_idle_info;
 
 static gboolean spiral_idle_func(gpointer data)
 {  spiral_idle_info *sii = (spiral_idle_info*)data;
    int i;
 
-   for(i=Closure->lastPercent+1; i<=Closure->percent; i++)
+   for(i=sii->from; i<=sii->to; i++)
      DrawSpiralSegment(sii->cmpSpiral, sii->segColor, i-1);
-
-   Closure->lastPercent = Closure->percent;
 
    g_free(sii);
    return FALSE;
 }
 
 static void add_verify_values(Method *method, int percent, 
-/*			       gint64 totalMissing, gint64 totalCrcErrors, */
 			       gint64 newMissing, gint64 newCrcErrors)
 {  RS02Widgets *wl = (RS02Widgets*)method->widgetList;
    spiral_idle_info *sii = g_malloc(sizeof(spiral_idle_info));
@@ -90,21 +87,16 @@ static void add_verify_values(Method *method, int percent,
    if(percent < 0 || percent > VERIFY_IMAGE_SEGMENTS)
      return;
 
-   /*
-   if(newMissing) 
-     SetLabelText(GTK_LABEL(wl->cmpMissingSectors), "<span color=\"red\">%lld</span>", totalMissing);
-
-   if(newCrcErrors) 
-     SetLabelText(GTK_LABEL(wl->cmpChkSumErrors), "<span color=\"red\">%lld</span>", totalCrcErrors);
-   */
-
    sii->cmpSpiral = wl->cmpSpiral;
 
    sii->segColor = Closure->green;
    if(newCrcErrors) sii->segColor = Closure->yellow;
    if(newMissing) sii->segColor = Closure->red;
 
-   Closure->percent = percent;
+   sii->from = wl->lastPercent+1;
+   sii->to   = percent;
+
+   wl->lastPercent = percent;
 
    g_idle_add(spiral_idle_func, sii);
 }

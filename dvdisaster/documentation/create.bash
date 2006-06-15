@@ -156,7 +156,7 @@ EOF
       echo "<i>$trans_version $cooked_version</i>" >>$file
 
       if [ $major_mode == "local" ]; then
-        echo "</td><td align=\"right\"><font size="+3">&nbsp;</font><a href=\"http://developer.berlios.de/projects/dvdisaster/$lang/\">$trans_to_internet</a>" >>$file
+        echo "</td><td align=\"right\"><font size="+3">&nbsp;</font><a href=\"http://dvdisaster.sourceforge.net/$lang/\">$trans_to_internet</a>" >>$file
       fi
    cat >> $file <<EOF
    </td>

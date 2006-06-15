@@ -48,9 +48,12 @@ static gboolean log_idle_func(gpointer data)
 
 
 void UpdateLog()
-{  
-  if(Closure->logWidget)
-    g_idle_add(log_idle_func, NULL);
+{  static int unique_addr;
+
+   if(Closure->logWidget)
+   {  g_idle_remove_by_data(&unique_addr);
+      g_idle_add(log_idle_func, &unique_addr);
+   }
 }
 
 void ShowLog()

@@ -48,8 +48,7 @@ void ResetRS01VerifyWindow(Method *self)
    SetLabelText(GTK_LABEL(wl->cmpEccResult), "");
    SwitchAndSetFootline(wl->cmpEccNotebook, 0, NULL, NULL);
 
-   Closure->percent = 0;
-   Closure->lastPercent = 0;
+   wl->lastPercent = 0;
 
    FillSpiral(wl->cmpSpiral, Closure->background);
    DrawSpiral(wl->cmpSpiral);
@@ -66,16 +65,15 @@ void ResetRS01VerifyWindow(Method *self)
 typedef struct _spiral_idle_info
 {  Spiral *cmpSpiral;
    GdkColor *segColor;
+   int from, to;
 } spiral_idle_info;
 
 static gboolean spiral_idle_func(gpointer data)
 {  spiral_idle_info *sii = (spiral_idle_info*)data;
    int i;
 
-   for(i=Closure->lastPercent+1; i<=Closure->percent; i++)
+   for(i=sii->from; i<=sii->to; i++)
      DrawSpiralSegment(sii->cmpSpiral, sii->segColor, i-1);
-
-   Closure->lastPercent = Closure->percent;
 
    g_free(sii);
    return FALSE;
@@ -102,7 +100,10 @@ void RS01AddVerifyValues(Method *method, int percent,
    if(newCrcErrors) sii->segColor = Closure->yellow;
    if(newMissing) sii->segColor = Closure->red;
 
-   Closure->percent = percent;
+   sii->from = wl->lastPercent+1;
+   sii->to   = percent;
+
+   wl->lastPercent = percent;
 
    g_idle_add(spiral_idle_func, sii);
 }
