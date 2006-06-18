@@ -233,8 +233,8 @@ void RS01ScanImage(Method *method, ImageInfo *ii, EccInfo *ei, int mode)
       MD5Update(&image_md5, buf, n);  /* update image md5sum */
 
       if(Closure->guiMode && mode & PRINT_MODE) 
-	    percent = (VERIFY_IMAGE_SEGMENTS*s)/ii->sectors;
-      else  percent = (100*s)/ii->sectors;
+	   percent = (VERIFY_IMAGE_SEGMENTS*(s+1))/ii->sectors;
+      else percent = (100*(s+1))/ii->sectors;
       if(last_percent != percent) 
       {  PrintProgress(msg,percent);
 
@@ -242,9 +242,10 @@ void RS01ScanImage(Method *method, ImageInfo *ii, EccInfo *ei, int mode)
 	   SetProgress(wl->encPBar1, percent, 100);
 
 	 if(Closure->guiMode && mode & PRINT_MODE)
-	 {  RS01AddVerifyValues(method, percent, ii->sectorsMissing, ii->crcErrors,
+ 	 {  RS01AddVerifyValues(method, percent, ii->sectorsMissing, ii->crcErrors,
 				ii->sectorsMissing - prev_missing,
 				ii->crcErrors - prev_crc_errors);
+
 	    prev_missing = ii->sectorsMissing;
 	    prev_crc_errors = ii->crcErrors;
 	 }
@@ -268,7 +269,6 @@ void RS01ScanImage(Method *method, ImageInfo *ii, EccInfo *ei, int mode)
    /*** The image md5sum can only be calculated if all blocks have been successfully read. */
 
    MD5Final(ii->mediumSum, &image_md5);
-   PrintProgress(msg,100);
 
    LargeSeek(ii->file, 0);
    if(crcbuf) g_free(crcbuf);

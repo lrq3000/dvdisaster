@@ -2584,12 +2584,7 @@ Příklad pro shell bash a německý jazyk:
 Pokud nejsou speciální znaky jako německé přehlásky zobrazeny správně,
 zkuste následující:<p>
 
-<tt>export OUTPUT_CHARSET=iso-8859-1</tt> (X11, XTerm)<p>
-
-nebo<p>
-
-<tt>export OUTPUT_CHARSET=CP850</tt> (Windows)<p>
-
+<tt>export OUTPUT_CHARSET=iso-8859-1</tt> (X11, XTerm)
 <div align=right><a href="#top">&uarr;</a></div>
 
 

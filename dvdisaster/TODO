@@ -1,11 +1,6 @@
 
 CURRENTLY WORKING ON
 
-- 0.70: add RS02 support for the adaptive reading strategy
-	full RS02 integration into the graphical user interface
-
-ROADMAP
-
 - 0.72: introduce multi threading for multicore processor support
 
 TODO  (with no particular order / schedule)

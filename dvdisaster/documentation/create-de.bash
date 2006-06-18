@@ -2411,7 +2411,50 @@ der Quellkode-Version gibt es <a href="download20.html">Installationshinweise</a
 
 <pre> </pre>
 
+<!---
 <b>Entwickler-Versionen</b> - neu und experimentell für erfahrene Benutzer!<p> 
+<b>Stabile Versionen</b> - zum Einstieg empfohlen<p> 
+--->
+
+<b>Aktuelle Version</b><p> 
+
+<table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
+<tr><td><b>dvdisaster-0.70</b></td><td align="right">xx-Jun-2006</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+  <table>
+    <tr><td align="right">&nbsp;&nbsp;Quellkode für alle Betriebssysteme:&nbsp;</td>
+        <td><a href="${tar_0_70}">dvdisaster-0.70.tar.bz2</a></td></tr>
+    <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
+        <td><a href="${tar_0_70_sig}">dvdisaster-0.70.tar.bz2.gpg</a></td></tr>
+    <tr><td align="right">Binärversion für Windows:&nbsp;</td>
+        <td><a href="${setup_0_70}">dvdisaster-0.70-setup.exe</a></td></tr>
+    <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
+        <td><a href="${setup_0_70_sig}">dvdisaster-0.70-setup.exe.gpg</a></td></tr>
+  </table>
+</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+Das <a href="background30.html">RS02-Fehlerkorrektur-Verfahren</a>
+wird in der graphischen Benutzeroberfläche vollständig unterstützt.
+Damit erzeugte Abbilder können nun auch
+mit dem <a href="background50.html">angepaßten Leseverfahren</a>
+ verarbeitet werden.<p>
+
+Julian Einwag hat damit begonnen, dvdisaster 
+für <a href="download20.html#darwin">Mac OS X / Darwin</a> anzupassen.<p>
+
+Daniel Nylander hat die Bildschirmtexte ins Schwedische übersetzt.
+
+</td></tr></table><p>
+
+Der dvdisaster-Quellkode wird auch in einem
+<a href="http://sourceforge.net/cvs/?group_id=157550">CVS-Archiv</a>
+bereitgestellt.
+
+<pre> </pre>
+
+<b>Ältere Versionen</b><p> 
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.66</b></td><td align="right">25-Mär-2006</td></tr>
@@ -2486,8 +2529,6 @@ wenn das Abbild unmittelbar vorher eingelesen wurde.</li>
 </td></tr></table><p>
 
 <pre> </pre>
-
-<b>Stabile Versionen</b> - zum Einstieg empfohlen<p> 
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.64 (pl2)</b></td><td align="right">01-Nov-2005</td></tr>
@@ -2592,7 +2633,8 @@ function download10de()
 
 <ul>
  <li><b>x86-kompatible</b> Hardware in der <b>32bit</b>-Betriebsart
-  (64-bit Unterstützung siehe Betriebssysteme),<p></li>
+  (64-bit Unterstützung siehe Betriebssysteme);<br>
+  PowerPC-Unterstützung ist experimentell,<p></li>
  <li>ein aktuelles CD- oder DVD-Laufwerk mit ATAPI- oder SCSI-Schnittstelle,<p></li>
  <li>mindestens P4 mit 2Ghz oder vergleichbare Rechenleistung<p>
 </ul>
@@ -2605,6 +2647,9 @@ function download10de()
  </li>
  <li><b>Linux</b> ab Kernel <b>2.6.7</b>, 64bit möglich<br> 
      (Kernel >= 2.4.20 sind möglich, aber nicht empfohlen!)<p>
+ </li>
+ <li><b>Mac OS X</b> ab Version 10.3 (Panther)<br> 
+      auf x86 und PowerPC-Hardware.<p>
  </li>
  <li><b>Windows</b> <b>2000</b> oder <b>XP</b><br>
      (Windows 98 und ME sind möglich, aber für die Bearbeitung von DVD nicht empfohlen)
@@ -2621,12 +2666,9 @@ function download20de()
 
 <b>Benötigte Werkzeuge und Bibliotheken</b><p>
 
-dvdisaster benötigt die üblichen <a href="http://www.gnu.org/">GNU</a>-Entwicklungswerkzeuge 
-zum Übersetzen von C-Programmen. Bei FreeBSD und Linux sind diese Werkzeuge auf den
-mitgelieferten Datenträgern normalerweise vorhanden.<p>
-Für Windows sind die entsprechenden Werkzeuge in der
- <a href="http://www.mingw.org">Mingw</a>-Umgebung enthalten.
-Cygwin wird nicht unterstützt.<p>
+dvdisaster benötigt die üblichen 
+<a href="http://www.gnu.org/">GNU</a>-Entwicklungswerkzeuge 
+zum Übersetzen von C-Programmen.<p>
 
 Abhängig vom Betriebssystem brauchen Sie außerdem:
 
@@ -2637,12 +2679,40 @@ Abhängig vom Betriebssystem brauchen Sie außerdem:
 <li>Die <a href="http://www.gtk.org">GTK+-Bibliothek</a> ab Version 2.2 einschließlich aller Hilfsbibliotheken</li>
 </ul>
 
-Diese Komponenten sind auf den FreeBSD- und Linux-Installations-Datenträgern
-typischerweise vorhanden.
+Bei FreeBSD und Linux sind diese Werkzeuge auf den
+mitgelieferten Datenträgern normalerweise vorhanden.
+Manchmal sind die Pakete nicht vollständig installiert; in diesem
+Fall müssen die Entwicklerversionen nachinstalliert werden.
+Diese Versionen erkennen Sie typerweise an den Namensendungen
+"-devel" oder "-dev".<p>
+
+<a name="windows"></a>
+<b>Hinweise für Windows</b><p>
+
+Für Windows sind die GNU-Werkzeuge in der
+<a href="http://www.mingw.org">Mingw</a>-Umgebung enthalten;
+Cygwin wird nicht unterstützt.<p>
+
 Das <a href="http://www.gtk.org">Gtk+</a>-Projekt bietet
 spezielle Versionen dieser Bibliotheken 
 <a href="http://www.gimp.org/~tml/gimp/win32/downloads.html">für Windows</a> an.
 Sie benötigen sowohl die normalen Bibliotheken als auch die "-devel"-Versionen.<p> 
+
+<a name="darwin"></a>
+<b>Hinweise für Mac OS X / Darwin</b><p>
+
+dvdisaster wurde von Julian Einwag an  
+<a href="http://de.wikipedia.org/wiki/Darwin_%28Betriebssystem%29">Darwin</a>
+angepaßt, dem Unix-Unterbau von Mac OS X. 
+Momentan muß dvdisaster unter
+Mac OS X als <a href="http://developer.apple.com/opensource/tools/runningX11.html">X11-Anwendung übersetzt und betrieben</a> werden,
+weil eine Aqua-Version der <a href="http://www.gtk.org">Gtk+-Bibliothek</a> 
+zwar bereits in Arbeit ist, aber noch nicht stabil läuft. Sobald sich dies ändert,
+wird dvdisaster ohne X11 unter Mac OS X lauffähig sein.<p>
+
+Mac OS X erlaubt in der Grundeinstellung nur seiner eigenen Benutzeroberfläche
+einen Zugriff auf CD/DVD-Laufwerke. Damit dvdisaster auf die Laufwerke zugreifen kann, 
+müssen Sie die Laufwerke vorher "unmounten".<p>
 
 <a name="freebsd"></a>
 <b>Hinweise für FreeBSD</b><p>
@@ -2809,6 +2879,7 @@ dvdisaster beinhaltet Bildschirmtexte in den folgenden Sprachen:<p>
 <tr><td>&nbsp;&nbsp;&nbsp;</td><td>Deutsch</td><td>--</td><td>vollständig</td></tr>
 <tr><td></td><td>Englisch</td><td>--</td><td>vollständig</td></tr>
 <tr><td></td><td>Italienisch</td><td>--</td><td>vollständig</td></tr>
+<tr><td></td><td>Schwedisch</td><td>--</td><td>vollständig</td></tr>
 <tr><td></td><td>Tschechisch</td><td>--</td><td>vollständig</td></tr>
 </table><p>
 
@@ -2826,11 +2897,7 @@ Zum Beispiel für die bash-Kommandozeile und deutsche Sprache:
 Wenn Umlaute nicht richtig oder als "a,"o,"u usw. dargestellt werden,
 fehlt eventuell noch: <p>
 
-<tt>export OUTPUT_CHARSET=iso-8859-1</tt> (X11, XTerm)<p>
-
-oder<p>
-
-<tt>export OUTPUT_CHARSET=CP850</tt> (Windows)<p>
+<tt>export OUTPUT_CHARSET=iso-8859-1</tt> (X11, XTerm)
 
 <div align=right><a href="#top">&uarr;</a></div>
 

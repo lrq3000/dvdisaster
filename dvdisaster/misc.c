@@ -206,7 +206,8 @@ void PrintProgress(char *format, ...)
    print_greetings(stderr);
 
    va_start(argp, format);
-   n = g_vsnprintf(msg, 256, format, argp);
+   g_vsnprintf(msg, 256, format, argp);
+   n = g_utf8_strlen(msg,-1);
    va_end(argp);
 
    if(n>255) 

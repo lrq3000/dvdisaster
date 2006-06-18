@@ -58,8 +58,13 @@ setup_0_65_sig="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.65-se
 
 tar_0_66="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.66.tar.bz2?download"
 tar_0_66_sig="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.66.tar.bz2.gpg?download"
-setup_0_66="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.66-setup.exe?download"
-setup_0_66_sig="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.66-setup.exe.gpg?download"
+setup_0_66="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.66.3-setup.exe?download"
+setup_0_66_sig="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.66.3-setup.exe.gpg?download"
+
+tar_0_70="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.tar.bz2?download"
+tar_0_70_sig="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.tar.bz2.gpg?download"
+setup_0_70="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70-setup.exe?download"
+setup_0_70_sig="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70-setup.exe.gpg?download"
 
 case $major_mode in
   local) echo "Creating local documentation for $project_title $cooked_version" ;;
@@ -79,8 +84,13 @@ case $major_mode in
 
 	 tar_0_66="http://download.berlios.de/dvdisaster/dvdisaster-0.66.tar.bz2"
          tar_0_66_sig="http://download.berlios.de/dvdisaster/dvdisaster-0.66.tar.bz2.gpg"
-         setup_0_66="http://download.berlios.de/dvdisaster/dvdisaster-0.66-setup.exe"
-         setup_0_66_sig="http://download.berlios.de/dvdisaster/dvdisaster-0.66-setup.exe.gpg"
+         setup_0_66="http://download.berlios.de/dvdisaster/dvdisaster-0.66.3-setup.exe"
+         setup_0_66_sig="http://download.berlios.de/dvdisaster/dvdisaster-0.66.3-setup.exe.gpg"
+
+	 tar_0_70="http://download.berlios.de/dvdisaster/dvdisaster-0.70.tar.bz2"
+         tar_0_70_sig="http://download.berlios.de/dvdisaster/dvdisaster-0.70.tar.bz2.gpg"
+         setup_0_70="http://download.berlios.de/dvdisaster/dvdisaster-0.70-setup.exe"
+         setup_0_70_sig="http://download.berlios.de/dvdisaster/dvdisaster-0.70-setup.exe.gpg"
 
          ;;
   *)     echo "Error: mode $major_mode unknown. Use \"local\", \"sf\" or \"berlios\"." ;;

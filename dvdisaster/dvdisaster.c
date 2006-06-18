@@ -207,7 +207,7 @@ int main(int argc, char *argv[])
 #endif
 	     break;
 
-          case LANG_GERMAN:  /* 0x07 German */
+          case LANG_GERMAN:
 	     g_setenv("LANG", "de_DE", 1);
 #ifdef WIN_CONSOLE
 	     g_setenv("OUTPUT_CHARSET", "CP850", 1);
@@ -216,8 +216,17 @@ int main(int argc, char *argv[])
 #endif
 	     break;
 
-          case LANG_ITALIAN:  /* 0x10 Italian */
+          case LANG_ITALIAN:
 	     g_setenv("LANG", "it_IT", 1);
+#ifdef WIN_CONSOLE
+	     g_setenv("OUTPUT_CHARSET", "CP850", 1);
+#else
+	     g_setenv("OUTPUT_CHARSET", "CP1252", 1);
+#endif
+	     break;
+
+          case LANG_SWEDISH:
+	     g_setenv("LANG", "sv_SV", 1);
 #ifdef WIN_CONSOLE
 	     g_setenv("OUTPUT_CHARSET", "CP850", 1);
 #else

@@ -2335,7 +2335,45 @@ For the source code version see the <a href="download20.html">installation instr
 
 <pre> </pre>
 
+<!---
 <b>Developer versions</b> - new and experimental for experienced users!<p>
+<b>Stable versions</b> - recommended for getting started.<p>
+-->
+
+<b>Current version</b><p>
+
+<table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
+<tr><td><b>dvdisaster-0.70</b></td><td align="right">25-Mar-2006</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+  <table>
+    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
+        <td><a href="${tar_0_70}">dvdisaster-0.70.tar.bz2</a></td></tr>
+    <tr><td align="right">Digital signature:&nbsp;</td>
+        <td><a href="${tar_0_70_sig}">dvdisaster-0.70.tar.bz2.gpg</a></td></tr>
+    <tr><td align="right">Binary for Windows:&nbsp;</td>
+        <td><a href="${setup_0_70}">dvdisaster-0.70-setup.exe</a></td></tr>
+    <tr><td align="right">Digital signature:&nbsp;</td>
+        <td><a href="${setup_0_70_sig}">dvdisaster-0.70-setup.exe.gpg</a></td></tr>
+  </table>
+</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+The <a href="background30.html">RS02 error correction method</a>
+is fully supported in the graphical user interface. Images created
+with RS02 can be used 
+with the <a href="background50.html">adaptive reading strategy</a>.<p>
+
+Julian Einwag started porting dvdisaster 
+to <a href="download20.html#darwin">Mac OS X / Darwin</a>.<p>
+
+Daniel Nylander provided Swedish translations of the screen texts.
+
+</td></tr></table><p>
+
+<pre> </pre>
+
+<b>Older versions</b><p>
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.66</b></td><td align="right">25-Mar-2006</td></tr>
@@ -2413,8 +2451,6 @@ if creation is invoked immediately after the image read.</li>
 </td></tr></table><p>
 
 <pre> </pre>
-
-<b>Stable versions</b> - recommended for getting started.<p>
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.64 (pl2)</b></td><td align="right">01-Nov-2005</td></tr>
@@ -2520,7 +2556,8 @@ function download10en()
 
 <ul>
  <li><b>x86 compatible</b> hardware in <b>32bit</b> mode 
-     (see operating systems for 64bit support),<p></li>
+     (see operating systems for 64bit support);<br>
+     PowerPC support is experimental,<p></li>
  <li>an up-to-date CD or DVD drive with ATAPI or SCSI interface,<p></li>
  <li>at least a P4 at 2Ghz or comparable processor<p>
 </ul>
@@ -2533,6 +2570,8 @@ function download10en()
  <li><b>Linux</b> with kernel <b>2.6.7</b> or later, 64bit supported<br>
      (using kernels >= 2.4.20 is possible, but not recommended!)<p>
  </li>
+ <li><b>Mac OS X</b> ab Version 10.3 (Panther)<br> 
+      on x86 and PowerPC hardware.<p>
  <li><b>Windows</b> <b>2000</b> or <b>XP</b><br>
      (Windows 98 and ME are possible, but are not recommended for handling DVD)
  </li>
@@ -2548,11 +2587,7 @@ function download20en()
 <b>Required tools and libraries</b><p>
 
 dvdisaster requires the usual <a href="http://www.gnu.org/">GNU</a> development
-tools for compiling C programs. FreeBSD and Linux typically come with suitable 
-packages on their installation media.<p>
-For Windows, the respective tools are available in the 
-<a href="http://www.mingw.org">Mingw</a> framework.
-Building under Cygwin is not supported.<p>
+tools for compiling C programs.<p>
 
 Depending on your operating system you will also need:
 
@@ -2563,10 +2598,37 @@ Depending on your operating system you will also need:
 <li>The <a href="http://www.gtk.org">GTK+ library</a>  version 2.2 or better including all auxiliary libraries</li>
 </ul>
 
-These should also be included on the FreeBSD and Linux distribution media.
+FreeBSD and Linux typically come with suitable 
+packages on their installation media. Sometimes these packages are not installed
+completely by default; you may need to install their development versions
+also. The additional packages are usually suffixed with "-devel" or "-dev".<p>
+
+<a name="windows"></a>
+<b>Hints for Windows</b><p>
+
+For Windows the GNU tools are available in the 
+<a href="http://www.mingw.org">Mingw</a> framework.
+Building under Cygwin is not supported.<p>
+
 The <a href="http://www.gtk.org">Gtk+</a> project offers pre-compiled
 <a href="http://www.gimp.org/~tml/gimp/win32/downloads.html">Windows versions</a>.
 You'll need both the normal and "-devel" versions of the libraries.<p> 
+
+<a name="darwin"></a>
+<b>Hints for Mac OS X / Darwin</b><p>
+
+dvdisaster was ported by Julian Einwag to  
+<a href="http://en.wikipedia.org/wiki/Darwin_%28operating_system%29">Darwin</a>,
+the Unix foundation of Mac OS X. 
+Currently dvdisaster needs to be built and run as an
+<a href="http://developer.apple.com/opensource/tools/runningX11.html">X11 application</a>
+under Mac OS X. An Aqua compatible version of 
+the <a href="http://www.gtk.org">Gtk+ library</a> is under development, but not
+yet stable. As soon as this changes, dvdisaster will be able to run under
+Mac OS X without using X11.<p>
+
+Mac OS X allows access to CD/DVD drives only to its own user interface by default.
+You must unmount the drives to make them accessible for dvdisaster.<p>
 
 <a name="freebsd"></a>
 <b>Hints for FreeBSD</b><p>
@@ -2730,6 +2792,7 @@ The current version of dvdisaster contains screen texts in the following languag
 <tr><td></td><td>English</td><td>--</td><td>complete</td></tr>
 <tr><td>&nbsp;&nbsp;&nbsp;</td><td>German</td><td>--</td><td>complete</td></tr>
 <tr><td>&nbsp;&nbsp;&nbsp;</td><td>Italian</td><td>--</td><td>complete</td></tr>
+<tr><td>&nbsp;&nbsp;&nbsp;</td><td>Swedish</td><td>--</td><td>complete</td></tr>
 </table><p>
 
 Translators for other languages are welcome!<p>
@@ -2745,11 +2808,7 @@ Example for the bash shell and german language:
 If special characters like german umlauts are not displayed properly,
 try the following:<p>
 
-<tt>export OUTPUT_CHARSET=iso-8859-1</tt> (X11, XTerm)<p>
-
-or<p>
-
-<tt>export OUTPUT_CHARSET=CP850</tt> (Windows)<p>
+<tt>export OUTPUT_CHARSET=iso-8859-1</tt> (X11, XTerm)
 
 <div align=right><a href="#top">&uarr;</a></div>
 

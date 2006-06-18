@@ -380,7 +380,7 @@ void CreateAdaptiveReadWindow(GtkWidget *parent)
    g_signal_connect(G_OBJECT(d_area), "expose_event", G_CALLBACK(expose_cb), NULL);
 
    Closure->readAdaptiveSpiral = CreateSpiral(Closure->grid, Closure->background, 10, 5, 
-					      ADAPTIVE_READ_SPIRAL_SIZE-1);
+					      ADAPTIVE_READ_SPIRAL_SIZE);
 
    gtk_widget_set_size_request(d_area, -1, Closure->readAdaptiveSpiral->diameter);
 }

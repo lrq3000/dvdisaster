@@ -688,6 +688,7 @@ step_counter:
       s += nsectors;
       if(s>read_marker) read_marker=s;
       percent = (1000*s)/sectors;
+
       if(last_percent != percent) 
       {  gulong ignore;
 	 int color;

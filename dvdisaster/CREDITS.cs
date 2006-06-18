@@ -19,6 +19,9 @@ Phil Karn
    programu dvdisaster, měli byste ziskat originální věc, máte-li
    zájem na zabudování RS kódů do vaší aplikace.
 
+Daniel Nylander (info@danielnylander.se)
+   provides and maintains the Swedish translation.
+
 Andrea Polverini (polve@polve.com) 
    poskytuje a udržuje italský překlad.
 

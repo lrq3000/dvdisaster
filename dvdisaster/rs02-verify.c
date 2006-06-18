@@ -238,7 +238,7 @@ void CreateRS02VerifyWindow(Method *self, GtkWidget *parent)
    frame = gtk_frame_new(_utf("Image state"));
    gtk_table_attach(GTK_TABLE(table), frame, 1, 2, 0, 2, GTK_SHRINK | GTK_FILL, GTK_EXPAND | GTK_FILL, 5, 5);
 
-   wl->cmpSpiral = CreateSpiral(Closure->grid, Closure->background, 10, 5, VERIFY_IMAGE_SEGMENTS-1);
+   wl->cmpSpiral = CreateSpiral(Closure->grid, Closure->background, 10, 5, VERIFY_IMAGE_SEGMENTS);
    d_area = wl->cmpDrawingArea = gtk_drawing_area_new();
    gtk_widget_set_size_request(d_area, wl->cmpSpiral->diameter+20, -1);
    gtk_container_add(GTK_CONTAINER(frame), d_area);
@@ -667,8 +667,8 @@ void RS02Verify(Method *self)
       }
 
       if(Closure->guiMode) 
-	    percent = (VERIFY_IMAGE_SEGMENTS*s)/expected_sectors;
-      else  percent = (100*s)/expected_sectors;
+	    percent = (VERIFY_IMAGE_SEGMENTS*(s+1))/expected_sectors;
+      else  percent = (100*(s+1))/expected_sectors;
 
       if(last_percent != percent) 
       {  PrintProgress(_("- testing sectors  : %3d%%") ,percent);
@@ -716,9 +716,6 @@ void RS02Verify(Method *self)
 
    MD5Final(ecc_sum, &meta_md5); 
 	    
-
-   PrintProgress(_("- testing sectors  : %3d%%"), 100);
-
    /* Do a resume of our findings */ 
 
    if(!total_missing && !hdr_missing && !hdr_crc_errors && !data_crc_errors)

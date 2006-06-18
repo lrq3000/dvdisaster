@@ -332,5 +332,5 @@ void CreateLinearReadWindow(GtkWidget *parent)
    gtk_notebook_append_page(GTK_NOTEBOOK(notebook), Closure->readLinearFootline, ignore);
 
    Closure->readLinearCurve  = CreateCurve(d_area, _("Speed"), "%dx", 1000, CURVE_MEGABYTES);
-   Closure->readLinearSpiral = CreateSpiral(Closure->grid, Closure->background, 10, 5, 999);
+   Closure->readLinearSpiral = CreateSpiral(Closure->grid, Closure->background, 10, 5, 1000);
 }

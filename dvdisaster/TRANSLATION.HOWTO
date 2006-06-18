@@ -13,8 +13,7 @@ Czech		- Luboš Staněk (lubek@users.sourceforge.net)
 English 	- Carsten Gnörlich (program author)
 German 		- Carsten Gnörlich (program author)
 Italian		- Andrea Polverini (polve@polve.com)
-
-
+Swedish		- Daniel Nylander (info@danielnylander.se)
 
 2) Requirements for translating dvdisaster
 ------------------------------------------
@@ -39,6 +38,9 @@ Appendix A) contains instructions for setting up a new
 language by yourself if you just want to play around
 with translating. 
 
+Appendix B) is a memo for myself to properly set up
+a locale. It is not strictly necessary for playing with
+a new translation.
 
 
 A) Maintainers tasks for adding a new language
@@ -118,3 +120,22 @@ e) When a new version of dvdisaster comes out,
 msgattrib --untranslated locale/de.po
 
 to find out about new untranslated strings.
+
+
+B) Things to edit at the source level for a language
+----------------------------------------------------
+
+This should be fully automated, but alas, it isn't.
+
+- Add translator to General information section in this file
+- Add translator to CREDITS* files
+- Edit GNUMakefile.template
+- Double check that the translator gets credits in the about dialog
+  text for his language
+- Add localization information in the HTML documentation
+
+- Add Windows codepage to dvdisaster.c
+- Edit installer.template
+
+- Edit wininst contents
+

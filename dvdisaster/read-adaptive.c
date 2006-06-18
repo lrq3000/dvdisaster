@@ -325,6 +325,12 @@ static void mark_sector(read_closure *rc, gint64 sector, GdkColor *color)
 
 	 if(rc->segmentState[segment] >= rc->sectorsPerSegment)
 	   new = color;
+
+	 /* Last segment represents less sectors */
+
+	 if(   segment == Closure->readAdaptiveSpiral->segmentClipping - 1
+	    && rc->segmentState[segment] >= rc->sectors % rc->sectorsPerSegment)
+	   new = color;
       }
 
       if(new != old)
@@ -1057,9 +1063,11 @@ void ReadMediumAdaptive(gpointer data)
    /*** Initialize segment state counters (only in GUI mode) */
 
    if(Closure->guiMode)
-   {  rc->sectorsPerSegment = 1 + (rc->sectors / ADAPTIVE_READ_SPIRAL_SIZE);
+   {  //rc->sectorsPerSegment = 1 + (rc->sectors / ADAPTIVE_READ_SPIRAL_SIZE);
+      rc->sectorsPerSegment = ((rc->sectors+ADAPTIVE_READ_SPIRAL_SIZE-1) / ADAPTIVE_READ_SPIRAL_SIZE);
       rc->segmentState = g_malloc0(ADAPTIVE_READ_SPIRAL_SIZE * sizeof(int));
-      ClipReadAdaptiveSpiral(rc->sectors/rc->sectorsPerSegment);
+      //      ClipReadAdaptiveSpiral(rc->sectors/rc->sectorsPerSegment);
+      ClipReadAdaptiveSpiral((rc->sectors+rc->sectorsPerSegment-1)/rc->sectorsPerSegment);
    }
 
    /*** Initialize the interval list */

@@ -915,6 +915,16 @@ static int read_cd_sector(DeviceHandle *dh, unsigned char *buf, int lba, int nse
 int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
 {  int retry,status;
 
+#if 0
+  if(s == 352480)  /* Manually placed read error */
+  {  dh->sense.sense_key = 3;
+     dh->sense.asc       = 255;
+     dh->sense.ascq      = 255;
+     RememberSense(dh->sense.sense_key, dh->sense.asc, dh->sense.ascq);
+     return TRUE;
+  }
+#endif
+
    /* See if we are in a simulated defective area */ 
 
    if(dh->defects)

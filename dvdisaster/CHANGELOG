@@ -1,3 +1,10 @@
+0.67 (devel-17) 18-06-2006
+	- added Swedish locale from Daniel Nylander
+	- fixed utf8 strlen problem in console output
+	- fixed missing output of last sector status during
+	  read and verify operations (only GUI output was affected;
+	  sectors were properly read) 
+
 0.67 (devel-16) 15-06-2006
 	- removed race conditions in some GUI idle functions
 
