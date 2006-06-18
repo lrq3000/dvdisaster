@@ -382,7 +382,7 @@ innodist: dvdisaster html pack-images prepare-dist
 	@sed 's/dvdisaster-%version%/$(PKGNAME)/' <installer.template >installer.iss
 	@iscc installer.iss
 
-nsisdist: prepare-dist wininst/version.nsh
+nsisdist: dvdisaster html pack-images prepare-dist wininst/version.nsh
 	@echo "Making NSIS package"
 	@cd wininst; makensis dvdisaster.nsi > dvdisaster.nsi.log
 
