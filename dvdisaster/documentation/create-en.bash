@@ -2570,7 +2570,7 @@ function download10en()
  <li><b>Linux</b> with kernel <b>2.6.7</b> or later, 64bit supported<br>
      (using kernels >= 2.4.20 is possible, but not recommended!)<p>
  </li>
- <li><b>Mac OS X</b> ab Version 10.3 (Panther)<br> 
+ <li><b>Mac OS X</b> ab Version 10.4 (Tiger)<br> 
       on x86 and PowerPC hardware.<p>
  <li><b>Windows</b> <b>2000</b> or <b>XP</b><br>
      (Windows 98 and ME are possible, but are not recommended for handling DVD)

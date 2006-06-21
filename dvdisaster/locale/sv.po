@@ -384,20 +384,6 @@ msgid ""
 "  --zero-unreadable - replace the \"unreadable sector\" markers with zeros\n"
 "\n"
 msgstr ""
-"Optionen zum Testen (absichtlich undokumentiert und möglicherweise schädlich!)\n"
-"  --debug           - schaltet die folgenden Optionen frei\n"
-"  --byteset s,i,b   - setze Byte i in Sektor s auf Wert b\n"
-"  --erase sector    - Löscht den angegebenen Sektor\n"
-"  --erase n-m       - Löscht die Sektoren n - m (einschließlich n,m)\n"
-"  --random-errors r,e Füllt Abbild mit zufälligen reparierbaren Fehlern\n"
-"  --random-image n  - Erzeugt Abbild mit n Sektoren aus Zufallszahlen\n"
-"  --random-seed n   - Anfangswert für den eingebauten Zufallszahlengenerator\n"
-"  --send-cdb arg    - führt cdb im Laufwerk aus; schrottet System bei Fehleingabe\n"
-"  --show-sector n   - Zeigt hexadezimale Darstellung des Sektor-Inhalts\n"
-"  --sim-defects n   - simuliere n beschädigte Sektoren auf dem Datenträger\n"
-"  --truncate n      - Verkürzt Abbild auf n Sektoren Länge\n"
-"  --zero-unreadable - Ersetzt die \"unlesbare Sektoren\"-Markierungen durch Nullen\n"
-"\n"
 
 #: ecc-rs01.c:41
 msgid "Error correction file (RS01)"
@@ -409,7 +395,7 @@ msgstr "Klassisk Reed-Solomon-metod baserad på polynomial aritmetik"
 
 #: ecc-rs02.c:47
 msgid "Augmented image (RS02)"
-msgstr "Erweitertes Abbild (RS02)"
+msgstr ""
 
 #: ecc-rs02.c:48
 msgid "Reed-Solomon method with improved tolerance for defective ecc data"
@@ -545,8 +531,6 @@ msgid ""
 "<big>Modifying dvdisaster</big>\n"
 "<i>Your changes are not ours.</i>"
 msgstr ""
-"<big>dvdisaster verändern</big>\n"
-"<i>Ihre Änderungen sind nicht unsere.</i>"
 
 #: help-dialogs.c:450
 msgid "windowtitle|About dvdisaster"
@@ -557,8 +541,6 @@ msgid ""
 "Modified version Copyright 2006 (please fill in - [directions])\n"
 "Copyright 2004-2006 Carsten Gnoerlich"
 msgstr ""
-"Veränderte Version Copyright 2006 (bitte eintragen - [Hinweise])\n"
-"Original-Programm Copyright 2004-2006 Carsten Gnörlich"
 
 #: help-dialogs.c:474
 msgid "Copyright 2004-2006 Carsten Gnoerlich"
@@ -586,7 +568,7 @@ msgstr ""
 "Detta är fri programvara och du är välkommen att distribuera det\n"
 "under villkoren för [GNU General Public License].\n"
 "\n"
-"Swedish translation by Daniel Nylander (info@danielnylander.se)\n"
+"Svensk översättning av Daniel Nylander (info@danielnylander.se)\n"
 
 #: help-dialogs.c:492
 msgid ""
@@ -597,12 +579,6 @@ msgid ""
 "Please do not bother the original authors of dvdisaster\n"
 "([www.dvdisaster.org]) about issues with this version.\n"
 msgstr ""
-"\n"
-"Dieses Programm ist <i>nicht das Original</i>. Es basiert auf den\n"
-"Quellen von dvdisaster, wurde aber von Dritten verändert.\n"
-"\n"
-"Bitte behelligen Sie die ursprünglichen Autoren von dvdisaster\n"
-"([www.dvdisaster.org]) nicht wegen Problemen mit dieser Version.\n"
 
 #: help-dialogs.c:507
 msgid ""
@@ -617,8 +593,6 @@ msgid ""
 "\n"
 "Darwin port (Mac OS X): Julian Einwag &lt;julian@einwag.de&gt;"
 msgstr ""
-"\n"
-"Anpassungen für Darwin (Mac OS X): Julian Einwag &lt;julian@einwag.de&gt;"
 
 #: large-io.c:402
 #, c-format
@@ -694,7 +668,7 @@ msgstr "Validera"
 
 #: main-window.c:268
 msgid "tooltip|Consistency check"
-msgstr "Daten überprüfen"
+msgstr ""
 
 #: main-window.c:268
 msgid "Tests consistency of error correction data and image file."
@@ -975,11 +949,11 @@ msgstr "Medium och avbildsfilsystem"
 
 #: preferences.c:526
 msgid "Get Image size from: "
-msgstr "Abbild-Größe ermitteln durch:"
+msgstr ""
 
 #: preferences.c:532
 msgid "Drive"
-msgstr "Laufwerk"
+msgstr ""
 
 #: preferences.c:538
 msgid "ISO/UDF"
@@ -1081,7 +1055,7 @@ msgstr "Felkorrigering"
 
 #: preferences.c:748
 msgid "Storage method:"
-msgstr "Abspeichern in:"
+msgstr ""
 
 # Hitta bättre ord
 #: print-sense.c:573
@@ -2438,7 +2412,7 @@ msgstr ""
 #: rs02-create.c:193 rs02-create.c:253 rs02-create.c:262
 #, c-format
 msgid "Preparing image (checksums, adding space): %3d%%"
-msgstr "Abbild vorbereiten (Prüfsummen, Größe erweitern): %3d%%"
+msgstr ""
 
 #: rs02-create.c:228 rs02-create.c:238 rs02-fix.c:87
 #, c-format
@@ -2490,11 +2464,6 @@ msgid ""
 "not an option, please create a separate error correction\n"
 "file using the RS01 method.\n"
 msgstr ""
-"Der Datenträger hat nicht genügend Platz für die Fehlerkorrektur-Daten.\n"
-"Dateninhalt des Abbilds: %lldM; Höchstmögliche Größe: %lldM.\n"
-"Falls die Abbild-Größe nicht verringert werden kann\n"
-"und kein größerer Datenträger zur Verfügung steht, erzeugen Sie bitte\n"
-"eine alleinstehende Fehlerkorrektur-Datei mit dem RS01-Verfahren.\n"
 
 #: rs02-create.c:1020
 #, c-format
@@ -2575,11 +2544,11 @@ msgstr "Datasektion:"
 
 #: rs02-verify.c:218
 msgid "Crc section:"
-msgstr "Crc-Abschnitt:"
+msgstr ""
 
 #: rs02-verify.c:226
 msgid "Ecc section:"
-msgstr "Ecc-Abschnitt:"
+msgstr ""
 
 #: rs02-verify.c:249
 msgid "Error correction data"
@@ -2618,7 +2587,7 @@ msgstr "Misslyckades med att läsa ecc-huvud vid %lld: %s\n"
 
 #: rs02-verify.c:560 rs02-verify.c:751 rs02-verify.c:752 rs02-verify.c:753
 msgid "complete"
-msgstr "vollständig"
+msgstr ""
 
 #: rs02-verify.c:562
 #, c-format
@@ -2646,7 +2615,7 @@ msgstr ""
 
 #: rs02-verify.c:728
 msgid "* suspicious image : contains damaged ecc headers\n"
-msgstr "* Verdächtiges Abbild: enthält beschädigte Ecc-Vorspänne\n"
+msgstr ""
 
 #: rs02-verify.c:733
 #, c-format
@@ -2752,11 +2721,11 @@ msgstr "<b>1. Förbereder avbild:</b>"
 
 #: rs02-window.c:520
 msgid "Maximum image size"
-msgstr "Größte mögliche Abbildlänge"
+msgstr ""
 
 #: rs02-window.c:539
 msgid "Use smallest possible size from following table (in sectors):"
-msgstr "Verwende kleinsten möglichen Wert aus folgender Tabelle:"
+msgstr ""
 
 #: rs02-window.c:543
 msgid "CD-R / CD-RW:"
@@ -2764,15 +2733,15 @@ msgstr "CD-R / CD-RW:"
 
 #: rs02-window.c:547
 msgid "DVD 1 layer:"
-msgstr "einlagige DVD:"
+msgstr ""
 
 #: rs02-window.c:551
 msgid "DVD 2 layers:"
-msgstr "zweilagige DVD:"
+msgstr ""
 
 #: rs02-window.c:567 rs02-window.c:571 rs02-window.c:575
 msgid "query medium"
-msgstr "Datenträger abfragen"
+msgstr ""
 
 #: rs02-window.c:619
 msgid "sectors."
@@ -2784,23 +2753,23 @@ msgstr "Inga cd/dvd-enheter hittades."
 
 #: scsi-darwin.c:152
 msgid "Could not get SCSI-Iterator."
-msgstr "SCSI-Iterator nicht verfügbar."
+msgstr ""
 
 #: scsi-darwin.c:165
 msgid "Could not get PlugInInterface."
-msgstr "PlugInInterface nicht verfügbar."
+msgstr ""
 
 #: scsi-darwin.c:171
 msgid "Could not get MMCDeviceInterface."
-msgstr "MMCDeviceInterface nicht verfügbar."
+msgstr ""
 
 #: scsi-darwin.c:177
 msgid "Could not get SCSITaskDeviceInterface."
-msgstr "SCSITaskDeviceInterface nicht verfügbar."
+msgstr ""
 
 #: scsi-darwin.c:182
 msgid "Couldn't obtain exclusive access to drive."
-msgstr "Ausschließlicher Zugriff auf Laufwerk nicht möglich."
+msgstr ""
 
 #: scsi-darwin.c:187
 msgid "Could not create taskInterface."
@@ -2813,11 +2782,11 @@ msgstr "otillåten data_mode: %d"
 
 #: scsi-darwin.c:253
 msgid "Couldn't set command descriptor block."
-msgstr "Konnte command descriptor block nicht setzen."
+msgstr ""
 
 #: scsi-darwin.c:258
 msgid "Couldn't set scatter-gather."
-msgstr "Konnte scatter-gather nicht setzen."
+msgstr ""
 
 #: scsi-freebsd.c:42 scsi-linux.c:42
 msgid ""
@@ -3030,10 +2999,6 @@ msgid ""
 "READ DVD STRUCTURE: %lld sectors\n"
 "\n"
 msgstr ""
-"Widersprüchliche Angaben zur Länge des Datenträger-Inhaltes:\n"
-"READ CAPACITY:      %lld Sektoren\n"
-"READ DVD STRUCTURE: %lld Sektoren\n"
-"\n"
 
 #: scsi-layer.c:568
 msgid ""
@@ -3129,18 +3094,16 @@ msgstr "Medium \"%s\": %s, %lld sektorer%s skapade %s"
 #: scsi-layer.c:1026
 #, c-format
 msgid "This software does not support \"%s\" type media."
-msgstr "Dieses Programm unterstützt keine Datenträger vom Typ \"%s\"."
+msgstr ""
 
 #: scsi-layer.c:1033
 msgid "This software does not support encrypted media.\n"
-msgstr "Dieses Programm unterstützt keine verschlüsselten Datenträger.\n"
+msgstr ""
 
 #: scsi-layer.c:1040
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr ""
-"Dieses Programm unterstützt keine Mehrfach-Sitzungen (%d Sitzungen).\n"
-"(für Anglophile: Multisession-CDs sind gemeint ;-)"
 
 #: scsi-unknown.c:34
 msgid ""
@@ -3303,17 +3266,14 @@ msgid ""
 "<span color=\"#%s\">-</span> in the graphical user interface.\n"
 "- Adaptive reading supports RS02 images.\n"
 msgstr ""
-"- Das RS02-Fehlerkorrektur-Verfahren wird vollständig\n"
-"<span color=\"#%s\">-</span> in der graphischen Benutzeroberfläche unterstützt.\n"
-"- Das optimierte Leseverfahren verarbeitet RS02-Abbilder.\n"
 
 #: welcome-window.c:92
 msgid "Show this message again"
-msgstr "Diesen Text erneut anzeigen"
+msgstr ""
 
 #: welcome-window.c:134
 msgid "<span weight=\"bold\" size=\"xx-large\">Welcome to dvdisaster!</span>"
-msgstr "<span weight=\"bold\" size=\"xx-large\">Willkommen bei dvdisaster!</span>"
+msgstr ""
 
 #: welcome-window.c:136
 msgid ""
@@ -3321,18 +3281,13 @@ msgid ""
 "dvdisaster creates error correction data to protect\n"
 "CD and DVD media against data loss.\n"
 msgstr ""
-"\n"
-"dvdisaster erzeugt Fehlerkorrektur-Daten um CD- und\n"
-"DVD-Datenträger gegen Datenverlust zu schützen.\n"
 
 #: welcome-window.c:139
 msgid ""
 "Please see the manual for [typical uses] of dvdisaster.\n"
 "\n"
 msgstr ""
-"Im Handbuch sind [typische Anwendungen] beschrieben.\n"
-"\n"
 
 #: welcome-window.c:142
 msgid "<i>New in this Version:</i>"
-msgstr "<i>Neu in dieser Version:</i>"
+msgstr ""
