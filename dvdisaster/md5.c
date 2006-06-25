@@ -20,12 +20,13 @@
    and to fit the cifs vfs by 
    Steve French sfrench@us.ibm.com */
 
-/* replacement of  __u32 with guint32 and removal of hmac* functions
-   by Carsten Gnörlich for the dvdisaster project. */
+/* Replacement of  __u32 with guint32 and removal of hmac* functions
+   and addition of functions by Carsten Gnörlich for the dvdisaster project. */
 
-#ifdef PNGPACK    /* pngpack */
+
+#if defined(PNGPACK) || defined(SIMPLE_MD5SUM)    /* pngpack or simple-md5sum*/
   #include <string.h>
-#else             /* dvdisaster */
+#else                                             /* dvdisaster */
   #include "dvdisaster.h"
 #endif
 
@@ -259,3 +260,80 @@ MD5Transform(guint32 buf[4], guint32 const in[16])
 	buf[2] += c;
 	buf[3] += d;
 }
+
+/***
+ *** The following functions have been added for the dvdisaster project.
+ ***/
+
+/*
+ * Convert md5 digest into printable format.
+ */
+
+static char hextab[] = "0123456789abcdef";
+
+void AsciiDigest(char *out, unsigned char *in)
+{  int i,o;
+
+   for(i=0, o=0; i<16; i++)
+   {  out[o++] = hextab[in[i]>>4];
+      out[o++] = hextab[in[i]&0x0f];
+   }
+   out[o] = 0;
+}
+
+/*
+ * Wrapper for creating a simple md5sum binary.
+ * This emulates "md5sum -b", as md5sum is not available per
+ * default on all target platforms. 
+ */
+
+#ifdef SIMPLE_MD5SUM
+
+#include <stdio.h>
+
+#ifdef SYS_MINGW
+  #include <fcntl.h>
+#endif
+
+static void print_sum(char *path)
+{  FILE *file;
+   struct MD5Context ctxt;
+   unsigned char buf[32768];
+   char digest[16],ascii_digest[33];
+   int size = 0;
+
+   file = fopen(path, "rb");
+   if(!file) return;
+
+   MD5Init(&ctxt);
+
+   while(!feof(file))
+   {  int n = fread(buf, 1, 32768, file);
+      if(!n) break;
+
+      MD5Update(&ctxt, buf, n);
+      size += n;
+   }
+
+   MD5Final(digest, &ctxt);
+   AsciiDigest(ascii_digest, digest);
+   printf("%s *%s\n", ascii_digest, path);
+
+   fclose(file);
+}
+
+
+int main(int argc, char *argv[])
+{  int i;
+
+#ifdef SYS_MINGW
+   setmode(fileno(stdout), O_BINARY);
+#endif
+
+   for(i=1; i<argc; i++)
+     print_sum(argv[i]);
+
+  return 0;
+}
+
+#endif

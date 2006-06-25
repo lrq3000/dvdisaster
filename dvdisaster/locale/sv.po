@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-18 19:11+0200\n"
+"POT-Creation-Date: 2006-06-25 20:14+0200\n"
 "PO-Revision-Date: 2006-06-14 23:48+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -61,14 +61,14 @@ msgstr ""
 "Genererar slumpmässigt korrigerbara raderingar (för %d rötter, max raderingar = %d).\n"
 
 #: debug.c:106 debug.c:186 debug.c:228 debug.c:488 debug.c:556
-#: rs01-common.c:54 rs02-common.c:62 rs02-create.c:297 rs02-create.c:929
+#: rs01-common.c:54 rs02-common.c:62 rs02-create.c:303 rs02-create.c:935
 #: rs02-fix.c:375 rs02-verify.c:384
 #, c-format
 msgid "Failed seeking to sector %lld in image: %s"
 msgstr "Misslyckades med att söka fram till sektor %lld i avbild: %s"
 
 #: debug.c:108 debug.c:188 debug.c:230 debug.c:355 debug.c:448 debug.c:493
-#: debug.c:560 rs02-create.c:320 rs02-create.c:346 rs02-create.c:932
+#: debug.c:560 rs02-create.c:326 rs02-create.c:352 rs02-create.c:938
 #, c-format
 msgid "Failed writing to sector %lld in image: %s"
 msgstr "Misslyckades med att skriva till sektor %lld i avbild: %s"
@@ -116,7 +116,7 @@ msgstr "Bytevärde måste vara inom intervallet [0..255]"
 msgid "Setting byte %d in sector %lld to value %d.\n"
 msgstr "Ställer in byte %d i sektor %lld till värdet %d.\n"
 
-#: debug.c:309 debug.c:348 rs02-create.c:163 rs02-verify.c:576
+#: debug.c:309 debug.c:348 rs02-create.c:169 rs02-verify.c:576
 #, c-format
 msgid "Failed seeking to start of image: %s\n"
 msgstr "Misslyckades med att söka fram till början av avbild: %s\n"
@@ -146,14 +146,14 @@ msgid "Truncating image to %lld sectors.\n"
 msgstr "Kapar avbild till %lld sektorer.\n"
 
 #: debug.c:387 read-linear.c:831 rs01-fix.c:192 rs01-fix.c:213 rs01-fix.c:229
-#: rs01-fix.c:263 rs02-create.c:94 rs02-create.c:136 rs02-fix.c:231
+#: rs01-fix.c:263 rs02-create.c:100 rs02-create.c:142 rs02-fix.c:231
 #: rs02-fix.c:251 rs02-fix.c:266
 #, c-format
 msgid "Could not truncate %s: %s\n"
 msgstr "Kunde inte kapa %s: %s\n"
 
-#: debug.c:412 file.c:59 file.c:125 file.c:145 read-adaptive.c:1084
-#: read-adaptive.c:1112 read-linear.c:262 read-linear.c:287
+#: debug.c:412 file.c:59 file.c:125 file.c:145 read-adaptive.c:1085
+#: read-adaptive.c:1113 read-linear.c:262 read-linear.c:287
 #, c-format
 msgid ""
 "Can't open %s:\n"
@@ -487,11 +487,11 @@ msgstr "Avbildsfil %s inte borttagen: %s\n"
 msgid "Failed to create the log tables!\n"
 msgstr "Misslyckades med att skapa loggtabellerna!\n"
 
-#: help-dialogs.c:67
+#: help-dialogs.c:69
 msgid "windowtitle|Log data"
 msgstr "Loggdata"
 
-#: help-dialogs.c:68
+#: help-dialogs.c:70
 msgid ""
 "<big>Log data</big>\n"
 "<i>Protocol of the current or previous action</i>"
@@ -499,11 +499,11 @@ msgstr ""
 "<big>Loggdata</big>\n"
 "<i>Protokoll för aktuell eller tidigare operation</i>"
 
-#: help-dialogs.c:84
+#: help-dialogs.c:86
 msgid "windowtitle|GNU General Public License"
 msgstr "GNU General Public License"
 
-#: help-dialogs.c:85
+#: help-dialogs.c:87
 msgid ""
 "<big>GNU General Public License</big>\n"
 "<i>The license terms of dvdisaster.</i>"
@@ -511,7 +511,7 @@ msgstr ""
 "<big>GNU General Public License</big>\n"
 "<i>Licensvillkoren för dvdisaster.</i>"
 
-#: help-dialogs.c:157
+#: help-dialogs.c:159
 #, c-format
 msgid ""
 "File\n"
@@ -522,31 +522,31 @@ msgstr ""
 "%s\n"
 "inte tillgänglig"
 
-#: help-dialogs.c:240
+#: help-dialogs.c:242
 msgid "windowtitle|Modifying dvdisaster"
 msgstr "Ändra dvdisaster"
 
-#: help-dialogs.c:241
+#: help-dialogs.c:243
 msgid ""
 "<big>Modifying dvdisaster</big>\n"
 "<i>Your changes are not ours.</i>"
 msgstr ""
 
-#: help-dialogs.c:450
+#: help-dialogs.c:452
 msgid "windowtitle|About dvdisaster"
 msgstr "Om dvdisaster"
 
-#: help-dialogs.c:470
+#: help-dialogs.c:472
 msgid ""
 "Modified version Copyright 2006 (please fill in - [directions])\n"
 "Copyright 2004-2006 Carsten Gnoerlich"
 msgstr ""
 
-#: help-dialogs.c:474
+#: help-dialogs.c:476
 msgid "Copyright 2004-2006 Carsten Gnoerlich"
 msgstr "Copyright 2004-2006 Carsten Gnörlich"
 
-#: help-dialogs.c:481
+#: help-dialogs.c:483
 msgid ""
 "dvdisaster provides a margin of safety against data loss\n"
 "on CD and DVD media caused by aging or scratches.\n"
@@ -558,7 +558,7 @@ msgstr ""
 "Det skapar felkorrigeringsdata som kan användas för att\n"
 "återskapa oläsliga sektorer om skivan senare blir skadad.\n"
 
-#: help-dialogs.c:486
+#: help-dialogs.c:488
 msgid ""
 "This software comes with  <b>absolutely no warranty</b>.\n"
 "This is free software and you are welcome to redistribute it\n"
@@ -570,7 +570,7 @@ msgstr ""
 "\n"
 "Svensk översättning av Daniel Nylander (info@danielnylander.se)\n"
 
-#: help-dialogs.c:492
+#: help-dialogs.c:494
 msgid ""
 "\n"
 "This program is <i>not the original</i>. It is based on the\n"
@@ -580,7 +580,7 @@ msgid ""
 "([www.dvdisaster.org]) about issues with this version.\n"
 msgstr ""
 
-#: help-dialogs.c:507
+#: help-dialogs.c:509
 msgid ""
 "\n"
 "e-mail: carsten@dvdisaster.com   -or-   cgnoerlich@fsfe.org"
@@ -588,7 +588,7 @@ msgstr ""
 "\n"
 "e-post: carsten@dvdisaster.com   -eller-   cgnoerlich@fsfe.org"
 
-#: help-dialogs.c:510
+#: help-dialogs.c:512
 msgid ""
 "\n"
 "Darwin port (Mac OS X): Julian Einwag &lt;julian@einwag.de&gt;"
@@ -890,7 +890,7 @@ msgstr ""
 "\n"
 "Varken fil eller ecc-data hittades i avbild.\n"
 
-#: misc.c:162
+#: misc.c:146
 #, c-format
 msgid "dvdisaster-%s%sCopyright 2004-2006 Carsten Gnoerlich.\n"
 msgstr "dvdisaster-%s%sCopyright 2004-2006 Carsten Gnörlich.\n"
@@ -899,7 +899,7 @@ msgstr "dvdisaster-%s%sCopyright 2004-2006 Carsten Gnörlich.\n"
 #. legislature. If in doubt, just translate the following like "This is free
 #. software; please refer to the conditions of the GNU GENERAL PUBLIC LICENSE
 #. in the source code." Avoid making any legal statements by your own.
-#: misc.c:168
+#: misc.c:152
 msgid ""
 "This software comes with  ABSOLUTELY NO WARRANTY.  This\n"
 "is free software and you are welcome to redistribute it\n"
@@ -911,11 +911,11 @@ msgstr ""
 "under villkoren för GNU GENERAL PUBLIC LICENSE.\n"
 "Se filen \"COPYING\" för ytterligare information.\n"
 
-#: misc.c:401
+#: misc.c:385
 msgid "Warning"
 msgstr "Varning"
 
-#: misc.c:464
+#: misc.c:448
 msgid ""
 "\n"
 "*\n"
@@ -1073,7 +1073,7 @@ msgstr "Avkänningsfel: %s; "
 msgid "unknown asc/ascq code (0x%02x, 0x%02x)."
 msgstr "okänd asc/ascq-kod (0x%02x, 0x%02x)."
 
-#: read-adaptive.c:129 read-adaptive.c:1246
+#: read-adaptive.c:129 read-adaptive.c:1247
 msgid "Aborted by unrecoverable error."
 msgstr "Avbruten av ej återhämtningsbart fel."
 
@@ -1113,8 +1113,8 @@ msgstr ""
 "Endast de första %lld mediumsektorerna kommer att behandlas.\n"
 
 #: read-adaptive.c:455 read-adaptive.c:471 read-adaptive.c:530
-#: read-adaptive.c:617 read-adaptive.c:670 read-adaptive.c:967
-#: read-adaptive.c:1176
+#: read-adaptive.c:617 read-adaptive.c:670 read-adaptive.c:968
+#: read-adaptive.c:1177
 msgid "Aborted by user request!"
 msgstr "Avbruten av användaren!"
 
@@ -1189,7 +1189,7 @@ msgstr "Analyserar existerande avbildsfil"
 msgid "premature end in image (only %d bytes): %s\n"
 msgstr "för tidigt slut på avbild (endast %d byte): %s\n"
 
-#: read-adaptive.c:703 read-adaptive.c:1284 read-linear.c:410
+#: read-adaptive.c:703 read-adaptive.c:1285 read-linear.c:410
 #: rs01-common.c:221
 #, c-format
 msgid "Error reading CRC information: %s"
@@ -1226,51 +1226,51 @@ msgstr "Ignorera alltid"
 msgid "Abort"
 msgstr "Avbryt"
 
-#: read-adaptive.c:935
+#: read-adaptive.c:936
 #, c-format
 msgid "Filling image area [%lld..%lld]"
 msgstr "Fyller avbildsområde [%lld..%lld]"
 
-#: read-adaptive.c:948 read-adaptive.c:1259 read-adaptive.c:1440
-#: read-linear.c:358 read-linear.c:483 read-linear.c:585 read-linear.c:640
-#: rs01-fix.c:431 rs01-fix.c:689 rs02-fix.c:733
+#: read-adaptive.c:949 read-adaptive.c:1260 read-adaptive.c:1385
+#: read-adaptive.c:1466 read-linear.c:358 read-linear.c:483 read-linear.c:585
+#: read-linear.c:640 rs01-fix.c:431 rs01-fix.c:689 rs02-fix.c:733
 #, c-format
 msgid "Failed seeking to sector %lld in image [%s]: %s"
 msgstr "Misslyckades med att söka fram till sektor %lld i avbild [%s]: %s"
 
-#: read-adaptive.c:960 read-adaptive.c:1302 read-adaptive.c:1310
-#: read-adaptive.c:1323 read-adaptive.c:1446 read-linear.c:364
-#: read-linear.c:591 read-linear.c:648 rs01-fix.c:436
+#: read-adaptive.c:961 read-adaptive.c:1303 read-adaptive.c:1314
+#: read-adaptive.c:1330 read-adaptive.c:1390 read-adaptive.c:1472
+#: read-linear.c:364 read-linear.c:591 read-linear.c:648 rs01-fix.c:436
 #, c-format
 msgid "Failed writing to sector %lld in image [%s]: %s"
 msgstr "Misslyckades med att skriva till sektor %lld i avbild [%s]: %s"
 
-#: read-adaptive.c:1025 read-linear.c:145
+#: read-adaptive.c:1026 read-linear.c:145
 msgid "Reading aborted"
 msgstr "Läsning avbruten"
 
-#: read-adaptive.c:1028 read-linear.c:148
+#: read-adaptive.c:1029 read-linear.c:148
 msgid "Preparing for reading the medium image."
 msgstr "Förbereder för läsning av mediumavbild."
 
-#: read-adaptive.c:1029 read-linear.c:142 read-linear.c:149
+#: read-adaptive.c:1030 read-linear.c:142 read-linear.c:149
 msgid "Medium: not yet determined"
 msgstr "Medium: ännu inte fastställt"
 
-#: read-adaptive.c:1086 read-linear.c:264
+#: read-adaptive.c:1087 read-linear.c:264
 #, c-format
 msgid "Creating new %s image.\n"
 msgstr "Skapar ny avbild %s.\n"
 
-#: read-adaptive.c:1090 read-linear.c:257
+#: read-adaptive.c:1091 read-linear.c:257
 msgid "Reading new medium image."
 msgstr "Läser ny mediumavbild."
 
-#: read-adaptive.c:1106 read-linear.c:278
+#: read-adaptive.c:1107 read-linear.c:278
 msgid "Completing existing medium image."
 msgstr "Färdigställer existerande mediumavbild."
 
-#: read-adaptive.c:1135 read-adaptive.c:1416
+#: read-adaptive.c:1136 read-adaptive.c:1442
 msgid ""
 "\n"
 "Sufficient data for reconstructing the image is available.\n"
@@ -1278,7 +1278,7 @@ msgstr ""
 "\n"
 "Tillräcklig data för att återskapa avbilden finns tillgänglig.\n"
 
-#: read-adaptive.c:1233 read-linear.c:532
+#: read-adaptive.c:1234 read-linear.c:532
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -1287,7 +1287,7 @@ msgstr ""
 "Sektor %lld: %s\n"
 "Kan inte återhämta från felet ovan."
 
-#: read-adaptive.c:1237 read-linear.c:536
+#: read-adaptive.c:1238 read-linear.c:536
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -1300,32 +1300,32 @@ msgstr ""
 "Det kanske inte är möjligt att återhämta från detta fel.\n"
 "Ska detta fel ignoreras och läsningen fortsätta?"
 
-#: read-adaptive.c:1281 rs01-fix.c:38 rs02-fix.c:410
+#: read-adaptive.c:1282 rs01-fix.c:38 rs02-fix.c:410
 #, c-format
 msgid "Failed seeking in crc area: %s"
 msgstr "Misslyckades med att söka i crc-område: %s"
 
-#: read-adaptive.c:1297 rs01-fix.c:385 rs02-fix.c:423
+#: read-adaptive.c:1298 rs01-fix.c:385 rs02-fix.c:423
 #, c-format
 msgid "CRC error in sector %lld\n"
 msgstr "CRC-fel i sektor %lld\n"
 
-#: read-adaptive.c:1429 scsi-layer.c:442
+#: read-adaptive.c:1455 scsi-layer.c:442
 #, c-format
 msgid "Sectors %lld-%lld: %s\n"
 msgstr "Sektorer %lld-%lld: %s\n"
 
-#: read-adaptive.c:1432 read-linear.c:625 scsi-layer.c:441
+#: read-adaptive.c:1458 read-linear.c:625 scsi-layer.c:441
 #, c-format
 msgid "Sector %lld: %s\n"
 msgstr "Sektor %lld: %s\n"
 
-#: read-adaptive.c:1560
+#: read-adaptive.c:1586
 #, c-format
 msgid "Only %2d.%1d%% of the image are readable or correctable"
 msgstr "Endast %2d.%1d%% av avbilden är läsbar eller korrigerbar"
 
-#: read-adaptive.c:1563
+#: read-adaptive.c:1589
 #, c-format
 msgid ""
 "\n"
@@ -1336,7 +1336,7 @@ msgstr ""
 "%s\n"
 "(%lld läsbara,  %lld korrigerbara,  %lld saknas fortfarande).\n"
 
-#: read-adaptive.c:1577
+#: read-adaptive.c:1603
 msgid ""
 "\n"
 "Good! All sectors have been read.\n"
@@ -1344,12 +1344,12 @@ msgstr ""
 "\n"
 "Bra! Alla sektorer har lästs.\n"
 
-#: read-adaptive.c:1584
+#: read-adaptive.c:1610
 #, c-format
 msgid "No unreadable intervals with >= %d sectors left."
 msgstr "Inga oläsbara intervall med >= %d sektorer kvar."
 
-#: read-adaptive.c:1587
+#: read-adaptive.c:1613
 #, c-format
 msgid ""
 "\n"
@@ -1435,7 +1435,7 @@ msgstr ""
 
 #: read-linear.c:164 rs01-create.c:635 rs01-fix.c:183 rs01-fix.c:204
 #: rs01-fix.c:249 rs01-fix.c:278 rs01-fix.c:294 rs01-fix.c:343
-#: rs01-verify.c:427 rs01-verify.c:776 rs02-create.c:101 rs02-fix.c:223
+#: rs01-verify.c:427 rs01-verify.c:776 rs02-create.c:107 rs02-fix.c:223
 #: rs02-fix.c:243 rs02-fix.c:333 rs02-verify.c:597
 msgid "<span color=\"red\">Aborted by user request!</span>"
 msgstr "<span color=\"red\">Avbruten av användaren!</span>"
@@ -1608,7 +1608,7 @@ msgstr "Finns redan"
 msgid "Speed"
 msgstr "Hastighet"
 
-#: rs01-common.c:70 rs02-common.c:67 rs02-create.c:180 rs02-fix.c:378
+#: rs01-common.c:70 rs02-common.c:67 rs02-create.c:186 rs02-fix.c:378
 #, c-format
 msgid "Failed reading sector %lld in image: %s"
 msgstr "Misslyckades med att läsa sektor %lld i avbild: %s"
@@ -1703,11 +1703,11 @@ msgid "Failed skipping ecc+crc header: %s"
 msgstr "Misslyckades med att hoppa över ecc+crc-huvud: %s"
 
 # Rätt?
-#: rs01-create.c:367 rs02-create.c:451
+#: rs01-create.c:367 rs02-create.c:457
 msgid "Internal error: parity blocks are not a multiple of sector size.\n"
 msgstr "Internfel: paritetsblock är inte multiplicerbar med sektorstorlek.\n"
 
-#: rs01-create.c:494 rs01-create.c:617 rs01-create.c:910 rs02-create.c:902
+#: rs01-create.c:494 rs01-create.c:617 rs01-create.c:910 rs02-create.c:908
 #, c-format
 msgid "Ecc generation: %3d.%1d%%"
 msgstr "Generering av ecc: %3d.%1d%%"
@@ -1730,7 +1730,7 @@ msgstr ""
 "Kan inte skriva ecc-huvud:\n"
 "%s"
 
-#: rs01-create.c:946 rs02-create.c:1051
+#: rs01-create.c:946 rs02-create.c:1057
 #, c-format
 msgid "Ecc generation: 100.0%%\n"
 msgstr "Generering av ecc: 100.0%%\n"
@@ -2131,7 +2131,7 @@ msgstr "- Kontrollerar ecc-fil -"
 msgid "No error correction file present."
 msgstr "Ingen felkorrigeringsfil finns tillgänglig."
 
-#: rs01-verify.c:533 scsi-freebsd.c:117 scsi-linux.c:98
+#: rs01-verify.c:533 scsi-freebsd.c:113 scsi-linux.c:98
 #, c-format
 msgid "Could not open %s: %s"
 msgstr "Kunde inte öppna %s: %s"
@@ -2386,11 +2386,11 @@ msgstr "Misslyckades med att söka till ecc-huvud på %lld: %s\n"
 msgid "Failed writing ecc header at %lld: %s\n"
 msgstr "Misslyckades med att skriva ecc-huvud vid %lld: %s\n"
 
-#: rs02-create.c:97
+#: rs02-create.c:103
 msgid "<span color=\"red\">Aborted by user request!</span> (partial ecc data removed from image)"
 msgstr "<span color=\"red\">Avbröts på användarens begäran!</span> (ej komplett ecc-data borttagen från avbild)"
 
-#: rs02-create.c:127
+#: rs02-create.c:133
 #, c-format
 msgid ""
 "Image \"%s\" already contains error correction information.\n"
@@ -2399,7 +2399,7 @@ msgstr ""
 "Avbilden \"%s\" innehåller redan felkorrigeringsinformation.\n"
 "Kapar avbild till datadel (%lld sektorer).\n"
 
-#: rs02-create.c:183
+#: rs02-create.c:189
 msgid ""
 "Image contains unread(able) sectors.\n"
 "Error correction information can only be\n"
@@ -2409,26 +2409,26 @@ msgstr ""
 "Felkorrigeringsinformation kan endast läggas till\n"
 "i kompletta (oskadade) avbilder.\n"
 
-#: rs02-create.c:193 rs02-create.c:253 rs02-create.c:262
+#: rs02-create.c:199 rs02-create.c:259 rs02-create.c:268
 #, c-format
 msgid "Preparing image (checksums, adding space): %3d%%"
 msgstr ""
 
-#: rs02-create.c:228 rs02-create.c:238 rs02-fix.c:87
+#: rs02-create.c:234 rs02-create.c:244 rs02-fix.c:87
 #, c-format
 msgid "Failed seeking to end of image: %s\n"
 msgstr "Misslyckades med att söka till slutet av avbild: %s\n"
 
-#: rs02-create.c:232 rs02-create.c:249 rs02-fix.c:96
+#: rs02-create.c:238 rs02-create.c:255 rs02-fix.c:96
 #, c-format
 msgid "Failed expanding the image: %s\n"
 msgstr "Misslyckades med att expandera avbilden: %s\n"
 
-#: rs02-create.c:972
+#: rs02-create.c:978
 msgid "Error correction data creation aborted"
 msgstr "Skapandet av felkorrigeringsdata avbröts"
 
-#: rs02-create.c:976 rs02-create.c:996
+#: rs02-create.c:982 rs02-create.c:1002
 #, c-format
 msgid ""
 "<big>Augmenting the image with error correction data.</big>\n"
@@ -2437,16 +2437,16 @@ msgstr ""
 "<big>Utvidgar avbilden med felkorrigeringsdata.</big>\n"
 "<i>%s</i>"
 
-#: rs02-create.c:977
+#: rs02-create.c:983
 msgid "- checking image -"
 msgstr "- kontrollerar avbild -"
 
-#: rs02-create.c:992
+#: rs02-create.c:998
 #, c-format
 msgid "Encoding with Method RS02: %lld MB data, %lld MB ecc (%d roots; %4.1f%% redundancy)."
 msgstr "Kodar med Metod RS02: %lld MB data, %lld MB ecc (%d rötter; %4.1f%% redundans)."
 
-#: rs02-create.c:1000
+#: rs02-create.c:1006
 #, c-format
 msgid ""
 "Augmenting image with Method RS02:\n"
@@ -2455,7 +2455,7 @@ msgstr ""
 "Utvidgar avbild med Metod RS02:\n"
 " %lld MB data, %lld MB ecc (%d rötter; %4.1f%% redundans)."
 
-#: rs02-create.c:1009
+#: rs02-create.c:1015
 #, c-format
 msgid ""
 "Not enough space on medium left for error correction data.\n"
@@ -2465,7 +2465,7 @@ msgid ""
 "file using the RS01 method.\n"
 msgstr ""
 
-#: rs02-create.c:1020
+#: rs02-create.c:1026
 #, c-format
 msgid ""
 "Using redundancies below 20%%%% may not give\n"
@@ -2474,7 +2474,7 @@ msgstr ""
 "Användning av redundans under 20%%%% kanske inte ger\n"
 "förväntat skydd mot förlorat data.\n"
 
-#: rs02-create.c:1052 rs02-create.c:1061
+#: rs02-create.c:1058 rs02-create.c:1067
 #, c-format
 msgid ""
 "Image has been augmented with error correction data.\n"
@@ -2775,7 +2775,7 @@ msgstr ""
 msgid "Could not create taskInterface."
 msgstr "Kunde inte skapa taskInterface."
 
-#: scsi-darwin.c:242 scsi-freebsd.c:173 scsi-linux.c:140 scsi-win32.c:609
+#: scsi-darwin.c:242 scsi-freebsd.c:169 scsi-linux.c:140 scsi-win32.c:609
 #, c-format
 msgid "illegal data_mode: %d"
 msgstr "otillåten data_mode: %d"
@@ -2796,7 +2796,7 @@ msgstr ""
 "Kan inte komma åt /dev efter enheter\n"
 "Inga enheter kommer att vara förvalda.\n"
 
-#: scsi-freebsd.c:101 scsi-linux.c:83
+#: scsi-freebsd.c:97 scsi-linux.c:83
 msgid ""
 "No CD/DVD drives found in /dev.\n"
 "No drives will be pre-selected.\n"
@@ -2804,7 +2804,7 @@ msgstr ""
 "Inga cd/dvd-enheter hittades i /dev.\n"
 "Inga enheter kommer att vara förvalda.\n"
 
-#: scsi-freebsd.c:126
+#: scsi-freebsd.c:122
 #, c-format
 msgid "Could not allocate ccb for %s"
 msgstr "Kunde inte allokera ccb för %s"
@@ -3236,11 +3236,11 @@ msgstr ""
 msgid "Search"
 msgstr "Sök"
 
-#: show-manual.c:326
+#: show-manual.c:329
 msgid "Documentation not installed."
 msgstr "Dokumentationen är inte installerad."
 
-#: show-manual.c:371
+#: show-manual.c:374
 #, c-format
 msgid ""
 "Documentation file\n"
@@ -3251,7 +3251,7 @@ msgstr ""
 "%s\n"
 "hittades inte.\n"
 
-#: show-manual.c:380
+#: show-manual.c:383
 msgid "Please hang on until the browser comes up!"
 msgstr "Vänta tills webbläsaren har startats!"
 

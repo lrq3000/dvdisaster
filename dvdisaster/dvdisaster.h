@@ -657,7 +657,6 @@ char* sgettext_utf8(char*);
 gint64 uchar_to_gint64(unsigned char*);
 void gint64_to_uchar(unsigned char*, gint64);
 
-void AsciiDigest(char*, unsigned char*);
 void CalcSectors(gint64, gint64*, int*);
 
 void PrintCLI(char*, ...);

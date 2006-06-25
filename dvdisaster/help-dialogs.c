@@ -21,6 +21,8 @@
 
 #include "dvdisaster.h"
 
+#include "help-dialogs.h"
+
 /***
  *** The log viewer
  ***/

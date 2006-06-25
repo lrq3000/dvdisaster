@@ -58,7 +58,13 @@ static void ecc_cleanup(gpointer data)
       AllowActions(TRUE);
    }
 
-   /** Clean up */
+   /*** We must invalidate the CRC cache as it does only cover the
+	data portion of the image, not the full RS02 enhanced image. */
+
+   if(Closure->crcCache)
+     ClearCrcCache();
+
+   /*** Clean up */
 
    if(ec->gt) FreeGaloisTables(ec->gt);
    if(ec->ii) FreeImageInfo(ec->ii);

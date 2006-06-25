@@ -1,5 +1,13 @@
-0.67 (devel-18)
+0.67 (devel-18) 25-06-2006
 	- started putting the NSIS scripts into place (not yet finished)
+	- adaptive reader left correctable sector zero-filled in the image under
+	  some circumstances; these showed up as CRC errors during verify and fix.
+	  these are now correctly filled with the dead sector marker and therefore
+	  reported as missing.
+	- fixed crash when doing RS01 encode right after RS02 encode on same image
+	- added simple-md5sum as FreeBSD does not have md5sum by default,
+	  but we need it during the build process.
+	- fixed non-working online manual button under FreeBSD and Darwin
 
 0.67 (devel-17) 18-06-2006
 	- added Swedish locale from Daniel Nylander

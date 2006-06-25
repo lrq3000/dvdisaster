@@ -709,7 +709,7 @@ skip:
 
      /* Report progress */
 
-     percent = (1000*si)/s;
+     percent = (1000*(si+1))/s;
 
      if(last_percent != percent) 
      {  if(Closure->guiMode)

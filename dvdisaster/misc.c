@@ -117,22 +117,6 @@ void gint64_to_uchar(unsigned char *out, gint64 in)
 }
 
 /*
- * Convert md5 digest into printable format.
- */
-
-static char hextab[] = "0123456789abcdef";
-
-void AsciiDigest(char *out, unsigned char *in)
-{  int i,o;
-
-   for(i=0, o=0; i<16; i++)
-   {  out[o++] = hextab[in[i]>>4];
-      out[o++] = hextab[in[i]&0x0f];
-   }
-   out[o] = 0;
-}
-
-/*
  * Calculate total number of sectors (including the last sector)
  * and the remaining bytes in the last sector for a given medium size.
  */

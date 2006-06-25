@@ -21,7 +21,7 @@
 
 #include "dvdisaster.h"
 
-#ifdef SYS_LINUX
+#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_DARWIN)
 #include <sys/wait.h>
 #endif
 
@@ -34,7 +34,7 @@
  *** Ask user to specify his browser
  ***/
 
-#ifdef SYS_LINUX
+#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_DARWIN)
 #define SEARCH_BUTTON 1
 
 typedef struct
@@ -147,7 +147,7 @@ static void browser_dialog(char *url)
 
    gtk_widget_show_all(dialog);
 }
-#endif /* SYS_LINUX */
+#endif /* SYS_ unix-like */
 
 /***
  *** Show the manual in an external browser
@@ -172,7 +172,7 @@ static void msg_destroy_cb(GtkWidget *widget, gpointer data)
    bi->msg = NULL; 
 }
 
-#ifdef SYS_LINUX
+#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_DARWIN)
 
 /* 
  * The following list of browsers and html wrappers
@@ -202,18 +202,13 @@ static gboolean browser_timeout_func(gpointer data)
 
    waitpid(bi->pid, &status, WNOHANG);
 
-   if(WIFEXITED(status))
-   {  switch(WEXITSTATUS(status))
-      {  case 0:  /* browser was successful */
-	   if(bi->msg) 
-	     gtk_widget_destroy(bi->msg);
-	   if(bi->url) 
-	     g_free(bi->url);
-	   g_free(bi);
-	   return FALSE;
+   /* At least mozilla returns random values under FreeBSD on success,
+      so we can't rely on the return value exept our own 110 one. */
 
-         case 110: /* browser did not execute */
-         default:  /* browser executed, but failed afterwards */
+   if(WIFEXITED(status))
+   {
+      switch(WEXITSTATUS(status))
+      {  case 110: /* browser did not execute */
 	   browser_index++;
 	   if(!browsers[browser_index]) /* all browsers from the list failed */
 	   {  browser_dialog(bi->url);
@@ -229,7 +224,15 @@ static gboolean browser_timeout_func(gpointer data)
 	      try_browser(bi);
 	   }
 	   return FALSE;
-	   break;
+
+         case 0:  /* browser assumed to be successful */
+         default:
+	   if(bi->msg) 
+	     gtk_widget_destroy(bi->msg);
+	   if(bi->url) 
+	     g_free(bi->url);
+	   g_free(bi);
+	   return FALSE;
       }
    }
 
@@ -241,7 +244,7 @@ static gboolean browser_timeout_func(gpointer data)
 
    return bi->seconds > 60 ? FALSE : TRUE;
 }
-#endif /* SYS_LINUX */
+#endif /* SYS_ unix-like */
 
 #ifdef SYS_MINGW
 static gboolean browser_timeout_func(gpointer data)
@@ -267,7 +270,7 @@ static gboolean browser_timeout_func(gpointer data)
  * Invoke the browser
  */
 
-#ifdef SYS_LINUX
+#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_DARWIN)
 static void try_browser(browser_info *bi)
 {  pid_t pid;
 
@@ -303,7 +306,7 @@ static void try_browser(browser_info *bi)
       _exit(110); /* couldn't execute */
    }
 }
-#endif /* SYS_LINUX */
+#endif /* SYS_ unix-like */
 
 
 void ShowHTML(char *target)
@@ -387,10 +390,10 @@ void ShowHTML(char *target)
    g_timeout_add(1000, browser_timeout_func, (gpointer)bi);
 #endif
 
-#ifdef SYS_LINUX
+#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_DARWIN)
    /* Try the first browser */
 
    browser_index = 0;
    try_browser(bi);
-#endif /* SYS_LINUX */
+#endif
 }

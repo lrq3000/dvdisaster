@@ -90,8 +90,28 @@ inlined-icons.h: icons/read.png icons/create.png icons/scan.png icons/fix.png ic
 	@gdk-pixbuf-csource --raw --name=dvdisaster_open_ecc icons/open-ecc.png >>inlined-icons.h
 	@gdk-pixbuf-csource --raw --name=dvdisaster_open_img icons/open-img.png >>inlined-icons.h
 
+help-dialogs.o: help-dialogs.c simple-md5sum
+	@if test -e fingerprints.md5; \
+	then if test -e help-dialogs.h; then rm help-dialogs.h; fi; \
+	     mv inlined-icons.h inlined-icons.saved; \
+	     ./simple-md5sum -b *.h *.c documentation/*.bash | sort -k2 >tmp.md5; \
+	     sort -k2 < fingerprints.md5 >tmp2.md5; \
+	     mv inlined-icons.saved inlined-icons.h; \
+	     if ! cmp tmp2.md5 tmp.md5 >/dev/null; \
+	     then echo "#define MODIFIED_SOURCE 1" >> help-dialogs.h; \
+	     else echo "#define UNMODIFIED_SOURCE 1" >> help-dialogs.h; \
+	     fi; \
+	     rm tmp.md5 tmp2.md5; \
+	else echo "#define MODIFIED_SOURCE 1" >> help-dialogs.h; \
+	fi
+	@echo "Compiling:" $*.c
+	@$(CC) $(COPTS) -c $*.c
+
 locale:
 	@$(MAKE) --no-print-directory -C locale
+
+simple-md5sum: md5.c
+	@$(CC) $(COPTS) -DSIMPLE_MD5SUM md5.c -o simple-md5sum
 
 # Stuff needed to generate or prepare the documentation
 
@@ -270,8 +290,8 @@ distclean: clean
 
 clean:
 	@echo "Removing rebuildable files"
-	@rm -rf *.o medium.* dvdisaster *.exe *.zip .dvdisaster core *.core *.stackdump
-	@rm -f inlined-icons.h installer.iss
+	@rm -rf *.o medium.* dvdisaster simple-md5sum *.exe *.zip .dvdisaster core *.core *.stackdump
+	@rm -f inlined-icons.h help-dialogs.h installer.iss
 	@rm -f wininst/version.nsh
 	@find . -name \*\~ -print | xargs rm -f;
 	@find . -name \*.mo -print | xargs rm -f;

@@ -55,15 +55,13 @@ char* DefaultDevice()
      { char buf[80];
 
        sprintf(buf,"/dev/%s", dev); 
-//printf("trying device %s\n",buf);
+
        memset(dh, 0, sizeof(DeviceHandle));
 
        /* see if we can open it */
 
        dh->camdev = cam_open_pass(buf, O_RDWR, NULL);
        dh->device = buf;
-
-//       printf("opening %s: %s\n",buf,strerror(errno));
 
        if(!dh->camdev)   /* device not even present */
 	 continue;
@@ -87,8 +85,6 @@ char* DefaultDevice()
        g_ptr_array_add(Closure->deviceNodes, g_strdup(buf));
        sprintf(buf, "%s (/dev/%s)", dh->devinfo, dev);
        g_ptr_array_add(Closure->deviceNames, g_strdup(buf));
-
-//       printf("found %s\n",buf);
      }
    }
 
@@ -187,7 +183,6 @@ int SendPacket(DeviceHandle *dh, unsigned char *cmd, int cdb_size, unsigned char
       cam_error_print(dh->camdev, ccb, CAM_ESF_ALL, CAM_EPF_ALL, stderr);
       return -1;
    }
-//   else printf("cam_send worked\n");
 
    /* Extract sense data */
 

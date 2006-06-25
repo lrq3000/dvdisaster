@@ -188,19 +188,6 @@ done
 echo "}" >> method-link.c
 echo 
 
-# Check sources for modifications
-
-if test -e fingerprints.md5; then
-  md5sum -b *.h *.c documentation/*.bash | sort -k2 >tmp.md5
-  sort -k2 < fingerprints.md5 >tmp2.md5
-  if ! cmp tmp2.md5 tmp.md5 >/dev/null; then
-    CFG_OTHER_OPTIONS="$CFG_OTHER_OPTIONS -DMODIFIED_SOURCE"
-  fi
-  rm tmp.md5 tmp2.md5
-else
-  CFG_OTHER_OPTIONS="$CFG_OTHER_OPTIONS -DMODIFIED_SOURCE"
-fi
-
 # Okay, hopefully we've got everything together now.
 
 (cd locale; bash create-makefile)

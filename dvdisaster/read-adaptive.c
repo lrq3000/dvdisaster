@@ -367,26 +367,22 @@ static void open_and_determine_mode(read_closure *rc)
       rc->eh  = rc->dh->rs02Header;
       rc->lay = CalcRS02Layout(uchar_to_gint64(rc->eh->sectors), rc->eh->eccBytes);
  
-#if 1 /* for testing purposes, remove me ! */
-      { gint64 s,sinv,slice,idx;
-	for(s=0; s<rc->dh->sectors-1; s++)
-	{  RS02SliceIndex(rc->lay, s, &slice, &idx);
-	   sinv = RS02SectorIndex(rc->lay, slice, idx);
-	   /*
-	   if(s<rc->lay->protectedSectors) sinv = slice*rc->lay->sectorsPerLayer + idx;
-	   else  sinv = RS02EccSectorIndex(rc->lay, slice-rc->lay->ndata, idx);
-	   */
+      if(Closure->verbose)  /* for testing purposes */
+      {  gint64 s,sinv,slice,idx;
 
-	   if(slice == -1)
-	     printf("Header %lld found at sector %lld\n", idx, s);
-           else
-	   if(s != sinv) Stop("Failed for sector %lld / %lld:\n"
-			      "slice %lld, idx %lld\n",
-			      s, sinv, slice, idx);
-	}
-	printf("RS02SliceIndex() is okay\n");
+	 for(s=0; s<rc->dh->sectors-1; s++)
+	 {  RS02SliceIndex(rc->lay, s, &slice, &idx);
+	    sinv = RS02SectorIndex(rc->lay, slice, idx);
+
+	    if(slice == -1)
+	       Verbose("Header %lld found at sector %lld\n", idx, s);
+	    else
+	    if(s != sinv) Verbose("Failed for sector %lld / %lld:\n"
+				  "slice %lld, idx %lld\n",
+				  s, sinv, slice, idx);
+	 }
+	 Verbose("RS02SliceIndex() verification finished.\n");
       }
-#endif
    }
 
    /* else check the current ecc file */
@@ -925,7 +921,8 @@ void fill_gap(read_closure *rc)
   char *t;
   gint64 i,j;
 
-  /*** TODO: this is fishy. */
+  /*** Point maxImageSector to first unwritten sector 
+       TODO: this is fishy. */
 
   if(rc->firstSector==0 || rc->maxImageSector > 0)
     rc->maxImageSector++;
@@ -1303,6 +1300,9 @@ reopen_image:
 			   b, "unv", strerror(errno));
 
 		    mark_sector(rc, b, Closure->yellow);
+
+		    if(rc->maxImageSector < b)
+		      rc->maxImageSector = b;
 		 }
 		 else /* good sector */
 		 {  n = LargeWrite(rc->image, Closure->scratchBuf+i*2048, 2048);
@@ -1314,6 +1314,9 @@ reopen_image:
 		    rc->readable++;
 
 		    mark_sector(rc, b, Closure->green);
+		    
+		    if(rc->maxImageSector < b)
+		      rc->maxImageSector = b;
 		 }
 	       }
 
@@ -1363,9 +1366,28 @@ reopen_image:
 			{  SetBit(rc->map, layer_idx);
 			   rc->correctable++;
 			   mark_sector(rc, layer_idx, Closure->green);
+
 #ifdef CHECK_VISITED
 			   count[layer_idx]++;
 #endif
+
+			   /* If the correctable sector lies beyond rc->maxImageSector,
+			      fill the gap with dead sector markers */
+
+			   if(layer_idx > rc->maxImageSector)
+			   {  gint64 ds = rc->maxImageSector+1;
+			     
+			      if(!LargeSeek(rc->image, (gint64)(2048*ds)))
+			        Stop(_("Failed seeking to sector %lld in image [%s]: %s"),
+				     ds, "skip-corr", strerror(errno));
+
+			      for(ds=rc->maxImageSector+1; ds<=layer_idx; ds++)
+			      {  if(LargeWrite(rc->image, Closure->deadSector, 2048) != 2048)
+				   Stop(_("Failed writing to sector %lld in image [%s]: %s"),
+					ds, "skip-corr", strerror(errno));
+			      }
+			      rc->maxImageSector = layer_idx;
+			   }
 			}
 		        layer_idx += rc->rs01LayerSectors;
 		     }
@@ -1410,7 +1432,7 @@ reopen_image:
 	    if(s>rc->maxImageSector) rc->maxImageSector=s-1;
 
 	    /* Stop reading if enough data for error correction
-	       has benn gathered */
+	       has been gathered */
 
 	    if(rc->readable + rc->correctable >= rc->sectors)
 	    {  char *t = _("\nSufficient data for reconstructing the image is available.\n");
