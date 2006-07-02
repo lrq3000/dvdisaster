@@ -6,11 +6,11 @@ bcc539132868e8c92929302de62ef434 *rs01-includes.h
 48a04499df58f9aad0923e8c5409513b *scsi-layer.h
 7fc9a92c6f94536e7c4f5eaaac2a791c *udf.h
 daa7ec033afb7fcfa5e4591cdda6ffac *bitmap.c
-fbff5284b373b719589c4174ac4263da *closure.c
+b687f8d2de769b7ee19f41c3e596e2c5 *closure.c
 e0c423fffb94956009695231decaa295 *crc32.c
 c8264cf87e441cd33b55611988a58548 *curve.c
 ae0ac9a0e355bd3a2b31590309d7848d *debug.c
-73a03cad36e84563e464a62f1f004aa3 *dvdisaster.c
+3114a048f66b4fd5889e6e465833831b *dvdisaster.c
 61bd5e47034125cb7062e15eeb68c62c *ecc-rs01.c
 717006a7b52a55416d526ca5734cdf61 *ecc-rs02.c
 255f47cdc89a7edb4c091a5e92379550 *endian.c
@@ -20,9 +20,9 @@ b1a8a70dd7cff1fe05c263e8a2c7b2ed *galois.c
 da4bb1a3fde494c707b86dbbedca907a *icon-factory.c
 7ea547219ab8184458047f34153d9f0f *large-io.c
 dce5ee933f48f4b05f7cac1b3ebba2b9 *main-window.c
-9ecd78782d05982ebfdd09f1bb9e0c38 *md5.c
+9cd36d26ea575986db9dc68a84217232 *md5.c
 c20a9ced3a33577cef8a102e2f8f842d *memtrack.c
-1931e565eb75fcde2ac440481988db72 *menubar.c
+cd4ad1831e8f743a8d2328ffdda6f82d *menubar.c
 4fbbf52079c1af319bd7a2f0ca991320 *method.c
 eecfd7e236c89cc36e1de2062754ac2e *method-link.c
 8804592e0902d58daabe95d70f019123 *misc.c
@@ -45,7 +45,7 @@ d9f706b44d9ee8670aa330b4d7ec6bd4 *rs02-verify.c
 6a12091704c2ded29f3f7ef64c6e1dab *rs02-window.c
 cc85e2cdb2d8a2b9cd9544c38bc459ed *scsi-darwin.c
 b826f04c5a5f28c912f1a9eec100a670 *scsi-freebsd.c
-0982827a38af83cdb883d091a63d3fce *scsi-layer.c
+1e364858dff8a02a9f07f9d6640952dd *scsi-layer.c
 13cc055568e2bea3d9475f511503ff53 *scsi-linux.c
 79a515b5dc4addb8ffbe301e5ee88b72 *scsi-unknown.c
 c377b11bed46d51a37cd161b63cad251 *scsi-win32.c
@@ -56,5 +56,5 @@ f3695be8726f3177bd738959bdf869b3 *udf.c
 885740e21baf96c2a30dca4237c01bbe *welcome-window.c
 50f7aae5c0fd219a298a2a47167db9a2 *documentation/create.bash
 578fb108d4ffaf2e008356f39debd486 *documentation/create-cs.bash
-76f06b248e27f1d6b59fcacd3233c828 *documentation/create-de.bash
-b693c90038659587f6359ef879748482 *documentation/create-en.bash
+bd83b568c4e64dca91ffc809a2b2d5f5 *documentation/create-de.bash
+6354a172cd481fb360a66ebaace2706a *documentation/create-en.bash

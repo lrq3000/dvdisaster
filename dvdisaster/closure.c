@@ -271,9 +271,15 @@ void ReadDotfile()
       if(!strcmp(symbol, "last-device"))     { if(Closure->device) g_free(Closure->device);
 	                                       Closure->device      = g_strdup(value); continue; }
       if(!strcmp(symbol, "last-image"))      { g_free(Closure->imageName);
-					       Closure->imageName   = g_strdup(value); continue; }
+	                                       if(!strcmp(value, "none"))
+						    Closure->imageName = g_strdup("");
+					       else Closure->imageName = g_strdup(value); continue; 
+                                             }
       if(!strcmp(symbol, "last-ecc"))        { g_free(Closure->eccName);
-                                               Closure->eccName     = g_strdup(value); continue; }
+	                                       if(!strcmp(value, "none"))
+						    Closure->eccName = g_strdup("");
+                                               else Closure->eccName = g_strdup(value); continue; 
+                                             }
       if(!strcmp(symbol, "browser"))         { g_free(Closure->browser);
                                                Closure->browser     = g_strdup(value); continue; }
 

@@ -68,9 +68,17 @@ static void menu_cb(GtkWidget *widget, gpointer data)
    
 	g_free(Closure->imageName);
 	Closure->imageName = g_strdup(gtk_entry_get_text(GTK_ENTRY(Closure->imageEntry)));
+	if(!Closure->imageName || !strlen(Closure->imageName))
+	{  if(Closure->imageName) g_free(Closure->imageName);
+	   Closure->imageName = g_strdup("none");
+	}
 
 	g_free(Closure->eccName);
 	Closure->eccName = g_strdup(gtk_entry_get_text(GTK_ENTRY(Closure->eccEntry)));
+	if(!Closure->eccName || !strlen(Closure->eccName))
+	{  if(Closure->eccName) g_free(Closure->eccName);
+	   Closure->eccName = g_strdup("none");
+	}
 
 	/* and quit */
 
@@ -364,7 +372,7 @@ static void file_select_cb(GtkWidget *widget, gpointer data)
 
 void set_path(GtkWidget *entry, char *path)
 {
-   if(path[0] == '/' || path[0] == '\\' || path[1] == ':')
+  if(path[0] == '/' || path[0] == '\\' || path[1] == ':' || strlen(path) < 1)
    {  gtk_entry_set_text(GTK_ENTRY(entry), path);
       gtk_editable_set_position(GTK_EDITABLE(entry), -1);
    }

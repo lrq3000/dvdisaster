@@ -669,7 +669,6 @@ int main(int argc, char *argv[])
 	     "  --cache-size n         - image cache size in MB during -c mode (default: 32MB)\n"
 	     "  --dao                  - assume DAO disc; do not trim image end\n"
 	     "  --fill-unreadable n    - fill unreadable sectors with byte n\n"
-	     "  --medium-size          - max. possible image size on medium (in sectors)\n"
       	     "  --query-size n         - query drive/udf/ecc for image size (default: ecc)\n"         
 	     "  --speed-warning n      - print warning if speed changes by more than n percent\n"
 	     "  --spinup-delay n       - wait n seconds for drive to spin up\n"
@@ -689,7 +688,7 @@ int main(int argc, char *argv[])
 	     "  --random-seed n   - random seed for built-in random number generator\n"
 	     "  --send-cdb arg    - executes given cdb at drive; kills system if used wrong\n"
 	     "  --show-sector n   - shows hexdump of the given sector\n"
-	     "  --sim-defects n   - simulate n defective sectors on medium\n"
+	     "  --sim-defects n   - simulate n%% defective sectors on medium\n"
 	     "  --truncate n      - truncates image to n sectors\n"
 	     "  --zero-unreadable - replace the \"unreadable sector\" markers with zeros\n\n"));
       }

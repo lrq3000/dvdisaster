@@ -970,7 +970,7 @@ This will verify the error correction information in the image read from the med
 <td>Watch the comparison progress.<p>
 If the verification finishes without error messages, your CD/DVD writing
 software is compatible with the augmented images.</td>
-<td><a href="example6.html"><img src="images/ex-compare.png" alt="screen shot" width="200"></a><p>
+<td><a href="example6.html#rs02"><img src="images/ex-compare-rs02.png" alt="screen shot" width="200"></a><p>
 </td>
 </tr>
 
@@ -1145,8 +1145,9 @@ The <img src="../images/open-img.png" alt="filechooser button" align="middle"> s
 </tr>
 
 <tr valign="top" $BGCOLOR2>
-<td>4.</td>
-<td>
+<td>4a.</td>
+<td>only when error correction files are used (RS01):<p>
+
 Select the error correction file.
 The error correction file must be available at this stage so that dvdisaster can determine
 when enough data for reconstructing the image has been collected.<p>
@@ -1156,6 +1157,14 @@ The <img src="../images/open-ecc.png" alt="filechooser button" align="middle"> s
 </tr>
 
 <tr valign="top" $BGCOLOR1>
+<td>4b.</td>
+<td>only when augmented images are used (RS02):<p>
+Choose "ECC/RS02" in the settings so that the correct image size is used for reading.<p>
+</td>
+<td><a href="example81.html#imagesize"><img src="images/prefs-general.png" alt="Screenshot" width="200"></a></td>
+</tr>
+
+<tr valign="top" $BGCOLOR2>
 <td>5.</td>
 <td>
 Select the adaptive reading strategy.<p>
@@ -1163,13 +1172,13 @@ Select the adaptive reading strategy.<p>
 <td><a href="example82.html"><img src="images/prefs-read.png" alt="screenshot" width="200"></a></td>
 </tr>
 
-<tr valign="top" $BGCOLOR2>
+<tr valign="top" $BGCOLOR1>
 <td>6.</td>
 <td>Start the reading process by clicking at the "Read" button.</td>
 <td><img src="images/btn-read.png" alt="Read button"></td>
 </tr>
 
-<tr valign="top" $BGCOLOR1>
+<tr valign="top" $BGCOLOR2>
 <td>7.</td>
 <td>Watch the reading progress.</td>
 <td><a href="example4.html"><img src="images/ex-read-a.png" alt="screenshot" width="200"></a><p>
@@ -1212,15 +1221,9 @@ This requires the following parameters (defaults are given in parenthesis):
 <td><a href="example90.html#ecc">-e / --ecc</a></td>
 <td>only for <a href="background30.html">RS01</a>: Error correction file (medium.ecc)</td>
 </tr>
-<tr>
-<td><a href="example90.html#parse-ecc">--parse-ecc</a></td>
-<td>only for <a href="background30.html">RS02</a>: Use information from Ecc header</td>
-</tr>
-<tr>
-<td><a href="example90.html#jump">-j / --jump</a></td>
-<td>Skip sectors after a read error (16)</td>
-</tr>
 </table><p>
+
+Example for reading a defective medium using <b>error correction files (RS01):</b><p>
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>dvdisaster -r --adaptive-read -i image.iso -e corrdata.ecc</b><br>
@@ -1239,6 +1242,27 @@ Filling image area [57280..1083504]<br>
 Repairable: 100.0% (correctable: 319200; now reading [320304..327065], size 6762)<br>
 Sufficient data for reconstructing the image is available.
 </td></tr></table><p>
+
+Example for reading a defective medium containing an <b>augmented image (RS02):</b><p>
+
+<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+user@linux&gt; <b>dvdisaster -r --adaptive-read -i image.iso</b><br>
+dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
+<i>[... remainder of the GPL announcement ...]</i><p>
+
+Device: /dev/cdrom, &nbsp;ATAPI DVD+RW 8X4X12 B2K7<br>
+Medium: DVD+R, 2224288 sectors, Ecc, 1 layer(s)<p>
+
+Adaptive reading: Trying to collect enough data for error correction.<br>
+Creating new image.iso image.<br>
+Repairable:  2.6% (correctable: 0; now reading [0..2224288], size 2224288)<br>
+Sectors 57264-57279: Medium Error; Unrecovered read error.<br>
+Filling image area [57280..1083504]<br>
+[... more descriptions of reading process ...] <br>
+Repairable: 100.0% (correctable: 319200; now reading [320304..327065], size 6762)<br>
+Sufficient data for reconstructing the image is available.
+</td></tr></table><p>
+
 EOF
 }
 
@@ -1253,6 +1277,8 @@ function example5en()
 </td></tr>
 
 <tr><td>
+The screen shot shows a recovery using an error correction file; for augmented images
+the output will differ in the head line.  
 The repairing progress will be shown in percent.<p>
 
 <ul>
@@ -1305,7 +1331,10 @@ The <img src="../images/open-img.png" alt="filechooser button" align="middle"> s
 <tr valign="top" $BGCOLOR2>
 <td>2.</td>
 <td>
-Select the respective error correction file.<p>
+If you are using error correction files, select
+the respective error correction file. 
+Leave this entry blank when working
+with augmented images.<p>
 </td>
 <td><img src="../images/btn-eccfile.png" alt="ecc file selection"><p>
 The <img src="../images/open-ecc.png" alt="filechooser button" align="middle"> symbol opens the file chooser.</td>
@@ -1347,9 +1376,11 @@ Recovering requires the following parameters (defaults are given in parenthesis)
 </tr>
 <tr>
 <td><a href="example90.html#ecc">-e / --ecc</a></td>
-<td>Error correction file (medium.ecc)</td>
+<td>only for <a href="background30.html">RS01</a>: Error correction file (medium.ecc)</td>
 </tr>
 </table><p>
+
+No error correction file needs to be specified when augmented images are used.<p>
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>dvdisaster -f -i image.iso -e corrdata.ecc</b><br>
@@ -1382,6 +1413,14 @@ function example6en()
 <br clear="all">
 </td></tr>
 
+<tr align="center"><td>
+<a name="rs02"></a>
+<h3>Screenshot: Verifying an augmented image with its error correction data</h3><p></td></tr>
+<tr align="center"><td>
+<center><img src="images/ex-compare-rs02.png" alt="screen shot"></center>
+<br clear="all">
+</td></tr>
+
 <tr><td>
 
 This process may take a while as both
@@ -1396,10 +1435,10 @@ still uncorrected read errors. In contrast the appearance of checksum errors
 is usually the result of
 <a href="qa20.html#crc">incorrect handling or hardware problems</a>.<p></li>
 
-<li><b>"Error correction file summary"</b>.<br>
-This field shows the settings used while creating the error correction file,
+<li><b>"Error correction file summary" / "Error correction data"</b>.<br>
+This field shows the settings used while creating the error correction data,
 and whether it can be processed by your version of dvdisaster.
-If the error correction file does not correspond to the image file
+If an error correction file does not correspond to the image file
 or if it is damaged, warnings are printed beneath the last four entries.<p></li>
 
 <li><b>Hint:</b> The results of the verification are unreliable if the image has been read in
@@ -1416,8 +1455,8 @@ function example50en()
    cat >> $1 <<EOF
 <h3>Getting information about images and error correction data</h3>
 
-This function provides information about image and error correction files
-which are already present on your hard disc:<p>
+This function provides information about image and error correction data
+which is already present on your hard disc:<p>
 
 <table width="100%" border="0" cellspacing="0" cellpadding="10">
 <tr valign="top" $BGCOLOR1>
@@ -1432,7 +1471,9 @@ The <img src="../images/open-img.png" alt="filechooser button" align="middle"> s
 <tr valign="top" $BGCOLOR2>
 <td>2.</td>
 <td>
-Select the respective error correction file.<p>
+If you are using error correction files, select
+the respective error correction file. Leave this entry blank when working
+with augmented images.<p>
 </td>
 <td><img src="../images/btn-eccfile.png" alt="eccfile selection"><p>
 The <img src="../images/open-ecc.png" alt="filechooser button" align="middle"> symbol opens the file chooser</td>
@@ -1440,7 +1481,8 @@ The <img src="../images/open-ecc.png" alt="filechooser button" align="middle"> s
 
 <tr valign="top" $BGCOLOR1>
 <td>3.</td>
-<td>Click the "Verify" button.</td>
+<td>Click the "Verify" button to verfiy the image data with the error correction
+information.</td>
 <td><img src="images/btn-compare.png" alt="verify button"></td>
 </tr>
 
@@ -1469,9 +1511,11 @@ You will need the following parameters (defaults are given in parenthesis):
 </tr>
 <tr>
 <td><a href="example90.html#ecc">-e / --ecc</a></td>
-<td>Error correction file (medium.ecc)</td>
+<td>only for <a href="background30.html">RS01</a>: Error correction file (medium.ecc)</td>
 </tr>
 </table><p>
+
+Example for verifying an image with the respective error correction file:<p>
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>dvdisaster -t -i image.iso -e corrdata.ecc</b><br>
@@ -1490,6 +1534,26 @@ dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnörlich.<br>
 - fingerprint match: good<br>
 - ecc blocks       : 20428800 (good)<br>
 - ecc md5sum       : 4bdf5ed398e7662ac93c9d08e1ba9ff2 (good)
+</td></tr></table><p>
+
+Example for checking an augmented image:<p>
+
+<table class="example" width=100% bgcolor=#ffffe0><tr><td>
+user@linux&gt; <b>dvdisaster -t -i image.iso</b><br>
+dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnörlich.<br>
+<i>[... remainder of the GPL announcement ...]</i><p>
+
+/dvd/image.iso: present, contains 2281713 medium sectors.<br>
+- good image       : all sectors present<br>
+- data md5sum      : 1b6ad314c0cbaa1874841c41ee05a620<p>
+
+Error correction data: created by dvdisaster-0.70<br>
+- method           : RS02, 94 roots, 58.4% redundancy.<br>
+- requires         : dvdisaster-0.66 (good)<br>
+- medium sectors   : 2281713 (good)<br>
+- data md5sum      : 1b6ad314c0cbaa1874841c41ee05a620 (good)<br>
+- crc md5sum       : 105381481a7d5e490d3a53ae66e19f79 (good)<br>
+- ecc md5sum       : 5d04d3746a228dd8ad23442aeb80d838 (good)
 </td></tr></table><p>
 EOF
 }
@@ -1557,23 +1621,27 @@ More information on this form follows down this page.<p>
 <center><img src="images/prefs-general-1.png" alt="screen shot"></center>
 <br clear="all">
 
-These options work around some problems caused by drives
-<a href="qa20.html#plusrw">reporting incorrect image lengths</a>
-with DVD-RW/+RW media.<p>
+dvdisaster provides several ways of determining the image size when reading media:<p>
 
-<b>Use information from Ecc headers <font color="red">(1)</font>:</b>
-The image size will be determined from the headers of the
+<b>ECC/RS02</b>: dvdisaster will use the image size recorded in the 
 <a href="background30.html">RS02</a> error correction information.
-If the image does not contain RS02 error correction data, the start of the reading
-process will be delayed significantly by setting this option.<p>
+This option <i>must</i> be selected for reading augmented images; otherwise
+the resulting image may be incomplete.<br>
+ 
+It is possible to read images containing no RS02 error correction information 
+with this option set. In this case the image size will be determined as in the
+"ISO/UDF" setting. However searching for the error correction information
+may delay the start of the reading operation.<p>
 
-<b>Use information from ISO/UDF file system <font color="red">(2)</font>:</b>
-dvdisaster will determine the image size from the ISO/UDF file system
-if this option is checked. If the image contains
-<a href="background30.html">RS02</a> error correction information you must
-also set option <font color="red">(1)</font>. Otherwise the 
-error correction data will not be included into the image.
+<b>ISO/UDF</b>: dvdisaster will determine the image size from the ISO/UDF file system.<br>
+Caution: This is only suitable for working with error correction files as it 
+results in incomplete images if used for reading images augmented
+with <a href="background30.html">RS02</a> error correction information.<p>
 
+<b>Drive</b>: The image size reported by the drive will be used. 
+Since this information is typically wrong for <a href="qa20.html#rw">DVD-RW/+RW/-RAM</a>
+media this option is only present for backwards compatibility with older dvdisaster
+versions.
 
 <p><hr><p>
 
@@ -1688,6 +1756,16 @@ More information on this form follows down this page.<p>
 
 <p><hr><p>
 
+<a name="ecc-method"></a>
+<b>Selection of error correction method</b> <p>
+
+<center><img src="images/prefs-ecc-0.png"  alt="screen shot"></center><br clear="all">
+
+Select "Error correction file (RS01)" to store the error correction data in
+a <a href="background30.html">separate file</a>.
+
+<p><hr><p>
+
 <a name="redundancy"></a>
 <b>Redundancy for new error correction files</b><p>
 
@@ -1742,44 +1820,58 @@ function example84en()
 
 More information on this form follows down this page.<p>
 
-<center><img src="images/prefs-ecc.png" alt="screen shot"></center>
+<center><img src="images/prefs-rs02.png" alt="screen shot"></center>
 <br clear="all">
 
 <p><hr><p>
 
-<a name="redundancy"></a>
-<b>Redundancy for new error correction files</b><p>
+<a name="ecc-method"></a>
+<b>Selection of error correction method</b> <p>
 
-<center><img src="images/prefs-ecc-1.png" alt="screen shot"></center>
-<br clear="all">
+<center><img src="images/prefs-rs02-0.png"  alt="Bildschirmfoto"></center><br clear="all">
 
- The redundancy specifies the amount of correctable errors
-<a href="background10.html">in the best case</a>. Since the ideal case
-is rare, it is recommended to apply a reasonable margin when selecting the redundancy:<p>
+Select "Augmented Image (RS02)" to store the error correction data 
+<a href="background30.html">directly in the image</a>.
 
-<font color="red">(1)</font> / <font color="red">(2)</font>
-The presets <b>normal</b> and <b>high</b> provide a redundancy 
-of 14.3% and 33.5%, respectively. They invoke optimized program code to speed up the
-error correction file creation.<p>
+<p><hr><p>
 
-<font color="red">(3)</font> Specify the redundancy <b>by percent</b>. Please note:
+<a name="max-image-size"></a>
+<b>Maximum image size</b> <p>
+
+<center><img src="images/prefs-rs02-1.png"  alt="screen shot"></center><br clear="all">
+
+dvdisaster needs to know the total space available on the medium.
+From this value the unused space is calculated and filled with error correction
+information when creating an augmented image.<p>
+
+<b>"Use smallest possible size from following table (in sectors)"</b>:
+When this option is activated dvdisaster assumes that you want to use 
+the smallest possible medium (CD or DVD). The augmented image size will not
+exceed the respective size.<p>
+
+The typical capacities of an 80min CD and one and two layered DVDs are
+pre-defined in the table. If you own media with different sizes you can enter
+the values in the respective rows (in sectors of 2KB size).<p>
+
+The "query medium" button takes the medium capacity from the drive; this may
+return wrong values for certain drives and media. The yellow arrow resets the
+value to the last saved one.<p>
+
+<b>"Use at most ... sectors"</b>:
+Use this option to override the above settings; the augmented image will be expanded
+to the size given in this field. This allows for the creation of DVD-sized augmented 
+images which would normally be fitted to CD size.<p>
+
+<a name="size-hints">Advance notices:</a><p>
 
 <ul>
-<li>An error correction file with  x% redundancy will be approximately x% of the size
-of the corresponding image file.</li>
-<li>The error correction capability depends on the statistical distribution of read errors. 
-Only changes by 5 percentage points and more may 
-have a recognizable effect on the error correction.<p></li>
+<li>For technical reasons the augmented image may be a bit smaller than the above values.</li>
+<li>Do not enter values which would lead to "overburning" the medium, e.g. which are 
+larger than the nominal medium capacity.</li>
+<li>When the image is smaller than one third of the medium capacity,
+the augmented image may not fill the medium completely since the maximum
+possible redundancy is 200%.</li>
 </ul>
-
-<font color="red">(4)</font> Give the <b>maximum size</b> of the error correction file in MB.
-dvdisaster will choose a suitable redundancy setting so that
-the overall size of the error correction file does not exceed the
-given limit. <p>
-
-Advance notice: When using the same size setting for images of vastly different size,
-more error correction information is allotted to the smaller images
-and less to the larger ones.<p>
 
 <p><hr><p>
 
@@ -1788,7 +1880,7 @@ and less to the larger ones.<p>
 <center><img src="images/prefs-ecc-2.png" alt="screen shot"></center>
 <br clear="all">
 
-dvdisaster optimizes access to the image and error correction files by maintaining 
+dvdisaster optimizes access to the image and error correction data by maintaining 
 its own cache. The preset of 32MB is suitable for most systems.<p>
 
 EOF
@@ -1841,19 +1933,20 @@ first letter abbreviation (-d). They are used to change the pre-selected drive a
 long form unless noted otherwise.<p>
 
 <table>
-<tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#adaptiveread">--adaptive-read</a></td><td>use adaptive strategy for reading damaged media</td></tr>
-<tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#autosuffix">--auto-suffix</a></td><td>automatically add .iso and .ecc file suffixes</td></tr>
+<tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#adaptiveread">--adaptive-read</a></td><td>Use adaptive strategy for reading damaged media</td></tr>
+<tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#autosuffix">--auto-suffix</a></td><td>Automatically add .iso and .ecc file suffixes</td></tr>
 <tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#cache">--cache-size</a> &nbsp; &nbsp;</td><td>Cache size during creation of the error correction file</td></tr>
 <tr valign=top><td></td><td><a href="#dao">--dao</a></td><td>Assumes "disk at once" medium</td></tr>
-<tr valign=top><td></td><td><a href="#fillunreadable">--fill-unreadable [n]</a></td><td>fill unreadable sectors with given byte</td></tr>
+<tr valign=top><td></td><td><a href="#fillunreadable">--fill-unreadable [n]</a></td><td>Fill unreadable sectors with given byte</td></tr>
 <tr valign=top><td></td><td><a href="#jump">-j / --jump</a></td><td>Skip sectors after a read error</td></tr>
-<tr valign=top><td></td><td><a href="#parse-ecc">--parse-ecc</a></td><td>Use information from error correction headers</td></tr>
-<tr valign=top><td></td><td><a href="#parse-udf">--parse-udf</a></td><td>Use information from ISO/UDF filesystem</td></tr>
-<tr valign=top><td></td><td><a href="#redundancy">-n / --redundancy</a></td><td>Set error correction code redundancy</td></tr>
 <tr valign=top><td></td><td><a href="#method">-m / --method</a>&nbsp; &nbsp;</td><td>Select error correction method</td></tr>
+<tr valign=top><td></td><td>-n / --redundancy</td><td><a href="#redundancy-rs01">Set error correction file redundancy (RS01)</a></td></tr>
+<tr valign=top><td></td><td></td><td><a href="#redundancy-rs02">Set maximum size for augmented images (RS02)</a></td></tr>
+<tr valign=top><td></td><td><a href="#query-size">--query-size</a></td><td>Query drive or udf/ecc file system for image size</td></tr>
 <tr valign=top><td></td><td><a href="#speedwarn">--speed-warning [n]</a>&nbsp; &nbsp;</td><td>Warns when reading speed drops a certain amount</td></tr>
 <tr valign=top><td></td><td><a href="#spinup">--spinup-delay [n]</a>&nbsp; &nbsp;</td><td>Gives drive time to spin up</td></tr>
 <tr valign=top><td></td><td><a href="#split">--split-files</a>&nbsp; &nbsp;</td><td>Splits files into segments <= 2GB</td></tr>
+<tr valign=top><td></td><td><a href="#verbose">-v / --verbose</a></td><td>More explanatory output</td></tr>
 </table>
 
 <h3>Actions.</h3>
@@ -2047,12 +2140,15 @@ user@windows&gt; dvdisaster <b>-d 2:</b> -r<br>
 
 <a name="adaptiveread"><b>--adaptive-read: Use adaptive strategy for reading damaged media</b></a><p>
 
-This switch selects the <a href="background50.html">adaptive reading strategy</a>
-which is particularly suited for reading in damaged media.
-Use this switch in conjunction with <a href="#read">-r/--read</a> and with
-<a href="#ecc">-e/--ecc</a>. Specifying the error correction file 
-causes the reading process to finish as soon as enough information has been 
-collected for recovering the medium image.
+Use this switch in conjunction with <a href="#read">-r/--read</a> to
+ select the <a href="background50.html">adaptive reading strategy</a>
+which is particularly suited for reading in damaged media.<p>
+
+If you are working with error correction files, specify them with
+<a href="#ecc">-e/--ecc</a> so that the reading process can
+finish as soon as enough information has been 
+collected for recovering the medium image. For augmented images 
+the error correction data is used automatically.
 <p>
 
 <div align=right><a href="#options">&uarr;</a></div><p>
@@ -2073,7 +2169,7 @@ if no other file name extension is already present.
 <a name="cache"><b>--cache-size &lt;size in MB&gt;: Specify the cache size</b></a><p>
 
 dvdisaster optimizes access to the image and error correction
-files by maintaining its own cache.
+data by maintaining its own cache.
 The cache size can be between 1 and 2048 MB. 
 The preset is  32MB, which should be suitable for most systems.<p>
 
@@ -2121,7 +2217,7 @@ these can not be told apart from unreadable sectors if zero filling is used.
 
 <a name="jump"><b>-j / --jump &lt;number of sectors&gt;: Skip sectors after a read error </b></a><p>
 
-This option has slightly different behaviour depending on the used reading strategy:
+This option has slightly different behaviour depending on the employed reading strategy:
 <ul>
 <li>when using the <a href="background40.html#configure">linear reading strategy</a>
 (default setting), 
@@ -2139,40 +2235,50 @@ The number of skipped sectors must be a multiple of 16.
 
 
 
-<a name="parse-ecc"><b>--parse-ecc: Use information from error correction headers</b></a><p>
-dvdisaster will determine the image size from the headers created by the 
-<a href="background30.html">RS02 method</a> if this option is given. 
-This works around some problems caused by drives
-<a href="qa20.html#plusrw">reporting incorrect image lengths</a>
-with DVD-RW/+RW media.<p>
+<a name="method"><b>-m / --method &lt;m&gt;: Select error correction method</b></a><p>
 
-Note: Use this option only for reading images which have been augmented with 
-error correction data. Otherwise the reading process will be delayed significantly at the
-beginning.
+Choose between the
+<a href="background30.html">RS01</a> (default) 
+and <a href="background30.html">RS02</a> method.
 
 <div align=right><a href="#options">&uarr;</a></div><p>
 
 
 
+<a name="query-size"><b>--query-size &lt;m&gt;: Query drive or udf/ecc file system for image size</b></a><p>
 
-<a name="parse-udf"><b>--parse-udf: Use information from ISO/UDF filesystem</b></a><p>
-dvdisaster will determine the image size from the ISO/UDF file system
-if this option is given. This works around some problems caused by drives
-<a href="qa20.html#plusrw">reporting incorrect image lengths</a>
-with DVD-RW/+RW media.<p>
+This option influences how dvdisaster will determine the image size when reading media.
+&lt;m&gt; can have the following values:<p>
 
-Warning: Always use this option together with <a href="#parse-ecc">--parse-ecc</a>
-to read images which have been augmented with error correction data by the
-<a href="background30.html">RS02 method</a>. Otherwise the error correction data
-will not be read.
+<b>ecc</b>: This is the default. dvdisaster will use the image size recorded in the 
+<a href="background30.html">RS02</a> error correction information.
+This option <i>must</i> be selected for reading augmented images; otherwise
+the resulting image may be incomplete.<br>
+ 
+It is possible to read images containing no RS02 error correction information 
+with this option set. In this case the image size will be determined as in the
+"udf" setting. However searching for the error correction information
+may delay the start of the reading operation.<p>
+
+<b>udf</b>: dvdisaster will determine the image size from the ISO/UDF file system.<br>
+Caution: This is only suitable for working with error correction files as it
+results in incomplete images if used for reading images augmented
+with <a href="background30.html">RS02</a> error correction information.<p>
+
+<b>drive</b>: The image size reported by the drive will be used. 
+Since this information is typically wrong for <a href="qa20.html#rw">DVD-RW/+RW/-RAM</a>
+media this option is only present for backwards compatibility with older dvdisaster
+versions.
+
 
 <div align=right><a href="#options">&uarr;</a></div><p>
 
 
 
-<a name="redundancy"><b>-n / --redundancy: Set error correction code redundancy</b></a><p>
+<a name="redundancy-rs01"><b>-n / --redundancy: Set error correction file redundancy (RS01)</b></a><p>
 
-The redundancy specifies the percentage of correctable errors
+The redundancy specifies the percentage of errors which are correctable
+by the <a href="background30.html">error correction file</a>
 <a href="background10.html">in the best case</a>.
 Since the ideal case is rare, it is recommended to apply a reasonable margin 
 to the redundancy. Also, consider the following properties of the error correction:<p>
@@ -2254,11 +2360,19 @@ and less to the larger ones.<p>
 <div align=right><a href="#options">&uarr;</a></div><p>
 
 
-<a name="method"><b>-m / --method &lt;m&gt;: Select error correction method</b></a><p>
 
-Choose between the
-<a href="background30.html">RS01</a> (default) 
-and <a href="background30.html">RS02</a> method.
+<a name="redundancy-rs02"><b>-n / --redundancy: Set maximum size for augmented images (RS02)</b></a><p>
+
+Specifies the maximum possible size for <a href="background30.html">augmented images</a> 
+in sectors of 2K size. The image will be filled up with error correction data up to the
+given size.<p>
+
+If this option is omitted dvdisaster will expand the image so that the smallest
+possible medium type (CD or one/two layered DVD) can be used. The default sizes
+are shown in a <a href="example84.html#max-image-size">table</a> within the
+graphical user interface. Please observe 
+the <a href="example84.html#size-hints">hints</a> for choosing the
+medium size given there.
 
 <div align=right><a href="#options">&uarr;</a></div><p>
 
@@ -2293,6 +2407,16 @@ Allows the creation of large images and error correction files
 The file name must still be specified as
 "medium.iso" using the <a href="#image">--image</a> option; 
 the numbering will be automatically inserted when this switch is active.<p>
+
+<div align=right><a href="#options">&uarr;</a></div><p>
+
+
+<a name="verbose"><b>-v / --verbose: More explanatory output</b></a><p>
+
+dvdisaster will print more information about what it is doing if this option is set.
+Unlike the other command line options this one does also have an effect in the
+graphical user interface; the additional output will be printed into the
+"Print Log" window.
 
 <div align=right><a href="#options">&uarr;</a></div><p>
 
@@ -2343,7 +2467,7 @@ For the source code version see the <a href="download20.html">installation instr
 <b>Current version</b><p>
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.70</b></td><td align="right">25-Mar-2006</td></tr>
+<tr><td><b>dvdisaster-0.70</b></td><td align="right">08-Jul-2006</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
@@ -2472,7 +2596,7 @@ if creation is invoked immediately after the image read.</li>
 This version is capable of determining the
 <a href="example81.html#imagesize">image size from the UDF/ISO file system</a>
 to improve the
-<a href="qa20.html#plusrw">image size recognition for -RW/+RW media</a>.
+<a href="qa20.html#rw">image size recognition for -RW/+RW/-RAM media</a>.
 Reading images and creating the respective error correction file can now be invoked together
 with a <a href="example81.html#auto">single mouse click</a>.
 A couple of small improvements have been made
@@ -2820,32 +2944,41 @@ Media containing multiple sessions or copy protections can <i>not</i> be used.<p
 
 Usable media by type:<p>
 
-<b>DVD-R, DVD+R</b><p>
-
-<ul>
-<li>No further limitations are known.</li>
-</ul>
-
-<b>DVD+R9 (two layers)</b>
-<ul>
-<li>The drive must be able to <a href="qa20.html#dvdrom">identify the medium type</a>.</li>
-</ul>
-
-<b>DVD-RW, DVD+RW</b><p>
-
-<ul>
-<li>Some drives report wrong <a href="qa20.html#plusrw">image sizes</a>.<br>
-Remedy: Activate <a href="example81.html#imagesize">"Use information from the ISO/UDF file system"</a>
-</li></ul>
-
 <b>CD-R, CD-RW</b><p>
 
 <ul>
  <li>only Data CD are supported.</li>
 </ul>
 
+<b>DVD-R, DVD+R</b><p>
+
+<ul>
+<li>No further limitations are known.</li>
+</ul>
+
+<b>DVD-R9, DVD+R9 (two layers)</b>
+<ul>
+<li>The drive must be able to <a href="qa20.html#dvdrom">identify the medium type</a>
+and tolerate that <a href="qa20.html#dash9">DVD-R9 has no specific book type</a>.</li>
+</ul>
+
+<b>DVD-RW, DVD+RW</b><p>
+
+<ul>
+<li>Some drives report wrong <a href="qa20.html#rw">image sizes</a>.<br>
+Remedy: Determine the <a href="example81.html#imagesize">image size from the ISO/UDF or ECC/RS02 file system</a>.
+</li></ul>
+
+<b>DVD-RAM</b><p>
+<ul>
+<li>Usable only when written with ISO/UDF images like DVD-R/-RW;</li>
+<li>Not supported when used as removeable medium / for packet writing.</li>
+<li>Similar issues with <a href="qa20.html#rw">image size</a>
+recognition as noted above.</li>
+</ul>
+
 <b>Not usable types</b> (image can not be extracted):<p>
-CD-Audio and CD-Video as well as DVD-ROM and DVD-RAM.
+DVD-ROM (pressed DVDs), CD-Audio and CD-Video.
 
 <div align=right><a href="#top">&uarr;</a></div><p>
 
@@ -2917,10 +3050,11 @@ function qa20en()
 <a href="#tao">3.1 "Warning: 2 sectors missing at the end of the disc".</a><p>
 <a href="#block">3.2 Program blocks right after invocation.</a><p>
 <a href="#crc">3.3 What does "CRC error, sector: n" mean?</a><p>
-<a href="#plusrw">3.4 Read errors or wrong image size with -RW/+RW media</a><p>
+<a href="#rw">3.4 Read errors or wrong image size with -RW/+RW/-RAM media</a><p>
 <a href="#dvdrom">3.5 My self-written media is recognized as "DVD-ROM" and rejected.</a><p>
 <a href="#freebsd">3.6 No drives appear under FreeBSD.</a><p>
 <a href="#v40error">3.7 "Ecc file has been created with version 0.40.7."</a><p>
+<a href="#dash9">3.8 DVD-R9 are incorrectly recognized.</a><p>
 
 <pre> </pre><hr><pre> </pre>
 
@@ -2974,9 +3108,9 @@ broken drive cabling, or wrong CPU/system frequency settings.
 <div align=right><a href="#top">&uarr;</a></div>
 
 
-<b><a name="plusrw">3.4 Read errors or wrong image size with -RW/+RW media</a></b><p>
+<b><a name="rw">3.4 Read errors or wrong image size with -RW/+RW/-RAM media</a></b><p>
 
-Some drives report incorrect image sizes when -RW/+RW media are used. Two common
+Some drives report incorrect image sizes when -RW/+RW/-RAM media are used. Two common
 cases are:<p>
 
 <table>
@@ -3003,13 +3137,12 @@ but all files on the medium are still readable and complete.
 Possible remedy:<p>
 
 <table width=100%><tr><td bgcolor=#000000 width=2><img width=1 height=1 alt=""></td><td>
-Activate the option  <a href="example81.html#imagesize">Use information from the
-ISO/UDF file system</a> so that the image size will be determined from the
-ISO/UDF file system.
+Activate the option for determining the
+<a href="example81.html#imagesize">image size from the ISO/UDF or ECC/RS02 file systems</a>.
 </td></tr></table><p>
 
-If the required ISO/UDF sectors are unreadable when trying to recover damaged media
-there are two possible workarounds:
+If the required ISO/UDF sectors are unreadable and you are using error correction files
+to recover damaged media there are two possible workarounds:
 
 <ul>
 <li>Execute the <a href="example50.html">"Verify"</a> function with only
@@ -3037,7 +3170,7 @@ as "DVD-ROM (faked book type)".<p>
 
 But some drives do not support the recognition of faked book types.
 
-<li> Some drives can not tell DVD+R9 (two layers) from DVD-ROM.
+<li> Some drives can not tell DVD-R9 or DVD+R9 (two layers) from DVD-ROM.
 </li>
 </ol>
 
@@ -3065,6 +3198,15 @@ The <a href="http://sourceforge.net/cvs/?group_id=157550">CVS versions</a>
 of dvdisaster mark their ecc files with a special bit. This causes dvdisaster
 versions upto 0.65 to falsely display the above error message. Please use the
 CVS versions only together with dvdisaster 0.66 or newer versions.
+
+<div align=right><a href="#top">&uarr;</a></div>
+
+<b><a name="dash9">3.8 DVD-R9 are incorrectly recognized.</a></b><p>
+
+DVD-R9 media has no specific book type; it shares its media code with DVD-R
+and will at best be recognized as such (only DVD-R9 enabled burners may tell the
+difference). 
+
 <div align=right><a href="#top">&uarr;</a></div>
 
 EOF

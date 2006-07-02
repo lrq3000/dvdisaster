@@ -299,7 +299,8 @@ static void print_sum(char *path)
 {  FILE *file;
    struct MD5Context ctxt;
    unsigned char buf[32768];
-   char digest[16],ascii_digest[33];
+   unsigned char digest[16];
+   char ascii_digest[33];
    int size = 0;
 
    file = fopen(path, "rb");

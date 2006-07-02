@@ -1,3 +1,9 @@
+0.67 (devel-19) 02-07-2006
+	- completed German and English manual
+	- image and error correction file entries can be empty
+	- there is a yet unidentified bug in conjunction with
+	  adaptive reading and RS02 fixing left
+
 0.67 (devel-18) 25-06-2006
 	- started putting the NSIS scripts into place (not yet finished)
 	- adaptive reader left correctable sector zero-filled in the image under

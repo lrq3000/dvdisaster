@@ -987,7 +987,7 @@ DeviceHandle* OpenAndQueryDevice(char *device)
 
    switch(dh->subType)
    {  case DVD:
-        if(!dh->isoInfo || dh->rs02Size > 0)
+        if(!dh->isoInfo) // || dh->rs02Size > 0)
 	  dh->mediumDescr = g_strdup_printf(_("Medium: %s, %lld sectors%s %d layer(s)"),
 					    dh->typedescr, dh->sectors, 
 					    dh->rs02Size ? ", Ecc," : ",",
@@ -1004,7 +1004,7 @@ DeviceHandle* OpenAndQueryDevice(char *device)
 
       case DATA1:
       case XA21:
-        if(!dh->isoInfo || dh->rs02Size > 0)
+        if(!dh->isoInfo) // || dh->rs02Size > 0)
 	  dh->mediumDescr = g_strdup_printf(_("Medium: %s, %lld sectors%s"),
 					    dh->typedescr, dh->sectors,
 					    dh->rs02Size ? ", Ecc" : " ");
