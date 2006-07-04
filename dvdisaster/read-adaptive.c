@@ -994,6 +994,31 @@ void fill_gap(read_closure *rc)
   }
 }
 
+
+/*
+ * If a correctable sector <correctable> lies beyond rc->maxImageSector,
+ * fill the gap with dead sector markers.
+ * So when reading resumes there will be no holes in the image.
+ */
+
+void fill_correctable_gap(read_closure *rc, gint64 correctable)
+{
+   if(correctable > rc->maxImageSector)
+   {  gint64 ds = rc->maxImageSector+1;
+     
+      if(!LargeSeek(rc->image, (gint64)(2048*ds)))
+	Stop(_("Failed seeking to sector %lld in image [%s]: %s"),
+	     ds, "skip-corr", strerror(errno));
+
+      for(ds=rc->maxImageSector+1; ds<=correctable; ds++)
+      {  if(LargeWrite(rc->image, Closure->deadSector, 2048) != 2048)
+	  Stop(_("Failed writing to sector %lld in image [%s]: %s"),
+	       ds, "skip-corr", strerror(errno));
+      }
+      rc->maxImageSector = correctable;
+   }
+}
+
 /*
  * The adaptive read strategy 
  */
@@ -1331,6 +1356,9 @@ reopen_image:
 		  rc->readable++;
 
 		  mark_sector(rc, b, Closure->green);
+
+		  if(rc->maxImageSector < b)
+		    rc->maxImageSector = b;
 	       }
 	    }
 
@@ -1374,20 +1402,8 @@ reopen_image:
 			   /* If the correctable sector lies beyond rc->maxImageSector,
 			      fill the gap with dead sector markers */
 
-			   if(layer_idx > rc->maxImageSector)
-			   {  gint64 ds = rc->maxImageSector+1;
-			     
-			      if(!LargeSeek(rc->image, (gint64)(2048*ds)))
-			        Stop(_("Failed seeking to sector %lld in image [%s]: %s"),
-				     ds, "skip-corr", strerror(errno));
+			   fill_correctable_gap(rc, layer_idx);
 
-			      for(ds=rc->maxImageSector+1; ds<=layer_idx; ds++)
-			      {  if(LargeWrite(rc->image, Closure->deadSector, 2048) != 2048)
-				   Stop(_("Failed writing to sector %lld in image [%s]: %s"),
-					ds, "skip-corr", strerror(errno));
-			      }
-			      rc->maxImageSector = layer_idx;
-			   }
 			}
 		        layer_idx += rc->rs01LayerSectors;
 		     }
@@ -1419,6 +1435,7 @@ reopen_image:
 			{  SetBit(rc->map, sector);
 			   rc->correctable++;
 			   mark_sector(rc, sector, Closure->green);
+			   fill_correctable_gap(rc, sector);
 			}
 		     }
 		  }

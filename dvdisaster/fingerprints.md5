@@ -9,7 +9,7 @@ daa7ec033afb7fcfa5e4591cdda6ffac *bitmap.c
 b687f8d2de769b7ee19f41c3e596e2c5 *closure.c
 e0c423fffb94956009695231decaa295 *crc32.c
 c8264cf87e441cd33b55611988a58548 *curve.c
-ae0ac9a0e355bd3a2b31590309d7848d *debug.c
+6a44e6216db9e88f04c097ba1b886ba1 *debug.c
 3114a048f66b4fd5889e6e465833831b *dvdisaster.c
 61bd5e47034125cb7062e15eeb68c62c *ecc-rs01.c
 717006a7b52a55416d526ca5734cdf61 *ecc-rs02.c
@@ -29,7 +29,7 @@ eecfd7e236c89cc36e1de2062754ac2e *method-link.c
 eaf0dd9c3565ed109c17e497a19b2343 *preferences.c
 6dac7ee940b2c2e8094f2cbd6bf23e74 *print-sense.c
 cdde449dd2a8f64b560ff18a36f86234 *random.c
-5125317b92761e7c06c3aaba2f91eb60 *read-adaptive.c
+053cca9780d462f8e9c01939a21635ed *read-adaptive.c
 92a29364e0d8eaf70031c8883209a0ae *read-adaptive-window.c
 18a8e422f6279411f68bac82026dbee8 *read-linear.c
 8f6dd00126b3e613c0a388390dcb549b *read-linear-window.c
@@ -40,7 +40,7 @@ b1465b955acea866d333ef214902e714 *rs01-verify.c
 f2a5659cf67864e7395949acacbb5858 *rs01-window.c
 47639d2f0e609a6afac1d13415014d8f *rs02-common.c
 780a88772284e1b54a17e5a26f6b62b1 *rs02-create.c
-9ee3c47f85342cc4b6086fab519d2634 *rs02-fix.c
+87ed8f4fa83774d143df294ce0a5f408 *rs02-fix.c
 d9f706b44d9ee8670aa330b4d7ec6bd4 *rs02-verify.c
 6a12091704c2ded29f3f7ef64c6e1dab *rs02-window.c
 cc85e2cdb2d8a2b9cd9544c38bc459ed *scsi-darwin.c

@@ -1,3 +1,6 @@
+0.67 (devel-20)
+	- fixed the adaptive reading bug
+
 0.67 (devel-19) 02-07-2006
 	- completed German and English manual
 	- image and error correction file entries can be empty
@@ -6,7 +9,7 @@
 
 0.67 (devel-18) 25-06-2006
 	- started putting the NSIS scripts into place (not yet finished)
-	- adaptive reader left correctable sector zero-filled in the image under
+	- adaptive reader left correctable sectors zero-filled in the image under
 	  some circumstances; these showed up as CRC errors during verify and fix.
 	  these are now correctly filled with the dead sector marker and therefore
 	  reported as missing.

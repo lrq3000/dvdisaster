@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-02 16:27+0200\n"
+"POT-Creation-Date: 2006-07-04 21:01+0200\n"
 "PO-Revision-Date: 2004-11-30 19:48+0100\n"
 "Last-Translator: Carsten Gnörlich <carsten@dvdisaster.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -40,7 +40,7 @@ msgstr ""
 "# Sie wird bei jedem Aufruf von dvdisaster neu überschrieben.\n"
 "\n"
 
-#: debug.c:51 debug.c:280
+#: debug.c:51 debug.c:287
 msgid "2nd argument is missing"
 msgstr "Das zweite Argument fehlt"
 
@@ -52,7 +52,7 @@ msgstr ""
 "Die Anzahl der Nullstellen muß 8..100 sein;\n"
 "die Anzahl der Auslöschungen muß > 0 und kleiner als die Anzahl Nullstellen sein.\n"
 
-#: debug.c:77 debug.c:158
+#: debug.c:77 debug.c:163
 #, c-format
 msgid ""
 "\n"
@@ -61,25 +61,25 @@ msgstr ""
 "\n"
 "Erzeuge zufällige reparierbare Auslöschungen (für %d Nullstellen, max. %d Auslöschungen).\n"
 
-#: debug.c:106 debug.c:186 debug.c:228 debug.c:488 debug.c:556
+#: debug.c:106 debug.c:191 debug.c:235 debug.c:495 debug.c:563
 #: rs01-common.c:54 rs02-common.c:62 rs02-create.c:303 rs02-create.c:935
 #: rs02-fix.c:375 rs02-verify.c:384
 #, c-format
 msgid "Failed seeking to sector %lld in image: %s"
 msgstr "Ansteuern von Sektor %lld im Abbild fehlgeschlagen: %s"
 
-#: debug.c:108 debug.c:188 debug.c:230 debug.c:355 debug.c:448 debug.c:493
-#: debug.c:560 rs02-create.c:326 rs02-create.c:352 rs02-create.c:938
+#: debug.c:108 debug.c:193 debug.c:237 debug.c:362 debug.c:455 debug.c:500
+#: debug.c:567 rs02-create.c:326 rs02-create.c:352 rs02-create.c:938
 #, c-format
 msgid "Failed writing to sector %lld in image: %s"
 msgstr "Schreiben von Sektor %lld im Abbild fehlgeschlagen: %s"
 
-#: debug.c:116 debug.c:236 debug.c:452 debug.c:500
+#: debug.c:116 debug.c:243 debug.c:459 debug.c:507
 #, c-format
 msgid "Progress: %3d%%"
 msgstr "Fortschritt: %3d%%"
 
-#: debug.c:121 debug.c:241
+#: debug.c:121 debug.c:248
 #, c-format
 msgid ""
 "Progress: 100%%\n"
@@ -91,70 +91,70 @@ msgstr ""
 "erneut anwenden. Anderenfalls werden >= %d Auslöschungen pro ECC-Bereich\n"
 "erzeugt und das Abbild kann nicht mehr wiederhergestellt werden.\n"
 
-#: debug.c:149
+#: debug.c:154
 #, c-format
 msgid "Number of erasures must be > 0 and <= %d\n"
 msgstr "Die Anzahl von Auslöschungen muß > 0 und <= %d sein\n"
 
-#: debug.c:287
+#: debug.c:294
 msgid "3rd argument is missing"
 msgstr "Das dritte Argument fehlt"
 
-#: debug.c:294 debug.c:549
+#: debug.c:301 debug.c:556
 #, c-format
 msgid "Sector must be in range [0..%lld]\n"
 msgstr "Sektor muß im Bereich [0..%lld] liegen\n"
 
-#: debug.c:297
+#: debug.c:304
 msgid "Byte position must be in range [0..2047]"
 msgstr "Byte-Position muß im Bereich [0..2047] liegen"
 
-#: debug.c:300
+#: debug.c:307
 msgid "Byte value must be in range [0..255]"
 msgstr "Byte muß einen Wert von [0..255] haben"
 
-#: debug.c:302
+#: debug.c:309
 #, c-format
 msgid "Setting byte %d in sector %lld to value %d.\n"
 msgstr "Setze Byte %d in Sektor %lld auf den Wert %d.\n"
 
-#: debug.c:309 debug.c:348 rs02-create.c:169 rs02-verify.c:576
+#: debug.c:316 debug.c:355 rs02-create.c:169 rs02-verify.c:576
 #, c-format
 msgid "Failed seeking to start of image: %s\n"
 msgstr "Ansteuern des Abbild-Anfangs fehlgeschlagen: %s\n"
 
-#: debug.c:312
+#: debug.c:319
 msgid "Could not write the new byte value"
 msgstr "Konnte den neuen Byte-Wert nicht schreiben"
 
-#: debug.c:341 read-adaptive.c:498 read-linear.c:225
+#: debug.c:348 read-adaptive.c:498 read-linear.c:225
 #, c-format
 msgid "Sectors must be in range [0..%lld].\n"
 msgstr "Sektoren müssen im Intervall [0..%lld] liegen.\n"
 
-#: debug.c:343
+#: debug.c:350
 #, c-format
 msgid "Erasing sectors [%lld,%lld]\n"
 msgstr "Lösche Sektoren [%lld,%lld]\n"
 
-#: debug.c:380
+#: debug.c:387
 #, c-format
 msgid "New length must be in range [0..%lld].\n"
 msgstr "Neue Länge muß im Bereich [0..%lld] liegen.\n"
 
-#: debug.c:382
+#: debug.c:389
 #, c-format
 msgid "Truncating image to %lld sectors.\n"
 msgstr "Verkürze das Abbild auf %lld Sektoren.\n"
 
-#: debug.c:387 read-linear.c:831 rs01-fix.c:192 rs01-fix.c:213 rs01-fix.c:229
+#: debug.c:394 read-linear.c:831 rs01-fix.c:192 rs01-fix.c:213 rs01-fix.c:229
 #: rs01-fix.c:263 rs02-create.c:100 rs02-create.c:142 rs02-fix.c:231
 #: rs02-fix.c:251 rs02-fix.c:266
 #, c-format
 msgid "Could not truncate %s: %s\n"
 msgstr "Konnte %s nicht abschneiden: %s\n"
 
-#: debug.c:412 file.c:59 file.c:125 file.c:145 read-adaptive.c:1081
+#: debug.c:419 file.c:59 file.c:125 file.c:145 read-adaptive.c:1081
 #: read-adaptive.c:1109 read-linear.c:262 read-linear.c:287
 #, c-format
 msgid ""
@@ -164,7 +164,7 @@ msgstr ""
 "Kann %s nicht öffnen:\n"
 "%s"
 
-#: debug.c:416
+#: debug.c:423
 #, c-format
 msgid ""
 "\n"
@@ -183,7 +183,7 @@ msgstr ""
 "dvdisaster --debug --random-image %lld --random-seed %d\n"
 "\n"
 
-#: debug.c:460 file.c:104 read-adaptive.c:136 read-linear.c:64
+#: debug.c:467 file.c:104 read-adaptive.c:136 read-linear.c:64
 #, c-format
 msgid ""
 "Error closing image file:\n"
@@ -192,11 +192,11 @@ msgstr ""
 "Fehler beim Schließen des Abbildes:\n"
 "%s"
 
-#: debug.c:474
+#: debug.c:481
 msgid "Replacing the \"unreadable sector\" markers with zeros.\n"
 msgstr "Ersetze die \"unlesbarer Sektor\"-Markierungen durch Nullen.\n"
 
-#: debug.c:481
+#: debug.c:488
 #, c-format
 msgid ""
 "Could not read image sector %lld:\n"
@@ -205,12 +205,12 @@ msgstr ""
 "Konnte Abbild-Sektor %lld nicht lesen:\n"
 "%s\n"
 
-#: debug.c:505
+#: debug.c:512
 #, c-format
 msgid "%lld \"unreadable sector\" markers replaced.\n"
 msgstr "%lld \"unlesbarer Sektor\"-Markierungen ersetzt.\n"
 
-#: debug.c:551
+#: debug.c:558
 #, c-format
 msgid ""
 "Contents of sector %lld:\n"
@@ -1257,7 +1257,7 @@ msgstr "Auffüllen des Abbild-Bereichs [%lld..%lld]"
 
 #: read-adaptive.c:945 read-adaptive.c:1256 read-adaptive.c:1381
 #: read-adaptive.c:1462 read-linear.c:358 read-linear.c:483 read-linear.c:585
-#: read-linear.c:640 rs01-fix.c:431 rs01-fix.c:689 rs02-fix.c:733
+#: read-linear.c:640 rs01-fix.c:431 rs01-fix.c:689 rs02-fix.c:734
 #, c-format
 msgid "Failed seeking to sector %lld in image [%s]: %s"
 msgstr "Ansteuern von Sektor %lld im Abbild fehlgeschlagen [%s]: %s"
@@ -1932,12 +1932,12 @@ msgstr "Unerwarteter Byte-Fehler in Sektor %lld, Byte %d\n"
 msgid "Bad error location %d; corrupted .ecc file?\n"
 msgstr "Ungültige Fehlerposition %d; beschädigte .ecc-Datei?\n"
 
-#: rs01-fix.c:678 rs02-fix.c:700
+#: rs01-fix.c:678 rs02-fix.c:701
 #, c-format
 msgid "  %3d repaired sectors: "
 msgstr "  %3d reparierte Sektoren: "
 
-#: rs01-fix.c:697 rs02-fix.c:741
+#: rs01-fix.c:697 rs02-fix.c:742
 #, c-format
 msgid ""
 "could not write medium sector %lld:\n"
@@ -1946,12 +1946,12 @@ msgstr ""
 "Konnte Abbild-Sektor %lld nicht schreiben:\n"
 "%s"
 
-#: rs01-fix.c:723 rs02-fix.c:778
+#: rs01-fix.c:723 rs02-fix.c:779
 #, c-format
 msgid "Ecc progress: %3d.%1d%%"
 msgstr "Reparatur-Fortschritt: %3d.%1d%%"
 
-#: rs01-fix.c:735 rs02-fix.c:792
+#: rs01-fix.c:735 rs02-fix.c:793
 #, c-format
 msgid "Ecc progress: 100.0%%\n"
 msgstr "Reparatur-Fortschritt: 100.0%%\n"
@@ -1961,30 +1961,30 @@ msgstr "Reparatur-Fortschritt: 100.0%%\n"
 msgid "Repaired sectors: %lld     \n"
 msgstr "Reparierte Sektoren: %lld    \n"
 
-#: rs01-fix.c:738 rs02-fix.c:797
+#: rs01-fix.c:738 rs02-fix.c:798
 #, c-format
 msgid "Unrepaired sectors: %lld\n"
 msgstr "Nicht reparierbare Sektoren: %lld\n"
 
-#: rs01-fix.c:741 rs02-fix.c:800
+#: rs01-fix.c:741 rs02-fix.c:801
 #, c-format
 msgid "Image sectors could not be fully restored (%lld repaired; <span color=\"red\">%lld unrepaired</span>)"
 msgstr "Keine vollständige Reparatur möglich (%lld Sektoren repariert; <span color=\"red\">%lld nicht reparierbar</span>)"
 
-#: rs01-fix.c:747 rs02-fix.c:806
+#: rs01-fix.c:747 rs02-fix.c:807
 msgid "Good! All sectors are already present."
 msgstr "Gut! Alle Sektoren sind bereits vorhanden."
 
-#: rs01-fix.c:751 rs02-fix.c:810
+#: rs01-fix.c:751 rs02-fix.c:811
 msgid "Good! All sectors are repaired."
 msgstr "Gut! Alle Sektoren wurden repariert."
 
-#: rs01-fix.c:756 rs02-fix.c:815
+#: rs01-fix.c:756 rs02-fix.c:816
 #, c-format
 msgid "Erasure counts per ecc block:  avg =  %.1f; worst = %d.\n"
 msgstr "Auslöschungen pro Ecc-Bereich: Mittelwert = %.1f; Schlechtester = %d.\n"
 
-#: rs01-fix.c:761 rs02-fix.c:820
+#: rs01-fix.c:761 rs02-fix.c:821
 msgid "Repair results:"
 msgstr "Reparaturergebnis:"
 
@@ -2546,17 +2546,17 @@ msgstr ""
 msgid "* Ecc block %lld: %3d unrepairable sectors: "
 msgstr "* Ecc-Bereich %lld: %3d unreparierbare Sektoren: "
 
-#: rs02-fix.c:669
+#: rs02-fix.c:670
 #, c-format
 msgid "-> CRC-predicted error in sector %lld at byte %4d (value %02x '%c', expected %02x '%c')\n"
 msgstr "-> CRC-erkannter Fehler in Sektor %lld, Bytepos. %4d (Wert %02x '%c', erwartet %02x '%c')\n"
 
-#: rs02-fix.c:672
+#: rs02-fix.c:673
 #, c-format
 msgid "-> Non-predicted error in sector %lld at byte %4d (value %02x '%c', expected %02x '%c')\n"
 msgstr "-> Nicht erwarteter Fehler in Sektor %lld, Bytepos. %4d (Wert %02x '%c', erwartet %02x '%c')\n"
 
-#: rs02-fix.c:794
+#: rs02-fix.c:795
 #, c-format
 msgid "Repaired sectors: %lld (%lld data, %lld ecc)\n"
 msgstr "Reparierte Sektoren: %lld (%lld Daten, %lld Fehlerkorrektur)\n"

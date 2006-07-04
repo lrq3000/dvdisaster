@@ -461,7 +461,7 @@ void RS02Fix(Method *self)
 	uncorrected += erasure_count;
 	goto skip;
      }
-
+     Verbose("%d erasures\n", erasure_count);
      /* Build ecc block and attempt to correct it */
 
      for(bi=0; bi<2048; bi++)  /* Run through each ecc block byte */
@@ -613,7 +613,8 @@ void RS02Fix(Method *self)
 		       loc < ndata ? block_idx[loc] : fc->eccIdx[loc-ndata][cache_sector]);
 	   }
 	   PrintLog("\n");
-	   break;
+	   uncorrected += erasure_count;
+	   goto skip;
 	}
 
 	/* Compute err+eras evaluator poly omega(x) = syn(x)*lambda(x) 

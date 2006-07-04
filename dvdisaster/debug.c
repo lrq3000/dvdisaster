@@ -137,13 +137,18 @@ static void random_error2(EccHeader *eh, char *prefix, char *arg)
    guint64 header[42];
    int block_sel[255];
    int i,percent,last_percent = 0;
-   int hidx,n_errors;
+   int hidx,n_errors,erase_max = 0;
    double eras_scale, blk_scale, hdr_scale;
 
    SRandom(Closure->randomSeed);
    lay = CalcRS02Layout(uchar_to_gint64(eh->sectors), eh->eccBytes); 
 
    n_errors = atoi(arg);
+
+   if(n_errors < 0)
+   {  erase_max = 1;
+      n_errors = -n_errors;
+   }
 
    if(n_errors <= 0 || n_errors > eh->eccBytes)
      Stop(_("Number of erasures must be > 0 and <= %d\n"), eh->eccBytes);
@@ -193,6 +198,8 @@ static void random_error2(EccHeader *eh, char *prefix, char *arg)
 
    for(si=0; si<lay->sectorsPerLayer; si++)
    {  int n_erasures = (int)(eras_scale*(double)Random());
+      if(erase_max)
+	n_erasures = n_errors;
 
       /* Reset the block selector */
 
