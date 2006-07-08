@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-04 21:01+0200\n"
+"POT-Creation-Date: 2006-07-08 21:36+0200\n"
 "PO-Revision-Date: 2006-06-14 23:48+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -152,8 +152,8 @@ msgstr "Kapar avbild till %lld sektorer.\n"
 msgid "Could not truncate %s: %s\n"
 msgstr "Kunde inte kapa %s: %s\n"
 
-#: debug.c:419 file.c:59 file.c:125 file.c:145 read-adaptive.c:1081
-#: read-adaptive.c:1109 read-linear.c:262 read-linear.c:287
+#: debug.c:419 file.c:59 file.c:125 file.c:145 read-adaptive.c:1106
+#: read-adaptive.c:1134 read-linear.c:262 read-linear.c:287
 #, c-format
 msgid ""
 "Can't open %s:\n"
@@ -910,11 +910,11 @@ msgstr ""
 "under villkoren för GNU GENERAL PUBLIC LICENSE.\n"
 "Se filen \"COPYING\" för ytterligare information.\n"
 
-#: misc.c:385
+#: misc.c:389
 msgid "Warning"
 msgstr "Varning"
 
-#: misc.c:448
+#: misc.c:452
 msgid ""
 "\n"
 "*\n"
@@ -1072,7 +1072,7 @@ msgstr "Avkänningsfel: %s; "
 msgid "unknown asc/ascq code (0x%02x, 0x%02x)."
 msgstr "okänd asc/ascq-kod (0x%02x, 0x%02x)."
 
-#: read-adaptive.c:129 read-adaptive.c:1243
+#: read-adaptive.c:129 read-adaptive.c:1268
 msgid "Aborted by unrecoverable error."
 msgstr "Avbruten av ej återhämtningsbart fel."
 
@@ -1113,7 +1113,7 @@ msgstr ""
 
 #: read-adaptive.c:451 read-adaptive.c:467 read-adaptive.c:526
 #: read-adaptive.c:613 read-adaptive.c:666 read-adaptive.c:964
-#: read-adaptive.c:1173
+#: read-adaptive.c:1198
 msgid "Aborted by user request!"
 msgstr "Avbruten av användaren!"
 
@@ -1188,7 +1188,7 @@ msgstr "Analyserar existerande avbildsfil"
 msgid "premature end in image (only %d bytes): %s\n"
 msgstr "för tidigt slut på avbild (endast %d byte): %s\n"
 
-#: read-adaptive.c:699 read-adaptive.c:1281 read-linear.c:410
+#: read-adaptive.c:699 read-adaptive.c:1306 read-linear.c:410
 #: rs01-common.c:221
 #, c-format
 msgid "Error reading CRC information: %s"
@@ -1230,46 +1230,46 @@ msgstr "Avbryt"
 msgid "Filling image area [%lld..%lld]"
 msgstr "Fyller avbildsområde [%lld..%lld]"
 
-#: read-adaptive.c:945 read-adaptive.c:1256 read-adaptive.c:1381
-#: read-adaptive.c:1462 read-linear.c:358 read-linear.c:483 read-linear.c:585
+#: read-adaptive.c:945 read-adaptive.c:1010 read-adaptive.c:1281
+#: read-adaptive.c:1479 read-linear.c:358 read-linear.c:483 read-linear.c:585
 #: read-linear.c:640 rs01-fix.c:431 rs01-fix.c:689 rs02-fix.c:734
 #, c-format
 msgid "Failed seeking to sector %lld in image [%s]: %s"
 msgstr "Misslyckades med att söka fram till sektor %lld i avbild [%s]: %s"
 
-#: read-adaptive.c:957 read-adaptive.c:1299 read-adaptive.c:1310
-#: read-adaptive.c:1326 read-adaptive.c:1386 read-adaptive.c:1468
+#: read-adaptive.c:957 read-adaptive.c:1015 read-adaptive.c:1324
+#: read-adaptive.c:1335 read-adaptive.c:1351 read-adaptive.c:1485
 #: read-linear.c:364 read-linear.c:591 read-linear.c:648 rs01-fix.c:436
 #, c-format
 msgid "Failed writing to sector %lld in image [%s]: %s"
 msgstr "Misslyckades med att skriva till sektor %lld i avbild [%s]: %s"
 
-#: read-adaptive.c:1022 read-linear.c:145
+#: read-adaptive.c:1047 read-linear.c:145
 msgid "Reading aborted"
 msgstr "Läsning avbruten"
 
-#: read-adaptive.c:1025 read-linear.c:148
+#: read-adaptive.c:1050 read-linear.c:148
 msgid "Preparing for reading the medium image."
 msgstr "Förbereder för läsning av mediumavbild."
 
-#: read-adaptive.c:1026 read-linear.c:142 read-linear.c:149
+#: read-adaptive.c:1051 read-linear.c:142 read-linear.c:149
 msgid "Medium: not yet determined"
 msgstr "Medium: ännu inte fastställt"
 
-#: read-adaptive.c:1083 read-linear.c:264
+#: read-adaptive.c:1108 read-linear.c:264
 #, c-format
 msgid "Creating new %s image.\n"
 msgstr "Skapar ny avbild %s.\n"
 
-#: read-adaptive.c:1087 read-linear.c:257
+#: read-adaptive.c:1112 read-linear.c:257
 msgid "Reading new medium image."
 msgstr "Läser ny mediumavbild."
 
-#: read-adaptive.c:1103 read-linear.c:278
+#: read-adaptive.c:1128 read-linear.c:278
 msgid "Completing existing medium image."
 msgstr "Färdigställer existerande mediumavbild."
 
-#: read-adaptive.c:1132 read-adaptive.c:1438
+#: read-adaptive.c:1157 read-adaptive.c:1455
 msgid ""
 "\n"
 "Sufficient data for reconstructing the image is available.\n"
@@ -1277,7 +1277,7 @@ msgstr ""
 "\n"
 "Tillräcklig data för att återskapa avbilden finns tillgänglig.\n"
 
-#: read-adaptive.c:1230 read-linear.c:532
+#: read-adaptive.c:1255 read-linear.c:532
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -1286,7 +1286,7 @@ msgstr ""
 "Sektor %lld: %s\n"
 "Kan inte återhämta från felet ovan."
 
-#: read-adaptive.c:1234 read-linear.c:536
+#: read-adaptive.c:1259 read-linear.c:536
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -1299,32 +1299,32 @@ msgstr ""
 "Det kanske inte är möjligt att återhämta från detta fel.\n"
 "Ska detta fel ignoreras och läsningen fortsätta?"
 
-#: read-adaptive.c:1278 rs01-fix.c:38 rs02-fix.c:410
+#: read-adaptive.c:1303 rs01-fix.c:38 rs02-fix.c:410
 #, c-format
 msgid "Failed seeking in crc area: %s"
 msgstr "Misslyckades med att söka i crc-område: %s"
 
-#: read-adaptive.c:1294 rs01-fix.c:385 rs02-fix.c:423
+#: read-adaptive.c:1319 rs01-fix.c:385 rs02-fix.c:423
 #, c-format
 msgid "CRC error in sector %lld\n"
 msgstr "CRC-fel i sektor %lld\n"
 
-#: read-adaptive.c:1451 scsi-layer.c:442
+#: read-adaptive.c:1468 scsi-layer.c:442
 #, c-format
 msgid "Sectors %lld-%lld: %s\n"
 msgstr "Sektorer %lld-%lld: %s\n"
 
-#: read-adaptive.c:1454 read-linear.c:625 scsi-layer.c:441
+#: read-adaptive.c:1471 read-linear.c:625 scsi-layer.c:441
 #, c-format
 msgid "Sector %lld: %s\n"
 msgstr "Sektor %lld: %s\n"
 
-#: read-adaptive.c:1582
+#: read-adaptive.c:1599
 #, c-format
 msgid "Only %2d.%1d%% of the image are readable or correctable"
 msgstr "Endast %2d.%1d%% av avbilden är läsbar eller korrigerbar"
 
-#: read-adaptive.c:1585
+#: read-adaptive.c:1602
 #, c-format
 msgid ""
 "\n"
@@ -1335,7 +1335,7 @@ msgstr ""
 "%s\n"
 "(%lld läsbara,  %lld korrigerbara,  %lld saknas fortfarande).\n"
 
-#: read-adaptive.c:1599
+#: read-adaptive.c:1616
 msgid ""
 "\n"
 "Good! All sectors have been read.\n"
@@ -1343,12 +1343,12 @@ msgstr ""
 "\n"
 "Bra! Alla sektorer har lästs.\n"
 
-#: read-adaptive.c:1606
+#: read-adaptive.c:1623
 #, c-format
 msgid "No unreadable intervals with >= %d sectors left."
 msgstr "Inga oläsbara intervall med >= %d sektorer kvar."
 
-#: read-adaptive.c:1609
+#: read-adaptive.c:1626
 #, c-format
 msgid ""
 "\n"

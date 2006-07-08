@@ -25,7 +25,7 @@
 function dictionary_cs()
 {  trans_encoding="UTF-8"
 
-   trans_version="verze"
+   trans_version="verze 0.66 - not yet updated for"
 
    trans_to_internet="Na Internetovou verzi"
    trans_to_berlios="Přehled (na BerliOS)"
@@ -2172,6 +2172,36 @@ U verze ve zdrojovém kódu si přečtěte <a href="download20.html">instalačn�
 <pre> </pre>
 
 <b>Vývojové verze</b> - nové a experimentální pro zkušené uživatele!<p>
+
+
+<table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
+<tr><td><b>dvdisaster-0.70</b></td><td align="right">09-Jul-2006</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+  <table>
+    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
+        <td><a href="${tar_0_70}">dvdisaster-0.70.tar.bz2</a></td></tr>
+    <tr><td align="right">Digital signature:&nbsp;</td>
+        <td><a href="${tar_0_70_sig}">dvdisaster-0.70.tar.bz2.gpg</a></td></tr>
+    <tr><td align="right">Binary for Windows:&nbsp;</td>
+        <td><a href="${setup_0_70}">dvdisaster-0.70-setup.exe</a></td></tr>
+    <tr><td align="right">Digital signature:&nbsp;</td>
+        <td><a href="${setup_0_70_sig}">dvdisaster-0.70-setup.exe.gpg</a></td></tr>
+  </table>
+</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+The <a href="background30.html">RS02 error correction method</a>
+is fully supported in the graphical user interface. Images created
+with RS02 can be used 
+with the <a href="background50.html">adaptive reading strategy</a>.<p>
+
+Julian Einwag started porting dvdisaster 
+to <a href="../en/download20.html#darwin">Mac OS X / Darwin</a>.<p>
+
+Daniel Nylander provided Swedish translations of the screen texts.
+</td></tr></table><p>
+<pre> </pre>
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.66</b></td><td align="right">25.03.2006</td></tr>

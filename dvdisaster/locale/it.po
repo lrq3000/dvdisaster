@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-04 21:01+0200\n"
+"POT-Creation-Date: 2006-07-08 21:36+0200\n"
 "PO-Revision-Date: 2005-01-01 14:24+0100\n"
 "Last-Translator: Andrea Polverini <polve@polve.com>\n"
 "Language-Team: Italian <>\n"
@@ -152,8 +152,8 @@ msgstr ""
 msgid "Could not truncate %s: %s\n"
 msgstr "Non posso troncare %s: %s\n"
 
-#: debug.c:419 file.c:59 file.c:125 file.c:145 read-adaptive.c:1081
-#: read-adaptive.c:1109 read-linear.c:262 read-linear.c:287
+#: debug.c:419 file.c:59 file.c:125 file.c:145 read-adaptive.c:1106
+#: read-adaptive.c:1134 read-linear.c:262 read-linear.c:287
 #, c-format
 msgid ""
 "Can't open %s:\n"
@@ -886,11 +886,11 @@ msgstr ""
 "Per informazioni, leggete il file \"COPYING\".\n"
 "Traduzione italiana di Andrea Polverini (info@polve.com).\n"
 
-#: misc.c:385
+#: misc.c:389
 msgid "Warning"
 msgstr "Attenzione"
 
-#: misc.c:448
+#: misc.c:452
 msgid ""
 "\n"
 "*\n"
@@ -1047,7 +1047,7 @@ msgstr "Errore sense: %s; "
 msgid "unknown asc/ascq code (0x%02x, 0x%02x)."
 msgstr "Codice asc/ascq sconosciuto (0x%02x, 0x%02x)."
 
-#: read-adaptive.c:129 read-adaptive.c:1243
+#: read-adaptive.c:129 read-adaptive.c:1268
 msgid "Aborted by unrecoverable error."
 msgstr "Interrotto da un errore irrecuperabile."
 
@@ -1089,7 +1089,7 @@ msgstr ""
 
 #: read-adaptive.c:451 read-adaptive.c:467 read-adaptive.c:526
 #: read-adaptive.c:613 read-adaptive.c:666 read-adaptive.c:964
-#: read-adaptive.c:1173
+#: read-adaptive.c:1198
 msgid "Aborted by user request!"
 msgstr "Annullato dall'utente!"
 
@@ -1165,7 +1165,7 @@ msgstr "Analizzo il file immagine esistente"
 msgid "premature end in image (only %d bytes): %s\n"
 msgstr "Fine prematura dell'immagine (solo %d Bytes): %s\n"
 
-#: read-adaptive.c:699 read-adaptive.c:1281 read-linear.c:410
+#: read-adaptive.c:699 read-adaptive.c:1306 read-linear.c:410
 #: rs01-common.c:221
 #, c-format
 msgid "Error reading CRC information: %s"
@@ -1207,46 +1207,46 @@ msgstr "Ferma"
 msgid "Filling image area [%lld..%lld]"
 msgstr "Riempio l'area immagine [%lld..%lld]"
 
-#: read-adaptive.c:945 read-adaptive.c:1256 read-adaptive.c:1381
-#: read-adaptive.c:1462 read-linear.c:358 read-linear.c:483 read-linear.c:585
+#: read-adaptive.c:945 read-adaptive.c:1010 read-adaptive.c:1281
+#: read-adaptive.c:1479 read-linear.c:358 read-linear.c:483 read-linear.c:585
 #: read-linear.c:640 rs01-fix.c:431 rs01-fix.c:689 rs02-fix.c:734
 #, c-format
 msgid "Failed seeking to sector %lld in image [%s]: %s"
 msgstr ""
 
-#: read-adaptive.c:957 read-adaptive.c:1299 read-adaptive.c:1310
-#: read-adaptive.c:1326 read-adaptive.c:1386 read-adaptive.c:1468
+#: read-adaptive.c:957 read-adaptive.c:1015 read-adaptive.c:1324
+#: read-adaptive.c:1335 read-adaptive.c:1351 read-adaptive.c:1485
 #: read-linear.c:364 read-linear.c:591 read-linear.c:648 rs01-fix.c:436
 #, c-format
 msgid "Failed writing to sector %lld in image [%s]: %s"
 msgstr ""
 
-#: read-adaptive.c:1022 read-linear.c:145
+#: read-adaptive.c:1047 read-linear.c:145
 msgid "Reading aborted"
 msgstr "Lettura annullata"
 
-#: read-adaptive.c:1025 read-linear.c:148
+#: read-adaptive.c:1050 read-linear.c:148
 msgid "Preparing for reading the medium image."
 msgstr "Preparazione alla lettura dell'immagine del supporto"
 
-#: read-adaptive.c:1026 read-linear.c:142 read-linear.c:149
+#: read-adaptive.c:1051 read-linear.c:142 read-linear.c:149
 msgid "Medium: not yet determined"
 msgstr "Supporto: non ancora determinato"
 
-#: read-adaptive.c:1083 read-linear.c:264
+#: read-adaptive.c:1108 read-linear.c:264
 #, c-format
 msgid "Creating new %s image.\n"
 msgstr "Creo una nuova immagine %s.\n"
 
-#: read-adaptive.c:1087 read-linear.c:257
+#: read-adaptive.c:1112 read-linear.c:257
 msgid "Reading new medium image."
 msgstr "Lettura dell'immagine del supporto."
 
-#: read-adaptive.c:1103 read-linear.c:278
+#: read-adaptive.c:1128 read-linear.c:278
 msgid "Completing existing medium image."
 msgstr "Completamento dell'immagine esistente del supporto."
 
-#: read-adaptive.c:1132 read-adaptive.c:1438
+#: read-adaptive.c:1157 read-adaptive.c:1455
 msgid ""
 "\n"
 "Sufficient data for reconstructing the image is available.\n"
@@ -1254,7 +1254,7 @@ msgstr ""
 "\n"
 "Sono disponibili dati sufficienti per ricostruire l'immagine.\n"
 
-#: read-adaptive.c:1230 read-linear.c:532
+#: read-adaptive.c:1255 read-linear.c:532
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -1263,7 +1263,7 @@ msgstr ""
 "Settore %lld: %s\n"
 "Impossibile recuperare dall'errore suddetto."
 
-#: read-adaptive.c:1234 read-linear.c:536
+#: read-adaptive.c:1259 read-linear.c:536
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -1276,32 +1276,32 @@ msgstr ""
 "Potrebbe non essere possibile recuperare questo errore.\n"
 "La lettura deve procedere ignorando questo errore?"
 
-#: read-adaptive.c:1278 rs01-fix.c:38 rs02-fix.c:410
+#: read-adaptive.c:1303 rs01-fix.c:38 rs02-fix.c:410
 #, c-format
 msgid "Failed seeking in crc area: %s"
 msgstr ""
 
-#: read-adaptive.c:1294 rs01-fix.c:385 rs02-fix.c:423
+#: read-adaptive.c:1319 rs01-fix.c:385 rs02-fix.c:423
 #, c-format
 msgid "CRC error in sector %lld\n"
 msgstr "Errore CRC nel settore %lld\n"
 
-#: read-adaptive.c:1451 scsi-layer.c:442
+#: read-adaptive.c:1468 scsi-layer.c:442
 #, c-format
 msgid "Sectors %lld-%lld: %s\n"
 msgstr "Settori %lld-%lld: %s\n"
 
-#: read-adaptive.c:1454 read-linear.c:625 scsi-layer.c:441
+#: read-adaptive.c:1471 read-linear.c:625 scsi-layer.c:441
 #, c-format
 msgid "Sector %lld: %s\n"
 msgstr "Settore %lld: %s\n"
 
-#: read-adaptive.c:1582
+#: read-adaptive.c:1599
 #, c-format
 msgid "Only %2d.%1d%% of the image are readable or correctable"
 msgstr "Solo %2d.%1d%% dell'immagine è leggibile o correggibile"
 
-#: read-adaptive.c:1585
+#: read-adaptive.c:1602
 #, c-format
 msgid ""
 "\n"
@@ -1312,7 +1312,7 @@ msgstr ""
 "%s\n"
 "(%lld leggibile, %lld correggibili, %lld ancora mancanti).\n"
 
-#: read-adaptive.c:1599
+#: read-adaptive.c:1616
 msgid ""
 "\n"
 "Good! All sectors have been read.\n"
@@ -1320,12 +1320,12 @@ msgstr ""
 "\n"
 "Fatto! Tutti i settori sono stati letti.\n"
 
-#: read-adaptive.c:1606
+#: read-adaptive.c:1623
 #, c-format
 msgid "No unreadable intervals with >= %d sectors left."
 msgstr "Nessun intervallo illeggibile con >= %d settori rimasti."
 
-#: read-adaptive.c:1609
+#: read-adaptive.c:1626
 #, c-format
 msgid ""
 "\n"

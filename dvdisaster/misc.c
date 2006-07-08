@@ -191,7 +191,11 @@ void PrintProgress(char *format, ...)
 
    va_start(argp, format);
    g_vsnprintf(msg, 256, format, argp);
+#ifdef SYS_MINGW
+   n = strlen(msg);  /* UTF-8 is broken under Windows */
+#else
    n = g_utf8_strlen(msg,-1);
+#endif
    va_end(argp);
 
    if(n>255) 

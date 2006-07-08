@@ -2559,7 +2559,7 @@ der Quellkode-Version gibt es <a href="download20.html">Installationshinweise</a
 <b>Aktuelle Version</b><p> 
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.70</b></td><td align="right">08-Jul-2006</td></tr>
+<tr><td><b>dvdisaster-0.70</b></td><td align="right">09-Jul-2006</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
@@ -3018,9 +3018,9 @@ dvdisaster beinhaltet Bildschirmtexte in den folgenden Sprachen:<p>
 <table>
 <tr><td>&nbsp;&nbsp;&nbsp;</td><td>Deutsch</td><td>--</td><td>vollständig</td></tr>
 <tr><td></td><td>Englisch</td><td>--</td><td>vollständig</td></tr>
-<tr><td></td><td>Italienisch</td><td>--</td><td>vollständig</td></tr>
+<tr><td></td><td>Italienisch</td><td>--</td><td>bis Version 0.65</td></tr>
 <tr><td></td><td>Schwedisch</td><td>--</td><td>vollständig</td></tr>
-<tr><td></td><td>Tschechisch</td><td>--</td><td>vollständig</td></tr>
+<tr><td></td><td>Tschechisch</td><td>--</td><td>bis Version 0.66</td></tr>
 </table><p>
 
 Übersetzer/-innen für andere Sprachen sind willkommen!<p>

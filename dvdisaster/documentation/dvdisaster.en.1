@@ -1,4 +1,4 @@
-.TH DVDISASTER 1 "2005-11-25" "0.64.2" "protection for CD/DVD media"
+.TH DVDISASTER 1 "2006-07-06" "0.70" "protection for CD/DVD media"
 
 .SH NAME
 DVDISASTER \- data loss/scratch/aging protection for CD/DVD media
@@ -13,11 +13,15 @@ DVDISASTER \- data loss/scratch/aging protection for CD/DVD media
 .RB [\| \-i
 .IR image \|]
 .RB [\| \-e
-.IR eccifle \|]
+.IR eccfile \|]
+.RB [\| \-\-list \|]
 .RB [\| \-j
 .IR n \|]
 .RB [\| -n
 .IR n% \|]
+.RB [\| -m
+.IR n \|]
+.RB [\| -v \|]
 .RB [\| \-\-adaptive-read \|]
 .RB [\| \-\-auto-suffix \|]
 .RB [\| \-\-cache-size
@@ -25,9 +29,11 @@ DVDISASTER \- data loss/scratch/aging protection for CD/DVD media
 .RB [\| \-\-dao \|]
 .RB [\| \-\-fill-unreadable
 .IR n \|]
+.RB [\| \-\-query-size
+.IR n \|]
 .RB [\| \-\-speed-warning
 .IR n \|]
-.RB [\| \-\-spinup\-dalay
+.RB [\| \-\-spinup\-delay
 .IR n \|]
 .RB [\| \-\-split\-files \|]
 .RB [\| \-\-keep-style \|]
@@ -37,10 +43,58 @@ DVDISASTER \- data loss/scratch/aging protection for CD/DVD media
 provides a margin of safety against data loss on CD and DVD media caused by
 scratches or aging media. It creates error correction data which is used to
 recover unreadable sectors if the disc becomes damaged at a later time.
-.PP
+
+.SH EXAMPLES \fP(for the impatient ;-)
+
+To scan the medium in drive \fI/dev/hdc\fP for errors:
+
+.RS
+dvdisaster -d /dev/hdc -s
+.RE
+
+To read an image from drive \fI/dev/hdc\fP into the file \fImedium.iso\fP:
+
+.RS
+dvdisaster -d /dev/hdc -i medium.iso -r
+.RE
+
+To read an image from drive \fI/dev/hdc\fP into the file \fImedium.iso\fP
+using adaptive reading. Reading will automatically stop when enough data has been
+gathered to repair the image using the error correction file \fIcorr.ecc\fP:
+
+.RS
+dvdisaster -d /dev/hdc -i medium.iso -e corr.ecc -r --adaptive-read
+.RE
+
+To create an error correction file \fIcorr.ecc\fP for the image \fImedium.iso\fP:
+
+.RS
+dvdisaster -i medium.iso -e corr.ecc -c
+.RE
+
+To augment the image \fImedium.iso\fP with error correction information,
+expanding the image to no more than \fI350000\fP sectors (note the missing blank between -m and RS02):
+
+.RS
+dvdisaster -i medium.iso -mRS02 -n 350000 -c
+.RE
+
+To repair the image file \fImedium.iso\fP using error correction file \fIcorr.ecc\fP:
+
+.RS
+dvdisaster -i medium.iso -e corr.ecc -f
+.RE
+
+To verify the image \fImedium.iso\fP against the error correction file \fIcorr.ecc\fP:
+
+.RS
+dvdisaster -i medium.iso -e corr.ecc -t
+.RE
+
+NOTE: Omit the \fI-e corr.ecc\fP options when working with augmented images in the examples above.
 
 .SH OPTIONS
-Common usage examples:
+Action selection (at least one action must be specified):
 .TP
 .B \-r, \-\-read
 Read the medium image to hard disc. Use -rn-m to read a certain sector range,
@@ -56,10 +110,10 @@ Try to fix medium image using .ecc information.
 Scan the medium for read errors.
 .TP
 .B \-t, \-\-test
-Test integrity of the .img and .ecc files.
+Test integrity of the .iso and .ecc files.
 .TP
 .B \-u, \-\-unlink
-Delete .img files (when other actions complete).
+Delete .iso files (when other actions complete).
 .PP
 
 Drive and file specification:
@@ -68,13 +122,16 @@ Drive and file specification:
 read from given device (default: /dev/cdrom).
 .TP
 .B \-p, \-\-prefix prefix
-prefix of .img/.ecc file (default: medium.* ).
+prefix of .iso/.ecc file (default: medium.* ).
 .TP
 .B \-i, \-\-image imagefile
-name of image file (default: medium.img).
+name of image file (default: medium.iso).
 .TP
 .B \-e, \-\-ecc eccfile
 name of parity file (default: medium.ecc).
+.TP
+.B \-\-list
+lists available drives for the ASPI driver (Windows only).
 .PP
 
 Tweaking options (see manual before using!):
@@ -85,11 +142,20 @@ jump n sectors forward after a read error (default: 16).
 .B \-n, \-\-redundancy n%
 sets redundancy for error correction (default: 14.3%).
 .TP
+.B \-m, \-\-method n
+lists/selects error correction methods (default: RS01).
+.RS
+Possible values are RS01 and RS02.
+.RE
+.TP
+.B \-v, \-\-verbose n%
+more diagnostic messages
+.TP
 .B \-\-adaptive-read
 use optimized strategy for reading damaged media.
 .TP
 .B \-\-auto-suffix
-automatically add .img and .ecc file suffixes.
+automatically add .iso and .ecc file suffixes.
 .TP
 .B \-\-cache-size n
 image cache size in MB during -c mode (default: 32MB).
@@ -99,6 +165,12 @@ assume DAO disc; do not trim image end.
 .TP
 .B \-\-fill-unreadable n
 fill unreadable sectors with byte n
+.TP
+.B \-\-query-size n
+queries drive or filesystem on medium for image size (default: ecc)
+.RS
+Possible values are: drive udf ecc 
+.RE
 .TP
 .B \-\-speed-warning n
 print warning if speed changes by more than n percent.
@@ -125,4 +197,4 @@ DVDISASTER was written by Carsten Gnoerlich <carsten@dvdisaster.com>.
 .PP
 This manual page was written by Daniel Baumann
 <daniel.baumann@panthera-systems.net>, for the Debian project (but may be used
-by others).
+by others). It was enhanced for V0.70 by Carsten Gnoerlich.

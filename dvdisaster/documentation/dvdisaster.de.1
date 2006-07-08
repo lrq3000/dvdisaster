@@ -1,4 +1,4 @@
-.TH DVDISASTER 1 "2005-11-25" "0.64.2" "Schutz f\[:u]r CD/DVD Medien"
+.TH DVDISASTER 1 "2006-07-06" "0.70" "Schutz f\[:u]r CD/DVD Medien"
 
 .SH NAME
 DVDISASTER \- Schutz f\[:u]r CD/DVD Medien gegen Datenverlust durch Alterung
@@ -14,17 +14,23 @@ oder Kratzer
 .RB [\| \-i
 .IR image \|]
 .RB [\| \-e
-.IR eccifle \|]
+.IR eccfile \|]
+.RB [\| \-\-list \|]
 .RB [\| \-j
 .IR n \|]
 .RB [\| -n
 .IR n% \|]
+.RB [\| -m
+.IR n \|]
+.RB [\| -v \|]
 .RB [\| \-\-adaptive-read \|]
 .RB [\| \-\-auto-suffix \|]
 .RB [\| \-\-cache-size
 .IR n \|]
 .RB [\| \-\-dao \|]
 .RB [\| \-\-fill-unreadable
+.IR n \|]
+.RB [\| \-\-query-size
 .IR n \|]
 .RB [\| \-\-speed-warning
 .IR n \|]
@@ -39,29 +45,82 @@ erzeugt einen Sicherheitspuffer gegen Datenverluste, die auf CD- und
 DVD-Datentr\[:a]gern durch Alterung oder Kratzer entstehen. Es erzeugt
 Fehlerkorrekturdaten, um bei nachfolgenden Datentr\[:a]ger-Problemen unlesbare
 Sektoren zu rekonstruieren.
-.PP
+
+.SH BEISPIELE \fP(f\[:u]r die Ungeduldigen ;-)
+
+Datentr\[:a]ger in Laufwerk \fI/dev/hdc\fP auf Fehler \[:u]berpr\[:u]fen:
+
+.RS
+dvdisaster -d /dev/hdc -s
+.RE
+
+Ein Abbild vom Datentr\[:a]ger in Laufwerk \fI/dev/hdc\fP als Datei \fImedium.iso\fP erstellen:
+
+.RS
+dvdisaster -d /dev/hdc -i medium.iso -r
+.RE
+
+Ein Abbild vom Datentr\[:a]ger in Laufwerk \fI/dev/hdc\fP als Datei \fImedium.iso\fP
+mit der angepassten Lesestrategie erstellen. Der Lesevorgang wird automatisch beendet
+sobald gen\[:u]gend Daten eingelesen wurden, um das Abbild mit Hilfe der 
+Fehlerkorrektur-Datei \fIcorr.ecc\fP wiederherzustellen:
+
+.RS
+dvdisaster -d /dev/hdc -i medium.iso -e corr.ecc -r --adaptive-read
+.RE
+
+Eine Fehlerkorrektur-Datei \fIcorr.ecc\fP f\[:u]r das Abbild \fImedium.iso\fP erzeugen:
+
+.RS
+dvdisaster -i medium.iso -e corr.ecc -c
+.RE
+
+Ein Abbild \fImedium.iso\fP mit Fehlerkorrektur-Daten erweitern,
+wobei das Abbild auf nicht mehr als \fI350000\fP Sektoren vergr\[:o]ssert wird
+(beachten Sie das fehlende Leerzeichen zwischen -m und RS02):
+
+.RS
+dvdisaster -i medium.iso -mRS02 -n 350000 -c
+.RE
+
+Wiederherstellen der Abbild-Datei \fImedium.iso\fP 
+mit Hilfe der Fehlerkorrektur-Datei \fIcorr.ecc\fP:
+
+.RS
+dvdisaster -i medium.iso -e corr.ecc -f
+.RE
+
+Ein Abbild \fImedium.iso\fP mit der Fehlerkorrektur-Datei \fIcorr.ecc\fP \[:u]berpr\[:u]fen:
+
+.RS
+dvdisaster -i medium.iso -e corr.ecc -t
+.RE
+
+HINWEIS: Geben Sie in den obigen Beispielen 
+die \fI-e corr.ecc\fP-Optionen nicht an, wenn Sie mit erweiterten
+Abbildern arbeiten.
 
 .SH OPTIONEN
-Allgemeine Anwendungsbeispiele:
+Aktions-Auswahl (mindestes eine Aktion muss gew\[:a]hlt werden):
 .TP
 .B \-r, \-\-read
 Datentr\[:a]ger-Abbild auf Festplatte einlesen. -rn-m liest einen Bereich von
 Sektoren, z.B. -r100-200.
 .TP
 .B \-c, \-\-create
-Erzeugt .ecc - Datei f\[:u]r das Abbild.
+Erzeugt Fehlerkorrektur-Daten f\[:u]r das Abbild.
 .TP
 .B \-f, \-\-fix
-Versucht das Abbild mit Hilfe der .ecc - Datei zu reparieren.
+Versucht das Abbild mit Hilfe der Fehlerkorrektur-Daten zu reparieren.
 .TP
 .B \-s, \-\-scan
 Untersucht den Datentr\[:a]ger auf Lesefehler.
 .TP
 .B \-t, \-\-test
-Pr\[:u]ft die Struktur der .img und .ecc - Dateien.
+Pr\[:u]ft die Struktur der .iso und .ecc - Dateien.
 .TP
 .B \-u, \-\-unlink
-L\[:o]scht .img - Dateien nach Beenden der vorherigen Aktionen.
+L\[:o]scht .iso - Dateien nach Beenden der vorherigen Aktionen.
 .PP
 
 Laufwerks- und Dateinamen:
@@ -70,13 +129,16 @@ Laufwerks- und Dateinamen:
 Von diesem Laufwerk lesen (Standard: /dev/cdrom).
 .TP
 .B \-p, \-\-prefix prefix
-Anfang der .img/.ecc - Dateien (Standard: medium.* ).
+Anfang der .iso/.ecc - Dateien (Standard: medium.* ).
 .TP
 .B \-i, \-\-image imagefile
-Name der Abbild - Datei (Standard: medium.img).
+Name der Abbild - Datei (Standard: medium.iso).
 .TP
 .B \-e, \-\-ecc eccfile
 Name der Fehlerkorrektur-Datei (Standard: medium.ecc).
+.PP
+.B \-\-list
+Zeigt verf\[:u]gbare Laufwerke unter dem ASPI-Treiber (nur f\[:u]r Windows).
 .PP
 
 Feineinstellung (Beachten Sie die Hinweise in der Dokumentation!):
@@ -87,11 +149,20 @@ Feineinstellung (Beachten Sie die Hinweise in der Dokumentation!):
 .B \-n, \-\-redundancy n%
 Redundanz der Fehlerkorrektur (Standard: 14.3%).
 .TP
+.B \-m, \-\-method n
+Fehlerkorrektur-Methoden anzeigen/ausw\[:a]hlen (Standard: RS01).
+.RS
+M\[:o]gliche Werte sind RS01 und RS02.
+.RE
+.TP
+.B \-v, \-\-verbose n%
+mehr erl\[:a]uternde Ausgaben
+.TP
 .B \-\-adaptive-read
 verwende optimierte Lesestrategie f\[:u]r defekte Datentr\[:a]ger.
 .TP
 .B \-\-auto-suffix
-automatisches Anf\[:u]gen der .img- und .ecc-Dateiendungen.
+automatisches Anf\[:u]gen der .iso- und .ecc-Dateiendungen.
 .TP
 .B \-\-cache-size n
 Zwischenspeicher in MB bei .ecc-Datei-Erzeugung - (Standard: 32MB).
@@ -101,6 +172,13 @@ unterstelle DAO; Abbild am Ende nicht k\[:u]rzen.
 .TP
 .B \-\-fill-unreadable n
 f\[:u]lle unlesbare Sektoren mit Byte n.
+.TP
+.B \-\-query-size n
+Ermittelt die Abbildgr\[:o]sse durch das Laufwerk oder das Dateisystem auf dem Datentr\[:a]ger
+(Standard: ecc)
+.RS
+M\[:o]gliche Werte: drive udf ecc 
+.RE
 .TP
 .B \-\-speed-warning n
 warnt bei Geschwindigkeits\[:a]nderung um mehr als n Prozent.
@@ -128,4 +206,4 @@ DVDISASTER wurde von Carsten Gnoerlich <carsten@dvdisaster.com> geschrieben.
 .PP
 Diese Hilfeseite wurde von Daniel Baumann <daniel.baumann@panthera-systems.net>
 f\[:u]r das Debian Projekt geschrieben (kann aber auch von Anderen verwendet
-werden).
+werden). Sie wurde f\[:u]r Version 0.70 von Carsten Gn\[:o]rlich erweitert.

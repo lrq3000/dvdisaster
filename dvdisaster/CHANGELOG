@@ -1,5 +1,7 @@
-0.67 (devel-20)
+
+0.70 (rc-1) 08-07-2006
 	- fixed the adaptive reading bug
+	- updated German and English manual pages
 
 0.67 (devel-19) 02-07-2006
 	- completed German and English manual

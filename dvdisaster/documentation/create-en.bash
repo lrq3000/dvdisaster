@@ -2467,7 +2467,7 @@ For the source code version see the <a href="download20.html">installation instr
 <b>Current version</b><p>
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.70</b></td><td align="right">08-Jul-2006</td></tr>
+<tr><td><b>dvdisaster-0.70</b></td><td align="right">09-Jul-2006</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
@@ -2492,9 +2492,7 @@ Julian Einwag started porting dvdisaster
 to <a href="download20.html#darwin">Mac OS X / Darwin</a>.<p>
 
 Daniel Nylander provided Swedish translations of the screen texts.
-
 </td></tr></table><p>
-
 <pre> </pre>
 
 <b>Older versions</b><p>
@@ -2912,10 +2910,10 @@ function qa10en()
 The current version of dvdisaster contains screen texts in the following languages:<p>
 
 <table>
-<tr><td>&nbsp;&nbsp;&nbsp;</td><td>Czech</td><td>--</td><td>complete</td></tr>
+<tr><td>&nbsp;&nbsp;&nbsp;</td><td>Czech</td><td>--</td><td>upto version 0.66</td></tr>
 <tr><td></td><td>English</td><td>--</td><td>complete</td></tr>
 <tr><td>&nbsp;&nbsp;&nbsp;</td><td>German</td><td>--</td><td>complete</td></tr>
-<tr><td>&nbsp;&nbsp;&nbsp;</td><td>Italian</td><td>--</td><td>complete</td></tr>
+<tr><td>&nbsp;&nbsp;&nbsp;</td><td>Italian</td><td>--</td><td>upto version 0.65</td></tr>
 <tr><td>&nbsp;&nbsp;&nbsp;</td><td>Swedish</td><td>--</td><td>complete</td></tr>
 </table><p>
 
