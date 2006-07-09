@@ -2201,6 +2201,10 @@ to <a href="../en/download20.html#darwin">Mac OS X / Darwin</a>.<p>
 
 Daniel Nylander provided Swedish translations of the screen texts.
 </td></tr></table><p>
+
+The dvdisaster source code is also
+<a href="http://sourceforge.net/cvs/?group_id=157550">available via CVS</a>.
+
 <pre> </pre>
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">

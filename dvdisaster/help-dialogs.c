@@ -491,7 +491,7 @@ void AboutDialog()
 			"GPL");
 
 #ifdef MODIFIED_SOURCE
-   AboutTextWithLink(vbox, _("\nThis program is <i>not the original</i>. It is based on the\n"
+   AboutTextWithLink(vbox, _("\nThis program is <b>not the original</b>. It is based on the\n"
 			     "source code of dvdisaster, but contains third-party changes.\n\n"
 			     "Please do not bother the original authors of dvdisaster\n"
 			     "([www.dvdisaster.org]) about issues with this version.\n"),

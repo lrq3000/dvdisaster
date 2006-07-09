@@ -44,54 +44,39 @@ provides a margin of safety against data loss on CD and DVD media caused by
 scratches or aging media. It creates error correction data which is used to
 recover unreadable sectors if the disc becomes damaged at a later time.
 
-.SH EXAMPLES \fP(for the impatient ;-)
+.SH TYPICAL USAGE
 
-To scan the medium in drive \fI/dev/hdc\fP for errors:
-
-.RS
-dvdisaster -d /dev/hdc -s
-.RE
-
-To read an image from drive \fI/dev/hdc\fP into the file \fImedium.iso\fP:
-
-.RS
-dvdisaster -d /dev/hdc -i medium.iso -r
-.RE
-
-To read an image from drive \fI/dev/hdc\fP into the file \fImedium.iso\fP
-using adaptive reading. Reading will automatically stop when enough data has been
-gathered to repair the image using the error correction file \fIcorr.ecc\fP:
-
-.RS
-dvdisaster -d /dev/hdc -i medium.iso -e corr.ecc -r --adaptive-read
-.RE
-
-To create an error correction file \fIcorr.ecc\fP for the image \fImedium.iso\fP:
-
-.RS
-dvdisaster -i medium.iso -e corr.ecc -c
-.RE
-
-To augment the image \fImedium.iso\fP with error correction information,
-expanding the image to no more than \fI350000\fP sectors (note the missing blank between -m and RS02):
-
-.RS
-dvdisaster -i medium.iso -mRS02 -n 350000 -c
-.RE
-
-To repair the image file \fImedium.iso\fP using error correction file \fIcorr.ecc\fP:
-
-.RS
-dvdisaster -i medium.iso -e corr.ecc -f
-.RE
-
-To verify the image \fImedium.iso\fP against the error correction file \fIcorr.ecc\fP:
-
-.RS
-dvdisaster -i medium.iso -e corr.ecc -t
-.RE
-
-NOTE: Omit the \fI-e corr.ecc\fP options when working with augmented images in the examples above.
+.TP
+\fBdvdisaster\fP \fB-d\fP \fI/dev/hdc\fP \fB-s\fP
+Scans the medium in drive \fI/dev/hdc\fP for errors.
+.TP
+\fBdvdisaster\fP \fB-d\fP \fI/dev/hdc\fP \fB-i\fP \fImedium.iso\fP \fB-r\fP
+Reads an image from drive \fI/dev/hdc\fP into the file \fImedium.iso\fP.
+.TP
+\fBdvdisaster\fP \fB-d\fP \fI/dev/hdc\fP \fB-i\fP \fImedium.iso\fP \fB-e\fP \fIcorr.ecc\fP \fB-r\fP \fB--adaptive-read\fP
+Uses the adaptive reading strategy to read an image from 
+drive \fI/dev/hdc\fP into the file \fImedium.iso\fP.
+Reading will stop when enough data has been
+gathered to repair the image using the error correction file \fIcorr.ecc\fP.
+.TP
+\fBdvdisaster\fP \fB-i\fP \fImedium.iso\fP \fB-e\fP \fIcorr.ecc\fP \fB-c\fP
+Creates an error correction file \fIcorr.ecc\fP for the image \fImedium.iso\fP.
+.TP
+\fBdvdisaster\fP \fB-i\fP \fImedium.iso\fP \fB-m\fIRS02\fP \fB-n\fP \fI350000\fP \fB-c\fP
+Augments the image \fImedium.iso\fP with error correction information,
+expanding the image to no more than \fI350000\fP sectors. If \fB-n\fP is omitted the image
+will be expanded to the smallest possible medium size (CD, DVD, DVD9).
+Note the missing blank between \fB-m\fP and \fIRS02\fP.
+.TP
+\fBdvdisaster\fP \fB-i\fP \fImedium.iso\fP \fB-e\fP \fIcorr.ecc\fP \fB-f\fP
+Repairs the image file \fImedium.iso\fP using the error correction file \fIcorr.ecc\fP.
+.TP
+\fBdvdisaster\fP \fB-i\fP \fImedium.iso\fP \fB-e\fP \fIcorr.ecc\fP \fB-t\fP
+Verifies the image \fImedium.iso\fP with information from
+the error correction file \fIcorr.ecc\fP.
+.TP
+\fBNOTE:\fP
+Omit the \fB-e corr.ecc\fP options when working with augmented images in the examples above.
 
 .SH OPTIONS
 Action selection (at least one action must be specified):

@@ -2493,6 +2493,9 @@ to <a href="download20.html#darwin">Mac OS X / Darwin</a>.<p>
 
 Daniel Nylander provided Swedish translations of the screen texts.
 </td></tr></table><p>
+
+The dvdisaster source code is also
+<a href="http://sourceforge.net/cvs/?group_id=157550">available via CVS</a>.
 <pre> </pre>
 
 <b>Older versions</b><p>
@@ -2678,7 +2681,7 @@ function download10en()
 
 <ul>
  <li><b>x86 compatible</b> hardware in <b>32bit</b> mode 
-     (see operating systems for 64bit support);<br>
+     (see operating systems for 64bit support);
      PowerPC support is experimental,<p></li>
  <li>an up-to-date CD or DVD drive with ATAPI or SCSI interface,<p></li>
  <li>at least a P4 at 2Ghz or comparable processor<p>
@@ -2692,7 +2695,7 @@ function download10en()
  <li><b>Linux</b> with kernel <b>2.6.7</b> or later, 64bit supported<br>
      (using kernels >= 2.4.20 is possible, but not recommended!)<p>
  </li>
- <li><b>Mac OS X</b> ab Version 10.4 (Tiger)<br> 
+ <li><b>Mac OS X</b> version 10.4 (Tiger) or later,<br> 
       on x86 and PowerPC hardware.<p>
  <li><b>Windows</b> <b>2000</b> or <b>XP</b><br>
      (Windows 98 and ME are possible, but are not recommended for handling DVD)

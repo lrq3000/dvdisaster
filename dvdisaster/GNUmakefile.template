@@ -116,9 +116,9 @@ simple-md5sum: md5.c
 # Stuff needed to generate or prepare the documentation
 
 documentation/de/index.html: documentation/create.bash documentation/create-cs.bash documentation/create-de.bash documentation/create-en.bash
-	@if echo $(CFG_OTHER_OPTIONS) | grep MODIFIED >/dev/null; \
-	then cd documentation ; bash create.bash local-mod $(VERSION) $(PKGNAME); \
-	else cd documentation ; bash create.bash local-orig $(VERSION) $(PKGNAME); \
+	@if test -e help-dialogs.h && grep UNMODIFIED help-dialogs.h >/dev/null; \
+	then cd documentation ; bash create.bash local-orig $(VERSION) $(PKGNAME); \
+	else cd documentation ; bash create.bash local-mod $(VERSION) $(PKGNAME); \
 	fi
 
 html: documentation/de/index.html
@@ -214,6 +214,7 @@ install: dvdisaster html images
 	install -m 644 CHANGELOG $(BUILDROOT)$(DOCSUBDIR)
 	install -m 644 COPYING $(BUILDROOT)$(DOCSUBDIR)
 	install -m 644 CREDITS* $(BUILDROOT)$(DOCSUBDIR)
+	install -m 644 README.MODIFYING $(BUILDROOT)$(DOCSUBDIR)
 	install -m 644 TODO $(BUILDROOT)$(DOCSUBDIR)
 	install -d $(BUILDROOT)$(DOCSUBDIR)/cs
 	cd documentation; install -m 644 cs/*.html $(BUILDROOT)$(DOCSUBDIR)/cs
@@ -338,7 +339,7 @@ prepare-dist:
 	@if test -e win-build-dir; then rm -rf win-build-dir; fi
 	@mkdir win-build-dir
 	@mkdir win-build-dir/documentation
-	@cp -r CHANGELOG COPYING CREDITS* TODO dvdisaster.exe dvdisaster-win.exe win-build-dir
+	@cp -r CHANGELOG COPYING CREDITS* README.MODIFYING TODO dvdisaster.exe dvdisaster-win.exe win-build-dir
 	@cp documentation/pubkey.asc win-build-dir/documentation
 	@for i in cs de en; do \
 	  mkdir win-build-dir/documentation/$$i; \

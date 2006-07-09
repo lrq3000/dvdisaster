@@ -1,3 +1,11 @@
+------ 0.70 released ------
+
+0.70 09-07-2006
+	- cleaned up source distribution
+	- some more touch-ups on the manual pages
+	- fixed a bug reading the CD TOC which would cause
+	  temporary hangs in Windows XP for certain combinations
+	  of faulty drive firmware, CD-RW and SPTI.
 
 0.70 (rc-1) 08-07-2006
 	- fixed the adaptive reading bug

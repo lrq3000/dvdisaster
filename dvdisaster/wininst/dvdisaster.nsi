@@ -179,8 +179,11 @@ Section "!$(LANG_SECTION_APPLICATION)" SectionApp
   Call FileToUninstallLog
   IfErrors MainSectionEnd
   ${FileOverwriteNoError} "..\win-build-dir\" "COPYING"
+  ${FileOverwriteNoError} "..\win-build-dir\" "CREDITS.cs"
   ${FileOverwriteNoError} "..\win-build-dir\" "CREDITS.en"
+  ${FileOverwriteNoError} "..\win-build-dir\" "CREDITS.de"
   ${FileOverwriteNoError} "..\win-build-dir\" "CHANGELOG"
+  ${FileOverwriteNoError} "..\win-build-dir\" "README.MODIFYING"
   ${FileOverwriteNoError} "..\win-build-dir\" "TODO"
   ${FileOverwriteIncReboot} "..\win-build-dir\" "iconv.dll"
   IfErrors MainSectionEnd

@@ -2773,7 +2773,7 @@ function download10de()
 
 <ul>
  <li><b>x86-kompatible</b> Hardware in der <b>32bit</b>-Betriebsart
-  (64-bit Unterstützung siehe Betriebssysteme);<br>
+  (64-bit Unterstützung siehe Betriebssysteme);
   PowerPC-Unterstützung ist experimentell,<p></li>
  <li>ein aktuelles CD- oder DVD-Laufwerk mit ATAPI- oder SCSI-Schnittstelle,<p></li>
  <li>mindestens P4 mit 2Ghz oder vergleichbare Rechenleistung<p>
@@ -2788,7 +2788,7 @@ function download10de()
  <li><b>Linux</b> ab Kernel <b>2.6.7</b>, 64bit möglich<br> 
      (Kernel >= 2.4.20 sind möglich, aber nicht empfohlen!)<p>
  </li>
- <li><b>Mac OS X</b> ab Version 10.4 (Tiger)<br> 
+ <li><b>Mac OS X</b> ab Version 10.4 (Tiger),<br> 
       auf x86 und PowerPC-Hardware.<p>
  </li>
  <li><b>Windows</b> <b>2000</b> oder <b>XP</b><br>

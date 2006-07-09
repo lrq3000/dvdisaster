@@ -46,62 +46,46 @@ DVD-Datentr\[:a]gern durch Alterung oder Kratzer entstehen. Es erzeugt
 Fehlerkorrekturdaten, um bei nachfolgenden Datentr\[:a]ger-Problemen unlesbare
 Sektoren zu rekonstruieren.
 
-.SH BEISPIELE \fP(f\[:u]r die Ungeduldigen ;-)
+.SH TYPISCHE ANWENDUNGEN
 
-Datentr\[:a]ger in Laufwerk \fI/dev/hdc\fP auf Fehler \[:u]berpr\[:u]fen:
-
-.RS
-dvdisaster -d /dev/hdc -s
-.RE
-
-Ein Abbild vom Datentr\[:a]ger in Laufwerk \fI/dev/hdc\fP als Datei \fImedium.iso\fP erstellen:
-
-.RS
-dvdisaster -d /dev/hdc -i medium.iso -r
-.RE
-
-Ein Abbild vom Datentr\[:a]ger in Laufwerk \fI/dev/hdc\fP als Datei \fImedium.iso\fP
-mit der angepassten Lesestrategie erstellen. Der Lesevorgang wird automatisch beendet
+.TP
+\fBdvdisaster\fP \fB-d\fP \fI/dev/hdc\fP \fB-s\fP
+\[:U]berpr\[:u]ft den Datentr\[:a]ger in Laufwerk \fI/dev/hdc\fP auf Fehler.
+.TP
+\fBdvdisaster\fP \fB-d\fP \fI/dev/hdc\fP \fB-i\fP \fIabbild.iso\fP \fB-r\fP
+Erstellt ein Abbild vom Datentr\[:a]ger in Laufwerk \fI/dev/hdc\fP als Datei \fIabbild.iso\fP.
+.TP
+\fBdvdisaster\fP \fB-d\fP \fI/dev/hdc\fP \fB-i\fP \fIabbild.iso\fP \fB-e\fP \fIkorr.ecc\fP \fB-r\fP \fB--adaptive-read\fP
+Verwendet die angepasste Lesestrategie, um ein Abbild vom 
+Datentr\[:a]ger in Laufwerk \fI/dev/hdc\fP als Datei \fIabbild.iso\fP
+zu erstellen. Der Lesevorgang wird automatisch beendet
 sobald gen\[:u]gend Daten eingelesen wurden, um das Abbild mit Hilfe der 
-Fehlerkorrektur-Datei \fIcorr.ecc\fP wiederherzustellen:
-
-.RS
-dvdisaster -d /dev/hdc -i medium.iso -e corr.ecc -r --adaptive-read
-.RE
-
-Eine Fehlerkorrektur-Datei \fIcorr.ecc\fP f\[:u]r das Abbild \fImedium.iso\fP erzeugen:
-
-.RS
-dvdisaster -i medium.iso -e corr.ecc -c
-.RE
-
-Ein Abbild \fImedium.iso\fP mit Fehlerkorrektur-Daten erweitern,
-wobei das Abbild auf nicht mehr als \fI350000\fP Sektoren vergr\[:o]ssert wird
-(beachten Sie das fehlende Leerzeichen zwischen -m und RS02):
-
-.RS
-dvdisaster -i medium.iso -mRS02 -n 350000 -c
-.RE
-
-Wiederherstellen der Abbild-Datei \fImedium.iso\fP 
-mit Hilfe der Fehlerkorrektur-Datei \fIcorr.ecc\fP:
-
-.RS
-dvdisaster -i medium.iso -e corr.ecc -f
-.RE
-
-Ein Abbild \fImedium.iso\fP mit der Fehlerkorrektur-Datei \fIcorr.ecc\fP \[:u]berpr\[:u]fen:
-
-.RS
-dvdisaster -i medium.iso -e corr.ecc -t
-.RE
-
-HINWEIS: Geben Sie in den obigen Beispielen 
-die \fI-e corr.ecc\fP-Optionen nicht an, wenn Sie mit erweiterten
-Abbildern arbeiten.
+Fehlerkorrektur-Datei \fIkorr.ecc\fP wiederherzustellen:
+.TP
+\fBdvdisaster\fP \fB-i\fP \fIabbild.iso\fP \fB-e\fP \fIkorr.ecc\fP \fB-c\fP
+Erzeugt eine Fehlerkorrektur-Datei \fIkorr.ecc\fP f\[:u]r das Abbild \fIabbild.iso\fP.
+.TP
+\fBdvdisaster\fp \fB-i\fP \fIabbild.iso\fP \fB-m\fIRS02\fP \fB-n\fP \fI350000\fP \fB-c\fP
+Erweitert ein Abbild \fIabbild.iso\fP mit Fehlerkorrektur-Daten,
+wobei das Abbild auf nicht mehr als \fI350000\fP Sektoren vergr\[:o]ssert wird.
+Ohne Angabe von \fB-n\fP wird das Abbild auf die Gr\[:o]sse des 
+kleinstm\[:o]glichen Datentr\[:a]gers (CD, DVD, DVD9) erweitert.
+Beachten Sie das fehlende Leerzeichen zwischen \fB-m\fP und \fIRS02\fP.
+.TP
+\fBdvdisaster\fP \fB-i\fP \fIabbild.iso\fP \fB-e\fP \fIkorr.ecc\fP \fB-f\fP
+Wiederherstellung der Abbild-Datei \fIabbild.iso\fP 
+mit Hilfe der Fehlerkorrektur-Datei \fIkorr.ecc\fP.
+.TP
+\fBdvdisaster\fP \fB-i\fP \fIabbild.iso\fP \fB-e\fP \fIkorr.ecc\fP \fB-t\fP
+\[:U]berpr\[:u]ft den Inhalt des Abbilds \fIabbild.iso\fP 
+mit Hilfe der Fehlerkorrektur-Datei \fIkorr.ecc\fP auf Vollst\[:a]ndigkeit und Korrektheit.
+.TP
+\fBHINWEIS:\fP
+Geben Sie in den obigen Beispielen  die \fB-e korr.ecc\fP-Optionen nicht an, 
+wenn Sie mit erweiterten Abbildern arbeiten.
 
 .SH OPTIONEN
-Aktions-Auswahl (mindestes eine Aktion muss gew\[:a]hlt werden):
+Aktions-Auswahl (mindestens eine Aktion muss gew\[:a]hlt werden):
 .TP
 .B \-r, \-\-read
 Datentr\[:a]ger-Abbild auf Festplatte einlesen. -rn-m liest einen Bereich von

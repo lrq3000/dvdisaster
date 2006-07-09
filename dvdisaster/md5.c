@@ -20,8 +20,10 @@
    and to fit the cifs vfs by 
    Steve French sfrench@us.ibm.com */
 
-/* Replacement of  __u32 with guint32 and removal of hmac* functions
-   and addition of functions by Carsten Gnörlich for the dvdisaster project. */
+/* Replacement of  __u32 with guint32,
+   removal of hmac* functions
+   and addition of AsciiDigest(), print_sum() and main()
+   by Carsten Gnörlich for the dvdisaster project, 2004-2006. */
 
 
 #if defined(PNGPACK) || defined(SIMPLE_MD5SUM)    /* pngpack or simple-md5sum*/

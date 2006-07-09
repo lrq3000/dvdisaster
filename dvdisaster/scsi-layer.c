@@ -293,6 +293,7 @@ assume_cd:
 
    memset(cmd, 0, MAX_CDB_SIZE);
    cmd[0] = 0x43;  /* READ TOC/PMA/ATIP */
+   cmd[1] = 0x02;  /* TIME bit required for this format */
    cmd[2] = 2;     /* format; we want the full TOC */
    cmd[6] = 1;     /* track/session number */
    cmd[7] = 0;     /* allocation length */
@@ -317,6 +318,7 @@ assume_cd:
 
    memset(cmd, 0, MAX_CDB_SIZE);
    cmd[0] = 0x43;  /* READ TOC/PMA/ATIP */
+   cmd[1] = 0x02;  /* TIME bit required for this format */
    cmd[2] = 2;     /* format; we want the full TOC */
    cmd[6] = 1;     /* track/session number */
    cmd[7] = 0;     /* allocation length */
