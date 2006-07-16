@@ -2367,12 +2367,13 @@ Specifies the maximum possible size for <a href="background30.html">augmented im
 in sectors of 2K size. The image will be filled up with error correction data up to the
 given size.<p>
 
-If this option is omitted dvdisaster will expand the image so that the smallest
-possible medium type (CD or one/two layered DVD) can be used. The default sizes
-are shown in a <a href="example84.html#max-image-size">table</a> within the
-graphical user interface. Please observe 
-the <a href="example84.html#size-hints">hints</a> for choosing the
-medium size given there.
+Instead of the number of sectors one of the values CD, DVD and DVD9
+are also accepted; these represent the 
+<a href="example84.html#max-image-size">default settings</a> shown in the
+graphical user interface.<p>
+
+If the -n/--redundancy option is omitted dvdisaster will expand the image so that the smallest
+possible medium type (CD or one/two layered DVD) can be used. 
 
 <div align=right><a href="#options">&uarr;</a></div><p>
 
@@ -3511,10 +3512,15 @@ any possible redundancy can be chosen</td>
 </tr>
 
 <tr valign="top">
-<td>already effective at 15% redundancy;
-medium can be completely filled with data</td>
-<td>requires at least 20%-30% redundancy;
-usable medium capacity is reduced accordingly</td> 
+<td>already effective at 15% redundancy
+since error correction files are required to be free of damage</td>
+<td>requires more redundancy (recommended: 20-30%)
+to compensate defects in the error correction data</td> 
+</tr>
+
+<tr valign="top">
+<td>medium can be completely filled with data</td>
+<td>usable medium capacity is reduced by amount of error correction data</td> 
 </tr>
 
 <tr valign="top">

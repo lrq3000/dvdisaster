@@ -22,6 +22,7 @@
 #include "dvdisaster.h"
 
 #include "rs02-includes.h"
+#include "udf.h"
 
 #include <time.h>
 
@@ -399,17 +400,18 @@ void TruncateImage(char *arg)
 }
 
 /*
- * Debugging function to create an image filled with random numbers
+ * Debugging function to create an ISO image filled with random numbers
  */
 
-void RandomImage(char *image_name, char *n_sectors)
+void RandomImage(char *image_name, char *n_sectors, int mark)
 {  LargeFile *image;
+   IsoHeader *ih;
    gint64 sectors,s = 0;
    int percent, last_percent = 0;
    guint32 invert;
 
    sectors = atoi(n_sectors);
-   if(sectors < 0) sectors = 1;
+   if(sectors < 64) sectors = 64;
 
    /*** Open the image file */
 
@@ -423,8 +425,10 @@ void RandomImage(char *image_name, char *n_sectors)
    PrintLog(_("\nCreating random image with %lld sectors.\n\n"
 	      "There is no need for permanently storing this image;\n" 
               "you can always reproduce it by calling\n"
-	      "dvdisaster --debug --random-image %lld --random-seed %d\n\n"),
-	      sectors, sectors, Closure->randomSeed);
+	      "dvdisaster --debug %s %lld --random-seed %d\n\n"),
+	      sectors, 
+	      mark ? "--marked-image" : "--random-image",
+	      sectors, Closure->randomSeed);
 
    if(Closure->randomSeed >= 0)
    {  SRandom(Closure->randomSeed);
@@ -434,6 +438,14 @@ void RandomImage(char *image_name, char *n_sectors)
    {  SRandom(-Closure->randomSeed);
       invert = 0xffffffff;
    }
+
+   /*** Create and write the ISO file system.
+	Otherwise some writing software will not recognize the image. */
+
+   ih = InitIsoHeader();
+   AddFile(ih, "random.data", 2048*(sectors-25));
+   s  = WriteIsoHeader(ih, image);
+   FreeIsoHeader(ih);
 
    /*** Create it */
 
@@ -447,6 +459,13 @@ void RandomImage(char *image_name, char *n_sectors)
 #else
       do buf[i--] = SwapBytes32(Random32() ^ invert); while(i>=0);
 #endif
+      
+      if(mark)  /* Mark the sector with its number. */
+      {  int i;
+
+	 for(i=0; i<2048; i+=128)
+	   sprintf(((char*)buf)+i, "Sector  %8lld", s);
+      }
 
       n = LargeWrite(image, buf, 2048);
       s++;

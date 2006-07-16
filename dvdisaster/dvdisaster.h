@@ -421,7 +421,7 @@ void RedrawCurve(Curve*, int, int);
 void Byteset(char*);
 void Erase(char*);
 void RandomError(char*, char*);
-void RandomImage(char*, char*);
+void RandomImage(char*, char*, int);
 void SendCDB(char*);
 void ShowSector(char*);
 Bitmap* SimulateDefects(gint64);
@@ -746,6 +746,7 @@ void ReadMediumAdaptive(gpointer);
 #define ADAPTIVE_READ_SPIRAL_SIZE 4800
 
 void ResetAdaptiveReadWindow();
+void SetAdaptiveReadMinimumPercentage(int);
 void CreateAdaptiveReadWindow(GtkWidget*);
 
 void ClipReadAdaptiveSpiral(int);

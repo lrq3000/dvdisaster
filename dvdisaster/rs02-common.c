@@ -212,20 +212,19 @@ void RS02SliceIndex(RS02Layout *lay, gint64 sector, gint64 *slice, gint64 *n)
 
 RS02Layout *CalcRS02Layout(gint64 data_sectors, int requested_roots)
 {  RS02Layout *lay = g_malloc0(sizeof(RS02Layout));
-   guint64 medium_capacity;
    guint64 ecc_area;
 
    /* If no medium size is given by the user,
       pick the smallest possible among CDR, single layer DVD and two layer DVD. */
 
    if(Closure->mediumSize)
-     medium_capacity = Closure->mediumSize;
+     lay->mediumCapacity = Closure->mediumSize;
    else
    {  if(data_sectors < Closure->cdSize)
-            medium_capacity = Closure->cdSize;   /* CDR */
+            lay->mediumCapacity = Closure->cdSize;   /* CDR */
       else if(data_sectors < Closure->dvdSize1)
-            medium_capacity = Closure->dvdSize1; /* Single layered DVD */
-      else  medium_capacity = Closure->dvdSize2; /* Double layered DVD */
+            lay->mediumCapacity = Closure->dvdSize1; /* Single layered DVD */
+      else  lay->mediumCapacity = Closure->dvdSize2; /* Double layered DVD */
    }
 
    lay->dataSectors      = data_sectors;
@@ -238,8 +237,8 @@ RS02Layout *CalcRS02Layout(gint64 data_sectors, int requested_roots)
    if(requested_roots > 0)
       lay->nroots = requested_roots;
    else
-   {  lay->rsSectors        = medium_capacity - lay->protectedSectors;     /* just to start */
-      lay->nroots           = (FIELDMAX*lay->rsSectors) / medium_capacity; /* iteration below */
+   {  lay->rsSectors        = lay->mediumCapacity - lay->protectedSectors;     /* just to start */
+      lay->nroots           = (FIELDMAX*lay->rsSectors) / lay->mediumCapacity; /* iteration below */
    }
 
    if(lay->nroots > 170)   /* Cap redundancy to 200% */
@@ -278,7 +277,7 @@ RS02Layout *CalcRS02Layout(gint64 data_sectors, int requested_roots)
       if(requested_roots > 0)
 	break;
 
-      if(lay->eccSectors + lay->dataSectors <= medium_capacity)
+      if(lay->eccSectors + lay->dataSectors <= lay->mediumCapacity)
 	break;
 
       lay->nroots--;
@@ -298,7 +297,7 @@ RS02Layout *CalcRS02Layout(gint64 data_sectors, int requested_roots)
    Verbose("total image size  = %lld\n", lay->eccSectors+lay->dataSectors);
    if(requested_roots > 0)
         Verbose("medium capacity   = n.a.\n");
-   else Verbose("medium capacity   = %lld\n", medium_capacity);
+   else Verbose("medium capacity   = %lld\n", lay->mediumCapacity);
 
    Verbose("\nInterleaving layout:\n");
    Verbose("%lld sectors per ecc layer\n",lay->sectorsPerLayer);

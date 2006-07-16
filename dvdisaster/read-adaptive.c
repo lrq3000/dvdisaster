@@ -367,6 +367,8 @@ static void open_and_determine_mode(read_closure *rc)
       rc->eh  = rc->dh->rs02Header;
       rc->lay = CalcRS02Layout(uchar_to_gint64(rc->eh->sectors), rc->eh->eccBytes);
  
+      SetAdaptiveReadMinimumPercentage((1000*rc->lay->ndata)/255);
+
       if(Closure->verbose)  /* for testing purposes */
       {  gint64 s,sinv,slice,idx;
 
@@ -393,6 +395,8 @@ static void open_and_determine_mode(read_closure *rc)
 	 rc->eh = rc->ei->eh;
 
 	 rc->rs01LayerSectors = (rc->ei->sectors+rc->eh->dataBytes-1)/rc->eh->dataBytes;
+
+	 SetAdaptiveReadMinimumPercentage((1000*(rc->eh->dataBytes-rc->eh->eccBytes))/rc->eh->dataBytes);
       }
    }
 

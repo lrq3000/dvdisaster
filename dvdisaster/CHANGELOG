@@ -1,3 +1,17 @@
+
+0.70 (pl-1)
+	- clarified higher redundancy requirements for RS02 in
+	  background30.html (thanks to M. Buchholtz for pointing this out)
+	- made Windows console and GUI versions refuse being run in the wrong mode
+	  (thanks to xaros2000 for noting this inconsistency)
+	- wrong values and units fixed in the error message for creating RS02
+	  images with too small medium size.
+	- -n/--redundancy will accept CD,DVD,DVD9 for the default medium sizes
+	  (thanks to mschaeff for suggesting this)
+	- added output of required sectors to adaptive reading GUI 
+	- changed --random-image to create a valid ISO image
+	- added --marked-image debugging option
+
 ------ 0.70 released ------
 
 0.70 09-07-2006

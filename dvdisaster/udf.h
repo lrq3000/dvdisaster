@@ -24,6 +24,10 @@
 
 #include "scsi-layer.h"
 
+/*
+ * Structure and functions for examining an existing .iso image 
+ */
+
 typedef struct _IsoInfo
 {  guint32 volumeSize;
    char volumeLabel[33];
@@ -36,5 +40,38 @@ EccHeader* FindHeaderInMedium(DeviceHandle*, gint64);
 gint64 MediumLengthFromRS02(DeviceHandle*, gint64);
 
 int ExamineUDF(DeviceHandle*);
+
+/*
+ * Structure and functions for creating an .iso image
+ */
+
+typedef struct _IsoDir
+{  unsigned char *dir;   /* memory allocated for dir, multiples of 2048 */
+   int nSectors;         /* number of sectors */
+   int tail;             /* next place for inserting new entry */
+} IsoDir;
+
+typedef struct _IsoPathTable
+{  unsigned char *lpath; /* memory allocated for L path table, multiples of 2048 */
+   unsigned char *mpath; /* memory allocated for R path table, multiples of 2048 */
+   int nSectors;         /* number of sectors */
+   int tail;             /* next place for inserting new entry */
+} IsoPathTable;
+
+typedef struct _IsoHeader
+{  unsigned char *pvd;   /* primary volume descriptor */
+   IsoDir *proot;        /* its root directory */
+   IsoPathTable *ppath;  /* and path table */
+   unsigned char *svd;   /* supplementary volume descriptor */
+   IsoDir *sroot;        /* its root directory */
+   IsoPathTable *spath;  /* and path table */
+   int dirSectors;
+   guint64 volumeSpace;
+} IsoHeader;
+
+IsoHeader* InitIsoHeader(void);
+void AddFile(IsoHeader*, char*, guint64);
+void FreeIsoHeader(IsoHeader*);
+guint64 WriteIsoHeader(IsoHeader*, LargeFile*);
 
 #endif

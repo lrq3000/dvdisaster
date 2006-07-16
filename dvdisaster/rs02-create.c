@@ -1013,11 +1013,11 @@ void RS02Create(Method *method)
 
    if(lay->nroots < 8)
      Stop(_("Not enough space on medium left for error correction data.\n"
-	    "Data portion of image: %lldM; maximum possible size: %lldM.\n"
+	    "Data portion of image: %lld sect.; maximum possible size: %lld sect.\n"
 	    "If reducing the image size or using a larger medium is\n"
 	    "not an option, please create a separate error correction\n"
 	    "file using the RS01 method.\n"),
-	  lay->dataSectors, Closure->mediumSize);
+	  lay->dataSectors, lay->mediumCapacity);
 
    if(lay->redundancy < 20)
    {  int answer;

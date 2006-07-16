@@ -124,6 +124,7 @@ typedef enum
    MODE_BYTESET, 
    MODE_ERASE, 
    MODE_LIST_ASPI,
+   MODE_MARKED_IMAGE,
    MODE_RANDOM_ERR, 
    MODE_RANDOM_IMAGE,
    MODE_SEND_CDB,
@@ -331,6 +332,7 @@ int main(int argc, char *argv[])
 #ifdef SYS_MINGW
 	{"list", 0, 0, 'l' },
 #endif
+	{"marked-image", 1, 0, MODE_MARKED_IMAGE },
 	{"method", 2, 0, 'm' },
 	{"query-size", 1, 0, MODIFIER_QUERY_SIZE },
         {"prefix", 1, 0, 'p'},
@@ -391,7 +393,13 @@ int main(int argc, char *argv[])
 	           break;
          case 'n': if(optarg) 
 		   {  Closure->redundancy = g_strdup(optarg); 
-		      Closure->mediumSize = (gint64)atoll(optarg);
+		      if(!strcmp(optarg, "CD") || !strcmp(optarg, "cd"))
+			   Closure->mediumSize = CDR_SIZE;
+		      else if(!strcmp(optarg, "DVD") || !strcmp(optarg, "dvd"))
+			   Closure->mediumSize = DVD_SL_SIZE;
+		      else if(!strcmp(optarg, "DVD9") || !strcmp(optarg, "dvd9"))
+			   Closure->mediumSize = DVD_DL_SIZE;
+		      else Closure->mediumSize = (gint64)atoll(optarg);
 		      break;
 		   }
          case 'e': if(optarg) 
@@ -492,6 +500,10 @@ int main(int argc, char *argv[])
 	   mode = MODE_ERASE;
 	   debug_arg = g_strdup(optarg);
 	   break;
+         case MODE_MARKED_IMAGE:
+	   mode = MODE_MARKED_IMAGE;
+	   debug_arg = g_strdup(optarg);
+	   break;
          case MODE_RANDOM_ERR:
 	   mode = MODE_RANDOM_ERR;
 	   debug_arg = g_strdup(optarg);
@@ -524,6 +536,7 @@ int main(int argc, char *argv[])
         case MODE_ERASE:
         case MODE_SEND_CDB:
         case MODE_SHOW_SECTOR:
+        case MODE_MARKED_IMAGE:
         case MODE_RANDOM_ERR:
         case MODE_RANDOM_IMAGE:
         case MODE_TRUNCATE:
@@ -561,8 +574,16 @@ int main(int argc, char *argv[])
    }
 
    /*** Dispatch action depending on mode.
-        The major modes can be executed in sequence 
-	(although not all combinations may be really useful) */
+        The major modes can be executed in sequence, 
+	but not all combinations may be really useful.
+
+	The GUI version for Windows does not have an open console,
+	so no command line actions can be carried out. 
+	Force opening the GUI by clearing the mode variable. */
+
+#if defined(SYS_MINGW) && !defined(WIN_CONSOLE)
+   mode = MODE_NONE;
+#endif
 
    switch(mode)
    {  case MODE_SEQUENCE:
@@ -607,8 +628,12 @@ int main(int argc, char *argv[])
 	 RandomError(Closure->imageName, debug_arg);
 	 break;
 
+      case MODE_MARKED_IMAGE:
+	 RandomImage(Closure->imageName, debug_arg, 1);
+	 break;
+
       case MODE_RANDOM_IMAGE:
-	 RandomImage(Closure->imageName, debug_arg);
+	RandomImage(Closure->imageName, debug_arg, 0);
 	 break;
 
       case MODE_TRUNCATE:
@@ -632,7 +657,11 @@ int main(int argc, char *argv[])
 
    /*** If no mode was selected, print the help screen. */
 
+#ifdef WIN_CONSOLE
+   if(mode == MODE_HELP || mode == MODE_NONE)
+#else
    if(mode == MODE_HELP)
+#endif
    {  
      /* TRANSLATORS: Program options like -r and --read are not to be translated
 	to avoid confusion when discussing the program in international forums. */
@@ -683,6 +712,7 @@ int main(int argc, char *argv[])
 	     "  --byteset s,i,b   - set byte i in sector s to b\n"
 	     "  --erase sector    - erase the given sector\n"
 	     "  --erase n-m       - erase sectors n - m, inclusively\n"
+	     "  --marked-image n  - create image with n marked random sectors\n"
 	     "  --random-errors r,e seed image with (correctable) random errors\n"
 	     "  --random-image n  - create image with n sectors of random numbers\n"
 	     "  --random-seed n   - random seed for built-in random number generator\n"
@@ -692,11 +722,20 @@ int main(int argc, char *argv[])
 	     "  --truncate n      - truncates image to n sectors\n"
 	     "  --zero-unreadable - replace the \"unreadable sector\" markers with zeros\n\n"));
       }
+
+#ifdef WIN_CONSOLE
+      PrintCLI(_("NOTE: This is the Windows console version of dvdisaster.\n"
+		 "The version providing a graphical user interface is called\n"
+		 "dvdisaster-win.exe (also contained in this installation).\n\n"));
+#endif
       FreeClosure();
       exit(EXIT_FAILURE);
    }
 
-   /* If no mode was selected at the command line, start the graphical user interface. */
+   /* If no mode was selected at the command line, 
+      start the graphical user interface. 
+      Unless we are in Windows console mode where starting the GUI
+      won't work. */
 
    if(mode == MODE_NONE)
    {  
@@ -704,7 +743,7 @@ int main(int argc, char *argv[])
       ReadDotfile();
       CreateMainWindow(&argc, &argv);
    }
-   
+
    FreeClosure();
 
    exit(exitCode);

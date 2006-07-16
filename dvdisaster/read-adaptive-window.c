@@ -26,7 +26,7 @@
  ***/
 
 static long long int readable, correctable, missing;
-static int percent;
+static int percent,min_required;
 static GdkColor *footer_color;
 
 #define REDRAW_TITLE      1<<0
@@ -118,9 +118,20 @@ static void redraw_labels(GtkWidget *widget, int erase_mask)
    snprintf(buf, 255, "  %s: %lld", _("missing"), missing);
    h = draw_text(d, Closure->readLinearCurve->layout, buf, x, y, Closure->black, erase_mask & REDRAW_PROGRESS); 
 
+   if(min_required > 0 && readable > 0)
+   {  int percent = ((1000*readable)/(readable+correctable+missing));
+
+      y += h;
+      snprintf(buf, 255, _("Readable: %d.%d%% / %d.%d%% required"), 
+	       percent/10, percent%10,
+	       min_required/10, min_required%10);
+      h = draw_text(d, Closure->readLinearCurve->layout, buf, x, y, Closure->black, erase_mask & REDRAW_PROGRESS); 
+   }
+
    y += h;
    snprintf(buf, 255, _("Total recoverable: %d.%d%%"), percent/10, percent%10);
    h = draw_text(d, Closure->readLinearCurve->layout, buf, x, y, Closure->black, erase_mask & REDRAW_PROGRESS); 
+
 
    if(Closure->readAdaptiveErrorMsg && erase_mask & REDRAW_ERRORMSG)
    {  gdk_gc_set_rgb_fg_color(Closure->drawGC, footer_color);
@@ -129,28 +140,6 @@ static void redraw_labels(GtkWidget *widget, int erase_mask)
       y = Closure->readAdaptiveSpiral->my + Closure->readAdaptiveSpiral->diameter/2 - h;
       gdk_draw_layout(d, Closure->drawGC, x, y, Closure->readLinearCurve->layout);
    }
-
-#if 0
-   /* label the spiral */
-
-   x = Closure->readLinearCurve->rightX + 20;
-   gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->blue);
-   SetText(Closure->readLinearCurve->layout, _("Media state"), &w, &h);
-   gdk_draw_layout(d, Closure->drawGC, 
-		   x,
-		   Closure->readLinearCurve->topY - h - 5, 
-		   Closure->readLinearCurve->layout);
-
-   if(Closure->readLinearSpiral->segmentColor[0] == Closure->blue)
-     DrawSpiralLabel(Closure->readLinearSpiral, Closure->readLinearCurve->layout,
-		     _("from previous run"), Closure->blue, x, -1);
-
-   DrawSpiralLabel(Closure->readLinearSpiral, Closure->readLinearCurve->layout,
-		   _("Successfully read"), Closure->green, x, 1);
-
-   DrawSpiralLabel(Closure->readLinearSpiral, Closure->readLinearCurve->layout,
-		   _("Unreadable / skipped"), Closure->red, x, 2);
-#endif
 }
 
 static void redraw_spiral(GtkWidget *widget)
@@ -348,7 +337,7 @@ void ResetAdaptiveReadWindow()
    Closure->readAdaptiveErrorMsg = NULL;
 
    readable = correctable = missing = 0;
-   percent = 0;
+   percent = min_required = 0;
 
    if(Closure->readAdaptiveDrawingArea->window)
    {  static GdkRectangle rect;
@@ -361,6 +350,14 @@ void ResetAdaptiveReadWindow()
       gdk_window_clear(Closure->readAdaptiveDrawingArea->window);
       gdk_window_invalidate_rect(Closure->readAdaptiveDrawingArea->window, &rect, FALSE);
    }
+}
+
+/*
+ * Set the minimum required data recovery value
+ */
+
+void SetAdaptiveReadMinimumPercentage(int value)
+{  min_required = value;
 }
 
 /***

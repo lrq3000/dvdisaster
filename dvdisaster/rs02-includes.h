@@ -131,8 +131,9 @@ typedef struct _RS02Layout
    guint64 eccSectors;           /* total number of sectors added to image */
    guint64 sectorsPerLayer;      /* sectors per RS layer (the are ndata layers) */
    guint64 firstCrcLayerIndex;   /* first slice containing a CRC32 data block */
-   int nroots,ndata;            /* RS encoding specification */
-   double redundancy;           /* resulting redundancy */
+   guint64 mediumCapacity;       /* selected medium capacity */
+   int nroots,ndata;             /* RS encoding specification */
+   double redundancy;            /* resulting redundancy */
 } RS02Layout;
 
 void RS02ReadSector(ImageInfo*, RS02Layout*, unsigned char*, gint64);

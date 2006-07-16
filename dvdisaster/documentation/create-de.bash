@@ -2451,14 +2451,14 @@ höchstmögliche Größe des Datenträgers (in Sektoren von 2KB) mit dieser Option
 angegeben. Das Abbild wird mit Fehlerkorrektur-Daten aufgefüllt wobei die angegebene
 Größe nicht überschritten wird.<p>
 
-Falls diese Option nicht angegeben wird, erweitert dvdisaster das Abbild so,
-daß der kleinstmögliche Datenträger (CD, ein- oder zweischichtige DVD) verwendet
-werden kann. Die Grundeinstellungen für die jeweiligen Datenträgergrößen
-sind in der graphischen Benutzeroberfläche
-<a href="example84.html#max-image-size"> in einer Tabelle</a> aufgeführt.
-Beachten Sie auch die dort gegebenen <a href="example84.html#size-hints">Hinweise</a>
-zum Wählen der Datenträger-Größe.
+Außer einer direkten Angabe der Anzahl von Sektoren können auch die Werte
+CD, DVD, und DVD9 angegeben werden, die 
+den <a href="example84.html#max-image-size">Grundeinstellungen</a> 
+in der graphischen Benutzeroberfläche für die jeweilige Datenträgergröße entsprechen.<p>
 
+Falls die -n/--redundancy-Option nicht angegeben wird, erweitert dvdisaster das Abbild so,
+daß der kleinstmögliche Datenträger (CD, ein- oder zweischichtige DVD) verwendet
+werden kann.
 
 <div align=right><a href="#options">&uarr;</a></div><p>
 
@@ -3636,10 +3636,15 @@ der Fehlerkorrektur-Informationen wird nicht benötigt.<p></li>
 </tr>
 
 <tr valign="top">
-<td>bereits wirksam ab 15% Redundanz;
-Datenträger kann beliebig voll sein</td>
-<td>benötigt mindestens 20%-30% Redundanz;
-nutzbare Datenträger-Kapazität sinkt entsprechend</td> 
+<td>bereits wirksam ab 15% Redundanz, weil die Fehlerkorrektur-Daten
+nach Voraussetzung unbeschädigt vorliegen</td>
+<td>benötigt mehr Redundanz (empfohlen: 20-30%), 
+um Verluste von Fehlerkorrektur-Daten auszugleichen</td> 
+</tr>
+
+<tr valign="top">
+<td>der Datenträger kann beliebig voll sein</td>
+<td>die nutzbare Datenträger-Kapazität sinkt entsprechend der erzielten Redundanz</td>
 </tr>
 
 <tr valign="top">
