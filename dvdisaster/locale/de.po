@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-16 20:12+0200\n"
+"POT-Creation-Date: 2006-07-17 20:13+0200\n"
 "PO-Revision-Date: 2004-11-30 19:48+0100\n"
 "Last-Translator: Carsten Gnörlich <carsten@dvdisaster.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -61,22 +61,22 @@ msgstr ""
 "\n"
 "Erzeuge zufällige reparierbare Auslöschungen (für %d Nullstellen, max. %d Auslöschungen).\n"
 
-#: debug.c:107 debug.c:192 debug.c:236 debug.c:514 debug.c:582
+#: debug.c:107 debug.c:192 debug.c:236 debug.c:525 debug.c:593
 #: rs01-common.c:54 rs02-common.c:62 rs02-create.c:303 rs02-create.c:935
 #: rs02-fix.c:375 rs02-verify.c:384
 #, c-format
 msgid "Failed seeking to sector %lld in image: %s"
 msgstr "Ansteuern von Sektor %lld im Abbild fehlgeschlagen: %s"
 
-#: debug.c:109 debug.c:194 debug.c:238 debug.c:363 debug.c:474 debug.c:519
-#: debug.c:586 rs02-create.c:326 rs02-create.c:352 rs02-create.c:938
-#: udf.c:1028 udf.c:1086 udf.c:1143 udf.c:1156 udf.c:1161 udf.c:1164
-#: udf.c:1167 udf.c:1170 udf.c:1173 udf.c:1176
+#: debug.c:109 debug.c:194 debug.c:238 debug.c:363 debug.c:485 debug.c:530
+#: debug.c:597 rs02-create.c:326 rs02-create.c:352 rs02-create.c:938
+#: udf.c:1033 udf.c:1091 udf.c:1148 udf.c:1161 udf.c:1166 udf.c:1169
+#: udf.c:1172 udf.c:1175 udf.c:1178 udf.c:1181
 #, c-format
 msgid "Failed writing to sector %lld in image: %s"
 msgstr "Schreiben von Sektor %lld im Abbild fehlgeschlagen: %s"
 
-#: debug.c:117 debug.c:244 debug.c:478 debug.c:526
+#: debug.c:117 debug.c:244 debug.c:489 debug.c:537
 #, c-format
 msgid "Progress: %3d%%"
 msgstr "Fortschritt: %3d%%"
@@ -102,7 +102,7 @@ msgstr "Die Anzahl von Auslöschungen muß > 0 und <= %d sein\n"
 msgid "3rd argument is missing"
 msgstr "Das dritte Argument fehlt"
 
-#: debug.c:302 debug.c:575
+#: debug.c:302 debug.c:586
 #, c-format
 msgid "Sector must be in range [0..%lld]\n"
 msgstr "Sektor muß im Bereich [0..%lld] liegen\n"
@@ -185,7 +185,7 @@ msgstr ""
 "dvdisaster --debug %s %lld --random-seed %d\n"
 "\n"
 
-#: debug.c:486 file.c:104 read-adaptive.c:136 read-linear.c:64
+#: debug.c:497 file.c:104 read-adaptive.c:136 read-linear.c:64
 #, c-format
 msgid ""
 "Error closing image file:\n"
@@ -194,11 +194,11 @@ msgstr ""
 "Fehler beim Schließen des Abbildes:\n"
 "%s"
 
-#: debug.c:500
+#: debug.c:511
 msgid "Replacing the \"unreadable sector\" markers with zeros.\n"
 msgstr "Ersetze die \"unlesbarer Sektor\"-Markierungen durch Nullen.\n"
 
-#: debug.c:507
+#: debug.c:518
 #, c-format
 msgid ""
 "Could not read image sector %lld:\n"
@@ -207,12 +207,12 @@ msgstr ""
 "Konnte Abbild-Sektor %lld nicht lesen:\n"
 "%s\n"
 
-#: debug.c:531
+#: debug.c:542
 #, c-format
 msgid "%lld \"unreadable sector\" markers replaced.\n"
 msgstr "%lld \"unlesbarer Sektor\"-Markierungen ersetzt.\n"
 
-#: debug.c:577
+#: debug.c:588
 #, c-format
 msgid ""
 "Contents of sector %lld:\n"

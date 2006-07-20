@@ -999,10 +999,15 @@ void FreeIsoHeader(IsoHeader *ih)
  */
 
 void AddFile(IsoHeader *ih, char *name, guint64 size)
-{
-   add_file_record(ih->proot, "RAN_0001.DAT;1", size, 25,
+{  static int n;
+   char iso[20], joliet[strlen(name+3)];
+
+   n++;
+   sprintf(iso,"RAN_%04d.DAT;1", n);
+   add_file_record(ih->proot, iso, size, 25,
 			106, 7, 16, 12, 28, 10, 8);
-   add_d1_file_record(ih->sroot, "random.data;1", size, 25,
+   sprintf(joliet,"%s;1", name);
+   add_d1_file_record(ih->sroot, joliet, size, 25,
 			106, 7, 16, 12, 28, 10, 8);
 
    ih->volumeSpace += (size+2047)/2048;
@@ -1012,7 +1017,7 @@ void AddFile(IsoHeader *ih, char *name, guint64 size)
  * Write out the IsoHeader, return number of sectors written
  */
 
-guint64 WriteIsoHeader(IsoHeader *ih, LargeFile *image)
+void WriteIsoHeader(IsoHeader *ih, LargeFile *image)
 {  unsigned char zero[2048], sector[2048];
    unsigned char *pvd,*svd;
    int i;
@@ -1175,5 +1180,4 @@ guint64 WriteIsoHeader(IsoHeader *ih, LargeFile *image)
    if(LargeWrite(image, ih->sroot->dir, 2048) != 2048)
      Stop(_("Failed writing to sector %lld in image: %s"), (gint64)24, strerror(errno));
 
-   return ih->dirSectors + 16;
 }

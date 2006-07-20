@@ -72,6 +72,6 @@ typedef struct _IsoHeader
 IsoHeader* InitIsoHeader(void);
 void AddFile(IsoHeader*, char*, guint64);
 void FreeIsoHeader(IsoHeader*);
-guint64 WriteIsoHeader(IsoHeader*, LargeFile*);
+void WriteIsoHeader(IsoHeader*, LargeFile*);
 
 #endif

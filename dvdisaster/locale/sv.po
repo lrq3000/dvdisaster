@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-16 20:12+0200\n"
+"POT-Creation-Date: 2006-07-17 20:13+0200\n"
 "PO-Revision-Date: 2006-06-14 23:48+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -60,22 +60,22 @@ msgstr ""
 "\n"
 "Genererar slumpmässigt korrigerbara raderingar (för %d rötter, max raderingar = %d).\n"
 
-#: debug.c:107 debug.c:192 debug.c:236 debug.c:514 debug.c:582
+#: debug.c:107 debug.c:192 debug.c:236 debug.c:525 debug.c:593
 #: rs01-common.c:54 rs02-common.c:62 rs02-create.c:303 rs02-create.c:935
 #: rs02-fix.c:375 rs02-verify.c:384
 #, c-format
 msgid "Failed seeking to sector %lld in image: %s"
 msgstr "Misslyckades med att söka fram till sektor %lld i avbild: %s"
 
-#: debug.c:109 debug.c:194 debug.c:238 debug.c:363 debug.c:474 debug.c:519
-#: debug.c:586 rs02-create.c:326 rs02-create.c:352 rs02-create.c:938
-#: udf.c:1028 udf.c:1086 udf.c:1143 udf.c:1156 udf.c:1161 udf.c:1164
-#: udf.c:1167 udf.c:1170 udf.c:1173 udf.c:1176
+#: debug.c:109 debug.c:194 debug.c:238 debug.c:363 debug.c:485 debug.c:530
+#: debug.c:597 rs02-create.c:326 rs02-create.c:352 rs02-create.c:938
+#: udf.c:1033 udf.c:1091 udf.c:1148 udf.c:1161 udf.c:1166 udf.c:1169
+#: udf.c:1172 udf.c:1175 udf.c:1178 udf.c:1181
 #, c-format
 msgid "Failed writing to sector %lld in image: %s"
 msgstr "Misslyckades med att skriva till sektor %lld i avbild: %s"
 
-#: debug.c:117 debug.c:244 debug.c:478 debug.c:526
+#: debug.c:117 debug.c:244 debug.c:489 debug.c:537
 #, c-format
 msgid "Progress: %3d%%"
 msgstr "Förlopp: %3d%%"
@@ -100,7 +100,7 @@ msgstr "Antal raderingar måste vara > 0 och <= %d\n"
 msgid "3rd argument is missing"
 msgstr "tredje argumentet saknas"
 
-#: debug.c:302 debug.c:575
+#: debug.c:302 debug.c:586
 #, c-format
 msgid "Sector must be in range [0..%lld]\n"
 msgstr "Sektor måste vara inom intervallet [0..%lld]\n"
@@ -183,7 +183,7 @@ msgstr ""
 "dvdisaster --debug %s %lld --random-seed %d\n"
 "\n"
 
-#: debug.c:486 file.c:104 read-adaptive.c:136 read-linear.c:64
+#: debug.c:497 file.c:104 read-adaptive.c:136 read-linear.c:64
 #, c-format
 msgid ""
 "Error closing image file:\n"
@@ -192,11 +192,11 @@ msgstr ""
 "Fel vid stängning av avbildsfil:\n"
 "%s"
 
-#: debug.c:500
+#: debug.c:511
 msgid "Replacing the \"unreadable sector\" markers with zeros.\n"
 msgstr "Ersätter markeringarna för \"oläsbar sektor\" med nollor.\n"
 
-#: debug.c:507
+#: debug.c:518
 #, c-format
 msgid ""
 "Could not read image sector %lld:\n"
@@ -205,12 +205,12 @@ msgstr ""
 "Kunde inte läsa sektor %lld i avbild:\n"
 "%s\n"
 
-#: debug.c:531
+#: debug.c:542
 #, c-format
 msgid "%lld \"unreadable sector\" markers replaced.\n"
 msgstr "%lld \"oläsbar sektor\"-markeringar ersatta.\n"
 
-#: debug.c:577
+#: debug.c:588
 #, c-format
 msgid ""
 "Contents of sector %lld:\n"

@@ -443,9 +443,20 @@ void RandomImage(char *image_name, char *n_sectors, int mark)
 	Otherwise some writing software will not recognize the image. */
 
    ih = InitIsoHeader();
-   AddFile(ih, "random.data", 2048*(sectors-25));
-   s  = WriteIsoHeader(ih, image);
+   for(s=25; s<sectors; s+=524288)
+   {  int size = 524288;
+      char name[40];
+
+      if(s+size >= sectors) 
+        size = sectors-s;
+      
+      sprintf(name, "random%02d.data", (int)(s/524288)+1);
+      AddFile(ih, name, 2048*size);
+   }
+   WriteIsoHeader(ih, image);
    FreeIsoHeader(ih);
+
+   s = 25; /* number of ISO headers */
 
    /*** Create it */
 

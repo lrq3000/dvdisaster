@@ -1,5 +1,7 @@
 
 0.70 (pl-1)
+	- fixed a bug in read-adaptive for RS02 which would sometimes prevent it 
+	  from properly restarting a previously interrupted reading session.
 	- clarified higher redundancy requirements for RS02 in
 	  background30.html (thanks to M. Buchholtz for pointing this out)
 	- made Windows console and GUI versions refuse being run in the wrong mode

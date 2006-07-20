@@ -2559,18 +2559,18 @@ der Quellkode-Version gibt es <a href="download20.html">Installationshinweise</a
 <b>Aktuelle Version</b><p> 
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.70</b></td><td align="right">09-Jul-2006</td></tr>
+<tr><td><b>dvdisaster-0.70</b></td><td align="right">23-Jul-2006</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Quellkode für alle Betriebssysteme:&nbsp;</td>
-        <td><a href="${tar_0_70}">dvdisaster-0.70.tar.bz2</a></td></tr>
+        <td><a href="${tar_0_70}">dvdisaster-0.70.1.tar.bz2</a></td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><a href="${tar_0_70_sig}">dvdisaster-0.70.tar.bz2.gpg</a></td></tr>
+        <td><a href="${tar_0_70_sig}">dvdisaster-0.70.1.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Binärversion für Windows:&nbsp;</td>
-        <td><a href="${setup_0_70}">dvdisaster-0.70-setup.exe</a></td></tr>
+        <td><a href="${setup_0_70}">dvdisaster-0.70.1-setup.exe</a></td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><a href="${setup_0_70_sig}">dvdisaster-0.70-setup.exe.gpg</a></td></tr>
+        <td><a href="${setup_0_70_sig}">dvdisaster-0.70.1-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
@@ -2584,8 +2584,13 @@ mit dem <a href="background50.html">angepaßten Leseverfahren</a>
 Julian Einwag hat damit begonnen, dvdisaster 
 für <a href="download20.html#darwin">Mac OS X / Darwin</a> anzupassen.<p>
 
-Daniel Nylander hat die Bildschirmtexte ins Schwedische übersetzt.
+Daniel Nylander hat die Bildschirmtexte ins Schwedische übersetzt.<p>
 
+<b>Patches</b> (kleine Änderungen nach Version 0.70; die obigen Dateien wurden erneuert):<br>
+
+<b>pl1</b> behebt einen Fehler im angepaßten Lesen für RS02, durch den abgebrochene 
+Leseversuche nicht immer erfolgreich fortgesetzt werden konnten.
+Ein paar kleine Verbesserungen an der Dokumentation und der Benutzbarkeit sind auch dabei.
 </td></tr></table><p>
 
 Der dvdisaster-Quellkode wird auch in einem

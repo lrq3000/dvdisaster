@@ -2175,18 +2175,18 @@ U verze ve zdrojovém kódu si přečtěte <a href="download20.html">instalačn�
 
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.70</b></td><td align="right">09-Jul-2006</td></tr>
+<tr><td><b>dvdisaster-0.70</b></td><td align="right">23-Jul-2006</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
-        <td><a href="${tar_0_70}">dvdisaster-0.70.tar.bz2</a></td></tr>
+        <td><a href="${tar_0_70}">dvdisaster-0.70.1.tar.bz2</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="${tar_0_70_sig}">dvdisaster-0.70.tar.bz2.gpg</a></td></tr>
+        <td><a href="${tar_0_70_sig}">dvdisaster-0.70.1.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Binary for Windows:&nbsp;</td>
-        <td><a href="${setup_0_70}">dvdisaster-0.70-setup.exe</a></td></tr>
+        <td><a href="${setup_0_70}">dvdisaster-0.70.1-setup.exe</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="${setup_0_70_sig}">dvdisaster-0.70-setup.exe.gpg</a></td></tr>
+        <td><a href="${setup_0_70_sig}">dvdisaster-0.70.1-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
@@ -2199,7 +2199,13 @@ with the <a href="background50.html">adaptive reading strategy</a>.<p>
 Julian Einwag started porting dvdisaster 
 to <a href="../en/download20.html#darwin">Mac OS X / Darwin</a>.<p>
 
-Daniel Nylander provided Swedish translations of the screen texts.
+Daniel Nylander provided Swedish translations of the screen texts.<p>
+
+<b>Patches</b> (small changes after version 0.70; files above have been updated):<br>
+
+<b>pl1</b> fixes a bug in adaptive reading for RS02 which would sometimes prevent it 
+from properly restarting a previously interrupted reading session. Adds some small
+improvements of documentation and usability.
 </td></tr></table><p>
 
 The dvdisaster source code is also

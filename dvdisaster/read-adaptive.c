@@ -103,6 +103,9 @@ static void cleanup(gpointer data)
       /* Careful: we must not call Stop() here to avoid infinite
 	 recursion in error situations. */
 
+      if(lay->firstEccHeader > end)  /* ecc area not reached during read? */
+	goto bail_out;
+
       if(!LargeSeek(rc->image, 2048*lay->firstEccHeader))
 	goto bail_out;
    
