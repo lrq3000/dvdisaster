@@ -369,6 +369,8 @@ void InitClosure(void);
 void ClearCrcCache(void);
 void FreeClosure(void);
 void ReadDotfile(void);
+void WriteSignature(void);
+int  VerifySignature(void);
 
 /***
  *** crc32.c

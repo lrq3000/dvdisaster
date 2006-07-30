@@ -35,6 +35,7 @@ Source: "COPYING"; DestDir: "{app}"
 Source: "CREDITS.*"; DestDir: "{app}"
 Source: "README.MODIFYING"; DestDir: "{app}"
 Source: "TODO"; DestDir: "{app}"
+Source: "signature"; DestDir: "{app}"
 Source: "*.exe"; DestDir: "{app}"
 Source: "*.dll"; DestDir: "{app}"
 Source: "lib\locale\cs\LC_MESSAGES\*"; DestDir: "{app}\lib\locale\cs\LC_MESSAGES"
@@ -71,12 +72,14 @@ Filename: "{app}\documentation\pngpack.exe"; Parameters: """{app}\documentation\
 Filename: "{app}\documentation\pngpack.exe"; Parameters: """{app}\documentation\images-cs.pngpack"""; WorkingDir: "{app}\documentation\local\images"; Flags: runhidden; Languages: cs
 Filename: "{app}\documentation\pngpack.exe"; Parameters: """{app}\documentation\images-de.pngpack"""; WorkingDir: "{app}\documentation\local\images"; Flags: runhidden; Languages: de
 Filename: "{app}\documentation\pngpack.exe"; Parameters: """{app}\documentation\images-en.pngpack"""; WorkingDir: "{app}\documentation\local\images"; Flags: runhidden; Languages: en
+Filename: "{app}\dvdisaster.exe"; Parameters: "--debug --sign"; WorkingDir: "{app}"; Flags: runhidden 
 
 [UninstallDelete]
 Type: files; Name:"{app}\.dvdisaster"
 ;Type: filesandordirs; Name:"{userappdata}\dvdisaster"
 Type: filesandordirs; Name:"{app}\documentation\images"
 Type: filesandordirs; Name:"{app}\documentation\local\images"
+Type: files; Name:"{app}\signature"
 Type: files; Name:"{app}\medium.iso"
 Type: files; Name:"{app}\medium.ecc"
 Type: files; Name:"{app}\medium.img"

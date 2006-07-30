@@ -2559,7 +2559,7 @@ der Quellkode-Version gibt es <a href="download20.html">Installationshinweise</a
 <b>Aktuelle Version</b><p> 
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.70</b></td><td align="right">23-Jul-2006</td></tr>
+<tr><td><b>dvdisaster-0.70</b></td><td align="right">30-Jul-2006</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
@@ -2588,8 +2588,8 @@ Daniel Nylander hat die Bildschirmtexte ins Schwedische übersetzt.<p>
 
 <b>Patches</b> (kleine Änderungen nach Version 0.70; die obigen Dateien wurden erneuert):<br>
 
-<b>pl1</b> behebt einen Fehler im angepaßten Lesen für RS02, durch den abgebrochene 
-Leseversuche nicht immer erfolgreich fortgesetzt werden konnten.
+<b>pl1</b> behebt einen Fehler im angepaßten Lesen für RS02, durch den unter bestimmten
+Bedingungen nicht genügend Daten für eine erfolgreiche Wiederherstellung gelesen wurden.
 Ein paar kleine Verbesserungen an der Dokumentation und der Benutzbarkeit sind auch dabei.
 </td></tr></table><p>
 

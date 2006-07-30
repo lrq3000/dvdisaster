@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-22 12:09+0200\n"
+"POT-Creation-Date: 2006-07-29 21:08+0200\n"
 "PO-Revision-Date: 2006-03-16 20:40+0100\n"
 "Last-Translator: Luboš Staněk <lubek@users.sourceforge.net>\n"
 "Language-Team: čeština <cs@li.org>\n"
@@ -18,17 +18,17 @@ msgstr ""
 "X-Generator: KBabel 1.11.1\n"
 "Plural-Forms:  nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: closure.c:313 closure.c:371
+#: closure.c:373 closure.c:431
 #, c-format
 msgid "Error closing configuration file %s: %s\n"
 msgstr "Chyba při zavírání konfiguračního souboru %s: %s\n"
 
-#: closure.c:333
+#: closure.c:393
 #, c-format
 msgid "Could not open configuration file %s: %s\n"
 msgstr "Nelze otevřít konfigurační soubor %s: %s\n"
 
-#: closure.c:339
+#: closure.c:399
 #, c-format
 msgid ""
 "# dvdisaster-%s configuration file\n"
@@ -64,7 +64,7 @@ msgstr ""
 
 #: debug.c:107 debug.c:192 debug.c:236 debug.c:525 debug.c:593
 #: rs01-common.c:54 rs02-common.c:62 rs02-create.c:303 rs02-create.c:935
-#: rs02-fix.c:375 rs02-verify.c:384
+#: rs02-fix.c:375 rs02-verify.c:390
 #, c-format
 msgid "Failed seeking to sector %lld in image: %s"
 msgstr "Selhalo vystavení na sektor %lld v obrazu: %s"
@@ -120,7 +120,7 @@ msgstr "Hodnota bajtu musí být v rozsahu [0..255]"
 msgid "Setting byte %d in sector %lld to value %d.\n"
 msgstr "Nastavování bajtu %d v sektoru %lld na hodnotu %d.\n"
 
-#: debug.c:317 debug.c:356 rs02-create.c:169 rs02-verify.c:576
+#: debug.c:317 debug.c:356 rs02-create.c:169 rs02-verify.c:661
 #, c-format
 msgid "Failed seeking to start of image: %s\n"
 msgstr "Selhalo vystavení na začátek obrazu: %s\n"
@@ -129,7 +129,7 @@ msgstr "Selhalo vystavení na začátek obrazu: %s\n"
 msgid "Could not write the new byte value"
 msgstr "Nelze zapsat novou hodnotu bajtu"
 
-#: debug.c:349 read-adaptive.c:505 read-linear.c:225
+#: debug.c:349 read-adaptive.c:504 read-linear.c:225
 #, c-format
 msgid "Sectors must be in range [0..%lld].\n"
 msgstr "Sektory musí být v rozsahu [0..%lld].\n"
@@ -239,24 +239,24 @@ msgstr "Metoda RS01 není dostupná pro porovnání souborů."
 #. TRANSLATORS:
 #. This is a dummy entry which is supposed to translate into "ok".
 #. Please do not return anything else here.
-#: dvdisaster.c:254 dvdisaster.c:267 dvdisaster.c:279
+#: dvdisaster.c:255 dvdisaster.c:268 dvdisaster.c:280
 msgid "test phrase for verifying the locale installation"
 msgstr "ok"
 
-#: dvdisaster.c:300
+#: dvdisaster.c:301
 #, c-format
 msgid "sizeof(EccHeader) is %d, but must be 4096.\n"
 msgstr "velikost(EccHlavička) je %d, ale musí být 4096.\n"
 
-#: dvdisaster.c:438
+#: dvdisaster.c:440
 msgid "--cache-size must at least be 1MB; 16MB or higher is recommended."
 msgstr "--cache-size musí být alespoň 1MB; je doporučeno 16MB nebo větší."
 
-#: dvdisaster.c:440
+#: dvdisaster.c:442
 msgid "--cache-size maximum is 2048MB."
 msgstr "--cache-size maximum je 2048MB."
 
-#: dvdisaster.c:491
+#: dvdisaster.c:493
 #, c-format
 msgid ""
 "\n"
@@ -267,14 +267,21 @@ msgstr ""
 "dvdisaster, verze %s\n"
 "\n"
 
-#: dvdisaster.c:527
+#: dvdisaster.c:532
 #, c-format
 msgid "?? illegal getopt return value %d\n"
 msgstr "?? neplatná návratová hodnota getopt %d\n"
 
+#: dvdisaster.c:563
+#, c-format
+msgid ""
+"dvdisaster is not properly installed.\n"
+"Please execute the installer program (%s) again.\n"
+msgstr ""
+
 #. TRANSLATORS: Program options like -r and --read are not to be translated
 #. to avoid confusion when discussing the program in international forums.
-#: dvdisaster.c:668
+#: dvdisaster.c:691
 msgid ""
 "\n"
 "Common usage examples:\n"
@@ -298,7 +305,7 @@ msgstr ""
 "  dvdisaster -u,--unlink # Smaže soubor .iso (když se dokončí další akce)\n"
 "\n"
 
-#: dvdisaster.c:677
+#: dvdisaster.c:700
 #, c-format
 msgid ""
 "Drive and file specification:\n"
@@ -313,7 +320,7 @@ msgstr ""
 "  -i,--image  imagefile  - název souboru obrazu     (výchozí: medium.iso)\n"
 "  -e,--ecc    eccfile    - název souboru ecc        (výchozí: medium.ecc)\n"
 
-#: dvdisaster.c:685
+#: dvdisaster.c:708
 msgid ""
 "  -l,--list              - list drives available under ASPI manager\n"
 "\n"
@@ -321,7 +328,7 @@ msgstr ""
 "  -l,--list              - vypíše seznam mechanik dostupných pod ASPI\n"
 "\n"
 
-#: dvdisaster.c:690
+#: dvdisaster.c:713
 #, c-format
 msgid ""
 "Tweaking options (see manual before using!)\n"
@@ -342,7 +349,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: dvdisaster.c:706
+#: dvdisaster.c:729
 msgid ""
 "Graphical user interface options\n"
 "  --keep-style           - do not override the style settings\n"
@@ -352,7 +359,7 @@ msgstr ""
 "  --keep-style           - nepřepisovat nastavení\n"
 "\n"
 
-#: dvdisaster.c:710
+#: dvdisaster.c:733
 #, c-format
 msgid ""
 "Debugging options (purposefully undocumented and possibly harmful)\n"
@@ -372,7 +379,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: dvdisaster.c:727
+#: dvdisaster.c:750
 msgid ""
 "NOTE: This is the Windows console version of dvdisaster.\n"
 "The version providing a graphical user interface is called\n"
@@ -680,15 +687,23 @@ msgstr "Přerušit akci"
 msgid "Aborts an ongoing action."
 msgstr "Přeruší probíhající akci."
 
-#: main-window.c:442
+#: main-window.c:404
+#, c-format
+msgid ""
+"<b>dvdisaster is not properly installed</b>\n"
+"\n"
+"Please execute the installer program (%s) again.\n"
+msgstr ""
+
+#: main-window.c:499
 msgid "tooltip|Protocol for current action"
 msgstr "Protokol aktuální akce"
 
-#: main-window.c:443
+#: main-window.c:500
 msgid "Displays additional information created during the current or last action."
 msgstr "Zobrazí další informace vytvořené v průběhu aktuální nebo poslední akce."
 
-#: main-window.c:452
+#: main-window.c:509
 msgid "View log"
 msgstr "Zobrazit záznam"
 
@@ -1066,7 +1081,7 @@ msgstr "Chyba příkazu: %s; "
 msgid "unknown asc/ascq code (0x%02x, 0x%02x)."
 msgstr "neznámý kód asc/ascq (0x%02x, 0x%02x)."
 
-#: read-adaptive.c:132 read-adaptive.c:1275
+#: read-adaptive.c:132 read-adaptive.c:1276
 msgid "Aborted by unrecoverable error."
 msgstr "Zrušeno kvůli neopravitelné chybě."
 
@@ -1080,21 +1095,21 @@ msgstr "Opravitelné: %2d.%1d%% (opravitelné: %lld; nyní načítám [%lld..%ll
 msgid "Repairable: %2d.%1d%% (missing: %lld; now reading [%lld..%lld], size %lld)"
 msgstr "Opravitelné: %2d.%1d%% (chybějící: %lld; nyní načítám [%lld..%lld], velikost %lld)"
 
-#: read-adaptive.c:410
+#: read-adaptive.c:409
 #, c-format
 msgid "Stopping when unreadable intervals < %d."
 msgstr "Zastavení po nečitelných úsecích < %d."
 
-#: read-adaptive.c:412 read-adaptive.c:418
+#: read-adaptive.c:411 read-adaptive.c:417
 #, c-format
 msgid "Adaptive reading: %s\n"
 msgstr "Adaptivní čtení: %s\n"
 
-#: read-adaptive.c:417
+#: read-adaptive.c:416
 msgid "Trying to collect enough data for error correction."
 msgstr "Pokouším se shromáždit dostatek dat pro opravu chyb."
 
-#: read-adaptive.c:451
+#: read-adaptive.c:450
 #, c-format
 msgid ""
 "Medium contains %lld sectors more as recorded in the .ecc file\n"
@@ -1105,13 +1120,13 @@ msgstr ""
 "(Médium: %lld sektorů; očekáváno podle souboru .ecc: %lld sektorů).\n"
 "Bude zpracováno pouze prvních %lld sektorů média.\n"
 
-#: read-adaptive.c:458 read-adaptive.c:474 read-adaptive.c:533
-#: read-adaptive.c:620 read-adaptive.c:673 read-adaptive.c:971
-#: read-adaptive.c:1205
+#: read-adaptive.c:457 read-adaptive.c:473 read-adaptive.c:532
+#: read-adaptive.c:619 read-adaptive.c:672 read-adaptive.c:971
+#: read-adaptive.c:1206
 msgid "Aborted by user request!"
 msgstr "Zrušeno uživatelem!"
 
-#: read-adaptive.c:468
+#: read-adaptive.c:467
 #, c-format
 msgid ""
 "Medium contains %lld sectors less as recorded in the .ecc file\n"
@@ -1120,12 +1135,12 @@ msgstr ""
 "Médium obsahuje o %lld sektor(y/ů) méně než je zapsáno v souboru .ecc\n"
 "(Médium: %lld sektorů; očekáváno podle souboru .ecc: %lld sektorů).\n"
 
-#: read-adaptive.c:507 read-linear.c:227
+#: read-adaptive.c:506 read-linear.c:227
 #, c-format
 msgid "Limiting sector range to [%lld,%lld].\n"
 msgstr "Omezení rozsahu sektorů na [%lld,%lld].\n"
 
-#: read-adaptive.c:528 rs01-fix.c:288
+#: read-adaptive.c:527 rs01-fix.c:288
 #, c-format
 msgid ""
 "Sector %d is missing. Can not compare image and ecc fingerprints.\n"
@@ -1134,7 +1149,7 @@ msgstr ""
 "Sektor %d chybí. Nelze porovnat otisky obrazu a ecc.\n"
 "Důkladně zkontrolujte, že soubory obrazu a ecc patří k sobě.\n"
 
-#: read-adaptive.c:546 rs01-fix.c:300
+#: read-adaptive.c:545 rs01-fix.c:300
 msgid ""
 "Fingerprints of image and ecc file do not match.\n"
 "Image and ecc file do not belong together.\n"
@@ -1142,11 +1157,11 @@ msgstr ""
 "Velikosti obrazu a souboru ecc si neodpovídají.\n"
 "Obraz a soubor ecc k sobě nepatří.\n"
 
-#: read-adaptive.c:581 read-linear.c:307
+#: read-adaptive.c:580 read-linear.c:307
 msgid "Image file does not match the CD/DVD."
 msgstr "Soubor obrazu neodpovídá CD/DVD."
 
-#: read-adaptive.c:584 read-linear.c:310
+#: read-adaptive.c:583 read-linear.c:310
 msgid ""
 "Image file already exists and does not match the CD/DVD.\n"
 "The existing image file will be deleted."
@@ -1154,11 +1169,11 @@ msgstr ""
 "Soubor obrazu již existuje a nesouhlasí s CD/DVD.\n"
 "Existující soubor obrazu bude vymazán."
 
-#: read-adaptive.c:589
+#: read-adaptive.c:588
 msgid "Reading aborted. Please select a different image file."
 msgstr "Čtení zrušeno. Zvolte prosím jiný soubor obrazu."
 
-#: read-adaptive.c:615
+#: read-adaptive.c:614
 #, c-format
 msgid ""
 "Image file is %lld sectors longer than inserted medium\n"
@@ -1167,55 +1182,55 @@ msgstr ""
 "Soubor obrazu je o %lld sektor(y/ů) delší než vložené médium\n"
 "(Soubor obrazu: %lld sektorů; médium: %lld sektorů).\n"
 
-#: read-adaptive.c:652 read-linear.c:402 rs01-common.c:119 rs01-create.c:236
+#: read-adaptive.c:651 read-linear.c:402 rs01-common.c:119 rs01-create.c:236
 #: rs01-verify.c:759
 #, c-format
 msgid "Failed skipping the ecc header: %s"
 msgstr "Selhalo přeskočení hlavičky ecc: %s"
 
-#: read-adaptive.c:665
+#: read-adaptive.c:664
 msgid "Analysing existing image file"
 msgstr "Analyzování existujícího souboru obrazu"
 
-#: read-adaptive.c:682 rs01-common.c:158 rs02-verify.c:606
+#: read-adaptive.c:681 rs01-common.c:158 rs02-verify.c:692
 #, c-format
 msgid "premature end in image (only %d bytes): %s\n"
 msgstr "předčasný konec obrazu (pouze %d bajtů): %s\n"
 
-#: read-adaptive.c:706 read-adaptive.c:1313 read-linear.c:410
+#: read-adaptive.c:705 read-adaptive.c:1314 read-linear.c:410
 #: rs01-common.c:221
 #, c-format
 msgid "Error reading CRC information: %s"
 msgstr "Chyba při čtení CRC informací: %s"
 
-#: read-adaptive.c:766
+#: read-adaptive.c:765
 #, c-format
 msgid "Analysing existing image file: %2d%%"
 msgstr "Analyzování existujícího souboru obrazu: %2d%%"
 
-#: read-adaptive.c:783
+#: read-adaptive.c:782
 msgid "Determining correctable sectors"
 msgstr "Zjišťování opravitelných sektorů"
 
-#: read-adaptive.c:854
+#: read-adaptive.c:855
 #, c-format
 msgid "Analysing existing image file: %lld readable, %lld correctable, %lld still missing.\n"
 msgstr "Analyzování existujícího souboru obrazu: %lld čitelných, %lld opravitelných, %lld stále chybějících.\n"
 
-#: read-adaptive.c:856
+#: read-adaptive.c:857
 #, c-format
 msgid "Analysing existing image file: %lld readable, %lld still missing.\n"
 msgstr "Analyzování existujícího souboru obrazu: %lld čitelných, %lld stále chybějících.\n"
 
-#: read-adaptive.c:904 read-linear.c:103
+#: read-adaptive.c:907 read-linear.c:103
 msgid "Ignore once"
 msgstr "Ignorovat jednou"
 
-#: read-adaptive.c:905 read-linear.c:104
+#: read-adaptive.c:908 read-linear.c:104
 msgid "Ignore always"
 msgstr "Ignorovat vždy"
 
-#: read-adaptive.c:906 read-linear.c:105
+#: read-adaptive.c:909 read-linear.c:105
 msgid "Abort"
 msgstr "Přerušit"
 
@@ -1224,15 +1239,15 @@ msgstr "Přerušit"
 msgid "Filling image area [%lld..%lld]"
 msgstr "Vyplňování oblasti obrazu [%lld..%lld]"
 
-#: read-adaptive.c:952 read-adaptive.c:1017 read-adaptive.c:1288
-#: read-adaptive.c:1486 read-linear.c:358 read-linear.c:483 read-linear.c:585
+#: read-adaptive.c:952 read-adaptive.c:1017 read-adaptive.c:1289
+#: read-adaptive.c:1491 read-linear.c:358 read-linear.c:483 read-linear.c:585
 #: read-linear.c:640 rs01-fix.c:431 rs01-fix.c:689 rs02-fix.c:734
 #, c-format
 msgid "Failed seeking to sector %lld in image [%s]: %s"
 msgstr "Selhalo vystavení na sektor %lld v obrazu [%s]: %s"
 
-#: read-adaptive.c:964 read-adaptive.c:1022 read-adaptive.c:1331
-#: read-adaptive.c:1342 read-adaptive.c:1358 read-adaptive.c:1492
+#: read-adaptive.c:964 read-adaptive.c:1022 read-adaptive.c:1332
+#: read-adaptive.c:1343 read-adaptive.c:1359 read-adaptive.c:1497
 #: read-linear.c:364 read-linear.c:591 read-linear.c:648 rs01-fix.c:436
 #, c-format
 msgid "Failed writing to sector %lld in image [%s]: %s"
@@ -1263,7 +1278,7 @@ msgstr "Načítání nového obrazu média."
 msgid "Completing existing medium image."
 msgstr "Kompletování existujícího obrazu média."
 
-#: read-adaptive.c:1164 read-adaptive.c:1462
+#: read-adaptive.c:1164 read-adaptive.c:1467
 msgid ""
 "\n"
 "Sufficient data for reconstructing the image is available.\n"
@@ -1271,7 +1286,7 @@ msgstr ""
 "\n"
 "Je k dispozici dostatek dat pro rekonstrukci obrazu.\n"
 
-#: read-adaptive.c:1262 read-linear.c:532
+#: read-adaptive.c:1263 read-linear.c:532
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -1280,7 +1295,7 @@ msgstr ""
 "Sektor %lld: %s\n"
 "Nelze se zotavit po uvedené chybě."
 
-#: read-adaptive.c:1266 read-linear.c:536
+#: read-adaptive.c:1267 read-linear.c:536
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -1293,32 +1308,32 @@ msgstr ""
 "Nemusí být možné se zotavit po této chybě.\n"
 "Má čtení pokračovat a ignorovat tuto chybu?"
 
-#: read-adaptive.c:1310 rs01-fix.c:38 rs02-fix.c:410
+#: read-adaptive.c:1311 rs01-fix.c:38 rs02-fix.c:410
 #, c-format
 msgid "Failed seeking in crc area: %s"
 msgstr "Selhalo vystavení na oblast crc: %s"
 
-#: read-adaptive.c:1326 rs01-fix.c:385 rs02-fix.c:423
+#: read-adaptive.c:1327 rs01-fix.c:385 rs02-fix.c:423
 #, c-format
 msgid "CRC error in sector %lld\n"
 msgstr "Chyba CRC v sektoru %lld\n"
 
-#: read-adaptive.c:1475 scsi-layer.c:444
+#: read-adaptive.c:1480 scsi-layer.c:444
 #, c-format
 msgid "Sectors %lld-%lld: %s\n"
 msgstr "Sektory %lld-%lld: %s\n"
 
-#: read-adaptive.c:1478 read-linear.c:625 scsi-layer.c:443
+#: read-adaptive.c:1483 read-linear.c:625 scsi-layer.c:443
 #, c-format
 msgid "Sector %lld: %s\n"
 msgstr "Sektor %lld: %s\n"
 
-#: read-adaptive.c:1606
+#: read-adaptive.c:1611
 #, c-format
 msgid "Only %2d.%1d%% of the image are readable or correctable"
 msgstr "Pouze %2d.%1d%% obrazu je čitelných nebo opravitelných"
 
-#: read-adaptive.c:1609
+#: read-adaptive.c:1614
 #, c-format
 msgid ""
 "\n"
@@ -1329,7 +1344,7 @@ msgstr ""
 "%s\n"
 "(%lld čitelných,  %lld opravitelných,  %lld stále chybějících).\n"
 
-#: read-adaptive.c:1623
+#: read-adaptive.c:1628
 msgid ""
 "\n"
 "Good! All sectors have been read.\n"
@@ -1337,12 +1352,12 @@ msgstr ""
 "\n"
 "V pořádku! Všechny sektory byly načteny.\n"
 
-#: read-adaptive.c:1630
+#: read-adaptive.c:1635
 #, c-format
 msgid "No unreadable intervals with >= %d sectors left."
 msgstr "Nezbyly žádné nečitelné úseky obsahující >= %d sektorů."
 
-#: read-adaptive.c:1633
+#: read-adaptive.c:1638
 #, c-format
 msgid ""
 "\n"
@@ -1373,12 +1388,12 @@ msgstr "opravitelný"
 msgid "missing"
 msgstr "chybějící"
 
-#: read-adaptive-window.c:125
+#: read-adaptive-window.c:128
 #, c-format
 msgid "Readable: %d.%d%% / %d.%d%% required"
 msgstr ""
 
-#: read-adaptive-window.c:132
+#: read-adaptive-window.c:135
 #, c-format
 msgid "Total recoverable: %d.%d%%"
 msgstr "Celkem opravitelných: %d.%d%%"
@@ -1418,7 +1433,7 @@ msgstr ""
 #: read-linear.c:164 rs01-create.c:635 rs01-fix.c:183 rs01-fix.c:204
 #: rs01-fix.c:249 rs01-fix.c:278 rs01-fix.c:294 rs01-fix.c:343
 #: rs01-verify.c:427 rs01-verify.c:776 rs02-create.c:107 rs02-fix.c:223
-#: rs02-fix.c:243 rs02-fix.c:333 rs02-verify.c:597
+#: rs02-fix.c:243 rs02-fix.c:333 rs02-verify.c:683
 msgid "<span color=\"red\">Aborted by user request!</span>"
 msgstr "<span color=\"red\">Zrušeno uživatelem!</span>"
 
@@ -1464,7 +1479,7 @@ msgstr "neočekávaná chyba čtení obrazu v sektoru %lld"
 msgid "Sector %lld: %s Skipping %d sectors.\n"
 msgstr "Sektor %lld: %s Přeskakuji %d sektorů.\n"
 
-#: read-linear.c:669 rs01-common.c:227 rs02-verify.c:647
+#: read-linear.c:669 rs01-common.c:227 rs02-verify.c:734
 #, c-format
 msgid "* CRC error, sector: %lld\n"
 msgstr "* Chyba CRC, sektor: %lld\n"
@@ -1574,7 +1589,7 @@ msgid "Unreadable / skipped sectors: %lld, CRC errors: %lld"
 msgstr "Nečitelných / přeskočených sektorů: %lld, chyb CRC: %lld"
 
 #: read-linear-window.c:203 read-linear-window.c:245 rs01-verify.c:121
-#: rs02-verify.c:115
+#: rs02-verify.c:118
 msgid "Sectors with CRC errors"
 msgstr "Sektory s chybami CRC"
 
@@ -1607,7 +1622,7 @@ msgstr "Rychlost"
 msgid "Failed reading sector %lld in image: %s"
 msgstr "Selhalo čtení sektoru %lld v obrazu: %s"
 
-#: rs01-common.c:132 rs02-verify.c:674
+#: rs01-common.c:132 rs02-verify.c:765
 #, c-format
 msgid "- testing sectors  : %3d%%"
 msgstr "- testování sektorů  : %3d%%"
@@ -1617,12 +1632,12 @@ msgstr "- testování sektorů  : %3d%%"
 msgid "Scanning image sectors: %3d%%"
 msgstr "Skenuji sektory obrazu: %3d%%"
 
-#: rs01-common.c:179 rs02-verify.c:634
+#: rs01-common.c:179 rs02-verify.c:721
 #, c-format
 msgid "* missing sector   : %lld\n"
 msgstr "* chybějící sektor   : %lld\n"
 
-#: rs01-common.c:180 rs02-verify.c:635
+#: rs01-common.c:180 rs02-verify.c:722
 #, c-format
 msgid "* missing sectors  : %lld - %lld\n"
 msgstr "* chybějící sektory  : %lld - %lld\n"
@@ -1745,7 +1760,7 @@ msgstr ""
 "Soubor oprav chyb byl úspěšně vytvořen.\n"
 "Zajistěte, aby byl tento soubor uložen na spolehlivém médiu."
 
-#: rs01-fix.c:43 rs02-fix.c:413 rs02-verify.c:421
+#: rs01-fix.c:43 rs02-fix.c:413 rs02-verify.c:427
 #, c-format
 msgid "problem reading crc data: %s"
 msgstr "problém při čtení dat crc: %s"
@@ -1954,15 +1969,15 @@ msgstr "Výsledky opravy:"
 msgid "n/a"
 msgstr "n/a"
 
-#: rs01-verify.c:118 rs02-verify.c:112
+#: rs01-verify.c:118 rs02-verify.c:115
 msgid "Good sectors"
 msgstr "Dobré sektory"
 
-#: rs01-verify.c:124 rs01-verify.c:145 rs02-verify.c:118 rs02-verify.c:139
+#: rs01-verify.c:124 rs01-verify.c:145 rs02-verify.c:121 rs02-verify.c:142
 msgid "Missing sectors"
 msgstr "Chybějící sektory"
 
-#: rs01-verify.c:188 rs02-verify.c:176
+#: rs01-verify.c:188 rs02-verify.c:179
 msgid "Image file summary"
 msgstr "Souhrn souboru obrazu"
 
@@ -1970,7 +1985,7 @@ msgstr "Souhrn souboru obrazu"
 msgid "No image present."
 msgstr "Žádný obraz není dostupný."
 
-#: rs01-verify.c:207 rs01-verify.c:297 rs02-verify.c:186 rs02-verify.c:292
+#: rs01-verify.c:207 rs01-verify.c:297 rs02-verify.c:189 rs02-verify.c:295
 msgid "Medium sectors:"
 msgstr "Sektory média:"
 
@@ -1986,7 +2001,7 @@ msgstr "Chybějící sektory:"
 msgid "Image checksum:"
 msgstr "Kontrolní součet obrazu:"
 
-#: rs01-verify.c:243 rs02-verify.c:238
+#: rs01-verify.c:243 rs02-verify.c:241
 msgid "Image state"
 msgstr "Stav obrazu"
 
@@ -1994,15 +2009,15 @@ msgstr "Stav obrazu"
 msgid "Error correction file summary"
 msgstr "Souhrn souboru oprav chyb"
 
-#: rs01-verify.c:273 rs02-verify.c:268
+#: rs01-verify.c:273 rs02-verify.c:271
 msgid "Created by:"
 msgstr "Vytvořil:"
 
-#: rs01-verify.c:281 rs02-verify.c:276
+#: rs01-verify.c:281 rs02-verify.c:279
 msgid "Method:"
 msgstr "Metoda:"
 
-#: rs01-verify.c:289 rs02-verify.c:284
+#: rs01-verify.c:289 rs02-verify.c:287
 msgid "Requires:"
 msgstr "Vyžaduje:"
 
@@ -2014,7 +2029,7 @@ msgstr "Otisk:"
 msgid "Ecc blocks:"
 msgstr "Bloky Ecc:"
 
-#: rs01-verify.c:329 rs02-verify.c:316
+#: rs01-verify.c:329 rs02-verify.c:47 rs02-verify.c:319
 msgid "Ecc checksum:"
 msgstr "Kontrolní součet Ecc:"
 
@@ -2034,7 +2049,7 @@ msgstr "- Kontrola souboru obrazu -"
 msgid "not present\n"
 msgstr "nedostupný\n"
 
-#: rs01-verify.c:411 rs02-verify.c:492
+#: rs01-verify.c:411 rs02-verify.c:573
 #, c-format
 msgid "present, contains %lld medium sectors.\n"
 msgstr "přítomen, obsahuje %lld sektorů média.\n"
@@ -2082,7 +2097,7 @@ msgstr ""
 "- dobrý obraz      : všechny sektory jsou přítomny\n"
 "- md5suma obrazu   : %s\n"
 
-#: rs01-verify.c:481 rs02-verify.c:764
+#: rs01-verify.c:481 rs02-verify.c:855
 msgid "<span color=\"#008000\">Good image.</span>"
 msgstr "<span color=\"#008000\">Dobrý obraz.</span>"
 
@@ -2099,12 +2114,12 @@ msgstr ""
 msgid "<span color=\"red\">Image complete, but contains checksum errors!</span>"
 msgstr "<span color=\"red\">Obraz je kompletní, avšak obsahuje chyby kontrolního součtu!</span>"
 
-#: rs01-verify.c:497 rs02-verify.c:731
+#: rs01-verify.c:497 rs02-verify.c:822
 #, c-format
 msgid "* BAD image        : %lld sectors missing\n"
 msgstr "* VADNÝ obraz        : %lld chybějících sektorů\n"
 
-#: rs01-verify.c:498 rs02-verify.c:735
+#: rs01-verify.c:498 rs02-verify.c:826
 #, c-format
 msgid "* BAD image        : %lld sectors missing, %lld CRC errors\n"
 msgstr "* VADNÝ obraz        : %lld chybějících sektorů, %lld chyb CRC\n"
@@ -2122,11 +2137,11 @@ msgstr "Žádný soubor oprav chyb není dostupný."
 msgid "Could not open %s: %s"
 msgstr "Nelze otevřít %s: %s"
 
-#: rs01-verify.c:562 rs02-verify.c:792
+#: rs01-verify.c:562 rs02-verify.c:883
 msgid "created by dvdisaster"
 msgstr "vytvořil dvdisaster"
 
-#: rs01-verify.c:574 rs02-verify.c:803
+#: rs01-verify.c:574 rs02-verify.c:894
 #, c-format
 msgid "created by dvdisaster-%d.%d\n"
 msgstr "vytvořil dvdisaster-%d.%d\n"
@@ -2135,22 +2150,22 @@ msgstr "vytvořil dvdisaster-%d.%d\n"
 msgid "created by dvdisaster-0.41.x.\n"
 msgstr "vytvořil dvdisaster-0.41.x.\n"
 
-#: rs01-verify.c:589 rs02-verify.c:816
+#: rs01-verify.c:589 rs02-verify.c:907
 #, c-format
 msgid "- method           : %4s, %d roots, %4.1f%% redundancy.\n"
 msgstr "- metoda           : %4s, %d kořenů, redundance %4.1f%%.\n"
 
-#: rs01-verify.c:593 rs02-verify.c:821
+#: rs01-verify.c:593 rs02-verify.c:912
 #, c-format
 msgid "%4s, %d roots, %4.1f%% redundancy"
 msgstr "%4s, %d kořenů, redundance %4.1f%%"
 
-#: rs01-verify.c:598 rs02-verify.c:828
+#: rs01-verify.c:598 rs02-verify.c:919
 #, c-format
 msgid "- requires         : dvdisaster-%d.%d (good)\n"
 msgstr "- vyžaduje         : dvdisaster-%d.%d (v pořádku)\n"
 
-#: rs01-verify.c:607 rs02-verify.c:839
+#: rs01-verify.c:607 rs02-verify.c:930
 #, c-format
 msgid ""
 "* requires         : dvdisaster-%d.%d (BAD)\n"
@@ -2161,11 +2176,11 @@ msgstr ""
 "* Varování          : Následující výstup nemusí být správný.\n"
 "*                  : Navštivte prosím http://www.dvdisaster.com kvůli aktualizaci.\n"
 
-#: rs01-verify.c:619 rs02-verify.c:852
+#: rs01-verify.c:619 rs02-verify.c:943
 msgid "<span color=\"red\">Please upgrade your version of dvdisaster!</span>"
 msgstr "<span color=\"red\">Aktualizujte prosím vaši verzi programu dvdisaster!</span>"
 
-#: rs01-verify.c:631 rs02-verify.c:859
+#: rs01-verify.c:631 rs02-verify.c:950
 #, c-format
 msgid "- medium sectors   : %lld (good)\n"
 msgstr "- sektorů média    : %lld (v pořádku)\n"
@@ -2175,12 +2190,12 @@ msgstr "- sektorů média    : %lld (v pořádku)\n"
 msgid "- medium sectors   : %lld sectors + %d bytes (good)\n"
 msgstr ""
 
-#: rs01-verify.c:646 rs02-verify.c:866
+#: rs01-verify.c:646 rs02-verify.c:957
 #, c-format
 msgid "* medium sectors   : %lld (BAD, perhaps TAO/DAO mismatch)\n"
 msgstr "* sektorů média   : %lld (ŠPATNĚ, pravděpodobně rozdíl TAO/DAO)\n"
 
-#: rs01-verify.c:655 rs02-verify.c:868
+#: rs01-verify.c:655 rs02-verify.c:959
 #, c-format
 msgid "* medium sectors   : %lld (BAD)\n"
 msgstr "* sektorů média   : %lld (SPATNĚ)\n"
@@ -2284,7 +2299,7 @@ msgstr "<span color=\"red\">chybný</span>"
 msgid "<span color=\"red\">Error correction file may be damaged!</span>"
 msgstr "<span color=\"red\">Soubor oprav chyb může být poškozen!</span>"
 
-#: rs01-verify.c:792 rs02-verify.c:935
+#: rs01-verify.c:792 rs02-verify.c:1024
 #, c-format
 msgid "- ecc md5sum       : %s (good)\n"
 msgstr "- md5suma ecc      : %s (v pořádku)\n"
@@ -2362,12 +2377,12 @@ msgstr "Využití paměti"
 msgid "Use"
 msgstr "Použít"
 
-#: rs02-common.c:322 rs02-common.c:334 rs02-verify.c:526
+#: rs02-common.c:327 rs02-common.c:339 rs02-verify.c:609
 #, c-format
 msgid "Failed seeking to ecc header at %lld: %s\n"
 msgstr "Skok na hlavičku ecc selhal na %lld: %s\n"
 
-#: rs02-common.c:326 rs02-common.c:338
+#: rs02-common.c:331 rs02-common.c:343
 #, c-format
 msgid "Failed writing ecc header at %lld: %s\n"
 msgstr "Selhal zápis hlavičky ecc na %lld: %s\n"
@@ -2510,81 +2525,109 @@ msgstr "-> Neočekávaná chyba v sektoru %lld bajtu %4d (hodnota %02x '%c', oč
 msgid "Repaired sectors: %lld (%lld data, %lld ecc)\n"
 msgstr "Opravených sektorů: %lld (data %lld, ecc %lld)\n"
 
-#: rs02-verify.c:194 rs02-verify.c:300
+#: rs02-verify.c:45 rs02-verify.c:197 rs02-verify.c:303
 msgid "Data checksum:"
 msgstr ""
 
-#: rs02-verify.c:202
-msgid "Ecc headers:"
-msgstr ""
-
-#: rs02-verify.c:210
-msgid "Data section:"
-msgstr ""
-
-#: rs02-verify.c:218
-msgid "Crc section:"
-msgstr ""
-
-#: rs02-verify.c:226
-msgid "Ecc section:"
-msgstr ""
-
-#: rs02-verify.c:249
-msgid "Error correction data"
-msgstr ""
-
-#: rs02-verify.c:308
+#: rs02-verify.c:46 rs02-verify.c:311
 msgid "CRC checksum:"
 msgstr ""
 
-#: rs02-verify.c:475
-msgid "Check aborted"
+#: rs02-verify.c:205
+msgid "Ecc headers:"
 msgstr ""
 
-#: rs02-verify.c:488
-msgid "Checking the image file."
+#: rs02-verify.c:213
+msgid "Data section:"
 msgstr ""
 
-#: rs02-verify.c:489
-msgid "Image contains error correction data."
+#: rs02-verify.c:221
+msgid "Crc section:"
 msgstr ""
 
-#: rs02-verify.c:509
+#: rs02-verify.c:229
+msgid "Ecc section:"
+msgstr ""
+
+#: rs02-verify.c:252
+msgid "Error correction data"
+msgstr ""
+
+#: rs02-verify.c:492
 #, c-format
-msgid "<span color=\"red\">Image file is %lld sectors shorter than expected.</span>"
+msgid "- erasure counts   :  avg =  %.1f; worst = %d per ecc block.\n"
+msgstr ""
+
+#: rs02-verify.c:495
+#, c-format
+msgid "- prognosis        : %lld of %lld sectors recoverable (%d.%d%%)\n"
+msgstr ""
+
+#: rs02-verify.c:501
+msgid "Erasure counts:"
+msgstr ""
+
+#: rs02-verify.c:502
+msgid "Prognosis:"
+msgstr ""
+
+#: rs02-verify.c:505
+#, c-format
+msgid "<span color=\"%s\">avg =  %.1f; worst = %d per ecc block.</span>"
 msgstr ""
 
 #: rs02-verify.c:510
 #, c-format
+msgid "<span color=\"%s\">%lld of %lld sectors recoverable (%d.%d%%)</span>"
+msgstr ""
+
+#: rs02-verify.c:555
+msgid "Check aborted"
+msgstr ""
+
+#: rs02-verify.c:569
+msgid "Checking the image file."
+msgstr ""
+
+#: rs02-verify.c:570
+msgid "Image contains error correction data."
+msgstr ""
+
+#: rs02-verify.c:592
+#, c-format
+msgid "<span color=\"red\">Image file is %lld sectors shorter than expected.</span>"
+msgstr ""
+
+#: rs02-verify.c:593
+#, c-format
 msgid "<span color=\"red\">Image file is %lld sectors longer than expected.</span>"
 msgstr ""
 
-#: rs02-verify.c:530
+#: rs02-verify.c:613
 #, c-format
 msgid "Failed reading ecc header at %lld: %s\n"
 msgstr "Selhalo načtení hlavičky ecc na %lld: %s\n"
 
-#: rs02-verify.c:560 rs02-verify.c:751 rs02-verify.c:752 rs02-verify.c:753
+#: rs02-verify.c:645 rs02-verify.c:842 rs02-verify.c:843 rs02-verify.c:844
 msgid "complete"
 msgstr ""
 
-#: rs02-verify.c:562
+#: rs02-verify.c:647
 #, c-format
 msgid "<span color=\"red\">%lld ok, %lld CRC errors, %lld missing</span>"
 msgstr ""
 
-#: rs02-verify.c:679 rs02-verify.c:700
+#: rs02-verify.c:770 rs02-verify.c:791
 #, c-format
 msgid "<span color=\"red\">%lld sectors missing; %lld CRC errors</span>"
 msgstr ""
 
-#: rs02-verify.c:683 rs02-verify.c:687 rs02-verify.c:704 rs02-verify.c:708
+#: rs02-verify.c:774 rs02-verify.c:778 rs02-verify.c:795 rs02-verify.c:799
 #, c-format
 msgid "<span color=\"red\">%lld sectors missing</span>"
 msgstr ""
 
-#: rs02-verify.c:722
+#: rs02-verify.c:813
 #, c-format
 msgid ""
 "- good image       : all sectors present\n"
@@ -2593,45 +2636,45 @@ msgstr ""
 "- dobrý obraz      : všechny sektory přítomny\n"
 "- md5suma dat      : %s\n"
 
-#: rs02-verify.c:728
+#: rs02-verify.c:819
 msgid "* suspicious image : contains damaged ecc headers\n"
 msgstr ""
 
-#: rs02-verify.c:733
+#: rs02-verify.c:824
 #, c-format
 msgid "* suspicious image : all sectors present, but %lld CRC errors\n"
 msgstr "* podezřelý obraz  : všechny sektory přítomny, ale %lld chyb CRC\n"
 
-#: rs02-verify.c:739
+#: rs02-verify.c:830
 #, c-format
 msgid "  ... ecc headers    : %lld ok, %lld CRC errors, %lld missing\n"
 msgstr ""
 
-#: rs02-verify.c:741
+#: rs02-verify.c:832
 #, c-format
 msgid "  ... data section   : %lld sectors missing; %lld CRC errors\n"
 msgstr "  ... datová sekce   : %lld sektorů chybí; %lld chyb CRC\n"
 
-#: rs02-verify.c:744
+#: rs02-verify.c:835
 #, c-format
 msgid "  ... data md5sum    : %s\n"
 msgstr "  ... md5suma dat    : %s\n"
 
-#: rs02-verify.c:745
+#: rs02-verify.c:836
 #, c-format
 msgid "  ... crc section    : %lld sectors missing\n"
 msgstr "  ... sekce crc      : %lld sektorů chybí\n"
 
-#: rs02-verify.c:746
+#: rs02-verify.c:837
 #, c-format
 msgid "  ... ecc section    : %lld sectors missing\n"
 msgstr "  ... sekce ecc      : %lld sektorů chybí\n"
 
-#: rs02-verify.c:767
+#: rs02-verify.c:858
 msgid "<span color=\"red\">Damaged image.</span>"
 msgstr ""
 
-#: rs02-verify.c:773
+#: rs02-verify.c:864
 msgid ""
 "\n"
 "Error correction data: "
@@ -2639,60 +2682,60 @@ msgstr ""
 "\n"
 "Data oprav chyb: "
 
-#: rs02-verify.c:874
+#: rs02-verify.c:965
 msgid "<span color=\"red\">Image size does not match recorded size.</span>"
 msgstr ""
 
-#: rs02-verify.c:885
+#: rs02-verify.c:976
 #, c-format
 msgid "- data md5sum      : %s (good)\n"
 msgstr "- md5suma dat      : %s (v pořádku)\n"
 
-#: rs02-verify.c:886
+#: rs02-verify.c:977
 #, c-format
 msgid "* data md5sum      : %s (BAD)\n"
 msgstr "* md5suma dat      : %s (ŠPATNĚ)\n"
 
-#: rs02-verify.c:897
+#: rs02-verify.c:988
 #, c-format
 msgid "- data md5sum      : %s\n"
 msgstr "- md5suma dat      : %s\n"
 
-#: rs02-verify.c:909
+#: rs02-verify.c:1000
 #, c-format
 msgid "- crc md5sum       : %s (good)\n"
 msgstr "- md5suma crc      : %s (v pořádku)\n"
 
-#: rs02-verify.c:914
+#: rs02-verify.c:1005
 #, c-format
 msgid "* crc md5sum       : %s (BAD)\n"
 msgstr "* md5suma crc      : %s (ŠPATNĚ)\n"
 
-#: rs02-verify.c:918
-msgid "<span color=\"red\">Damaged CRC data.</span>"
-msgstr ""
-
-#: rs02-verify.c:923
+#: rs02-verify.c:1012
 #, c-format
 msgid "- crc md5sum       : %s\n"
 msgstr ""
 
-#: rs02-verify.c:940
+#: rs02-verify.c:1029
 #, c-format
 msgid "* ecc md5sum       : %s (BAD)\n"
 msgstr "* md5suma ecc      : %s (ŠPATNĚ)\n"
 
-#: rs02-verify.c:944 rs02-verify.c:969
-msgid "<span color=\"red\">Damaged error correction data - try data recovery anyways!</span>"
-msgstr ""
-
-#: rs02-verify.c:949
+#: rs02-verify.c:1036
 #, c-format
 msgid "- ecc md5sum       : %s\n"
 msgstr ""
 
-#: rs02-verify.c:966
+#: rs02-verify.c:1055
 msgid "<span color=\"#008000\">Good error correction data.</span>"
+msgstr ""
+
+#: rs02-verify.c:1058
+msgid "<span color=\"#008000\">Full data recovery is likely.</span>"
+msgstr ""
+
+#: rs02-verify.c:1059
+msgid "<span color=\"red\">Full data recovery is NOT possible.</span>"
 msgstr ""
 
 #: rs02-window.c:76

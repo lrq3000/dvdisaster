@@ -119,7 +119,10 @@ static void redraw_labels(GtkWidget *widget, int erase_mask)
    h = draw_text(d, Closure->readLinearCurve->layout, buf, x, y, Closure->black, erase_mask & REDRAW_PROGRESS); 
 
    if(min_required > 0 && readable > 0)
-   {  int percent = ((1000*readable)/(readable+correctable+missing));
+   {  int percent = round(((1000*readable)/(readable+correctable+missing)));
+
+      if(!missing)                /* Make sure target percentage is reached */
+	percent = min_required;   /* in spite of rounding errors            */
 
       y += h;
       snprintf(buf, 255, _("Readable: %d.%d%% / %d.%d%% required"), 

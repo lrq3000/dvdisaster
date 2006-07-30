@@ -384,23 +384,23 @@ static void bp_get_string(unsigned char *dest, unsigned char *src, int begin, in
    dest[length] = 0;
 }
 
-static void bp_set_string(unsigned char *dest, unsigned char *src, int begin, int end)
+static void bp_set_string(unsigned char *dest, char *src, int begin, int end)
 {  int length = end-begin+1;  
 
-   strncpy((char*)(dest+begin-1), (char*)src, length);
+   strncpy((char*)(dest+begin-1), src, length);
 }
 
 /*
  * D1 string conversion currently simply expands the string to 16bit characters.
  */
 
-static void bp_set_d1_string(unsigned char *dest, unsigned char *src, int begin, int end)
+static void bp_set_d1_string(unsigned char *dest, char *src, int begin, int end)
 { 
    dest = dest + begin - 1;
 
    while(begin<=end-2 && *src)
    {  *dest++ = 0;
-      *dest++ = *src++;
+      *dest++ = (unsigned char)*src++;
       begin += 2;
    }
 }

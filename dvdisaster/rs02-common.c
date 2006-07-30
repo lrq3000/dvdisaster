@@ -116,7 +116,12 @@ gint64 RS02SectorIndex(RS02Layout *lay, gint64 slice, gint64 n)
    /* Easy case: Sector is a data or crc sector */
 
    if(slice < lay->ndata)
-     return slice*lay->sectorsPerLayer + n;
+   {  gint64 sector = slice*lay->sectorsPerLayer + n;
+
+      if(sector < lay->protectedSectors)
+	   return sector;
+      else return -1;      /* padding sector (invalid)! */
+   }
 
    /* else calculate position of ecc sector */
 

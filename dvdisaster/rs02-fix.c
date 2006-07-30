@@ -461,7 +461,7 @@ void RS02Fix(Method *self)
 	uncorrected += erasure_count;
 	goto skip;
      }
-     Verbose("%d erasures\n", erasure_count);
+
      /* Build ecc block and attempt to correct it */
 
      for(bi=0; bi<2048; bi++)  /* Run through each ecc block byte */

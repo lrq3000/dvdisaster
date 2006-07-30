@@ -46,7 +46,7 @@
  ***/
 
 /* 
- * Find location of special windows diretories.
+ * Find location of special windows directories.
  * Copied from glib sources since they have declared it static.
  * Windows only.
  * CHECKME: Is it okay to return UTF8?
@@ -104,6 +104,66 @@ static char* get_exe_path()
    return NULL;
 }
 #endif
+
+/*
+ * Create / compare signatures for our installation directory
+ */
+
+#ifdef SYS_MINGW
+static unsigned char *create_signature()
+{  struct MD5Context md5ctxt;
+   unsigned char *digest = g_malloc(20);
+   char buf[80];
+
+   sprintf(buf,"dvdisaster %s signature string", Closure->cookedVersion);
+
+   MD5Init(&md5ctxt);
+   MD5Update(&md5ctxt, buf, strlen(buf));
+   MD5Final(digest+2, &md5ctxt);
+   digest[ 0] = digest[ 7]+19;
+   digest[ 1] = digest[ 9]+58;
+   digest[18] = digest[12]+31;
+   digest[19] = digest[15]+5;
+
+   return digest;
+}
+
+void WriteSignature()
+{  char loc[strlen(Closure->binDir) + strlen("\\signature")+ 10];
+   unsigned char *sig = create_signature();
+   FILE *file;
+
+   /* processing of error conditions not necessary */
+
+   sprintf(loc, "%s\\signature", Closure->binDir);
+   if(!(file = fopen(loc, "wb")))
+     return;
+   fwrite(sig, 20, 1, file);
+   fclose(file);
+   g_free(sig);
+}
+
+int VerifySignature()
+{  char loc[strlen(Closure->binDir) + strlen("\\signature")+ 10];
+   unsigned char *sig = create_signature();
+   char buf[20];
+   FILE *file;
+   int result;
+
+   sprintf(loc, "%s\\signature", Closure->binDir);
+   if(!(file = fopen(loc, "rb")))
+     return FALSE;
+
+   fread(buf, 20, 1, file);
+   fclose(file);
+
+   result = !memcmp(sig, buf, 20);
+
+   return result;
+}
+
+#endif
+
 
 static void get_base_dirs()
 {  struct stat mystat;

@@ -244,7 +244,7 @@ static GtkWidget* create_action_bar(GtkNotebook *notebook)
    Closure->createButton = wid = create_button(_("button|Create"), "dvdisaster-create");
    g_signal_connect(G_OBJECT(wid), "clicked", G_CALLBACK(action_cb), (gpointer)ACTION_CREATE);
    gtk_box_pack_start(GTK_BOX(vbox), wid, FALSE, FALSE, 0);
-   AttachTooltip(wid, _("tooltip|Create error correction file"), _("Creates an error correction file. Requires an image file."));
+   AttachTooltip(wid, _("tooltip|Create error correction data"), _("Creates error correction data. Requires an image file."));
 
    /*** Scan */
 
@@ -331,6 +331,7 @@ void CreateMainWindow(int *argc, char ***argv)
 {   GtkWidget *window,*wid,*outer_box,*middle_box,*status_box,*sep;
     GtkWidget *box, *icon, *button;
     char title[80];
+    int sig_okay = TRUE;
 
     /*** Initialize GTK+ */
 
@@ -353,9 +354,14 @@ void CreateMainWindow(int *argc, char ***argv)
     else g_snprintf(title, 80, "dvdisaster-%s", Closure->cookedVersion); 
 #endif
 
+#ifdef SYS_MINGW
+    sig_okay = VerifySignature();
+#endif
+
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(window), title);
-    gtk_window_set_default_size(GTK_WINDOW(window), -1, 550);
+    if(sig_okay)
+      gtk_window_set_default_size(GTK_WINDOW(window), -1, 550);
     gtk_window_set_icon(GTK_WINDOW(window), Closure->windowIcon);
     Closure->window = GTK_WINDOW(window);
 
@@ -366,6 +372,57 @@ void CreateMainWindow(int *argc, char ***argv)
     /* and with destroy events */
 
     g_signal_connect(window, "destroy", G_CALLBACK(destroy_cb), NULL);
+
+
+    /*** Validate our binary directory */
+
+#ifdef SYS_MINGW
+    if(!sig_okay)
+    {  GtkWidget *lab, *icon, *button;
+       char *msg, *utf, version[80];
+
+       if(Closure->version % 100)
+            sprintf(version, "dvdisaster-%s.%d-setup.exe", VERSION, Closure->version%100);
+       else sprintf(version, "dvdisaster-%s-setup.exe", VERSION);
+
+       gtk_container_set_border_width(GTK_CONTAINER(window), 10);
+
+       outer_box = gtk_hbox_new(FALSE, 10);
+       gtk_container_add(GTK_CONTAINER(window), outer_box);
+
+       middle_box = gtk_vbox_new(FALSE, 0);
+       gtk_box_pack_start(GTK_BOX(outer_box), middle_box, FALSE, FALSE, 0);
+
+       icon = gtk_image_new_from_stock(GTK_STOCK_DIALOG_ERROR, GTK_ICON_SIZE_DIALOG);
+       gtk_box_pack_start(GTK_BOX(middle_box), icon, FALSE, FALSE, 0);
+
+       middle_box = gtk_vbox_new(FALSE, 0);
+       gtk_box_pack_start(GTK_BOX(outer_box), middle_box, FALSE, FALSE, 0);
+
+       lab = gtk_label_new(NULL);
+       gtk_box_pack_start(GTK_BOX(middle_box), lab, FALSE, FALSE, 0);
+       msg = g_strdup_printf(_("<b>dvdisaster is not properly installed</b>\n\n"
+			       "Please execute the installer program (%s) again.\n"), version);
+       utf = g_locale_to_utf8(msg, -1, NULL, NULL, NULL);
+       gtk_label_set_markup(GTK_LABEL(lab), utf);
+       g_free(msg);
+       g_free(utf);
+
+       box = gtk_hbox_new(FALSE, 0);
+       gtk_box_pack_start(GTK_BOX(middle_box), box, FALSE, FALSE, 0);
+
+       button = gtk_button_new_from_stock(GTK_STOCK_CLOSE);
+       gtk_box_pack_end(GTK_BOX(box), button, FALSE, FALSE, 0);
+
+       g_signal_connect_swapped(G_OBJECT (button), "clicked",
+				G_CALLBACK(gtk_widget_destroy),
+				G_OBJECT(window));
+       gtk_widget_show_all(window);
+       gtk_main();
+
+       return;
+    }
+#endif
 
     /*** Initialize the tooltips struct */
 

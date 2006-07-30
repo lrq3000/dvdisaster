@@ -129,6 +129,7 @@ typedef enum
    MODE_RANDOM_IMAGE,
    MODE_SEND_CDB,
    MODE_SHOW_SECTOR, 
+   MODE_SIGN,
    MODE_TRUNCATE,
    MODE_ZERO_UNREADABLE,
 
@@ -344,6 +345,7 @@ int main(int argc, char *argv[])
 	{"scan", 2, 0,'s'},
 	{"send-cdb", 1, 0, MODE_SEND_CDB},
 	{"show-sector", 1, 0, MODE_SHOW_SECTOR},
+	{"sign", 0, 0, MODE_SIGN},
 	{"sim-defects", 1, 0, MODIFIER_SIMULATE_DEFECTS},
 	{"speed-warning", 2, 0, MODIFIER_SPEED_WARNING},
 	{"spinup-delay", 1, 0, MODIFIER_SPINUP_DELAY},
@@ -492,8 +494,8 @@ int main(int argc, char *argv[])
 	   FreeClosure();
 	   exit(EXIT_SUCCESS); 
 	   break;
-         case MODE_SEND_CDB: 
-	   mode = MODE_SEND_CDB;
+         case MODE_BYTESET:
+	   mode = MODE_BYTESET;
 	   debug_arg = g_strdup(optarg);
 	   break;
          case MODE_ERASE: 
@@ -512,9 +514,12 @@ int main(int argc, char *argv[])
 	   mode = MODE_RANDOM_IMAGE;
 	   debug_arg = g_strdup(optarg);
 	   break;
-         case MODE_BYTESET:
-	   mode = MODE_BYTESET;
+         case MODE_SEND_CDB: 
+	   mode = MODE_SEND_CDB;
 	   debug_arg = g_strdup(optarg);
+	   break;
+         case MODE_SIGN:
+	   mode = MODE_SIGN;
 	   break;
          case MODE_SHOW_SECTOR:
 	   mode = MODE_SHOW_SECTOR;
@@ -539,6 +544,7 @@ int main(int argc, char *argv[])
         case MODE_MARKED_IMAGE:
         case MODE_RANDOM_ERR:
         case MODE_RANDOM_IMAGE:
+        case MODE_SIGN:
         case MODE_TRUNCATE:
         case MODE_ZERO_UNREADABLE:
 	  mode = MODE_HELP;
@@ -546,6 +552,18 @@ int main(int argc, char *argv[])
      }
 	  
    PrepareDeadSector();
+
+#ifdef WIN_CONSOLE
+   if(mode != MODE_SIGN && !VerifySignature())
+   {  char version[80];
+
+      if(Closure->version % 100)
+           sprintf(version, "dvdisaster-%s.%d-setup.exe", VERSION, Closure->version%100);
+      else sprintf(version, "dvdisaster-%s-setup.exe", VERSION);
+      Stop(_("dvdisaster is not properly installed.\n"
+	     "Please execute the installer program (%s) again.\n"), version);
+   }
+#endif
 
    /*** Parse the sector ranges for --read and --scan */
 
@@ -647,6 +665,11 @@ int main(int argc, char *argv[])
 #ifdef SYS_MINGW
       case MODE_LIST_ASPI:
 	 ListAspiDrives();
+	 break;
+
+      case MODE_SIGN:
+	 WriteSignature();
+	 exit(0);
 	 break;
 #endif
       default:

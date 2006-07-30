@@ -1,7 +1,9 @@
 
-0.70 (pl-1)
+0.70 (pl-1) 30-07-2006
 	- fixed a bug in read-adaptive for RS02 which would sometimes prevent it 
 	  from properly restarting a previously interrupted reading session.
+	- fixed a bug in read-adaptive for RS02 which would cause it to read 
+	  insufficient data for error correction in some circumstances.
 	- clarified higher redundancy requirements for RS02 in
 	  background30.html (thanks to M. Buchholtz for pointing this out)
 	- made Windows console and GUI versions refuse being run in the wrong mode

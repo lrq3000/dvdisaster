@@ -2175,7 +2175,7 @@ U verze ve zdrojovém kódu si přečtěte <a href="download20.html">instalačn�
 
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.70</b></td><td align="right">23-Jul-2006</td></tr>
+<tr><td><b>dvdisaster-0.70</b></td><td align="right">30-Jul-2006</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
@@ -2203,8 +2203,8 @@ Daniel Nylander provided Swedish translations of the screen texts.<p>
 
 <b>Patches</b> (small changes after version 0.70; files above have been updated):<br>
 
-<b>pl1</b> fixes a bug in adaptive reading for RS02 which would sometimes prevent it 
-from properly restarting a previously interrupted reading session. Adds some small
+<b>pl1</b> fixes a bug in adaptive reading for RS02 which would sometimes result in
+reading insufficient data for a successful recovery. Adds some small
 improvements of documentation and usability.
 </td></tr></table><p>
 

@@ -72,6 +72,7 @@ dvdisaster: inlined-icons.h $(OFILES)
 	     $(CC) $(LOPTS) $(OFILES) winres.o $(LIBS) -lole32 -mwindows -o dvdisaster-win; \
 	     $(CC) $(COPTS) -DWIN_CONSOLE -c dvdisaster.c ; \
 	     $(CC) $(LOPTS) $(OFILES) $(LIBS) -lole32 -o dvdisaster; \
+	     if ! test -e signature; then dvdisaster --debug --sign; fi; \
 	else echo "Linking  : dvdisaster"; \
 	     $(CC) $(LOPTS) $(OFILES) $(LIBS) -o dvdisaster; \
 	fi
@@ -292,7 +293,7 @@ distclean: clean
 clean:
 	@echo "Removing rebuildable files"
 	@rm -rf *.o medium.* dvdisaster simple-md5sum *.exe *.zip .dvdisaster core *.core *.stackdump
-	@rm -f inlined-icons.h help-dialogs.h installer.iss
+	@rm -f inlined-icons.h help-dialogs.h installer.iss signature
 	@rm -f wininst/version.nsh
 	@find . -name \*\~ -print | xargs rm -f;
 	@find . -name \*.mo -print | xargs rm -f;
@@ -340,6 +341,7 @@ prepare-dist:
 	@mkdir win-build-dir
 	@mkdir win-build-dir/documentation
 	@cp -r CHANGELOG COPYING CREDITS* README.MODIFYING TODO dvdisaster.exe dvdisaster-win.exe win-build-dir
+	@head --bytes=20 dvdisaster.exe >win-build-dir/signature
 	@cp documentation/pubkey.asc win-build-dir/documentation
 	@for i in cs de en; do \
 	  mkdir win-build-dir/documentation/$$i; \

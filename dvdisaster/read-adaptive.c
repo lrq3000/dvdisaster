@@ -62,7 +62,7 @@ typedef struct
    gint64 intervalStart;        /* information about currently processed interval */
    gint64 intervalEnd;
    gint64 intervalSize;
-   gint64 maxImageSector;       /* current size of image file */ 
+   gint64 highestWrittenSector; /* current size of image file */ 
  
    char progressMsg[256];       /* message output related */
    char progressBs[256];
@@ -97,8 +97,8 @@ static void cleanup(gpointer data)
       guint64 hpos;
       guint64 end = lay->eccSectors+lay->dataSectors;
 
-      if(rc->maxImageSector < end)  /* image may have been partially read */
-	end = rc->maxImageSector;
+      if(rc->highestWrittenSector+1 < end)  /* image may have been partially read */
+	end = rc->highestWrittenSector+1;
 
       /* Careful: we must not call Stop() here to avoid infinite
 	 recursion in error situations. */
@@ -363,9 +363,21 @@ static void open_and_determine_mode(read_closure *rc)
    rc->dh = OpenAndQueryDevice(Closure->device);
    rc->readMode = IMAGE_ONLY;
 
+   /* See if we have ecc information available. 
+      Prefer the error correction file over augmented images if both are available. */
+
    /* See if the medium contains RS02 type ecc information */
 
-   if(rc->dh->rs02Header)
+   rc->ei = OpenEccFile(READABLE_ECC | PRINT_MODE);
+   if(rc->ei)   /* RS01 type ecc */
+   {  rc->readMode = ECC_IN_FILE;
+      rc->eh = rc->ei->eh;
+
+      rc->rs01LayerSectors = (rc->ei->sectors+rc->eh->dataBytes-1)/rc->eh->dataBytes;
+
+      SetAdaptiveReadMinimumPercentage((1000*(rc->eh->dataBytes-rc->eh->eccBytes))/rc->eh->dataBytes);
+   }
+   else if(rc->dh->rs02Header)  /* see if we have RS02 type ecc */
    {  rc->readMode = ECC_IN_IMAGE;
       rc->eh  = rc->dh->rs02Header;
       rc->lay = CalcRS02Layout(uchar_to_gint64(rc->eh->sectors), rc->eh->eccBytes);
@@ -387,19 +399,6 @@ static void open_and_determine_mode(read_closure *rc)
 				  s, sinv, slice, idx);
 	 }
 	 Verbose("RS02SliceIndex() verification finished.\n");
-      }
-   }
-
-   /* else check the current ecc file */
-   else
-   {  rc->ei = OpenEccFile(READABLE_ECC | PRINT_MODE);
-      if(rc->ei)
-      {  rc->readMode = ECC_IN_FILE;
-	 rc->eh = rc->ei->eh;
-
-	 rc->rs01LayerSectors = (rc->ei->sectors+rc->eh->dataBytes-1)/rc->eh->dataBytes;
-
-	 SetAdaptiveReadMinimumPercentage((1000*(rc->eh->dataBytes-rc->eh->eccBytes))/rc->eh->dataBytes);
       }
    }
 
@@ -622,9 +621,9 @@ void check_image_size(read_closure *rc, gint64 image_file_sectors)
 	 cleanup((gpointer)rc);
       }
 
-      rc->maxImageSector = rc->sectors;
+      rc->highestWrittenSector = rc->sectors-1;
    }
-   else rc->maxImageSector = image_file_sectors;
+   else rc->highestWrittenSector = image_file_sectors-1;
 }
 
 /***
@@ -664,7 +663,7 @@ void build_interval_from_image(read_closure *rc)
    if(Closure->guiMode)
      SetAdaptiveReadSubtitle(_("Analysing existing image file"));
 
-   for(s=0; s<rc->maxImageSector; s++)
+   for(s=0; s<=rc->highestWrittenSector; s++)
    {  int n,percent;
 
       /* Check for user interruption. */
@@ -695,7 +694,7 @@ void build_interval_from_image(read_closure *rc)
 	/* If the CRC buf is exhausted, refill it. */
 
 	 if(crcidx >= CRCBUFSIZE)
-	 {  int remain = rc->maxImageSector-s;
+	 {  int remain = rc->highestWrittenSector-s+1;
 	    int size;
 
 	    if(remain < CRCBUFSIZE)
@@ -737,8 +736,8 @@ void build_interval_from_image(read_closure *rc)
 
       /* Determine end of current interval and write it out */
 
-      if((!current_missing || s>=rc->maxImageSector-1) && first_missing>=0)
-      {  if(s>=rc->maxImageSector-1)       /* special case: interval end = image end */
+      if((!current_missing || s>=rc->highestWrittenSector) && first_missing>=0)
+      {  if(s>=rc->highestWrittenSector)   /* special case: interval end = image end */
 	 {  last_missing = rc->lastSector; /* may happen when image is truncated */
 	    tail_included = TRUE;
 	 }
@@ -760,7 +759,7 @@ void build_interval_from_image(read_closure *rc)
 
       /* Visualize the progress */
 
-      percent = (100*s)/rc->maxImageSector;
+      percent = (100*s)/(rc->highestWrittenSector+1);
       if(last_percent != percent) 
       {  if(!Closure->guiMode)
 	    PrintProgress(_("Analysing existing image file: %2d%%"),percent);
@@ -812,6 +811,7 @@ void build_interval_from_image(read_closure *rc)
 #ifdef CHECK_VISITED
 		  count[layer_idx]++;
 #endif
+		  mark_sector(rc, layer_idx, Closure->green);
 	       }
 
 	       layer_idx += rc->rs01LayerSectors;
@@ -830,7 +830,8 @@ void build_interval_from_image(read_closure *rc)
 	 
 	 for(j=0; j<255; j++)
 	 {  sector = RS02SectorIndex(rc->lay, j, s);
-	    if(GetBit(rc->map, sector))
+	    if(   sector < 0  /* padding sector */ 
+	       || GetBit(rc->map, sector))
 	      present++;
 	 }
 
@@ -839,9 +840,11 @@ void build_interval_from_image(read_closure *rc)
 	 if(255-present <= rc->eh->eccBytes)
 	 {  for(j=0; j<255; j++)   /* mark them as visited */
 	    {  sector = RS02SectorIndex(rc->lay, j, s);
-	       if(!GetBit(rc->map, sector))
+	        if(   sector >= 0 /* don't mark the padding sector */
+		   && !GetBit(rc->map, sector))
 	       {  SetBit(rc->map, sector);
 		  rc->correctable++;
+		  mark_sector(rc, sector, Closure->green);
 	       }
 	    }
 	 }
@@ -860,6 +863,8 @@ void build_interval_from_image(read_closure *rc)
      UpdateAdaptiveResults(rc->readable, rc->correctable, 
 			   rc->sectors-rc->readable-rc->correctable,
 			   (int)((1000LL*(rc->readable+rc->correctable))/rc->sectors));
+
+//   print_intervals(rc);
 }
 
    /*** Mark RS02 header sectors as correctable.
@@ -907,7 +912,7 @@ static void insert_buttons(GtkDialog *dialog)
 } 
 
 /*
- * Fill the gap between rc->intervalStart and rc->maxImageSectors
+ * Fill the gap between rc->intervalStart and rc->highestWrittenSector
  * with dead sector markers. These are needed in case the user aborts the operation; 
  * otherwise the gap will just be zero-filled and we don't know its contents
  * are unprocessed if we try to re-read the image later.
@@ -927,17 +932,14 @@ void fill_gap(read_closure *rc)
 		    ": |.........*|\b\b\b\b\b\b\b\b\b\b\b\b\b\b"};
   char *t;
   gint64 i,j;
+  gint64 firstUnwritten;
 
-  /*** Point maxImageSector to first unwritten sector 
-       TODO: this is fishy. */
-
-  if(rc->firstSector==0 || rc->maxImageSector > 0)
-    rc->maxImageSector++;
+  firstUnwritten = rc->highestWrittenSector + 1;
 
   /*** Tell user what's going on */
 
   t = g_strdup_printf(_("Filling image area [%lld..%lld]"), 
-		      rc->maxImageSector, rc->intervalStart-1);
+		      firstUnwritten, rc->intervalStart-1);
   clear_progress(rc);
   if(Closure->guiMode)
   {  SetAdaptiveReadSubtitle(t);
@@ -948,13 +950,13 @@ void fill_gap(read_closure *rc)
 
   /*** Seek to end of image */
 
-  if(!LargeSeek(rc->image, (gint64)(2048*rc->maxImageSector)))
+  if(!LargeSeek(rc->image, (gint64)(2048*firstUnwritten)))
     Stop(_("Failed seeking to sector %lld in image [%s]: %s"),
-	 rc->maxImageSector, "fill", strerror(errno));
+	 firstUnwritten, "fill", strerror(errno));
 
   /*** Fill image with dead sector markers until rc->intervalStart */
 
-  for(i=rc->maxImageSector, j=0; i<rc->intervalStart; i++)
+  for(i=firstUnwritten, j=0; i<rc->intervalStart; i++)
   {  int n;
 
      /* Write next sector */ 
@@ -962,7 +964,7 @@ void fill_gap(read_closure *rc)
      n = LargeWrite(rc->image, Closure->deadSector, 2048);
      if(n != 2048)
        Stop(_("Failed writing to sector %lld in image [%s]: %s"),
-	    rc->maxImageSector, "fill", strerror(errno));
+	    i, "fill", strerror(errno));
 
      /* Check whether user hit the Stop button */
 	     
@@ -993,7 +995,7 @@ void fill_gap(read_closure *rc)
   }
 
   PrintCLI("               \n");
-  rc->maxImageSector = rc->intervalStart-1;
+  rc->highestWrittenSector = rc->intervalStart-1;
 
   if(Closure->guiMode)  /* remove temporary fill markers */
   {  RemoveFillMarkers();
@@ -1003,26 +1005,26 @@ void fill_gap(read_closure *rc)
 
 
 /*
- * If a correctable sector <correctable> lies beyond rc->maxImageSector,
+ * If a correctable sector <correctable> lies beyond rc->highestWrittenSector,
  * fill the gap with dead sector markers.
  * So when reading resumes there will be no holes in the image.
  */
 
 void fill_correctable_gap(read_closure *rc, gint64 correctable)
 {
-   if(correctable > rc->maxImageSector)
-   {  gint64 ds = rc->maxImageSector+1;
+   if(correctable > rc->highestWrittenSector)
+   {  gint64 ds = rc->highestWrittenSector+1;
      
       if(!LargeSeek(rc->image, (gint64)(2048*ds)))
 	Stop(_("Failed seeking to sector %lld in image [%s]: %s"),
 	     ds, "skip-corr", strerror(errno));
 
-      for(ds=rc->maxImageSector+1; ds<=correctable; ds++)
+      for(ds=rc->highestWrittenSector+1; ds<=correctable; ds++)
       {  if(LargeWrite(rc->image, Closure->deadSector, 2048) != 2048)
 	  Stop(_("Failed writing to sector %lld in image [%s]: %s"),
 	       ds, "skip-corr", strerror(errno));
       }
-      rc->maxImageSector = correctable;
+      rc->highestWrittenSector = correctable;
    }
 }
 
@@ -1186,9 +1188,10 @@ reopen_image:
 
    for(;;)
    {  
-      /* If we jumped beyond the max_sector, fill the gap with dead sector markers. */
+      /* If we jumped beyond the highest writtensector, 
+	 fill the gap with dead sector markers. */
 
-      if(rc->intervalStart > rc->maxImageSector+1)
+      if(rc->intervalStart > rc->highestWrittenSector)
 	fill_gap(rc);
 
       /*** Try reading the next interval */
@@ -1333,8 +1336,8 @@ reopen_image:
 
 		    mark_sector(rc, b, Closure->yellow);
 
-		    if(rc->maxImageSector < b)
-		      rc->maxImageSector = b;
+		    if(rc->highestWrittenSector < b)
+		      rc->highestWrittenSector = b;
 		 }
 		 else /* good sector */
 		 {  n = LargeWrite(rc->image, Closure->scratchBuf+i*2048, 2048);
@@ -1347,8 +1350,8 @@ reopen_image:
 
 		    mark_sector(rc, b, Closure->green);
 		    
-		    if(rc->maxImageSector < b)
-		      rc->maxImageSector = b;
+		    if(rc->highestWrittenSector < b)
+		      rc->highestWrittenSector = b;
 		 }
 	       }
 
@@ -1364,8 +1367,8 @@ reopen_image:
 
 		  mark_sector(rc, b, Closure->green);
 
-		  if(rc->maxImageSector < b)
-		    rc->maxImageSector = b;
+		  if(rc->highestWrittenSector < b)
+		    rc->highestWrittenSector = b;
 	       }
 	    }
 
@@ -1406,7 +1409,7 @@ reopen_image:
 			   count[layer_idx]++;
 #endif
 
-			   /* If the correctable sector lies beyond rc->maxImageSector,
+			   /* If the correctable sector lies beyond the highest written sector,
 			      fill the gap with dead sector markers */
 
 			   fill_correctable_gap(rc, layer_idx);
@@ -1428,7 +1431,8 @@ reopen_image:
 		  RS02SliceIndex(rc->lay, b, &ignore, &slice_idx);
 		  for(j=0; j<255; j++) 
 		  {  sector = RS02SectorIndex(rc->lay, j, slice_idx);
-		     if(GetBit(rc->map, sector))
+		     if(   sector < 0  /* padding sector */ 
+			|| GetBit(rc->map, sector))
 			present++;
 		  }
 
@@ -1438,7 +1442,8 @@ reopen_image:
 		  if(255-present <= rc->eh->eccBytes)
 		  {  for(j=0; j<255; j++)
 		     {  sector = RS02SectorIndex(rc->lay, j, slice_idx);
-		        if(!GetBit(rc->map, sector))
+		        if(   sector >= 0 /* don't mark the padding sector */
+			   && !GetBit(rc->map, sector))
 			{  SetBit(rc->map, sector);
 			   rc->correctable++;
 			   mark_sector(rc, sector, Closure->green);
@@ -1453,7 +1458,9 @@ reopen_image:
 	       if we added sectors beyond the image size. */
 
 	    s+=nsectors;
-	    if(s>rc->maxImageSector) rc->maxImageSector=s-1;
+#if 0 /* obsoleted since it is carried out right after the LargeWrite() above */
+	    if(s>rc->highestWrittenSector) rc->highestWrittenSector=s;
+#endif
 
 	    /* Stop reading if enough data for error correction
 	       has been gathered */
@@ -1495,8 +1502,8 @@ reopen_image:
 	       mark_sector(rc, s+i, Closure->red);
 	    }
 
-	    if(rc->maxImageSector < s+nsectors)
-	      rc->maxImageSector = s+nsectors-1;
+	    if(rc->highestWrittenSector < s+nsectors)
+	      rc->highestWrittenSector = s+nsectors-1;
 
 	    /* Reading of the interval ends at the first read error.
 	       Store the remainder of the current interval in the queue. */

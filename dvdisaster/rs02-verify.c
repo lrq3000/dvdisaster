@@ -42,9 +42,12 @@ void ResetRS02VerifyWindow(Method *self)
    SetLabelText(GTK_LABEL(wl->cmpEccMethod), "");
    SetLabelText(GTK_LABEL(wl->cmpEccRequires), "");
    SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), "");
-   SetLabelText(GTK_LABEL(wl->cmpDataMd5Sum), "");
-   SetLabelText(GTK_LABEL(wl->cmpCrcMd5Sum), "");
-   SetLabelText(GTK_LABEL(wl->cmpEccMd5Sum), "");
+   SetLabelText(GTK_LABEL(wl->cmpEcc1Name), _("Data checksum:"));
+   SetLabelText(GTK_LABEL(wl->cmpEcc2Name), _("CRC checksum:"));
+   SetLabelText(GTK_LABEL(wl->cmpEcc3Name), _("Ecc checksum:"));
+   SetLabelText(GTK_LABEL(wl->cmpEcc1Msg), "");
+   SetLabelText(GTK_LABEL(wl->cmpEcc2Msg), "");
+   SetLabelText(GTK_LABEL(wl->cmpEcc3Msg), "");
 
    SwitchAndSetFootline(wl->cmpEccNotebook, 0, NULL, NULL);
 
@@ -295,27 +298,27 @@ void CreateRS02VerifyWindow(Method *self, GtkWidget *parent)
    gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
    gtk_table_attach(GTK_TABLE(table2), lab, 1, 2, 3, 4, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
 
-   lab = gtk_label_new(NULL);
+   lab = wl->cmpEcc1Name = gtk_label_new(NULL);
    gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
    SetLabelText(GTK_LABEL(lab), _("Data checksum:"));
    gtk_table_attach(GTK_TABLE(table2), lab, 0, 1, 4, 5, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 2 );
-   lab = wl->cmpDataMd5Sum = gtk_label_new(NULL);
+   lab = wl->cmpEcc1Msg = gtk_label_new(NULL);
    gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
    gtk_table_attach(GTK_TABLE(table2), lab, 1, 2, 4, 5, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
 
-   lab = gtk_label_new(NULL);
+   lab = wl->cmpEcc2Name = gtk_label_new(NULL);
    gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
    SetLabelText(GTK_LABEL(lab), _("CRC checksum:"));
    gtk_table_attach(GTK_TABLE(table2), lab, 0, 1, 5, 6, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 2 );
-   lab = wl->cmpCrcMd5Sum = gtk_label_new(NULL);
+   lab = wl->cmpEcc2Msg = gtk_label_new(NULL);
    gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
    gtk_table_attach(GTK_TABLE(table2), lab, 1, 2, 5, 6, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
-   lab = gtk_label_new(NULL);
 
+   lab = wl->cmpEcc3Name = gtk_label_new(NULL);
    gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
    SetLabelText(GTK_LABEL(lab), _("Ecc checksum:"));
    gtk_table_attach(GTK_TABLE(table2), lab, 0, 1, 6, 7, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 2 );
-   lab = wl->cmpEccMd5Sum = gtk_label_new(NULL);
+   lab = wl->cmpEcc3Msg = gtk_label_new(NULL);
    gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
    gtk_table_attach(GTK_TABLE(table2), lab, 1, 2, 6, 7, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
 
@@ -336,6 +339,8 @@ void CreateRS02VerifyWindow(Method *self, GtkWidget *parent)
 typedef struct
 {  LargeFile *file;
    RS02Layout *lay;
+   RS02Widgets *wl;
+   Bitmap *map;
    guint32 *crcBuf;
    gint8   *crcValid;
    unsigned char crcSum[16];
@@ -351,6 +356,7 @@ static void cleanup(gpointer data)
 
    if(cc->file) LargeClose(cc->file);
    if(cc->lay) g_free(cc->lay);
+   if(cc->map) FreeBitmap(cc->map);
    if(cc->crcBuf) g_free(cc->crcBuf);
    if(cc->crcValid) g_free(cc->crcValid);
    
@@ -440,6 +446,79 @@ static void read_crc(verify_closure *cc, RS02Layout *lay)
 }
 
 /*
+ * Prognosis for correctability
+ */
+
+int prognosis(verify_closure *vc, gint64 missing, gint64 expected)
+{  int j,eccblock;
+   int worst_ecc = 0;
+   gint64 damaged_sectors = 0, damaged_eccsecs = 0;
+   gint64 correctable = 0;
+   gint64 recoverable;
+
+   for(eccblock=0; eccblock<vc->lay->sectorsPerLayer; eccblock++)
+   {  int count = 255;
+
+      for(j=0; j<255; j++)
+      {  gint64 sector = RS02SectorIndex(vc->lay, j, eccblock);
+
+	/* padding sectors are always correctable
+	   and the first ecc header does not take part in error correction */
+
+	 if(   sector < 0  
+	    || sector  == vc->lay->firstEccHeader
+	    || sector  == vc->lay->firstEccHeader + 1)
+	 {  count--;
+	    continue;  
+	 }
+
+	 if(GetBit(vc->map, sector))
+	   count--;
+	 else damaged_sectors++;
+      }
+
+      Verbose("Ecc block %d: %d erasures\n", eccblock, count);
+
+      if(count>0)                damaged_eccsecs++;
+      if(count>worst_ecc)        worst_ecc = count; 
+      if(count<=vc->lay->nroots) correctable += count;
+   }
+
+   recoverable = expected - missing + correctable;
+
+   if(damaged_sectors > 0)
+   {  int percentage  = (1000*recoverable) / expected;
+
+      PrintLog(_("- erasure counts   :  avg =  %.1f; worst = %d per ecc block.\n"),
+	      (double)damaged_sectors/(double)damaged_eccsecs,worst_ecc);
+
+      PrintLog(_("- prognosis        : %lld of %lld sectors recoverable (%d.%d%%)\n"),
+	       recoverable, expected, percentage/10, percentage%10);
+
+      if(Closure->guiMode)
+      {  SetLabelText(GTK_LABEL(vc->wl->cmpEcc1Name), "");
+	 SetLabelText(GTK_LABEL(vc->wl->cmpEcc1Msg),  "");
+	 SetLabelText(GTK_LABEL(vc->wl->cmpEcc2Name), _("Erasure counts:"));
+	 SetLabelText(GTK_LABEL(vc->wl->cmpEcc3Name), _("Prognosis:"));
+
+	 SetLabelText(GTK_LABEL(vc->wl->cmpEcc2Msg),
+		      _("<span color=\"%s\">avg =  %.1f; worst = %d per ecc block.</span>"),
+		      worst_ecc <= vc->lay->nroots ? "#008000" : "red",
+		      (double)damaged_sectors/(double)damaged_eccsecs,worst_ecc);
+
+	 SetLabelText(GTK_LABEL(vc->wl->cmpEcc3Msg),
+		     _("<span color=\"%s\">%lld of %lld sectors recoverable (%d.%d%%)</span>"),
+		     recoverable < expected ? "red" : "#008000",
+		     recoverable, expected, percentage/10, percentage%10);
+      }
+   }	      
+
+   if(damaged_sectors && worst_ecc <= vc->lay->nroots && recoverable >= expected)
+        return TRUE;
+   else return FALSE;
+}
+
+/*
  * The verify action
  */
 
@@ -469,10 +548,12 @@ void RS02Verify(Method *self)
    char method[5];
    char *img_advice = NULL;
    char *ecc_advice = NULL;
+   int try_it;
 
    /*** Prepare for early termination */
 
    RegisterCleanup(_("Check aborted"), cleanup, cc);
+   cc->wl = wl;
 
    /*** Open the .iso file */
 
@@ -496,6 +577,8 @@ void RS02Verify(Method *self)
    expected_sectors = lay->eccSectors+lay->dataSectors;
    if(!eh->inLast)      /* 0.66 pre-releases did not set this */
      eh->inLast = 2048;
+
+   cc->map = CreateBitmap0(expected_sectors);
 
    /*** Print information on image size */
 
@@ -544,7 +627,9 @@ void RS02Verify(Method *self)
          real_crc = Crc32((unsigned char*)&eh, sizeof(EccHeader));
 
 	 if(real_crc == recorded_crc)
-	    hdr_ok++;
+	 {   hdr_ok++;
+	     SetBit(cc->map, hdr_pos);
+	 }
 	 else
 	 {  hdr_crc_errors++; 
 	 }
@@ -589,6 +674,7 @@ void RS02Verify(Method *self)
 
    for(s=0; s<expected_sectors; s++)
    {  int percent,current_missing;
+      int defective = 0;
 
       /* Check for user interruption */
 
@@ -624,6 +710,7 @@ void RS02Verify(Method *self)
 	 if(s < lay->dataSectors) data_missing++;
 	 else if(s >= lay->dataSectors + 2 && s < lay->protectedSectors) crc_missing++;
 	 else ecc_missing++;
+	 defective = TRUE;
       }
 
       /* Report dead sectors. Combine subsequent missing sectors into one report. */
@@ -647,9 +734,13 @@ void RS02Verify(Method *self)
 	 {  PrintCLI(_("* CRC error, sector: %lld\n"), s);
 	    data_crc_errors++;
 	    new_crc_errors++;
+	    defective = TRUE;
 	 }
       }
       crc_idx++;
+
+      if(!defective)
+	SetBit(cc->map, s);
 
       /* Calculate the ecc checksum */
 
@@ -886,9 +977,9 @@ void RS02Verify(Method *self)
       else  PrintLog(_("* data md5sum      : %s (BAD)\n"),hdr_digest);
 
       if(Closure->guiMode)
-      {  if(n) SetLabelText(GTK_LABEL(wl->cmpDataMd5Sum), "%s", hdr_digest);
+      {  if(n) SetLabelText(GTK_LABEL(wl->cmpEcc1Msg), "%s", hdr_digest);
 	 else  
-	 {  SetLabelText(GTK_LABEL(wl->cmpDataMd5Sum), "<span color=\"red\">%s</span>", hdr_digest);
+	 {  SetLabelText(GTK_LABEL(wl->cmpEcc1Msg), "<span color=\"red\">%s</span>", hdr_digest);
 	    SetLabelText(GTK_LABEL(wl->cmpImageMd5Sum), "<span color=\"red\">%s</span>", data_digest);
 	 }
       }
@@ -897,7 +988,7 @@ void RS02Verify(Method *self)
    {  PrintLog(_("- data md5sum      : %s\n"), "-");
 
       if(Closure->guiMode)
-	SetLabelText(GTK_LABEL(wl->cmpDataMd5Sum), "%s", "-");
+	SetLabelText(GTK_LABEL(wl->cmpEcc1Msg), "%s", "-");
    }
 
    /*** md5sum of the crc portion */
@@ -908,14 +999,12 @@ void RS02Verify(Method *self)
    {  if(!memcmp(eh->crcSum, cc->crcSum, 16))
       {  PrintLog(_("- crc md5sum       : %s (good)\n"),digest);
          if(Closure->guiMode)
-	   SetLabelText(GTK_LABEL(wl->cmpCrcMd5Sum), "%s", digest);
+	   SetLabelText(GTK_LABEL(wl->cmpEcc2Msg), "%s", digest);
       }
       else 
       {    PrintLog(_("* crc md5sum       : %s (BAD)\n"),digest);
            if(Closure->guiMode)
-	   {  SetLabelText(GTK_LABEL(wl->cmpCrcMd5Sum), "<span color=\"red\">%s</span>", digest);
-	      if(!ecc_advice)
-	        ecc_advice = g_strdup(_("<span color=\"red\">Damaged CRC data.</span>"));
+	   {  SetLabelText(GTK_LABEL(wl->cmpEcc2Msg), "<span color=\"red\">%s</span>", digest);
 	   }
       }
    }
@@ -923,7 +1012,7 @@ void RS02Verify(Method *self)
    {  PrintLog(_("- crc md5sum       : %s\n"), "-");
      
       if(Closure->guiMode)
-	SetLabelText(GTK_LABEL(wl->cmpCrcMd5Sum), "%s", "-");
+	SetLabelText(GTK_LABEL(wl->cmpEcc2Msg), "%s", "-");
    }
 
    /*** meta md5sum of the ecc slices */
@@ -934,14 +1023,12 @@ void RS02Verify(Method *self)
    {  if(!memcmp(eh->eccSum, ecc_sum, 16))
       {    PrintLog(_("- ecc md5sum       : %s (good)\n"),digest);
            if(Closure->guiMode)
-	      SetLabelText(GTK_LABEL(wl->cmpEccMd5Sum), "%s", digest);
+	      SetLabelText(GTK_LABEL(wl->cmpEcc3Msg), "%s", digest);
       }
       else 
       {    PrintLog(_("* ecc md5sum       : %s (BAD)\n"),digest);
            if(Closure->guiMode)
-	   {  SetLabelText(GTK_LABEL(wl->cmpEccMd5Sum), "<span color=\"red\">%s</span>", digest);
-	      if(!ecc_advice)
-		ecc_advice = g_strdup(_("<span color=\"red\">Damaged error correction data - try data recovery anyways!</span>"));
+	   {  SetLabelText(GTK_LABEL(wl->cmpEcc3Msg), "<span color=\"red\">%s</span>", digest);
 	   }
       }
    }
@@ -949,11 +1036,13 @@ void RS02Verify(Method *self)
    {  PrintLog(_("- ecc md5sum       : %s\n"), "-");
      
       if(Closure->guiMode)
-	SetLabelText(GTK_LABEL(wl->cmpEccMd5Sum), "%s", "-");
+	SetLabelText(GTK_LABEL(wl->cmpEcc3Msg), "%s", "-");
    }
 
 
    /*** Print final results */
+
+   try_it = prognosis(cc, total_missing - 2*(hdr_crc_errors + hdr_missing), expected_sectors);
 
    if(Closure->guiMode)
    {  if(ecc_advice) 
@@ -966,7 +1055,8 @@ void RS02Verify(Method *self)
 		       _("<span color=\"#008000\">Good error correction data.</span>"));
         else
 	  SetLabelText(GTK_LABEL(wl->cmpEccResult),
-		       _("<span color=\"red\">Damaged error correction data - try data recovery anyways!</span>"));
+		       try_it ? _("<span color=\"#008000\">Full data recovery is likely.</span>")
+		              : _("<span color=\"red\">Full data recovery is NOT possible.</span>"));
    }
 
    /*** Close and clean up */

@@ -72,9 +72,12 @@ typedef struct
    GtkWidget *cmpEccMethod;
    GtkWidget *cmpEccRequires;
    GtkWidget *cmpEccMediumSectors;
-   GtkWidget *cmpDataMd5Sum;
-   GtkWidget *cmpCrcMd5Sum;
-   GtkWidget *cmpEccMd5Sum;
+   GtkWidget *cmpEcc1Name;
+   GtkWidget *cmpEcc2Name;
+   GtkWidget *cmpEcc3Name;
+   GtkWidget *cmpEcc1Msg;
+   GtkWidget *cmpEcc2Msg;
+   GtkWidget *cmpEcc3Msg;
    GtkWidget *cmpEccResult;
 
    /*** Widgets in the Preferences window */
