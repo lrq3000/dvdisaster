@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-09 21:09+0200\n"
+"POT-Creation-Date: 2006-09-10 18:07+0200\n"
 "PO-Revision-Date: 2006-06-14 23:48+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -1402,12 +1402,12 @@ msgstr "Misslyckades med att söka i crc-område: %s"
 msgid "CRC error in sector %lld\n"
 msgstr "CRC-fel i sektor %lld\n"
 
-#: read-adaptive.c:1488 scsi-layer.c:597
+#: read-adaptive.c:1488 scsi-layer.c:602
 #, c-format
 msgid "Sectors %lld-%lld: %s\n"
 msgstr "Sektorer %lld-%lld: %s\n"
 
-#: read-adaptive.c:1491 read-linear.c:625 scsi-layer.c:596
+#: read-adaptive.c:1491 read-linear.c:625 scsi-layer.c:601
 #, c-format
 msgid "Sector %lld: %s\n"
 msgstr "Sektor %lld: %s\n"
@@ -1460,7 +1460,7 @@ msgstr "Adaptiv läsning:"
 msgid "Sectors processed"
 msgstr "Sektorer behandlade"
 
-#: read-adaptive-window.c:110 scsi-layer.c:578
+#: read-adaptive-window.c:110 scsi-layer.c:583
 msgid "readable"
 msgstr "läsbar"
 
@@ -1543,7 +1543,7 @@ msgstr "Färdigställer avbild %s. Endast saknade sektorer kommer att läsas.\n"
 msgid "done.\n"
 msgstr "klar.\n"
 
-#: read-linear.c:430 scsi-layer.c:958
+#: read-linear.c:430 scsi-layer.c:963
 #, c-format
 msgid "Waiting %d seconds for drive to spin up...\n"
 msgstr "Väntar %d sekunder på att enheten ska varva upp...\n"
@@ -3059,7 +3059,7 @@ msgstr "Okänd"
 msgid "CD Audio"
 msgstr "Cd-ljud"
 
-#: scsi-layer.c:529
+#: scsi-layer.c:534
 #, c-format
 msgid ""
 "%s\n"
@@ -3068,12 +3068,12 @@ msgstr ""
 "%s\n"
 "Kunde inte fråga efter dvdstrukturlängd för formatkod 1.\n"
 
-#: scsi-layer.c:539
+#: scsi-layer.c:544
 #, c-format
 msgid "Could not query dvd copyright info - implausible packet length %d\n"
 msgstr "Kunde inte fråga efter dvd:ns copyrightinformation - osannolik paketlängd %d\n"
 
-#: scsi-layer.c:554
+#: scsi-layer.c:559
 #, c-format
 msgid ""
 "%s\n"
@@ -3082,23 +3082,23 @@ msgstr ""
 "%s\n"
 "Kunde inte fråga efter copyrightinformation.\n"
 
-#: scsi-layer.c:612
+#: scsi-layer.c:617
 msgid "is undecideable because of read error"
 msgstr "är inte bestämt på grund av läsfel"
 
-#: scsi-layer.c:618
+#: scsi-layer.c:623
 msgid "looks GOOD"
 msgstr "ser BRA UT"
 
-#: scsi-layer.c:624
+#: scsi-layer.c:629
 msgid "gives unformatted size (UNUSABLE)"
 msgstr "ger oformaterad storlek (EJ ANVÄNDBAR)"
 
-#: scsi-layer.c:629
+#: scsi-layer.c:634
 msgid "is UNUSABLE"
 msgstr "är OANVÄNDBAR"
 
-#: scsi-layer.c:650
+#: scsi-layer.c:655
 #, c-format
 msgid ""
 "%s\n"
@@ -3107,7 +3107,7 @@ msgstr ""
 "%s\n"
 "Kunde inte fråga efter mediumstorlek.\n"
 
-#: scsi-layer.c:720
+#: scsi-layer.c:725
 #, c-format
 msgid ""
 "Different media sizes depending on query method:\n"
@@ -3116,7 +3116,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: scsi-layer.c:725
+#: scsi-layer.c:730
 msgid ""
 "Evaluation of returned medium sizes:\n"
 "\n"
@@ -3124,15 +3124,15 @@ msgstr ""
 "Evaluering av returnerade mediumstorlekar:\n"
 "\n"
 
-#: scsi-layer.c:780
+#: scsi-layer.c:785
 msgid "Using value from READ CAPACITY"
 msgstr "Använder värde från LÄSKAPACITET"
 
-#: scsi-layer.c:784
+#: scsi-layer.c:789
 msgid "Using value from READ DVD STRUCTURE"
 msgstr "Använder värde från LÄS DVDSTRUKTUR"
 
-#: scsi-layer.c:794
+#: scsi-layer.c:799
 #, c-format
 msgid ""
 "FAILED to determine image size.\n"
@@ -3143,7 +3143,7 @@ msgstr ""
 "Använder ett mindre värde eftersom det passar för >90%% av alla enheter,\n"
 "men FORTSÄTT PÅ EGEN RISK (avbilden kan bli felaktig/oanvändbar)"
 
-#: scsi-layer.c:799
+#: scsi-layer.c:804
 #, c-format
 msgid ""
 "Final decision: %s\n"
@@ -3152,7 +3152,7 @@ msgstr ""
 "Slutligt beslut: %s\n"
 "\n"
 
-#: scsi-layer.c:807
+#: scsi-layer.c:812
 msgid ""
 "Failed to determine image size.\n"
 "Try using a different drive."
@@ -3160,16 +3160,16 @@ msgstr ""
 "Misslyckades med att fastställa avbildsstorlek.\n"
 "Försök använda en annan enhet."
 
-#: scsi-layer.c:1015
+#: scsi-layer.c:1020
 msgid "Setting the drive speed failed:\n"
 msgstr "Misslyckades med att ställa in enhetens hastighet:\n"
 
-#: scsi-layer.c:1196
+#: scsi-layer.c:1201
 #, c-format
 msgid "Retrying Sector %lld because of: %s\n"
 msgstr "Nytt försök för sektor %lld på grund av: %s\n"
 
-#: scsi-layer.c:1223
+#: scsi-layer.c:1228
 #, c-format
 msgid ""
 "\n"
@@ -3178,7 +3178,7 @@ msgstr ""
 "\n"
 "Enhet: %s, %s\n"
 
-#: scsi-layer.c:1227
+#: scsi-layer.c:1232
 #, c-format
 msgid ""
 "\n"
@@ -3187,44 +3187,44 @@ msgstr ""
 "\n"
 "Enhet: %s (%s), %s\n"
 
-#: scsi-layer.c:1234
+#: scsi-layer.c:1239
 msgid "... Device can read defective sectors in RAW mode. Good!\n"
 msgstr ""
 
-#: scsi-layer.c:1237
+#: scsi-layer.c:1242
 msgid "... Device can NOT read defective sectors in RAW mode.\n"
 msgstr ""
 
-#: scsi-layer.c:1248
+#: scsi-layer.c:1253
 #, c-format
 msgid "Medium: %s, %lld sectors%s %d layer(s)"
 msgstr "Medium: %s, %lld sektorer%s %d lager"
 
-#: scsi-layer.c:1253
+#: scsi-layer.c:1258
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s %d layer(s), created %s"
 msgstr "Medium \"%s\": %s, %lld sektorer%s %d lager, skapad %s"
 
-#: scsi-layer.c:1265
+#: scsi-layer.c:1270
 #, c-format
 msgid "Medium: %s, %lld sectors%s"
 msgstr "Medium: %s, %lld sektorer%s"
 
-#: scsi-layer.c:1269
+#: scsi-layer.c:1274
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s created %s"
 msgstr "Medium \"%s\": %s, %lld sektorer%s skapade %s"
 
-#: scsi-layer.c:1283
+#: scsi-layer.c:1288
 #, c-format
 msgid "This software does not support \"%s\" type media."
 msgstr ""
 
-#: scsi-layer.c:1290
+#: scsi-layer.c:1295
 msgid "This software does not support encrypted media.\n"
 msgstr ""
 
-#: scsi-layer.c:1297
+#: scsi-layer.c:1302
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr ""

@@ -107,7 +107,7 @@ DeviceHandle* OpenDevice(char *device)
 void CloseDevice(DeviceHandle *dh)
 { 
   if(dh->rawBuffer)
-  {  SetRawMode(dh, dh->previousReadMode);
+  {  SetRawMode(dh, dh->previousReadMode, TRUE);
      FreeRawBuffer(dh->rawBuffer);
   }
 

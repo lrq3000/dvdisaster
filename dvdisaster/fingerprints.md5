@@ -3,7 +3,7 @@
 c27628ad149e3f8564b24a86642b54b6 *md5.h
 bcc539132868e8c92929302de62ef434 *rs01-includes.h
 f2b10d6fea61bf904c6876bac4828c4b *rs02-includes.h
-87c295126edbd909824c162fd2feef4b *scsi-layer.h
+05e3c8278c098ad29309620fa3158975 *scsi-layer.h
 f4be9160aae464f3469b2f3815be3670 *udf.h
 daa7ec033afb7fcfa5e4591cdda6ffac *bitmap.c
 deccf98b2a985cea228eafff8daeafc8 *closure.c
@@ -33,7 +33,7 @@ cdde449dd2a8f64b560ff18a36f86234 *random.c
 5a37967ccb84d6e7535cb78e5cb0f227 *read-adaptive-window.c
 18a8e422f6279411f68bac82026dbee8 *read-linear.c
 8f6dd00126b3e613c0a388390dcb549b *read-linear-window.c
-618f52c3aa20bec470ea4efc615a13ee *recover-raw.c
+2936b8e3d85b79878e4ac73c4aefcd51 *recover-raw.c
 1edd34d022eaea0ceb3b438754cf0d67 *rs01-common.c
 9fe8a9262fe22a60ebe505c5a3fc39f1 *rs01-create.c
 b69dfaef06f296edc503b53d8461dac4 *rs01-fix.c
@@ -44,12 +44,12 @@ f2a5659cf67864e7395949acacbb5858 *rs01-window.c
 04e1f02fbf762aeef2f984617be686ad *rs02-fix.c
 f747d0e89474d40f3833da319fcdc88b *rs02-verify.c
 6a12091704c2ded29f3f7ef64c6e1dab *rs02-window.c
-44180e0f99cd3f23fae265f797a912a1 *scsi-darwin.c
-421742c346dee26756d9fdecc688ff43 *scsi-freebsd.c
-d139665c05ea3c181a44ce433c9ab47e *scsi-layer.c
-8db64565bd907379d95afc851d72b171 *scsi-linux.c
+1f4492537c0ac78c57a86ca231d1973c *scsi-darwin.c
+e061f7bcdae26fa4ef2e941f64668780 *scsi-freebsd.c
+2677e35600e27f8dc7f0d865d191b558 *scsi-layer.c
+bbfee8ed42bad97b39e4c0c0e1eaada6 *scsi-linux.c
 79a515b5dc4addb8ffbe301e5ee88b72 *scsi-unknown.c
-f76c7ef062edeaaf653d8c1e6d6ac1a8 *scsi-win32.c
+318fd9bf947c32fc31208d54b10d0681 *scsi-win32.c
 403a712d287c784d4dbfdb259c48325b *show-manual.c
 ef3f31cd53b5b95eddd2b549c2d1ee10 *spiral.c
 67a36aa297fba714cd68ac665ffa41e2 *style.c

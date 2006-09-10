@@ -400,14 +400,17 @@ assume_cd:
 
 /*
  * Find out whether the drive can return raw sectors with
- * uncorrected read errors
+ * uncorrected read errors. Depending on override,
+ * mode is or'ed with existing flags (override = FALSE),
+ * or written over existings flags (override = TRUE). 
  */
 
-int SetRawMode(DeviceHandle *dh, int mode)
+int SetRawMode(DeviceHandle *dh, int mode, int override)
 {  AlignedBuffer *ab = CreateAlignedBuffer(2048);
    unsigned char *buf = ab->buf;
    Sense sense;
    unsigned char cdb[16];
+   unsigned wanted_mode;
    int pll, ret;
 
    /*** Read mode page 1 */
@@ -445,7 +448,9 @@ int SetRawMode(DeviceHandle *dh, int mode)
    cdb[8] = pll;          /* parameter list length */
 
    dh->previousReadMode = buf[10];
-   buf[10] |= mode;       /* add new read mode */
+   if(override) buf[10] = mode;       /* add new read mode */
+   else         buf[10] |= mode;
+   wanted_mode = buf[10];
 
    ret  = SendPacket(dh, cdb, 10, buf, pll, &sense, DATA_WRITE);
 
@@ -473,8 +478,8 @@ int SetRawMode(DeviceHandle *dh, int mode)
       return FALSE;
    }
 
-   if(!(buf[10] & mode))
-   {  Verbose("Setting raw mode failed: %2x instead of %2x\n", buf[10], mode);
+   if(buf[10] != wanted_mode)
+   {  Verbose("Setting raw mode failed: %2x instead of %2x\n", buf[10], wanted_mode);
       FreeAlignedBuffer(ab);
       return FALSE;
    }
@@ -485,7 +490,7 @@ int SetRawMode(DeviceHandle *dh, int mode)
 
 static int query_raw_mode(DeviceHandle *dh, int mode)
 {  
-   dh->canRawRead = SetRawMode(dh, mode);
+   dh->canRawRead = SetRawMode(dh, mode, FALSE);
 
    if(dh->canRawRead)
    {  dh->rawBuffer = CreateRawBuffer();

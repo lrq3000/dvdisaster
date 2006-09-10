@@ -317,7 +317,7 @@ int RecoverRaw(unsigned char *out, RawBuffer *rb)
      if(check_edc(rb->cdFrame))
      {  Verbose("Sector %d sucessfully recovered by majority algorithm.\n", rb->lba);
 
-//        HexDump(rb->cdFrame, rb->sampleLength, 32);
+        HexDump(rb->cdFrame, rb->sampleLength, 32);
         memcpy(out, rb->cdFrame+16, 2048);
 	return TRUE;
      }

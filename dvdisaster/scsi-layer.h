@@ -258,7 +258,7 @@ int SendPacket(DeviceHandle*, unsigned char*, int, unsigned char*, int, Sense*, 
 
 DeviceHandle* OpenAndQueryDevice(char*);
 int InquireDevice(DeviceHandle*, int); 
-int SetRawMode(DeviceHandle*, int);
+int SetRawMode(DeviceHandle*, int, int);
 void SpinupDevice(DeviceHandle*);
 int ReadSectors(DeviceHandle*, unsigned char*, gint64, int);
 void CloseDevice(DeviceHandle*);
