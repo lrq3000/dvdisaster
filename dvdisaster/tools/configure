@@ -19,7 +19,7 @@ fi
 
 # Set the package name and version
 
-PACKAGE pngpack 0.10
+PACKAGE pngpack 0.11
 
 # Check for some essential tools.
 
@@ -42,6 +42,11 @@ REQUIRE_LIBRARY bz2 BZ2_bzReadOpen bz2
 
 REQUIRE_INCLUDE png.h png
 REQUIRE_LIBRARY png png_sig_cmp png
+
+# Byte order
+
+echo
+CHECK_ENDIAN
 
 # Do not proceed further if in --help mode
 

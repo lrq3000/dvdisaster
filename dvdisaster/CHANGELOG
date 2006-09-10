@@ -1,3 +1,16 @@
+Warning: CD/DVD reading is currently being reworked. Do not use for production work;
+	 images might contain wrong data.
+
+0.71 (devel-1)
+	- added CD raw reading and majority algorithm
+	- started transfer of preferences documentation from HTML manual
+	  to new online help system
+
+0.70 (pl2)
+	- fixed crash by inappropriate g_free() on Pango layout (thanks to Dmitry
+	  for pointing this out)
+	- fixed pngpack decoding failure on big endian machines (thanks again to
+	  Dmitry)
 
 0.70 (pl-1) 30-07-2006
 	- fixed a bug in read-adaptive for RS02 which would sometimes prevent it 

@@ -360,6 +360,7 @@ void ReadDotfile()
       if(!strcmp(symbol, "method-name"))     { if(Closure->methodName) g_free(Closure->methodName);
 	                                       Closure->methodName = g_strdup(value); continue; }
       if(!strcmp(symbol, "query-size"))      { Closure->querySize  = atoi(value); continue; }
+      if(!strcmp(symbol, "raw-attempts"))    { Closure->rawAttempts = atoi(value); continue; }
       if(!strcmp(symbol, "read-and-create")) { Closure->readAndCreate = atoi(value); continue; }
       if(!strcmp(symbol, "redundancy"))      { if(Closure->redundancy) g_free(Closure->redundancy);
                                                Closure->redundancy  = g_strdup(value); continue; }
@@ -419,6 +420,7 @@ static void update_dotfile()
    g_fprintf(dotfile, "medium-size:     %lld\n", Closure->mediumSize);
    g_fprintf(dotfile, "method-name:     %s\n", Closure->methodName);
    g_fprintf(dotfile, "query-size:      %d\n", Closure->querySize);
+   g_fprintf(dotfile, "raw-attempts:    %d\n", Closure->rawAttempts);
    g_fprintf(dotfile, "read-and-create: %d\n", Closure->readAndCreate);
    if(Closure->redundancy)
      g_fprintf(dotfile, "redundancy:    %s\n", Closure->redundancy);
@@ -507,13 +509,6 @@ void InitClosure()
    Closure->dvdSize1 = Closure->savedDVDSize1 = DVD_SL_SIZE;
    Closure->dvdSize2 = Closure->savedDVDSize2 = DVD_DL_SIZE;
 
-   /*** Align the buffer at a 4096 boundary.
-	Might be needed by some SCSI drivers. */
-
-   Closure->scratchBufBase = g_malloc(32768+4096);
-   Closure->scratchBuf = Closure->scratchBufBase 
-                         + (4096 - ((unsigned long)Closure->scratchBufBase & 4095));
-
    Closure->logString = g_string_sized_new(1024);
 
    Closure->background = g_malloc0(sizeof(GdkColor));
@@ -590,12 +585,12 @@ void FreeClosure()
 
    cond_free(Closure->methodName);
    cond_free(Closure->dotFile);
+   cond_free(Closure->logFile);
    cond_free(Closure->binDir);
    cond_free(Closure->docDir);
    cond_free(Closure->browser);
    cond_free(Closure->deadSector);
    cond_free(Closure->errorTitle);
-   cond_free(Closure->scratchBufBase);
 
    if(Closure->prefsContext)
      FreePreferences(Closure->prefsContext);

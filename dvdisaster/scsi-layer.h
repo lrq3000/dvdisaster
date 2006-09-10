@@ -200,7 +200,11 @@ typedef struct _DeviceHandle
    char devinfo[34];          /* whole device info string */
    char vendor[34];           /* vendor and product info only */
    int category;
+   int canRawRead;            /* TRUE if drive can raw read uncorrectable sectors */
+   int previousReadMode;      /* read mode prior to switching to raw reads */
+   RawBuffer *rawBuffer;      /* for performing raw read analysis */
    int (*read)(struct _DeviceHandle*, unsigned char*, int, int);
+   int (*readRaw)(struct _DeviceHandle*, unsigned char*, int, int);
    Sense sense;               /* sense data from last operation */
    gint64 userAreaSize;       /* size of user area according to DVD Info struct */
    gint64 rs02Size;           /* size reported in RS02 header */
@@ -254,6 +258,7 @@ int SendPacket(DeviceHandle*, unsigned char*, int, unsigned char*, int, Sense*, 
 
 DeviceHandle* OpenAndQueryDevice(char*);
 int InquireDevice(DeviceHandle*, int); 
+int SetRawMode(DeviceHandle*, int);
 void SpinupDevice(DeviceHandle*);
 int ReadSectors(DeviceHandle*, unsigned char*, gint64, int);
 void CloseDevice(DeviceHandle*);

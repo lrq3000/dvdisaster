@@ -125,6 +125,7 @@ typedef struct _GlobalClosure
    int cacheMB;         /* Cache setting for the parity codec, in megabytes */
    int sectorSkip;      /* Number of sectors to skip after read error occurs */
    char *redundancy;    /* Error correction code redundancy */
+   int rawAttempts;     /* Raw reading attempts */
    int adaptiveRead;    /* Use optimized strategy for reading defective images */
    int speedWarning;    /* Print warning if speed changes by more than given percentage */
    int fillUnreadable;  /* Byte value for filling unreadable sectors or -1 */
@@ -166,9 +167,6 @@ typedef struct _GlobalClosure
    unsigned long (*GetASPI32SupportInfo)(void);
    unsigned long (*SendASPI32Command)(void*);
 #endif
-
-   unsigned char *scratchBufBase;  /* scratch buffer for use with SCSI commands; */
-   unsigned char *scratchBuf;      /* 32768 bytes aligned at a 4096 byte boundary */
 
    guint32 *crcCache;              /* sectorwise CRC32 for last image read */
    char    *crcImageName;          /* file name of cached image */
@@ -377,6 +375,7 @@ int  VerifySignature(void);
  ***/
 
 guint32 Crc32(unsigned char*, int);
+guint32 EDCCrc32(unsigned char*, int);
 
 /***
  *** curve.c
@@ -420,10 +419,12 @@ void RedrawCurve(Curve*, int, int);
  *** debug.c
  ***/
 
+void HexDump(unsigned char*, int, int);
 void Byteset(char*);
 void Erase(char*);
 void RandomError(char*, char*);
 void RandomImage(char*, char*, int);
+void ReadSector(char*);
 void SendCDB(char*);
 void ShowSector(char*);
 Bitmap* SimulateDefects(gint64);
@@ -503,6 +504,27 @@ void FreeGaloisTables(GaloisTables*);
 /***
  *** help-dialogs.c
  ***/
+
+/* Creating frames with links to online help */
+
+typedef struct _FrameWithOnlineHelp
+{  GtkWidget *helpWindow;
+   GtkWidget *clientFrame;
+   GtkWidget *vbox;
+  
+   char *windowTitle;
+   char *windowHeadline;
+   char *normalText;
+   char *highlitText;
+   int inside;
+} FrameWithOnlineHelp;
+
+FrameWithOnlineHelp* CreateFrameWithOnlineHelp(char*);
+void ClearFrameWithOnlineHelp(FrameWithOnlineHelp*);
+void AddHelpParagraph(FrameWithOnlineHelp*, char*);
+void AddHelpWidget(FrameWithOnlineHelp*, GtkWidget*);
+
+/* Specific online help dialogs */
 
 GtkWidget* ShowTextfile(char*, char*, char*, GtkScrolledWindow**, GtkTextBuffer**);
 void ShowGPL();
@@ -709,6 +731,16 @@ void RememberSense(int, int, int);
 char *GetSenseString(int, int, int, int);
 char* GetLastSenseString(int);
 
+/***
+ *** random.c
+ ***/
+
+#define	MY_RAND_MAX	2147483647
+
+gint32  Random(void);
+void    SRandom(gint32);
+guint32 Random32(void);
+
 /*** 
  *** read-linear.c
  ***/
@@ -724,16 +756,6 @@ void CreateLinearReadWindow(GtkWidget*);
 
 void InitializeCurve(int, gint64, gint64, gint64);
 void AddCurveValues(int, double, int);
-
-/***
- *** random.c
- ***/
-
-#define	MY_RAND_MAX	2147483647
-
-gint32  Random(void);
-void    SRandom(gint32);
-guint32 Random32(void);
 
 /*** 
  *** read-adaptive.c
@@ -759,12 +781,50 @@ void ChangeSegmentColor(GdkColor*, int);
 void ChangeSpiralCursor(int);
 void RemoveFillMarkers();
 
+/***
+ *** recover-raw.c
+ ***/
+
+typedef struct _RawBuffer
+{  unsigned char **rawBuf;    /* buffer for raw read attempts */
+   int *rawState;             /* error state returned for this sample */
+   int samplesRead;           /* number of samples read */
+   int sampleLength;          /* length of samples */
+   unsigned char *cdFrame;    /* working buffer for cd frame recovery */
+   char *byteState;           /* state of error correction (see enum below) */
+   int lba;                   /* sector number were currently working on */
+} RawBuffer;
+
+enum                          /* values for rawState */
+{  RAW_SUCCESS = 0,           /* drive believes data is correct */
+   RAW_READ_ERROR = 1         /* drive signalled read error */
+};
+
+enum                          /* values for byteState */
+{  FRAME_BYTE_UNKNOWN,        /* state of byte is unknown */
+   FRAME_BYTE_ERROR,          /* byte is wrong (= erasure for ecc) */
+   FRAME_BYTE_GOOD            /* byte is correct */
+};
+
+RawBuffer* CreateRawBuffer(void);
+void FreeRawBuffer(RawBuffer*);
+
+int RecoverRaw(unsigned char*, RawBuffer*);
+
 /*** 
  *** scsi-layer.c
  ***
  * Note that there is also a scsi-layer.h with more
  * scsi wrapper dependent declarations.
  */
+
+typedef struct _AlignedBuffer
+{  unsigned char *base;
+   unsigned char *buf;
+} AlignedBuffer;
+
+AlignedBuffer *CreateAlignedBuffer(int);
+void FreeAlignedBuffer(AlignedBuffer*);
 
 void OpenAspi(void);
 void CloseAspi(void);
@@ -774,7 +834,7 @@ char* DefaultDevice(void);
 gint64 CurrentImageSize(void);
 gint64 CurrentImageCapacity(void);
 
-int SendReadCDB(char*, unsigned char*, int, int);
+int SendReadCDB(char*, unsigned char*, unsigned char*, int, int);
 
 /***
  *** show-manual.c
@@ -821,6 +881,5 @@ void AdjustStyle();
  ***/
 
 void CreateWelcomePage(GtkNotebook*);
-
 
 #endif				/* DVDISASTER_H */

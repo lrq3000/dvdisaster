@@ -29,23 +29,28 @@
  ***/
 
 static int read_fingerprint(DeviceHandle *dh, unsigned char *fingerprint, gint64 sector)
-{  struct MD5Context md5ctxt;
+{  AlignedBuffer *ab = CreateAlignedBuffer(2048);
+   struct MD5Context md5ctxt;
    int status;
 
-   status = ReadSectors(dh, Closure->scratchBuf, sector, 1);
+   status = ReadSectors(dh, ab->buf, sector, 1);
 
-   if(status) return FALSE;
+   if(status) 
+   {  FreeAlignedBuffer(ab);
+      return FALSE;
+   }
 
    MD5Init(&md5ctxt);
-   MD5Update(&md5ctxt, Closure->scratchBuf, 2048);
+   MD5Update(&md5ctxt, ab->buf, 2048);
    MD5Final(fingerprint, &md5ctxt);
 
+   FreeAlignedBuffer(ab);
    return TRUE;
 }
 
 enum { HEADER_FOUND, TRY_NEXT_HEADER, TRY_NEXT_MODULO};
 
-static int try_sector(DeviceHandle *dh, gint64 pos, EccHeader **ehptr)
+static int try_sector(DeviceHandle *dh, gint64 pos, EccHeader **ehptr, unsigned char *secbuf)
 {  EccHeader *eh;
    unsigned char fingerprint[16];
    guint32 recorded_crc;
@@ -56,12 +61,12 @@ static int try_sector(DeviceHandle *dh, gint64 pos, EccHeader **ehptr)
 
    Verbose("udf/try_sector: trying sector %lld\n", pos);
 
-   if(ReadSectors(dh, Closure->scratchBuf, pos, 2))
+   if(ReadSectors(dh, secbuf, pos, 2))
    {  Verbose("udf/try_sector: read error, trying next header\n");
       return TRY_NEXT_HEADER;
    }
 
-   eh = (EccHeader*)Closure->scratchBuf;
+   eh = (EccHeader*)secbuf;
 
    /* See if the magic cookie is there. If not, searching within
       this modulo makes no sense for write-once media.
@@ -98,7 +103,7 @@ static int try_sector(DeviceHandle *dh, gint64 pos, EccHeader **ehptr)
    }
 
    eh = g_malloc(sizeof(EccHeader));
-   memcpy(eh, Closure->scratchBuf, sizeof(EccHeader));
+   memcpy(eh, secbuf, sizeof(EccHeader));
 #ifdef HAVE_BIG_ENDIAN
    SwapEccHeaderBytes(eh);
 #endif
@@ -139,7 +144,8 @@ static int try_sector(DeviceHandle *dh, gint64 pos, EccHeader **ehptr)
 }
 
 EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
-{  EccHeader *eh = NULL;
+{  AlignedBuffer *ab = CreateAlignedBuffer(4096);
+   EccHeader *eh = NULL;
    Bitmap *try_next_header, *try_next_modulo;
    gint64 pos;
    gint64 header_modulo;
@@ -151,19 +157,22 @@ EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
 
       /* Iso size is correct; look for root sector at +2 */
 
-      if(try_sector(dh, iso_size, &eh) == HEADER_FOUND)
+      if(try_sector(dh, iso_size, &eh, ab->buf) == HEADER_FOUND)
       {  Verbose("Root sector search at +0 successful\n");
+	 FreeAlignedBuffer(ab);
 	 return eh;
       }
 
       /* Strange stuff. Sometimes the iso size is increased by 150
 	 sectors by the burning software. */
 
-      if(try_sector(dh, iso_size-150, &eh) == HEADER_FOUND)
+      if(try_sector(dh, iso_size-150, &eh, ab->buf) == HEADER_FOUND)
       {  Verbose("Root sector search at -150 successful\n");
+	 FreeAlignedBuffer(ab);
 	 return eh;
       }
 
+      FreeAlignedBuffer(ab);
       return NULL;
    }
 
@@ -196,7 +205,7 @@ EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
 	     goto check_next_modulo;
 	 }
 
-	 result = try_sector(dh, pos, &eh);
+	 result = try_sector(dh, pos, &eh, ab->buf);
 
 	 switch(result)
 	 {  case TRY_NEXT_HEADER:
@@ -208,6 +217,7 @@ EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
 	    case HEADER_FOUND:
 	       FreeBitmap(try_next_header);
 	       FreeBitmap(try_next_modulo);
+	       FreeAlignedBuffer(ab);
 	       return eh;
 	 }
 
@@ -221,6 +231,7 @@ EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
 
    FreeBitmap(try_next_header);
    FreeBitmap(try_next_modulo);
+   FreeAlignedBuffer(ab);
    return NULL;
 }
 
@@ -558,9 +569,10 @@ static IsoInfo* examine_primary_vd(unsigned char *buf)
 }
 
 static IsoInfo* examine_iso(DeviceHandle *dh)
-{  IsoInfo *ii = NULL;
+{  AlignedBuffer *ab = CreateAlignedBuffer(2048);
+   unsigned char *buf = ab->buf;
+   IsoInfo *ii = NULL;
    int sector,status;
-   unsigned char *buf = Closure->scratchBuf;
    int vdt,vdt_ver;
    unsigned char sid[6];
       
@@ -609,6 +621,7 @@ static IsoInfo* examine_iso(DeviceHandle *dh)
    }
 
 finished:
+   FreeAlignedBuffer(ab);
    return ii;
 }
 

@@ -544,11 +544,11 @@ void ZeroUnreadable(void)
    FreeImageInfo(ii);
 }
 
-/*
- * Debugging function to show contents of a given sector
- */
+/**
+ ** Debugging functions to show contents of a given sector
+ **/
 
-static void hexdump(unsigned char *buf, int len, int step)
+void HexDump(unsigned char *buf, int len, int step)
 {  int i,j;
 
    for(i=0; i<len; i+=step)
@@ -567,6 +567,10 @@ static void hexdump(unsigned char *buf, int len, int step)
       g_printf("\n");
    }
 }
+
+/*
+ * Show sector from image file
+ */
 
 void ShowSector(char *arg)
 {  ImageInfo *ii;
@@ -594,15 +598,61 @@ void ShowSector(char *arg)
 
    n = LargeRead(ii->file, buf, 2048);
    if(n != 2048)
-     Stop(_("Failed writing to sector %lld in image: %s"),sector,strerror(errno));
+     Stop(_("Failed reading sector %lld in image: %s"),sector,strerror(errno));
 
-   hexdump(buf, 2048, 32);
+   HexDump(buf, 2048, 32);
 
    g_printf("CRC32 = %04x\n", Crc32(buf, 2048));
 
    /*** Clean up */
 
    FreeImageInfo(ii);
+}
+
+/* 
+ * Read sector from drive
+ */
+
+void ReadSector(char *arg)
+{  AlignedBuffer *ab = CreateAlignedBuffer(2048);
+   DeviceHandle *dh;
+   gint64 sector;
+   int status;
+
+   /*** Open the device */
+
+   dh = OpenAndQueryDevice(Closure->device);
+
+   /*** Determine sector to show */
+
+   sector =  atoi(arg);
+
+   if(sector < 0 || sector >= dh->sectors)
+   {  CloseDevice(dh);
+      FreeAlignedBuffer(ab);
+      Stop(_("Sector must be in range [0..%lld]\n"),dh->sectors-1);
+   }
+
+   PrintLog(_("Contents of sector %lld:\n\n"),sector);
+
+   /*** Read it. */
+
+   status = ReadSectors(dh, ab->buf, sector, 1); 
+
+   /*** Print results */
+   
+   if(status)
+   {  CloseDevice(dh);
+      FreeAlignedBuffer(ab);
+      Stop(_("Failed reading sector %lld: %s"),sector,strerror(errno));
+   }
+
+   HexDump(ab->buf, 2048, 32);
+
+   g_printf("CRC32 = %04x\n", Crc32(ab->buf, 2048));
+
+   CloseDevice(dh);
+   FreeAlignedBuffer(ab);
 }
 
 /***
@@ -624,7 +674,8 @@ void ShowSector(char *arg)
 enum {  SHIFT0, SHIFT4, ALLOC };
 
 void SendCDB(char *cdb_raw)
-{  int cdb_len = 0;
+{  AlignedBuffer *ab = CreateAlignedBuffer(32768);
+   int cdb_len = 0;
    int alloc_len = 0;
    unsigned char cdb[16];
    int mode = SHIFT4;
@@ -668,12 +719,14 @@ void SendCDB(char *cdb_raw)
    }
 
    PrintLog("\n");
-   status = SendReadCDB(Closure->device, cdb, cdb_len, alloc_len);
+   status = SendReadCDB(Closure->device, ab->buf, cdb, cdb_len, alloc_len);
 
    if(!status)
    {  g_printf("\nDrive returned:\n\n");
-      hexdump(Closure->scratchBuf, alloc_len, 16);
+      HexDump(ab->buf, alloc_len, 16);
    }
+
+   FreeAlignedBuffer(ab);
 }
 
 /***

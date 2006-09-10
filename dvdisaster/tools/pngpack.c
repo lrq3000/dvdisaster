@@ -55,6 +55,14 @@
   #include "exdll.h"
 #endif
 
+guint32 SwapBytes32(guint32 in)
+{
+  return
+        ((in & 0xff000000) >> 24) 
+      | ((in & 0x00ff0000) >>  8) 
+      | ((in & 0x0000ff00) <<  8) 
+      | ((in & 0x000000ff) << 24);
+}
 
 /*
  * Tell user that current action was aborted due to a serious error.
@@ -65,12 +73,12 @@ void Stop(char *format, ...)
 
    /*** Show message depending on commandline / GUI mode  */ 
 
-   fprintf(stderr, "*\n* pngpack - can not continue:\n*\n");
+   fprintf(stdout, "*\n* pngpack - can not continue:\n*\n");
    va_start(argp, format);
-   vfprintf(stderr, format, argp);
+   vfprintf(stdout, format, argp);
    va_end(argp);
-   fprintf(stderr, "\n\n");
-   fflush(stderr);
+   fprintf(stdout, "\n\n");
+   fflush(stdout);
 
    exit(EXIT_FAILURE);
 }
@@ -125,8 +133,8 @@ image *load_png(char *name)
    /* stat ppm file */
 
    if(stat(name, &mystat) == -1)
-   {  fprintf(stderr, "COULD NOT STAT %s!\n", name);
-      fflush(stderr);
+   {  fprintf(stdout, "COULD NOT STAT %s!\n", name);
+      fflush(stdout);
       return NULL;
    }
 
@@ -139,8 +147,8 @@ image *load_png(char *name)
 
    pi->file = fopen(name, "rb");
    if(!pi->file)
-   {  fprintf(stderr, "COULD NOT OPEN %s!\n", name);
-      fflush(stderr);
+   {  fprintf(stdout, "COULD NOT OPEN %s!\n", name);
+      fflush(stdout);
       return NULL;
    }
 
@@ -149,8 +157,8 @@ image *load_png(char *name)
    fread(buf, 1, 8, pi->file);
    if(png_sig_cmp(buf, 0, 8))
    {  fclose(pi->file);
-      fprintf(stderr, "%s is not a .png file!\n", name);
-      fflush(stderr);
+      fprintf(stdout, "%s is not a .png file!\n", name);
+      fflush(stdout);
       return NULL;
    }
 
@@ -164,8 +172,8 @@ image *load_png(char *name)
 
    if(setjmp(png_jmpbuf(pi->png_read)))
    {  free_image(pi);
-      fprintf(stderr, "error decoding .png file!\n");
-      fflush(stderr);
+      fprintf(stdout, "error decoding .png file!\n");
+      fflush(stdout);
       return NULL;
    }
 
@@ -185,8 +193,8 @@ image *load_png(char *name)
 
    if(depth != 8)
    {  free_image(pi);
-      fprintf(stderr, ", ILLEGAL DEPTH: %d\n",depth);
-      fflush(stderr);
+      fprintf(stdout, ", ILLEGAL DEPTH: %d\n",depth);
+      fflush(stdout);
       return NULL;
    }
 
@@ -256,8 +264,8 @@ void save_png(image *pi, char *name)
    if(setjmp(png_jmpbuf(pi->png_write)))
    {  png_destroy_write_struct(&pi->png_write, &pi->png_info);
       fclose(pi->file);
-      fprintf(stderr, "error creating .png file!\n");
-      fflush(stderr);
+      fprintf(stdout, "error creating .png file!\n");
+      fflush(stdout);
       return;
    }
 
@@ -317,21 +325,11 @@ void save_ppm(image *pi, char *name)
    if(!file)
      Stop("Could not open %s: %s\n",name,strerror(errno));
 
-#if 0
    fprintf(file, "P6\n"
 	         "# CREATOR: pngpack-%s\n"
 	         "%d %d\n"
 	         "255\n",
 	         VERSION, pi->width, pi->height);
-#endif
-
-#if 1
-   fprintf(file, "P6\n"
-                 "# CREATOR: XV Version 3.10a  Rev: 12/29/94 (PNG patch 1.2)\n"
-	         "%d %d\n"
-	         "255\n",
-	         pi->width, pi->height);
-#endif
 	   
    while(size--)
    {  putc((*pixel>>16)&0xff, file);
@@ -932,6 +930,7 @@ static void render_image(image *pi)
 {  struct MD5Context md5ctxt;
    unsigned char checksum[16]; 
    unsigned int oidx,i,*p;
+   unsigned int background;
    int x=0, y=0;
 
    /* Clear the image */ 
@@ -939,8 +938,15 @@ static void render_image(image *pi)
    i = pi->width * pi->height; 
    p = pi->image;
 
+#ifdef HAVE_LITTLE_ENDIAN
+   background = pi->tile_background;
    while(i--)
-     *p++ = pi->tile_background;
+     *p++ = background;
+#else
+   background = SwapBytes32(pi->tile_background);
+   while(i--)
+     *p++ = background;
+#endif
 
    /* Render it */
 
@@ -958,7 +964,11 @@ static void render_image(image *pi)
       for(i=0; i<t->width; i++) 
 	for(j=0; j<t->height; j++)
 	  if(t->image[i][j] != t->background)
+#ifdef HAVE_LITTLE_ENDIAN
 	    PIXEL(pi, i+x, j+y) = t->image[i][j]; 
+#else
+            PIXEL(pi, i+x, j+y) = SwapBytes32(t->image[i][j]); 
+#endif
    }  
 
    /* verify md5sum */
@@ -969,7 +979,7 @@ static void render_image(image *pi)
 
    if(!memcmp(pi->checksum, checksum, 16))
          fprintf(stdout, "\n");
-   else  fprintf(stderr, " - DECODING FAILURE (checksum error).\n");
+   else  fprintf(stdout, " - DECODING FAILURE (checksum error).\n");
 }
 
 /***

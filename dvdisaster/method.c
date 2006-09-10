@@ -108,20 +108,21 @@ Method *FindMethod(char *name)
 
 static int read_fingerprint(LargeFile *file, unsigned char *fingerprint, gint64 sector)
 {  struct MD5Context md5ctxt;
+   unsigned char buf[2048];
    int n;
 
    if(!LargeSeek(file, 2048LL*sector))
      return FALSE;
 
-   n = LargeRead(file, Closure->scratchBuf, 2048);
+   n = LargeRead(file, buf, 2048);
 
    if(n != 2048) return FALSE;
 
-   if(!memcmp(Closure->scratchBuf, Closure->deadSector, 2048))
+   if(!memcmp(buf, Closure->deadSector, 2048))
      return FALSE;
 
    MD5Init(&md5ctxt);
-   MD5Update(&md5ctxt, Closure->scratchBuf, 2048);
+   MD5Update(&md5ctxt, buf, 2048);
    MD5Final(fingerprint, &md5ctxt);
 
    return TRUE;

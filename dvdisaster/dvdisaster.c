@@ -127,6 +127,7 @@ typedef enum
    MODE_MARKED_IMAGE,
    MODE_RANDOM_ERR, 
    MODE_RANDOM_IMAGE,
+   MODE_READ_SECTOR,
    MODE_SEND_CDB,
    MODE_SHOW_SECTOR, 
    MODE_SIGN,
@@ -144,6 +145,7 @@ typedef enum
    MODIFIER_KEEP_STYLE,
    MODIFIER_QUERY_SIZE,
    MODIFIER_RANDOM_SEED,
+   MODIFIER_RAW_ATTEMPTS,
    MODIFIER_SIMULATE_DEFECTS,
    MODIFIER_SPEED_WARNING, 
    MODIFIER_SPINUP_DELAY, 
@@ -340,7 +342,9 @@ int main(int argc, char *argv[])
 	{"random-errors", 1, 0, MODE_RANDOM_ERR },
 	{"random-image", 1, 0, MODE_RANDOM_IMAGE },
 	{"random-seed", 1, 0, MODIFIER_RANDOM_SEED },
+	{"raw-attempts", 1, 0, MODIFIER_RAW_ATTEMPTS },
 	{"read", 2, 0,'r'},
+	{"read-sector", 1, 0, MODE_READ_SECTOR},
 	{"redundancy", 1, 0, 'n'},
 	{"scan", 2, 0,'s'},
 	{"send-cdb", 1, 0, MODE_SEND_CDB},
@@ -469,6 +473,9 @@ int main(int argc, char *argv[])
          case MODIFIER_RANDOM_SEED:
 	   if(optarg) Closure->randomSeed = atoi(optarg);
 	   break;
+         case MODIFIER_RAW_ATTEMPTS:
+	   if(optarg) Closure->rawAttempts = atoi(optarg);
+	   break;
          case MODIFIER_SIMULATE_DEFECTS:
 	   if(optarg) Closure->simulateDefects = atoi(optarg);
 	   else Closure->simulateDefects = 10;
@@ -514,6 +521,10 @@ int main(int argc, char *argv[])
 	   mode = MODE_RANDOM_IMAGE;
 	   debug_arg = g_strdup(optarg);
 	   break;
+         case MODE_READ_SECTOR:
+	   mode = MODE_READ_SECTOR;
+	   debug_arg = g_strdup(optarg);
+	   break;
          case MODE_SEND_CDB: 
 	   mode = MODE_SEND_CDB;
 	   debug_arg = g_strdup(optarg);
@@ -539,11 +550,12 @@ int main(int argc, char *argv[])
      switch(mode)
      {  case MODE_BYTESET:
         case MODE_ERASE:
+        case MODE_RANDOM_ERR:
+        case MODE_RANDOM_IMAGE:
+        case MODE_READ_SECTOR:
         case MODE_SEND_CDB:
         case MODE_SHOW_SECTOR:
         case MODE_MARKED_IMAGE:
-        case MODE_RANDOM_ERR:
-        case MODE_RANDOM_IMAGE:
         case MODE_SIGN:
         case MODE_TRUNCATE:
         case MODE_ZERO_UNREADABLE:
@@ -638,6 +650,10 @@ int main(int argc, char *argv[])
 	 SendCDB(debug_arg);
 	 break;
 
+      case MODE_READ_SECTOR:
+	 ReadSector(debug_arg);
+	 break;
+
       case MODE_SHOW_SECTOR:
 	 ShowSector(debug_arg);
 	 break;
@@ -721,7 +737,8 @@ int main(int argc, char *argv[])
 	     "  --cache-size n         - image cache size in MB during -c mode (default: 32MB)\n"
 	     "  --dao                  - assume DAO disc; do not trim image end\n"
 	     "  --fill-unreadable n    - fill unreadable sectors with byte n\n"
-      	     "  --query-size n         - query drive/udf/ecc for image size (default: ecc)\n"         
+      	     "  --query-size n         - query drive/udf/ecc for image size (default: ecc)\n"   
+	     "  --raw-attempts n       - attempts n raw reads of a defective sector\n"
 	     "  --speed-warning n      - print warning if speed changes by more than n percent\n"
 	     "  --spinup-delay n       - wait n seconds for drive to spin up\n"
 	     "  --split-files          - split image into files <= 2GB\n\n"));
@@ -739,8 +756,9 @@ int main(int argc, char *argv[])
 	     "  --random-errors r,e seed image with (correctable) random errors\n"
 	     "  --random-image n  - create image with n sectors of random numbers\n"
 	     "  --random-seed n   - random seed for built-in random number generator\n"
+	     "  --read-sector n   - shows hexdump of the given sector from medium in drive\n"
 	     "  --send-cdb arg    - executes given cdb at drive; kills system if used wrong\n"
-	     "  --show-sector n   - shows hexdump of the given sector\n"
+	     "  --show-sector n   - shows hexdump of the given sector in an image file\n"
 	     "  --sim-defects n   - simulate n%% defective sectors on medium\n"
 	     "  --truncate n      - truncates image to n sectors\n"
 	     "  --zero-unreadable - replace the \"unreadable sector\" markers with zeros\n\n"));

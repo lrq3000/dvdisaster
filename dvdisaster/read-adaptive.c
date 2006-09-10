@@ -45,6 +45,8 @@ typedef struct
    int rs01LayerSectors;        /* length of each RS01 ecc layer in sectors */
    RS02Layout *lay;             /* layout of RS02 type ecc data */
 
+   AlignedBuffer *ab;           /* buffer suitable for reading from the drive */
+   unsigned char *buf;          /* buffer component from above */
    Bitmap *map;                 /* bitmap for keeping track of read sectors */
    guint32 *crcbuf;             /* crc sum buffer space */
 
@@ -144,6 +146,8 @@ bail_out:
    if(rc->subtitle) g_free(rc->subtitle);
    if(rc->segmentState) g_free(rc->segmentState);
 
+   if(rc->ab) FreeAlignedBuffer(rc->ab);
+   
    if(rc->intervals) g_free(rc->intervals);
    if(rc->crcbuf) g_free(rc->crcbuf);
 
@@ -518,7 +522,7 @@ static void check_fingerprint(read_closure *rc)
 {  unsigned char digest[16];
    int status;
    
-   status = ReadSectors(rc->dh, Closure->scratchBuf, rc->eh->fpSector, 1);
+   status = ReadSectors(rc->dh, rc->buf, rc->eh->fpSector, 1);
 
    if(status) /* Not readable. Bad luck. */
    {  int answer;
@@ -538,7 +542,7 @@ static void check_fingerprint(read_closure *rc)
    {  struct MD5Context image_md5;
 
       MD5Init(&image_md5);
-      MD5Update(&image_md5, (unsigned char*)Closure->scratchBuf, 2048);
+      MD5Update(&image_md5, rc->buf, 2048);
       MD5Final(digest, &image_md5);
 
       if(memcmp(digest, rc->eh->mediumFP, 16))
@@ -566,15 +570,15 @@ int check_image_fingerprint(read_closure *rc)
    if(!LargeSeek(rc->image, (gint64)(2048*fingerprint_sector)))
      return 0; /* can't tell, assume okay */
 
-   n = LargeRead(rc->image, Closure->scratchBuf, 2048);
-   status = ReadSectors(rc->dh, Closure->scratchBuf+2048, fingerprint_sector, 1);
+   n = LargeRead(rc->image, rc->buf, 2048);
+   status = ReadSectors(rc->dh, rc->buf+2048, fingerprint_sector, 1);
 
-   if(n != 2048 || status || !memcmp(Closure->scratchBuf, Closure->deadSector, 2048))
+   if(n != 2048 || status || !memcmp(rc->buf, Closure->deadSector, 2048))
      return 0; /* can't tell, assume okay */
 
    /* If both could be read, compare them */
 
-   if(memcmp(Closure->scratchBuf, Closure->scratchBuf+2048, 2048))
+   if(memcmp(rc->buf, rc->buf+2048, 2048))
    {  	  
      if(!Closure->guiMode)
        Stop(_("Image file does not match the CD/DVD."));
@@ -676,13 +680,13 @@ void build_interval_from_image(read_closure *rc)
 
       /* Read the next sector */
 
-      n = LargeRead(rc->image, Closure->scratchBuf, 2048);
+      n = LargeRead(rc->image, rc->buf, 2048);
       if(n != 2048) /* && (s != rc->sectors - 1 || n != ii->inLast)) */
 	Stop(_("premature end in image (only %d bytes): %s\n"),n,strerror(errno));
 
       /* Look for the dead sector marker */
 
-      current_missing = !memcmp(Closure->scratchBuf, Closure->deadSector, n);
+      current_missing = !memcmp(rc->buf, Closure->deadSector, n);
 
       if(current_missing)
 	mark_sector(rc, s, Closure->red);
@@ -709,7 +713,7 @@ void build_interval_from_image(read_closure *rc)
 
 	 /* compare the checksums */
 
-	 crc = Crc32(Closure->scratchBuf, 2048); 
+	 crc = Crc32(rc->buf, 2048); 
 	 if(crc != rc->crcbuf[crcidx++] && !current_missing)
 	 {  current_missing = 1;
 	    mark_sector(rc, s, Closure->yellow);
@@ -1044,6 +1048,8 @@ void ReadMediumAdaptive(gpointer data)
 
    rc = g_malloc0(sizeof(read_closure));
 
+   rc->ab = CreateAlignedBuffer(32768);
+   rc->buf = rc->ab->buf;
    crcbuf = rc->crcbuf = g_malloc(sizeof(guint32)*CRCBUFSIZE);
 
    memset(rc->progressBs, '\b', 256);
@@ -1251,7 +1257,7 @@ reopen_image:
 
 	 /* Try to actually read the next sector(s) */
 
-	 status = ReadSectors(rc->dh, Closure->scratchBuf, s, nsectors);
+	 status = ReadSectors(rc->dh, rc->buf, s, nsectors);
 
 	 /* Medium Error (3) and Illegal Request (5) may result from 
 	    a medium read problem, but other errors are regarded as fatal. */
@@ -1322,7 +1328,7 @@ reopen_image:
 		    Sectors with bad CRC sums are marked unvisited,
 		    but do not terminate the current interval. */
 
-		 crc = Crc32(Closure->scratchBuf+i*2048, 2048); 
+		 crc = Crc32(rc->buf+i*2048, 2048); 
 
 		 if(crc != crcbuf[crcidx++])  /* failed CRC test */
 		 {  PrintCLI("\n");
@@ -1340,7 +1346,7 @@ reopen_image:
 		      rc->highestWrittenSector = b;
 		 }
 		 else /* good sector */
-		 {  n = LargeWrite(rc->image, Closure->scratchBuf+i*2048, 2048);
+		 {  n = LargeWrite(rc->image, rc->buf+i*2048, 2048);
 		    if(n != 2048)
 		      Stop(_("Failed writing to sector %lld in image [%s]: %s"),
 			   b, "store", strerror(errno));
@@ -1356,7 +1362,7 @@ reopen_image:
 	       }
 
 	       else /* no crc information available */
-	       {  n = LargeWrite(rc->image, Closure->scratchBuf+i*2048, 2048);
+	       {  n = LargeWrite(rc->image, rc->buf+i*2048, 2048);
 		  if(n != 2048)
 		    Stop(_("Failed writing to sector %lld in image [%s]: %s"),
 			 b, "store", strerror(errno));

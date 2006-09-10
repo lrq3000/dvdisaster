@@ -130,6 +130,11 @@ DeviceHandle* OpenDevice(char *device)
 
 void CloseDevice(DeviceHandle *dh)
 { 
+  if(dh->rawBuffer)
+  {  SetRawMode(dh, dh->previousReadMode);
+     FreeRawBuffer(dh->rawBuffer);
+  }
+
   if(dh->ccb)
     cam_freeccb(dh->ccb);
   if(dh->camdev)

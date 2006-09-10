@@ -139,7 +139,7 @@ static gboolean expose_cb(GtkWidget *widget, GdkEventExpose *event, gpointer dat
 
    if(!wl->cmpLayout)
    {  SetSpiralWidget(wl->cmpSpiral, widget);
-      wl->cmpLayout = gtk_widget_create_pango_layout(widget, NULL); REMEMBER(wl->cmpLayout);
+      wl->cmpLayout = gtk_widget_create_pango_layout(widget, NULL);
    }
 
    SetText(wl->cmpLayout, _("Missing sectors"), &w, &h);

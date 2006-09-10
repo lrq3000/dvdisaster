@@ -24,14 +24,6 @@
 #include "rs02-includes.h"
 
 /***
- *** The RS02 codec is work in progress.
- ***
- * Do not use for production work; 
- * do not assume created .ecc data and images to be compatible with
- * the final release!
- */
-
-/***
  *** Method registration
  ***/
 
@@ -78,8 +70,16 @@ static void destroy(Method *method)
 {  RS02Widgets *wl = (RS02Widgets*)method->widgetList;
 
    if(wl)
-   {  
-      g_free(method->widgetList);
+   {  if(wl->fixCurve) FreeCurve(wl->fixCurve);
+      if(method->widgetList)
+       g_free(method->widgetList);
+
+      if(wl->cmpSpiral)
+	FreeSpiral(wl->cmpSpiral);
+
+      if(wl->cmpLayout)
+	g_object_unref(wl->cmpLayout);
+
    }
 }
 

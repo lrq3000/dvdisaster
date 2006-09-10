@@ -33,7 +33,7 @@ Curve* CreateCurve(GtkWidget *widget, char *left_label, char *left_format, int n
 {  Curve *curve = g_malloc0(sizeof(Curve));
 
    curve->widget     = widget;
-   curve->layout     = gtk_widget_create_pango_layout(widget, NULL); REMEMBER(curve->layout);
+   curve->layout     = gtk_widget_create_pango_layout(widget, NULL);
    curve->leftLabel  = g_strdup(left_label); 
    curve->leftFormat = g_strdup(left_format);
    curve->bottomFormat = bottom_format;   
@@ -57,7 +57,7 @@ Curve* CreateCurve(GtkWidget *widget, char *left_label, char *left_format, int n
 
 void FreeCurve(Curve *curve)
 {
-   g_free(curve->layout);
+   g_object_unref(curve->layout);
    g_free(curve->leftLabel);
    g_free(curve->leftFormat);
    g_free(curve->fvalue);

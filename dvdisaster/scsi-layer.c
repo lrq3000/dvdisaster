@@ -34,6 +34,26 @@ static int query_copyright(DeviceHandle*);
 
 static int read_dvd_sector(DeviceHandle*, unsigned char*, int, int);
 static int read_cd_sector(DeviceHandle*, unsigned char*, int, int);
+static int read_raw_cd_sector(DeviceHandle*, unsigned char*, int, int);
+
+/***
+ *** Create a buffer aligned at a 4096 byte boundary.
+ *** Some SCSI drivers seem to need this.
+ */
+
+AlignedBuffer* CreateAlignedBuffer(int size)
+{  AlignedBuffer *ab = g_malloc0(sizeof(AlignedBuffer));
+
+   ab->base = g_malloc(size+4096);
+   ab->buf  = ab->base + (4096 - ((unsigned long)ab->base & 4095));
+
+   return ab;
+}
+
+void FreeAlignedBuffer(AlignedBuffer *ab)
+{  g_free(ab->base);
+   g_free(ab);
+}
 
 /***
  *** CD and DVD query routines.
@@ -45,10 +65,11 @@ static int read_cd_sector(DeviceHandle*, unsigned char*, int, int);
  */
 
 int InquireDevice(DeviceHandle *dh, int probe_only)
-{  Sense sense;
+{  AlignedBuffer *ab = CreateAlignedBuffer(2048);
+   Sense sense;
    char *ibuf,*vbuf;
    unsigned char cmd[MAX_CDB_SIZE];
-   unsigned char *buf = Closure->scratchBuf;
+   unsigned char device_type;
 
    /*** Try to learn something about the device vendor */
 
@@ -56,8 +77,9 @@ int InquireDevice(DeviceHandle *dh, int probe_only)
    cmd[0] = 0x12;   /* INQUIRY */
    cmd[4] = 36;     /* allocation length */
 
-   if(SendPacket(dh, cmd, 6, buf, 36, &sense, DATA_READ)<0)
-   {  if(probe_only) return 0x1f;  /* don't care about failure, just return invalid device */
+   if(SendPacket(dh, cmd, 6, ab->buf, 36, &sense, DATA_READ)<0)
+   {  FreeAlignedBuffer(ab);
+      if(probe_only) return 0x1f;  /* don't care about failure, just return invalid device */
 
       strcpy(dh->devinfo, _("unknown"));
 
@@ -86,10 +108,10 @@ int InquireDevice(DeviceHandle *dh, int probe_only)
 	    if(i>0 && !isspace(ibuf[i-1])) /* separate the version string */
 	      ibuf[i++] = ' ';
 	 }
-         if(   isprint(buf[j])                  /* eliminate multiple spaces and unprintables */
-            && (!isspace(buf[j]) || (i>0 && !isspace(ibuf[i-1]))))
-	 {    vbuf[i] = buf[j];
-	      ibuf[i++] = buf[j];
+         if(   isprint(ab->buf[j])         /* eliminate multiple spaces and unprintables */
+            && (!isspace(ab->buf[j]) || (i>0 && !isspace(ibuf[i-1]))))
+	 {    vbuf[i] = ab->buf[j];
+	      ibuf[i++] = ab->buf[j];
 	 }
       }
       ibuf[i] = vbuf[i] = 0;
@@ -98,14 +120,17 @@ int InquireDevice(DeviceHandle *dh, int probe_only)
       while(vidx >= 0 && vbuf[vidx] == ' ')
 	vbuf[vidx--] =0;
 
-      if(buf[0] != 0x05 && !probe_only)
+      if(ab->buf[0] != 0x05 && !probe_only)
       {  PrintCLI("\n");
-	 if(buf[0]) Stop(_("Device %s (%s) is not a CDROM drive."),dh->device,ibuf);
-	 else       Stop(_("Device %s (%s) is a hard disk."),dh->device,ibuf);
+	 if(ab->buf[0]) Stop(_("Device %s (%s) is not a CDROM drive."),dh->device,ibuf);
+	 else           Stop(_("Device %s (%s) is a hard disk."),dh->device,ibuf);
       }
    }
 
-   return buf[0] & 0x1f;  /* return the SCSI peripheral device type */
+   device_type = ab->buf[0] & 0x1f; 
+   FreeAlignedBuffer(ab);
+
+   return device_type;  /* return the SCSI peripheral device type */
 }
 
 /*
@@ -114,9 +139,10 @@ int InquireDevice(DeviceHandle *dh, int probe_only)
 
 static int query_type(DeviceHandle *dh, int probe_only)
 {  static char sbuf[32];
+   AlignedBuffer *ab = CreateAlignedBuffer(2048);
+   unsigned char *buf = ab->buf;
    Sense sense;
    unsigned char cmd[MAX_CDB_SIZE];
-   unsigned char *buf = Closure->scratchBuf; 
    unsigned int length;
    int control;
    unsigned int ua_start,ua_end,ua_end0;
@@ -156,7 +182,8 @@ static int query_type(DeviceHandle *dh, int probe_only)
    length += 2;
 
    if(length>4096) /* don't let the drive hack us using a buffer overflow ;-) */
-   {  Stop(_("Could not query dvd physical structure - implausible packet length %d\n"),length);
+   {  FreeAlignedBuffer(ab);
+      Stop(_("Could not query dvd physical structure - implausible packet length %d\n"),length);
       return FALSE;
    }
 
@@ -170,7 +197,8 @@ static int query_type(DeviceHandle *dh, int probe_only)
    cmd[9] = length & 0xff;
 
    if(SendPacket(dh, cmd, 12, buf, length, &sense, DATA_READ)<0)
-   {  Stop(_("%s\nCould not query physical dvd structure.\n"),
+   {  FreeAlignedBuffer(ab);
+      Stop(_("%s\nCould not query physical dvd structure.\n"),
 	   GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
       return FALSE;
    }
@@ -238,6 +266,7 @@ static int query_type(DeviceHandle *dh, int probe_only)
         dh->userAreaSize = (gint64)(ua_end-ua_start);
    else dh->userAreaSize = (gint64)(ua_end0-ua_start)*2;
 
+   FreeAlignedBuffer(ab);
    return TRUE;
 
    /*** If we reach this, the medium is assumed to be one of the CD varities.*/
@@ -259,15 +288,18 @@ assume_cd:
 
    if(SendPacket(dh, cmd, 10, buf, 2, &sense, DATA_READ)<0)
    {  if(!probe_only)
-        Stop(_("%s\nCould not query TOC length.\n"),
-	     GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
+      {  FreeAlignedBuffer(ab);
+         Stop(_("%s\nCould not query TOC length.\n"),
+	      GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
+      }
       return FALSE;
    }
 
    length = buf[0]<<8 | buf[1];
    length += 2  ;  /* MMC3: "Disc information length excludes itself" */
    if(length>1024) /* don't let the drive hack us using a buffer overflow ;-) */
-   {  Stop(_("TOC info too long (%d), probably multisession.\n"),length);
+   {  FreeAlignedBuffer(ab);
+      Stop(_("TOC info too long (%d), probably multisession.\n"),length);
       return FALSE;
    }
 
@@ -279,7 +311,8 @@ assume_cd:
    cmd[8] = length;
 
    if(SendPacket(dh, cmd, 10, buf, length, &sense, DATA_READ)<0)
-   {  Stop(_("%s\nCould not read TOC.\n"),
+   {  FreeAlignedBuffer(ab);
+      Stop(_("%s\nCould not read TOC.\n"),
 	   GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
       return FALSE;
    }
@@ -300,7 +333,8 @@ assume_cd:
    cmd[8] = 2;
 
    if(SendPacket(dh, cmd, 10, buf, 2, &sense, DATA_READ)<0)
-   {  Stop(_("%s\nCould not query full TOC length.\n"),
+   {  FreeAlignedBuffer(ab);
+      Stop(_("%s\nCould not query full TOC length.\n"),
 	   GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
       return FALSE;
    }
@@ -308,11 +342,13 @@ assume_cd:
    length = buf[0]<<8 | buf[1];
    length += 2;    /* MMC3: "Disc information length excludes itself" */
    if(length < 15)
-   {  Stop(_("TOC info too short, length %d.\n"),length);
+   {  FreeAlignedBuffer(ab);
+      Stop(_("TOC info too short, length %d.\n"),length);
       return FALSE;
    }
    if(length>1024) /* don't let the drive hack us using a buffer overflow ;-) */
-   {  Stop(_("TOC info too long (%d), probably multisession.\n"),length);
+   {  FreeAlignedBuffer(ab);
+      Stop(_("TOC info too long (%d), probably multisession.\n"),length);
       return FALSE;
    }
 
@@ -325,7 +361,8 @@ assume_cd:
    cmd[8] = length;
 
    if(SendPacket(dh, cmd, 10, buf, length, &sense, DATA_READ)<0)
-   {  Stop(_("%s\nCould not read full TOC.\n"),
+   {  FreeAlignedBuffer(ab);
+      Stop(_("%s\nCould not read full TOC.\n"),
 	   GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
       return FALSE;
    }
@@ -338,6 +375,7 @@ assume_cd:
       {  PrintLog("%02x ",buf[i]);
 	 if(i==3 || (i-3)%11 == 0) PrintLog("\n");
       }
+      FreeAlignedBuffer(ab);
       Stop(_("Consider sending a bug report.\n"));
       return FALSE;
    }
@@ -356,7 +394,113 @@ assume_cd:
       dh->subType = UNSUPPORTED;
    }
 
+   FreeAlignedBuffer(ab);
    return TRUE;
+}
+
+/*
+ * Find out whether the drive can return raw sectors with
+ * uncorrected read errors
+ */
+
+int SetRawMode(DeviceHandle *dh, int mode)
+{  AlignedBuffer *ab = CreateAlignedBuffer(2048);
+   unsigned char *buf = ab->buf;
+   Sense sense;
+   unsigned char cdb[16];
+   int pll, ret;
+
+   /*** Read mode page 1 */
+
+   memset(cdb, 0, MAX_CDB_SIZE);
+   cdb[0] = 0x5a;         /* MODE SENSE(10) */
+   cdb[2] = 1;            /* Page code */
+   cdb[8] = 255;          /* Allocation length */
+   ret  = SendPacket(dh, cdb, 10, buf, 255, &sense, DATA_READ);
+
+   if(ret<0) 
+   {  Verbose("MODE SENSE: %s\n", 
+	      GetSenseString(sense.sense_key, sense.asc, sense.ascq, 0));
+      FreeAlignedBuffer(ab);
+      return FALSE;
+   }
+
+   Verbose("MODE PAGE 01h:\n");
+   Verbose("  mode data length = %d\n", buf[0]<<8 | buf[1]);
+   Verbose("  block descriptor length = %d\n", buf[6]<<8 | buf[7]);
+   Verbose("  page byte 0 = %2x\n", buf[8]);
+   Verbose("  page byte 1 = %2x\n", buf[9]);
+   Verbose("  page byte 2 = %2x\n", buf[10]);
+   Verbose("  page byte 3 = %2x\n", buf[11]);
+
+   pll = buf[1] + 2;  /* mode data length + 2 */
+   Verbose("  using mode data length %d\n", pll);
+
+   /*** Set new raw reading mode */
+
+   memset(cdb, 0, MAX_CDB_SIZE);
+   cdb[0] = 0x55;         /* MODE SELECT(10) */
+   cdb[1] = 0x10;         /* set page format (PF) bit */
+   cdb[7] = 0;
+   cdb[8] = pll;          /* parameter list length */
+
+   dh->previousReadMode = buf[10];
+   buf[10] |= mode;       /* add new read mode */
+
+   ret  = SendPacket(dh, cdb, 10, buf, pll, &sense, DATA_WRITE);
+
+   if(ret<0) 
+   {  Verbose("MODE SELECT: %s\n", 
+	      GetSenseString(sense.sense_key, sense.asc, sense.ascq, 0));
+      FreeAlignedBuffer(ab);
+      return FALSE;
+   }
+
+   /*** Read mode page 1 back again to make sure it worked */
+       
+   memset(cdb, 0, MAX_CDB_SIZE);
+   memset(buf, 0, pll);
+   cdb[0] = 0x5a;         /* MODE SENSE(10) */
+   cdb[2] = 1;            /* Page code */
+   cdb[8] = pll;          /* Allocation length */
+
+   ret  = SendPacket(dh, cdb, 10, buf, 255, &sense, DATA_READ);
+
+   if(ret<0) 
+   {  Verbose("MODE SENSE: %s\n", 
+	      GetSenseString(sense.sense_key, sense.asc, sense.ascq, 0));
+      FreeAlignedBuffer(ab);
+      return FALSE;
+   }
+
+   if(!(buf[10] & mode))
+   {  Verbose("Setting raw mode failed: %2x instead of %2x\n", buf[10], mode);
+      FreeAlignedBuffer(ab);
+      return FALSE;
+   }
+
+   FreeAlignedBuffer(ab);
+   return TRUE;
+}
+
+static int query_raw_mode(DeviceHandle *dh, int mode)
+{  
+   dh->canRawRead = SetRawMode(dh, mode);
+
+   if(dh->canRawRead)
+   {  dh->rawBuffer = CreateRawBuffer();
+
+      switch(dh->mainType)
+      {  case CD:
+	   dh->readRaw = read_raw_cd_sector;
+	   break;
+         default:
+	   dh->readRaw = NULL;
+	   break;
+      }
+   }
+
+   return dh->canRawRead;
 }
 
 /*
@@ -365,8 +509,10 @@ assume_cd:
 
 static int query_copyright(DeviceHandle *dh)
 {  Sense sense;
+   AlignedBuffer *ab = CreateAlignedBuffer(2048);
+   unsigned char *buf = ab->buf;
    unsigned char cmd[MAX_CDB_SIZE];
-   unsigned char *buf = Closure->scratchBuf;
+   unsigned char result;
    unsigned int length;
 
    /* Query length of returned data */
@@ -379,7 +525,8 @@ static int query_copyright(DeviceHandle *dh)
    cmd[9] = 2;
 
    if(SendPacket(dh, cmd, 12, buf, 2, &sense, DATA_READ)<0)
-   {  Stop(_("%s\nCould not query dvd structure length for format code 1.\n"),
+   {  FreeAlignedBuffer(ab);
+      Stop(_("%s\nCould not query dvd structure length for format code 1.\n"),
 	   GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
       return TRUE;
    }
@@ -388,7 +535,8 @@ static int query_copyright(DeviceHandle *dh)
    length += 2;
 
    if(length>4096) /* don't let the drive hack us using a buffer overflow ;-) */
-   {  Stop(_("Could not query dvd copyright info - implausible packet length %d\n"),length);
+   {  FreeAlignedBuffer(ab);
+      Stop(_("Could not query dvd copyright info - implausible packet length %d\n"),length);
       return TRUE;
    }
 
@@ -402,12 +550,16 @@ static int query_copyright(DeviceHandle *dh)
    cmd[9] = length & 0xff;
 
    if(SendPacket(dh, cmd, 12, buf, length, &sense, DATA_READ)<0)
-   {  Stop(_("%s\nCould not query copyright info.\n"),
+   {  FreeAlignedBuffer(ab);
+      Stop(_("%s\nCould not query copyright info.\n"),
 	   GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
       return TRUE;
    }
 
-   return buf[4] & 1;
+   result = buf[4] & 1;
+   FreeAlignedBuffer(ab);
+   
+   return result;
 }
 
 /*
@@ -415,11 +567,12 @@ static int query_copyright(DeviceHandle *dh)
  */
 
 static int check_sector(DeviceHandle *dh, GString *msg_out, guint64 sector, int n_sectors)
-{  int status,result;
+{  AlignedBuffer *scratch = CreateAlignedBuffer(32768);
+   int status,result;
    char *msg;
-   unsigned char *scratch = Closure->scratchBuf;
 
-   status = read_dvd_sector(dh, scratch, sector, n_sectors);
+   status = read_dvd_sector(dh, scratch->buf, sector, n_sectors);
+   FreeAlignedBuffer(scratch);
 
    if(!status)   /* Sector was readable */ 
    {  msg = _("readable");
@@ -482,8 +635,9 @@ static void evaluate_results(int res0, int res1, int *result, char **msg)
 
 static unsigned int query_size(DeviceHandle *dh)
 {  Sense sense;
+   AlignedBuffer *ab = CreateAlignedBuffer(2048);
+   unsigned char *buf = ab->buf; 
    unsigned char cmd[MAX_CDB_SIZE];
-   unsigned char *buf = Closure->scratchBuf; 
    gint64 read_capacity;
 
    /*** Query size by doing READ CAPACITY */
@@ -492,13 +646,14 @@ static unsigned int query_size(DeviceHandle *dh)
    cmd[0] = 0x25;  /* READ CAPACITY */
 
    if(SendPacket(dh, cmd, 10, buf, 8, &sense, DATA_READ)<0)
-   {  Stop(_("%s\nCould not query medium size.\n"),
+   {  FreeAlignedBuffer(ab);
+      Stop(_("%s\nCould not query medium size.\n"),
 	   GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
       return 0;
    }
 
    read_capacity = (gint64)(buf[0]<<24 | buf[1]<<16 | buf[2]<<8 | buf[3]);
-
+   FreeAlignedBuffer(ab);
 
    /*** If RS02 header search is enabled and we can find an appropriate header,
 	use it as an authoritative source for the medium size. */
@@ -695,8 +850,9 @@ gint64 CurrentImageSize()
 gint64 CurrentImageCapacity()
 {  DeviceHandle *dh = NULL;
    Sense sense;
+   AlignedBuffer *ab = CreateAlignedBuffer(2048);
+   unsigned char *buf = ab->buf; 
    unsigned char cmd[MAX_CDB_SIZE];
-   unsigned char *buf = Closure->scratchBuf; 
    gint64 cmc_size;
    int i,idx, n_lists;
 
@@ -705,9 +861,14 @@ gint64 CurrentImageCapacity()
 #endif
 
    dh = OpenDevice(Closure->device);
-   if(!dh) return 0;
+   if(!dh)
+   {  FreeAlignedBuffer(ab);
+      return 0;
+   }
+
    if(InquireDevice(dh, 1) != 0x05) 
    {  CloseDevice(dh);
+      FreeAlignedBuffer(ab);
       return 0;
    }
 
@@ -718,7 +879,9 @@ gint64 CurrentImageCapacity()
    cmd[7] = 1;     /* 256 bytes of buffer (32*8 lists maximum) */
 
    if(SendPacket(dh, cmd, 10, buf, 256, &sense, DATA_READ)<0)
+   {  FreeAlignedBuffer(ab);
       return 0;
+   }
 
 //   printf("Cap list length %d\n", buf[3]);
 
@@ -731,7 +894,10 @@ gint64 CurrentImageCapacity()
    n_lists = buf[3] / 8;
    n_lists--;
 
-   if(!n_lists) return cmc_size;
+   if(!n_lists) 
+   {  FreeAlignedBuffer(ab);
+      return cmc_size;
+   }
 
 #if 0
    printf("CMC descriptor: %lld blocks\n", cmc_size);
@@ -755,7 +921,8 @@ gint64 CurrentImageCapacity()
    /* Now go through all capacity lists */
 
    for(i=0, idx=12; i<n_lists; i++, idx+=8)
-   {  //printf("Cap list %d - type %d\n", i, buf[idx+4]>>2);
+   {  gint64 result;
+      //printf("Cap list %d - type %d\n", i, buf[idx+4]>>2);
       //size = (gint64)(buf[idx]<<24 | buf[idx+1]<<16 | buf[idx+2]<<8 | buf[idx+3]);
       //printf(".. size %lld\n", size);
 
@@ -763,7 +930,9 @@ gint64 CurrentImageCapacity()
       {  case 0x00:
          case 0x10:  /* blank CD-RW capacity */
          case 0x26:  /* blank DVD+RW capacity */
-	     return (gint64)(buf[idx]<<24 | buf[idx+1]<<16 | buf[idx+2]<<8 | buf[idx+3]);
+	     result = (gint64)(buf[idx]<<24 | buf[idx+1]<<16 | buf[idx+2]<<8 | buf[idx+3]);
+	     FreeAlignedBuffer(ab);
+	     return result;
 	     break;
       }
    }
@@ -779,7 +948,8 @@ gint64 CurrentImageCapacity()
  */
 
 void SpinupDevice(DeviceHandle *dh)
-{  GTimer *timer;
+{  AlignedBuffer *ab = CreateAlignedBuffer(32768);
+   GTimer *timer;
    gint64 s;
 
    if(!Closure->spinupDelay)
@@ -797,14 +967,15 @@ void SpinupDevice(DeviceHandle *dh)
 
       if(s>=dh->sectors) return;
  
-      status = ReadSectors(dh, Closure->scratchBuf, s, 16);
+      status = ReadSectors(dh, ab->buf, s, 16);
       if(status) return;
 
       elapsed = g_timer_elapsed(timer, &ignore);
       if(elapsed > Closure->spinupDelay)
-	return;
+	break;
    }
 
+   FreeAlignedBuffer(ab);
    g_timer_destroy(timer);
 }
 
@@ -906,6 +1077,88 @@ static int read_cd_sector(DeviceHandle *dh, unsigned char *buf, int lba, int nse
    return ret;
 }
 
+static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, int nsectors)
+{  Sense *sense = &dh->sense;
+   unsigned char cdb[MAX_CDB_SIZE];
+   AlignedBuffer *raw = CreateAlignedBuffer(4096);
+   RawBuffer *rb;
+   int i, ret = -1;
+
+   if(!dh->rawBuffer)  /* sanity check */ 
+     return 1;
+
+   /* Return error for reading multiple sectors;
+      caller will retry reading single sectors */
+
+   if(nsectors != 1)
+     return 1;
+
+   /* reset raw reading buffer */
+
+   rb = dh->rawBuffer;
+   rb->lba          = lba;
+   rb->samplesRead  = 0;
+   rb->sampleLength = 0;
+
+   /* try a number of raw reads */
+
+   for(i=0; i<Closure->rawAttempts; i++)
+   {  Verbose("Trying raw read #%d for sector %d\n", i, lba);
+
+      memset(cdb, 0, MAX_CDB_SIZE);
+      cdb[0]  = 0xbe;         /* READ CD */
+      switch(dh->subType)     /* Expected sector type */
+      {  case DATA1: cdb[1] = 2<<2; rb->sampleLength=2352; break;  /* data mode 1 */
+         case XA21:  cdb[1] = 4<<2; rb->sampleLength=2328; break;  /* xa mode 2 form 1 */
+      }
+      cdb[2]  = (lba >> 24) & 0xff;
+      cdb[3]  = (lba >> 16) & 0xff;
+      cdb[4]  = (lba >>  8) & 0xff;
+      cdb[5]  = lba & 0xff;
+      cdb[6]  = 0;        /* number of sectors to read (3 bytes) */
+      cdb[7]  = 0;  
+      cdb[8]  = 1;        /* read nsectors */
+
+      cdb[9]  = 0xb8;     /* we want Sync + Header + User data + EDC/ECC */
+      cdb[10] = 0;        /* reserved stuff */
+      cdb[11] = 0;        /* no special wishes for the control byte */
+
+      memcpy(raw->buf, Closure->deadSector, 2048);
+      ret = SendPacket(dh, cdb, 12, raw->buf, rb->sampleLength, sense, DATA_READ);
+
+      if(ret<0)  /* Read failed, data incomplete or missing */
+      {  RememberSense(sense->sense_key, sense->asc, sense->ascq);
+
+	 /* See if drive returned some data at all. */
+	
+	 if(memcmp(raw->buf, Closure->deadSector, 2048))
+	 {  memcpy(rb->rawBuf[rb->samplesRead], raw->buf, rb->sampleLength);
+	    rb->rawState[rb->samplesRead] = RAW_READ_ERROR;
+	    rb->samplesRead++;
+	    Verbose("... raw data read\n");
+	 }
+	 else /* Nope, no data came back */
+	 {  Verbose("... nothing returned\n");
+	 }
+      }
+      else   /* Drive says data is okay. Remember this but trust  it */
+      {  memcpy(rb->rawBuf[rb->samplesRead], raw->buf, rb->sampleLength);
+	 rb->rawState[rb->samplesRead] = RAW_SUCCESS;
+	 rb->samplesRead++;
+	 Verbose("... reading SUCCEEDED\n");
+      }
+
+      Verbose("--> %d raw samples gathered\n", rb->samplesRead);
+   }
+
+   FreeAlignedBuffer(raw);
+
+   if(RecoverRaw(outbuf, rb))
+     return 0;
+
+   return ret;
+}
+
 /*
  * Sector reading through the device handle.
  * dh->read dispatches to one the routines above.
@@ -916,16 +1169,6 @@ static int read_cd_sector(DeviceHandle *dh, unsigned char *buf, int lba, int nse
 
 int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
 {  int retry,status;
-
-#if 0
-  if(s == 352480)  /* Manually placed read error */
-  {  dh->sense.sense_key = 3;
-     dh->sense.asc       = 255;
-     dh->sense.ascq      = 255;
-     RememberSense(dh->sense.sense_key, dh->sense.asc, dh->sense.ascq);
-     return TRUE;
-  }
-#endif
 
    /* See if we are in a simulated defective area */ 
 
@@ -956,6 +1199,11 @@ int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
       else break;
    }
 
+   /* Try raw read if possible */
+
+   if(status && dh->readRaw)
+     status = dh->readRaw(dh, buf, s, nsectors);
+
    return status;
 }
 
@@ -981,6 +1229,13 @@ DeviceHandle* OpenAndQueryDevice(char *device)
 #endif
 
    query_type(dh, 0);
+
+   if(query_raw_mode(dh, 0x20))
+   {  PrintLog(_("... Device can read defective sectors in RAW mode. Good!\n")); 
+   }
+   else
+   {  PrintLog(_("... Device can NOT read defective sectors in RAW mode.\n")); 
+   }
 
    if(Closure->querySize >= 1)  /* parseUDF or better requested */
      ExamineUDF(dh);
@@ -1055,7 +1310,7 @@ DeviceHandle* OpenAndQueryDevice(char *device)
  *** Debugging function for sending a cdb to the drive
  ***/
 
-int SendReadCDB(char *device, unsigned char *cdb, int cdb_len, int alloc_len)
+int SendReadCDB(char *device, unsigned char *buf, unsigned char *cdb, int cdb_len, int alloc_len)
 {  DeviceHandle *dh = NULL;
    Sense sense;
    int i,status;
@@ -1070,7 +1325,7 @@ int SendReadCDB(char *device, unsigned char *cdb, int cdb_len, int alloc_len)
      PrintLog(" %02x",cdb[i]);
    PrintLog(", length %d, allocation length %d\n", cdb_len, alloc_len);
 
-   status = SendPacket(dh, cdb, cdb_len, Closure->scratchBuf, alloc_len, &sense, DATA_READ);
+   status = SendPacket(dh, cdb, cdb_len, buf, alloc_len, &sense, DATA_READ);
 
    CloseDevice(dh);
 

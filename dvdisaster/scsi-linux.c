@@ -105,7 +105,12 @@ DeviceHandle* OpenDevice(char *device)
 }
 
 void CloseDevice(DeviceHandle *dh)
-{
+{ 
+  if(dh->rawBuffer)
+  {  SetRawMode(dh, dh->previousReadMode);
+     FreeRawBuffer(dh->rawBuffer);
+  }
+
   if(dh->fd)
     close(dh->fd);
   if(dh->device)
@@ -135,6 +140,9 @@ int SendPacket(DeviceHandle *dh, unsigned char *cmd, int cdb_size, unsigned char
    switch(data_mode)
    {  case DATA_READ:
         cgc.data_direction = CGC_DATA_READ; 
+	break;
+      case DATA_WRITE:
+        cgc.data_direction = CGC_DATA_WRITE; 
 	break;
       default:
 	Stop(_("illegal data_mode: %d"),data_mode);

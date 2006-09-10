@@ -194,6 +194,11 @@ DeviceHandle* OpenDevice(char *device)
 
 void CloseDevice(DeviceHandle *dh)
 {
+  if(dh->rawBuffer)
+  {  SetRawMode(dh, dh->previousReadMode);
+     FreeRawBuffer(dh->rawBuffer);
+  }
+
   if (dh->taskInterface) {
     (*dh->taskInterface)->Release(dh->taskInterface);
   }
