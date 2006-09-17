@@ -647,7 +647,7 @@ void ReadSector(char *arg)
       Stop(_("Failed reading sector %lld: %s"),sector,strerror(errno));
    }
 
-   HexDump(ab->buf, 2048, 32);
+   //   HexDump(ab->buf, 2048, 32);
 
    g_printf("CRC32 = %04x\n", Crc32(ab->buf, 2048));
 

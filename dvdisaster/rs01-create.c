@@ -36,7 +36,7 @@
  */
 
 static gint64 ecc_file_size(gint64 sectors, int nr)
-{  int nd = FIELDMAX - nr;
+{  int nd = GF_FIELDMAX - nr;
    gint64 bytesize; 
 
    bytesize = 4096 + 4*sectors + 2048*nr*((sectors+nd-1)/nd);
@@ -60,7 +60,7 @@ static int calculate_redundancy(char *image_name)
    switch(last)
    {  case '%' : p = atof(Closure->redundancy);
                  if(p<3.2 || p>64.5) Stop(_("Redundancy %4.1f%% out of useful range [3.2%%..64.5%%]"),p);
-		 nr = (int)round((FIELDMAX*p) / (100.0+p));
+		 nr = (int)round((GF_FIELDMAX*p) / (100.0+p));
 	         break;
 
       case 'm' : if(!LargeStat(image_name, &filesize))
@@ -104,6 +104,7 @@ typedef struct
 {  Method *self;
    RS01Widgets *wl;
    GaloisTables *gt;
+   ReedSolomonTables *rt;
    int earlyTermination;
    unsigned char *data;
    unsigned char *parity;
@@ -128,6 +129,7 @@ static void ecc_cleanup(gpointer data)
    /** Clean up */
 
    if(ec->gt) FreeGaloisTables(ec->gt);
+   if(ec->rt) FreeReedSolomonTables(ec->rt);
    if(ec->data) g_free(ec->data);
    if(ec->parity) g_free(ec->parity);
 
@@ -155,6 +157,7 @@ enum { NORMAL, HIGH, GENERIC };
 void RS01Create(Method *self)
 {  RS01Widgets *wl = (RS01Widgets*)self->widgetList;
    GaloisTables *gt;
+   ReedSolomonTables *rt;
    ecc_closure *ec = g_malloc0(sizeof(ecc_closure));
    ImageInfo *ii = NULL;
    EccInfo   *ei = NULL;
@@ -169,8 +172,8 @@ void RS01Create(Method *self)
    gint32 nroots;         /* These are copied to increase performance. */
    gint32 ndata;
    gint32 *gf_index_of;
-   gint32 *gf_gpoly;
    gint32 *enc_alpha_to;
+   gint32 *rs_gpoly;
 
    /*** Register the cleanup procedure for GUI mode */
 
@@ -189,13 +192,14 @@ void RS01Create(Method *self)
    else if(!strcmp(Closure->redundancy, "high"))  loop_type = HIGH;
 
    n = calculate_redundancy(Closure->imageName);
-   gt = ec->gt = CreateGaloisTables(n);
+   gt = ec->gt = CreateGaloisTables(RS_GENERATOR_POLY);
+   rt = ec->rt = CreateReedSolomonTables(gt, RS_FIRST_ROOT, RS_PRIM_ELEM, n);
 
-   nroots       = gt->nroots;
-   ndata        = gt->ndata;
-   gf_index_of  = gt->index_of;
-   enc_alpha_to = gt->enc_alpha_to;
-   gf_gpoly     = gt->gpoly;
+   nroots       = rt->nroots;
+   ndata        = rt->ndata;
+   rs_gpoly     = rt->gpoly;
+   enc_alpha_to = gt->encAlphaTo;
+   gf_index_of  = gt->indexOf;
 
    /*** Announce what we are going to do */
 
@@ -438,7 +442,7 @@ void RS01Create(Method *self)
 
 	       feedback = gf_index_of[ec->data[i] ^ par_idx[sp]];
 
-	       if(feedback != ALPHA0) /* non-zero feedback term */
+	       if(feedback != GF_ALPHA0) /* non-zero feedback term */
 	       {  register int spk = sp;
 
                   par_idx[((++spk)&31)] ^= enc_alpha_to[feedback + 249];
@@ -529,7 +533,7 @@ void RS01Create(Method *self)
 
 	       feedback = gf_index_of[ec->data[i] ^ par_idx[sp]];
 
-	       if(feedback != ALPHA0) /* non-zero feedback term */
+	       if(feedback != GF_ALPHA0) /* non-zero feedback term */
 	       {  register int spk = sp;
 
                   par_idx[((++spk)&63)] ^= enc_alpha_to[feedback +  98];
@@ -655,9 +659,9 @@ void RS01Create(Method *self)
 
 	       feedback = gf_index_of[ec->data[i] ^ par_idx[sp]];
 
-	       if(feedback != ALPHA0) /* non-zero feedback term */
+	       if(feedback != GF_ALPHA0) /* non-zero feedback term */
 	       {  register int spk = sp+1;
-		  register int *gpoly = gf_gpoly + nroots;
+		  register int *gpoly = rs_gpoly + nroots;
 
 		  switch(nroots-spk)
 		  {  
@@ -889,7 +893,7 @@ void RS01Create(Method *self)
 		     case  1: par_idx[spk++] ^= enc_alpha_to[feedback + *--gpoly];
 		  }
 
-		  par_idx[sp] = enc_alpha_to[feedback + gf_gpoly[0]];
+		  par_idx[sp] = enc_alpha_to[feedback + rs_gpoly[0]];
 	       }
 	       else                   /* zero feedback term */
 		 par_idx[sp] = 0;

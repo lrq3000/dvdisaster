@@ -478,28 +478,45 @@ void CreateFixWindow(GtkWidget*);
  * be #included from galois-inlines.h
  */  
 
-#define SYMBOLSIZE 8
-#define FIELDSIZE (1<<SYMBOLSIZE)
-#define FIELDMAX (FIELDSIZE-1)
-#define ALPHA0 FIELDMAX
+/* Galois field parameters for 8bit symbol Reed-Solomon code */
 
-#define GENERATOR_POLY 0x187    /* 1 + X + X**2 + X**7 + X**8 */
-#define FIRST_ROOT 112          /* same choices as in CCSDS */                 
-#define PRIM_ELEM 11                  
-#define PRIMTH_ROOT 116         /* prim-th root of 1 */           
+#define GF_SYMBOLSIZE 8
+#define GF_FIELDSIZE (1<<GF_SYMBOLSIZE)
+#define GF_FIELDMAX (GF_FIELDSIZE-1)
+#define GF_ALPHA0 GF_FIELDMAX
+
+/* RS polynomial parameters for RS01/RS02 codec */
+
+#define RS_GENERATOR_POLY 0x187    /* 1 + X + X**2 + X**7 + X**8 */
+#define RS_FIRST_ROOT 112          /* same choices as in CCSDS */                 
+#define RS_PRIM_ELEM 11                  
+#define RS_PRIMTH_ROOT 116         /* prim-th root of 1 */           
+
+/* Lookup tables for Galois field arithmetic */
 
 typedef struct _GaloisTables
-{  gint32 nroots;        /* degree of generator polynomial */
-   gint32 ndata;         /* data bytes per ecc block */
-
-   gint32 *index_of;     /* log */
-   gint32 *alpha_to;     /* inverse log */
-   gint32 *enc_alpha_to; /* inverse log optimized for encoder */
-   gint32 *gpoly;        /* generator polynomial */
+{  gint32 gfGenerator;  /* GF generator polynomial */ 
+   gint32 *indexOf;     /* log */
+   gint32 *alphaTo;     /* inverse log */
+   gint32 *encAlphaTo; /* inverse log optimized for encoder */
 } GaloisTables;
 
-GaloisTables* CreateGaloisTables(int);
+/* Lookup and working tables for the ReedSolomon codecs */
+
+typedef struct _ReedSolomonTables
+{  GaloisTables *gfTables;/* from above */
+   gint32 *gpoly;        /* RS code generator polynomial */
+   gint32 fcr;           /* first consecutive root of RS generator polynomial */
+   gint32 primElem;      /* primitive field element */
+   gint32 nroots;        /* degree of RS generator polynomial */
+   gint32 ndata;         /* data bytes per ecc block */
+} ReedSolomonTables;
+
+GaloisTables* CreateGaloisTables(gint32);
 void FreeGaloisTables(GaloisTables*);
+
+ReedSolomonTables *CreateReedSolomonTables(GaloisTables*, gint32, gint32, int);
+void FreeReedSolomonTables(ReedSolomonTables*);
 
 /***
  *** help-dialogs.c
@@ -555,6 +572,19 @@ int LargeClose(LargeFile*);
 int LargeTruncate(LargeFile*, gint64);
 int LargeStat(char*, gint64*);
 int LargeUnlink(char*);
+
+/*** 
+ *** l-ec.c
+ ***/
+
+void GetPVector(unsigned char*, unsigned char*, int);
+void SetPVector(unsigned char*, unsigned char*, int);
+void FillPVector(unsigned char*, unsigned char, int);
+void GetQVector(unsigned char*, unsigned char*, int);
+void SetQVector(unsigned char*, unsigned char*, int);
+void FillQVector(unsigned char*, unsigned char, int);
+
+int DecodePQ(ReedSolomonTables*, unsigned char*, int, int*, int);
 
 /***
  *** main-window.c
@@ -786,7 +816,9 @@ void RemoveFillMarkers();
  ***/
 
 typedef struct _RawBuffer
-{  unsigned char **rawBuf;    /* buffer for raw read attempts */
+{  GaloisTables *gt;          /* for L-EC Reed-Solomon */
+   ReedSolomonTables *rt;
+   unsigned char **rawBuf;    /* buffer for raw read attempts */
    int *rawState;             /* error state returned for this sample */
    int samplesRead;           /* number of samples read */
    int sampleLength;          /* length of samples */

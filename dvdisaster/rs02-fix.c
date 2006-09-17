@@ -32,6 +32,7 @@ typedef struct
 {  RS02Widgets *wl;
    RS02Layout *lay;
    GaloisTables *gt;
+   ReedSolomonTables *rt;
    int earlyTermination;
    char *msg;
    ImageInfo *ii;
@@ -69,6 +70,7 @@ static void fix_cleanup(gpointer data)
    if(fc->lay) g_free(fc->lay);
 
    if(fc->gt) FreeGaloisTables(fc->gt);
+   if(fc->rt) FreeReedSolomonTables(fc->rt);
 
    g_free(fc);
 
@@ -176,9 +178,10 @@ void RS02Fix(Method *self)
 
    /*** Set up the Galois field arithmetic */
 
-   fc->gt      = CreateGaloisTables(nroots);
-   gf_index_of = fc->gt->index_of;
-   gf_alpha_to = fc->gt->alpha_to;
+   fc->gt      = CreateGaloisTables(RS_GENERATOR_POLY);
+   fc->rt      = CreateReedSolomonTables(fc->gt, RS_FIRST_ROOT, RS_PRIM_ELEM, nroots);
+   gf_index_of = fc->gt->indexOf;
+   gf_alpha_to = fc->gt->alphaTo;
 
    /*** Expand a truncated image with "dead sector" markers */
 
@@ -432,7 +435,7 @@ void RS02Fix(Method *self)
 	}
      }
 
-     for(i=lay->ndata; i<FIELDMAX; i++)  /* Check the ecc sectors */
+     for(i=lay->ndata; i<GF_FIELDMAX; i++)  /* Check the ecc sectors */
      {  
         erasure_map[i] = 0;
 	if(!memcmp(fc->imgBlock[i]+cache_offset, Closure->deadSector, 2048))
@@ -479,12 +482,12 @@ void RS02Fix(Method *self)
 	for(i=0; i<nroots; i++)
 	  syn[i] = fc->imgBlock[0][offset];
 
-	for(j=1; j<FIELDMAX; j++)
+	for(j=1; j<GF_FIELDMAX; j++)
 	{  int data = fc->imgBlock[j][offset];
 
 	   for(i=0;i<nroots;i++)
 	   {  if(syn[i] == 0) syn[i] = data;
-	      else syn[i] = data ^ gf_alpha_to[mod_fieldmax(gf_index_of[syn[i]] + (FIRST_ROOT+i)*PRIM_ELEM)];
+	      else syn[i] = data ^ gf_alpha_to[mod_fieldmax(gf_index_of[syn[i]] + (RS_FIRST_ROOT+i)*RS_PRIM_ELEM)];
 	   }
 	}
 
@@ -510,12 +513,12 @@ void RS02Fix(Method *self)
 	lambda[0] = 1;
 
 	if(erasure_count > 0)
-	{  lambda[1] = gf_alpha_to[mod_fieldmax(PRIM_ELEM*(FIELDMAX-1-erasure_list[0]))];
+	{  lambda[1] = gf_alpha_to[mod_fieldmax(RS_PRIM_ELEM*(GF_FIELDMAX-1-erasure_list[0]))];
 	   for(i=1; i<erasure_count; i++) 
-	   {  u = mod_fieldmax(PRIM_ELEM*(FIELDMAX-1-erasure_list[i]));
+	   {  u = mod_fieldmax(RS_PRIM_ELEM*(GF_FIELDMAX-1-erasure_list[i]));
 	      for(j=i+1; j>0; j--) 
 	      {  tmp = gf_index_of[lambda[j-1]];
-	         if(tmp != ALPHA0)
+	         if(tmp != GF_ALPHA0)
 		   lambda[j] ^= gf_alpha_to[mod_fieldmax(u + tmp)];
 	      }
 	   }
@@ -532,21 +535,21 @@ void RS02Fix(Method *self)
 	{  
 	  discr_r = 0;
 	  for(i=0; i<r; i++)
-	    if((lambda[i] != 0) && (syn[r-i-1] != ALPHA0))
+	    if((lambda[i] != 0) && (syn[r-i-1] != GF_ALPHA0))
 	      discr_r ^= gf_alpha_to[mod_fieldmax(gf_index_of[lambda[i]] + syn[r-i-1])];
 
 	  discr_r = gf_index_of[discr_r];	/* Index form */
 
-	  if(discr_r == ALPHA0) 
+	  if(discr_r == GF_ALPHA0) 
 	  {  /* B(x) = x*B(x) */
 	    memmove(b+1, b, nroots*sizeof(b[0]));
-	    b[0] = ALPHA0;
+	    b[0] = GF_ALPHA0;
 	  } 
 	  else 
 	  {  /* T(x) = lambda(x) - discr_r*x*b(x) */
 	     t[0] = lambda[0];
 	     for(i=0; i<nroots; i++) 
-	     {  if(b[i] != ALPHA0)
+	     {  if(b[i] != GF_ALPHA0)
 		     t[i+1] = lambda[i+1] ^ gf_alpha_to[mod_fieldmax(discr_r + b[i])];
 	        else t[i+1] = lambda[i+1];
 	     }
@@ -556,12 +559,12 @@ void RS02Fix(Method *self)
 
 	        /* B(x) <-- inv(discr_r) * lambda(x) */
 	        for(i=0; i<=nroots; i++)
-		  b[i] = (lambda[i] == 0) ? ALPHA0 : mod_fieldmax(gf_index_of[lambda[i]] - discr_r + FIELDMAX);
+		  b[i] = (lambda[i] == 0) ? GF_ALPHA0 : mod_fieldmax(gf_index_of[lambda[i]] - discr_r + GF_FIELDMAX);
 	     } 
 	     else 
 	     {  /* 2 lines below: B(x) <-- x*B(x) */
 	        memmove(b+1, b, nroots*sizeof(b[0]));
-		b[0] = ALPHA0;
+		b[0] = GF_ALPHA0;
 	     }
 
 	     memcpy(lambda,t,(nroots+1)*sizeof(t[0]));
@@ -572,7 +575,7 @@ void RS02Fix(Method *self)
 	deg_lambda = 0;
 	for(i=0; i<nroots+1; i++)
 	{  lambda[i] = gf_index_of[lambda[i]];
-	   if(lambda[i] != ALPHA0)
+	   if(lambda[i] != GF_ALPHA0)
 	     deg_lambda = i;
 	}
 
@@ -580,11 +583,11 @@ void RS02Fix(Method *self)
 	memcpy(reg+1, lambda+1, nroots*sizeof(reg[0]));
 	count = 0;		/* Number of roots of lambda(x) */
 
-	for(i=1, k=PRIMTH_ROOT-1; i<=FIELDMAX; i++, k=mod_fieldmax(k+PRIMTH_ROOT))
+	for(i=1, k=RS_PRIMTH_ROOT-1; i<=GF_FIELDMAX; i++, k=mod_fieldmax(k+RS_PRIMTH_ROOT))
 	{  q=1; /* lambda[0] is always 0 */
 
 	   for(j=deg_lambda; j>0; j--)
-	   {  if(reg[j] != ALPHA0) 
+	   {  if(reg[j] != GF_ALPHA0) 
 	      {  reg[j] = mod_fieldmax(reg[j] + j);
 		 q ^= gf_alpha_to[reg[j]];
 	      }
@@ -625,7 +628,7 @@ void RS02Fix(Method *self)
 	for(i=0; i<=deg_omega; i++)
 	{  tmp = 0;
 	   for(j=i; j>=0; j--)
-	   {  if((syn[i - j] != ALPHA0) && (lambda[j] != ALPHA0))
+	   {  if((syn[i - j] != GF_ALPHA0) && (lambda[j] != GF_ALPHA0))
 	        tmp ^= gf_alpha_to[mod_fieldmax(syn[i - j] + lambda[j])];
 	   }
 
@@ -641,17 +644,17 @@ void RS02Fix(Method *self)
 	{  num1 = 0;
 
 	   for(i=deg_omega; i>=0; i--) 
-	   {  if(omega[i] != ALPHA0)
+	   {  if(omega[i] != GF_ALPHA0)
 	         num1 ^= gf_alpha_to[mod_fieldmax(omega[i] + i * root[j])];
 	   }
 
-	   num2 = gf_alpha_to[mod_fieldmax(root[j] * (FIRST_ROOT - 1) + FIELDMAX)];
+	   num2 = gf_alpha_to[mod_fieldmax(root[j] * (RS_FIRST_ROOT - 1) + GF_FIELDMAX)];
 	   den = 0;
     
 	   /* lambda[i+1] for i even is the formal derivative lambda_pr of lambda[i] */
 
 	   for(i=MIN(deg_lambda, nroots-1) & ~1; i>=0; i-=2) 
-	   {  if(lambda[i+1] != ALPHA0)
+	   {  if(lambda[i+1] != GF_ALPHA0)
 	        den ^= gf_alpha_to[mod_fieldmax(lambda[i+1] + i * root[j])];
 	   }
 
@@ -662,7 +665,7 @@ void RS02Fix(Method *self)
 		
 	      if(erasure_map[location] != 1)  /* erasure came from CRC error */
 	      {  int old = fc->imgBlock[location][offset];
-		 int new = old ^ gf_alpha_to[mod_fieldmax(gf_index_of[num1] + gf_index_of[num2] + FIELDMAX - gf_index_of[den])];
+		 int new = old ^ gf_alpha_to[mod_fieldmax(gf_index_of[num1] + gf_index_of[num2] + GF_FIELDMAX - gf_index_of[den])];
 		 char *msg;
 		 gint64 sector;
 
@@ -687,7 +690,7 @@ void RS02Fix(Method *self)
 			  new, isprint(new) ? new : '.');
 	      }
 
-	      fc->imgBlock[location][offset] ^= gf_alpha_to[mod_fieldmax(gf_index_of[num1] + gf_index_of[num2] + FIELDMAX - gf_index_of[den])];
+	      fc->imgBlock[location][offset] ^= gf_alpha_to[mod_fieldmax(gf_index_of[num1] + gf_index_of[num2] + GF_FIELDMAX - gf_index_of[den])];
 	   }
 	}
      }

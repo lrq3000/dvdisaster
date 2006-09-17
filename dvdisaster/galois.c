@@ -37,66 +37,96 @@
 /* Initialize the Galois field tables */
 
 
-GaloisTables* CreateGaloisTables(int nroots_in)
+GaloisTables* CreateGaloisTables(gint32 gf_generator)
 {  GaloisTables *gt = g_malloc0(sizeof(GaloisTables));
-   gint32 i,j,b,log,root;
-
-   gt->nroots = nroots_in;
-   gt->ndata  = FIELDMAX - gt->nroots;
+   gint32 b,log;
 
    /* Allocate the tables.
       The encoder uses a special version of alpha_to which has the mod_fieldmax()
       folded into the table. */
 
-   gt->index_of     = g_malloc(FIELDSIZE * sizeof(gint32));
-   gt->alpha_to     = g_malloc(FIELDSIZE * sizeof(gint32));
-   gt->enc_alpha_to = g_malloc(2*FIELDSIZE * sizeof(gint32));
-   gt->gpoly        = g_malloc((gt->nroots+1) * sizeof(gint32));
+   gt->gfGenerator = gf_generator;
+
+   gt->indexOf     = g_malloc(GF_FIELDSIZE * sizeof(gint32));
+   gt->alphaTo     = g_malloc(GF_FIELDSIZE * sizeof(gint32));
+   gt->encAlphaTo  = g_malloc(2*GF_FIELDSIZE * sizeof(gint32));
    
    /* create the log/ilog values */
 
-   for(b=1, log=0; log<FIELDMAX; log++)
-   {  gt->index_of[b]   = log;
-      gt->alpha_to[log] = b;
+   for(b=1, log=0; log<GF_FIELDMAX; log++)
+   {  gt->indexOf[b]   = log;
+      gt->alphaTo[log] = b;
       b = b << 1;
-      if(b & FIELDSIZE)
-	b = b ^ GENERATOR_POLY;
+      if(b & GF_FIELDSIZE)
+	b = b ^ gf_generator;
    }
 
    if(b!=1) Stop(_("Failed to create the log tables!\n"));
 
    /* we're even closed using infinity (makes things easier) */
 
-   gt->index_of[0] = ALPHA0;    /* log(0) = inf */
-   gt->alpha_to[ALPHA0] = 0;   /* and the other way around */
+   gt->indexOf[0] = GF_ALPHA0;    /* log(0) = inf */
+   gt->alphaTo[GF_ALPHA0] = 0;   /* and the other way around */
 
-   for(b=0; b<2*FIELDSIZE; b++)
-     gt->enc_alpha_to[b] = gt->alpha_to[mod_fieldmax(b)];
+   for(b=0; b<2*GF_FIELDSIZE; b++)
+     gt->encAlphaTo[b] = gt->alphaTo[mod_fieldmax(b)];
+
+   return gt;
+}
+
+void FreeGaloisTables(GaloisTables *gt)
+{
+  if(gt->indexOf)     g_free(gt->indexOf);
+  if(gt->alphaTo)     g_free(gt->alphaTo);
+  if(gt->encAlphaTo) g_free(gt->encAlphaTo);
+
+  g_free(gt);
+}
+
+/***
+ *** Create the the Reed-Solomon generator polynomial
+ *** and some auxiliary data structures.
+ */
+
+ReedSolomonTables *CreateReedSolomonTables(GaloisTables *gt,
+					   gint32 first_consecutive_root,
+					   gint32 prim_elem,
+					   int nroots_in)
+{  ReedSolomonTables *rt = g_malloc0(sizeof(ReedSolomonTables));
+   gint32 i,j,root;
+
+   rt->gfTables = gt;
+   rt->fcr      = first_consecutive_root;
+   rt->primElem = prim_elem;
+   rt->nroots   = nroots_in;
+   rt->ndata    = GF_FIELDMAX - rt->nroots;
+
+   rt->gpoly    = g_malloc((rt->nroots+1) * sizeof(gint32));
 
    /* Create the RS code generator polynomial */
 
-   gt->gpoly[0] = 1;
+   rt->gpoly[0] = 1;
 
-   for(i=0, root=FIRST_ROOT*PRIM_ELEM; i<gt->nroots; i++, root+=PRIM_ELEM)
-   {  gt->gpoly[i+1] = 1;
+   for(i=0, root=first_consecutive_root*prim_elem; i<rt->nroots; i++, root+=prim_elem)
+   {  rt->gpoly[i+1] = 1;
 
      /* Multiply gpoly  by  alpha**(root+x) */
 
      for(j=i; j>0; j--)
      {
-       if(gt->gpoly[j] != 0)
-         gt->gpoly[j] = gt->gpoly[j-1] ^ gt->alpha_to[mod_fieldmax(gt->index_of[gt->gpoly[j]] + root)];
+       if(rt->gpoly[j] != 0)
+         rt->gpoly[j] = rt->gpoly[j-1] ^ gt->alphaTo[mod_fieldmax(gt->indexOf[rt->gpoly[j]] + root)]; 
        else
-	 gt->gpoly[j] = gt->gpoly[j-1];
+	 rt->gpoly[j] = rt->gpoly[j-1];
      }
 
-     gt->gpoly[0] = gt->alpha_to[mod_fieldmax(gt->index_of[gt->gpoly[0]] + root)];
+     rt->gpoly[0] = gt->alphaTo[mod_fieldmax(gt->indexOf[rt->gpoly[0]] + root)];
    }
 
    /* Store the polynomials index for faster encoding */ 
 
-   for(i=0; i<=gt->nroots; i++)
-     gt->gpoly[i] = gt->index_of[gt->gpoly[i]];
+   for(i=0; i<=rt->nroots; i++)
+     rt->gpoly[i] = gt->indexOf[rt->gpoly[i]];
 
 #if 0
    /* for the precalculated unrolled loops only */
@@ -110,16 +140,12 @@ GaloisTables* CreateGaloisTables(int nroots_in)
 	  gt->gpoly[0]);
 #endif
 
-   return gt;
+   return rt;
 }
 
-void FreeGaloisTables(GaloisTables *gt)
+void FreeReedSolomonTables(ReedSolomonTables *rt)
 {
-  if(gt->index_of)     g_free(gt->index_of);
-  if(gt->alpha_to)     g_free(gt->alpha_to);
-  if(gt->enc_alpha_to) g_free(gt->enc_alpha_to);
-  if(gt->gpoly)        g_free(gt->gpoly);
+  if(rt->gpoly)        g_free(rt->gpoly);
 
-  g_free(gt);
+  g_free(rt);
 }
-

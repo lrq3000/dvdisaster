@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-10 18:07+0200\n"
+"POT-Creation-Date: 2006-09-17 18:39+0200\n"
 "PO-Revision-Date: 2004-11-30 19:48+0100\n"
 "Last-Translator: Carsten Gnörlich <carsten@dvdisaster.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -62,14 +62,14 @@ msgstr ""
 "Erzeuge zufällige reparierbare Auslöschungen (für %d Nullstellen, max. %d Auslöschungen).\n"
 
 #: debug.c:107 debug.c:192 debug.c:236 debug.c:525 debug.c:597
-#: rs01-common.c:54 rs02-common.c:62 rs02-create.c:303 rs02-create.c:935
-#: rs02-fix.c:375 rs02-verify.c:390
+#: rs01-common.c:54 rs02-common.c:62 rs02-create.c:305 rs02-create.c:938
+#: rs02-fix.c:378 rs02-verify.c:390
 #, c-format
 msgid "Failed seeking to sector %lld in image: %s"
 msgstr "Ansteuern von Sektor %lld im Abbild fehlgeschlagen: %s"
 
 #: debug.c:109 debug.c:194 debug.c:238 debug.c:363 debug.c:485 debug.c:530
-#: rs02-create.c:326 rs02-create.c:352 rs02-create.c:938 udf.c:1046 udf.c:1104
+#: rs02-create.c:328 rs02-create.c:354 rs02-create.c:941 udf.c:1046 udf.c:1104
 #: udf.c:1161 udf.c:1174 udf.c:1179 udf.c:1182 udf.c:1185 udf.c:1188
 #: udf.c:1191 udf.c:1194
 #, c-format
@@ -120,7 +120,7 @@ msgstr "Byte muß einen Wert von [0..255] haben"
 msgid "Setting byte %d in sector %lld to value %d.\n"
 msgstr "Setze Byte %d in Sektor %lld auf den Wert %d.\n"
 
-#: debug.c:317 debug.c:356 rs02-create.c:169 rs02-verify.c:661
+#: debug.c:317 debug.c:356 rs02-create.c:171 rs02-verify.c:661
 #, c-format
 msgid "Failed seeking to start of image: %s\n"
 msgstr "Ansteuern des Abbild-Anfangs fehlgeschlagen: %s\n"
@@ -149,9 +149,9 @@ msgstr "Neue Länge muß im Bereich [0..%lld] liegen.\n"
 msgid "Truncating image to %lld sectors.\n"
 msgstr "Verkürze das Abbild auf %lld Sektoren.\n"
 
-#: debug.c:395 read-linear.c:831 rs01-fix.c:192 rs01-fix.c:213 rs01-fix.c:229
-#: rs01-fix.c:263 rs02-create.c:100 rs02-create.c:142 rs02-fix.c:231
-#: rs02-fix.c:251 rs02-fix.c:266
+#: debug.c:395 read-linear.c:831 rs01-fix.c:195 rs01-fix.c:216 rs01-fix.c:232
+#: rs01-fix.c:266 rs02-create.c:102 rs02-create.c:144 rs02-fix.c:234
+#: rs02-fix.c:254 rs02-fix.c:269
 #, c-format
 msgid "Could not truncate %s: %s\n"
 msgstr "Konnte %s nicht abschneiden: %s\n"
@@ -221,8 +221,8 @@ msgstr ""
 "Inhalt von Sektor %lld:\n"
 "\n"
 
-#: debug.c:601 rs01-common.c:70 rs02-common.c:67 rs02-create.c:186
-#: rs02-fix.c:378
+#: debug.c:601 rs01-common.c:70 rs02-common.c:67 rs02-create.c:188
+#: rs02-fix.c:381
 #, c-format
 msgid "Failed reading sector %lld in image: %s"
 msgstr "Lesen von Sektor %lld im Abbild fehlgeschlagen: %s"
@@ -506,7 +506,7 @@ msgstr ""
 "Kann den Ecc-Vorspann nicht lesen:\n"
 "%s"
 
-#: file.c:184 file.c:189 rs01-create.c:941
+#: file.c:184 file.c:189 rs01-create.c:945
 #, c-format
 msgid ""
 "Error closing error correction file:\n"
@@ -538,7 +538,7 @@ msgstr ""
 msgid "Image file %s not deleted: %s\n"
 msgstr "Abbild-Datei %s nicht gelöscht: %s\n"
 
-#: galois.c:66
+#: galois.c:64
 msgid "Failed to create the log tables!\n"
 msgstr "Fehler beim Erzeugen der Logarithmen-Tabellen!\n"
 
@@ -1321,7 +1321,7 @@ msgstr ""
 msgid "Limiting sector range to [%lld,%lld].\n"
 msgstr "Begrenze Sektor-Bereich auf [%lld,%lld].\n"
 
-#: read-adaptive.c:531 rs01-fix.c:288
+#: read-adaptive.c:531 rs01-fix.c:291
 #, c-format
 msgid ""
 "Sector %d is missing. Can not compare image and ecc fingerprints.\n"
@@ -1331,7 +1331,7 @@ msgstr ""
 "Fehlerkorrekturdatei nicht vergleichen.\n"
 "Vergewissern Sie sich, daß beide Dateien zusammengehören.\n"
 
-#: read-adaptive.c:549 rs01-fix.c:300
+#: read-adaptive.c:549 rs01-fix.c:303
 msgid ""
 "Fingerprints of image and ecc file do not match.\n"
 "Image and ecc file do not belong together.\n"
@@ -1364,7 +1364,7 @@ msgstr ""
 "Abbild-Datei ist %lld Sektoren länger als der Datenträger\n"
 "(Abbild-Datei: %lld Sektoren; Datenträger: %lld Sektoren).\n"
 
-#: read-adaptive.c:655 read-linear.c:402 rs01-common.c:119 rs01-create.c:236
+#: read-adaptive.c:655 read-linear.c:402 rs01-common.c:119 rs01-create.c:240
 #: rs01-verify.c:759
 #, c-format
 msgid "Failed skipping the ecc header: %s"
@@ -1423,14 +1423,14 @@ msgstr "Auffüllen des Abbild-Bereichs [%lld..%lld]"
 
 #: read-adaptive.c:958 read-adaptive.c:1023 read-adaptive.c:1297
 #: read-adaptive.c:1499 read-linear.c:358 read-linear.c:483 read-linear.c:585
-#: read-linear.c:640 rs01-fix.c:431 rs01-fix.c:689 rs02-fix.c:734
+#: read-linear.c:640 rs01-fix.c:437 rs01-fix.c:695 rs02-fix.c:737
 #, c-format
 msgid "Failed seeking to sector %lld in image [%s]: %s"
 msgstr "Ansteuern von Sektor %lld im Abbild fehlgeschlagen [%s]: %s"
 
 #: read-adaptive.c:970 read-adaptive.c:1028 read-adaptive.c:1340
 #: read-adaptive.c:1351 read-adaptive.c:1367 read-adaptive.c:1505
-#: read-linear.c:364 read-linear.c:591 read-linear.c:648 rs01-fix.c:436
+#: read-linear.c:364 read-linear.c:591 read-linear.c:648 rs01-fix.c:442
 #, c-format
 msgid "Failed writing to sector %lld in image [%s]: %s"
 msgstr "Schreiben von Sektor %lld im Abbild fehlgeschlagen [%s]: %s"
@@ -1490,22 +1490,22 @@ msgstr ""
 "Eine Fortsetzung ist gegebenenfalls nicht mehr möglich.\n"
 "Soll der Fehler nicht beachtet und weiter gelesen werden?"
 
-#: read-adaptive.c:1319 rs01-fix.c:38 rs02-fix.c:410
+#: read-adaptive.c:1319 rs01-fix.c:38 rs02-fix.c:413
 #, c-format
 msgid "Failed seeking in crc area: %s"
 msgstr "Suchen im CRC-Abschnitt fehlgeschlagen: %s"
 
-#: read-adaptive.c:1335 rs01-fix.c:385 rs02-fix.c:423
+#: read-adaptive.c:1335 rs01-fix.c:391 rs02-fix.c:426
 #, c-format
 msgid "CRC error in sector %lld\n"
 msgstr "Prüfsummen-Fehler in Sektor %lld\n"
 
-#: read-adaptive.c:1488 scsi-layer.c:602
+#: read-adaptive.c:1488 scsi-layer.c:617
 #, c-format
 msgid "Sectors %lld-%lld: %s\n"
 msgstr "Sektoren %lld-%lld: %s\n"
 
-#: read-adaptive.c:1491 read-linear.c:625 scsi-layer.c:601
+#: read-adaptive.c:1491 read-linear.c:625 scsi-layer.c:616
 #, c-format
 msgid "Sector %lld: %s\n"
 msgstr "Sektor %lld: %s\n"
@@ -1558,7 +1558,7 @@ msgstr "Angepaßtes Leseverfahren:"
 msgid "Sectors processed"
 msgstr "Bearbeitete Sektoren"
 
-#: read-adaptive-window.c:110 scsi-layer.c:583
+#: read-adaptive-window.c:110 scsi-layer.c:598
 msgid "readable"
 msgstr "lesbar"
 
@@ -1612,10 +1612,10 @@ msgstr ""
 "aber \"%s\" gibt es bereits.\n"
 "Soll die Datei überschrieben werden?\n"
 
-#: read-linear.c:164 rs01-create.c:635 rs01-fix.c:183 rs01-fix.c:204
-#: rs01-fix.c:249 rs01-fix.c:278 rs01-fix.c:294 rs01-fix.c:343
-#: rs01-verify.c:427 rs01-verify.c:776 rs02-create.c:107 rs02-fix.c:223
-#: rs02-fix.c:243 rs02-fix.c:333 rs02-verify.c:683
+#: read-linear.c:164 rs01-create.c:639 rs01-fix.c:186 rs01-fix.c:207
+#: rs01-fix.c:252 rs01-fix.c:281 rs01-fix.c:297 rs01-fix.c:349
+#: rs01-verify.c:427 rs01-verify.c:776 rs02-create.c:109 rs02-fix.c:226
+#: rs02-fix.c:246 rs02-fix.c:336 rs02-verify.c:683
 msgid "<span color=\"red\">Aborted by user request!</span>"
 msgstr "<span color=\"red\">Abbruch auf Benutzeranforderung!</span>"
 
@@ -1641,7 +1641,7 @@ msgstr "Vervollständige Abbild %s. Nur die fehlenden Sektoren werden gelesen.\n
 msgid "done.\n"
 msgstr "fertig.\n"
 
-#: read-linear.c:430 scsi-layer.c:963
+#: read-linear.c:430 scsi-layer.c:978
 #, c-format
 msgid "Waiting %d seconds for drive to spin up...\n"
 msgstr "Warte %d Sekunden auf das Hochdrehen des Laufwerks...\n"
@@ -1819,7 +1819,7 @@ msgstr "* fehlender Sektor   : %lld\n"
 msgid "* missing sectors  : %lld - %lld\n"
 msgstr "* fehlende Sektoren  : %lld - %lld\n"
 
-#: rs01-common.c:198 rs01-common.c:265 rs01-create.c:253
+#: rs01-common.c:198 rs01-common.c:265 rs01-create.c:257
 #, c-format
 msgid "Error writing CRC information: %s"
 msgstr "Fehler beim Schreiben der CRC-Information: %s"
@@ -1839,20 +1839,20 @@ msgstr "Ecc-Datei-Größe %lldm außerhalb des nutzbaren Bereiches [%lld .. %lld
 msgid "Redundancy %d out of useful range [8..100]."
 msgstr "Redundanz %d außerhalb des nutzbaren Bereiches [8..100]."
 
-#: rs01-create.c:124 rs01-fix.c:76 rs02-create.c:57 rs02-fix.c:52
+#: rs01-create.c:125 rs01-fix.c:77 rs02-create.c:58 rs02-fix.c:53
 msgid "<span color=\"red\">Aborted by unrecoverable error.</span>"
 msgstr "<span color=\"red\">Abbruch durch nicht behebbaren Fehler.</span>"
 
-#: rs01-create.c:180
+#: rs01-create.c:183
 msgid "Error correction file creation aborted"
 msgstr "Erzeugung der Fehlerkorrektur-Datei abgebrochen"
 
-#: rs01-create.c:202
+#: rs01-create.c:206
 #, c-format
 msgid "Encoding with Method RS01: %d roots, %4.1f%% redundancy."
 msgstr "Kodiere mit Methode RS01: %d Nullstellen, %4.1f%% Redundanz."
 
-#: rs01-create.c:208
+#: rs01-create.c:212
 #, c-format
 msgid ""
 "<big>Creating the error correction file.</big>\n"
@@ -1861,43 +1861,43 @@ msgstr ""
 "<big>Erzeuge die Fehlerkorrektur-Datei.</big>\n"
 "<i>%s</i>"
 
-#: rs01-create.c:224
+#: rs01-create.c:228
 #, c-format
 msgid "Writing sector checksums: %3d%%"
 msgstr "Schreibe Sektoren-Prüfsummen: %3d%%"
 
-#: rs01-create.c:228
+#: rs01-create.c:232
 msgid "<b>1. Writing image sector checksums:</b>"
 msgstr "<b>1. Schreibe Sektoren-Prüfsummen:</b>"
 
-#: rs01-create.c:271 rs01-window.c:116
+#: rs01-create.c:275 rs01-window.c:116
 msgid "<b>1. Calculating image sector checksums:</b>"
 msgstr "<b>1. Berechne Sektoren-Prüfsummen:</b>"
 
-#: rs01-create.c:284 rs01-create.c:418 rs01-create.c:509
+#: rs01-create.c:288 rs01-create.c:422 rs01-create.c:513
 msgid "<span color=\"red\">Aborted by user request!</span> (partial error correction file removed)"
 msgstr "<span color=\"red\">Abbruch auf Benutzeranforderung!</span> (unvollständige Fehlerkorrektur-Datei wurde entfernt)"
 
-#: rs01-create.c:292
+#: rs01-create.c:296
 #, c-format
 msgid "%lld sectors unread or missing due to errors.\n"
 msgstr "%lld unlesbare oder fehlende Sektoren im Abbild.\n"
 
-#: rs01-create.c:346
+#: rs01-create.c:350
 #, c-format
 msgid "Failed skipping ecc+crc header: %s"
 msgstr "Überspringen der Ecc/Crc-Vorspänne fehlgeschlagen: %s"
 
-#: rs01-create.c:367 rs02-create.c:457
+#: rs01-create.c:371 rs02-create.c:460
 msgid "Internal error: parity blocks are not a multiple of sector size.\n"
 msgstr "Interner Fehler: Umfang der Korrektur-Blöcke ist kein Vielfaches der Sektorgröße\n"
 
-#: rs01-create.c:494 rs01-create.c:617 rs01-create.c:910 rs02-create.c:908
+#: rs01-create.c:498 rs01-create.c:621 rs01-create.c:914 rs02-create.c:911
 #, c-format
 msgid "Ecc generation: %3d.%1d%%"
 msgstr "Kodierungs-Fortschritt: %3d.%1d%%"
 
-#: rs01-create.c:923
+#: rs01-create.c:927
 #, c-format
 msgid ""
 "could not write to ecc file \"%s\":\n"
@@ -1906,7 +1906,7 @@ msgstr ""
 "Konnte nicht in die Fehlerkorrektur-Datei schreiben: \"%s\":\n"
 "%s"
 
-#: rs01-create.c:938
+#: rs01-create.c:942
 #, c-format
 msgid ""
 "Can't write ecc header:\n"
@@ -1915,12 +1915,12 @@ msgstr ""
 "Konnte den Vorspann der Fehlerkorrektur-Datei nicht schreiben:\n"
 "%s"
 
-#: rs01-create.c:946 rs02-create.c:1057
+#: rs01-create.c:950 rs02-create.c:1060
 #, c-format
 msgid "Ecc generation: 100.0%%\n"
 msgstr "Kodierungs-Fortschritt: 100.0%%\n"
 
-#: rs01-create.c:947
+#: rs01-create.c:951
 #, c-format
 msgid ""
 "Error correction file \"%s\" created.\n"
@@ -1929,7 +1929,7 @@ msgstr ""
 "Fehlerkorrektur-Datei \"%s\" wurde erzeugt.\n"
 "Verwahren Sie die Datei auf einem zuverlässigen Datenträger.\n"
 
-#: rs01-create.c:955
+#: rs01-create.c:959
 msgid ""
 "The error correction file has been successfully created.\n"
 "Make sure to keep this file on a reliable medium."
@@ -1937,16 +1937,16 @@ msgstr ""
 "Die Fehlerkorrektur-Datei wurde erfolgreich erzeugt.\n"
 "Verwahren Sie die Datei auf einem zuverlässigen Datenträger."
 
-#: rs01-fix.c:43 rs02-fix.c:413 rs02-verify.c:427
+#: rs01-fix.c:43 rs02-fix.c:416 rs02-verify.c:427
 #, c-format
 msgid "problem reading crc data: %s"
 msgstr "Problem beim Lesen der CRC-Daten: %s"
 
-#: rs01-fix.c:133 rs02-fix.c:161
+#: rs01-fix.c:136 rs02-fix.c:163
 msgid "Repairing of image aborted"
 msgstr "Reparatur des Abbildes abgebrochen"
 
-#: rs01-fix.c:139 rs01-fix.c:154 rs02-fix.c:167 rs02-fix.c:197
+#: rs01-fix.c:142 rs01-fix.c:157 rs02-fix.c:169 rs02-fix.c:200
 #, c-format
 msgid ""
 "<big>Repairing the image.</big>\n"
@@ -1955,16 +1955,16 @@ msgstr ""
 "<big>Repariere das Abbild.</big>\n"
 "<i>%s</i>"
 
-#: rs01-fix.c:140 rs02-fix.c:168
+#: rs01-fix.c:143 rs02-fix.c:170
 msgid "Opening files..."
 msgstr "Öffne Dateien..."
 
-#: rs01-fix.c:148
+#: rs01-fix.c:151
 #, c-format
 msgid "Error correction file using Method RS01, %d roots, %4.1f%% redundancy."
 msgstr "Fehlerkorrektur-Datei verwendet Methode RS01, %d Nullstellen, %4.1f%% Redundanz."
 
-#: rs01-fix.c:158 rs02-fix.c:202
+#: rs01-fix.c:161 rs02-fix.c:205
 msgid ""
 "\n"
 "Fix mode: Repairable sectors will be fixed in the image.\n"
@@ -1972,7 +1972,7 @@ msgstr ""
 "\n"
 "\"Fix\"-Modus: Reparierbare Sektoren werden im Abbild wiederhergestellt.\n"
 
-#: rs01-fix.c:168
+#: rs01-fix.c:171
 #, c-format
 msgid ""
 "The image file is %lld sectors longer as noted in the\n"
@@ -1990,7 +1990,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: rs01-fix.c:175 rs02-fix.c:215
+#: rs01-fix.c:178 rs02-fix.c:218
 #, c-format
 msgid ""
 "Image file is %lld sectors longer than expected.\n"
@@ -2001,16 +2001,16 @@ msgstr ""
 "Es wird ein TAO-Datenträger angenommen.\n"
 "%lld Sektoren werden vom Ende des Abbildes abgeschnitten.\n"
 
-#: rs01-fix.c:199 rs02-fix.c:238
+#: rs01-fix.c:202 rs02-fix.c:241
 msgid "Is it okay to remove the superfluous sectors?"
 msgstr "Dürfen die überflüssigen Sektoren abgeschnitten werden?"
 
-#: rs01-fix.c:215 rs01-fix.c:231 rs02-fix.c:253 rs02-fix.c:268
+#: rs01-fix.c:218 rs01-fix.c:234 rs02-fix.c:256 rs02-fix.c:271
 #, c-format
 msgid "Image has been truncated by %lld sectors.\n"
 msgstr "Die Abbild-Datei wurde um %lld Sektoren verkürzt.\n"
 
-#: rs01-fix.c:222 rs02-fix.c:260
+#: rs01-fix.c:225 rs02-fix.c:263
 msgid ""
 "Add the --truncate option to the program call\n"
 "to have the superfluous sectors removed."
@@ -2018,7 +2018,7 @@ msgstr ""
 "Fügen Sie dem Programmaufruf die --truncate-Option hinzu\n"
 "um die überzähligen Sektoren zu entfernen."
 
-#: rs01-fix.c:241
+#: rs01-fix.c:244
 #, c-format
 msgid ""
 "The image file is %d bytes longer than noted\n"
@@ -2029,7 +2029,7 @@ msgstr ""
 "der Fehlerkorrektur-Datei vermerkt wurde.\n"
 "Dürfen die überzähligen Sektoren abgeschnitten werden?\n"
 
-#: rs01-fix.c:256
+#: rs01-fix.c:259
 #, c-format
 msgid ""
 "The image file is %d bytes longer than noted\n"
@@ -2042,12 +2042,12 @@ msgstr ""
 "Fügen Sie dem Programmaufruf die --truncate-Option hinzu\n"
 "um die überzähligen Sektoren zu entfernen."
 
-#: rs01-fix.c:265
+#: rs01-fix.c:268
 #, c-format
 msgid "Image has been truncated by %d bytes.\n"
 msgstr "Die Abbild-Datei wurde um %d Bytes verkürzt.\n"
 
-#: rs01-fix.c:273
+#: rs01-fix.c:276
 msgid ""
 "Image file appears to be truncated.\n"
 "Consider completing it with another reading pass before going on.\n"
@@ -2055,17 +2055,17 @@ msgstr ""
 "Abbild ist zu kurz. Eine Vervollständigung\n"
 "mit einem weiteren Lese-Durchgang wird empfohlen.\n"
 
-#: rs01-fix.c:410
+#: rs01-fix.c:416
 #, c-format
 msgid "* %3d unrepairable sectors: "
 msgstr "* %3d nicht reparierbare Sektoren:"
 
-#: rs01-fix.c:455
+#: rs01-fix.c:461
 #, c-format
 msgid "Failed seeking in ecc area: %s"
 msgstr "Suchen im ECC-Abschnitt fehlgeschlagen: %s"
 
-#: rs01-fix.c:459
+#: rs01-fix.c:465
 #, c-format
 msgid ""
 "Can't read ecc file:\n"
@@ -2074,32 +2074,32 @@ msgstr ""
 "Kann nicht aus der Fehlerkorrektur-Datei lesen:\n"
 "%s"
 
-#: rs01-fix.c:596 rs02-fix.c:608
+#: rs01-fix.c:602 rs02-fix.c:611
 #, c-format
 msgid "Decoder problem (%d != %d) for %d sectors: "
 msgstr "Dekodierungsproblem (%d != %d) für %d Sektoren: "
 
-#: rs01-fix.c:655
+#: rs01-fix.c:661
 #, c-format
 msgid "-> Error located in sector %lld at byte %4d (value %02x '%c', expected %02x '%c')\n"
 msgstr "-> Fehler festgestellt in Sektor %lld in Byteposition %4d (Wert %02x '%c', erwartet %02x '%c')\n"
 
-#: rs01-fix.c:662
+#: rs01-fix.c:668
 #, c-format
 msgid "Unexpected byte error in sector %lld, byte %d\n"
 msgstr "Unerwarteter Byte-Fehler in Sektor %lld, Byte %d\n"
 
-#: rs01-fix.c:668
+#: rs01-fix.c:674
 #, c-format
 msgid "Bad error location %d; corrupted .ecc file?\n"
 msgstr "Ungültige Fehlerposition %d; beschädigte .ecc-Datei?\n"
 
-#: rs01-fix.c:678 rs02-fix.c:701
+#: rs01-fix.c:684 rs02-fix.c:704
 #, c-format
 msgid "  %3d repaired sectors: "
 msgstr "  %3d reparierte Sektoren: "
 
-#: rs01-fix.c:697 rs02-fix.c:742
+#: rs01-fix.c:703 rs02-fix.c:745
 #, c-format
 msgid ""
 "could not write medium sector %lld:\n"
@@ -2108,45 +2108,45 @@ msgstr ""
 "Konnte Abbild-Sektor %lld nicht schreiben:\n"
 "%s"
 
-#: rs01-fix.c:723 rs02-fix.c:779
+#: rs01-fix.c:729 rs02-fix.c:782
 #, c-format
 msgid "Ecc progress: %3d.%1d%%"
 msgstr "Reparatur-Fortschritt: %3d.%1d%%"
 
-#: rs01-fix.c:735 rs02-fix.c:793
+#: rs01-fix.c:741 rs02-fix.c:796
 #, c-format
 msgid "Ecc progress: 100.0%%\n"
 msgstr "Reparatur-Fortschritt: 100.0%%\n"
 
-#: rs01-fix.c:736
+#: rs01-fix.c:742
 #, c-format
 msgid "Repaired sectors: %lld     \n"
 msgstr "Reparierte Sektoren: %lld    \n"
 
-#: rs01-fix.c:738 rs02-fix.c:798
+#: rs01-fix.c:744 rs02-fix.c:801
 #, c-format
 msgid "Unrepaired sectors: %lld\n"
 msgstr "Nicht reparierbare Sektoren: %lld\n"
 
-#: rs01-fix.c:741 rs02-fix.c:801
+#: rs01-fix.c:747 rs02-fix.c:804
 #, c-format
 msgid "Image sectors could not be fully restored (%lld repaired; <span color=\"red\">%lld unrepaired</span>)"
 msgstr "Keine vollständige Reparatur möglich (%lld Sektoren repariert; <span color=\"red\">%lld nicht reparierbar</span>)"
 
-#: rs01-fix.c:747 rs02-fix.c:807
+#: rs01-fix.c:753 rs02-fix.c:810
 msgid "Good! All sectors are already present."
 msgstr "Gut! Alle Sektoren sind bereits vorhanden."
 
-#: rs01-fix.c:751 rs02-fix.c:811
+#: rs01-fix.c:757 rs02-fix.c:814
 msgid "Good! All sectors are repaired."
 msgstr "Gut! Alle Sektoren wurden repariert."
 
-#: rs01-fix.c:756 rs02-fix.c:816
+#: rs01-fix.c:762 rs02-fix.c:819
 #, c-format
 msgid "Erasure counts per ecc block:  avg =  %.1f; worst = %d.\n"
 msgstr "Auslöschungen pro Ecc-Bereich: Mittelwert = %.1f; Schlechtester = %d.\n"
 
-#: rs01-fix.c:761 rs02-fix.c:821
+#: rs01-fix.c:767 rs02-fix.c:824
 msgid "Repair results:"
 msgstr "Reparaturergebnis:"
 
@@ -2573,11 +2573,11 @@ msgstr "Ansteuern des Ecc-Vorspanns bei Pos. %lld fehlgeschlagen: %s\n"
 msgid "Failed writing ecc header at %lld: %s\n"
 msgstr "Schreiben des Ecc-Vorspanns bei Pos. %lld fehlgeschlagen: %s\n"
 
-#: rs02-create.c:103
+#: rs02-create.c:105
 msgid "<span color=\"red\">Aborted by user request!</span> (partial ecc data removed from image)"
 msgstr "<span color=\"red\">Abbruch auf Benutzeranforderung!</span> (unvollständige Fehlerkorrektur-Daten wurden aus dem Abbild entfernt)"
 
-#: rs02-create.c:133
+#: rs02-create.c:135
 #, c-format
 msgid ""
 "Image \"%s\" already contains error correction information.\n"
@@ -2586,7 +2586,7 @@ msgstr ""
 "Das Abbild \"%s\" enthält bereits Fehlerkorrektur-Daten.\n"
 "Es wird auf den Daten-Anteil (%lld Sektoren) verkürzt.\n"
 
-#: rs02-create.c:189
+#: rs02-create.c:191
 msgid ""
 "Image contains unread(able) sectors.\n"
 "Error correction information can only be\n"
@@ -2596,26 +2596,26 @@ msgstr ""
 "Fehlerkorrektur-Daten können nur an vollständige\n"
 "Abbilder hinzugefügt werden.\n"
 
-#: rs02-create.c:199 rs02-create.c:259 rs02-create.c:268
+#: rs02-create.c:201 rs02-create.c:261 rs02-create.c:270
 #, c-format
 msgid "Preparing image (checksums, adding space): %3d%%"
 msgstr "Abbild vorbereiten (Prüfsummen, Größe erweitern): %3d%%"
 
-#: rs02-create.c:234 rs02-create.c:244 rs02-fix.c:87
+#: rs02-create.c:236 rs02-create.c:246 rs02-fix.c:89
 #, c-format
 msgid "Failed seeking to end of image: %s\n"
 msgstr "Ansteuern des Abbild-Endes fehlgeschlagen: %s\n"
 
-#: rs02-create.c:238 rs02-create.c:255 rs02-fix.c:96
+#: rs02-create.c:240 rs02-create.c:257 rs02-fix.c:98
 #, c-format
 msgid "Failed expanding the image: %s\n"
 msgstr "Erweitern des Abbildes fehlgeschlagen: %s\n"
 
-#: rs02-create.c:978
+#: rs02-create.c:981
 msgid "Error correction data creation aborted"
 msgstr "Erzeugen der Fehlerkorrektur-Daten abgebrochen"
 
-#: rs02-create.c:982 rs02-create.c:1002
+#: rs02-create.c:985 rs02-create.c:1005
 #, c-format
 msgid ""
 "<big>Augmenting the image with error correction data.</big>\n"
@@ -2624,16 +2624,16 @@ msgstr ""
 "<big>Erweitere das Abbild um Fehlerkorrektur-Daten.</big>\n"
 "<i>%s</i>"
 
-#: rs02-create.c:983
+#: rs02-create.c:986
 msgid "- checking image -"
 msgstr "- prüfe Abbild -"
 
-#: rs02-create.c:998
+#: rs02-create.c:1001
 #, c-format
 msgid "Encoding with Method RS02: %lld MB data, %lld MB ecc (%d roots; %4.1f%% redundancy)."
 msgstr "Kodiere mit Methode RS02: %lld MB Daten, %lld MB Fehlerkorrektur-Daten (%d Nullstellen; %4.1f%% Redundanz)."
 
-#: rs02-create.c:1006
+#: rs02-create.c:1009
 #, c-format
 msgid ""
 "Augmenting image with Method RS02:\n"
@@ -2642,7 +2642,7 @@ msgstr ""
 "Erweitere das Abbild mit dem RS02-Verfahren:\n"
 "%lld MB Daten, %lld MB Fehlerkorrektur-Daten (%d Nullstellen; %4.1f%% Redundanz)."
 
-#: rs02-create.c:1015
+#: rs02-create.c:1018
 #, c-format
 msgid ""
 "Not enough space on medium left for error correction data.\n"
@@ -2657,7 +2657,7 @@ msgstr ""
 "und kein größerer Datenträger zur Verfügung steht, erzeugen Sie bitte\n"
 "eine alleinstehende Fehlerkorrektur-Datei mit dem RS01-Verfahren.\n"
 
-#: rs02-create.c:1026
+#: rs02-create.c:1029
 #, c-format
 msgid ""
 "Using redundancies below 20%%%% may not give\n"
@@ -2666,7 +2666,7 @@ msgstr ""
 "Redundanzen unterhalb von 20%%%% haben möglicherweise\n"
 "nicht die erhoffte Datensicherungs-Funktion.\n"
 
-#: rs02-create.c:1058 rs02-create.c:1067
+#: rs02-create.c:1061 rs02-create.c:1070
 #, c-format
 msgid ""
 "Image has been augmented with error correction data.\n"
@@ -2675,17 +2675,17 @@ msgstr ""
 "Das Abbild wurde um Fehlerkorrektur-Daten erweitert.\n"
 "Die neue Abbild-Größe ist %lld MB (%lld Sektoren).\n"
 
-#: rs02-fix.c:102 rs02-fix.c:110
+#: rs02-fix.c:104 rs02-fix.c:112
 #, c-format
 msgid "Expanding image: %3d%%"
 msgstr "Erweitere das Abbild: %3d%%"
 
-#: rs02-fix.c:191
+#: rs02-fix.c:194
 #, c-format
 msgid "Image contains error correction data: Method RS02, %d roots, %4.1f%% redundancy."
 msgstr "Das Abbild enthält Fehlerkorrektur-Daten: Methode RS02, %d Nullstellen, %4.1f%% Redundanz."
 
-#: rs02-fix.c:208
+#: rs02-fix.c:211
 #, c-format
 msgid ""
 "The image file is %lld sectors longer as noted in the\n"
@@ -2703,22 +2703,22 @@ msgstr ""
 "\n"
 "%s"
 
-#: rs02-fix.c:451
+#: rs02-fix.c:454
 #, c-format
 msgid "* Ecc block %lld: %3d unrepairable sectors: "
 msgstr "* Ecc-Bereich %lld: %3d unreparierbare Sektoren: "
 
-#: rs02-fix.c:670
+#: rs02-fix.c:673
 #, c-format
 msgid "-> CRC-predicted error in sector %lld at byte %4d (value %02x '%c', expected %02x '%c')\n"
 msgstr "-> CRC-erkannter Fehler in Sektor %lld, Bytepos. %4d (Wert %02x '%c', erwartet %02x '%c')\n"
 
-#: rs02-fix.c:673
+#: rs02-fix.c:676
 #, c-format
 msgid "-> Non-predicted error in sector %lld at byte %4d (value %02x '%c', expected %02x '%c')\n"
 msgstr "-> Nicht erwarteter Fehler in Sektor %lld, Bytepos. %4d (Wert %02x '%c', erwartet %02x '%c')\n"
 
-#: rs02-fix.c:795
+#: rs02-fix.c:798
 #, c-format
 msgid "Repaired sectors: %lld (%lld data, %lld ecc)\n"
 msgstr "Reparierte Sektoren: %lld (%lld Daten, %lld Fehlerkorrektur)\n"
@@ -3167,7 +3167,7 @@ msgstr "Unbekannt"
 msgid "CD Audio"
 msgstr "Audio-CD"
 
-#: scsi-layer.c:534
+#: scsi-layer.c:549
 #, c-format
 msgid ""
 "%s\n"
@@ -3177,14 +3177,14 @@ msgstr ""
 "Konnte Länge der DVD-Strukturbeschreibung für Formatkode 1\n"
 "nicht ermitteln.\n"
 
-#: scsi-layer.c:544
+#: scsi-layer.c:559
 #, c-format
 msgid "Could not query dvd copyright info - implausible packet length %d\n"
 msgstr ""
 "Konnte DVD-Copyright-Information nicht ermitteln\n"
 "- ungültige Datenpaket-Größe %d\n"
 
-#: scsi-layer.c:559
+#: scsi-layer.c:574
 #, c-format
 msgid ""
 "%s\n"
@@ -3193,23 +3193,23 @@ msgstr ""
 "%s\n"
 "Konnte DVD-Copyright-Information nicht ermitteln.\n"
 
-#: scsi-layer.c:617
+#: scsi-layer.c:632
 msgid "is undecideable because of read error"
 msgstr "ist aufgrund von Lesefehlern unbestimmbar"
 
-#: scsi-layer.c:623
+#: scsi-layer.c:638
 msgid "looks GOOD"
 msgstr "erscheint KORREKT"
 
-#: scsi-layer.c:629
+#: scsi-layer.c:644
 msgid "gives unformatted size (UNUSABLE)"
 msgstr "ist die unformatierte Größe (UNBRAUCHBAR)"
 
-#: scsi-layer.c:634
+#: scsi-layer.c:649
 msgid "is UNUSABLE"
 msgstr "ist UNBRAUCHBAR"
 
-#: scsi-layer.c:655
+#: scsi-layer.c:670
 #, c-format
 msgid ""
 "%s\n"
@@ -3218,7 +3218,7 @@ msgstr ""
 "%s\n"
 "Konnte Datenträger-Größe nicht ermitteln.\n"
 
-#: scsi-layer.c:725
+#: scsi-layer.c:740
 #, c-format
 msgid ""
 "Different media sizes depending on query method:\n"
@@ -3231,7 +3231,7 @@ msgstr ""
 "READ DVD STRUCTURE: %lld Sektoren\n"
 "\n"
 
-#: scsi-layer.c:730
+#: scsi-layer.c:745
 msgid ""
 "Evaluation of returned medium sizes:\n"
 "\n"
@@ -3239,15 +3239,15 @@ msgstr ""
 "Untersuchung der beiden Angaben:\n"
 "\n"
 
-#: scsi-layer.c:785
+#: scsi-layer.c:800
 msgid "Using value from READ CAPACITY"
 msgstr "Verwende den Wert von READ CAPACITY."
 
-#: scsi-layer.c:789
+#: scsi-layer.c:804
 msgid "Using value from READ DVD STRUCTURE"
 msgstr "Verwende den Wert von READ DVD STRUCTURE."
 
-#: scsi-layer.c:799
+#: scsi-layer.c:814
 #, c-format
 msgid ""
 "FAILED to determine image size.\n"
@@ -3258,7 +3258,7 @@ msgstr ""
 "Verwende den kleineren Wert (funktioniert bei 90%% aller Laufwerke).\n"
 "Weitermachen auf EIGENE GEFAHR: das Abbild kann unvollständig/unbrauchbar sein."
 
-#: scsi-layer.c:804
+#: scsi-layer.c:819
 #, c-format
 msgid ""
 "Final decision: %s\n"
@@ -3267,7 +3267,7 @@ msgstr ""
 "Abschließende Entscheidung: %s\n"
 "\n"
 
-#: scsi-layer.c:812
+#: scsi-layer.c:827
 msgid ""
 "Failed to determine image size.\n"
 "Try using a different drive."
@@ -3275,16 +3275,16 @@ msgstr ""
 "Größe des Datenträger-Inhaltes ist unbestimmbar.\n"
 "Probieren Sie ein anderes Laufwerk."
 
-#: scsi-layer.c:1020
+#: scsi-layer.c:1035
 msgid "Setting the drive speed failed:\n"
 msgstr "Konnte Laufwerksgeschwindigkeit nicht verändern:\n"
 
-#: scsi-layer.c:1201
+#: scsi-layer.c:1216
 #, c-format
 msgid "Retrying Sector %lld because of: %s\n"
 msgstr "Erneuter Leseversuch von Sektor %lld wegen: %s\n"
 
-#: scsi-layer.c:1228
+#: scsi-layer.c:1243
 #, c-format
 msgid ""
 "\n"
@@ -3293,7 +3293,7 @@ msgstr ""
 "\n"
 "Laufwerk: %s, %s\n"
 
-#: scsi-layer.c:1232
+#: scsi-layer.c:1247
 #, c-format
 msgid ""
 "\n"
@@ -3302,44 +3302,44 @@ msgstr ""
 "\n"
 "Laufwerk: %s (%s), %s\n"
 
-#: scsi-layer.c:1239
+#: scsi-layer.c:1257
 msgid "... Device can read defective sectors in RAW mode. Good!\n"
 msgstr "... Laufwerk kann beschädigte Sektoren in der RAW-Betriebsart lesen. Gut!\n"
 
-#: scsi-layer.c:1242
+#: scsi-layer.c:1260
 msgid "... Device can NOT read defective sectors in RAW mode.\n"
 msgstr "... Laufwerk kann KEINE beschädigten Sektoren in der RAW-Betriebsart lesen.\n"
 
-#: scsi-layer.c:1253
+#: scsi-layer.c:1272
 #, c-format
 msgid "Medium: %s, %lld sectors%s %d layer(s)"
 msgstr "Datenträger: %s, %lld Sektoren%s %d Schicht(en)"
 
-#: scsi-layer.c:1258
+#: scsi-layer.c:1277
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s %d layer(s), created %s"
 msgstr "Datenträger \"%s\": %s, %lld Sektoren%s %d Schicht(en), erzeugt %s"
 
-#: scsi-layer.c:1270
+#: scsi-layer.c:1289
 #, c-format
 msgid "Medium: %s, %lld sectors%s"
 msgstr "Datenträger: %s, %lld Sektoren%s"
 
-#: scsi-layer.c:1274
+#: scsi-layer.c:1293
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s created %s"
 msgstr "Datenträger \"%s\": %s, %lld Sektoren%s erzeugt %s"
 
-#: scsi-layer.c:1288
+#: scsi-layer.c:1307
 #, c-format
 msgid "This software does not support \"%s\" type media."
 msgstr "Dieses Programm unterstützt keine Datenträger vom Typ \"%s\"."
 
-#: scsi-layer.c:1295
+#: scsi-layer.c:1314
 msgid "This software does not support encrypted media.\n"
 msgstr "Dieses Programm unterstützt keine verschlüsselten Datenträger.\n"
 
-#: scsi-layer.c:1302
+#: scsi-layer.c:1321
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr ""

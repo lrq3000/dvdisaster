@@ -30,10 +30,10 @@
 
 static inline int mod_fieldmax(int x)
 {
-  while (x >= FIELDMAX) 
+  while (x >= GF_FIELDMAX) 
   {
-    x -= FIELDMAX;
-    x = (x >> SYMBOLSIZE) + (x & FIELDMAX);
+    x -= GF_FIELDMAX;
+    x = (x >> GF_SYMBOLSIZE) + (x & GF_FIELDMAX);
   }
 
   return x;

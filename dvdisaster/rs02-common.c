@@ -243,7 +243,7 @@ RS02Layout *CalcRS02Layout(gint64 data_sectors, int requested_roots)
       lay->nroots = requested_roots;
    else
    {  lay->rsSectors        = lay->mediumCapacity - lay->protectedSectors;     /* just to start */
-      lay->nroots           = (FIELDMAX*lay->rsSectors) / lay->mediumCapacity; /* iteration below */
+      lay->nroots           = (GF_FIELDMAX*lay->rsSectors) / lay->mediumCapacity; /* iteration below */
    }
 
    if(lay->nroots > 170)   /* Cap redundancy to 200% */
@@ -253,7 +253,7 @@ RS02Layout *CalcRS02Layout(gint64 data_sectors, int requested_roots)
       we get about 20 to 40 copies of the header in the ecc section. */
 
    lay->headerModulo = 32;
-   lay->ndata        = FIELDMAX-lay->nroots;
+   lay->ndata        = GF_FIELDMAX-lay->nroots;
    ecc_area = lay->nroots * ((lay->protectedSectors + lay->ndata - 1) / lay->ndata); 
 
    while(ecc_area / lay->headerModulo > 40)
@@ -265,7 +265,7 @@ RS02Layout *CalcRS02Layout(gint64 data_sectors, int requested_roots)
    {  gint64 first_repeat;  /* first header which is interleaved with ecc sectors */
       gint64 interleaved;   /* number of ecc sectors after first header */
 
-      lay->ndata             = FIELDMAX-lay->nroots;
+      lay->ndata             = GF_FIELDMAX-lay->nroots;
       lay->rsSectors         = lay->nroots * ((lay->protectedSectors + lay->ndata - 1) / lay->ndata); 
       first_repeat  = (lay->protectedSectors + lay->headerModulo - 1) / lay->headerModulo;
       first_repeat *= lay->headerModulo;

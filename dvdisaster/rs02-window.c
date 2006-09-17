@@ -358,7 +358,7 @@ static int cache_size[] = { 1, 2, 4, 8, 16, 32, 64, 96, 128, 192, 256, 384, 512,
 
 static gchar* format_cb(GtkScale *scale, gdouble value, gpointer data)
 {  int nroots = value;
-   int ndata  = FIELDMAX - nroots;
+   int ndata  = GF_FIELDMAX - nroots;
    char *label;
 
    if(GPOINTER_TO_INT(data) == PREF_CACHE)

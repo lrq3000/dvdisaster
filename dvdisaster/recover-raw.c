@@ -30,6 +30,10 @@ RawBuffer *CreateRawBuffer(void)
    int i;
 
    rb = g_malloc0(sizeof(RawBuffer));
+
+   rb->gt = CreateGaloisTables(0x11d);
+   rb->rt = CreateReedSolomonTables(rb->gt, 0, 1, 10);
+
    rb->rawBuf    = g_malloc(Closure->rawAttempts * sizeof(unsigned char*));
    rb->rawState  = g_malloc(Closure->rawAttempts * sizeof(int));
    rb->cdFrame   = g_malloc(2352);
@@ -43,6 +47,9 @@ RawBuffer *CreateRawBuffer(void)
 
 void FreeRawBuffer(RawBuffer *rb)
 {  int i;
+
+   FreeGaloisTables(rb->gt);
+   FreeReedSolomonTables(rb->rt);
 
    for(i=0; i<Closure->rawAttempts; i++)
      g_free(rb->rawBuf[i]);
@@ -135,6 +142,8 @@ static int check_edc(unsigned char *cd_frame)
  *** The majority decision algorithm
  ***/   
 
+//#define DEBUG_MAJ
+
 static int majority_decision(unsigned char *cd_frame, RawBuffer *rb)
 {  int byte_votes[256];
    int byte_nominations[256];
@@ -144,7 +153,9 @@ static int majority_decision(unsigned char *cd_frame, RawBuffer *rb)
    int ties_encountered = FALSE;
    int i,j;
 
+#ifdef DEBUG_MAJ
    Verbose("Doing majority decision for %d samples\n", rb->samplesRead);
+#endif
 
    /*** We need at last three samples for a majority */
 
@@ -208,7 +219,9 @@ static int majority_decision(unsigned char *cd_frame, RawBuffer *rb)
       }
    }
 
+#ifdef DEBUG_MAJ
    Verbose("smallest majority was %d.\n", smallest);
+#endif
 
    /*** Resolve ties.
 	If two or more bytes got the same number of votes,
@@ -216,7 +229,10 @@ static int majority_decision(unsigned char *cd_frame, RawBuffer *rb)
 	instead of one. */
 
    if(ties_encountered)
-   {  Verbose("resolving ties...\n");
+   {  
+#ifdef DEBUG_MAJ
+      Verbose("resolving ties...\n");
+#endif
 
       for(i=0; i<rb->sampleLength; i++)
       {  if(tie[i])
@@ -224,8 +240,9 @@ static int majority_decision(unsigned char *cd_frame, RawBuffer *rb)
 	    int max_nominations = -1;
 	    int chosen_byte = 0;
 
+#ifdef DEBUG_MAJ
 	    Verbose("Tie for byte %4x:\n", i);
-
+#endif
 	    /* Vote again by counting the number of nominations
 	       of each bytes (= buffers containing it) and the
 	       score of its voting buffers. The byte winning in
@@ -237,7 +254,9 @@ static int majority_decision(unsigned char *cd_frame, RawBuffer *rb)
 	    for(j=0; j<rb->samplesRead; j++)
 	    {  byte_votes[rb->rawBuf[j][i]] += buffer_score[j];
 	       byte_nominations[rb->rawBuf[j][i]]++;
+#ifdef DEBUG_MAJ
 	       Verbose(" %2x [%d]\n", rb->rawBuf[j][i], buffer_score[j]);
+#endif
 	    }
 
 	    /* Pick byte with highest score,
@@ -257,8 +276,10 @@ static int majority_decision(unsigned char *cd_frame, RawBuffer *rb)
 	    }
 
 	    cd_frame[i] = chosen_byte;
+#ifdef DEBUG_MAJ
 	    Verbose("picked %2x with %d nominations and %d votes\n", 
 		    chosen_byte, max_nominations, max_votes);
+#endif
 	 }
       }
    }
@@ -293,40 +314,146 @@ static int majority_decision(unsigned char *cd_frame, RawBuffer *rb)
  * Return TRUE if data was recovered successfully, else return FALSE.
  */
 
+#define P_PADDING 229
+#define Q_PADDING 210
+
 int RecoverRaw(unsigned char *out, RawBuffer *rb)
 {  
    /*** Try the simple majority algorithm first. */
 
    if(majority_decision(rb->cdFrame, rb))
-   { 
-     /* See if the created CD frame is L-EC recoverable. */
+   {  unsigned char p_vector[26];
+      unsigned char q_vector[45];
+      unsigned char p_state[26];
+      unsigned char q_state[45];
+      int erasures[45], erasure_count;
+      int p_failures, q_failures;
+      int p_corrected, q_corrected;
+      int p,q;
+      int last_p_failures = 86;
+      int last_q_failures = 52;
+      int iteration=1;
 
-#if 0
-     if(try_l_ec(rb->cdFrame))   /* not yet implemented */
-     {  Verbose("Sector %d sucessfully recovered by L_EC after majority algorithm.\n", rb->lba);
+      /* Maybe the sector can be corrected by L-EC after the majority decision? */
 
-        HexDump(rb->cdFrame, rb->sampleLength, 32);
-        memcpy(out, rb->cdFrame+16, 2048);
-	return TRUE;
-     }
+      memset(rb->byteState, FRAME_BYTE_UNKNOWN, 2352);
 
-#endif
+      for(; ;) /* iterate over P- and Q-Parity until failures converge */
+      {	
+	p_failures = q_failures = 0;
+	p_corrected = q_corrected = 0;
 
-     /* If the CRC is good, return the user data portion */
+	/* Perform Q-Parity error correction */
 
-     if(check_edc(rb->cdFrame))
-     {  Verbose("Sector %d sucessfully recovered by majority algorithm.\n", rb->lba);
+	erasure_count = 0;
 
-        HexDump(rb->cdFrame, rb->sampleLength, 32);
-        memcpy(out, rb->cdFrame+16, 2048);
-	return TRUE;
-     }
-     else
-     {  Verbose("Sector %d NOT recovered by majority algorithm.\n", rb->lba);
-     }
+	for(q=0; q<52; q++)
+	{  int i,err;
+
+	   /* Determine number of erasures */
+
+	   GetQVector(rb->byteState, q_state, q);
+	   erasure_count = 0;
+
+	   for(i=0; i<45; i++)
+	     if(q_state[i] == FRAME_BYTE_ERROR)
+	       erasures[erasure_count++] = i;
+
+	   /* Erasure values >2 are not helpful,
+	      but it is not certain that these bytes are wrong at all.
+	      Lets give it a try anyways. */
+
+	   if(erasure_count > 2)
+	     erasure_count = 0;
+
+	   /* Try error correction */
+
+	   GetQVector(rb->cdFrame, q_vector, q);
+	   err = DecodePQ(rb->rt, q_vector, Q_PADDING, erasures, erasure_count);
+
+	   if(err < 0)  /* Uncorrectable. Mark bytes are erasure. */
+	   {  q_failures++;
+	      FillQVector(rb->byteState, FRAME_BYTE_ERROR, q);
+	   }
+	   else 
+	   {  if(err == 1 || err == 2) /* Store back corrected vector */ 
+	      {  SetQVector(rb->cdFrame, q_vector, q);
+		 FillQVector(rb->byteState, FRAME_BYTE_GOOD, q);
+		 q_corrected++;
+	      }
+	   }
+	}
+
+	/* Perform P-Parity error correction */
+
+	for(p=0; p<86; p++)
+	{  int err,i;
+
+	   /* Determine number of erasures */
+
+	   GetPVector(rb->byteState, p_state, p);
+	   erasure_count = 0;
+
+	   for(i=0; i<26; i++)
+	     if(p_state[i] == FRAME_BYTE_ERROR)
+	       erasures[erasure_count++] = i;
+
+	   /* Erasure values >2 are not helpful,
+	      but it is not certain that these bytes are wrong at all.
+	      Lets give it a try anyways. */
+
+	   if(erasure_count > 2)
+	     erasure_count = 0;
+
+	   /* Try error correction */
+
+	   GetPVector(rb->cdFrame, p_vector, p);
+	   err = DecodePQ(rb->rt, p_vector, P_PADDING, erasures, erasure_count);
+
+	   if(err < 0)  /* Uncorrectable. */
+	   {  p_failures++;
+	      FillPVector(rb->byteState, FRAME_BYTE_ERROR, p);
+	   }
+	   else 
+	   {  if(err == 1 || err == 2) /* Store back corrected vector */ 
+	      {  SetPVector(rb->cdFrame, p_vector, p);
+		 FillPVector(rb->byteState, FRAME_BYTE_GOOD, p);
+		 p_corrected++;
+	      }
+	   }
+	}
+
+	/* See if there was an improvement */
+
+	printf("L-EC: iteration %d\n", iteration); 
+	printf("      Q-failures/corrected: %2d/%2d\n", q_failures, q_corrected);
+	printf("      P-failures/corrected: %2d/%2d\n", p_failures, p_corrected);
+
+	if(p_failures + q_failures == 0)
+	  break;
+
+	if(   last_p_failures > p_failures
+	   || last_q_failures > q_failures)
+	{  last_p_failures = p_failures;
+	   last_q_failures = q_failures;
+	   iteration++;
+	}
+	else break;
+      }
+
+      /* If the CRC is good, return the user data portion */
+
+      if(check_edc(rb->cdFrame))
+      {  Verbose("Sector %d sucessfully recovered by majority algorithm and L-EC.\n", rb->lba);
+
+//         HexDump(rb->cdFrame, rb->sampleLength, 32);
+         memcpy(out, rb->cdFrame+16, 2048);
+	 return TRUE;
+      }
+      else
+      {  Verbose("Sector %d NOT recovered by majority algorithm and L-EC.\n", rb->lba);
+      }
    }
-
-   /*** Try harder. Andrei? ;-) */
 
    return FALSE;
 }

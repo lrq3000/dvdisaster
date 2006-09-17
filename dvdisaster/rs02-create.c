@@ -32,6 +32,7 @@ typedef struct
    RS02Widgets *wl;
    RS02Layout *lay;
    GaloisTables *gt;
+   ReedSolomonTables *rt;
    ImageInfo *ii;
    EccHeader *eh;
    unsigned char *data;
@@ -67,6 +68,7 @@ static void ecc_cleanup(gpointer data)
    /*** Clean up */
 
    if(ec->gt) FreeGaloisTables(ec->gt);
+   if(ec->rt) FreeReedSolomonTables(ec->rt);
    if(ec->ii) FreeImageInfo(ec->ii);
    if(ec->eh) g_free(ec->eh);
    if(ec->lay) g_free(ec->lay);
@@ -412,7 +414,7 @@ static void create_reed_solomon(ecc_closure *ec)
    int layer,chunk,i,j,k;
    unsigned char *par_ptr;
 static gint32 *gf_index_of;    /* These need to be static globals */
-static gint32 *gf_gpoly;       /* for optimization reasons. */
+static gint32 *rs_gpoly;       /* for optimization reasons. */
 static gint32 *enc_alpha_to;
 
    /*** Show the second progress bar */
@@ -428,11 +430,12 @@ static gint32 *enc_alpha_to;
 
    /*** Create table for Galois field math */
 
-   ec->gt = CreateGaloisTables(nroots);
+   ec->gt = CreateGaloisTables(RS_GENERATOR_POLY);
+   ec->rt = CreateReedSolomonTables(ec->gt, RS_FIRST_ROOT, RS_PRIM_ELEM, nroots);
 
-   gf_index_of  = ec->gt->index_of;
-   enc_alpha_to = ec->gt->enc_alpha_to;
-   gf_gpoly     = ec->gt->gpoly;
+   gf_index_of  = ec->gt->indexOf;
+   enc_alpha_to = ec->gt->encAlphaTo;
+   rs_gpoly     = ec->rt->gpoly;
 
    /*** Allocate buffers for the parity calculation and image data caching. 
 
@@ -533,9 +536,9 @@ static gint32 *enc_alpha_to;
 
 	    feedback = gf_index_of[ec->data[i] ^ par_idx[sp]];
 
-	    if(feedback != ALPHA0) /* non-zero feedback term */
+	    if(feedback != GF_ALPHA0) /* non-zero feedback term */
 	    {  register int spk = sp+1;
-	       register int *gpoly = gf_gpoly + nroots;
+	       register int *gpoly = rs_gpoly + nroots;
 
 	       switch(nroots-spk)  /* unrolled loop part1 */
 	       {  
@@ -887,7 +890,7 @@ static gint32 *enc_alpha_to;
 		   case  1: par_idx[spk++] ^= enc_alpha_to[feedback + *--gpoly];
 	       }
 
-	       par_idx[sp] = enc_alpha_to[feedback + gf_gpoly[0]];
+	       par_idx[sp] = enc_alpha_to[feedback + rs_gpoly[0]];
 	    }
 	    else                   /* zero feedback term */
 	      par_idx[sp] = 0;

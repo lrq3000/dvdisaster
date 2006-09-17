@@ -405,6 +405,8 @@ assume_cd:
  * or written over existings flags (override = TRUE). 
  */
 
+//#define RAW_DEBUG
+
 int SetRawMode(DeviceHandle *dh, int mode, int override)
 {  AlignedBuffer *ab = CreateAlignedBuffer(2048);
    unsigned char *buf = ab->buf;
@@ -422,12 +424,15 @@ int SetRawMode(DeviceHandle *dh, int mode, int override)
    ret  = SendPacket(dh, cdb, 10, buf, 255, &sense, DATA_READ);
 
    if(ret<0) 
-   {  Verbose("MODE SENSE: %s\n", 
+   {  FreeAlignedBuffer(ab);
+#ifdef RAW_DEBUG
+      Verbose("MODE SENSE: %s\n", 
 	      GetSenseString(sense.sense_key, sense.asc, sense.ascq, 0));
-      FreeAlignedBuffer(ab);
+#endif
       return FALSE;
    }
 
+#ifdef RAW_DEBUG
    Verbose("MODE PAGE 01h:\n");
    Verbose("  mode data length = %d\n", buf[0]<<8 | buf[1]);
    Verbose("  block descriptor length = %d\n", buf[6]<<8 | buf[7]);
@@ -435,9 +440,13 @@ int SetRawMode(DeviceHandle *dh, int mode, int override)
    Verbose("  page byte 1 = %2x\n", buf[9]);
    Verbose("  page byte 2 = %2x\n", buf[10]);
    Verbose("  page byte 3 = %2x\n", buf[11]);
+#endif
 
    pll = buf[1] + 2;  /* mode data length + 2 */
+
+#ifdef RAW_DEBUG
    Verbose("  using mode data length %d\n", pll);
+#endif
 
    /*** Set new raw reading mode */
 
@@ -455,9 +464,11 @@ int SetRawMode(DeviceHandle *dh, int mode, int override)
    ret  = SendPacket(dh, cdb, 10, buf, pll, &sense, DATA_WRITE);
 
    if(ret<0) 
-   {  Verbose("MODE SELECT: %s\n", 
+   {  FreeAlignedBuffer(ab);
+#ifdef RAW_DEBUG
+      Verbose("MODE SELECT: %s\n", 
 	      GetSenseString(sense.sense_key, sense.asc, sense.ascq, 0));
-      FreeAlignedBuffer(ab);
+#endif
       return FALSE;
    }
 
@@ -472,15 +483,19 @@ int SetRawMode(DeviceHandle *dh, int mode, int override)
    ret  = SendPacket(dh, cdb, 10, buf, 255, &sense, DATA_READ);
 
    if(ret<0) 
-   {  Verbose("MODE SENSE: %s\n", 
+   {  FreeAlignedBuffer(ab);
+#ifdef RAW_DEBUG
+      Verbose("MODE SENSE: %s\n", 
 	      GetSenseString(sense.sense_key, sense.asc, sense.ascq, 0));
-      FreeAlignedBuffer(ab);
+#endif
       return FALSE;
    }
 
    if(buf[10] != wanted_mode)
-   {  Verbose("Setting raw mode failed: %2x instead of %2x\n", buf[10], wanted_mode);
-      FreeAlignedBuffer(ab);
+   {  FreeAlignedBuffer(ab);
+#ifdef RAW_DEBUG
+      Verbose("Setting raw mode failed: %2x instead of %2x\n", buf[10], wanted_mode);
+#endif
       return FALSE;
    }
 
@@ -1235,11 +1250,15 @@ DeviceHandle* OpenAndQueryDevice(char *device)
 
    query_type(dh, 0);
 
-   if(query_raw_mode(dh, 0x20))
-   {  PrintLog(_("... Device can read defective sectors in RAW mode. Good!\n")); 
-   }
-   else
-   {  PrintLog(_("... Device can NOT read defective sectors in RAW mode.\n")); 
+   /* Try switching into raw mode if rawAttempts > 0 */
+
+   if(Closure->rawAttempts > 0)
+   {  if(query_raw_mode(dh, 0x20))
+      {  PrintLog(_("... Device can read defective sectors in RAW mode. Good!\n")); 
+      }
+      else
+      {  PrintLog(_("... Device can NOT read defective sectors in RAW mode.\n")); 
+      }
    }
 
    if(Closure->querySize >= 1)  /* parseUDF or better requested */
