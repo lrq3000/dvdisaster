@@ -405,7 +405,7 @@ assume_cd:
  * or written over existings flags (override = TRUE). 
  */
 
-//#define RAW_DEBUG
+#define RAW_DEBUG
 
 int SetRawMode(DeviceHandle *dh, int mode, int override)
 {  AlignedBuffer *ab = CreateAlignedBuffer(2048);

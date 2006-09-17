@@ -1,6 +1,9 @@
 Warning: CD/DVD reading is currently being reworked. Do not use for production work;
 	 images might contain wrong data.
 
+0.72 (devel-2)
+	- added experimental l-ec to raw reading algorithm. Won't work reliably yet.
+
 0.71 (devel-1)
 	- added CD raw reading and majority algorithm
 	- started transfer of preferences documentation from HTML manual

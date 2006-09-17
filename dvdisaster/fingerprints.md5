@@ -47,7 +47,7 @@ f747d0e89474d40f3833da319fcdc88b *rs02-verify.c
 cb43b36c9f3cbad2f612cac3778ff9f5 *rs02-window.c
 1f4492537c0ac78c57a86ca231d1973c *scsi-darwin.c
 e061f7bcdae26fa4ef2e941f64668780 *scsi-freebsd.c
-124f2d1f69a362318eaa97a271810a55 *scsi-layer.c
+1afcfc7a8481d230e5a5f769f97300d2 *scsi-layer.c
 bbfee8ed42bad97b39e4c0c0e1eaada6 *scsi-linux.c
 79a515b5dc4addb8ffbe301e5ee88b72 *scsi-unknown.c
 318fd9bf947c32fc31208d54b10d0681 *scsi-win32.c
