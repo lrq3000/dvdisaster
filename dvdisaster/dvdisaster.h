@@ -176,7 +176,6 @@ typedef struct _GlobalClosure
    /*** GUI-related things */
 
    int guiMode;         /* TRUE if GUI is active */
-   int keepStyle;       /* TRUE = don't tinker with style */
    int stopActions;     /* crude method to stop ongoing action(s) */
 
    GtkWidget *logWidget;     /* Dialog for the log display */
@@ -217,6 +216,7 @@ typedef struct _GlobalClosure
    GdkGC     *drawGC;
    GdkColor  *background,*grid,*black,*white;
    GdkColor  *red,*yellow,*green,*darkgreen,*blue;
+   char      bgString[16];
    gint      lastPercent;
    gint      lastSegment;
    gint      lastPlotted;
@@ -538,7 +538,8 @@ typedef struct _FrameWithOnlineHelp
 
 FrameWithOnlineHelp* CreateFrameWithOnlineHelp(char*);
 void ClearFrameWithOnlineHelp(FrameWithOnlineHelp*);
-void AddHelpParagraph(FrameWithOnlineHelp*, char*);
+void AddHelpItemList(FrameWithOnlineHelp*, char*, ...);
+void AddHelpParagraph(FrameWithOnlineHelp*, char*, ...);
 void AddHelpWidget(FrameWithOnlineHelp*, GtkWidget*);
 
 /* Specific online help dialogs */
@@ -577,12 +578,22 @@ int LargeUnlink(char*);
  *** l-ec.c
  ***/
 
+#define N_P_VECTORS   86      /* 43 16bit p vectors */
+#define P_VECTOR_SIZE 26      /* using RS(26,24) ECC */
+
+#define N_Q_VECTORS   52      /* 26 16bit q vectors */
+#define Q_VECTOR_SIZE 45      /* using RS(45,43) ECC */
+
 void GetPVector(unsigned char*, unsigned char*, int);
 void SetPVector(unsigned char*, unsigned char*, int);
 void FillPVector(unsigned char*, unsigned char, int);
+void IncrPVector(unsigned char*, int);
+void RaisePVector(unsigned char*, unsigned char, int);
+
 void GetQVector(unsigned char*, unsigned char*, int);
 void SetQVector(unsigned char*, unsigned char*, int);
 void FillQVector(unsigned char*, unsigned char, int);
+void RaiseQVector(unsigned char*, unsigned char, int);
 
 int DecodePQ(ReedSolomonTables*, unsigned char*, int, int*, int);
 
@@ -820,25 +831,26 @@ typedef struct _RawBuffer
    ReedSolomonTables *rt;
    unsigned char **rawBuf;    /* buffer for raw read attempts */
    int *rawState;             /* error state returned for this sample */
+   int *valid;                /* sector considered valid? */
    int samplesRead;           /* number of samples read */
    int sampleLength;          /* length of samples */
-   unsigned char *cdFrame;    /* working buffer for cd frame recovery */
-   char *byteState;           /* state of error correction (see enum below) */
+
+   unsigned char *recovered;  /* working buffer for cd frame recovery */
+   char *byteState;           /* state of error correction */
+   int *pList[N_P_VECTORS];   /* list of suspicious p vectors */
+   int *qList[N_Q_VECTORS];   /* list of suspicious q vectors */
+   int pIndex[N_P_VECTORS];   /* index for list above */
+   int qIndex[N_Q_VECTORS];
    int lba;                   /* sector number were currently working on */
 } RawBuffer;
 
 enum                          /* values for rawState */
 {  RAW_SUCCESS = 0,           /* drive believes data is correct */
-   RAW_READ_ERROR = 1         /* drive signalled read error */
+   RAW_READ_ERROR = 1,        /* drive signalled read error */
 };
 
-enum                          /* values for byteState */
-{  FRAME_BYTE_UNKNOWN,        /* state of byte is unknown */
-   FRAME_BYTE_ERROR,          /* byte is wrong (= erasure for ecc) */
-   FRAME_BYTE_GOOD            /* byte is correct */
-};
 
-RawBuffer* CreateRawBuffer(void);
+RawBuffer* CreateRawBuffer(int);
 void FreeRawBuffer(RawBuffer*);
 
 int RecoverRaw(unsigned char*, RawBuffer*);

@@ -41,7 +41,6 @@ static gboolean expose_cb(GtkWidget *widget, GdkEventExpose *event, gpointer dat
 
    if(!Closure->drawGC)
    {  GdkColor *bg = &widget->style->bg[0];
-      char color[16];
 
       GdkColormap *cmap = gdk_colormap_get_system();
       Closure->drawGC = gdk_gc_new(widget->window);
@@ -80,12 +79,12 @@ static gboolean expose_cb(GtkWidget *widget, GdkEventExpose *event, gpointer dat
       if(Closure->welcomeMessage || Closure->version != Closure->dotFileVersion)
       {  GtkWidget *button;
 
-	 snprintf(color, 16, "%04x%04x%04x", bg->red, bg->green, bg->blue);
+	 snprintf(Closure->bgString, 16, "%04x%04x%04x", bg->red, bg->green, bg->blue);
 
 	 AboutText(box, _("- RS02 error correction method fully supported\n"
 			  "<span color=\"#%s\">-</span> in the graphical user interface.\n"
 			  "- Adaptive reading supports RS02 images.\n"),
-		   color);
+		   Closure->bgString);
 
 	 gtk_box_pack_start(GTK_BOX(box), gtk_hseparator_new(), FALSE, FALSE, 10);
 

@@ -433,13 +433,13 @@ static void query_cb(GtkWidget *widget, gpointer data)
    gint64 size;
  
    size = CurrentImageCapacity();
-   g_snprintf(value, 40, "%lld", size);
+   g_snprintf(value, 40, "%lld", (long long int)size);
 
    if(widget == wl->cdButton)
      gtk_entry_set_text(GTK_ENTRY(wl->cdEntry), value);
 
    if(widget == wl->cdUndoButton)
-   {  g_snprintf(value, 40, "%lld", Closure->savedCDSize);
+   {  g_snprintf(value, 40, "%lld", (long long int)Closure->savedCDSize);
       gtk_entry_set_text(GTK_ENTRY(wl->cdEntry), value);
    }
 
@@ -447,7 +447,7 @@ static void query_cb(GtkWidget *widget, gpointer data)
      gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry1), value);
 
    if(widget == wl->dvdUndoButton1)
-   {  g_snprintf(value, 40, "%lld", Closure->savedDVDSize1);
+   {  g_snprintf(value, 40, "%lld", (long long int)Closure->savedDVDSize1);
       gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry1), value);
    }
 
@@ -455,7 +455,7 @@ static void query_cb(GtkWidget *widget, gpointer data)
      gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry2), value);
 
    if(widget == wl->dvdUndoButton2)
-   {  g_snprintf(value, 40, "%lld", Closure->savedDVDSize2);
+   {  g_snprintf(value, 40, "%lld", (long long int)Closure->savedDVDSize2);
       gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry2), value);
    }
 }
@@ -594,11 +594,11 @@ void CreateRS02PrefsPage(Method *method, GtkWidget *parent)
    g_signal_connect(G_OBJECT(wl->dvdUndoButton2), "clicked", G_CALLBACK(query_cb), wl);
    gtk_table_attach(GTK_TABLE(table), wl->dvdUndoButton2, 3, 4, 3, 4, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
 
-   g_snprintf(value, 40, "%lld", Closure->cdSize);
+   g_snprintf(value, 40, "%lld", (long long int)Closure->cdSize);
    gtk_entry_set_text(GTK_ENTRY(wl->cdEntry), value);
-   g_snprintf(value, 40, "%lld", Closure->dvdSize1);
+   g_snprintf(value, 40, "%lld", (long long int)Closure->dvdSize1);
    gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry1), value);
-   g_snprintf(value, 40, "%lld", Closure->dvdSize2);
+   g_snprintf(value, 40, "%lld", (long long int)Closure->dvdSize2);
    gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry2), value);
 
    /* custom value selection */
@@ -619,7 +619,7 @@ void CreateRS02PrefsPage(Method *method, GtkWidget *parent)
    lab = gtk_label_new(_utf("sectors."));
    gtk_box_pack_start(GTK_BOX(hbox), lab, FALSE, FALSE, 0);
 
-   g_snprintf(value, 40, "%lld", Closure->mediumSize);
+   g_snprintf(value, 40, "%lld", (long long int)Closure->mediumSize);
    gtk_entry_set_text(GTK_ENTRY(wl->otherEntry), value);
 
    /* Initialize radio buttons */

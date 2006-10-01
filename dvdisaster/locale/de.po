@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-17 18:39+0200\n"
+"POT-Creation-Date: 2006-10-01 12:55+0200\n"
 "PO-Revision-Date: 2004-11-30 19:48+0100\n"
 "Last-Translator: Carsten Gnörlich <carsten@dvdisaster.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -61,7 +61,7 @@ msgstr ""
 "\n"
 "Erzeuge zufällige reparierbare Auslöschungen (für %d Nullstellen, max. %d Auslöschungen).\n"
 
-#: debug.c:107 debug.c:192 debug.c:236 debug.c:525 debug.c:597
+#: debug.c:107 debug.c:192 debug.c:236 debug.c:525 debug.c:617
 #: rs01-common.c:54 rs02-common.c:62 rs02-create.c:305 rs02-create.c:938
 #: rs02-fix.c:378 rs02-verify.c:390
 #, c-format
@@ -102,7 +102,7 @@ msgstr "Die Anzahl von Auslöschungen muß > 0 und <= %d sein\n"
 msgid "3rd argument is missing"
 msgstr "Das dritte Argument fehlt"
 
-#: debug.c:302 debug.c:590 debug.c:633
+#: debug.c:302 debug.c:610 debug.c:657
 #, c-format
 msgid "Sector must be in range [0..%lld]\n"
 msgstr "Sektor muß im Bereich [0..%lld] liegen\n"
@@ -212,7 +212,7 @@ msgstr ""
 msgid "%lld \"unreadable sector\" markers replaced.\n"
 msgstr "%lld \"unlesbarer Sektor\"-Markierungen ersetzt.\n"
 
-#: debug.c:592 debug.c:636
+#: debug.c:612 debug.c:660
 #, c-format
 msgid ""
 "Contents of sector %lld:\n"
@@ -221,13 +221,13 @@ msgstr ""
 "Inhalt von Sektor %lld:\n"
 "\n"
 
-#: debug.c:601 rs01-common.c:70 rs02-common.c:67 rs02-create.c:188
+#: debug.c:621 rs01-common.c:70 rs02-common.c:67 rs02-create.c:188
 #: rs02-fix.c:381
 #, c-format
 msgid "Failed reading sector %lld in image: %s"
 msgstr "Lesen von Sektor %lld im Abbild fehlgeschlagen: %s"
 
-#: debug.c:647
+#: debug.c:671
 #, c-format
 msgid "Failed reading sector %lld: %s"
 msgstr ""
@@ -250,24 +250,24 @@ msgstr "RS01-Methode zum Überprüfen der Dateien nicht verfügbar."
 #. TRANSLATORS:
 #. This is a dummy entry which is supposed to translate into "ok".
 #. Please do not return anything else here.
-#: dvdisaster.c:257 dvdisaster.c:270 dvdisaster.c:282
+#: dvdisaster.c:256 dvdisaster.c:269 dvdisaster.c:281
 msgid "test phrase for verifying the locale installation"
 msgstr "ok"
 
-#: dvdisaster.c:303
+#: dvdisaster.c:302
 #, c-format
 msgid "sizeof(EccHeader) is %d, but must be 4096.\n"
 msgstr "sizeof(EccHeader) ist %d, muß aber 4096 sein.\n"
 
-#: dvdisaster.c:444
+#: dvdisaster.c:442
 msgid "--cache-size must at least be 1MB; 16MB or higher is recommended."
 msgstr "--cache-size muß mindestens 1MB sein; 16MB oder mehr werden empfohlen."
 
-#: dvdisaster.c:446
+#: dvdisaster.c:444
 msgid "--cache-size maximum is 2048MB."
 msgstr "Die Maximalgröße von --cache-size ist 2048MB."
 
-#: dvdisaster.c:500
+#: dvdisaster.c:495
 #, c-format
 msgid ""
 "\n"
@@ -278,12 +278,12 @@ msgstr ""
 "dvdisaster Version %s\n"
 "\n"
 
-#: dvdisaster.c:543
+#: dvdisaster.c:538
 #, c-format
 msgid "?? illegal getopt return value %d\n"
 msgstr "?? ungültiger Rückgabewert von getopt: %d\n"
 
-#: dvdisaster.c:575
+#: dvdisaster.c:570
 #, c-format
 msgid ""
 "dvdisaster is not properly installed.\n"
@@ -295,7 +295,7 @@ msgstr ""
 
 #. TRANSLATORS: Program options like -r and --read are not to be translated
 #. to avoid confusion when discussing the program in international forums.
-#: dvdisaster.c:707
+#: dvdisaster.c:702
 msgid ""
 "\n"
 "Common usage examples:\n"
@@ -319,7 +319,7 @@ msgstr ""
 "  dvdisaster -u,--unlink # Löscht .iso - Dateien nach Beenden der vorherigen Aktionen.\n"
 "\n"
 
-#: dvdisaster.c:716
+#: dvdisaster.c:711
 #, c-format
 msgid ""
 "Drive and file specification:\n"
@@ -334,7 +334,7 @@ msgstr ""
 "  -i,--image  Name       - Name der Abbild - Datei        (Standard: medium.iso)\n"
 "  -e,--ecc    Name       - Name der Fehlerkorrektur-Datei (Standard: medium.ecc)\n"
 
-#: dvdisaster.c:724
+#: dvdisaster.c:719
 msgid ""
 "  -l,--list              - list drives available under ASPI manager\n"
 "\n"
@@ -342,7 +342,7 @@ msgstr ""
 "  -l,--list              - zeigt unter ASPI verfügbare Laufwerke\n"
 "\n"
 
-#: dvdisaster.c:729
+#: dvdisaster.c:724
 #, c-format
 msgid ""
 "Tweaking options (see manual before using!)\n"
@@ -381,17 +381,7 @@ msgstr ""
 "  --split-files          - Abbild in mehrere Dateien <= 2GB aufteilen\n"
 "\n"
 
-#: dvdisaster.c:746
-msgid ""
-"Graphical user interface options\n"
-"  --keep-style           - do not override the style settings\n"
-"\n"
-msgstr ""
-"Einstellungen für die graphische Benutzeroberfläche\n"
-"  --keep-style           - Style-Einstellungen nicht überschreiben\n"
-"\n"
-
-#: dvdisaster.c:750
+#: dvdisaster.c:742
 #, c-format
 msgid ""
 "Debugging options (purposefully undocumented and possibly harmful)\n"
@@ -428,7 +418,7 @@ msgstr ""
 "  --zero-unreadable - Ersetzt die \"unlesbare Sektoren\"-Markierungen durch Nullen\n"
 "\n"
 
-#: dvdisaster.c:768
+#: dvdisaster.c:760
 msgid ""
 "NOTE: This is the Windows console version of dvdisaster.\n"
 "The version providing a graphical user interface is called\n"
@@ -542,11 +532,11 @@ msgstr "Abbild-Datei %s nicht gelöscht: %s\n"
 msgid "Failed to create the log tables!\n"
 msgstr "Fehler beim Erzeugen der Logarithmen-Tabellen!\n"
 
-#: help-dialogs.c:247
+#: help-dialogs.c:323
 msgid "windowtitle|Log data"
 msgstr "Protokollfenster"
 
-#: help-dialogs.c:248
+#: help-dialogs.c:324
 msgid ""
 "<big>Log data</big>\n"
 "<i>Protocol of the current or previous action</i>"
@@ -554,11 +544,11 @@ msgstr ""
 "<big>Protokolldaten</big>\n"
 "<i>Protokoll des momentanen oder letzten Vorgangs.</i>"
 
-#: help-dialogs.c:264
+#: help-dialogs.c:340
 msgid "windowtitle|GNU General Public License"
 msgstr "GNU General Public License"
 
-#: help-dialogs.c:265
+#: help-dialogs.c:341
 msgid ""
 "<big>GNU General Public License</big>\n"
 "<i>The license terms of dvdisaster.</i>"
@@ -566,7 +556,7 @@ msgstr ""
 "<big>GNU General Public License</big>\n"
 "<i>Die Lizenzbedingungen von dvdisaster.</i>"
 
-#: help-dialogs.c:337
+#: help-dialogs.c:413
 #, c-format
 msgid ""
 "File\n"
@@ -577,11 +567,11 @@ msgstr ""
 "%s\n"
 "nicht vorhanden"
 
-#: help-dialogs.c:420
+#: help-dialogs.c:496
 msgid "windowtitle|Modifying dvdisaster"
 msgstr "dvdisaster verändern"
 
-#: help-dialogs.c:421
+#: help-dialogs.c:497
 msgid ""
 "<big>Modifying dvdisaster</big>\n"
 "<i>Your changes are not ours.</i>"
@@ -589,11 +579,11 @@ msgstr ""
 "<big>dvdisaster verändern</big>\n"
 "<i>Ihre Änderungen sind nicht unsere.</i>"
 
-#: help-dialogs.c:560
+#: help-dialogs.c:636
 msgid "windowtitle|About dvdisaster"
 msgstr "Kurzinformation"
 
-#: help-dialogs.c:580
+#: help-dialogs.c:656
 msgid ""
 "Modified version Copyright 2006 (please fill in - [directions])\n"
 "Copyright 2004-2006 Carsten Gnoerlich"
@@ -601,11 +591,11 @@ msgstr ""
 "Veränderte Version Copyright 2006 (bitte eintragen - [Hinweise])\n"
 "Original-Programm Copyright 2004-2006 Carsten Gnörlich"
 
-#: help-dialogs.c:584
+#: help-dialogs.c:660
 msgid "Copyright 2004-2006 Carsten Gnoerlich"
 msgstr "Copyright 2004-2006 Carsten Gnörlich"
 
-#: help-dialogs.c:591
+#: help-dialogs.c:667
 msgid ""
 "dvdisaster provides a margin of safety against data loss\n"
 "on CD and DVD media caused by aging or scratches.\n"
@@ -617,7 +607,7 @@ msgstr ""
 "Es erzeugt Fehlerkorrekturdaten, um bei nachfolgenden Datenträger-\n"
 "Problemen unlesbare Sektoren zu rekonstruieren.\n"
 
-#: help-dialogs.c:596
+#: help-dialogs.c:672
 msgid ""
 "This software comes with  <b>absolutely no warranty</b>.\n"
 "This is free software and you are welcome to redistribute it\n"
@@ -626,7 +616,7 @@ msgstr ""
 "dvdisaster ist <b>freie Software</b>; es gelten die Bedingungen\n"
 "der [GNU General Public License] .\n"
 
-#: help-dialogs.c:602
+#: help-dialogs.c:678
 msgid ""
 "\n"
 "This program is <b>not the original</b>. It is based on the\n"
@@ -642,7 +632,7 @@ msgstr ""
 "Bitte behelligen Sie die ursprünglichen Autoren von dvdisaster\n"
 "([www.dvdisaster.org]) nicht wegen Problemen mit dieser Version.\n"
 
-#: help-dialogs.c:617
+#: help-dialogs.c:693
 msgid ""
 "\n"
 "e-mail: carsten@dvdisaster.com   -or-   cgnoerlich@fsfe.org"
@@ -650,7 +640,7 @@ msgstr ""
 "\n"
 "e-mail: carsten@dvdisaster.de   -oder-   cgnoerlich@fsfe.org"
 
-#: help-dialogs.c:620
+#: help-dialogs.c:696
 msgid ""
 "\n"
 "Darwin port (Mac OS X): Julian Einwag &lt;julian@einwag.de&gt;"
@@ -751,7 +741,7 @@ msgstr "Vorgang abbrechen"
 msgid "Aborts an ongoing action."
 msgstr "Bricht den laufenden Vorgang ab."
 
-#: main-window.c:404
+#: main-window.c:411
 #, c-format
 msgid ""
 "<b>dvdisaster is not properly installed</b>\n"
@@ -763,15 +753,15 @@ msgstr ""
 "Bitte führen Sie das Installationsprogramm\n"
 "%s erneut aus.\n"
 
-#: main-window.c:499
+#: main-window.c:506
 msgid "tooltip|Protocol for current action"
 msgstr "Protokoll des Vorgangs"
 
-#: main-window.c:500
+#: main-window.c:507
 msgid "Displays additional information created during the current or last action."
 msgstr "Zeigt zusätzliche Informationen über den laufenden oder zuletzt durchgeführten Vorgang an."
 
-#: main-window.c:509
+#: main-window.c:516
 msgid "View log"
 msgstr "Protokoll"
 
@@ -1152,37 +1142,44 @@ msgstr ""
 msgid ""
 "<b>Treatment of unreadable areas</b>\n"
 "Defective media usually contain numerous read errors in a contigous region.\n"
-"Therefore skipping sectors after a read error reduces the amount of failed read\n"
-"attempts. <i>Larger values</i> reduce the processing time and the mechanical wear\n"
-"on the drive, but leave <i>larger gaps</i> in the image when reading defective areas."
+"Skipping sectors after a read error reduces the processing time and the\n"
+"mechanical wear on the drive, but leaves larger gaps in the image file:"
 msgstr ""
 "<b>Behandlung von unlesbaren Bereichen</b>\n"
 "Lesefehler treten bei beschädigten Datenträgern typischerweise nicht einzeln,\n"
 "sondern über längere Bereiche auf. Das Überspringen von Sektoren nach einem\n"
-"Lesefehler vermindert die Anzahl vergeblicher Leseversuche. <i>Größere Werte</i>\n"
-"verringern die Bearbeitungszeit und die mechanische Beanspruchung des Laufwerkes,\n"
-"lassen aber auch <i>größere Lücken</i> beim Einlesen defekter Bereiche."
+"Lesefehler verringert die Bearbeitungszeit und die mechanische Beanspruchung\n"
+"des Laufwerkes, hinterläßt aber größere Lücken in der Abbild-Datei:"
 
-#: preferences.c:831
+#: preferences.c:830
 #, c-format
 msgid "Skip %d sectors after read error"
 msgstr "Überspringe %d Sektoren nach einem Lesefehler"
 
-#: preferences.c:832
+#: preferences.c:831
 #, c-format
 msgid "Stop reading when unreadable intervals < %d"
 msgstr "Lesen beenden wenn unlesbare Bereiche < %d"
 
-#: preferences.c:851
+#: preferences.c:850
 msgid ""
-"When using the <i>linear reading strategy</i>, the given number of sectors will be\n"
-"skipped after the occurance of a read error. This has the following consequences:\n"
-"\n"
+"When using the <i>linear reading strategy</i>, skipping sectors has the following\n"
+"consequences:\n"
 "- Skipping a large number of sectors (e.g. 1024) gives a quick overview of\n"
-"- damaged areas, but will usually not collect enough data for repairing the image.\n"
+"damaged areas, but will usually not collect enough data for repairing the image.\n"
 "- Smaller values like 16, 32 or 64 are a good trade-off: The processing time will be\n"
-"- considerably shortened, but still enough data for repairing the image is collected.\n"
-"\n"
+"considerably shortened, but still enough data for repairing the image is collected.\n"
+msgstr ""
+"Beim Einsatz des <i>linearen Leseverfahrens</i> hat das Überspringen die folgenden\n"
+"Auswirkungen:\n"
+"- Das Überspringen einer großen Anzahl von Sektoren (z.B 1024) ergibt eine\n"
+"schnelle Übersicht über die Beschädigung des Datenträgers. Es liefert aber\n"
+"in der Regel nicht genügend Daten für eine erfolgreiche Fehlerkorrektur.\n"
+"- Kleinere Werte von 16, 32 oder 64 sind ein guter Kompromiß zwischen verringerter\n"
+"Bearbeitungszeit und Wiederherstellbarkeit des Datenträger-Abbildes.\n"
+
+#: preferences.c:858
+msgid ""
 "The <i>adaptive reading strategy</i> uses this setting only if no error correction data\n"
 "is available. In that case the reading process will stop when no unread areas\n"
 "larger than the selected size remain. Values smaller than 128 <i>are not recommended</i>\n"
@@ -1193,24 +1190,13 @@ msgid ""
 "On DVD media read errors do usually extend over at least 16 sectors for technical\n"
 "reasons. Therefore selecting a value less than 16 is not recommended for DVD."
 msgstr ""
-"Beim Einsatz des <i>linearen Leseverfahrens</i> wird nach einem Lesefehler die\n"
-"eingestellte Anzahl nachfolgender Sektoren übersprungen. Dies hat die folgenden\n"
-"Auswirkungen:\n"
-"\n"
-"- Das Überspringen einer großen Anzahl von Sektoren (z.B 1024) ergibt eine\n"
-"- schnelle Übersicht über die Beschädigung des Datenträgers. Es liefert aber\n"
-"- in der Regel nicht genügend Daten für eine erfolgreiche Fehlerkorrektur.\n"
-"- Kleinere Werte von 16, 32 oder 64 sind ein guter Kompromiß zwischen verringerter\n"
-"- Bearbeitungszeit und Wiederherstellbarkeit des Datenträger-Abbildes.\n"
-"\n"
 "Das <i>angepaßte Leseverfahren</i> verwendet diese Einstellung nur, wenn keine Fehler-\n"
 "korrektur-Daten zur Verfügung stehen. Dann wird der Lesevorgang beendet, sobald\n"
 "keine unlesbaren Bereiche oberhalb der angegebenen Größe mehr vorhanden sind.\n"
-"Die Größe sollte nicht kleiner als 128 eingestellt werden. Anderenfalls werden in\n"
-"der Schlußphase des Einlesens sehr viele Neupositionierungen des Laserschlittens\n"
-"im Laufwerk durchgeführt. Wenn das angepaßte Lesen mit 128 nicht genügend Daten\n"
-"liefert, ist es günstiger, die verbleibenden Sektoren mit dem linearen Lesen zu\n"
-"vervollständigen.\n"
+"Werte kleiner als 128 sind nicht empfehlenswert, da sonst in der Schlußphase \n"
+"des Einlesens sehr viele Neupositionierungen des Laserschlittens im Laufwerk\n"
+"stattfinden. Wenn das angepaßte Lesen mit 128 nicht genügend Daten liefert, ist\n"
+"es günstiger, die verbleibenden Sektoren mit dem linearen Lesen zu vervollständigen.\n"
 "\n"
 "Auf DVD-Datenträgern erstrecken sich Lesefehler aus technischen Gründen über \n"
 "mindestens 16 Sektoren. Daher sind Werte kleiner als 16 für DVD nicht sinnvoll."
@@ -3502,7 +3488,7 @@ msgstr "Bitte warten Sie bis der HTML-Betrachter erscheint!"
 msgid "Unnamed"
 msgstr "Unbenannt"
 
-#: welcome-window.c:85
+#: welcome-window.c:84
 #, c-format
 msgid ""
 "- RS02 error correction method fully supported\n"
@@ -3513,15 +3499,15 @@ msgstr ""
 "<span color=\"#%s\">-</span> in der graphischen Benutzeroberfläche unterstützt.\n"
 "- Das optimierte Leseverfahren verarbeitet RS02-Abbilder.\n"
 
-#: welcome-window.c:92
+#: welcome-window.c:91
 msgid "Show this message again"
 msgstr "Diesen Text erneut anzeigen"
 
-#: welcome-window.c:134
+#: welcome-window.c:133
 msgid "<span weight=\"bold\" size=\"xx-large\">Welcome to dvdisaster!</span>"
 msgstr "<span weight=\"bold\" size=\"xx-large\">Willkommen bei dvdisaster!</span>"
 
-#: welcome-window.c:136
+#: welcome-window.c:135
 msgid ""
 "\n"
 "dvdisaster creates error correction data to protect\n"
@@ -3531,7 +3517,7 @@ msgstr ""
 "dvdisaster erzeugt Fehlerkorrektur-Daten um CD- und\n"
 "DVD-Datenträger gegen Datenverlust zu schützen.\n"
 
-#: welcome-window.c:139
+#: welcome-window.c:138
 msgid ""
 "Please see the manual for [typical uses] of dvdisaster.\n"
 "\n"
@@ -3539,9 +3525,18 @@ msgstr ""
 "Im Handbuch sind [typische Anwendungen] beschrieben.\n"
 "\n"
 
-#: welcome-window.c:142
+#: welcome-window.c:141
 msgid "<i>New in this Version:</i>"
 msgstr "<i>Neu in dieser Version:</i>"
+
+#~ msgid ""
+#~ "Graphical user interface options\n"
+#~ "  --keep-style           - do not override the style settings\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Einstellungen für die graphische Benutzeroberfläche\n"
+#~ "  --keep-style           - Style-Einstellungen nicht überschreiben\n"
+#~ "\n"
 
 #~ msgid "<span color=\"red\">Damaged CRC data.</span>"
 #~ msgstr "<span color=\"red\">Beschädigte Prüfsummen.</span>"

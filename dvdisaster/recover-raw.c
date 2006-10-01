@@ -21,11 +21,41 @@
 
 #include "dvdisaster.h"
 
+/*
+ * Debugging function
+ */
+
+static void dump_sector(RawBuffer *rb)
+{  FILE *file = fopen("test-cases/dump.h", "w");
+   int i;
+   
+   fprintf(file, 
+	   "#define SAMPLES_READ %d\n"
+	   "#define SAMPLE_LENGTH %d\n"
+	   "unsigned char cd_frame[][%d] = {\n",
+	   rb->samplesRead, rb->sampleLength, rb->sampleLength);
+
+   for(i=0; i<rb->samplesRead; i++)
+   {  int j;
+
+      fprintf(file, "{\n");
+      for(j=0; j<rb->sampleLength; j++)
+      {  fprintf(file, "%3d, ",rb->rawBuf[i][j]); 
+	 if(j%16 == 15) fprintf(file, "\n");
+      }
+      fprintf(file, "},\n");
+   }
+   
+   fprintf(file, "};\n");
+
+   fclose(file);
+}
+
 /***
  *** Create our local working context
  ***/
 
-RawBuffer *CreateRawBuffer(void)
+RawBuffer *CreateRawBuffer(int sample_length)
 {  RawBuffer *rb;
    int i;
 
@@ -36,12 +66,20 @@ RawBuffer *CreateRawBuffer(void)
 
    rb->rawBuf    = g_malloc(Closure->rawAttempts * sizeof(unsigned char*));
    rb->rawState  = g_malloc(Closure->rawAttempts * sizeof(int));
-   rb->cdFrame   = g_malloc(2352);
-   rb->byteState = g_malloc(2352);
+   rb->valid     = g_malloc(Closure->rawAttempts * sizeof(int));
+   rb->recovered = g_malloc(sample_length);
+   rb->byteState = g_malloc(sample_length);
 
    for(i=0; i<Closure->rawAttempts; i++)
-   {  rb->rawBuf[i] = g_malloc(2352);
+   {  rb->rawBuf[i] = g_malloc(sample_length);
    }
+
+   for(i=0; i<N_P_VECTORS; i++)
+     rb->pList[i] = g_malloc(Closure->rawAttempts * sizeof(int));
+
+   for(i=0; i<N_Q_VECTORS; i++)
+     rb->qList[i] = g_malloc(Closure->rawAttempts * sizeof(int));
+
    return rb;
 }
 
@@ -54,18 +92,24 @@ void FreeRawBuffer(RawBuffer *rb)
    for(i=0; i<Closure->rawAttempts; i++)
      g_free(rb->rawBuf[i]);
 
+   for(i=0; i<N_P_VECTORS; i++)
+     g_free(rb->pList[i]);
+
+   for(i=0; i<N_Q_VECTORS; i++)
+     g_free(rb->qList[i]);
+
    g_free(rb->rawBuf);
    g_free(rb->rawState);
-   g_free(rb->cdFrame);
+   g_free(rb->valid);
+   g_free(rb->recovered);
    g_free(rb->byteState);
    g_free(rb);
 }
 
 /***
- *** CD level CRC and ECC calculations
+ *** CD level CRC calculation
  ***/
 
-#if 0  /* currently unused */
 /* Convert LBA sector number into MSF format */
 
 static void lba_to_msf(int lba, unsigned char *minute, unsigned char *second, unsigned char
@@ -111,7 +155,6 @@ static void initialize_cd_frame(unsigned char *cd_frame, int sector)
    
    cd_frame[15] = 0x01;
 }
-#endif
 
 /*
  * Test raw sector against its 32bit CRC.
@@ -132,18 +175,16 @@ static int check_edc(unsigned char *cd_frame)
 
    real_crc = EDCCrc32(cd_frame, 2064);
 
-   printf("CRC   : %x\n", expected_crc);
-   printf("My CRC: %x\n", real_crc);
-
    return expected_crc == real_crc;
 }
 
 /***
- *** The majority decision algorithm
+ *** The majority decision algorithm (currently unused)
  ***/   
 
 //#define DEBUG_MAJ
 
+#if 0
 static int majority_decision(unsigned char *cd_frame, RawBuffer *rb)
 {  int byte_votes[256];
    int byte_nominations[256];
@@ -286,6 +327,412 @@ static int majority_decision(unsigned char *cd_frame, RawBuffer *rb)
    
    return TRUE;
 }
+#endif
+
+/***
+ *** Detection of unplausible sectors.
+ ***
+ * The drive might have lost track and returned the wrong sector.
+ * We build a difference matrix containing the pairwise byte 
+ * differences of all sectors gathered so far, then mark those 
+ * sectors as bad whose average difference exceeds the median 
+ * plus some safety margin.
+ * Note that the bad sectors are just marked but not deleted as
+ * we might be unlucky to start off with a batch of bad sectors.
+ * If the good sectors come in later, we might have to revise our
+ * decision.  
+ */
+
+//#define DEBUG_VALIDATION 1
+
+static int int_compare(const void *a, const void *b)
+{  return (*(int*)a) - (*(int*)b);
+}
+
+static void validate_sectors(RawBuffer *rb)
+{  int matrix_size = rb->samplesRead*rb->samplesRead;
+   int score[matrix_size];
+   int col_avg[rb->samplesRead];
+   int col_avg_sorted[matrix_size];
+   int i,j,k;
+   int margin,median;
+   unsigned char minute,second,frame;
+
+   /* If we are extremely unlucky we are flooded with many wrong sectors
+      so that the heuristic below does not work. Reject all sectors
+      with wrong MSF addresses to be sure. */
+
+   lba_to_msf(rb->lba, &minute, &second, &frame);
+   minute = int_to_bcd(minute);
+   second = int_to_bcd(second);
+   frame = int_to_bcd(frame);
+
+   for(i=0; i<rb->samplesRead; i++)
+     if(   rb->rawBuf[i][12] != minute
+	|| rb->rawBuf[i][13] != second	
+	|| rb->rawBuf[i][14] != frame)
+     {  rb->valid[i] = FALSE; 
+#ifdef DEBUG_VALIDATION
+        printf("MSF mismatch for sector %d: %2d%2d%2d / %2d%2d%2d\n",
+	       i, rb->recovered[12], rb->recovered[13], rb->recovered[14],
+	       rb->rawBuf[i][12], rb->rawBuf[i][13], rb->rawBuf[i][14]);
+#endif
+     }
+     else rb->valid[i] = TRUE;  /* for initialization */ 
+
+   /* Examine sectors based on their byte differences */
+
+   memset(score, 0, sizeof(score));
+
+   for(i=0; i<rb->samplesRead; i++)
+   { col_avg[i] = 0;
+     for(j=i; j<rb->samplesRead; j++)
+     {  score[i*rb->samplesRead+j] = 0;
+        for(k=0; k< rb->sampleLength; k++)
+	  if(rb->rawBuf[i][k] != rb->rawBuf[j][k])
+	    score[i*rb->samplesRead+j]++;
+	score[j*rb->samplesRead+i] = score[i*rb->samplesRead+j];
+     }
+
+     for(j=0; j<rb->samplesRead; j++)
+       col_avg[i]+=score[i*rb->samplesRead+j];
+
+     col_avg[i] /= (rb->samplesRead-1);
+
+#ifdef DEBUG_VALIDATION
+     for(j=0; j<rb->samplesRead; j++)
+	printf("%5d",score[i*rb->samplesRead+j]);
+     printf("\n");
+#endif
+   }
+
+   /* Calculate median of differences;
+      skip rb->samplesRead elements for the zero diagonal */
+
+   memcpy(col_avg_sorted, col_avg, sizeof(col_avg));
+   qsort(col_avg_sorted, rb->samplesRead, sizeof(int), int_compare);
+   if(rb->samplesRead & 1) 
+        median = col_avg_sorted[rb->samplesRead/2];
+   else median = (col_avg_sorted[rb->samplesRead/2] + col_avg_sorted[rb->samplesRead/2-1]) / 2;
+
+   margin = median + median/2;  /* margin = 1.5*median */
+
+#ifdef DEBUG_VALIDATION
+   printf("----\n");
+   for(i=0; i<rb->samplesRead; i++)
+     printf("%5d", col_avg_sorted[i]);
+
+   printf("\n");
+
+   for(i=0; i<rb->samplesRead; i++)
+     printf("%5d",col_avg[i]);
+
+   printf(" - median %d, margin %d\n", median, margin);
+#endif
+
+   /* Sectors whose difference exceeds the median for floor(rb->samplesRead) times
+      are marked as invalid; the drive might have delivered a wrong sector here. */
+
+   for(i=0; i<rb->samplesRead; i++)
+     if(col_avg[i] > margin)
+     {  rb->valid[i] = FALSE; 
+#ifdef DEBUG_VALIDATION
+	printf("rejecting sector %d\n", i);
+#endif
+     }
+}
+
+/***
+ *** Analyse P and Q vectors for each sector.
+ ***
+ * After this stage, we have:
+ *
+ * - marked the frame bytes in rb->byteState are as following;
+ *  2 = Byte lies at intersection of good P and Q vector 
+ *  1 = Byte lies at P or Q vector from above
+ *  0 = Byte is uncorrected 
+ *
+ * - recorded bytes with a score better than 0 in rb->recovered;
+ *
+ * - collected all P and Q vectors which pretend to be correct
+ *   or correctable in rb->pList and rb->qList.
+ */
+
+#define P_PADDING 229
+#define Q_PADDING 210
+
+static int analyse_pq(RawBuffer *rb)
+{  int score[2];
+   int p_miss,q_miss,p_clash,q_clash;
+   int i,f;
+
+   /* Initially all bytes are considered as bad
+      and none are recovered */
+
+   memset(rb->byteState, 0, rb->sampleLength);
+   initialize_cd_frame(rb->recovered, rb->lba);
+
+   memset(rb->pIndex, 0, sizeof(rb->pIndex));
+   memset(rb->qIndex, 0, sizeof(rb->qIndex));
+
+   /* Iterate over all non-rejected sectors */
+
+   for(f=0; f<rb->samplesRead; f++)
+   {  unsigned char frame_state[rb->sampleLength];
+      unsigned char frame_byte[rb->sampleLength];
+      unsigned char vector[Q_VECTOR_SIZE];
+      unsigned char compare[Q_VECTOR_SIZE];
+      int erasures[2];
+      int i,err,v;
+
+      if(!rb->valid[f])
+	 continue;
+
+      memset(frame_state, 0, sizeof(frame_state));
+
+      /*** Search for undamaged Q vectors in the frame */
+
+      for(v=0; v<N_Q_VECTORS; v++)
+      {  GetQVector(rb->rawBuf[f], vector, v);
+
+	 err = DecodePQ(rb->rt, vector, Q_PADDING, erasures, 0);
+	 if(err >= 0 && err <= 2)    /* Good vector */
+	 {  
+	    /* Record all different q vectors which claim to
+	       be correct(able). */
+
+	    if(rb->qIndex[v])
+	    {  GetQVector(frame_byte, compare, v);
+	       if(memcmp(compare, vector, Q_VECTOR_SIZE))
+		 rb->qList[v][rb->qIndex[v]++] = f;
+	    }
+	    else  /* record first q vector found */ 
+	    {  rb->qList[v][rb->qIndex[v]++] = f;
+
+	       SetQVector(frame_byte, vector, v);
+	    }
+
+	    FillQVector(frame_state, 1, v);
+	 }
+      }
+
+      /*** Search for undamaged P vectors in the frame */
+
+      for(v=0; v<N_P_VECTORS; v++)
+      {  GetPVector(rb->rawBuf[f], vector, v);
+
+	 err = DecodePQ(rb->rt, vector, P_PADDING, erasures, 0);
+	 if(err >= 0 && err <= 2) /* Good vector */
+	 {  
+
+	    /* Record all different p vectors which claim to
+	       be correct(able). */
+
+	    if(rb->pIndex[v])
+	    {  GetPVector(frame_byte, compare, v);
+	       if(memcmp(compare, vector, P_VECTOR_SIZE))
+		 rb->pList[v][rb->pIndex[v]++] = f;
+	    }
+	    else /* record first p vector found */ 
+	    {  rb->pList[v][rb->pIndex[v]++] = f;
+
+	       SetPVector(frame_byte, vector, v);
+	    }
+
+	    IncrPVector(frame_state, v);
+	 }
+      }
+
+      /*** Now the frame bytes are marked as following:
+	   2 = Byte lies at intersection of good P and Q vector 
+	   1 = Byte lies at P or Q vector from above
+	   0 = Byte is uncorrected */
+      
+      score[0] = score[1] = score[2] = 0;
+
+      for(i=12; i<rb->sampleLength; i++)
+      {  int s = frame_state[i];
+
+	 if(s > rb->byteState[i]) 
+	 {  rb->recovered[i] = frame_byte[i];
+	    rb->byteState[i] = s;
+	 }
+	 score[s]++;
+      }
+      
+      printf("Frame %d: [2/1/0]=[%d/%d/%d]\n", f, score[2], score[1], score[0]);
+   }
+
+   /* Count total byte states */
+
+   score[0] = score[1] = score[2] = 0;
+
+   for(i=12; i<rb->sampleLength; i++)
+   {  int s = rb->byteState[i];
+
+      score[s]++;
+   }
+
+   printf("Recovered: [2/1/0]=[%d/%d/%d]\n", score[2], score[1], score[0]);
+
+   /* Evaluate p/q vector state */
+   
+   p_miss = q_miss = p_clash = q_clash = 0;
+
+   for(i=0; i<N_P_VECTORS; i++)
+   {  if(rb->pIndex[i] == 0) p_miss++;
+      if(rb->pIndex[i] > 1) p_clash++;
+   }
+
+   for(i=0; i<N_Q_VECTORS; i++)
+   {  if(rb->qIndex[i] == 0) q_miss++;
+      if(rb->qIndex[i] > 1) q_clash++;
+   }
+
+   printf("P/Q vectors: %d/%d missing, %d/%d ambiguous\n", p_miss, q_miss, p_clash, q_clash);
+
+   return score[0] == 0;
+}
+
+/***
+ *** Try to correct remaining bytes in rb->recovered.
+ ***
+ * Iterate over P and Q recovery until no further improvements are made.
+ */
+
+int iterative_recovery(RawBuffer *rb)
+{  unsigned char p_vector[P_VECTOR_SIZE];
+   unsigned char q_vector[Q_VECTOR_SIZE];
+   unsigned char p_state[P_VECTOR_SIZE];
+   unsigned char q_state[Q_VECTOR_SIZE];
+   int erasures[Q_VECTOR_SIZE], erasure_count;
+   int p_failures, q_failures;
+   int p_corrected, q_corrected;
+   int p,q;
+   int last_p_failures = N_P_VECTORS;
+   int last_q_failures = N_Q_VECTORS;
+   int iteration=1;
+   int score[2];
+
+   /* Maybe the sector can be corrected by L-EC after the majority decision? */
+
+
+   for(; ;) /* iterate over P- and Q-Parity until failures converge */
+   {	
+      p_failures = q_failures = 0;
+      p_corrected = q_corrected = 0;
+
+      /* Perform Q-Parity error correction */
+
+      erasure_count = 0;
+
+      for(q=0; q<N_Q_VECTORS; q++)
+      {  int i,err;
+
+	 /* Determine number of erasures */
+
+	 GetQVector(rb->byteState, q_state, q);
+	 erasure_count = 0;
+
+	 for(i=0; i<Q_VECTOR_SIZE; i++)
+	   if(!q_state[i])
+	     erasures[erasure_count++] = i;
+
+	 /* Erasure values >2 are not helpful,
+	    but it is not certain that these bytes are wrong at all.
+	    Lets give it a try anyways. */
+
+	 if(erasure_count > 2)
+	   erasure_count = 0;
+
+	 /* Try error correction */
+
+	 GetQVector(rb->recovered, q_vector, q);
+	 err = DecodePQ(rb->rt, q_vector, Q_PADDING, erasures, erasure_count);
+
+	 if(err < 0)  /* Uncorrectable. Mark bytes are erasure. */
+	 {  q_failures++;
+//	    FillQVector(rb->byteState, FRAME_BYTE_ERROR, q);
+	 }
+	 else 
+	 {  if(err == 1 || err == 2) /* Store back corrected vector */ 
+	    {  SetQVector(rb->recovered, q_vector, q);
+	       RaiseQVector(rb->byteState, 1, q);
+	       q_corrected++;
+	    }
+	 }
+      }
+
+      /* Perform P-Parity error correction */
+
+      for(p=0; p<N_P_VECTORS; p++)
+      {  int err,i;
+
+	/* Determine number of erasures */
+
+	GetPVector(rb->byteState, p_state, p);
+	erasure_count = 0;
+
+	for(i=0; i<P_VECTOR_SIZE; i++)
+	  if(!p_state[i])
+	    erasures[erasure_count++] = i;
+
+	/* Erasure values >2 are not helpful,
+	   but it is not certain that these bytes are wrong at all.
+	   Lets give it a try anyways. */
+
+	if(erasure_count > 2)
+	  erasure_count = 0;
+	
+	/* Try error correction */
+
+	GetPVector(rb->recovered, p_vector, p);
+	err = DecodePQ(rb->rt, p_vector, P_PADDING, erasures, erasure_count);
+
+	if(err < 0)  /* Uncorrectable. */
+	{  p_failures++;
+//	   FillPVector(rb->byteState, FRAME_BYTE_ERROR, p);
+	}
+	else 
+	  {  if(err == 1 || err == 2) /* Store back corrected vector */ 
+	     {  SetPVector(rb->recovered, p_vector, p);
+	        RaisePVector(rb->byteState, 1, p);
+		p_corrected++;
+	     }
+	  }
+      }
+
+      /* See if there was an improvement */
+
+      printf("L-EC: iteration %d\n", iteration); 
+      printf("      Q-failures/corrected: %2d/%2d\n", q_failures, q_corrected);
+      printf("      P-failures/corrected: %2d/%2d\n", p_failures, p_corrected);
+
+      if(p_failures + q_failures == 0)
+	break;
+
+      if(   last_p_failures > p_failures
+	 || last_q_failures > q_failures)
+      {  last_p_failures = p_failures;
+	 last_q_failures = q_failures;
+	 iteration++;
+      }
+      else break;
+   }
+
+   score[0] = score[1] = score[2] = 0;
+
+   for(p=12; p<rb->sampleLength; p++)
+   {  int s = rb->byteState[p];
+
+      score[s]++;
+   }
+
+   printf("Recovered: [2/1/0]=[%d/%d/%d]\n", score[2], score[1], score[0]);
+
+
+   return (p_failures + q_failures == 0);
+}
 
 /***
  *** Perform analysis and recovery of raw read data.
@@ -295,6 +742,7 @@ static int majority_decision(unsigned char *cd_frame, RawBuffer *rb)
  * rb->rawBuf[]       the samples from the raw read attempts, unscrambled
  * rb->samplesRead    the number of samples in the array above
  * rb->sampleLength   the length of each sample
+ * rb->lba            sector we are currently working on
  *
  * e.g. rb->rawBuf contains samplesRead samples of sampleLength bytes,
  * and the max array dimensions are rb->rawBuf[samplesRead][sampleLength]
@@ -303,158 +751,52 @@ static int majority_decision(unsigned char *cd_frame, RawBuffer *rb)
  *                    RAW_SUCCESS    - drive considered read to be good
  *                    RAW_READ_ERROR - drive could not correct the sector,
  *                                     but something was read
+ * rb->valid          outcome of validate_sectors()
  *
- * rb->cdFrame        working buffer for recovering the CD frame, unscrambled
- * rb->byteState      state of bytes in rb->cdFrame as a guidance to error correction:
- *                    FRAME_BYTE_UNKNOWN - state of byte is unknown
- *                    FRAME_BYTE_ERROR   - byte is wrong, treat as erasure
- *                    FRAME_BYTE_GOOD    - we could somehow prove that byte is correct
- * rb->lba            sector we are currently working on
+ * rb->recovered      working buffer for recovering the CD frame, unscrambled
+ * rb->byteState      state of bytes in rb->recovered as a guidance to error correction
+ * rb->pList          list of p vectors pretending to be good
+ * rb->qList          list of q vectors pretending to be good
+ * rb->pindex         length of above
+ * rb->qindex         length of above
  *
  * Return TRUE if data was recovered successfully, else return FALSE.
  */
 
-#define P_PADDING 229
-#define Q_PADDING 210
-
 int RecoverRaw(unsigned char *out, RawBuffer *rb)
-{  
-   /*** Try the simple majority algorithm first. */
+{  int success;
 
-   if(majority_decision(rb->cdFrame, rb))
-   {  unsigned char p_vector[26];
-      unsigned char q_vector[45];
-      unsigned char p_state[26];
-      unsigned char q_state[45];
-      int erasures[45], erasure_count;
-      int p_failures, q_failures;
-      int p_corrected, q_corrected;
-      int p,q;
-      int last_p_failures = 86;
-      int last_q_failures = 52;
-      int iteration=1;
+   printf("RecoverRaw() for %d samples.\n", rb->samplesRead);
 
-      /* Maybe the sector can be corrected by L-EC after the majority decision? */
+   /* We need at least 3 successful reads to do anything */
 
-      memset(rb->byteState, FRAME_BYTE_UNKNOWN, 2352);
+   if(rb->samplesRead < 3) return FALSE;
 
-      for(; ;) /* iterate over P- and Q-Parity until failures converge */
-      {	
-	p_failures = q_failures = 0;
-	p_corrected = q_corrected = 0;
+   /* Reject unplausible sectors */
 
-	/* Perform Q-Parity error correction */
+   validate_sectors(rb);
 
-	erasure_count = 0;
+   /* Collect P and Q statistics for each sector */
 
-	for(q=0; q<52; q++)
-	{  int i,err;
+   success = analyse_pq(rb);
 
-	   /* Determine number of erasures */
+   if(success && check_edc(rb->recovered))
+   {  Verbose("Sector %d recovered after L-EC analysis (stage 1/2).\n", rb->lba);
 
-	   GetQVector(rb->byteState, q_state, q);
-	   erasure_count = 0;
+      memcpy(out, rb->recovered+16, 2048);
+      return TRUE;
+   }
 
-	   for(i=0; i<45; i++)
-	     if(q_state[i] == FRAME_BYTE_ERROR)
-	       erasures[erasure_count++] = i;
+   /* Try iterative L-EC */
 
-	   /* Erasure values >2 are not helpful,
-	      but it is not certain that these bytes are wrong at all.
-	      Lets give it a try anyways. */
+   success = iterative_recovery(rb);
 
-	   if(erasure_count > 2)
-	     erasure_count = 0;
+   if(success && check_edc(rb->recovered))
+   {  Verbose("Sector %d recovered after iterative L-EC (stage 2/2).\n", rb->lba);
 
-	   /* Try error correction */
-
-	   GetQVector(rb->cdFrame, q_vector, q);
-	   err = DecodePQ(rb->rt, q_vector, Q_PADDING, erasures, erasure_count);
-
-	   if(err < 0)  /* Uncorrectable. Mark bytes are erasure. */
-	   {  q_failures++;
-	      FillQVector(rb->byteState, FRAME_BYTE_ERROR, q);
-	   }
-	   else 
-	   {  if(err == 1 || err == 2) /* Store back corrected vector */ 
-	      {  SetQVector(rb->cdFrame, q_vector, q);
-		 FillQVector(rb->byteState, FRAME_BYTE_GOOD, q);
-		 q_corrected++;
-	      }
-	   }
-	}
-
-	/* Perform P-Parity error correction */
-
-	for(p=0; p<86; p++)
-	{  int err,i;
-
-	   /* Determine number of erasures */
-
-	   GetPVector(rb->byteState, p_state, p);
-	   erasure_count = 0;
-
-	   for(i=0; i<26; i++)
-	     if(p_state[i] == FRAME_BYTE_ERROR)
-	       erasures[erasure_count++] = i;
-
-	   /* Erasure values >2 are not helpful,
-	      but it is not certain that these bytes are wrong at all.
-	      Lets give it a try anyways. */
-
-	   if(erasure_count > 2)
-	     erasure_count = 0;
-
-	   /* Try error correction */
-
-	   GetPVector(rb->cdFrame, p_vector, p);
-	   err = DecodePQ(rb->rt, p_vector, P_PADDING, erasures, erasure_count);
-
-	   if(err < 0)  /* Uncorrectable. */
-	   {  p_failures++;
-	      FillPVector(rb->byteState, FRAME_BYTE_ERROR, p);
-	   }
-	   else 
-	   {  if(err == 1 || err == 2) /* Store back corrected vector */ 
-	      {  SetPVector(rb->cdFrame, p_vector, p);
-		 FillPVector(rb->byteState, FRAME_BYTE_GOOD, p);
-		 p_corrected++;
-	      }
-	   }
-	}
-
-	/* See if there was an improvement */
-
-	printf("L-EC: iteration %d\n", iteration); 
-	printf("      Q-failures/corrected: %2d/%2d\n", q_failures, q_corrected);
-	printf("      P-failures/corrected: %2d/%2d\n", p_failures, p_corrected);
-
-	if(p_failures + q_failures == 0)
-	  break;
-
-	if(   last_p_failures > p_failures
-	   || last_q_failures > q_failures)
-	{  last_p_failures = p_failures;
-	   last_q_failures = q_failures;
-	   iteration++;
-	}
-	else break;
-      }
-
-      /* If the CRC is good, return the user data portion */
-
-      if(check_edc(rb->cdFrame))
-      {  Verbose("Sector %d sucessfully recovered by majority algorithm and L-EC.\n", rb->lba);
-
-//         HexDump(rb->cdFrame, rb->sampleLength, 32);
-         memcpy(out, rb->cdFrame+16, 2048);
-	 return TRUE;
-      }
-      else
-      {  Verbose("Sector %d NOT recovered by majority algorithm and L-EC.\n", rb->lba);
-      }
+      memcpy(out, rb->recovered+16, 2048);
+      return TRUE;
    }
 
    return FALSE;
 }
-  

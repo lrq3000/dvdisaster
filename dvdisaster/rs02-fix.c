@@ -831,17 +831,17 @@ skip:
 	   damaged_eccsecs, lay->sectorsPerLayer);
    if(data_count != lay->dataSectors)
         g_printf("ONLY %lld of %lld data sectors processed\n", 
-		 data_count, lay->dataSectors);
+		 (long long int)data_count, (long long int)lay->dataSectors);
    else Verbose("all data sectors processed\n");
 
    if(crc_count != lay->crcSectors)
         g_printf("%lld of %lld crc sectors processed\n", 
-		 crc_count, lay->crcSectors);
+		 (long long int)crc_count, (long long int)lay->crcSectors);
    else Verbose("all  crc sectors processed\n");
 
    if(ecc_count != lay->rsSectors)
         g_printf("%lld of %lld ecc sectors processed\n", 
-		 ecc_count, lay->rsSectors);
+		 (long long int)ecc_count, (long long int)lay->rsSectors);
    else Verbose("all  ecc sectors processed\n");
 
    /*** Clean up */

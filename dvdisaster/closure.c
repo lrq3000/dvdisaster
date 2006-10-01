@@ -410,14 +410,14 @@ static void update_dotfile()
    g_fprintf(dotfile, "adaptive-read:   %d\n", Closure->adaptiveRead);
    g_fprintf(dotfile, "auto-suffix:     %d\n", Closure->autoSuffix);
    g_fprintf(dotfile, "cache-size:      %d\n", Closure->cacheMB);
-   g_fprintf(dotfile, "cd-size:         %lld\n", Closure->cdSize);
+   g_fprintf(dotfile, "cd-size:         %lld\n", (long long int)Closure->cdSize);
    g_fprintf(dotfile, "dao:             %d\n", Closure->noTruncate);
    g_fprintf(dotfile, "dotfile-version: %d\n", Closure->dotFileVersion);
-   g_fprintf(dotfile, "dvd-size1:       %lld\n", Closure->dvdSize1);
-   g_fprintf(dotfile, "dvd-size2:       %lld\n", Closure->dvdSize2);
+   g_fprintf(dotfile, "dvd-size1:       %lld\n", (long long int)Closure->dvdSize1);
+   g_fprintf(dotfile, "dvd-size2:       %lld\n", (long long int)Closure->dvdSize2);
    g_fprintf(dotfile, "fill-unreadable: %d\n", Closure->fillUnreadable);
    g_fprintf(dotfile, "jump:            %d\n", Closure->sectorSkip);
-   g_fprintf(dotfile, "medium-size:     %lld\n", Closure->mediumSize);
+   g_fprintf(dotfile, "medium-size:     %lld\n", (long long int)Closure->mediumSize);
    g_fprintf(dotfile, "method-name:     %s\n", Closure->methodName);
    g_fprintf(dotfile, "query-size:      %d\n", Closure->querySize);
    g_fprintf(dotfile, "raw-attempts:    %d\n", Closure->rawAttempts);

@@ -1,6 +1,10 @@
 Warning: CD/DVD reading is currently being reworked. Do not use for production work;
 	 images might contain wrong data.
 
+0.72 (devel-3) 01-10-2006
+	- added recognition of wrong sectors (e.g. the respective sector was not
+	  requested)
+
 0.72 (devel-2)
 	- added experimental l-ec to raw reading algorithm. Won't work reliably yet.
 

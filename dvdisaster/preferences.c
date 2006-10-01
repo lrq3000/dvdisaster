@@ -824,9 +824,8 @@ void CreatePreferencesWindow(void)
       AddHelpParagraph(fwoh, 
 		       _("<b>Treatment of unreadable areas</b>\n"
 			 "Defective media usually contain numerous read errors in a contigous region.\n"
-			 "Therefore skipping sectors after a read error reduces the amount of failed read\n"
-			 "attempts. <i>Larger values</i> reduce the processing time and the mechanical wear\n"
-			 "on the drive, but leave <i>larger gaps</i> in the image when reading defective areas."));
+			 "Skipping sectors after a read error reduces the processing time and the\n"
+			 "mechanical wear on the drive, but leaves larger gaps in the image file:"));
 
       pc->formatLinear = g_strdup(_utf("Skip %d sectors after read error"));
       pc->formatAdaptive  = g_strdup(_utf("Stop reading when unreadable intervals < %d"));
@@ -847,15 +846,16 @@ void CreatePreferencesWindow(void)
 	 else   AddHelpWidget(fwoh, scale);
       }
 
-      AddHelpParagraph(fwoh, 
-		       _("When using the <i>linear reading strategy</i>, the given number of sectors will be\n"
-			 "skipped after the occurance of a read error. This has the following consequences:\n\n" 
+      AddHelpItemList(fwoh, 
+		       _("When using the <i>linear reading strategy</i>, skipping sectors has the following\n"
+			 "consequences:\n"
 			 "- Skipping a large number of sectors (e.g. 1024) gives a quick overview of\n"
-			 "- damaged areas, but will usually not collect enough data for repairing the image.\n"
+			 "damaged areas, but will usually not collect enough data for repairing the image.\n"
 			 "- Smaller values like 16, 32 or 64 are a good trade-off: The processing time will be\n"
-			 "- considerably shortened, but still enough data for repairing the image is collected.\n\n"
+			 "considerably shortened, but still enough data for repairing the image is collected.\n"));
 
-			 "The <i>adaptive reading strategy</i> uses this setting only if no error correction data\n"
+      AddHelpParagraph(fwoh, 
+		       _("The <i>adaptive reading strategy</i> uses this setting only if no error correction data\n"
 			 "is available. In that case the reading process will stop when no unread areas\n"
 			 "larger than the selected size remain. Values smaller than 128 <i>are not recommended</i>\n"
 			 "as they cause the drive to carry out lots of laser head repositioning during the\n"

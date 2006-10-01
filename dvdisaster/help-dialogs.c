@@ -180,9 +180,85 @@ void ClearFrameWithOnlineHelp(FrameWithOnlineHelp *fwoh)
  * Add a paragraph of text to the help window
  */
 
-void AddHelpParagraph(FrameWithOnlineHelp *fwoh, char *text)
+void AddHelpParagraph(FrameWithOnlineHelp *fwoh, char *format, ...)
 {  GtkWidget *label = gtk_label_new(NULL);
-   char *utf;
+   va_list argp;
+   char *text,*utf;
+
+   va_start(argp, format);
+   text = g_strdup_vprintf(format, argp);
+   va_end(argp);
+
+
+   utf = g_locale_to_utf8(text, -1, NULL, NULL, NULL);
+   gtk_label_set_markup(GTK_LABEL(label), utf);
+   g_free(utf);
+   g_free(text);
+
+   gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.0);
+   gtk_box_pack_start(GTK_BOX(fwoh->vbox), label, TRUE, TRUE, 0);
+}
+
+/*
+ * Add an item list to the help window.
+ * The list may be preceeded by an optional paragraph of text.
+ */
+
+void AddHelpItemList(FrameWithOnlineHelp *fwoh, char *format, ...)
+{  GtkWidget *label = gtk_label_new(NULL);
+   va_list argp;
+   char *text,*utf,*c;
+   int list_mode = FALSE;
+   GString *list = g_string_new("");
+
+   va_start(argp, format);
+   text = g_strdup_vprintf(format, argp);
+   va_end(argp);
+   
+   c=text;
+   while(*c)
+   {  char *first = c;
+
+      while(*c && *c != '\n')  /* Extract next line */
+	c++;
+
+      /* optional text paragraph at the beginning */
+
+      if(*first != '-' && !list_mode)
+      {  if(first == c)
+	 {  g_string_append_c(list, '\n');
+	    c++;
+	 }
+	 else
+	 {  *c++ = 0; 
+	     g_string_append_printf(list, "%s\n", first);
+	 }
+
+	 continue;
+      }
+
+      /* do list indenting */ 
+
+      if(*first == '-')
+      {  list_mode = TRUE;
+	 *c++ = 0;
+	 g_string_append_printf(list, "%s\n", first);
+      }
+      else
+      {  if(first == c)
+	 {  g_string_append_c(list, '\n');
+	    c++;
+	 }
+	 else
+	 {  *c++ = 0; 
+	   g_string_append_printf(list, "<span color=\"#%s\">-</span> %s\n", 
+				  Closure->bgString, first);
+	 }
+      }
+   }
+
+   g_free(text);
+   text = g_string_free(list, FALSE);
 
    utf = g_locale_to_utf8(text, -1, NULL, NULL, NULL);
    gtk_label_set_markup(GTK_LABEL(label), utf);

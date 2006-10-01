@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-17 18:39+0200\n"
+"POT-Creation-Date: 2006-09-30 22:04+0200\n"
 "PO-Revision-Date: 2006-03-16 20:40+0100\n"
 "Last-Translator: Luboš Staněk <lubek@users.sourceforge.net>\n"
 "Language-Team: čeština <cs@li.org>\n"
@@ -62,7 +62,7 @@ msgstr ""
 "\n"
 "Generuji náhodné opravitelné výmazy (pro %d kořenů, max. výmazů = %d).\n"
 
-#: debug.c:107 debug.c:192 debug.c:236 debug.c:525 debug.c:597
+#: debug.c:107 debug.c:192 debug.c:236 debug.c:525 debug.c:617
 #: rs01-common.c:54 rs02-common.c:62 rs02-create.c:305 rs02-create.c:938
 #: rs02-fix.c:378 rs02-verify.c:390
 #, c-format
@@ -102,7 +102,7 @@ msgstr "Počet výmazů musí být > 0 a <= %d\n"
 msgid "3rd argument is missing"
 msgstr "chybí třetí argument"
 
-#: debug.c:302 debug.c:590 debug.c:633
+#: debug.c:302 debug.c:610 debug.c:657
 #, c-format
 msgid "Sector must be in range [0..%lld]\n"
 msgstr "Sektor musí být v rozsahu [0..%lld]\n"
@@ -212,7 +212,7 @@ msgstr ""
 msgid "%lld \"unreadable sector\" markers replaced.\n"
 msgstr "%lld značek \"nečitelných sektorů\" nahrazeno.\n"
 
-#: debug.c:592 debug.c:636
+#: debug.c:612 debug.c:660
 #, c-format
 msgid ""
 "Contents of sector %lld:\n"
@@ -221,13 +221,13 @@ msgstr ""
 "Obsah sektoru %lld:\n"
 "\n"
 
-#: debug.c:601 rs01-common.c:70 rs02-common.c:67 rs02-create.c:188
+#: debug.c:621 rs01-common.c:70 rs02-common.c:67 rs02-create.c:188
 #: rs02-fix.c:381
 #, c-format
 msgid "Failed reading sector %lld in image: %s"
 msgstr "Selhalo čtení sektoru %lld v obrazu: %s"
 
-#: debug.c:647
+#: debug.c:671
 #, c-format
 msgid "Failed reading sector %lld: %s"
 msgstr ""
@@ -250,24 +250,24 @@ msgstr "Metoda RS01 není dostupná pro porovnání souborů."
 #. TRANSLATORS:
 #. This is a dummy entry which is supposed to translate into "ok".
 #. Please do not return anything else here.
-#: dvdisaster.c:257 dvdisaster.c:270 dvdisaster.c:282
+#: dvdisaster.c:256 dvdisaster.c:269 dvdisaster.c:281
 msgid "test phrase for verifying the locale installation"
 msgstr "ok"
 
-#: dvdisaster.c:303
+#: dvdisaster.c:302
 #, c-format
 msgid "sizeof(EccHeader) is %d, but must be 4096.\n"
 msgstr "velikost(EccHlavička) je %d, ale musí být 4096.\n"
 
-#: dvdisaster.c:444
+#: dvdisaster.c:442
 msgid "--cache-size must at least be 1MB; 16MB or higher is recommended."
 msgstr "--cache-size musí být alespoň 1MB; je doporučeno 16MB nebo větší."
 
-#: dvdisaster.c:446
+#: dvdisaster.c:444
 msgid "--cache-size maximum is 2048MB."
 msgstr "--cache-size maximum je 2048MB."
 
-#: dvdisaster.c:500
+#: dvdisaster.c:495
 #, c-format
 msgid ""
 "\n"
@@ -278,12 +278,12 @@ msgstr ""
 "dvdisaster, verze %s\n"
 "\n"
 
-#: dvdisaster.c:543
+#: dvdisaster.c:538
 #, c-format
 msgid "?? illegal getopt return value %d\n"
 msgstr "?? neplatná návratová hodnota getopt %d\n"
 
-#: dvdisaster.c:575
+#: dvdisaster.c:570
 #, c-format
 msgid ""
 "dvdisaster is not properly installed.\n"
@@ -292,7 +292,7 @@ msgstr ""
 
 #. TRANSLATORS: Program options like -r and --read are not to be translated
 #. to avoid confusion when discussing the program in international forums.
-#: dvdisaster.c:707
+#: dvdisaster.c:702
 msgid ""
 "\n"
 "Common usage examples:\n"
@@ -316,7 +316,7 @@ msgstr ""
 "  dvdisaster -u,--unlink # Smaže soubor .iso (když se dokončí další akce)\n"
 "\n"
 
-#: dvdisaster.c:716
+#: dvdisaster.c:711
 #, c-format
 msgid ""
 "Drive and file specification:\n"
@@ -331,7 +331,7 @@ msgstr ""
 "  -i,--image  imagefile  - název souboru obrazu     (výchozí: medium.iso)\n"
 "  -e,--ecc    eccfile    - název souboru ecc        (výchozí: medium.ecc)\n"
 
-#: dvdisaster.c:724
+#: dvdisaster.c:719
 msgid ""
 "  -l,--list              - list drives available under ASPI manager\n"
 "\n"
@@ -339,7 +339,7 @@ msgstr ""
 "  -l,--list              - vypíše seznam mechanik dostupných pod ASPI\n"
 "\n"
 
-#: dvdisaster.c:729
+#: dvdisaster.c:724
 #, c-format
 msgid ""
 "Tweaking options (see manual before using!)\n"
@@ -361,17 +361,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: dvdisaster.c:746
-msgid ""
-"Graphical user interface options\n"
-"  --keep-style           - do not override the style settings\n"
-"\n"
-msgstr ""
-"Možnosti grafického uživatelského rozhraní\n"
-"  --keep-style           - nepřepisovat nastavení\n"
-"\n"
-
-#: dvdisaster.c:750
+#: dvdisaster.c:742
 #, c-format
 msgid ""
 "Debugging options (purposefully undocumented and possibly harmful)\n"
@@ -392,7 +382,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: dvdisaster.c:768
+#: dvdisaster.c:760
 msgid ""
 "NOTE: This is the Windows console version of dvdisaster.\n"
 "The version providing a graphical user interface is called\n"
@@ -500,11 +490,11 @@ msgstr "Soubor obrazu %s nebyl smazán: %s\n"
 msgid "Failed to create the log tables!\n"
 msgstr "Selhalo vytvoření tabulek záznamu!\n"
 
-#: help-dialogs.c:247
+#: help-dialogs.c:323
 msgid "windowtitle|Log data"
 msgstr "Data záznamu"
 
-#: help-dialogs.c:248
+#: help-dialogs.c:324
 msgid ""
 "<big>Log data</big>\n"
 "<i>Protocol of the current or previous action</i>"
@@ -512,11 +502,11 @@ msgstr ""
 "<big>Data záznamu</big>\n"
 "<i> Protokol z aktuální nebo předchozí akce</i>"
 
-#: help-dialogs.c:264
+#: help-dialogs.c:340
 msgid "windowtitle|GNU General Public License"
 msgstr "Všeobecná veřejná licence GNU"
 
-#: help-dialogs.c:265
+#: help-dialogs.c:341
 msgid ""
 "<big>GNU General Public License</big>\n"
 "<i>The license terms of dvdisaster.</i>"
@@ -524,7 +514,7 @@ msgstr ""
 "<big>Všeobecná veřejná licence GNU</big>\n"
 "<i>Licenční podmínky aplikace dvdisaster.</i>"
 
-#: help-dialogs.c:337
+#: help-dialogs.c:413
 #, c-format
 msgid ""
 "File\n"
@@ -535,33 +525,33 @@ msgstr ""
 "%s\n"
 "není přítomen"
 
-#: help-dialogs.c:420
+#: help-dialogs.c:496
 msgid "windowtitle|Modifying dvdisaster"
 msgstr ""
 
-#: help-dialogs.c:421
+#: help-dialogs.c:497
 msgid ""
 "<big>Modifying dvdisaster</big>\n"
 "<i>Your changes are not ours.</i>"
 msgstr ""
 
-#: help-dialogs.c:560
+#: help-dialogs.c:636
 msgid "windowtitle|About dvdisaster"
 msgstr "O aplikaci dvdisaster"
 
-#: help-dialogs.c:580
+#: help-dialogs.c:656
 msgid ""
 "Modified version Copyright 2006 (please fill in - [directions])\n"
 "Copyright 2004-2006 Carsten Gnoerlich"
 msgstr ""
 
-#: help-dialogs.c:584
+#: help-dialogs.c:660
 msgid "Copyright 2004-2006 Carsten Gnoerlich"
 msgstr ""
 "Copyright 2004-2006 Carsten Gnörlich\n"
 "Česká lokalizace 2006 Luboš Staněk"
 
-#: help-dialogs.c:591
+#: help-dialogs.c:667
 msgid ""
 "dvdisaster provides a margin of safety against data loss\n"
 "on CD and DVD media caused by aging or scratches.\n"
@@ -573,7 +563,7 @@ msgstr ""
 "Vytváří data oprav chyb, která se použijí k obnovení\n"
 "nečitelných sektorů, pokud se disk později poškodí.\n"
 
-#: help-dialogs.c:596
+#: help-dialogs.c:672
 msgid ""
 "This software comes with  <b>absolutely no warranty</b>.\n"
 "This is free software and you are welcome to redistribute it\n"
@@ -583,7 +573,7 @@ msgstr ""
 "Jedná se o svobodný software a můžete jej šířit\n"
 "za podmínek [Všeobecné veřejné licence GNU].\n"
 
-#: help-dialogs.c:602
+#: help-dialogs.c:678
 msgid ""
 "\n"
 "This program is <b>not the original</b>. It is based on the\n"
@@ -593,7 +583,7 @@ msgid ""
 "([www.dvdisaster.org]) about issues with this version.\n"
 msgstr ""
 
-#: help-dialogs.c:617
+#: help-dialogs.c:693
 msgid ""
 "\n"
 "e-mail: carsten@dvdisaster.com   -or-   cgnoerlich@fsfe.org"
@@ -602,7 +592,7 @@ msgstr ""
 "e-mail: carsten@dvdisaster.de   -nebo-   cgnoerlich@fsfe.org\n"
 "Český překlad, e-mail: lubek@users.sourceforge.net"
 
-#: help-dialogs.c:620
+#: help-dialogs.c:696
 msgid ""
 "\n"
 "Darwin port (Mac OS X): Julian Einwag &lt;julian@einwag.de&gt;"
@@ -700,7 +690,7 @@ msgstr "Přerušit akci"
 msgid "Aborts an ongoing action."
 msgstr "Přeruší probíhající akci."
 
-#: main-window.c:404
+#: main-window.c:411
 #, c-format
 msgid ""
 "<b>dvdisaster is not properly installed</b>\n"
@@ -708,15 +698,15 @@ msgid ""
 "Please execute the installer program (%s) again.\n"
 msgstr ""
 
-#: main-window.c:499
+#: main-window.c:506
 msgid "tooltip|Protocol for current action"
 msgstr "Protokol aktuální akce"
 
-#: main-window.c:500
+#: main-window.c:507
 msgid "Displays additional information created during the current or last action."
 msgstr "Zobrazí další informace vytvořené v průběhu aktuální nebo poslední akce."
 
-#: main-window.c:509
+#: main-window.c:516
 msgid "View log"
 msgstr "Zobrazit záznam"
 
@@ -1081,31 +1071,32 @@ msgstr ""
 msgid ""
 "<b>Treatment of unreadable areas</b>\n"
 "Defective media usually contain numerous read errors in a contigous region.\n"
-"Therefore skipping sectors after a read error reduces the amount of failed read\n"
-"attempts. <i>Larger values</i> reduce the processing time and the mechanical wear\n"
-"on the drive, but leave <i>larger gaps</i> in the image when reading defective areas."
+"Skipping sectors after a read error reduces the processing time and the\n"
+"mechanical wear on the drive, but leaves larger gaps in the image file:"
 msgstr ""
 
-#: preferences.c:831
+#: preferences.c:830
 #, c-format
 msgid "Skip %d sectors after read error"
 msgstr "Přeskočit %d sektorů po chybě čtení"
 
-#: preferences.c:832
+#: preferences.c:831
 #, c-format
 msgid "Stop reading when unreadable intervals < %d"
 msgstr "Přestat číst, je-li nečitelný úsek < %d"
 
-#: preferences.c:851
+#: preferences.c:850
 msgid ""
-"When using the <i>linear reading strategy</i>, the given number of sectors will be\n"
-"skipped after the occurance of a read error. This has the following consequences:\n"
-"\n"
+"When using the <i>linear reading strategy</i>, skipping sectors has the following\n"
+"consequences:\n"
 "- Skipping a large number of sectors (e.g. 1024) gives a quick overview of\n"
-"- damaged areas, but will usually not collect enough data for repairing the image.\n"
+"damaged areas, but will usually not collect enough data for repairing the image.\n"
 "- Smaller values like 16, 32 or 64 are a good trade-off: The processing time will be\n"
-"- considerably shortened, but still enough data for repairing the image is collected.\n"
-"\n"
+"considerably shortened, but still enough data for repairing the image is collected.\n"
+msgstr ""
+
+#: preferences.c:858
+msgid ""
 "The <i>adaptive reading strategy</i> uses this setting only if no error correction data\n"
 "is available. In that case the reading process will stop when no unread areas\n"
 "larger than the selected size remain. Values smaller than 128 <i>are not recommended</i>\n"
@@ -3368,7 +3359,7 @@ msgstr "Vydržte prosím, až se spustí prohlížeč!"
 msgid "Unnamed"
 msgstr "Nepojmenovaný"
 
-#: welcome-window.c:85
+#: welcome-window.c:84
 #, c-format
 msgid ""
 "- RS02 error correction method fully supported\n"
@@ -3376,30 +3367,39 @@ msgid ""
 "- Adaptive reading supports RS02 images.\n"
 msgstr ""
 
-#: welcome-window.c:92
+#: welcome-window.c:91
 msgid "Show this message again"
 msgstr ""
 
-#: welcome-window.c:134
+#: welcome-window.c:133
 msgid "<span weight=\"bold\" size=\"xx-large\">Welcome to dvdisaster!</span>"
 msgstr ""
 
-#: welcome-window.c:136
+#: welcome-window.c:135
 msgid ""
 "\n"
 "dvdisaster creates error correction data to protect\n"
 "CD and DVD media against data loss.\n"
 msgstr ""
 
-#: welcome-window.c:139
+#: welcome-window.c:138
 msgid ""
 "Please see the manual for [typical uses] of dvdisaster.\n"
 "\n"
 msgstr ""
 
-#: welcome-window.c:142
+#: welcome-window.c:141
 msgid "<i>New in this Version:</i>"
 msgstr ""
+
+#~ msgid ""
+#~ "Graphical user interface options\n"
+#~ "  --keep-style           - do not override the style settings\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Možnosti grafického uživatelského rozhraní\n"
+#~ "  --keep-style           - nepřepisovat nastavení\n"
+#~ "\n"
 
 #~ msgid "tooltip|Create error correction file"
 #~ msgstr "Vytvoření souboru oprav chyb"

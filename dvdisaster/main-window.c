@@ -338,7 +338,14 @@ void CreateMainWindow(int *argc, char ***argv)
     g_thread_init(NULL);
     Closure->mainThread = g_thread_self();
     gtk_init(argc, argv);
-    AdjustStyle();
+
+    /*** Some style tinkering */
+
+    gtk_rc_parse_string("style \"dvdisaster-style\"\n"
+                       "{  GtkMenuBar::shadow_type = none\n"
+                       "}\n"
+
+                       "class \"GtkMenuBar\" style \"dvdisaster-style\"\n");
 
     /*** Create our icons */
 

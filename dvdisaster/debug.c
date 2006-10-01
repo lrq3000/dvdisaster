@@ -475,7 +475,7 @@ void RandomImage(char *image_name, char *n_sectors, int mark)
       {  int i;
 
 	 for(i=0; i<2048; i+=128)
-	   sprintf(((char*)buf)+i, "Sector  %8lld", s);
+	   sprintf(((char*)buf)+i, "Sector  %8lld", (long long int)s);
       }
 
       n = LargeWrite(image, buf, 2048);
@@ -572,6 +572,26 @@ void HexDump(unsigned char *buf, int len, int step)
  * Show sector from image file
  */
 
+#define DUMP_FILE_SECTOR
+#ifdef DUMP_FILE_SECTOR
+static void dump_sector(unsigned char *sector)
+{  FILE *file = fopen("test-cases/dump.h", "w");
+   int j;
+   
+   fprintf(file, 
+	   "unsigned char ref_sector[%d] = {\n",
+	   2048);
+
+   for(j=0; j<2048; j++)
+   {  fprintf(file, "%3d, ",sector[j]); 
+      if(j%16 == 15) fprintf(file, "\n");
+   }
+   fprintf(file, "};\n");
+
+   fclose(file);
+}
+#endif
+
 void ShowSector(char *arg)
 {  ImageInfo *ii;
    gint64 sector;
@@ -607,6 +627,10 @@ void ShowSector(char *arg)
    /*** Clean up */
 
    FreeImageInfo(ii);
+
+#ifdef DUMP_FILE_SECTOR
+   dump_sector(buf);
+#endif
 }
 
 /* 

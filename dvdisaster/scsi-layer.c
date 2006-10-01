@@ -508,11 +508,11 @@ static int query_raw_mode(DeviceHandle *dh, int mode)
    dh->canRawRead = SetRawMode(dh, mode, FALSE);
 
    if(dh->canRawRead)
-   {  dh->rawBuffer = CreateRawBuffer();
-
+   {  
       switch(dh->mainType)
       {  case CD:
 	   dh->readRaw = read_raw_cd_sector;
+	   dh->rawBuffer = CreateRawBuffer(2352);
 	   break;
          default:
 	   dh->readRaw = NULL;
@@ -1169,12 +1169,12 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
       }
 
       Verbose("--> %d raw samples gathered\n", rb->samplesRead);
+
+      if(RecoverRaw(outbuf, rb))
+	return 0;
    }
 
    FreeAlignedBuffer(raw);
-
-   if(RecoverRaw(outbuf, rb))
-     return 0;
 
    return ret;
 }

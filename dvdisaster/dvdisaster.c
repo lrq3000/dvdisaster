@@ -142,7 +142,6 @@ typedef enum
    MODIFIER_DAO, 
    MODIFIER_DEBUG,
    MODIFIER_FILL_UNREADABLE,
-   MODIFIER_KEEP_STYLE,
    MODIFIER_QUERY_SIZE,
    MODIFIER_RANDOM_SEED,
    MODIFIER_RAW_ATTEMPTS,
@@ -331,7 +330,6 @@ int main(int argc, char *argv[])
 	{"help", 0, 0, 'h'},
         {"image", 1, 0, 'i'},
 	{"jump", 1, 0, 'j'},
-	{"keep-style", 0, 0, MODIFIER_KEEP_STYLE },
 #ifdef SYS_MINGW
 	{"list", 0, 0, 'l' },
 #endif
@@ -457,9 +455,6 @@ int main(int argc, char *argv[])
 	      debug_arg = g_strdup(optarg);
 	   }
 	   else Closure->truncate = 1; /* truncate confirmation for fix mode */
-	   break;
-         case MODIFIER_KEEP_STYLE:
-	   Closure->keepStyle = 1;
 	   break;
          case MODIFIER_DEBUG:
 	   Closure->debugMode = TRUE;
@@ -742,9 +737,6 @@ int main(int argc, char *argv[])
 	     "  --speed-warning n      - print warning if speed changes by more than n percent\n"
 	     "  --spinup-delay n       - wait n seconds for drive to spin up\n"
 	     "  --split-files          - split image into files <= 2GB\n\n"));
-
-      PrintCLI(_("Graphical user interface options\n"
-	     "  --keep-style           - do not override the style settings\n\n"));
 
       if(Closure->debugMode)
       { PrintCLI(_("Debugging options (purposefully undocumented and possibly harmful)\n"
