@@ -135,6 +135,7 @@ typedef struct _GlobalClosure
    int unlinkImage;     /* delete image after ecc file creation */
    int driveSpeed;      /* currently unused */
    int debugMode;       /* may activate additional features */
+   int debugCDump;      /* dump as #include file instead of hexdump */
    int verbose;         /* may activate additional messages */
    int splitFiles;      /* limit image files to 2GB */
    int autoSuffix;      /* automatically extend files with suffices .iso/.ecc */
@@ -424,6 +425,7 @@ void Byteset(char*);
 void Erase(char*);
 void RandomError(char*, char*);
 void RandomImage(char*, char*, int);
+void RawSector(char*);
 void ReadSector(char*);
 void SendCDB(char*);
 void ShowSector(char*);
@@ -584,15 +586,27 @@ int LargeUnlink(char*);
 #define N_Q_VECTORS   52      /* 26 16bit q vectors */
 #define Q_VECTOR_SIZE 45      /* using RS(45,43) ECC */
 
+#define P_PADDING 229         /* padding values for */
+#define Q_PADDING 210         /* shortened RS code  */
+
+int PToByteIndex(int, int);
+int QToByteIndex(int, int);
+void ByteIndexToP(int, int*, int*);
+void ByteIndexToQ(int, int*, int*);
+
+void PrintVector(unsigned char*, int, int);
+
 void GetPVector(unsigned char*, unsigned char*, int);
 void SetPVector(unsigned char*, unsigned char*, int);
 void FillPVector(unsigned char*, unsigned char, int);
+void OrPVector(unsigned char*, unsigned char, int);
 void IncrPVector(unsigned char*, int);
 void RaisePVector(unsigned char*, unsigned char, int);
 
 void GetQVector(unsigned char*, unsigned char*, int);
 void SetQVector(unsigned char*, unsigned char*, int);
 void FillQVector(unsigned char*, unsigned char, int);
+void OrQVector(unsigned char*, unsigned char, int);
 void RaiseQVector(unsigned char*, unsigned char, int);
 
 int DecodePQ(ReedSolomonTables*, unsigned char*, int, int*, int);
@@ -834,6 +848,7 @@ typedef struct _RawBuffer
    int *valid;                /* sector considered valid? */
    int samplesRead;           /* number of samples read */
    int sampleLength;          /* length of samples */
+   int attempt;               /* number of read attempts */
 
    unsigned char *recovered;  /* working buffer for cd frame recovery */
    char *byteState;           /* state of error correction */
@@ -849,11 +864,22 @@ enum                          /* values for rawState */
    RAW_READ_ERROR = 1,        /* drive signalled read error */
 };
 
-
 RawBuffer* CreateRawBuffer(int);
 void FreeRawBuffer(RawBuffer*);
 
+void InitializeCDFrame(unsigned char*, int);
+int CheckEDC(unsigned char*);
+
 int RecoverRaw(unsigned char*, RawBuffer*);
+
+/***
+ *** recover-raw2.c
+ ***/
+
+int Level1_L_EC(RawBuffer*);
+int Level2_L_EC(unsigned char*, RawBuffer*, unsigned char*);
+int SearchBestSector(RawBuffer*);
+int SearchPlausibleSector(RawBuffer*);
 
 /*** 
  *** scsi-layer.c
@@ -913,12 +939,6 @@ void DrawSpiral(Spiral*);
 void DrawSpiralSegment(Spiral*, GdkColor*, int);
 void DrawSpiralLabel(Spiral*, PangoLayout*, char*, GdkColor*, int, int);
 void MoveSpiralCursor(Spiral*, int);
-
-/***
- *** style.c
- ***/
-
-void AdjustStyle();
 
 /***
  *** welcome-window.c

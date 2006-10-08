@@ -32,6 +32,68 @@
  ***/
 
 /*
+ * Mapping of frame bytes to P/Q Vectors
+ */
+
+int PToByteIndex(int p, int i)
+{  return 12 + p + i*86;
+}
+
+void ByteIndexToP(int b, int *p, int *i)
+{  *p = (b-12)%86;
+   *i = (b-12)/86;
+}
+
+int QToByteIndex(int q, int i)
+{  int offset = 12 + (q & 1);
+
+   if(i == 43) return 2248+q;
+   if(i == 44) return 2300+q;
+
+   q&=~1;
+   return offset + (q*43 + i*88) % 2236;
+}
+
+void ByteIndexToQ(int b, int *q, int *i)
+{ int x,y,offset;
+ 
+  if(b >= 2300) 
+  {  *i = 44;
+     *q = (b-2300);
+     return;
+  }
+
+  if(b >= 2248) 
+  {  *i = 43;
+     *q = (b-2248);
+     return;
+  }
+
+  offset = b&1;
+  b  = (b-12)/2;
+  x  = b/43;
+  y  = (b-(x*43))%26;  
+  *i = b-(x*43);
+  *q = 2*((x+26-y)%26)+offset;
+}
+
+/* 
+ * Debugging output
+ */
+
+void PrintVector(unsigned char *vector, int len, int n)
+{  int i;
+
+   g_printf("%c#%2d =", len == P_VECTOR_SIZE ? 'P' : 'Q', n);
+
+   for(i=0; i<len; i++)
+     g_printf(" %2x", vector[i]);
+
+   g_printf("\n");
+}
+
+
+/*
  * There are 86 vectors of P-parity, yielding a RS(26,24) code.
  */
 
@@ -65,6 +127,14 @@ void IncrPVector(unsigned char *frame, int n)
 
    for(i=0; i<26; i++, w_idx+=86)
      frame[w_idx]++;
+}
+
+void OrPVector(unsigned char *frame, unsigned char value, int n)
+{  int i;
+   int w_idx = n+12;
+
+   for(i=0; i<26; i++, w_idx+=86)
+       frame[w_idx] |= value;
 }
 
 void RaisePVector(unsigned char *frame, unsigned char value, int n)
@@ -114,6 +184,18 @@ void FillQVector(unsigned char *frame, unsigned char data, int n)
 
    frame[2248 + n] = data;
    frame[2300 + n] = data;
+}
+
+void OrQVector(unsigned char *frame, unsigned char data, int n)
+{  int offset = 12 + (n & 1);
+   int w_idx  = (n&~1) * 43;
+   int i;
+
+   for(i=0; i<43; i++, w_idx+=88)
+     frame[(w_idx % 2236) + offset] |= data;
+
+   frame[2248 + n] |= data;
+   frame[2300 + n] |= data;
 }
 
 void RaiseQVector(unsigned char *frame, unsigned char value, int n)

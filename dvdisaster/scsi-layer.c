@@ -1102,7 +1102,7 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
    unsigned char cdb[MAX_CDB_SIZE];
    AlignedBuffer *raw = CreateAlignedBuffer(4096);
    RawBuffer *rb;
-   int i, ret = -1;
+   int ret = -1;
 
    if(!dh->rawBuffer)  /* sanity check */ 
      return 1;
@@ -1122,8 +1122,8 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
 
    /* try a number of raw reads */
 
-   for(i=0; i<Closure->rawAttempts; i++)
-   {  Verbose("Trying raw read #%d for sector %d\n", i, lba);
+   for(rb->attempt=0; rb->attempt<Closure->rawAttempts; rb->attempt++)
+   {  Verbose("Trying raw read #%d for sector %d\n", rb->attempt, lba);
 
       memset(cdb, 0, MAX_CDB_SIZE);
       cdb[0]  = 0xbe;         /* READ CD */
@@ -1161,7 +1161,7 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
 	 {  Verbose("... nothing returned\n");
 	 }
       }
-      else   /* Drive says data is okay. Remember this but trust  it */
+      else   /* Drive says data is okay. Remember this but do not trust it */
       {  memcpy(rb->rawBuf[rb->samplesRead], raw->buf, rb->sampleLength);
 	 rb->rawState[rb->samplesRead] = RAW_SUCCESS;
 	 rb->samplesRead++;

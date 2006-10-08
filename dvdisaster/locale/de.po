@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-01 12:55+0200\n"
+"POT-Creation-Date: 2006-10-07 18:01+0200\n"
 "PO-Revision-Date: 2004-11-30 19:48+0100\n"
 "Last-Translator: Carsten Gnörlich <carsten@dvdisaster.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -61,7 +61,7 @@ msgstr ""
 "\n"
 "Erzeuge zufällige reparierbare Auslöschungen (für %d Nullstellen, max. %d Auslöschungen).\n"
 
-#: debug.c:107 debug.c:192 debug.c:236 debug.c:525 debug.c:617
+#: debug.c:107 debug.c:192 debug.c:236 debug.c:525 debug.c:625
 #: rs01-common.c:54 rs02-common.c:62 rs02-create.c:305 rs02-create.c:938
 #: rs02-fix.c:378 rs02-verify.c:390
 #, c-format
@@ -102,7 +102,7 @@ msgstr "Die Anzahl von Auslöschungen muß > 0 und <= %d sein\n"
 msgid "3rd argument is missing"
 msgstr "Das dritte Argument fehlt"
 
-#: debug.c:302 debug.c:610 debug.c:657
+#: debug.c:302 debug.c:618 debug.c:664 debug.c:724
 #, c-format
 msgid "Sector must be in range [0..%lld]\n"
 msgstr "Sektor muß im Bereich [0..%lld] liegen\n"
@@ -212,7 +212,7 @@ msgstr ""
 msgid "%lld \"unreadable sector\" markers replaced.\n"
 msgstr "%lld \"unlesbarer Sektor\"-Markierungen ersetzt.\n"
 
-#: debug.c:612 debug.c:660
+#: debug.c:620 debug.c:667 debug.c:727
 #, c-format
 msgid ""
 "Contents of sector %lld:\n"
@@ -221,15 +221,19 @@ msgstr ""
 "Inhalt von Sektor %lld:\n"
 "\n"
 
-#: debug.c:621 rs01-common.c:70 rs02-common.c:67 rs02-create.c:188
+#: debug.c:629 rs01-common.c:70 rs02-common.c:67 rs02-create.c:188
 #: rs02-fix.c:381
 #, c-format
 msgid "Failed reading sector %lld in image: %s"
 msgstr "Lesen von Sektor %lld im Abbild fehlgeschlagen: %s"
 
-#: debug.c:671
+#: debug.c:678
 #, c-format
 msgid "Failed reading sector %lld: %s"
+msgstr ""
+
+#: debug.c:714
+msgid "Raw reading only possible on CD media\n"
 msgstr ""
 
 #: dvdisaster.c:66 main-window.c:126
@@ -250,24 +254,24 @@ msgstr "RS01-Methode zum Überprüfen der Dateien nicht verfügbar."
 #. TRANSLATORS:
 #. This is a dummy entry which is supposed to translate into "ok".
 #. Please do not return anything else here.
-#: dvdisaster.c:256 dvdisaster.c:269 dvdisaster.c:281
+#: dvdisaster.c:258 dvdisaster.c:271 dvdisaster.c:283
 msgid "test phrase for verifying the locale installation"
 msgstr "ok"
 
-#: dvdisaster.c:302
+#: dvdisaster.c:304
 #, c-format
 msgid "sizeof(EccHeader) is %d, but must be 4096.\n"
 msgstr "sizeof(EccHeader) ist %d, muß aber 4096 sein.\n"
 
-#: dvdisaster.c:442
+#: dvdisaster.c:446
 msgid "--cache-size must at least be 1MB; 16MB or higher is recommended."
 msgstr "--cache-size muß mindestens 1MB sein; 16MB oder mehr werden empfohlen."
 
-#: dvdisaster.c:444
+#: dvdisaster.c:448
 msgid "--cache-size maximum is 2048MB."
 msgstr "Die Maximalgröße von --cache-size ist 2048MB."
 
-#: dvdisaster.c:495
+#: dvdisaster.c:502
 #, c-format
 msgid ""
 "\n"
@@ -278,12 +282,12 @@ msgstr ""
 "dvdisaster Version %s\n"
 "\n"
 
-#: dvdisaster.c:538
+#: dvdisaster.c:549
 #, c-format
 msgid "?? illegal getopt return value %d\n"
 msgstr "?? ungültiger Rückgabewert von getopt: %d\n"
 
-#: dvdisaster.c:570
+#: dvdisaster.c:582
 #, c-format
 msgid ""
 "dvdisaster is not properly installed.\n"
@@ -295,7 +299,7 @@ msgstr ""
 
 #. TRANSLATORS: Program options like -r and --read are not to be translated
 #. to avoid confusion when discussing the program in international forums.
-#: dvdisaster.c:702
+#: dvdisaster.c:718
 msgid ""
 "\n"
 "Common usage examples:\n"
@@ -319,7 +323,7 @@ msgstr ""
 "  dvdisaster -u,--unlink # Löscht .iso - Dateien nach Beenden der vorherigen Aktionen.\n"
 "\n"
 
-#: dvdisaster.c:711
+#: dvdisaster.c:727
 #, c-format
 msgid ""
 "Drive and file specification:\n"
@@ -334,7 +338,7 @@ msgstr ""
 "  -i,--image  Name       - Name der Abbild - Datei        (Standard: medium.iso)\n"
 "  -e,--ecc    Name       - Name der Fehlerkorrektur-Datei (Standard: medium.ecc)\n"
 
-#: dvdisaster.c:719
+#: dvdisaster.c:735
 msgid ""
 "  -l,--list              - list drives available under ASPI manager\n"
 "\n"
@@ -342,7 +346,7 @@ msgstr ""
 "  -l,--list              - zeigt unter ASPI verfügbare Laufwerke\n"
 "\n"
 
-#: dvdisaster.c:724
+#: dvdisaster.c:740
 #, c-format
 msgid ""
 "Tweaking options (see manual before using!)\n"
@@ -381,18 +385,20 @@ msgstr ""
 "  --split-files          - Abbild in mehrere Dateien <= 2GB aufteilen\n"
 "\n"
 
-#: dvdisaster.c:742
+#: dvdisaster.c:758
 #, c-format
 msgid ""
 "Debugging options (purposefully undocumented and possibly harmful)\n"
 "  --debug           - enables the following options\n"
 "  --byteset s,i,b   - set byte i in sector s to b\n"
+"  --cdump           - creates C #include file dumps instead of hexdumps\n"
 "  --erase sector    - erase the given sector\n"
 "  --erase n-m       - erase sectors n - m, inclusively\n"
 "  --marked-image n  - create image with n marked random sectors\n"
 "  --random-errors r,e seed image with (correctable) random errors\n"
 "  --random-image n  - create image with n sectors of random numbers\n"
 "  --random-seed n   - random seed for built-in random number generator\n"
+"  --raw-sector n    - shows hexdump of the given raw sector from medium in drive\n"
 "  --read-sector n   - shows hexdump of the given sector from medium in drive\n"
 "  --send-cdb arg    - executes given cdb at drive; kills system if used wrong\n"
 "  --show-sector n   - shows hexdump of the given sector in an image file\n"
@@ -404,12 +410,14 @@ msgstr ""
 "Optionen zum Testen (absichtlich undokumentiert und möglicherweise schädlich!)\n"
 "  --debug           - schaltet die folgenden Optionen frei\n"
 "  --byteset s,i,b   - setze Byte i in Sektor s auf Wert b\n"
+"  --cdump           - Erzeugt C-Include-Dateien anstelle von hexadezimalen Ausgaben\n"
 "  --erase sector    - Löscht den angegebenen Sektor\n"
 "  --erase n-m       - Löscht die Sektoren n - m (einschließlich n,m)\n"
 "  --marked-image n  - Erzeugt Abbild mit n markierten Sektoren aus Zufallszahlen\n"
 "  --random-errors r,e Füllt Abbild mit zufälligen reparierbaren Fehlern\n"
 "  --random-image n  - Erzeugt Abbild mit n Sektoren aus Zufallszahlen\n"
 "  --random-seed n   - Anfangswert für den eingebauten Zufallszahlengenerator\n"
+"  --raw-sector n    - Zeigt hexadezimale Darstellung eines Roh-Sektors vom Datenträger\n"
 "  --read-sector n   - Zeigt hexadezimale Darstellung des Inhalts eines Sektors vom Datenträger\n"
 "  --send-cdb arg    - führt cdb im Laufwerk aus; schrottet System bei Fehleingabe\n"
 "  --show-sector n   - Zeigt hexadezimale Darstellung des Sektor-Inhalts einer Abbild-Datei\n"
@@ -418,7 +426,7 @@ msgstr ""
 "  --zero-unreadable - Ersetzt die \"unlesbare Sektoren\"-Markierungen durch Nullen\n"
 "\n"
 
-#: dvdisaster.c:760
+#: dvdisaster.c:778
 msgid ""
 "NOTE: This is the Windows console version of dvdisaster.\n"
 "The version providing a graphical user interface is called\n"

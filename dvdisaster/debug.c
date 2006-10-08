@@ -548,6 +548,10 @@ void ZeroUnreadable(void)
  ** Debugging functions to show contents of a given sector
  **/
 
+/* 
+ * produce a hex dump
+ */
+
 void HexDump(unsigned char *buf, int len, int step)
 {  int i,j;
 
@@ -569,28 +573,32 @@ void HexDump(unsigned char *buf, int len, int step)
 }
 
 /*
- * Show sector from image file
+ * produce a C #include file
  */
 
-#define DUMP_FILE_SECTOR
-#ifdef DUMP_FILE_SECTOR
-static void dump_sector(unsigned char *sector)
-{  FILE *file = fopen("test-cases/dump.h", "w");
-   int j;
+void CDump(unsigned char *buf, int lba, int len, int step)
+{  int i;
    
-   fprintf(file, 
-	   "unsigned char ref_sector[%d] = {\n",
-	   2048);
+   g_printf("#define SECTOR_LENGTH %d\n"
+	    "#define SECTOR_LBA %d\n"
+	    "unsigned char sector_frame[%d] = {\n",
+	    len, lba, len);
 
-   for(j=0; j<2048; j++)
-   {  fprintf(file, "%3d, ",sector[j]); 
-      if(j%16 == 15) fprintf(file, "\n");
+   len--;
+   for(i=0; i<=len; i++)
+   {  g_printf("%3d%c ", *buf++, i==len ? ' ' : ','); 
+
+      if(i%step == (step-1))
+	g_printf("\n");
    }
-   fprintf(file, "};\n");
-
-   fclose(file);
+ 
+   printf("};\n");
 }
-#endif
+
+
+/*
+ * Show sector from image file
+ */
 
 void ShowSector(char *arg)
 {  ImageInfo *ii;
@@ -620,17 +628,16 @@ void ShowSector(char *arg)
    if(n != 2048)
      Stop(_("Failed reading sector %lld in image: %s"),sector,strerror(errno));
 
-   HexDump(buf, 2048, 32);
-
-   g_printf("CRC32 = %04x\n", Crc32(buf, 2048));
+   if(Closure->debugCDump)
+        CDump(buf, sector, 2048, 16);
+   else 
+   {  HexDump(buf, 2048, 32);
+      g_printf("CRC32 = %04x\n", Crc32(buf, 2048));
+   }
 
    /*** Clean up */
 
    FreeImageInfo(ii);
-
-#ifdef DUMP_FILE_SECTOR
-   dump_sector(buf);
-#endif
 }
 
 /* 
@@ -671,13 +678,96 @@ void ReadSector(char *arg)
       Stop(_("Failed reading sector %lld: %s"),sector,strerror(errno));
    }
 
-   //   HexDump(ab->buf, 2048, 32);
-
-   g_printf("CRC32 = %04x\n", Crc32(ab->buf, 2048));
+   if(Closure->debugCDump)
+        CDump(ab->buf, sector, 2048, 16);
+   else 
+   {  HexDump(ab->buf, 2048, 32);
+      g_printf("CRC32 = %04x\n", Crc32(ab->buf, 2048));
+   }
 
    CloseDevice(dh);
    FreeAlignedBuffer(ab);
 }
+
+/***
+ *** Read a raw CD sector
+ ***/
+
+void RawSector(char *arg)
+{  AlignedBuffer *ab = CreateAlignedBuffer(2048);
+   Sense *sense;
+   unsigned char cdb[MAX_CDB_SIZE];
+   DeviceHandle *dh;
+   gint64 lba;
+   int length=0,status;
+
+   /*** Open the device */
+
+   dh = OpenAndQueryDevice(Closure->device);
+   sense = &dh->sense;
+
+   /*** Only CD can be read in raw mode */
+
+   if(dh->mainType != CD)
+   {  CloseDevice(dh);
+      FreeAlignedBuffer(ab);
+      Stop(_("Raw reading only possible on CD media\n"));
+   }
+
+   /*** Determine sector to show */
+
+   lba =  atoi(arg);
+
+   if(lba < 0 || lba >= dh->sectors)
+   {  CloseDevice(dh);
+      FreeAlignedBuffer(ab);
+      Stop(_("Sector must be in range [0..%lld]\n"),dh->sectors-1);
+   }
+
+   PrintLog(_("Contents of sector %lld:\n\n"),lba);
+
+   /*** Try the raw read */
+
+   memset(cdb, 0, MAX_CDB_SIZE);
+   cdb[0]  = 0xbe;         /* READ CD */
+   switch(dh->subType)     /* Expected sector type */
+   {  case DATA1: cdb[1] = 2<<2; length=2352; break;  /* data mode 1 */
+      case XA21:  cdb[1] = 4<<2; length=2328; break;  /* xa mode 2 form 1 */
+   }
+
+   cdb[2]  = (lba >> 24) & 0xff;
+   cdb[3]  = (lba >> 16) & 0xff;
+   cdb[4]  = (lba >>  8) & 0xff;
+   cdb[5]  = lba & 0xff;
+   cdb[6]  = 0;        /* number of sectors to read (3 bytes) */
+   cdb[7]  = 0;  
+   cdb[8]  = 1;        /* read nsectors */
+
+   cdb[9]  = 0xb8;     /* we want Sync + Header + User data + EDC/ECC */
+   cdb[10] = 0;        /* reserved stuff */
+   cdb[11] = 0;        /* no special wishes for the control byte */
+
+   memcpy(ab->buf, Closure->deadSector, 2048);
+   status = SendPacket(dh, cdb, 12, ab->buf, length, sense, DATA_READ);
+
+   if(status<0)  /* Read failed */
+   {  RememberSense(sense->sense_key, sense->asc, sense->ascq);
+      CloseDevice(dh);
+      FreeAlignedBuffer(ab);
+      Stop("Sector read failed: %s\n", GetLastSenseString(FALSE));
+   }
+   else  
+   {  if(Closure->debugCDump)
+         CDump(ab->buf, lba, length, 16);
+     else 
+     {   HexDump(ab->buf, length, 32);
+         g_printf("CRC32 = %04x\n", Crc32(ab->buf, 2048));
+     }
+   }
+
+   FreeAlignedBuffer(ab);
+}
+
 
 /***
  *** Send a CDB to the drive and report what happens

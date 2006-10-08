@@ -1,4 +1,4 @@
-93e6ad5f8222c0414a21a6daef8cacdd *dvdisaster.h
+4b401c52523c6a1639441b288b7794e4 *dvdisaster.h
 8f0376b9d0f6963e11677a9c2e446cc6 *galois-inlines.h
 c27628ad149e3f8564b24a86642b54b6 *md5.h
 bcc539132868e8c92929302de62ef434 *rs01-includes.h
@@ -9,8 +9,8 @@ daa7ec033afb7fcfa5e4591cdda6ffac *bitmap.c
 63ee183b0591b933d210cd437f19e894 *closure.c
 6a6405a04d801afc20d2f282ae9fba3b *crc32.c
 f6bfabe0fea5d9cc05500692056d9a77 *curve.c
-c1145c52e6a80d3a8f47437d0d44a7f0 *debug.c
-bdc9264e17a17ef97c053f6017d8a841 *dvdisaster.c
+20fadecdd0cb6d8f00984d9292e1dfc3 *debug.c
+f17e09935a77f60031bf7f6c9deffae1 *dvdisaster.c
 445852905059a696fc89b86015eefc72 *ecc-rs01.c
 e3556e136b8303501536314332fb0df2 *ecc-rs02.c
 255f47cdc89a7edb4c091a5e92379550 *endian.c
@@ -19,7 +19,7 @@ e3556e136b8303501536314332fb0df2 *ecc-rs02.c
 eb09b3ef7ab114254406d1695695c7c5 *help-dialogs.c
 da4bb1a3fde494c707b86dbbedca907a *icon-factory.c
 7ea547219ab8184458047f34153d9f0f *large-io.c
-bd202e8d8d021287b7ec25a37f18f94e *l-ec.c
+ad69d3cc59ca61c83861b269824d7d1f *l-ec.c
 8483b30798ebc2d5eff003408e327607 *main-window.c
 9f8e7da67068ae5229eef9bab8fa18a2 *md5.c
 c20a9ced3a33577cef8a102e2f8f842d *memtrack.c
@@ -34,7 +34,8 @@ cdde449dd2a8f64b560ff18a36f86234 *random.c
 5a37967ccb84d6e7535cb78e5cb0f227 *read-adaptive-window.c
 18a8e422f6279411f68bac82026dbee8 *read-linear.c
 8f6dd00126b3e613c0a388390dcb549b *read-linear-window.c
-5644fbe64214ade9fa1394b4eba1e0ca *recover-raw.c
+02830ac3914180412222ca5884f93fb7 *recover-raw2.c
+1466bb6ab5aca9fadc7db368f7f5bf12 *recover-raw.c
 1edd34d022eaea0ceb3b438754cf0d67 *rs01-common.c
 44d6c80ccca0af7dd6dca3ed47144018 *rs01-create.c
 e2a624c96b505cdb836b192e9da63a79 *rs01-fix.c
@@ -47,7 +48,7 @@ f747d0e89474d40f3833da319fcdc88b *rs02-verify.c
 08574c4ea55dc96fa1757a3a0bcfe0d7 *rs02-window.c
 1f4492537c0ac78c57a86ca231d1973c *scsi-darwin.c
 e061f7bcdae26fa4ef2e941f64668780 *scsi-freebsd.c
-e0e17d70943549fbd3129e3591ecb5c3 *scsi-layer.c
+014b68fa2f2ee87994d4b83eea1ac8cf *scsi-layer.c
 bbfee8ed42bad97b39e4c0c0e1eaada6 *scsi-linux.c
 79a515b5dc4addb8ffbe301e5ee88b72 *scsi-unknown.c
 318fd9bf947c32fc31208d54b10d0681 *scsi-win32.c

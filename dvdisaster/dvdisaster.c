@@ -127,6 +127,7 @@ typedef enum
    MODE_MARKED_IMAGE,
    MODE_RANDOM_ERR, 
    MODE_RANDOM_IMAGE,
+   MODE_RAW_SECTOR,
    MODE_READ_SECTOR,
    MODE_SEND_CDB,
    MODE_SHOW_SECTOR, 
@@ -139,6 +140,7 @@ typedef enum
    MODIFIER_CACHE_SIZE, 
    MODIFIER_CLV_SPEED,    /* unused */ 
    MODIFIER_CAV_SPEED,    /* unused */
+   MODIFIER_CDUMP, 
    MODIFIER_DAO, 
    MODIFIER_DEBUG,
    MODIFIER_FILL_UNREADABLE,
@@ -318,6 +320,7 @@ int main(int argc, char *argv[])
 	{"byteset", 1, 0, MODE_BYTESET },
 	{"cache-size", 1, 0, MODIFIER_CACHE_SIZE },
 	{"cav", 1, 0, MODIFIER_CAV_SPEED },
+	{"cdump", 0, 0, MODIFIER_CDUMP },
 	{"clv", 1, 0, MODIFIER_CLV_SPEED },
 	{"create", 0, 0, 'c'},
 	{"dao", 0, 0, MODIFIER_DAO },
@@ -341,6 +344,7 @@ int main(int argc, char *argv[])
 	{"random-image", 1, 0, MODE_RANDOM_IMAGE },
 	{"random-seed", 1, 0, MODIFIER_RANDOM_SEED },
 	{"raw-attempts", 1, 0, MODIFIER_RAW_ATTEMPTS },
+	{"raw-sector", 1, 0, MODE_RAW_SECTOR},
 	{"read", 2, 0,'r'},
 	{"read-sector", 1, 0, MODE_READ_SECTOR},
 	{"redundancy", 1, 0, 'n'},
@@ -443,6 +447,9 @@ int main(int argc, char *argv[])
 	   if(Closure->cacheMB > 2048) 
 	     Stop(_("--cache-size maximum is 2048MB.")); 
 	   break;
+         case MODIFIER_CDUMP:
+	   Closure->debugCDump = TRUE;
+	   break;
          case MODIFIER_DAO: 
 	   Closure->noTruncate = 1; 
 	   break;
@@ -516,6 +523,10 @@ int main(int argc, char *argv[])
 	   mode = MODE_RANDOM_IMAGE;
 	   debug_arg = g_strdup(optarg);
 	   break;
+         case MODE_RAW_SECTOR:
+	   mode = MODE_RAW_SECTOR;
+	   debug_arg = g_strdup(optarg);
+	   break;
          case MODE_READ_SECTOR:
 	   mode = MODE_READ_SECTOR;
 	   debug_arg = g_strdup(optarg);
@@ -548,6 +559,7 @@ int main(int argc, char *argv[])
         case MODE_RANDOM_ERR:
         case MODE_RANDOM_IMAGE:
         case MODE_READ_SECTOR:
+        case MODE_RAW_SECTOR:
         case MODE_SEND_CDB:
         case MODE_SHOW_SECTOR:
         case MODE_MARKED_IMAGE:
@@ -643,6 +655,10 @@ int main(int argc, char *argv[])
 
       case MODE_SEND_CDB:
 	 SendCDB(debug_arg);
+	 break;
+
+      case MODE_RAW_SECTOR:
+	 RawSector(debug_arg);
 	 break;
 
       case MODE_READ_SECTOR:
@@ -742,12 +758,14 @@ int main(int argc, char *argv[])
       { PrintCLI(_("Debugging options (purposefully undocumented and possibly harmful)\n"
 	     "  --debug           - enables the following options\n"
 	     "  --byteset s,i,b   - set byte i in sector s to b\n"
+             "  --cdump           - creates C #include file dumps instead of hexdumps\n" 
 	     "  --erase sector    - erase the given sector\n"
 	     "  --erase n-m       - erase sectors n - m, inclusively\n"
 	     "  --marked-image n  - create image with n marked random sectors\n"
 	     "  --random-errors r,e seed image with (correctable) random errors\n"
 	     "  --random-image n  - create image with n sectors of random numbers\n"
 	     "  --random-seed n   - random seed for built-in random number generator\n"
+	     "  --raw-sector n    - shows hexdump of the given raw sector from medium in drive\n"
 	     "  --read-sector n   - shows hexdump of the given sector from medium in drive\n"
 	     "  --send-cdb arg    - executes given cdb at drive; kills system if used wrong\n"
 	     "  --show-sector n   - shows hexdump of the given sector in an image file\n"

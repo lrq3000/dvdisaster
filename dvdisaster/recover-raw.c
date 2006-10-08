@@ -25,6 +25,9 @@
  * Debugging function
  */
 
+//#define DUMP_MODE
+
+#ifdef DUMP_MODE
 static void dump_sector(RawBuffer *rb)
 {  FILE *file = fopen("test-cases/dump.h", "w");
    int i;
@@ -32,8 +35,9 @@ static void dump_sector(RawBuffer *rb)
    fprintf(file, 
 	   "#define SAMPLES_READ %d\n"
 	   "#define SAMPLE_LENGTH %d\n"
+	   "#define LBA %d\n"
 	   "unsigned char cd_frame[][%d] = {\n",
-	   rb->samplesRead, rb->sampleLength, rb->sampleLength);
+	   rb->samplesRead, rb->sampleLength, rb->lba, rb->sampleLength);
 
    for(i=0; i<rb->samplesRead; i++)
    {  int j;
@@ -50,6 +54,7 @@ static void dump_sector(RawBuffer *rb)
 
    fclose(file);
 }
+#endif
 
 /***
  *** Create our local working context
@@ -131,7 +136,7 @@ static int int_to_bcd(int value)
 
 /* Initialize Sync, MSF and data mode bytes */
 
-static void initialize_cd_frame(unsigned char *cd_frame, int sector)
+void InitializeCDFrame(unsigned char *cd_frame, int sector)
 {  unsigned char minute, second, frame;
    int i;
 
@@ -161,7 +166,7 @@ static void initialize_cd_frame(unsigned char *cd_frame, int sector)
  * Returns TRUE if frame is good.
  */
 
-static int check_edc(unsigned char *cd_frame)
+int CheckEDC(unsigned char *cd_frame)
 { unsigned int expected_crc, real_crc;
 
   /* Get CRC from CD frame (byte position 2064) */
@@ -331,8 +336,41 @@ static int majority_decision(unsigned char *cd_frame, RawBuffer *rb)
 
 /***
  *** Detection of unplausible sectors.
- ***
- * The drive might have lost track and returned the wrong sector.
+ ***/
+
+//#define DEBUG_VALIDATION 1
+
+/* 
+ * Throw out those sectors which are obviously wrong
+ * by examining their MSF.
+ */
+
+static void validate_by_msf(RawBuffer *rb)
+{  unsigned char minute,second,frame;
+   int last = rb->samplesRead - 1;
+
+   if(!rb->samplesRead)
+     return;
+
+   lba_to_msf(rb->lba, &minute, &second, &frame);
+   minute = int_to_bcd(minute);
+   second = int_to_bcd(second);
+   frame = int_to_bcd(frame);
+
+   if(   rb->rawBuf[last][12] != minute
+      || rb->rawBuf[last][13] != second	
+      || rb->rawBuf[last][14] != frame)
+   {   
+#ifdef DEBUG_VALIDATION
+       printf("MSF mismatch for sector %d: %2d%2d%2d / %2d%2d%2d\n",
+	      last, minute, second, frame,
+	      rb->rawBuf[last][12], rb->rawBuf[last][13], rb->rawBuf[last][14]);
+#endif
+       rb->samplesRead--; 
+   }
+}
+
+/* The drive might have lost track and returned the wrong sector.
  * We build a difference matrix containing the pairwise byte 
  * differences of all sectors gathered so far, then mark those 
  * sectors as bad whose average difference exceeds the median 
@@ -343,42 +381,23 @@ static int majority_decision(unsigned char *cd_frame, RawBuffer *rb)
  * decision.  
  */
 
-//#define DEBUG_VALIDATION 1
-
 static int int_compare(const void *a, const void *b)
 {  return (*(int*)a) - (*(int*)b);
 }
 
-static void validate_sectors(RawBuffer *rb)
+static void validate_by_difference(RawBuffer *rb)
 {  int matrix_size = rb->samplesRead*rb->samplesRead;
    int score[matrix_size];
    int col_avg[rb->samplesRead];
    int col_avg_sorted[matrix_size];
    int i,j,k;
    int margin,median;
-   unsigned char minute,second,frame;
 
-   /* If we are extremely unlucky we are flooded with many wrong sectors
-      so that the heuristic below does not work. Reject all sectors
-      with wrong MSF addresses to be sure. */
-
-   lba_to_msf(rb->lba, &minute, &second, &frame);
-   minute = int_to_bcd(minute);
-   second = int_to_bcd(second);
-   frame = int_to_bcd(frame);
+   if(rb->samplesRead < 2)  /* Nothing to do yet */
+     return;
 
    for(i=0; i<rb->samplesRead; i++)
-     if(   rb->rawBuf[i][12] != minute
-	|| rb->rawBuf[i][13] != second	
-	|| rb->rawBuf[i][14] != frame)
-     {  rb->valid[i] = FALSE; 
-#ifdef DEBUG_VALIDATION
-        printf("MSF mismatch for sector %d: %2d%2d%2d / %2d%2d%2d\n",
-	       i, rb->recovered[12], rb->recovered[13], rb->recovered[14],
-	       rb->rawBuf[i][12], rb->rawBuf[i][13], rb->rawBuf[i][14]);
-#endif
-     }
-     else rb->valid[i] = TRUE;  /* for initialization */ 
+     rb->valid[i] = TRUE;  /* for initialization */ 
 
    /* Examine sectors based on their byte differences */
 
@@ -448,8 +467,9 @@ static void validate_sectors(RawBuffer *rb)
  * After this stage, we have:
  *
  * - marked the frame bytes in rb->byteState are as following;
- *  2 = Byte lies at intersection of good P and Q vector 
- *  1 = Byte lies at P or Q vector from above
+ *  3 = Byte lies at intersection of good P and Q vector 
+ *  2 = Byte lies at good P vector from above
+ *  1 = Byte lies at good Q vector from above
  *  0 = Byte is uncorrected 
  *
  * - recorded bytes with a score better than 0 in rb->recovered;
@@ -458,11 +478,10 @@ static void validate_sectors(RawBuffer *rb)
  *   or correctable in rb->pList and rb->qList.
  */
 
-#define P_PADDING 229
-#define Q_PADDING 210
+//#define DEBUG_ANALYSE
 
 static int analyse_pq(RawBuffer *rb)
-{  int score[2];
+{  int score[4];
    int p_miss,q_miss,p_clash,q_clash;
    int i,f;
 
@@ -470,7 +489,7 @@ static int analyse_pq(RawBuffer *rb)
       and none are recovered */
 
    memset(rb->byteState, 0, rb->sampleLength);
-   initialize_cd_frame(rb->recovered, rb->lba);
+   InitializeCDFrame(rb->recovered, rb->lba);
 
    memset(rb->pIndex, 0, sizeof(rb->pIndex));
    memset(rb->qIndex, 0, sizeof(rb->qIndex));
@@ -512,7 +531,7 @@ static int analyse_pq(RawBuffer *rb)
 	       SetQVector(frame_byte, vector, v);
 	    }
 
-	    FillQVector(frame_state, 1, v);
+	    OrQVector(frame_state, 1, v);
 	 }
       }
 
@@ -539,16 +558,17 @@ static int analyse_pq(RawBuffer *rb)
 	       SetPVector(frame_byte, vector, v);
 	    }
 
-	    IncrPVector(frame_state, v);
+	    OrPVector(frame_state, 2, v);
 	 }
       }
 
       /*** Now the frame bytes are marked as following:
-	   2 = Byte lies at intersection of good P and Q vector 
-	   1 = Byte lies at P or Q vector from above
+	   3 = Byte lies at intersection of good P and Q vector 
+	   2 = Byte lies at P vector from above
+	   1 = Byte lies at Q vector from above
 	   0 = Byte is uncorrected */
       
-      score[0] = score[1] = score[2] = 0;
+      score[0] = score[1] = score[2] = score[3] = 0;
 
       for(i=12; i<rb->sampleLength; i++)
       {  int s = frame_state[i];
@@ -560,12 +580,12 @@ static int analyse_pq(RawBuffer *rb)
 	 score[s]++;
       }
       
-      printf("Frame %d: [2/1/0]=[%d/%d/%d]\n", f, score[2], score[1], score[0]);
+      printf("Frame %d: [3/2/1/0]=[%d/%d/%d/%d]\n", f, score[3], score[2], score[1], score[0]);
    }
 
    /* Count total byte states */
 
-   score[0] = score[1] = score[2] = 0;
+   score[0] = score[1] = score[2] = score[3] = 0;
 
    for(i=12; i<rb->sampleLength; i++)
    {  int s = rb->byteState[i];
@@ -573,7 +593,7 @@ static int analyse_pq(RawBuffer *rb)
       score[s]++;
    }
 
-   printf("Recovered: [2/1/0]=[%d/%d/%d]\n", score[2], score[1], score[0]);
+   printf("Recovered: [3/2/1/0]=[%d/%d/%d/%d]\n", score[3], score[2], score[1], score[0]);
 
    /* Evaluate p/q vector state */
    
@@ -591,7 +611,119 @@ static int analyse_pq(RawBuffer *rb)
 
    printf("P/Q vectors: %d/%d missing, %d/%d ambiguous\n", p_miss, q_miss, p_clash, q_clash);
 
+#ifdef DEBUG_ANALYSE
+   for(i=0; i<N_P_VECTORS; i++)
+   {  unsigned char vector[P_VECTOR_SIZE];
+      GetPVector(rb->recovered, vector, i);
+      PrintVector(vector, P_VECTOR_SIZE, i);
+      GetPVector(rb->byteState, vector, i);
+      PrintVector(vector, P_VECTOR_SIZE, i);
+   }
+   for(i=0; i<N_Q_VECTORS; i++)
+   {  unsigned char vector[Q_VECTOR_SIZE];
+      GetQVector(rb->recovered, vector, i);
+      PrintVector(vector, Q_VECTOR_SIZE, i);
+      GetQVector(rb->byteState, vector, i);
+      PrintVector(vector, Q_VECTOR_SIZE, i);
+   }
+#endif
+
    return score[0] == 0;
+}
+
+/***
+ *** Try to cut down P/Q vector alternatives
+ ***
+ * If there is more than one alternative for a specific P/Q vector,
+ * try to find the right one.
+ */
+
+//#define DEBUG_DISAMBIGUATE
+
+static void disambiguate_vectors(RawBuffer *rb)
+{  unsigned char vector[Q_VECTOR_SIZE];
+   unsigned char hint[Q_VECTOR_SIZE];
+   int i,j,k,err;
+   int erasures[2];
+   int misses;
+   int min_misses, best_vector;
+
+   for(i=0; i<N_P_VECTORS; i++)
+   {   
+       if(rb->pIndex[i] < 2)
+       continue;
+
+#ifdef DEBUG_DISAMBIGUATE
+       g_printf("%d alternatives for P-vector %d\n", rb->pIndex[i], i);
+#endif
+
+       best_vector = 0;
+       min_misses = P_VECTOR_SIZE;
+
+       for(j=0; j<rb->pIndex[i]; j++)
+       {  GetPVector(rb->rawBuf[rb->pList[i][j]], vector, i);
+#ifdef DEBUG_DISAMBIGUATE
+ 	  PrintVector(vector, P_VECTOR_SIZE, i);
+#endif
+	  misses = 0;
+
+	  memset(hint, 0, sizeof(hint));
+	  SetPVector(rb->recovered, vector, i);
+	  for(k=0; k<P_VECTOR_SIZE; k++)
+	  {  int byte_index = PToByteIndex(i,k);
+	     int crossing_q,crossing_q_index;
+	     
+	     ByteIndexToQ(byte_index, &crossing_q, &crossing_q_index);
+	     GetQVector(rb->recovered, vector, crossing_q);
+	     err = DecodePQ(rb->rt, vector, Q_PADDING, erasures, 0);
+	     if(err < 0 || err > 1)
+	       misses++;
+	     else hint[k]++;
+	  }
+#ifdef DEBUG_DISAMBIGUATE
+	  PrintVector(hint, P_VECTOR_SIZE, i); 
+	  err = DecodePQ(rb->rt, vector, P_PADDING, erasures, 0);
+	  g_printf("index %d; misses = %d; %d errors\n", j, misses, err);
+#endif
+	  if(misses < min_misses)
+	  {  min_misses = misses;
+	     best_vector = j;
+	  }
+       }
+       GetPVector(rb->rawBuf[rb->pList[i][best_vector]], vector, i);
+       SetPVector(rb->recovered, vector, i); 
+
+#ifdef DEBUG_DISAMBIGUATE
+       g_printf("Best vector: %d\n", best_vector);
+#if 1
+       GetPVector(rb->recovered, vector, i);
+       PrintVector(vector, P_VECTOR_SIZE, i);
+#endif
+       GetPVector(rb->byteState, vector, i);
+       PrintVector(vector, P_VECTOR_SIZE, i);
+#endif
+   }
+
+   /* TODO: this :-) */
+
+#if 0
+   for(i=0; i<N_Q_VECTORS; i++)
+   {  if(rb->qIndex[i] < 2)
+       continue;
+     
+       g_printf("%d alternatives for Q-vector %d\n", rb->qIndex[i], i);
+       for(j=0; j<rb->qIndex[i]; j++)
+       {  GetQVector(rb->rawBuf[rb->qList[i][j]], vector, i);
+ 	  PrintVector(vector, Q_VECTOR_SIZE, i);
+	  err = DecodePQ(rb->rt, vector, Q_PADDING, erasures, 0);
+	  printf("%d errors\n", err);
+       }
+       GetQVector(rb->recovered, vector, i);
+       PrintVector(vector, Q_VECTOR_SIZE, i);
+       GetQVector(rb->byteState, vector, i);
+       PrintVector(vector, Q_VECTOR_SIZE, i);
+   }
+#endif
 }
 
 /***
@@ -612,7 +744,7 @@ int iterative_recovery(RawBuffer *rb)
    int last_p_failures = N_P_VECTORS;
    int last_q_failures = N_Q_VECTORS;
    int iteration=1;
-   int score[2];
+   int score[4];
 
    /* Maybe the sector can be corrected by L-EC after the majority decision? */
 
@@ -720,7 +852,7 @@ int iterative_recovery(RawBuffer *rb)
       else break;
    }
 
-   score[0] = score[1] = score[2] = 0;
+   score[0] = score[1] = score[2] = score[3] = 0;
 
    for(p=12; p<rb->sampleLength; p++)
    {  int s = rb->byteState[p];
@@ -728,7 +860,7 @@ int iterative_recovery(RawBuffer *rb)
       score[s]++;
    }
 
-   printf("Recovered: [2/1/0]=[%d/%d/%d]\n", score[2], score[1], score[0]);
+   printf("Recovered: [3/2/1/0]=[%d/%d/%d/%d]\n", score[3], score[2], score[1], score[0]);
 
 
    return (p_failures + q_failures == 0);
@@ -766,37 +898,143 @@ int iterative_recovery(RawBuffer *rb)
 int RecoverRaw(unsigned char *out, RawBuffer *rb)
 {  int success;
 
+   /* Reject unplausible sectors */
+
+   if(rb->samplesRead < 1) return FALSE;
+
+   validate_by_msf(rb);
+
    printf("RecoverRaw() for %d samples.\n", rb->samplesRead);
+
+#ifdef DUMP_MODE
+   if(rb->attempt == Closure->rawAttempts - 1)
+     dump_sector(rb);
+#endif
 
    /* We need at least 3 successful reads to do anything */
 
    if(rb->samplesRead < 3) return FALSE;
 
-   /* Reject unplausible sectors */
-
-   validate_sectors(rb);
+#if 0   /* maybe not needed at all */
+   validate_by_difference(rb);
+#else
+   int i;
+   for(i=0; i<rb->samplesRead; i++)
+     rb->valid[i] = TRUE;
+#endif
 
    /* Collect P and Q statistics for each sector */
 
    success = analyse_pq(rb);
 
-   if(success && check_edc(rb->recovered))
-   {  Verbose("Sector %d recovered after L-EC analysis (stage 1/2).\n", rb->lba);
+   if(success && CheckEDC(rb->recovered))
+   {  Verbose("Sector %d recovered after L-EC analysis (stage 1/5).\n", rb->lba);
 
       memcpy(out, rb->recovered+16, 2048);
       return TRUE;
    }
+
+   disambiguate_vectors(rb);
 
    /* Try iterative L-EC */
 
    success = iterative_recovery(rb);
 
-   if(success && check_edc(rb->recovered))
-   {  Verbose("Sector %d recovered after iterative L-EC (stage 2/2).\n", rb->lba);
+   if(success && CheckEDC(rb->recovered))
+   {  Verbose("Sector %d recovered after iterative L-EC (stage 2/5).\n", rb->lba);
+
+      memcpy(out, rb->recovered+16, 2048);
+#ifdef DUMP_MODE
+      return FALSE;
+#else
+      return TRUE;
+#endif
+   }
+#ifdef DUMP_MODE
+   return FALSE;
+#endif
+   /* I have another idea for a heuristic search here ... (stage 3/5) */
+
+   /* Try iterative L-EC */
+#if 1 
+   Level1_L_EC(rb);
+
+   if(CheckEDC(rb->recovered))
+   {  Verbose("Sector %d recovered after iterative L-EC (stage 4/11).\n", rb->lba);
 
       memcpy(out, rb->recovered+16, 2048);
       return TRUE;
+   }   
+
+   Level2_L_EC(rb->recovered, rb, out);
+
+   if(CheckEDC(rb->recovered))
+   {  Verbose("Sector %d recovered after heuristic L-EC (stage 5/11).\n", rb->lba);
+
+      memcpy(out, rb->recovered+16, 2048);
+      return TRUE;
+   }   
+#endif
+
+   /* Heuristically search for the most probable sector */
+   SearchBestSector(rb);
+   
+   if(CheckEDC(rb->recovered)) 
+   {  Verbose("Sector %d recovered after best sector search (stage 6/11).\n", rb->lba);
+      memcpy(out, rb->recovered+16, 2048);
+      return TRUE; 
    }
+
+   /* Try simple L-EC */
+#if 1
+	Level1_L_EC(rb);
+
+   if(CheckEDC(rb->recovered))
+   {  Verbose("Sector %d recovered after best sector search and iterative L-EC (stage 7/11).\n", rb->lba);
+      memcpy(out, rb->recovered+16, 2048);
+      return TRUE;
+   }
+
+   /* Try heuristic L-EC */
+
+   Level2_L_EC(rb->recovered, rb, out);
+
+   if(CheckEDC(rb->recovered))
+   {  Verbose("Sector %d recovered after best sector search and heuristic L-EC (stage 8/11).\n", rb->lba);
+      memcpy(out, rb->recovered+16, 2048);
+      return TRUE;
+   }
+#endif
+
+   /* Heuristically search for the most probable sector */
+   SearchPlausibleSector(rb);
+   
+   if(CheckEDC(rb->recovered)) 
+   {  Verbose("Sector %d recovered after plausible sector search (stage 9/11).\n", rb->lba);
+      memcpy(out, rb->recovered+16, 2048);
+      return TRUE; 
+   }
+
+   /* Try simple L-EC */
+#if 1
+	Level1_L_EC(rb);
+
+   if(CheckEDC(rb->recovered))
+   {  Verbose("Sector %d recovered after plausible sector search and iterative L-EC (stage 10/11).\n", rb->lba);
+      memcpy(out, rb->recovered+16, 2048);
+      return TRUE;
+   }
+
+   /* Try heuristic L-EC */
+
+   Level2_L_EC(rb->recovered, rb, out);
+
+   if(CheckEDC(rb->recovered))
+   {  Verbose("Sector %d recovered after plausible sector search and heuristic L-EC (stage 11/11).\n", rb->lba);
+      memcpy(out, rb->recovered+16, 2048);
+      return TRUE;
+   }
+#endif
 
    return FALSE;
 }
