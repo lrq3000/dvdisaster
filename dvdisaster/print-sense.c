@@ -51,7 +51,8 @@ static const char *snstext[] = {
     "Volume Overflow",          /* Medium full with still data to be written */
     "Miscompare",               /* Source data and data on the medium
                                    do not agree */
-    "Key=15"                    /* Reserved */
+    "Key=15",                   /* Reserved */
+    "dvdisaster"                /* internal errors, NOT part of the SCSI standard */
 };
 
 struct error_info{
@@ -534,10 +535,18 @@ static struct error_info additional[] =
   {0x73,0x04,R,"Program memory area update failure"},
   {0x73,0x05,R,"Program memory area is full"},
   {0x73,0x06,R,"RMA/PMA is full"},
+
+
+  /*
+   * Faked errors by software L-EC
+   */
+  {0xff,0x00,R,"Operating system hiccup - no data returned"},
+  {0xff,0x01,R,"EDC failure in RAW sector"},
+  {0xff,0x02,R,"Wrong MSF in RAW sector"},
   /*
    * Faked error by defect simulation mode
    */
-  {0xff,0xff,R,"Simulated medium defect"},
+  {0xff,0xff,R,"[dvdisaster: Simulated medium defect]"},
 
   {0, 0, 0, NULL}
 };
@@ -567,13 +576,14 @@ void RememberSense(int k, int a, int aq)
 char *GetSenseString(int sense_key, int asc, int ascq, int verbose)
 {  static char text[256];
    struct error_info *ei;
+   char sep = sense_key == 16 ? ':' : ';';
    int idx,len;
 
-   if(sense_key <0 || sense_key > 15) 
+   if(sense_key <0 || sense_key > 16) 
         g_snprintf(text, 255, _("Sense error (0x%02x); "),sense_key);
    else 
-   {  if(verbose) g_snprintf(text, 255, _("Sense error: %s; "),snstext[sense_key]);
-      else        g_snprintf(text, 255, "%s; ",snstext[sense_key]);
+     {  if(verbose) g_snprintf(text, 255, _("Sense error: %s%c "),snstext[sense_key],sep);
+       else        g_snprintf(text, 255, "%s%c ",snstext[sense_key],sep);
    }
 
    idx = strlen(text); 

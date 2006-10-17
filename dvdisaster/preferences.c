@@ -28,7 +28,9 @@
 /* non linear scale housekeeping */
 
 typedef struct
-{  int action;
+{  GtkWidget *label;  /* for help system linkage */
+   LabelWithOnlineHelp *lwoh;   
+   int action;
    int *values;
    char *format;
    struct _prefs_context *pc;
@@ -51,10 +53,11 @@ typedef struct _prefs_context
    GtkWidget *radioDrive, *radioISO, *radioECC;
    GtkWidget *radioLinearA, *radioLinearB;
    GtkWidget *radioAdaptiveA, *radioAdaptiveB;
-   GtkWidget *rawScaleA, *rawScaleB;
+   GtkWidget *attemptsScaleA, *attemptsScaleB;
    GtkWidget *rangeToggleA, *rangeToggleB;
    GtkWidget *rangeSpin1A, *rangeSpin1B;
    GtkWidget *rangeSpin2A, *rangeSpin2B;
+   GtkWidget *rawButtonA, *rawButtonB;
    GtkWidget *jumpScaleA, *jumpScaleB;
    GtkWidget *byteEntry, *byteCheck;
    GtkWidget *readAndCreateButton;
@@ -62,8 +65,11 @@ typedef struct _prefs_context
    GtkWidget *methodChooser;
    GtkWidget *methodNotebook;
 
-   non_linear_info *jumpScaleInfo;
-   non_linear_info *rawScaleInfo;
+   non_linear_info *jumpScaleInfoA, *jumpScaleInfoB;
+   LabelWithOnlineHelp *jumpScaleLwoh;
+
+   non_linear_info *attemptsScaleInfoA, *attemptsScaleInfoB;
+   LabelWithOnlineHelp *attemptsScaleLwoh;
 } prefs_context;
 
 void FreePreferences(void *context)
@@ -71,19 +77,19 @@ void FreePreferences(void *context)
    int i;
 
    for(i=0; i<pc->helpPages->len; i++)
-   {  FrameWithOnlineHelp *fwoh = g_ptr_array_index(pc->helpPages,i);
+   {  LabelWithOnlineHelp *lwoh = g_ptr_array_index(pc->helpPages,i);
 
-      ClearFrameWithOnlineHelp(fwoh);
+      FreeLabelWithOnlineHelp(lwoh);
    }
 
    if(pc->formatLinear) g_free(pc->formatLinear);
    if(pc->formatAdaptive) g_free(pc->formatAdaptive);
 
-   if(pc->jumpScaleInfo) g_free(pc->jumpScaleInfo);
-   if(pc->rawScaleInfo) 
-   {  g_free(pc->rawScaleInfo->format);
-      g_free(pc->rawScaleInfo);
-   }
+   if(pc->jumpScaleInfoA) g_free(pc->jumpScaleInfoA);
+   if(pc->jumpScaleInfoB) g_free(pc->jumpScaleInfoB);
+   if(pc->attemptsScaleInfoA) g_free(pc->attemptsScaleInfoA);
+   if(pc->attemptsScaleInfoB) g_free(pc->attemptsScaleInfoB);
+
    g_free(pc);
 }
 
@@ -140,8 +146,8 @@ void HidePreferences(void)
    gtk_widget_hide(GTK_WIDGET(Closure->prefsWindow));
 
    for(i=0; i<pc->helpPages->len; i++)
-   {  FrameWithOnlineHelp *fwoh = g_ptr_array_index(pc->helpPages,i);
-      gtk_widget_hide(fwoh->helpWindow);
+   {  LabelWithOnlineHelp *lwoh = g_ptr_array_index(pc->helpPages,i);
+      gtk_widget_hide(lwoh->helpWindow);
    }
 }
 
@@ -161,11 +167,12 @@ enum
    TOGGLE_DAO,
    TOGGLE_2GB,
    TOGGLE_RANGE,
+   TOGGLE_RAW,
 
    SPIN_DELAY,
    
    SLIDER_JUMP,
-   SLIDER_RAW_ATTEMPTS
+   SLIDER_READ_ATTEMPTS
 };
 
 /*
@@ -200,7 +207,8 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 	{  prefs_context *pc = Closure->prefsContext;
 
 	   Closure->adaptiveRead = FALSE;
-	   pc->jumpScaleInfo->format = pc->formatLinear;
+	   pc->jumpScaleInfoA->format = pc->formatLinear;
+	   pc->jumpScaleInfoB->format = pc->formatLinear;
 	   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioLinearA), TRUE);
 	   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioLinearB), TRUE);
 
@@ -225,6 +233,12 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 
       case TOGGLE_2GB:
 	Closure->splitFiles = state;
+	break;
+
+      case TOGGLE_RAW:
+	Closure->readRaw = state;
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->rawButtonA), state);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->rawButtonB), state);
 	break;
 
       case TOGGLE_RANGE:
@@ -328,58 +342,71 @@ static int jump_values[] = { 0, 16, 32, 64, 128, 256, 384, 512, 768, 1024, 2048,
  20480 };
 #define JUMP_VALUE_LENGTH 14
 
-static int raw_values[] = { 0, 5, 7, 9, 15, 20, 25, 30}; 
-#define RAW_VALUE_LENGTH 8
+static int attempts_values[] = { 0, 1, 2, 3, 5, 7, 9, 11, 15, 20, 25, 30, 40, 50}; 
+#define ATTEMPTS_VALUE_LENGTH 14
 
 static void non_linear_cb(GtkWidget *widget, gpointer data)
 {  non_linear_info *nli = (non_linear_info*)data;
    int index  = gtk_range_get_value(GTK_RANGE(widget));
+   char *text,*utf;
+
+   text = g_strdup_printf(nli->format, nli->values[index]);
+   utf = g_locale_to_utf8(text, -1, NULL, NULL, NULL);
 
    switch(nli->action)
    {  case SLIDER_JUMP:
         Closure->sectorSkip = nli->values[index];
-	gtk_range_set_value(GTK_RANGE(nli->pc->jumpScaleA), index);
+
 	gtk_range_set_value(GTK_RANGE(nli->pc->jumpScaleB), index);
+	gtk_label_set_markup(GTK_LABEL(nli->pc->jumpScaleInfoB->label), utf);
+
+	gtk_range_set_value(GTK_RANGE(nli->pc->jumpScaleA), index);
+	gtk_label_set_markup(GTK_LABEL(nli->pc->jumpScaleInfoA->label), utf);
+	SetOnlineHelpLinkText(nli->pc->jumpScaleLwoh, text);
 	break;
 
-      case SLIDER_RAW_ATTEMPTS:
-        Closure->rawAttempts = nli->values[index];
-	gtk_range_set_value(GTK_RANGE(nli->pc->rawScaleA), index);
-	gtk_range_set_value(GTK_RANGE(nli->pc->rawScaleB), index);
+      case SLIDER_READ_ATTEMPTS:
+        Closure->readAttempts = nli->values[index];
+
+	gtk_range_set_value(GTK_RANGE(nli->pc->attemptsScaleB), index);
+	gtk_label_set_markup(GTK_LABEL(nli->pc->attemptsScaleInfoB->label), utf);
+
+	gtk_range_set_value(GTK_RANGE(nli->pc->attemptsScaleA), index);
+	gtk_label_set_markup(GTK_LABEL(nli->pc->attemptsScaleInfoA->label), utf);
+	SetOnlineHelpLinkText(nli->pc->attemptsScaleLwoh, text);
 	break;
    }
+
+   g_free(utf);
+   g_free(text);
 }
 
 static gchar* non_linear_format_cb(GtkScale *scale, gdouble value, gpointer data)
-{  non_linear_info *nli = (non_linear_info*)data;
-   int index = value;
-   char *text;
+{  char *text;
 
-   text = g_strdup_printf(nli->format, nli->values[index]);
+   text = g_strdup(" ");
    FORGET(text);   /* The scale will free the old string by itself. Weird. */
 
    return text;
 }
 
-static GtkWidget* non_linear_scale(prefs_context *pc, non_linear_info **nli_ptr, 
+static GtkWidget* non_linear_scale(GtkWidget **hbox_out, non_linear_info *nli, 
+				   GtkWidget *label, prefs_context *pc, 
 				   int action, int *values, int n, int value)
 {  GtkWidget *scale;
-   non_linear_info *nli;
+   GtkWidget *hbox;
+   char *text,*utf;
    int index;
 
    for(index = 0; index < n; index++)
      if(values[index] > value)
        break;
 
-   if(!*nli_ptr)
-   {  nli = g_malloc0(sizeof(non_linear_info));
-      nli->action = action;
-      nli->values = values;
-      nli->pc     = pc;
-      *nli_ptr = nli;
-   }
-   else nli = *nli_ptr;
+   nli->action = action;
+   nli->values = values;
+   nli->pc     = pc;
 
+   hbox = gtk_hbox_new(FALSE, 0);
    scale = gtk_hscale_new_with_range(0,n-1,1);
    gtk_scale_set_value_pos(GTK_SCALE(scale), GTK_POS_RIGHT);
    gtk_range_set_increments(GTK_RANGE(scale), 1, 1);
@@ -387,6 +414,22 @@ static GtkWidget* non_linear_scale(prefs_context *pc, non_linear_info **nli_ptr,
    g_signal_connect(scale, "format-value", G_CALLBACK(non_linear_format_cb), nli);
    g_signal_connect(scale, "value-changed", G_CALLBACK(non_linear_cb), nli);
 
+   gtk_box_pack_start(GTK_BOX(hbox), scale, TRUE, TRUE, 0);
+
+   text = g_strdup_printf(nli->format, nli->values[index > 0 ? index-1 : index]);
+   utf = g_locale_to_utf8(text, -1, NULL, NULL, NULL);
+   nli->label = label;
+   gtk_label_set_markup(GTK_LABEL(label), utf);
+
+   if(nli->lwoh)
+   {    SetOnlineHelpLinkText(nli->lwoh, text);
+        gtk_box_pack_start(GTK_BOX(hbox), nli->lwoh->linkBox, FALSE, FALSE, 0);
+   }
+   else gtk_box_pack_start(GTK_BOX(hbox), nli->label, FALSE, FALSE, 0);
+   g_free(utf);
+   g_free(text);
+
+   *hbox_out = hbox;
    return scale;
 }
 
@@ -418,14 +461,16 @@ static void strategy_cb(GtkWidget *widget, gpointer data)
 
       if(pc->radioLinearA == widget || pc->radioLinearB == widget)
       {  Closure->adaptiveRead = FALSE;
-         pc->jumpScaleInfo->format = pc->formatLinear;
+         pc->jumpScaleInfoA->format = pc->formatLinear;
+         pc->jumpScaleInfoB->format = pc->formatLinear;
 	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioLinearA), TRUE);
 	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioLinearB), TRUE);
       }
 
       if(pc->radioAdaptiveA == widget || pc->radioAdaptiveB == widget)
       {  Closure->adaptiveRead = TRUE;
-         pc->jumpScaleInfo->format = pc->formatAdaptive;
+         pc->jumpScaleInfoA->format = pc->formatAdaptive;
+         pc->jumpScaleInfoB->format = pc->formatAdaptive;
 	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioAdaptiveA), TRUE);
 	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioAdaptiveB), TRUE);
 
@@ -564,7 +609,7 @@ void CreatePreferencesWindow(void)
 #if GTK_MINOR_VERSION < 4
       GtkWidget *option_menu_strip;
 #endif
-      FrameWithOnlineHelp *fwoh;
+      LabelWithOnlineHelp *lwoh;
       prefs_context *pc = g_malloc0(sizeof(prefs_context));
       int i, method_idx = 0;
  
@@ -696,9 +741,7 @@ void CreatePreferencesWindow(void)
 
       /** Reading preferences */
       
-      fwoh = CreateFrameWithOnlineHelp(_("Reading preferences"));
-      g_ptr_array_add(pc->helpPages, fwoh);
-      frame = fwoh->clientFrame;
+      frame = gtk_frame_new(_utf("Reading preferences"));
       gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
 
       vbox2 = gtk_vbox_new(FALSE, 20);
@@ -707,16 +750,14 @@ void CreatePreferencesWindow(void)
 
       /* Reading strategy */
 
-      AddHelpParagraph(fwoh, 
-		       _("<b>Reading strategy</b>\n"
-			 "dvdisaster provides two basic strategies for reading CD/DVD media:"));
+      lwoh = CreateLabelWithOnlineHelp(_("Reading strategy"), _("Reading strategy: "));
+      g_ptr_array_add(pc->helpPages, lwoh);
 
       for(i=0; i<2; i++)
       {  GtkWidget *hbox = gtk_hbox_new(FALSE, 4);
 	 GtkWidget *lab, *radio1, *radio2;
 
-         lab = gtk_label_new(_utf("Reading strategy: ")); 
-	 gtk_box_pack_start(GTK_BOX(hbox), lab, FALSE, FALSE, 0);
+	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
 
 	 radio1 = gtk_radio_button_new(NULL);
 	 if(!i) pc->radioLinearA = radio1;
@@ -739,55 +780,33 @@ void CreatePreferencesWindow(void)
          else gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio1), TRUE);
 
 	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
-	 else   AddHelpWidget(fwoh, hbox);
+	 else   AddHelpWidget(lwoh, hbox);
       }
 
-      AddHelpParagraph(fwoh, 
-		       _("The linear strategy is suited for undamaged media while the adaptive strategy\n"
-			 "is better for media already containing read errors.\n"
-			 "Both reading strategies can be further customized:\n"));
-
-      /* Reading attempts */
-
-      AddHelpParagraph(fwoh, 
-		       _("<b>Raw reading</b>\n"
-			 "Most drives return no data at all for defective sectors, but some have a special\n"
-			 "raw reading mode which returns even partly readable sectors. In that case it\n"
-			 "can be possible to recombine sector contents from several raw reading attempts."));
-
-      pc->rawScaleInfo = NULL;
-
-      for(i=0; i<2; i++)
-      {  GtkWidget *scale;
- 
-	 scale = non_linear_scale(pc, &pc->rawScaleInfo,
-				  SLIDER_RAW_ATTEMPTS, raw_values, RAW_VALUE_LENGTH,
-				  Closure->rawAttempts);
-
-	 if(!i) pc->rawScaleInfo->format = g_strdup(_("Try %d raw reads after read error (if supported)"));
-	 if(!i) pc->rawScaleA = scale;
-	 else   pc->rawScaleB = scale;
-
-	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), scale, FALSE, FALSE, 0);
-	 else   AddHelpWidget(fwoh, scale);
-      }
+      AddHelpParagraph(lwoh, 
+		       _("<b>Reading strategy</b>\n"
+		         "The linear strategy is optimized for undamaged media\n"
+			 "while the adaptive strategy is better suited\n"
+			 "for media already containing read errors."));
 
       /* Reading range */
 
-      AddHelpParagraph(fwoh, 
-		       _("<b>Reading range</b>\n"
-			 "Reading can be limited to a part of the medium (in sectors holding 2KB each).\n"
-			 "The values include the borders: 0-100 will read 101 sectors."));
+      lwoh = CreateLabelWithOnlineHelp(_("Reading range"), _("Read/Scan from sector"));
+      g_ptr_array_add(pc->helpPages, lwoh);
 
       for(i=0; i<2; i++)
       {  GtkWidget *hbox = gtk_hbox_new(FALSE, 4);
 	 GtkWidget *toggle,*spin1, *spin2;
 
-	 toggle = gtk_check_button_new_with_label(_utf("Read/Scan from sector"));
+	 //	 toggle = gtk_check_button_new_with_label(_utf("Read/Scan from sector"));
+	 toggle = gtk_check_button_new();
 	 if(!i) pc->rangeToggleA = toggle;
 	 else   pc->rangeToggleB = toggle;
 	 g_signal_connect(G_OBJECT(toggle), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_RANGE));
 	 gtk_box_pack_start(GTK_BOX(hbox), toggle, FALSE, FALSE, 0);
+
+	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, 
+			    FALSE, FALSE, 0);
 
 	 spin1 = gtk_spin_button_new_with_range(0, 10000000, 1000);
 	 if(!i) pc->rangeSpin1A = spin1;	 
@@ -809,53 +828,146 @@ void CreatePreferencesWindow(void)
 	 gtk_box_pack_start(GTK_BOX(hbox), spin2, FALSE, FALSE, 0);
 
 	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
-	 else   AddHelpWidget(fwoh, hbox);
+	 else   AddHelpWidget(lwoh, hbox);
 
 	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(toggle), FALSE);
       }
 
-      AddHelpParagraph(fwoh, 
-		       _("Limiting the reading range is not recommended for <i>adaptive reading</i> since it might\n"
-			 "prevent sectors from being read which are required for a succesful error correction.\n"
-			 "These settings are only effective for the current session and will not be saved.\n"));
+      AddHelpParagraph(lwoh, 
+		       _("<b>Reading range</b>\n\n"
+			 "Reading can be limited to a part of the medium (in sectors holding 2KB each).\n"
+			 "The values include the borders: 0-100 will read 101 sectors.\n\n"
+
+			 "<b>Note:</b> Limiting the reading range is not recommended for <i>adaptive reading</i> since it might\n"
+			 "prevent sectors from being read which are required for a succesful error correction.\n\n"
+			 "These settings are only effective for the current session and will not be saved."));
+
+      /** Reading preferences */
+      
+      frame = gtk_frame_new(_utf("Read error treatment"));
+      gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
+
+      vbox2 = gtk_vbox_new(FALSE, 20);
+      gtk_container_set_border_width(GTK_CONTAINER(vbox2), 10);
+      gtk_container_add(GTK_CONTAINER(frame), vbox2);
+
+      /* Raw verify */
+
+      lwoh = CreateLabelWithOnlineHelp(_("Raw reading"), _("Read and analyze raw sectors"));
+      g_ptr_array_add(pc->helpPages, lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
+
+	  //button = gtk_check_button_new_with_label(_utf("Read raw sectors"));
+
+	 button = gtk_check_button_new();
+	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
+       	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
+
+ 	 if(!i) pc->rawButtonA = button;
+	 else   pc->rawButtonB = button;
+
+         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->readRaw);
+         g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_RAW));
+
+	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	 else   AddHelpWidget(lwoh, hbox);
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Raw reading</b>\n\n"
+			 "Some CD/DVD drives may deliver unreliable results when their\n"
+			 "internal error correction approaches its maximum capacity.\n\n"
+			 "Activating this option makes dvdisaster read sectors in raw mode.\n"
+			 "The L-EC P/Q vectors, EDC checksum and MSF address contained in the\n"
+			 "raw data are checked to make sure that the sector was correctly read."
+			 ));
+
+      /* Reading attempts */
+
+      lwoh = CreateLabelWithOnlineHelp(_("Reading attempts for defective sectors"), "ignore");
+      g_ptr_array_add(pc->helpPages, lwoh);
+
+      pc->attemptsScaleLwoh = lwoh;
+      pc->attemptsScaleInfoA = g_malloc0(sizeof(non_linear_info));
+      pc->attemptsScaleInfoB = g_malloc0(sizeof(non_linear_info));
+      pc->attemptsScaleInfoA->format = g_strdup(_utf("Perform %d reading attempts for defective sectors"));
+      pc->attemptsScaleInfoA->format = g_strdup(_utf("Perform %d reading attempts for defective sectors"));
+      pc->attemptsScaleInfoB->format = g_strdup(_utf("Perform %d reading attempts for defective sectors"));
+
+      pc->attemptsScaleInfoA->lwoh = lwoh;
+
+      for(i=0; i<2; i++)
+	{  GtkWidget *scale,*scale_box;
+
+	 scale = non_linear_scale(&scale_box, 
+				  i ? pc->attemptsScaleInfoB : pc->attemptsScaleInfoA,
+				  i ? lwoh->normalLabel : lwoh->linkLabel, 
+				  pc, SLIDER_READ_ATTEMPTS, attempts_values, ATTEMPTS_VALUE_LENGTH,
+				  Closure->readAttempts);
+
+	 if(!i) pc->attemptsScaleA = scale;
+	 else   pc->attemptsScaleB = scale;
+
+	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), scale_box, FALSE, FALSE, 0);
+	 else   AddHelpWidget(lwoh, scale_box);
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Reading attempts</b>\n\n"
+			 "Increasing the number of reading attempts may improve data recovery\n"
+			 "on marginal media, but will also increase processing time and\n"
+			 "mechanical wear on the drive."));
+
 
       /* Jump selector */
 
-      AddHelpParagraph(fwoh, 
-		       _("<b>Treatment of unreadable areas</b>\n"
-			 "Defective media usually contain numerous read errors in a contigous region.\n"
-			 "Skipping sectors after a read error reduces the processing time and the\n"
-			 "mechanical wear on the drive, but leaves larger gaps in the image file:"));
+      lwoh = CreateLabelWithOnlineHelp(_("Treatment of unreadable areas"), "ignore");
+      g_ptr_array_add(pc->helpPages, lwoh);
 
+      pc->jumpScaleLwoh = lwoh;
       pc->formatLinear = g_strdup(_utf("Skip %d sectors after read error"));
-      pc->formatAdaptive  = g_strdup(_utf("Stop reading when unreadable intervals < %d"));
-      pc->jumpScaleInfo = NULL;
+      pc->formatAdaptive  = g_strdup(_utf("Stop reading when unreadable intervals &lt; %d"));
+
+      pc->jumpScaleInfoA = g_malloc0(sizeof(non_linear_info));
+      pc->jumpScaleInfoB = g_malloc0(sizeof(non_linear_info));
+      pc->jumpScaleInfoA->format = Closure->adaptiveRead ? pc->formatAdaptive : pc->formatLinear;
+      pc->jumpScaleInfoB->format = Closure->adaptiveRead ? pc->formatAdaptive : pc->formatLinear;
+
+      pc->jumpScaleInfoA->lwoh = lwoh;
 
       for(i=0; i<2; i++)
-      {  GtkWidget *scale;
+      {  GtkWidget *scale, *scale_box;
  
-	 scale = non_linear_scale(pc, &pc->jumpScaleInfo,
-				  SLIDER_JUMP, jump_values, JUMP_VALUE_LENGTH,
+	 scale = non_linear_scale(&scale_box, 
+				  i ? pc->jumpScaleInfoB : pc->jumpScaleInfoA, 
+				  i ? lwoh->normalLabel : lwoh->linkLabel, 
+				  pc, SLIDER_JUMP, jump_values, JUMP_VALUE_LENGTH,
 				  Closure->sectorSkip);
 
-	 pc->jumpScaleInfo->format = Closure->adaptiveRead ? pc->formatAdaptive : pc->formatLinear;
 	 if(!i) pc->jumpScaleA = scale;
 	 else   pc->jumpScaleB = scale;
 
-	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), scale, FALSE, FALSE, 0);
-	 else   AddHelpWidget(fwoh, scale);
+	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), scale_box, FALSE, FALSE, 0);
+	 else   AddHelpWidget(lwoh, scale_box);
       }
 
-      AddHelpItemList(fwoh, 
-		       _("When using the <i>linear reading strategy</i>, skipping sectors has the following\n"
-			 "consequences:\n"
+      AddHelpParagraph(lwoh, 
+		       _("<b>Treatment of unreadable areas</b>\n\n"
+			 "Defective media usually contain numerous read errors in a contigous region.\n"
+			 "Skipping sectors after a read error reduces the processing time and the\n"
+			 "mechanical wear on the drive, but leaves larger gaps in the image file.\n"));
+
+      AddHelpItemList(lwoh, 
+		       _("Effects on the <b>linear reading strategy</b>:\n"
 			 "- Skipping a large number of sectors (e.g. 1024) gives a quick overview of\n"
 			 "damaged areas, but will usually not collect enough data for repairing the image.\n"
 			 "- Smaller values like 16, 32 or 64 are a good trade-off: The processing time will be\n"
 			 "considerably shortened, but still enough data for repairing the image is collected.\n"));
 
-      AddHelpParagraph(fwoh, 
-		       _("The <i>adaptive reading strategy</i> uses this setting only if no error correction data\n"
+      AddHelpParagraph(lwoh, 
+		       _("The <b>adaptive reading strategy</b> uses this setting only if no error correction data\n"
 			 "is available. In that case the reading process will stop when no unread areas\n"
 			 "larger than the selected size remain. Values smaller than 128 <i>are not recommended</i>\n"
 			 "as they cause the drive to carry out lots of laser head repositioning during the\n"

@@ -360,8 +360,9 @@ void ReadDotfile()
       if(!strcmp(symbol, "method-name"))     { if(Closure->methodName) g_free(Closure->methodName);
 	                                       Closure->methodName = g_strdup(value); continue; }
       if(!strcmp(symbol, "query-size"))      { Closure->querySize  = atoi(value); continue; }
-      if(!strcmp(symbol, "raw-attempts"))    { Closure->rawAttempts = atoi(value); continue; }
+      if(!strcmp(symbol, "read-attempts"))   { Closure->readAttempts = atoi(value); continue; }
       if(!strcmp(symbol, "read-and-create")) { Closure->readAndCreate = atoi(value); continue; }
+      if(!strcmp(symbol, "read-raw"))        { Closure->readRaw = atoi(value); continue; }
       if(!strcmp(symbol, "redundancy"))      { if(Closure->redundancy) g_free(Closure->redundancy);
                                                Closure->redundancy  = g_strdup(value); continue; }
       if(!strcmp(symbol, "spinup-delay"))    { Closure->spinupDelay = atoi(value); continue; }
@@ -420,8 +421,9 @@ static void update_dotfile()
    g_fprintf(dotfile, "medium-size:     %lld\n", (long long int)Closure->mediumSize);
    g_fprintf(dotfile, "method-name:     %s\n", Closure->methodName);
    g_fprintf(dotfile, "query-size:      %d\n", Closure->querySize);
-   g_fprintf(dotfile, "raw-attempts:    %d\n", Closure->rawAttempts);
+   g_fprintf(dotfile, "read-attempts:   %d\n", Closure->readAttempts);
    g_fprintf(dotfile, "read-and-create: %d\n", Closure->readAndCreate);
+   g_fprintf(dotfile, "read-raw:        %d\n", Closure->readRaw);
    if(Closure->redundancy)
      g_fprintf(dotfile, "redundancy:    %s\n", Closure->redundancy);
    g_fprintf(dotfile, "spinup-delay:    %d\n", Closure->spinupDelay);

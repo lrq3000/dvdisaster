@@ -34,67 +34,20 @@
 /* Close button response */
 
 static void close_cb(GtkWidget *widget, gpointer data)
-{  FrameWithOnlineHelp *fwoh = (FrameWithOnlineHelp*)data;
+{  LabelWithOnlineHelp *lwoh = (LabelWithOnlineHelp*)data;
 
-   gtk_widget_hide(fwoh->helpWindow);
+   gtk_widget_hide(lwoh->helpWindow);
 }
 
 /* Do not destroy the window when close via the window manager */
 
 static gboolean delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
-{  FrameWithOnlineHelp *fwoh = (FrameWithOnlineHelp*)data;
+{  LabelWithOnlineHelp *lwoh = (LabelWithOnlineHelp*)data;
 
-   gtk_widget_hide(fwoh->helpWindow);
+   gtk_widget_hide(lwoh->helpWindow);
 
    return TRUE;
 }
-
-/* Create the basic framework for the help window */
-
-static void create_help_window(FrameWithOnlineHelp *fwoh)
-{  GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-   GtkWidget *scrolled_window;
-   GtkWidget *label, *vbox, *hbox, *button;
-
-   fwoh->helpWindow = window;
-   gtk_window_set_title(GTK_WINDOW(window), fwoh->windowTitle);
-   gtk_window_set_default_size(GTK_WINDOW(window), -1, 500);
-   gtk_window_set_icon(GTK_WINDOW(window), Closure->windowIcon);
-   gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
-   gtk_container_set_border_width(GTK_CONTAINER(window), 12);
-
-   /*** Connect with the close button from the window manager */
-
-   g_signal_connect(window, "delete_event", G_CALLBACK(delete_cb), fwoh);
-
-   /*** Create the main layout of the window */
-
-   vbox = gtk_vbox_new(FALSE, 0);
-   gtk_container_add(GTK_CONTAINER(window), vbox);
-   
-   label = gtk_label_new(NULL);
-   gtk_label_set_markup(GTK_LABEL(label), fwoh->windowHeadline);
-   gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.0);
-   gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
-   gtk_box_pack_start(GTK_BOX(vbox), gtk_hseparator_new(), FALSE, FALSE, 10);
-
-   scrolled_window = gtk_scrolled_window_new(NULL, NULL);
-   fwoh->vbox = gtk_vbox_new(FALSE, 0);
-   gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolled_window), fwoh->vbox);
-   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window), 
-				  GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-   gtk_box_pack_start(GTK_BOX(vbox), scrolled_window, TRUE, TRUE, 0);
-
-   hbox = gtk_hbox_new(FALSE, 0);
-   gtk_box_pack_end(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
-
-   button = gtk_button_new_from_stock(GTK_STOCK_CLOSE);
-   gtk_box_pack_end(GTK_BOX(hbox), button, FALSE, FALSE, 0);
-   g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(close_cb), fwoh);
-
-   gtk_box_pack_end(GTK_BOX(vbox), gtk_hseparator_new(), FALSE, FALSE, 6);
-}
-
 
 /*
  * Callback for the help link
@@ -102,22 +55,22 @@ static void create_help_window(FrameWithOnlineHelp *fwoh)
 
 static gint help_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
 {  GtkWidget *lab = GTK_BIN(widget)->child;
-   FrameWithOnlineHelp *fwoh = (FrameWithOnlineHelp*)data;
+   LabelWithOnlineHelp *lwoh = (LabelWithOnlineHelp*)data;
 
    switch(event->type)
    {  case GDK_BUTTON_PRESS: 
-        if(!fwoh->inside) return FALSE; /* Bug in Gtk for Windows? */
-	gtk_widget_show_all(GTK_WIDGET(fwoh->helpWindow));
+        if(!lwoh->inside) return FALSE; /* Bug in Gtk for Windows? */
+	gtk_widget_show_all(GTK_WIDGET(lwoh->helpWindow));
 	break; 
 
       case GDK_ENTER_NOTIFY: 
-	gtk_label_set_markup(GTK_LABEL(lab), fwoh->highlitText);
-	fwoh->inside = TRUE;
+	gtk_label_set_markup(GTK_LABEL(lab), lwoh->highlitText);
+	lwoh->inside = TRUE;
 	break;
 
       case GDK_LEAVE_NOTIFY: 
-	gtk_label_set_markup(GTK_LABEL(lab), fwoh->normalText);
-	fwoh->inside = FALSE;
+	gtk_label_set_markup(GTK_LABEL(lab), lwoh->normalText);
+	lwoh->inside = FALSE;
 	break;
 
       default: break;
@@ -130,57 +83,92 @@ static gint help_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
  * Create a frame labeled with a link to the help system
  */
 
-FrameWithOnlineHelp* CreateFrameWithOnlineHelp(char *ascii_text)
-{  GtkWidget *frame = gtk_frame_new(NULL);
+LabelWithOnlineHelp* CreateLabelWithOnlineHelp(char *title, char *ascii_text)
+{  GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+   GtkWidget *vbox, *hbox, *button;
    GtkWidget *ebox  = gtk_event_box_new();
-   GtkWidget *label  = gtk_label_new(NULL);
-   FrameWithOnlineHelp *fwoh;
-   char text[strlen(ascii_text)+80];
-
+   LabelWithOnlineHelp *lwoh;
+ 
    /*** Initialize online help context */
 
-   fwoh = g_malloc0(sizeof(FrameWithOnlineHelp));
-   fwoh->clientFrame = frame;
-   fwoh->windowTitle = g_locale_to_utf8(ascii_text, -1, NULL, NULL, NULL);
-   g_sprintf(text, "<big>%s</big>", ascii_text);
-   fwoh->windowHeadline  = g_locale_to_utf8(text, -1, NULL, NULL, NULL);
+   lwoh = g_malloc0(sizeof(LabelWithOnlineHelp));
+   lwoh->normalLabel = gtk_label_new(_utf(ascii_text));
+   lwoh->linkLabel = gtk_label_new(NULL);
+   lwoh->linkBox = ebox;
+   lwoh->windowTitle = g_locale_to_utf8(title, -1, NULL, NULL, NULL);
    //   g_sprintf(text, "<span color=\"blue\">%s</span>", ascii_text);
    //   g_sprintf(text, "<span color=\"blue\">%s</span>", ascii_text);
-   fwoh->normalText  = g_locale_to_utf8(ascii_text, -1, NULL, NULL, NULL);
-   g_sprintf(text, "<span underline=\"single\" color=\"blue\">%s</span>", ascii_text);
-   fwoh->highlitText = g_locale_to_utf8(text, -1, NULL, NULL, NULL);
+   SetOnlineHelpLinkText(lwoh, ascii_text);
 
-   create_help_window(fwoh);
+   /*** Create the help window */
 
-   /*** Put label into an event box and attach that to the client frame */
+   lwoh->helpWindow = window;
+   gtk_window_set_title(GTK_WINDOW(window), lwoh->windowTitle);
+   gtk_window_set_icon(GTK_WINDOW(window), Closure->windowIcon);
+   gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
+   gtk_container_set_border_width(GTK_CONTAINER(window), 12);
+
+   /* Connect window with the close button from the window manager */
+
+   g_signal_connect(window, "delete_event", G_CALLBACK(delete_cb), lwoh);
+
+   /* Create the main layout of the window */
+
+   lwoh->vbox = vbox = gtk_vbox_new(FALSE, 0);
+   gtk_container_add(GTK_CONTAINER(window), vbox);
+   
+   //   lwoh->topVBox = gtk_vbox_new(FALSE, 0);
+   //   gtk_box_pack_start(GTK_BOX(vbox), lwoh->topVBox, FALSE, FALSE, 0);
+
+   //   gtk_box_pack_start(GTK_BOX(vbox), gtk_hseparator_new(), FALSE, FALSE, 10);
+
+   hbox = gtk_hbox_new(FALSE, 0);
+   gtk_box_pack_end(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
+
+   button = gtk_button_new_from_stock(GTK_STOCK_CLOSE);
+   gtk_box_pack_end(GTK_BOX(hbox), button, FALSE, FALSE, 0);
+   g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(close_cb), lwoh);
+
+   gtk_box_pack_end(GTK_BOX(vbox), gtk_hseparator_new(), FALSE, FALSE, 6);
+
+   /*** Put label into an event box and return it to the client */
 
    gtk_widget_set_events(ebox, GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK | GDK_BUTTON_PRESS_MASK);
-   g_signal_connect(G_OBJECT(ebox), "button_press_event", G_CALLBACK(help_cb), (gpointer)fwoh);
-   g_signal_connect(G_OBJECT(ebox), "enter_notify_event", G_CALLBACK(help_cb), (gpointer)fwoh);
-   g_signal_connect(G_OBJECT(ebox), "leave_notify_event", G_CALLBACK(help_cb), (gpointer)fwoh);
+   g_signal_connect(G_OBJECT(ebox), "button_press_event", G_CALLBACK(help_cb), (gpointer)lwoh);
+   g_signal_connect(G_OBJECT(ebox), "enter_notify_event", G_CALLBACK(help_cb), (gpointer)lwoh);
+   g_signal_connect(G_OBJECT(ebox), "leave_notify_event", G_CALLBACK(help_cb), (gpointer)lwoh);
 
-   gtk_label_set_markup(GTK_LABEL(label), fwoh->normalText);
-   gtk_container_add(GTK_CONTAINER(ebox), label);
+   gtk_label_set_markup(GTK_LABEL(lwoh->linkLabel), lwoh->normalText);
+   gtk_container_add(GTK_CONTAINER(ebox), lwoh->linkLabel);
 
-   gtk_frame_set_label_widget(GTK_FRAME(frame), ebox);
-
-   return fwoh;
+   return lwoh;
 }
 
-void ClearFrameWithOnlineHelp(FrameWithOnlineHelp *fwoh)
+void SetOnlineHelpLinkText(LabelWithOnlineHelp *lwoh, char *ascii_text)
+{  char text[strlen(ascii_text)+80];
+
+   if(lwoh->normalText) g_free(lwoh->normalText);
+   if(lwoh->highlitText) g_free(lwoh->highlitText);
+
+   lwoh->normalText  = g_locale_to_utf8(ascii_text, -1, NULL, NULL, NULL);
+   g_sprintf(text, "<span underline=\"single\" color=\"blue\">%s</span>", ascii_text);
+   lwoh->highlitText = g_locale_to_utf8(text, -1, NULL, NULL, NULL);
+}
+
+void FreeLabelWithOnlineHelp(LabelWithOnlineHelp *lwoh)
 {
-  g_free(fwoh->windowTitle);
-  g_free(fwoh->windowHeadline);
-  g_free(fwoh->normalText);
-  g_free(fwoh->highlitText);
-  g_free(fwoh);
+  g_free(lwoh->windowTitle);
+  g_free(lwoh->windowHeadline);
+  g_free(lwoh->normalText);
+  g_free(lwoh->highlitText);
+  g_free(lwoh);
 }
 
 /*
  * Add a paragraph of text to the help window
  */
 
-void AddHelpParagraph(FrameWithOnlineHelp *fwoh, char *format, ...)
+void AddHelpParagraph(LabelWithOnlineHelp *lwoh, char *format, ...)
 {  GtkWidget *label = gtk_label_new(NULL);
    va_list argp;
    char *text,*utf;
@@ -196,7 +184,7 @@ void AddHelpParagraph(FrameWithOnlineHelp *fwoh, char *format, ...)
    g_free(text);
 
    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.0);
-   gtk_box_pack_start(GTK_BOX(fwoh->vbox), label, TRUE, TRUE, 0);
+   gtk_box_pack_start(GTK_BOX(lwoh->vbox), label, TRUE, TRUE, 0);
 }
 
 /*
@@ -204,7 +192,7 @@ void AddHelpParagraph(FrameWithOnlineHelp *fwoh, char *format, ...)
  * The list may be preceeded by an optional paragraph of text.
  */
 
-void AddHelpItemList(FrameWithOnlineHelp *fwoh, char *format, ...)
+void AddHelpItemList(LabelWithOnlineHelp *lwoh, char *format, ...)
 {  GtkWidget *label = gtk_label_new(NULL);
    va_list argp;
    char *text,*utf,*c;
@@ -265,16 +253,17 @@ void AddHelpItemList(FrameWithOnlineHelp *fwoh, char *format, ...)
    g_free(utf);
 
    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.0);
-   gtk_box_pack_start(GTK_BOX(fwoh->vbox), label, TRUE, TRUE, 0);
+   gtk_box_pack_start(GTK_BOX(lwoh->vbox), label, TRUE, TRUE, 0);
 }
 
 /*
  * Add a (fully functional!) widget set to the help window 
  */
 
-void AddHelpWidget(FrameWithOnlineHelp *fwoh, GtkWidget *widget)
+void AddHelpWidget(LabelWithOnlineHelp *lwoh, GtkWidget *widget)
 {  
-   gtk_box_pack_start(GTK_BOX(fwoh->vbox), widget, TRUE, TRUE, 10);
+   gtk_box_pack_start(GTK_BOX(lwoh->vbox), widget, TRUE, TRUE, 10);
+   gtk_box_pack_start(GTK_BOX(lwoh->vbox), gtk_hseparator_new(), FALSE, FALSE, 10);
 }
 
 /***

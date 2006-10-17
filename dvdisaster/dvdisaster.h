@@ -125,7 +125,8 @@ typedef struct _GlobalClosure
    int cacheMB;         /* Cache setting for the parity codec, in megabytes */
    int sectorSkip;      /* Number of sectors to skip after read error occurs */
    char *redundancy;    /* Error correction code redundancy */
-   int rawAttempts;     /* Raw reading attempts */
+   int readRaw;         /* Read CD sectors raw + verify them */
+   int readAttempts;    /* Reading attempts */
    int adaptiveRead;    /* Use optimized strategy for reading defective images */
    int speedWarning;    /* Print warning if speed changes by more than given percentage */
    int fillUnreadable;  /* Byte value for filling unreadable sectors or -1 */
@@ -524,11 +525,13 @@ void FreeReedSolomonTables(ReedSolomonTables*);
  *** help-dialogs.c
  ***/
 
-/* Creating frames with links to online help */
+/* Creating labels with links to online help */
 
-typedef struct _FrameWithOnlineHelp
+typedef struct _LabelWithOnlineHelp
 {  GtkWidget *helpWindow;
-   GtkWidget *clientFrame;
+   GtkWidget *normalLabel;
+   GtkWidget *linkBox;
+   GtkWidget *linkLabel;
    GtkWidget *vbox;
   
    char *windowTitle;
@@ -536,13 +539,14 @@ typedef struct _FrameWithOnlineHelp
    char *normalText;
    char *highlitText;
    int inside;
-} FrameWithOnlineHelp;
+} LabelWithOnlineHelp;
 
-FrameWithOnlineHelp* CreateFrameWithOnlineHelp(char*);
-void ClearFrameWithOnlineHelp(FrameWithOnlineHelp*);
-void AddHelpItemList(FrameWithOnlineHelp*, char*, ...);
-void AddHelpParagraph(FrameWithOnlineHelp*, char*, ...);
-void AddHelpWidget(FrameWithOnlineHelp*, GtkWidget*);
+LabelWithOnlineHelp* CreateLabelWithOnlineHelp(char*, char*);
+void FreeLabelWithOnlineHelp(LabelWithOnlineHelp*);
+void SetOnlineHelpLinkText(LabelWithOnlineHelp*, char*);
+void AddHelpItemList(LabelWithOnlineHelp*, char*, ...);
+void AddHelpParagraph(LabelWithOnlineHelp*, char*, ...);
+void AddHelpWidget(LabelWithOnlineHelp*, GtkWidget*);
 
 /* Specific online help dialogs */
 
@@ -599,15 +603,14 @@ void PrintVector(unsigned char*, int, int);
 void GetPVector(unsigned char*, unsigned char*, int);
 void SetPVector(unsigned char*, unsigned char*, int);
 void FillPVector(unsigned char*, unsigned char, int);
+void AndPVector(unsigned char*, unsigned char, int);
 void OrPVector(unsigned char*, unsigned char, int);
-void IncrPVector(unsigned char*, int);
-void RaisePVector(unsigned char*, unsigned char, int);
 
 void GetQVector(unsigned char*, unsigned char*, int);
 void SetQVector(unsigned char*, unsigned char*, int);
 void FillQVector(unsigned char*, unsigned char, int);
+void AndQVector(unsigned char*, unsigned char, int);
 void OrQVector(unsigned char*, unsigned char, int);
-void RaiseQVector(unsigned char*, unsigned char, int);
 
 int DecodePQ(ReedSolomonTables*, unsigned char*, int, int*, int);
 
@@ -851,7 +854,7 @@ typedef struct _RawBuffer
    int attempt;               /* number of read attempts */
 
    unsigned char *recovered;  /* working buffer for cd frame recovery */
-   char *byteState;           /* state of error correction */
+   unsigned char *byteState;  /* state of error correction */
    int *pList[N_P_VECTORS];   /* list of suspicious p vectors */
    int *qList[N_Q_VECTORS];   /* list of suspicious q vectors */
    int pIndex[N_P_VECTORS];   /* index for list above */
@@ -870,6 +873,7 @@ void FreeRawBuffer(RawBuffer*);
 void InitializeCDFrame(unsigned char*, int);
 int CheckEDC(unsigned char*);
 
+int ValidateRawSectors(RawBuffer*, unsigned char*, int);
 int RecoverRaw(unsigned char*, RawBuffer*);
 
 /***

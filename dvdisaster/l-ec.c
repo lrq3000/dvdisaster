@@ -121,14 +121,6 @@ void FillPVector(unsigned char *frame, unsigned char data, int n)
      frame[w_idx] = data;
 }
 
-void IncrPVector(unsigned char *frame, int n)
-{  int i;
-   int w_idx = n+12;
-
-   for(i=0; i<26; i++, w_idx+=86)
-     frame[w_idx]++;
-}
-
 void OrPVector(unsigned char *frame, unsigned char value, int n)
 {  int i;
    int w_idx = n+12;
@@ -137,13 +129,12 @@ void OrPVector(unsigned char *frame, unsigned char value, int n)
        frame[w_idx] |= value;
 }
 
-void RaisePVector(unsigned char *frame, unsigned char value, int n)
+void AndPVector(unsigned char *frame, unsigned char value, int n)
 {  int i;
    int w_idx = n+12;
 
    for(i=0; i<26; i++, w_idx+=86)
-     if(value > frame[w_idx])
-       frame[w_idx] = value;
+       frame[w_idx] &= value;
 }
 
 /*
@@ -198,20 +189,16 @@ void OrQVector(unsigned char *frame, unsigned char data, int n)
    frame[2300 + n] |= data;
 }
 
-void RaiseQVector(unsigned char *frame, unsigned char value, int n)
+void AndQVector(unsigned char *frame, unsigned char data, int n)
 {  int offset = 12 + (n & 1);
    int w_idx  = (n&~1) * 43;
    int i;
 
    for(i=0; i<43; i++, w_idx+=88)
-     if(value > frame[(w_idx % 2236) + offset])
-       frame[(w_idx % 2236) + offset] = value;
+     frame[(w_idx % 2236) + offset] &= data;
 
-   if(value > frame[2248 + n])
-     frame[2248 + n] = value;
-
-   if(value > frame[2300 + n])
-     frame[2300 + n] = value;
+   frame[2248 + n] &= data;
+   frame[2300 + n] &= data;
 }
 
 /***

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-07 18:01+0200\n"
+"POT-Creation-Date: 2006-10-16 22:23+0200\n"
 "PO-Revision-Date: 2006-06-14 23:48+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -16,17 +16,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: closure.c:374 closure.c:433
+#: closure.c:375 closure.c:435
 #, c-format
 msgid "Error closing configuration file %s: %s\n"
 msgstr "Fel vid stängning av konfigurationsfil %s: %s\n"
 
-#: closure.c:394
+#: closure.c:395
 #, c-format
 msgid "Could not open configuration file %s: %s\n"
 msgstr "Kunde inte öppna konfigurationsfil %s: %s\n"
 
-#: closure.c:400
+#: closure.c:401
 #, c-format
 msgid ""
 "# dvdisaster-%s configuration file\n"
@@ -252,24 +252,24 @@ msgstr "RS01-metoden inte tillgänglig för jämförelser av filer."
 #. TRANSLATORS:
 #. This is a dummy entry which is supposed to translate into "ok".
 #. Please do not return anything else here.
-#: dvdisaster.c:258 dvdisaster.c:271 dvdisaster.c:283
+#: dvdisaster.c:259 dvdisaster.c:272 dvdisaster.c:284
 msgid "test phrase for verifying the locale installation"
 msgstr "ok"
 
-#: dvdisaster.c:304
+#: dvdisaster.c:305
 #, c-format
 msgid "sizeof(EccHeader) is %d, but must be 4096.\n"
 msgstr "sizeof(EccHeader) är %d, men måste vara 4096.\n"
 
-#: dvdisaster.c:446
+#: dvdisaster.c:448
 msgid "--cache-size must at least be 1MB; 16MB or higher is recommended."
 msgstr "--cache-size måste vara åtminstone 1MB; 16MB eller högre rekommenderas."
 
-#: dvdisaster.c:448
+#: dvdisaster.c:450
 msgid "--cache-size maximum is 2048MB."
 msgstr "--cache-size maximum är 2048MB."
 
-#: dvdisaster.c:502
+#: dvdisaster.c:507
 #, c-format
 msgid ""
 "\n"
@@ -280,12 +280,12 @@ msgstr ""
 "dvdisaster version %s\n"
 "\n"
 
-#: dvdisaster.c:549
+#: dvdisaster.c:554
 #, c-format
 msgid "?? illegal getopt return value %d\n"
 msgstr "?? ogiltigt getopt-svarsvärde %d\n"
 
-#: dvdisaster.c:582
+#: dvdisaster.c:587
 #, c-format
 msgid ""
 "dvdisaster is not properly installed.\n"
@@ -294,7 +294,7 @@ msgstr ""
 
 #. TRANSLATORS: Program options like -r and --read are not to be translated
 #. to avoid confusion when discussing the program in international forums.
-#: dvdisaster.c:718
+#: dvdisaster.c:723
 msgid ""
 "\n"
 "Common usage examples:\n"
@@ -319,7 +319,7 @@ msgstr ""
 "  dvdisaster -u,--unlink # Ta bort .iso-filer (när andra operationer är färdiga)\n"
 "\n"
 
-#: dvdisaster.c:727
+#: dvdisaster.c:732
 #, c-format
 msgid ""
 "Drive and file specification:\n"
@@ -334,7 +334,7 @@ msgstr ""
 "  -i,--image  avbildsfil - namn på avbildsfil       (standard: medium.iso)\n"
 "  -e,--ecc    ecc-fil    - namn på paritetsfil      (standard: medium.ecc)\n"
 
-#: dvdisaster.c:735
+#: dvdisaster.c:740
 msgid ""
 "  -l,--list              - list drives available under ASPI manager\n"
 "\n"
@@ -342,7 +342,7 @@ msgstr ""
 "  -l,--list              - lista enheter tillgängliga under ASPI-hanteraren\n"
 "\n"
 
-#: dvdisaster.c:740
+#: dvdisaster.c:745
 #, c-format
 msgid ""
 "Tweaking options (see manual before using!)\n"
@@ -357,14 +357,15 @@ msgid ""
 "  --dao                  - assume DAO disc; do not trim image end\n"
 "  --fill-unreadable n    - fill unreadable sectors with byte n\n"
 "  --query-size n         - query drive/udf/ecc for image size (default: ecc)\n"
-"  --raw-attempts n       - attempts n raw reads of a defective sector\n"
+"  --read-attempts n      - attempts n reads of a defective sector\n"
+"  --read-raw             - performs read in raw mode if possible\n"
 "  --speed-warning n      - print warning if speed changes by more than n percent\n"
 "  --spinup-delay n       - wait n seconds for drive to spin up\n"
 "  --split-files          - split image into files <= 2GB\n"
 "\n"
 msgstr ""
 
-#: dvdisaster.c:758
+#: dvdisaster.c:764
 #, c-format
 msgid ""
 "Debugging options (purposefully undocumented and possibly harmful)\n"
@@ -387,7 +388,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: dvdisaster.c:778
+#: dvdisaster.c:784
 msgid ""
 "NOTE: This is the Windows console version of dvdisaster.\n"
 "The version providing a graphical user interface is called\n"
@@ -497,11 +498,11 @@ msgstr "Avbildsfil %s inte borttagen: %s\n"
 msgid "Failed to create the log tables!\n"
 msgstr "Misslyckades med att skapa loggtabellerna!\n"
 
-#: help-dialogs.c:323
+#: help-dialogs.c:312
 msgid "windowtitle|Log data"
 msgstr "Loggdata"
 
-#: help-dialogs.c:324
+#: help-dialogs.c:313
 msgid ""
 "<big>Log data</big>\n"
 "<i>Protocol of the current or previous action</i>"
@@ -509,11 +510,11 @@ msgstr ""
 "<big>Loggdata</big>\n"
 "<i>Protokoll för aktuell eller tidigare operation</i>"
 
-#: help-dialogs.c:340
+#: help-dialogs.c:329
 msgid "windowtitle|GNU General Public License"
 msgstr "GNU General Public License"
 
-#: help-dialogs.c:341
+#: help-dialogs.c:330
 msgid ""
 "<big>GNU General Public License</big>\n"
 "<i>The license terms of dvdisaster.</i>"
@@ -521,7 +522,7 @@ msgstr ""
 "<big>GNU General Public License</big>\n"
 "<i>Licensvillkoren för dvdisaster.</i>"
 
-#: help-dialogs.c:413
+#: help-dialogs.c:402
 #, c-format
 msgid ""
 "File\n"
@@ -532,31 +533,31 @@ msgstr ""
 "%s\n"
 "inte tillgänglig"
 
-#: help-dialogs.c:496
+#: help-dialogs.c:485
 msgid "windowtitle|Modifying dvdisaster"
 msgstr "Ändra dvdisaster"
 
-#: help-dialogs.c:497
+#: help-dialogs.c:486
 msgid ""
 "<big>Modifying dvdisaster</big>\n"
 "<i>Your changes are not ours.</i>"
 msgstr ""
 
-#: help-dialogs.c:636
+#: help-dialogs.c:625
 msgid "windowtitle|About dvdisaster"
 msgstr "Om dvdisaster"
 
-#: help-dialogs.c:656
+#: help-dialogs.c:645
 msgid ""
 "Modified version Copyright 2006 (please fill in - [directions])\n"
 "Copyright 2004-2006 Carsten Gnoerlich"
 msgstr ""
 
-#: help-dialogs.c:660
+#: help-dialogs.c:649
 msgid "Copyright 2004-2006 Carsten Gnoerlich"
 msgstr "Copyright 2004-2006 Carsten Gnörlich"
 
-#: help-dialogs.c:667
+#: help-dialogs.c:656
 msgid ""
 "dvdisaster provides a margin of safety against data loss\n"
 "on CD and DVD media caused by aging or scratches.\n"
@@ -568,7 +569,7 @@ msgstr ""
 "Det skapar felkorrigeringsdata som kan användas för att\n"
 "återskapa oläsliga sektorer om skivan senare blir skadad.\n"
 
-#: help-dialogs.c:672
+#: help-dialogs.c:661
 msgid ""
 "This software comes with  <b>absolutely no warranty</b>.\n"
 "This is free software and you are welcome to redistribute it\n"
@@ -580,7 +581,7 @@ msgstr ""
 "\n"
 "Svensk översättning av Daniel Nylander (info@danielnylander.se)\n"
 
-#: help-dialogs.c:678
+#: help-dialogs.c:667
 msgid ""
 "\n"
 "This program is <b>not the original</b>. It is based on the\n"
@@ -590,7 +591,7 @@ msgid ""
 "([www.dvdisaster.org]) about issues with this version.\n"
 msgstr ""
 
-#: help-dialogs.c:693
+#: help-dialogs.c:682
 msgid ""
 "\n"
 "e-mail: carsten@dvdisaster.com   -or-   cgnoerlich@fsfe.org"
@@ -598,7 +599,7 @@ msgstr ""
 "\n"
 "e-post: carsten@dvdisaster.com   -eller-   cgnoerlich@fsfe.org"
 
-#: help-dialogs.c:696
+#: help-dialogs.c:685
 msgid ""
 "\n"
 "Darwin port (Mac OS X): Julian Einwag &lt;julian@einwag.de&gt;"
@@ -945,165 +946,200 @@ msgstr ""
 "* dvdisaster - kan inte fortsätta:\n"
 "*\n"
 
-#: preferences.c:208
+#: preferences.c:216
 msgid "Switched to the linear reading strategy."
 msgstr "Växlade till linjär lässtategi."
 
-#: preferences.c:437
+#: preferences.c:482
 msgid "Disabled automatic error correction file generation."
 msgstr "Inaktiverade automatisk generering av felkorrigeringsfil."
 
-#: preferences.c:576
+#: preferences.c:621
 msgid "Preferences"
 msgstr "Inställningar"
 
-#: preferences.c:606
+#: preferences.c:651
 msgid "General"
 msgstr "Allmänt"
 
-#: preferences.c:610
+#: preferences.c:655
 msgid "Medium and image filesystem"
 msgstr "Medium och avbildsfilsystem"
 
-#: preferences.c:619
+#: preferences.c:664
 msgid "Get Image size from: "
 msgstr ""
 
-#: preferences.c:625
+#: preferences.c:670
 msgid "Drive"
 msgstr ""
 
-#: preferences.c:631
+#: preferences.c:676
 msgid "ISO/UDF"
 msgstr "ISO/UDF"
 
-#: preferences.c:637
+#: preferences.c:682
 msgid "ECC/RS02"
 msgstr "ECC/RS02"
 
-#: preferences.c:650
+#: preferences.c:695
 msgid "Local files (on hard disc)"
 msgstr "Lokala filer (på hårddisk)"
 
-#: preferences.c:657
+#: preferences.c:702
 msgid "Automatically add .iso and .ecc file suffixes"
 msgstr "Lägg automatiskt till filändelserna .iso och .ecc"
 
-#: preferences.c:664
+#: preferences.c:709
 msgid "Split files into segments <= 2GB"
 msgstr "Dela upp filer i segment <= 2GB"
 
-#: preferences.c:671
+#: preferences.c:716
 msgid "Automatic file creation and deletion"
 msgstr "Automatiskt filskapande och borttagning"
 
-#: preferences.c:680
+#: preferences.c:725
 msgid "Create error correction file after reading image"
 msgstr "Skapa felkorrigeringsfil efter läsning av avbild"
 
-#: preferences.c:688
+#: preferences.c:733
 msgid "Remove image after error correction file creation"
 msgstr "Ta bort avbild efter felkorrigeringsfil har skapats"
 
-#: preferences.c:695
+#: preferences.c:740
 msgid "Read & Scan"
 msgstr "Läs & sök av"
 
-#: preferences.c:699
+#: preferences.c:744
 msgid "Reading preferences"
 msgstr "Läsinställningar"
 
-#: preferences.c:711
-msgid ""
-"<b>Reading strategy</b>\n"
-"dvdisaster provides two basic strategies for reading CD/DVD media:"
-msgstr ""
-
-#: preferences.c:718
-msgid "Reading strategy: "
-msgstr "Lässtrategi: "
-
-#: preferences.c:726
-msgid "Linear"
-msgstr "Linjär"
-
-#: preferences.c:734
-msgid "Adaptive (for defective media)"
-msgstr "Adaptiv (för defekt media)"
-
-#: preferences.c:746
-msgid ""
-"The linear strategy is suited for undamaged media while the adaptive strategy\n"
-"is better for media already containing read errors.\n"
-"Both reading strategies can be further customized:\n"
+#: preferences.c:753
+msgid "Reading strategy"
 msgstr ""
 
 #: preferences.c:753
-msgid ""
-"<b>Raw reading</b>\n"
-"Most drives return no data at all for defective sectors, but some have a special\n"
-"raw reading mode which returns even partly readable sectors. In that case it\n"
-"can be possible to recombine sector contents from several raw reading attempts."
-msgstr ""
+msgid "Reading strategy: "
+msgstr "Lässtrategi: "
 
 #: preferences.c:767
-#, c-format
-msgid "Try %d raw reads after read error (if supported)"
-msgstr ""
+msgid "Linear"
+msgstr "Linjär"
 
-#: preferences.c:778
+#: preferences.c:775
+msgid "Adaptive (for defective media)"
+msgstr "Adaptiv (för defekt media)"
+
+#: preferences.c:787
 msgid ""
-"<b>Reading range</b>\n"
-"Reading can be limited to a part of the medium (in sectors holding 2KB each).\n"
-"The values include the borders: 0-100 will read 101 sectors."
+"<b>Reading strategy</b>\n"
+"The linear strategy is optimized for undamaged media\n"
+"while the adaptive strategy is better suited\n"
+"for media already containing read errors."
 msgstr ""
 
-#: preferences.c:786
+#: preferences.c:794
+msgid "Reading range"
+msgstr ""
+
+#: preferences.c:794
 msgid "Read/Scan from sector"
 msgstr "Läs/Sök av från sektor"
 
-#: preferences.c:800
+#: preferences.c:819
 msgid "to sector"
 msgstr "till sektor"
 
-#: preferences.c:818
+#: preferences.c:837
 msgid ""
-"Limiting the reading range is not recommended for <i>adaptive reading</i> since it might\n"
+"<b>Reading range</b>\n"
+"\n"
+"Reading can be limited to a part of the medium (in sectors holding 2KB each).\n"
+"The values include the borders: 0-100 will read 101 sectors.\n"
+"\n"
+"<b>Note:</b> Limiting the reading range is not recommended for <i>adaptive reading</i> since it might\n"
 "prevent sectors from being read which are required for a succesful error correction.\n"
-"These settings are only effective for the current session and will not be saved.\n"
+"\n"
+"These settings are only effective for the current session and will not be saved."
 msgstr ""
 
-#: preferences.c:825
+#: preferences.c:847
+msgid "Read error treatment"
+msgstr ""
+
+#: preferences.c:856
+msgid "Raw reading"
+msgstr ""
+
+#: preferences.c:856
+msgid "Read and analyze raw sectors"
+msgstr ""
+
+#: preferences.c:879
 msgid ""
-"<b>Treatment of unreadable areas</b>\n"
-"Defective media usually contain numerous read errors in a contigous region.\n"
-"Skipping sectors after a read error reduces the processing time and the\n"
-"mechanical wear on the drive, but leaves larger gaps in the image file:"
+"<b>Raw reading</b>\n"
+"\n"
+"Some CD/DVD drives may deliver unreliable results when their\n"
+"internal error correction approaches its maximum capacity.\n"
+"\n"
+"Activating this option makes dvdisaster read sectors in raw mode.\n"
+"The L-EC P/Q vectors, EDC checksum and MSF address contained in the\n"
+"raw data are checked to make sure that the sector was correctly read."
 msgstr ""
 
-#: preferences.c:830
+#: preferences.c:889
+msgid "Reading attempts for defective sectors"
+msgstr ""
+
+#: preferences.c:895 preferences.c:896 preferences.c:897
+#, c-format
+msgid "Perform %d reading attempts for defective sectors"
+msgstr ""
+
+#: preferences.c:918
+msgid ""
+"<b>Reading attempts</b>\n"
+"\n"
+"Increasing the number of reading attempts may improve data recovery\n"
+"on marginal media, but will also increase processing time and\n"
+"mechanical wear on the drive."
+msgstr ""
+
+#: preferences.c:926
+msgid "Treatment of unreadable areas"
+msgstr ""
+
+#: preferences.c:930
 #, c-format
 msgid "Skip %d sectors after read error"
 msgstr "Hoppa över %d sektorer efter läsfel"
 
-#: preferences.c:831
+#: preferences.c:931
 #, c-format
-msgid "Stop reading when unreadable intervals < %d"
-msgstr "Sluta läsa när oläsbara intervall < %d"
+msgid "Stop reading when unreadable intervals &lt; %d"
+msgstr ""
 
-#: preferences.c:850
+#: preferences.c:957
 msgid ""
-"When using the <i>linear reading strategy</i>, skipping sectors has the following\n"
-"consequences:\n"
+"<b>Treatment of unreadable areas</b>\n"
+"\n"
+"Defective media usually contain numerous read errors in a contigous region.\n"
+"Skipping sectors after a read error reduces the processing time and the\n"
+"mechanical wear on the drive, but leaves larger gaps in the image file.\n"
+msgstr ""
+
+#: preferences.c:963
+msgid ""
+"Effects on the <b>linear reading strategy</b>:\n"
 "- Skipping a large number of sectors (e.g. 1024) gives a quick overview of\n"
 "damaged areas, but will usually not collect enough data for repairing the image.\n"
 "- Smaller values like 16, 32 or 64 are a good trade-off: The processing time will be\n"
 "considerably shortened, but still enough data for repairing the image is collected.\n"
 msgstr ""
 
-#: preferences.c:858
+#: preferences.c:970
 msgid ""
-"The <i>adaptive reading strategy</i> uses this setting only if no error correction data\n"
+"The <b>adaptive reading strategy</b> uses this setting only if no error correction data\n"
 "is available. In that case the reading process will stop when no unread areas\n"
 "larger than the selected size remain. Values smaller than 128 <i>are not recommended</i>\n"
 "as they cause the drive to carry out lots of laser head repositioning during the\n"
@@ -1114,50 +1150,50 @@ msgid ""
 "reasons. Therefore selecting a value less than 16 is not recommended for DVD."
 msgstr ""
 
-#: preferences.c:871
+#: preferences.c:983
 msgid "Image properties"
 msgstr "Avbildsegenskaper"
 
-#: preferences.c:880
+#: preferences.c:992
 msgid "Assume image to be written in DAO mode (don't truncate)"
 msgstr "Anta att avbild kommer att skrivas i DAO-läget (kapa inte av)"
 
-#: preferences.c:892
+#: preferences.c:1004
 msgid "Fill unreadable sectors with byte:"
 msgstr "Fyll oläsbara sektorer med byte:"
 
-#: preferences.c:914
+#: preferences.c:1026
 msgid "Drive initialisation"
 msgstr "Enhetsinitiering"
 
-#: preferences.c:921
+#: preferences.c:1033
 msgid "Wait"
 msgstr "Vänta"
 
-#: preferences.c:930
+#: preferences.c:1042
 msgid "seconds for drive to spin up"
 msgstr "sekunder för att enheten ska varva upp"
 
-#: preferences.c:937
+#: preferences.c:1049
 msgid "Error correction"
 msgstr "Felkorrigering"
 
-#: preferences.c:940
+#: preferences.c:1052
 msgid "Storage method:"
 msgstr ""
 
 # Hitta bättre ord
-#: print-sense.c:573
+#: print-sense.c:583
 #, c-format
 msgid "Sense error (0x%02x); "
 msgstr "Avkänningsfel (0x%02x); "
 
-#: print-sense.c:575
+#: print-sense.c:585
 #, c-format
-msgid "Sense error: %s; "
-msgstr "Avkänningsfel: %s; "
+msgid "Sense error: %s%c "
+msgstr ""
 
-#: print-sense.c:589
+#: print-sense.c:599
 #, c-format
 msgid "unknown asc/ascq code (0x%02x, 0x%02x)."
 msgstr "okänd asc/ascq-kod (0x%02x, 0x%02x)."
@@ -1399,12 +1435,12 @@ msgstr "Misslyckades med att söka i crc-område: %s"
 msgid "CRC error in sector %lld\n"
 msgstr "CRC-fel i sektor %lld\n"
 
-#: read-adaptive.c:1488 scsi-layer.c:617
+#: read-adaptive.c:1488 scsi-layer.c:620
 #, c-format
 msgid "Sectors %lld-%lld: %s\n"
 msgstr "Sektorer %lld-%lld: %s\n"
 
-#: read-adaptive.c:1491 read-linear.c:625 scsi-layer.c:616
+#: read-adaptive.c:1491 read-linear.c:625 scsi-layer.c:619
 #, c-format
 msgid "Sector %lld: %s\n"
 msgstr "Sektor %lld: %s\n"
@@ -1457,7 +1493,7 @@ msgstr "Adaptiv läsning:"
 msgid "Sectors processed"
 msgstr "Sektorer behandlade"
 
-#: read-adaptive-window.c:110 scsi-layer.c:598
+#: read-adaptive-window.c:110 scsi-layer.c:601
 msgid "readable"
 msgstr "läsbar"
 
@@ -1540,7 +1576,7 @@ msgstr "Färdigställer avbild %s. Endast saknade sektorer kommer att läsas.\n"
 msgid "done.\n"
 msgstr "klar.\n"
 
-#: read-linear.c:430 scsi-layer.c:978
+#: read-linear.c:430 scsi-layer.c:981
 #, c-format
 msgid "Waiting %d seconds for drive to spin up...\n"
 msgstr "Väntar %d sekunder på att enheten ska varva upp...\n"
@@ -2977,7 +3013,7 @@ msgstr ""
 "%s\n"
 "Kunde inte fråga efter fysiska dvdstruktur.\n"
 
-#: scsi-layer.c:292
+#: scsi-layer.c:293
 #, c-format
 msgid ""
 "%s\n"
@@ -2986,12 +3022,12 @@ msgstr ""
 "%s\n"
 "Kunde inte fråga efter längd på innehållsförteckning.\n"
 
-#: scsi-layer.c:302 scsi-layer.c:351
+#: scsi-layer.c:303 scsi-layer.c:352
 #, c-format
 msgid "TOC info too long (%d), probably multisession.\n"
 msgstr "Innehållsförteckning för lång (%d), antagligen multisession.\n"
 
-#: scsi-layer.c:315
+#: scsi-layer.c:316
 #, c-format
 msgid ""
 "%s\n"
@@ -3000,7 +3036,7 @@ msgstr ""
 "%s\n"
 "Kunde inte läsa innehållsförteckning (TOC).\n"
 
-#: scsi-layer.c:337
+#: scsi-layer.c:338
 #, c-format
 msgid ""
 "%s\n"
@@ -3009,12 +3045,12 @@ msgstr ""
 "%s\n"
 "Kunde inte fråga efter fullständig innehållsförteckning (TOC).\n"
 
-#: scsi-layer.c:346
+#: scsi-layer.c:347
 #, c-format
 msgid "TOC info too short, length %d.\n"
 msgstr "Innehållsförteckning för kort, längd %d.\n"
 
-#: scsi-layer.c:365
+#: scsi-layer.c:366
 #, c-format
 msgid ""
 "%s\n"
@@ -3023,7 +3059,7 @@ msgstr ""
 "%s\n"
 "Kunde inte läsa fullständig innehållsförteckning (TOC).\n"
 
-#: scsi-layer.c:372
+#: scsi-layer.c:373
 #, c-format
 msgid ""
 "\n"
@@ -3032,31 +3068,31 @@ msgstr ""
 "\n"
 "Oväntat format på innehållsförteckning (längd %d):\n"
 
-#: scsi-layer.c:379
+#: scsi-layer.c:380
 msgid "Consider sending a bug report.\n"
 msgstr "Överväg att skicka in en felrapport.\n"
 
-#: scsi-layer.c:387
+#: scsi-layer.c:388
 msgid "Data CD mode 1"
 msgstr "Data CD-läge 1"
 
-#: scsi-layer.c:388
+#: scsi-layer.c:389
 msgid "CD-I"
 msgstr "CD-I"
 
-#: scsi-layer.c:389
+#: scsi-layer.c:390
 msgid "CD XA form 1"
 msgstr "CD XA form 1"
 
-#: scsi-layer.c:390
+#: scsi-layer.c:391
 msgid "Unknown"
 msgstr "Okänd"
 
-#: scsi-layer.c:393
+#: scsi-layer.c:394
 msgid "CD Audio"
 msgstr "Cd-ljud"
 
-#: scsi-layer.c:549
+#: scsi-layer.c:552
 #, c-format
 msgid ""
 "%s\n"
@@ -3065,12 +3101,12 @@ msgstr ""
 "%s\n"
 "Kunde inte fråga efter dvdstrukturlängd för formatkod 1.\n"
 
-#: scsi-layer.c:559
+#: scsi-layer.c:562
 #, c-format
 msgid "Could not query dvd copyright info - implausible packet length %d\n"
 msgstr "Kunde inte fråga efter dvd:ns copyrightinformation - osannolik paketlängd %d\n"
 
-#: scsi-layer.c:574
+#: scsi-layer.c:577
 #, c-format
 msgid ""
 "%s\n"
@@ -3079,23 +3115,23 @@ msgstr ""
 "%s\n"
 "Kunde inte fråga efter copyrightinformation.\n"
 
-#: scsi-layer.c:632
+#: scsi-layer.c:635
 msgid "is undecideable because of read error"
 msgstr "är inte bestämt på grund av läsfel"
 
-#: scsi-layer.c:638
+#: scsi-layer.c:641
 msgid "looks GOOD"
 msgstr "ser BRA UT"
 
-#: scsi-layer.c:644
+#: scsi-layer.c:647
 msgid "gives unformatted size (UNUSABLE)"
 msgstr "ger oformaterad storlek (EJ ANVÄNDBAR)"
 
-#: scsi-layer.c:649
+#: scsi-layer.c:652
 msgid "is UNUSABLE"
 msgstr "är OANVÄNDBAR"
 
-#: scsi-layer.c:670
+#: scsi-layer.c:673
 #, c-format
 msgid ""
 "%s\n"
@@ -3104,7 +3140,7 @@ msgstr ""
 "%s\n"
 "Kunde inte fråga efter mediumstorlek.\n"
 
-#: scsi-layer.c:740
+#: scsi-layer.c:743
 #, c-format
 msgid ""
 "Different media sizes depending on query method:\n"
@@ -3113,7 +3149,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: scsi-layer.c:745
+#: scsi-layer.c:748
 msgid ""
 "Evaluation of returned medium sizes:\n"
 "\n"
@@ -3121,15 +3157,15 @@ msgstr ""
 "Evaluering av returnerade mediumstorlekar:\n"
 "\n"
 
-#: scsi-layer.c:800
+#: scsi-layer.c:803
 msgid "Using value from READ CAPACITY"
 msgstr "Använder värde från LÄSKAPACITET"
 
-#: scsi-layer.c:804
+#: scsi-layer.c:807
 msgid "Using value from READ DVD STRUCTURE"
 msgstr "Använder värde från LÄS DVDSTRUKTUR"
 
-#: scsi-layer.c:814
+#: scsi-layer.c:817
 #, c-format
 msgid ""
 "FAILED to determine image size.\n"
@@ -3140,7 +3176,7 @@ msgstr ""
 "Använder ett mindre värde eftersom det passar för >90%% av alla enheter,\n"
 "men FORTSÄTT PÅ EGEN RISK (avbilden kan bli felaktig/oanvändbar)"
 
-#: scsi-layer.c:819
+#: scsi-layer.c:822
 #, c-format
 msgid ""
 "Final decision: %s\n"
@@ -3149,7 +3185,7 @@ msgstr ""
 "Slutligt beslut: %s\n"
 "\n"
 
-#: scsi-layer.c:827
+#: scsi-layer.c:830
 msgid ""
 "Failed to determine image size.\n"
 "Try using a different drive."
@@ -3157,16 +3193,21 @@ msgstr ""
 "Misslyckades med att fastställa avbildsstorlek.\n"
 "Försök använda en annan enhet."
 
-#: scsi-layer.c:1035
+#: scsi-layer.c:1038
 msgid "Setting the drive speed failed:\n"
 msgstr "Misslyckades med att ställa in enhetens hastighet:\n"
 
-#: scsi-layer.c:1216
+#: scsi-layer.c:1301
 #, c-format
-msgid "Retrying Sector %lld because of: %s\n"
-msgstr "Nytt försök för sektor %lld på grund av: %s\n"
+msgid "Sector %lld, try %d: %s\n"
+msgstr ""
 
-#: scsi-layer.c:1243
+#: scsi-layer.c:1307
+#, c-format
+msgid "Sector %lld, try %d: success\n"
+msgstr ""
+
+#: scsi-layer.c:1329
 #, c-format
 msgid ""
 "\n"
@@ -3175,7 +3216,7 @@ msgstr ""
 "\n"
 "Enhet: %s, %s\n"
 
-#: scsi-layer.c:1247
+#: scsi-layer.c:1333
 #, c-format
 msgid ""
 "\n"
@@ -3184,44 +3225,44 @@ msgstr ""
 "\n"
 "Enhet: %s (%s), %s\n"
 
-#: scsi-layer.c:1257
+#: scsi-layer.c:1352
 msgid "... Device can read defective sectors in RAW mode. Good!\n"
 msgstr ""
 
-#: scsi-layer.c:1260
+#: scsi-layer.c:1355
 msgid "... Device can NOT read defective sectors in RAW mode.\n"
 msgstr ""
 
-#: scsi-layer.c:1272
+#: scsi-layer.c:1368
 #, c-format
 msgid "Medium: %s, %lld sectors%s %d layer(s)"
 msgstr "Medium: %s, %lld sektorer%s %d lager"
 
-#: scsi-layer.c:1277
+#: scsi-layer.c:1373
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s %d layer(s), created %s"
 msgstr "Medium \"%s\": %s, %lld sektorer%s %d lager, skapad %s"
 
-#: scsi-layer.c:1289
+#: scsi-layer.c:1385
 #, c-format
 msgid "Medium: %s, %lld sectors%s"
 msgstr "Medium: %s, %lld sektorer%s"
 
-#: scsi-layer.c:1293
+#: scsi-layer.c:1389
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s created %s"
 msgstr "Medium \"%s\": %s, %lld sektorer%s skapade %s"
 
-#: scsi-layer.c:1307
+#: scsi-layer.c:1403
 #, c-format
 msgid "This software does not support \"%s\" type media."
 msgstr ""
 
-#: scsi-layer.c:1314
+#: scsi-layer.c:1410
 msgid "This software does not support encrypted media.\n"
 msgstr ""
 
-#: scsi-layer.c:1321
+#: scsi-layer.c:1417
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr ""
@@ -3412,6 +3453,15 @@ msgstr ""
 #: welcome-window.c:141
 msgid "<i>New in this Version:</i>"
 msgstr ""
+
+#~ msgid "Sense error: %s; "
+#~ msgstr "Avkänningsfel: %s; "
+
+#~ msgid "Retrying Sector %lld because of: %s\n"
+#~ msgstr "Nytt försök för sektor %lld på grund av: %s\n"
+
+#~ msgid "Stop reading when unreadable intervals < %d"
+#~ msgstr "Sluta läsa när oläsbara intervall < %d"
 
 #~ msgid ""
 #~ "Graphical user interface options\n"

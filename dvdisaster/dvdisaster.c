@@ -146,7 +146,8 @@ typedef enum
    MODIFIER_FILL_UNREADABLE,
    MODIFIER_QUERY_SIZE,
    MODIFIER_RANDOM_SEED,
-   MODIFIER_RAW_ATTEMPTS,
+   MODIFIER_READ_ATTEMPTS,
+   MODIFIER_READ_RAW,
    MODIFIER_SIMULATE_DEFECTS,
    MODIFIER_SPEED_WARNING, 
    MODIFIER_SPINUP_DELAY, 
@@ -343,10 +344,11 @@ int main(int argc, char *argv[])
 	{"random-errors", 1, 0, MODE_RANDOM_ERR },
 	{"random-image", 1, 0, MODE_RANDOM_IMAGE },
 	{"random-seed", 1, 0, MODIFIER_RANDOM_SEED },
-	{"raw-attempts", 1, 0, MODIFIER_RAW_ATTEMPTS },
 	{"raw-sector", 1, 0, MODE_RAW_SECTOR},
 	{"read", 2, 0,'r'},
+	{"read-attempts", 1, 0, MODIFIER_READ_ATTEMPTS },
 	{"read-sector", 1, 0, MODE_READ_SECTOR},
+	{"read-raw", 0, 0, MODIFIER_READ_RAW},
 	{"redundancy", 1, 0, 'n'},
 	{"scan", 2, 0,'s'},
 	{"send-cdb", 1, 0, MODE_SEND_CDB},
@@ -475,8 +477,11 @@ int main(int argc, char *argv[])
          case MODIFIER_RANDOM_SEED:
 	   if(optarg) Closure->randomSeed = atoi(optarg);
 	   break;
-         case MODIFIER_RAW_ATTEMPTS:
-	   if(optarg) Closure->rawAttempts = atoi(optarg);
+         case MODIFIER_READ_ATTEMPTS:
+	   if(optarg) Closure->readAttempts = atoi(optarg);
+	   break;
+         case MODIFIER_READ_RAW:
+	   Closure->readRaw = TRUE;
 	   break;
          case MODIFIER_SIMULATE_DEFECTS:
 	   if(optarg) Closure->simulateDefects = atoi(optarg);
@@ -749,7 +754,8 @@ int main(int argc, char *argv[])
 	     "  --dao                  - assume DAO disc; do not trim image end\n"
 	     "  --fill-unreadable n    - fill unreadable sectors with byte n\n"
       	     "  --query-size n         - query drive/udf/ecc for image size (default: ecc)\n"   
-	     "  --raw-attempts n       - attempts n raw reads of a defective sector\n"
+	     "  --read-attempts n      - attempts n reads of a defective sector\n"
+	     "  --read-raw             - performs read in raw mode if possible\n"
 	     "  --speed-warning n      - print warning if speed changes by more than n percent\n"
 	     "  --spinup-delay n       - wait n seconds for drive to spin up\n"
 	     "  --split-files          - split image into files <= 2GB\n\n"));
