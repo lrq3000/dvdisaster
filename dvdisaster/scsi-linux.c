@@ -106,8 +106,8 @@ DeviceHandle* OpenDevice(char *device)
 
 void CloseDevice(DeviceHandle *dh)
 { 
-  if(dh->rawBuffer)
-  {  SetRawMode(dh, dh->previousReadMode, TRUE);
+  if(dh->canReadDefective)
+  {  SetRawMode(dh, dh->previousReadMode, MODE_PAGE_SET);
      FreeRawBuffer(dh->rawBuffer);
   }
 
@@ -145,7 +145,7 @@ int SendPacket(DeviceHandle *dh, unsigned char *cmd, int cdb_size, unsigned char
         cgc.data_direction = CGC_DATA_WRITE; 
 	break;
       default:
-	Stop(_("illegal data_mode: %d"),data_mode);
+	Stop("illegal data_mode: %d", data_mode);
    }
 
    return ioctl(dh->fd, CDROM_SEND_PACKET, &cgc);

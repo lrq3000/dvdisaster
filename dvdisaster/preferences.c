@@ -59,6 +59,7 @@ typedef struct _prefs_context
    GtkWidget *rangeSpin2A, *rangeSpin2B;
    GtkWidget *rawButtonA, *rawButtonB;
    GtkWidget *jumpScaleA, *jumpScaleB;
+   GtkWidget *daoButtonA, *daoButtonB;
    GtkWidget *byteEntry, *byteCheck;
    GtkWidget *readAndCreateButton;
    GtkWidget *mainNotebook;
@@ -229,6 +230,8 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 
       case TOGGLE_DAO:
 	Closure->noTruncate = state;
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->daoButtonA), state);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->daoButtonB), state);
 	break;
 
       case TOGGLE_2GB:
@@ -342,7 +345,7 @@ static int jump_values[] = { 0, 16, 32, 64, 128, 256, 384, 512, 768, 1024, 2048,
  20480 };
 #define JUMP_VALUE_LENGTH 14
 
-static int attempts_values[] = { 0, 1, 2, 3, 5, 7, 9, 11, 15, 20, 25, 30, 40, 50}; 
+static int attempts_values[] = { 1, 2, 3, 4, 5, 7, 9, 11, 15, 20, 25, 30, 40, 50}; 
 #define ATTEMPTS_VALUE_LENGTH 14
 
 static void non_linear_cb(GtkWidget *widget, gpointer data)
@@ -859,8 +862,6 @@ void CreatePreferencesWindow(void)
       for(i=0; i<2; i++)
       {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
 
-	  //button = gtk_check_button_new_with_label(_utf("Read raw sectors"));
-
 	 button = gtk_check_button_new();
 	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
        	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
@@ -886,15 +887,14 @@ void CreatePreferencesWindow(void)
 
       /* Reading attempts */
 
-      lwoh = CreateLabelWithOnlineHelp(_("Reading attempts for defective sectors"), "ignore");
+      lwoh = CreateLabelWithOnlineHelp(_("Number of reading attempts"), "ignore");
       g_ptr_array_add(pc->helpPages, lwoh);
 
       pc->attemptsScaleLwoh = lwoh;
       pc->attemptsScaleInfoA = g_malloc0(sizeof(non_linear_info));
       pc->attemptsScaleInfoB = g_malloc0(sizeof(non_linear_info));
-      pc->attemptsScaleInfoA->format = g_strdup(_utf("Perform %d reading attempts for defective sectors"));
-      pc->attemptsScaleInfoA->format = g_strdup(_utf("Perform %d reading attempts for defective sectors"));
-      pc->attemptsScaleInfoB->format = g_strdup(_utf("Perform %d reading attempts for defective sectors"));
+      pc->attemptsScaleInfoA->format = g_strdup(_utf("Perform upto %d reading attempts per sector"));
+      pc->attemptsScaleInfoB->format = g_strdup(_utf("Perform upto %d reading attempts per sector"));
 
       pc->attemptsScaleInfoA->lwoh = lwoh;
 
@@ -989,10 +989,36 @@ void CreatePreferencesWindow(void)
 
       /* DAO button */
 
-      button = gtk_check_button_new_with_label(_utf("Assume image to be written in DAO mode (don't truncate)"));
-      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->noTruncate);
-      g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_DAO));
-      gtk_box_pack_start(GTK_BOX(vbox2), button, FALSE, FALSE, 0);
+      lwoh = CreateLabelWithOnlineHelp(_("DAO mode"), _("Assume image to be written in DAO mode (don't truncate)"));
+      g_ptr_array_add(pc->helpPages, lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
+
+	 button = gtk_check_button_new();
+	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
+	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
+
+	 if(!i) pc->daoButtonA = button;
+	 else   pc->daoButtonB = button;
+
+	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->noTruncate);
+	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_DAO));
+	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	 else   AddHelpWidget(lwoh, hbox);
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Assume DAO mode</b>\n\n"
+			 "Media written in \"TAO\" (\"track at once\") mode may contain two sectors\n"
+			 "with pseudo read errors at the end. By default these two sectors are ignored.\n\n"
+			 "If you are extremely unlucky to have a \"DAO\" (\"disc at once\") medium\n"
+			 "with exactly one or two real read errors at the end, dvdisaster may treat\n"
+			 "this as a \"TAO\" disc and truncate the image by two sectors. In that case\n"
+			 "activate this option to have the last two read errors handled correctly.\n\n"
+			 "<b>Tip:</b> To avoid these problems, consider using the \"DAO / Disc at once\"\n"
+			 "(sometimes also called \"SAO / Session at once\") mode for writing single\n"
+			 "session media."));
 
       /* byte filling */
       
@@ -1019,7 +1045,6 @@ void CreatePreferencesWindow(void)
 	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->byteCheck), TRUE);
       }
       else gtk_widget_set_sensitive(pc->byteEntry, FALSE);
-
 
       /** Drive initialisation */
 

@@ -302,7 +302,7 @@ int main(int argc, char *argv[])
 	wrong packing. */
 
    if(sizeof(EccHeader) != 4096)
-     Stop(_("sizeof(EccHeader) is %d, but must be 4096.\n"),sizeof(EccHeader));
+     Stop("sizeof(EccHeader) is %d, but must be 4096.\n", sizeof(EccHeader));
 
    /*** Determine the default device (OS dependent!) */
 

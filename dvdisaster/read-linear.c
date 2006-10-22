@@ -434,7 +434,8 @@ reopen_image:
    if(Closure->guiMode && Closure->spinupDelay)
      SwitchAndSetFootline(Closure->readLinearNotebook, 0, Closure->readLinearFootline, "ignore");
 
-   ReadSectors(rc->dh, buf, start, 1); /* eliminate initial seek time from timing */
+   if(Closure->spinupDelay)  /* eliminate initial seek time from timing */
+     ReadSectors(rc->dh, buf, start, 1); 
    g_timer_start(rc->speedTimer);
    g_timer_start(rc->readTimer);
 

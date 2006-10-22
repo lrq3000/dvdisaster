@@ -200,8 +200,9 @@ typedef struct _DeviceHandle
    char devinfo[34];          /* whole device info string */
    char vendor[34];           /* vendor and product info only */
    int category;
-   int canRawRead;            /* TRUE if drive can raw read uncorrectable sectors */
+   int canReadDefective;      /* TRUE if drive can raw read uncorrectable sectors */
    int previousReadMode;      /* read mode prior to switching to raw reads */
+   int currentReadMode;       /* current raw read mode */
    RawBuffer *rawBuffer;      /* for performing raw read analysis */
    int (*read)(struct _DeviceHandle*, unsigned char*, int, int);
    int (*readRaw)(struct _DeviceHandle*, unsigned char*, int, int);
@@ -255,6 +256,12 @@ int SendPacket(DeviceHandle*, unsigned char*, int, unsigned char*, int, Sense*, 
  ***
  * The really user-visible stuff
  */
+
+enum 
+{  MODE_PAGE_OR, 
+   MODE_PAGE_AND,
+   MODE_PAGE_SET
+};
 
 DeviceHandle* OpenAndQueryDevice(char*);
 int InquireDevice(DeviceHandle*, int); 

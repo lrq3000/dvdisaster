@@ -106,7 +106,7 @@ char* DefaultDevice()
 void CloseDevice(DeviceHandle *dh)
 {
   if(dh->rawBuffer)
-  {  SetRawMode(dh, dh->previousReadMode, TRUE);
+  {  SetRawMode(dh, dh->previousReadMode, MODE_PAGE_SET);
      FreeRawBuffer(dh->rawBuffer);
   }
 
@@ -217,7 +217,7 @@ void OpenAspi()
   Closure->GetASPI32SupportInfo 
      = (DWORD(*)(void))GetProcAddress(Closure->aspiLib, "GetASPI32SupportInfo");
   if(!Closure->GetASPI32SupportInfo)
-  {  PrintLog(_("GetASPI32SupportInfo() not available."));
+  {  PrintLog("GetASPI32SupportInfo() not available.");
      FreeLibrary(Closure->aspiLib);
      Closure->aspiLib = NULL;
      return;
@@ -226,7 +226,7 @@ void OpenAspi()
   Closure->SendASPI32Command 
      = (DWORD(*)(void*))GetProcAddress(Closure->aspiLib, "SendASPI32Command");
   if(!Closure->SendASPI32Command)
-  {  PrintLog(_("SendASPI32Command() not available."));
+  {  PrintLog("SendASPI32Command() not available.");
      FreeLibrary(Closure->aspiLib);
      Closure->aspiLib = NULL;
      return;
@@ -285,7 +285,7 @@ DeviceHandle* open_aspi_device(char *device, int list_mode)
   max_ha = ret & 0xff;
 
   if(status != SS_COMP)
-  {  PrintLog(_("Could not determine number of host adapters\n"));
+  {  PrintLog("Could not determine number of host adapters\n");
      g_free(dh->device);
      g_free(dh); 
      return NULL;
@@ -306,7 +306,7 @@ DeviceHandle* open_aspi_device(char *device, int list_mode)
 
      Closure->SendASPI32Command(&ha_inq);
      if(ha_inq.Status != SS_COMP)
-       PrintLog(_("ASPI warning: Could not query host adapter %d\n"),ha);
+       PrintLog("ASPI warning: Could not query host adapter %d\n",ha);
 
 #if 0
      PrintLog("HA %d: %16s\n",ha,ha_inq.HA_Identifier);
@@ -327,7 +327,7 @@ DeviceHandle* open_aspi_device(char *device, int list_mode)
      /* Missing the following conditions is close to impossible. */
 
      if(ha_inq.HA_BufAlignMask >= 4096)
-     {  Stop(_("ASPI alignment = %d requested; can't handle that.\n"),
+     {  Stop("ASPI alignment = %d requested; can't handle that.\n",
 	     ha_inq.HA_BufAlignMask);
         g_free(dh);
 	return NULL;
@@ -337,7 +337,7 @@ DeviceHandle* open_aspi_device(char *device, int list_mode)
 	so this information is also useless. */
 
      if(ha_inq.HA_MaxTransferLength < 32768)
-     {  Stop(_("ASPI max xfer length = %d; can't handle that.\n"),
+     {  Stop("ASPI max xfer length = %d; can't handle that.\n",
 	     ha_inq.HA_MaxTransferLength);
         g_free(dh);
 	return NULL;
@@ -465,7 +465,7 @@ static int send_aspi_packet(DeviceHandle *dh, unsigned char *cmd, int cdb_size, 
 	srb.Flags = SRB_DIR_IN | SRB_EVENT_NOTIFY;
 	break;
       default:
-	Stop(_("illegal data_mode for ASPI: %d"),data_mode);
+	Stop("illegal data_mode for ASPI: %d", data_mode);
 	return -1;
    }
    srb.BufPtr  = buf;
@@ -501,11 +501,11 @@ static int send_aspi_packet(DeviceHandle *dh, unsigned char *cmd, int cdb_size, 
 	return -1;
 
       case 0x08: /* BUSY */
-	PrintLog(_("ASPI layer: Target busy.\n"));
+	PrintLog("ASPI layer: Target busy.\n");
 	return -1;
 
       case 0x18: /* Reservation conflict */
-	PrintLog(_("ASPI layer: Reservation conflict.\n"));
+	PrintLog("ASPI layer: Reservation conflict.\n");
 	return -1;
    }
 
@@ -611,7 +611,7 @@ static int send_spti_packet(HANDLE fd, unsigned char *cmd, int cdb_size, char *b
 	ss.spt.DataIn          	= 2;  /* SCSI_IOCTL_DATA_UNSPECIFIED */
 	break;
       default:
-	Stop(_("illegal data_mode: %d"),data_mode);
+	Stop("illegal data_mode: %d",data_mode);
 	return -1;
    }
    ss.spt.DataTransferLength 	= size;

@@ -846,12 +846,11 @@ void RemoveFillMarkers();
 typedef struct _RawBuffer
 {  GaloisTables *gt;          /* for L-EC Reed-Solomon */
    ReedSolomonTables *rt;
+   struct _AlignedBuffer *workBuf; /* working buffer for READ CD */
+   unsigned char *zeroSector; /* a raw sector containing just zeros. */
    unsigned char **rawBuf;    /* buffer for raw read attempts */
-   int *rawState;             /* error state returned for this sample */
-   int *valid;                /* sector considered valid? */
    int samplesRead;           /* number of samples read */
    int sampleLength;          /* length of samples */
-   int attempt;               /* number of read attempts */
 
    unsigned char *recovered;  /* working buffer for cd frame recovery */
    unsigned char *byteState;  /* state of error correction */
@@ -862,19 +861,14 @@ typedef struct _RawBuffer
    int lba;                   /* sector number were currently working on */
 } RawBuffer;
 
-enum                          /* values for rawState */
-{  RAW_SUCCESS = 0,           /* drive believes data is correct */
-   RAW_READ_ERROR = 1,        /* drive signalled read error */
-};
-
 RawBuffer* CreateRawBuffer(int);
 void FreeRawBuffer(RawBuffer*);
 
+int ValidateRawSector(RawBuffer*, unsigned char*);
+int TryCDFrameRecovery(RawBuffer*, unsigned char*);
+
 void InitializeCDFrame(unsigned char*, int);
 int CheckEDC(unsigned char*);
-
-int ValidateRawSectors(RawBuffer*, unsigned char*, int);
-int RecoverRaw(unsigned char*, RawBuffer*);
 
 /***
  *** recover-raw2.c

@@ -52,7 +52,7 @@ static const char *snstext[] = {
     "Miscompare",               /* Source data and data on the medium
                                    do not agree */
     "Key=15",                   /* Reserved */
-    "dvdisaster"                /* internal errors, NOT part of the SCSI standard */
+    "Raw Reader"                /* internal errors, NOT part of the SCSI standard */
 };
 
 struct error_info{
@@ -540,9 +540,15 @@ static struct error_info additional[] =
   /*
    * Faked errors by software L-EC
    */
-  {0xff,0x00,R,"Operating system hiccup - no data returned"},
+  {0xff,0x00,R,"No data returned"},
   {0xff,0x01,R,"EDC failure in RAW sector"},
   {0xff,0x02,R,"Wrong MSF in RAW sector"},
+  {0xff,0x03,R,"RAW reading > 16 sectors at once not supported"},
+  {0xff,0x04,R,"RAW buffer not allocated"},
+  {0xff,0x05,R,"Atapi/scsi driver possibly broken (invalid zero sector)"},
+  {0xff,0x06,R,"Sector accumulated for analysis"},
+  {0xff,0x07,R,"Recovery failed"},
+
   /*
    * Faked error by defect simulation mode
    */
@@ -582,7 +588,7 @@ char *GetSenseString(int sense_key, int asc, int ascq, int verbose)
    if(sense_key <0 || sense_key > 16) 
         g_snprintf(text, 255, _("Sense error (0x%02x); "),sense_key);
    else 
-     {  if(verbose) g_snprintf(text, 255, _("Sense error: %s%c "),snstext[sense_key],sep);
+   {   if(verbose) g_snprintf(text, 255, _("Sense error: %s%c "),snstext[sense_key],sep);
        else        g_snprintf(text, 255, "%s%c ",snstext[sense_key],sep);
    }
 

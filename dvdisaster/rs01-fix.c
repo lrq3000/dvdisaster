@@ -599,7 +599,7 @@ void RS01Fix(Method *method)
 	   /* deg(lambda) unequal to number of roots => uncorrectable error detected */
 
 	   if(deg_lambda != count)
-	   {  PrintLog(_("Decoder problem (%d != %d) for %d sectors: "), deg_lambda, count, erasure_count);
+	   {  PrintLog("Decoder problem (%d != %d) for %d sectors: ", deg_lambda, count, erasure_count);
 
 	      for(i=0; i<erasure_count; i++)
 	      {  gint64 idx = block_idx[erasure_list[i]];

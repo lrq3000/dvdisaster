@@ -372,7 +372,7 @@ void ReadDotfile()
    }
 
    if(fclose(dotfile))
-     g_fprintf(stderr, _("Error closing configuration file %s: %s\n"), 
+     g_fprintf(stderr, "Error closing configuration file %s: %s\n", 
 	       Closure->dotFile, strerror(errno));
 }
 
@@ -392,7 +392,7 @@ static void update_dotfile()
 
    dotfile = fopen(Closure->dotFile, "wb");
    if(!dotfile)
-   {  g_fprintf(stderr, _("Could not open configuration file %s: %s\n"), 
+   {  g_fprintf(stderr, "Could not open configuration file %s: %s\n", 
 		Closure->dotFile, strerror(errno));
       return;
    }
@@ -432,7 +432,7 @@ static void update_dotfile()
    g_fprintf(dotfile, "welcome-msg:     %d\n", Closure->welcomeMessage);
 
    if(fclose(dotfile))
-     g_fprintf(stderr, _("Error closing configuration file %s: %s\n"), 
+     g_fprintf(stderr, "Error closing configuration file %s: %s\n", 
 	       Closure->dotFile, strerror(errno));
 
 }
@@ -499,6 +499,7 @@ void InitClosure()
    Closure->methodList  = g_ptr_array_new();
    Closure->methodName  = g_strdup("RS01");
    Closure->cacheMB     = 32;
+   Closure->readAttempts= 1;
    Closure->sectorSkip  = 16;
    Closure->spinupDelay = 5;
    Closure->querySize   = 2;

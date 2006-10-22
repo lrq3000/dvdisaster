@@ -457,7 +457,7 @@ static gint32 *enc_alpha_to;
    n_layer_sectors = n_parity_blocks/2048;
 
    if(n_layer_sectors*2048 != n_parity_blocks)
-     Stop(_("Internal error: parity blocks are not a multiple of sector size.\n"));
+     Stop("Internal error: parity blocks are not a multiple of sector size.\n");
 
    ec->parity = g_malloc(n_parity_bytes);
    ec->data   = g_malloc(n_layer_bytes);

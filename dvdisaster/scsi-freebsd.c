@@ -119,7 +119,7 @@ DeviceHandle* OpenDevice(char *device)
    if(!dh->ccb)
    {  cam_close_device(dh->camdev);
       g_free(dh);
-      Stop(_("Could not allocate ccb for %s"),device);
+      Stop("Could not allocate ccb for %s", device);
       return NULL;
    }
 
@@ -131,7 +131,7 @@ DeviceHandle* OpenDevice(char *device)
 void CloseDevice(DeviceHandle *dh)
 { 
   if(dh->rawBuffer)
-  {  SetRawMode(dh, dh->previousReadMode, TRUE);
+  {  SetRawMode(dh, dh->previousReadMode, MODE_PAGE_SET);
      FreeRawBuffer(dh->rawBuffer);
   }
 
@@ -171,7 +171,7 @@ int SendPacket(DeviceHandle *dh, unsigned char *cmd, int cdb_size, unsigned char
 	flags = CAM_DIR_NONE;
 	break;
       default:
-	Stop(_("illegal data_mode: %d"),data_mode);
+	Stop("illegal data_mode: %d", data_mode);
    }
 
 

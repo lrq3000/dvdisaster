@@ -61,7 +61,7 @@ GaloisTables* CreateGaloisTables(gint32 gf_generator)
 	b = b ^ gf_generator;
    }
 
-   if(b!=1) Stop(_("Failed to create the log tables!\n"));
+   if(b!=1) Stop("Failed to create the Galois field log tables!\n");
 
    /* we're even closed using infinity (makes things easier) */
 

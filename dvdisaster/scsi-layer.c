@@ -403,12 +403,12 @@ assume_cd:
  * Find out whether the drive can return raw sectors with
  * uncorrected read errors. Depending on override,
  * mode is or'ed with existing flags (override = FALSE),
- * or written over existings flags (override = TRUE). 
+ * or written over existing flags (override = TRUE). 
  */
 
-#define RAW_DEBUG
+//#define RAW_DEBUG
 
-int SetRawMode(DeviceHandle *dh, int mode, int override)
+int SetRawMode(DeviceHandle *dh, int mode, int operator)
 {  AlignedBuffer *ab = CreateAlignedBuffer(2048);
    unsigned char *buf = ab->buf;
    Sense sense;
@@ -458,8 +458,21 @@ int SetRawMode(DeviceHandle *dh, int mode, int override)
    cdb[8] = pll;          /* parameter list length */
 
    dh->previousReadMode = buf[10];
-   if(override) buf[10] = mode;       /* add new read mode */
-   else         buf[10] |= mode;
+
+   switch(operator)       /* set new read mode */
+   {  case MODE_PAGE_SET:
+        buf[10] = mode;       
+	break;
+
+      case MODE_PAGE_OR:
+	buf[10] |= mode;
+	break;
+
+      case MODE_PAGE_AND:
+	buf[10] &= mode;
+	break;
+   }
+
    wanted_mode = buf[10];
 
    ret  = SendPacket(dh, cdb, 10, buf, pll, &sense, DATA_WRITE);
@@ -500,31 +513,10 @@ int SetRawMode(DeviceHandle *dh, int mode, int override)
       return FALSE;
    }
 
+   dh->currentReadMode = buf[10];
    FreeAlignedBuffer(ab);
    return TRUE;
 }
-
-#if 0
-static int query_raw_mode(DeviceHandle *dh, int mode)
-{  
-   dh->canRawRead = SetRawMode(dh, mode, FALSE);
-
-   if(dh->canRawRead)
-   {  
-      switch(dh->mainType)
-      {  case CD:
-	   dh->readRaw = read_raw_cd_sector;
-	   dh->rawBuffer = CreateRawBuffer(2352);
-	   break;
-         default:
-	   dh->readRaw = NULL;
-	   break;
-      }
-   }
-
-   return dh->canRawRead;
-}
-#endif
 
 /*
  * Find out whether we are allowed to create an image from the DVD.
@@ -1096,27 +1088,32 @@ static int read_cd_sector(DeviceHandle *dh, unsigned char *buf, int lba, int nse
    ret = SendPacket(dh, cmd, 12, buf, 2048*nsectors, sense, DATA_READ);
 
    if(ret<0) RememberSense(sense->sense_key, sense->asc, sense->ascq);
-	
    return ret;
 }
 
 static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, int nsectors)
 {  Sense *sense = &dh->sense;
    unsigned char cdb[MAX_CDB_SIZE];
-   AlignedBuffer *raw = CreateAlignedBuffer(2352*nsectors);
    RawBuffer *rb;
    int ret = -1;
    int i,s;
 
-   if(!dh->rawBuffer)  /* sanity check */ 
-     return 1;
+   /* Sanity checks */ 
 
-   /* reset raw reading buffer */
+   if(!dh->rawBuffer)
+   {  RememberSense(16, 255, 4);
+      return -1;
+   }
+
+   if(nsectors > 16)
+   {  RememberSense(16, 255, 3);
+      return -1;
+   }
 
    rb = dh->rawBuffer;
-   rb->lba          = lba;
-   rb->samplesRead  = 1;
-   rb->sampleLength = 0;
+   rb->lba = lba;
+
+   /*** Perform the raw read */
 
    memset(cdb, 0, MAX_CDB_SIZE);
    cdb[0]  = 0xbe;         /* READ CD */
@@ -1136,132 +1133,54 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
    cdb[10] = 0;        /* reserved stuff */
    cdb[11] = 0;        /* no special wishes for the control byte */
 
-   /* Try read */
+   /* initialize sectors with our marker */
 
    for(i=0, s=0; i<nsectors; i++, s+=rb->sampleLength)
-     memcpy(raw->buf+s, Closure->deadSector, 2048);
+     memcpy(rb->workBuf->buf+s, Closure->deadSector, 2048);
 
-   ret = SendPacket(dh, cdb, 12, raw->buf, nsectors*rb->sampleLength, sense, DATA_READ);
+   ret = SendPacket(dh, cdb, 12, rb->workBuf->buf, nsectors*rb->sampleLength, sense, DATA_READ);
+   RememberSense(sense->sense_key, sense->asc, sense->ascq);
+         
+   /*** Read failed. See how to proceed if defective sector reading is enabled. */
 
-   /* Drive says read failed */
+   if(ret<0 && dh->canReadDefective)
+   {  
+     /* Fail if multiple sectors were requested.
+	Caller must retry reading single sectors. */
 
-   if(ret<0)
-   {  RememberSense(sense->sense_key, sense->asc, sense->ascq);
-      FreeAlignedBuffer(raw);
+      if(nsectors != 1)
+         return ret;
 
-      return ret;
+      return TryCDFrameRecovery(rb, outbuf);
    }
+
+   /*** If we reach this, only the simple L-EC check is requested. */
 
    /* See if drive returned some data at all. */
 
    for(i=0, s=0; i<nsectors; i++, s+=rb->sampleLength)
-     if(!memcmp(raw->buf+s, Closure->deadSector, 2048))
-     {  RememberSense(16, 255, 0);
-        FreeAlignedBuffer(raw);
+     if(!memcmp(rb->workBuf->buf+s, Closure->deadSector, 2048))
+     {  if(dh->canReadDefective)
+ 	  RememberSense(16, 255, 0); /* report that nothing came back */
         return -1;
      }
 
    /* Verify data and copy it back */
 
+   ret = 0;
+   rb->lba = lba;
+
    for(i=0, s=0; i<nsectors; i++, s+=rb->sampleLength)
-   {  if(!ValidateRawSectors(rb, raw->buf, nsectors))
-      {  FreeAlignedBuffer(raw);
-	 return -1;
-      }
+   {  if(!ValidateRawSector(rb, rb->workBuf->buf+s))
+        return -1;
 
-      memcpy(outbuf, raw->buf+s+16, 2048);
+      memcpy(outbuf, rb->workBuf->buf+s+16, 2048);
       outbuf += 2048;
+      rb->lba++;
    }
-
-   FreeAlignedBuffer(raw);
 
    return ret;
 }
-
-
-#if 0
-static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, int nsectors)
-{  Sense *sense = &dh->sense;
-   unsigned char cdb[MAX_CDB_SIZE];
-   AlignedBuffer *raw = CreateAlignedBuffer(4096);
-   RawBuffer *rb;
-   int ret = -1;
-
-   if(!dh->rawBuffer)  /* sanity check */ 
-     return 1;
-
-   /* Return error for reading multiple sectors;
-      caller will retry reading single sectors */
-
-   if(nsectors != 1)
-     return 1;
-
-   /* reset raw reading buffer */
-
-   rb = dh->rawBuffer;
-   rb->lba          = lba;
-   rb->samplesRead  = 0;
-   rb->sampleLength = 0;
-
-   /* try a number of raw reads */
-
-   for(rb->attempt=0; rb->attempt<Closure->readAttempts; rb->attempt++)
-   {  Verbose("Trying raw read #%d for sector %d\n", rb->attempt, lba);
-
-      memset(cdb, 0, MAX_CDB_SIZE);
-      cdb[0]  = 0xbe;         /* READ CD */
-      switch(dh->subType)     /* Expected sector type */
-      {  case DATA1: cdb[1] = 2<<2; rb->sampleLength=2352; break;  /* data mode 1 */
-         case XA21:  cdb[1] = 4<<2; rb->sampleLength=2328; break;  /* xa mode 2 form 1 */
-      }
-      cdb[2]  = (lba >> 24) & 0xff;
-      cdb[3]  = (lba >> 16) & 0xff;
-      cdb[4]  = (lba >>  8) & 0xff;
-      cdb[5]  = lba & 0xff;
-      cdb[6]  = 0;        /* number of sectors to read (3 bytes) */
-      cdb[7]  = 0;  
-      cdb[8]  = 1;        /* read nsectors */
-
-      cdb[9]  = 0xb8;     /* we want Sync + Header + User data + EDC/ECC */
-      cdb[10] = 0;        /* reserved stuff */
-      cdb[11] = 0;        /* no special wishes for the control byte */
-
-      memcpy(raw->buf, Closure->deadSector, 2048);
-      ret = SendPacket(dh, cdb, 12, raw->buf, rb->sampleLength, sense, DATA_READ);
-
-      if(ret<0)  /* Read failed, data incomplete or missing */
-      {  RememberSense(sense->sense_key, sense->asc, sense->ascq);
-
-	 /* See if drive returned some data at all. */
-	
-	 if(memcmp(raw->buf, Closure->deadSector, 2048))
-	 {  memcpy(rb->rawBuf[rb->samplesRead], raw->buf, rb->sampleLength);
-	    rb->rawState[rb->samplesRead] = RAW_READ_ERROR;
-	    rb->samplesRead++;
-	    Verbose("... raw data read\n");
-	 }
-	 else /* Nope, no data came back */
-	 {  Verbose("... nothing returned\n");
-	 }
-      }
-      else   /* Drive says data is okay. Remember this but do not trust it */
-      {  memcpy(rb->rawBuf[rb->samplesRead], raw->buf, rb->sampleLength);
-	 rb->rawState[rb->samplesRead] = RAW_SUCCESS;
-	 rb->samplesRead++;
-	 Verbose("... reading SUCCEEDED\n");
-      }
-
-      Verbose("--> %d raw samples gathered\n", rb->samplesRead);
-
-      if(RecoverRaw(outbuf, rb))
-	return 0;
-   }
-
-   FreeAlignedBuffer(raw);
-
-   return ret;
-}
-#endif
 
 /*
  * Sector reading through the device handle.
@@ -1270,7 +1189,6 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
 
 int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
 {  int retry,status = -1;
-   int max_retries = Closure->readAttempts;
 
    /* See if we are in a simulated defective area */ 
 
@@ -1287,22 +1205,31 @@ int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
        }
    }
 
+   /* Reset raw reading buffer (if there is one) */
+
+   if(Closure->readRaw && dh->readRaw)
+   {  dh->rawBuffer->samplesRead  = 0;
+   }
+
    /* Try normal read */
 
-   for(retry=0; retry<=max_retries; retry++)
+   for(retry=1; retry<=Closure->readAttempts; retry++)
    {  
       if(Closure->readRaw && dh->readRaw)
 	   status = dh->readRaw(dh, buf, s, nsectors);
       else status = dh->read(dh, buf, s, nsectors);
 
       if(status)  /* current try was unsucessful */
-      {  if(retry || max_retries)
+      {  if(Closure->readAttempts > 1)
 	   PrintCLIorLabel(Closure->status,
 			   _("Sector %lld, try %d: %s\n"),
 			   s, retry, GetLastSenseString(FALSE));
+
+	 if(dh->canReadDefective && Closure->readAttempts > 1 && retry == Closure->readAttempts)
+	   RememberSense(16, 255, 7);
       }
       else 
-      {  if(retry)
+      {  if(Closure->readAttempts > 1 && retry > 1)
 	  PrintCLIorLabel(Closure->status,
 			  _("Sector %lld, try %d: success\n"), s, retry);
 
@@ -1336,25 +1263,33 @@ DeviceHandle* OpenAndQueryDevice(char *device)
 
    query_type(dh, 0);
 
-   /* Allocate raw reading buffer if possible */
+   /* Activate raw reading features if possible,
+      output used reading mode */
 
-   if(dh->mainType == CD && Closure->readRaw)
-   {
-       dh->rawBuffer = CreateRawBuffer(2352);
+   switch(dh->mainType)
+   {  case CD:
+        PrintLog(_("Using READ CD"));
+	if(Closure->readRaw)
+	{  dh->rawBuffer = CreateRawBuffer(2352);
+	   PrintLog(_(", RAW reading"));
+
+	   if(Closure->readAttempts > 1)
+	   {  dh->canReadDefective = SetRawMode(dh, 0x20, MODE_PAGE_OR);
+
+	      if(dh->canReadDefective)
+	         PrintLog(_(", Mode page 1 ERP = %02xh"), dh->currentReadMode);
+	   } 
+	   else SetRawMode(dh, ~0x20, MODE_PAGE_AND);
+	}
+	PrintLog(".\n");
+        break;
+
+      default:
+	PrintLog(_("Using READ(10).\n"));
+	break;
    }
 
-#if 0
-   /* Try switching into raw mode if readAttempts > 0 */
-
-   if(Closure->readAttempts > 0)
-   {  if(query_raw_mode(dh, 0x20))
-      {  PrintLog(_("... Device can read defective sectors in RAW mode. Good!\n")); 
-      }
-      else
-      {  PrintLog(_("... Device can NOT read defective sectors in RAW mode.\n")); 
-      }
-   }
-#endif
+   /* Examine medium type */
 
    if(Closure->querySize >= 1)  /* parseUDF or better requested */
      ExamineUDF(dh);

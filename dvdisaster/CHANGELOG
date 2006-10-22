@@ -1,5 +1,10 @@
-Warning: CD/DVD reading is currently being reworked. Do not use for production work;
+Warning: CD/DVD reading is currently being reworked. DO NOT USE for production work;
 	 images might contain wrong data.
+
+0.72 (devel-5) 22-10.2006
+	- more fine-tuning on the plain RAW reading capabilities
+	- removed some rarely used error messages from localization
+	  to relieve the translators
 
 0.72 (devel-4) 17-10-2006
 	- rearranged raw reading and number of reading attempts
