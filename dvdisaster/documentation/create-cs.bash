@@ -3547,7 +3547,7 @@ function imprint0cs()
    <h3>Tiráž</h3>
 
    Carsten Gnörlich <br>
-   Im Hagen 10 <br>
+   Beerenkamp 23 <br>
    59514 Welver / Germany<br>
    Tel.: +49 2384 941174<pre> </pre>
    E-Mail: carsten@dvdisaster.de<br>

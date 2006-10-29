@@ -4044,7 +4044,7 @@ function imprint0de()
    <h3>Impressum</h3>
 
    Carsten Gnörlich <br>
-   Im Hagen 10 <br>
+   Beerenkamp 23 <br>
    59514 Welver / Deutschland<br>
    Tel.: +49 2384 941174<pre> </pre>
    E-Mail: carsten@dvdisaster.de<br>

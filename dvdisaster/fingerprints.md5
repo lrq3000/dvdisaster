@@ -1,4 +1,4 @@
-cc5c6cfcbc7d694432bc8d9af041dbdf *dvdisaster.h
+df163750bc8225c12660f63b0bbe4af9 *dvdisaster.h
 8f0376b9d0f6963e11677a9c2e446cc6 *galois-inlines.h
 c27628ad149e3f8564b24a86642b54b6 *md5.h
 bcc539132868e8c92929302de62ef434 *rs01-includes.h
@@ -16,7 +16,7 @@ e3556e136b8303501536314332fb0df2 *ecc-rs02.c
 255f47cdc89a7edb4c091a5e92379550 *endian.c
 547b08e6c859b478d36ee85db8c234bc *file.c
 4cf7893c94dcb6f19017ea16308f11a6 *galois.c
-fadc60fd6bbac68a7069056533d7b89a *help-dialogs.c
+17c6daef9e6adcc6964aa9d6f9c3721c *help-dialogs.c
 da4bb1a3fde494c707b86dbbedca907a *icon-factory.c
 7ea547219ab8184458047f34153d9f0f *large-io.c
 9ee1a5881e7621797b10c05197674160 *l-ec.c
@@ -27,15 +27,14 @@ cd4ad1831e8f743a8d2328ffdda6f82d *menubar.c
 b8bf60bf225e79825b212d03c454c895 *method.c
 eecfd7e236c89cc36e1de2062754ac2e *method-link.c
 37bb377a5daf2492681772ce056904f2 *misc.c
-035e84587e0299717194e201823ee5b6 *preferences.c
-b8e91eaa22cffa5384f709ce832a63e8 *print-sense.c
+1fe41fa98d87eb974f42e9cd009035c3 *preferences.c
+bfbda27200513f3d132b564d1c56723c *print-sense.c
 cdde449dd2a8f64b560ff18a36f86234 *random.c
 66112f5f30e65b6adc43a1ba12780131 *read-adaptive.c
 5a37967ccb84d6e7535cb78e5cb0f227 *read-adaptive-window.c
 a7b31cd642321d0886f0056b39d38904 *read-linear.c
 8f6dd00126b3e613c0a388390dcb549b *read-linear-window.c
-7b77caa900781aa79f0a0c3900dc4ee1 *recover-raw2.c
-0a64c532da3206738473870f300131bf *recover-raw.c
+f7f5e9ef8d2adf12f27ef55637bd04fb *recover-raw.c
 1edd34d022eaea0ceb3b438754cf0d67 *rs01-common.c
 e536474cb285a8cd9d2d17b5cc1dd880 *rs01-create.c
 f7d9f82d17c221ea5fb6de84588ce2ea *rs01-fix.c
@@ -48,7 +47,7 @@ f747d0e89474d40f3833da319fcdc88b *rs02-verify.c
 08574c4ea55dc96fa1757a3a0bcfe0d7 *rs02-window.c
 4c4c6afc2328404c7d03d5dd318bdf61 *scsi-darwin.c
 2e213180cdfa1951e959c74d60086916 *scsi-freebsd.c
-1f3c3d60e09fb768f2c0d4224fc4ea73 *scsi-layer.c
+bc18672e70b492eae1f57511da40b696 *scsi-layer.c
 0bf3231d5866f05e16c9903630545997 *scsi-linux.c
 79a515b5dc4addb8ffbe301e5ee88b72 *scsi-unknown.c
 e0b1e12036b027f0dbb0c1e50ffe2192 *scsi-win32.c
@@ -57,6 +56,6 @@ ef3f31cd53b5b95eddd2b549c2d1ee10 *spiral.c
 900af6084439b8fce3c9cf086472747e *udf.c
 9424e1015628a2a3d81ec9ed591b436b *welcome-window.c
 04422d4100f5a8a8c152c8661f579317 *documentation/create.bash
-f61842973337d061b037d0cb021ed9b9 *documentation/create-cs.bash
-bf289f6ae66f19fbfd7044b096dbe99f *documentation/create-de.bash
-8cfb538db26addda83a462bc809b3f9c *documentation/create-en.bash
+95687aceabfe2980088a0412cb403092 *documentation/create-cs.bash
+ad473cd32303be5051e5f0136b4702ea *documentation/create-de.bash
+5d14b89d8853ee6ba7135b10b67a528e *documentation/create-en.bash

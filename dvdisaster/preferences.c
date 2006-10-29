@@ -50,7 +50,11 @@ typedef struct _prefs_context
   /* Widgets for changing preferences settings. The are two copies (A and B) 
      of each; one for the standard dialog and one embedded in the online help. */
 
-   GtkWidget *radioDrive, *radioISO, *radioECC;
+   GtkWidget *radioDriveA, *radioDriveB;
+   GtkWidget *radioISOA, *radioISOB;
+   GtkWidget *radioECCA, *radioECCB;
+   GtkWidget *suffixA, *suffixB;
+   GtkWidget *splitA, *splitB;
    GtkWidget *radioLinearA, *radioLinearB;
    GtkWidget *radioAdaptiveA, *radioAdaptiveB;
    GtkWidget *attemptsScaleA, *attemptsScaleB;
@@ -60,7 +64,9 @@ typedef struct _prefs_context
    GtkWidget *rawButtonA, *rawButtonB;
    GtkWidget *jumpScaleA, *jumpScaleB;
    GtkWidget *daoButtonA, *daoButtonB;
-   GtkWidget *byteEntry, *byteCheck;
+   GtkWidget *byteEntryA, *byteEntryB;
+   GtkWidget *byteCheckA, *byteCheckB;
+   GtkWidget *spinUpA, *spinUpB;
    GtkWidget *readAndCreateButton;
    GtkWidget *mainNotebook;
    GtkWidget *methodChooser;
@@ -88,6 +94,8 @@ void FreePreferences(void *context)
 
    if(pc->jumpScaleInfoA) g_free(pc->jumpScaleInfoA);
    if(pc->jumpScaleInfoB) g_free(pc->jumpScaleInfoB);
+   if(pc->attemptsScaleInfoA->format) g_free(pc->attemptsScaleInfoA->format);
+   if(pc->attemptsScaleInfoB->format) g_free(pc->attemptsScaleInfoB->format);
    if(pc->attemptsScaleInfoA) g_free(pc->attemptsScaleInfoA);
    if(pc->attemptsScaleInfoB) g_free(pc->attemptsScaleInfoB);
 
@@ -121,10 +129,23 @@ void HidePreferences(void)
 
    /* Get fill byte and recalculate the dead sector marker */
 
-   if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pc->byteCheck)))   
-   {  const char *value = gtk_entry_get_text(GTK_ENTRY(pc->byteEntry));
+   if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pc->byteCheckA)))   
+   {  const char *value1 = gtk_entry_get_text(GTK_ENTRY(pc->byteEntryA));
+      const char *value2 = gtk_entry_get_text(GTK_ENTRY(pc->byteEntryB));
+      int v1 = strtol(value1, NULL, 0);
+      int v2 = strtol(value2, NULL, 0);
 
-      Closure->fillUnreadable = strtol(value, NULL, 0);
+      /* both field may contain different values */
+
+      if(Closure->fillUnreadable != v2)
+      {  Closure->fillUnreadable = v2;
+ 	 gtk_entry_set_text(GTK_ENTRY(pc->byteEntryA), value2);
+      }
+      else
+	if(Closure->fillUnreadable != v1)
+	{  Closure->fillUnreadable = v1;
+	   gtk_entry_set_text(GTK_ENTRY(pc->byteEntryB), value1);
+	}
 
       if(Closure->fillUnreadable < 0)
 	Closure->fillUnreadable = 1;
@@ -226,6 +247,8 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 
       case TOGGLE_SUFFIX:
 	Closure->autoSuffix = state;
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->suffixA), state);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->suffixB), state);
 	break;
 
       case TOGGLE_DAO:
@@ -236,6 +259,8 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 
       case TOGGLE_2GB:
 	Closure->splitFiles = state;
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->splitA), state);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->splitB), state);
 	break;
 
       case TOGGLE_RAW:
@@ -282,10 +307,19 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 static void spin_cb(GtkWidget *widget, gpointer data)
 {  int which = GPOINTER_TO_INT(data);
    int value = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+   prefs_context *pc = (prefs_context*)Closure->prefsContext;
 
    switch(which)
    {  case SPIN_DELAY:
 	Closure->spinupDelay = value;
+	if(widget == pc->spinUpA)
+	{  if(pc->spinUpB)
+	     gtk_spin_button_set_value(GTK_SPIN_BUTTON(pc->spinUpB), value);
+	}
+	if(widget == pc->spinUpB)
+	{  if(pc->spinUpA)
+	     gtk_spin_button_set_value(GTK_SPIN_BUTTON(pc->spinUpA), value);
+	}
 	break;
    }
 }
@@ -442,12 +476,35 @@ static GtkWidget* non_linear_scale(GtkWidget **hbox_out, non_linear_info *nli,
 
 static void imgsize_cb(GtkWidget *widget, gpointer data)
 {  int state  = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-   prefs_context *pc = (prefs_context*)data;
+   int selection = GPOINTER_TO_INT(data);
+   prefs_context *pc = (prefs_context*)Closure->prefsContext;
 
-   if(state == TRUE)
-   {  if(pc->radioDrive == widget) Closure->querySize = 0;
-      if(pc->radioISO   == widget) Closure->querySize = 1;
-      if(pc->radioECC   == widget) Closure->querySize = 2;
+   if(!state)  /* only track changes to activate state */
+     return;
+
+   Closure->querySize = selection;
+
+   switch(selection)
+   {  case 0:
+        if(pc->radioDriveA)
+          gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioDriveA), TRUE); 
+        if(pc->radioDriveB)
+          gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioDriveB), TRUE); 
+	break;
+
+      case 1:
+        if(pc->radioISOA)
+          gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioISOA), TRUE); 
+        if(pc->radioISOB)
+          gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioISOB), TRUE); 
+        break;
+
+      case 2:
+        if(pc->radioECCA)
+          gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioECCA), TRUE); 
+        if(pc->radioECCB)
+          gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioECCB), TRUE); 
+        break;
    }
 }
 
@@ -503,21 +560,26 @@ static void strategy_cb(GtkWidget *widget, gpointer data)
 
 static void bytefill_cb(GtkWidget *widget, gpointer data)
 {  prefs_context *pc = (prefs_context*)data;
-   const char *value = gtk_entry_get_text(GTK_ENTRY(pc->byteEntry));
+   const char *value = gtk_entry_get_text(GTK_ENTRY(widget));
+   char byte[11];
 
    Closure->fillUnreadable = strtol(value, NULL, 0);
 
    if(Closure->fillUnreadable < 0)
    {  Closure->fillUnreadable = 1;
-      gtk_entry_set_text(GTK_ENTRY(pc->byteEntry), "1");
+      if(pc->byteEntryA) gtk_entry_set_text(GTK_ENTRY(pc->byteEntryA), "1");
+      if(pc->byteEntryB) gtk_entry_set_text(GTK_ENTRY(pc->byteEntryB), "1");
+      return;
    }
 
    if(Closure->fillUnreadable > 255)
    {  Closure->fillUnreadable = 255;
    }
 
-   printf("byte %x\n",Closure->fillUnreadable);
+   g_snprintf(byte, 10, "0x%02x", Closure->fillUnreadable);
 
+   if(pc->byteEntryA) gtk_entry_set_text(GTK_ENTRY(pc->byteEntryA), byte);
+   if(pc->byteEntryB) gtk_entry_set_text(GTK_ENTRY(pc->byteEntryB), byte);
 }
 
 
@@ -525,18 +587,29 @@ static void bytefill_check_cb(GtkWidget *widget, gpointer data)
 {  prefs_context *pc = (prefs_context*)data;
    int state  = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-   if(state)
-   {  const char *current;
-      Closure->fillUnreadable = 0xb0;
-      gtk_widget_set_sensitive(pc->byteEntry, TRUE);
+   if(pc->byteCheckA)
+     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->byteCheckA), state);
+   if(pc->byteCheckB)
+     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->byteCheckB), state);
 
-      current = gtk_entry_get_text(GTK_ENTRY(pc->byteEntry));
-      if(!*current || !strlen(current))
-	gtk_entry_set_text(GTK_ENTRY(pc->byteEntry), "0xb0");
+   if(state)
+   {  char byte[11];
+
+      if(pc->byteEntryA) gtk_widget_set_sensitive(pc->byteEntryA, TRUE);
+      if(pc->byteEntryB) gtk_widget_set_sensitive(pc->byteEntryB, TRUE);
+
+      if(Closure->fillUnreadable < 0 || Closure->fillUnreadable > 255)
+	 Closure->fillUnreadable = 0xb0;
+
+      g_snprintf(byte, 10, "0x%02x", Closure->fillUnreadable);
+
+      if(pc->byteEntryA) gtk_entry_set_text(GTK_ENTRY(pc->byteEntryA), byte);
+      if(pc->byteEntryB) gtk_entry_set_text(GTK_ENTRY(pc->byteEntryB), byte);
    }
    else
    {  Closure->fillUnreadable = -1;
-      gtk_widget_set_sensitive(pc->byteEntry, FALSE);
+      if(pc->byteEntryA) gtk_widget_set_sensitive(pc->byteEntryA, FALSE);
+      if(pc->byteEntryB) gtk_widget_set_sensitive(pc->byteEntryB, FALSE);
    }
 }
 
@@ -608,11 +681,11 @@ void CreatePreferencesWindow(void)
 {  
    if(!Closure->prefsWindow)  /* No window to reuse? */
    {  GtkWidget *window, *outer_box, *hbox, *vbox, *vbox2, *notebook, *space, *button, *frame;
-      GtkWidget *lab, *spin, *radio1, *radio2, *radio3, *check, *entry;
+      GtkWidget *lab;
 #if GTK_MINOR_VERSION < 4
       GtkWidget *option_menu_strip;
 #endif
-      LabelWithOnlineHelp *lwoh;
+      LabelWithOnlineHelp *lwoh,*lwoh_clone;
       prefs_context *pc = g_malloc0(sizeof(prefs_context));
       int i, method_idx = 0;
  
@@ -662,36 +735,69 @@ void CreatePreferencesWindow(void)
       gtk_container_set_border_width(GTK_CONTAINER(vbox2), 10);
       gtk_container_add(GTK_CONTAINER(frame), vbox2);
 
-      hbox = gtk_hbox_new(FALSE, 4);
+      lwoh = CreateLabelWithOnlineHelp(_("Image size determination"), _("Get Image size from: "));
+      g_ptr_array_add(pc->helpPages, lwoh);
 
-      lab = gtk_label_new(_utf("Get Image size from: ")); 
-      gtk_box_pack_start(GTK_BOX(hbox), lab, FALSE, FALSE, 0);
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 4);
+	 GtkWidget *radio1, *radio2, *radio3;
 
-      radio1 = pc->radioDrive = gtk_radio_button_new(NULL);
-      g_signal_connect(G_OBJECT(radio1), "toggled", G_CALLBACK(imgsize_cb), pc);
-      gtk_box_pack_start(GTK_BOX(hbox), radio1, FALSE, FALSE, 0);
-      lab = gtk_label_new(_utf("Drive"));
-      gtk_container_add(GTK_CONTAINER(radio1), lab);
+	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
 
-      radio2 = pc->radioISO = gtk_radio_button_new_from_widget(GTK_RADIO_BUTTON(radio1));
-      g_signal_connect(G_OBJECT(radio2), "toggled", G_CALLBACK(imgsize_cb), pc);
-      gtk_box_pack_start(GTK_BOX(hbox), radio2, FALSE, FALSE, 0);
-      lab = gtk_label_new(_utf("ISO/UDF"));
-      gtk_container_add(GTK_CONTAINER(radio2), lab);
+	 radio1 = gtk_radio_button_new(NULL);
+	 g_signal_connect(G_OBJECT(radio1), "toggled", G_CALLBACK(imgsize_cb), (gpointer)0);
+	 gtk_box_pack_start(GTK_BOX(hbox), radio1, FALSE, FALSE, 0);
+	 lab = gtk_label_new(_utf("Drive"));
+	 gtk_container_add(GTK_CONTAINER(radio1), lab);
 
-      radio3 = pc->radioECC = gtk_radio_button_new_from_widget(GTK_RADIO_BUTTON(radio2));
-      g_signal_connect(G_OBJECT(radio3), "toggled", G_CALLBACK(imgsize_cb), pc);
-      gtk_box_pack_start(GTK_BOX(hbox), radio3, FALSE, FALSE, 0);
-      lab = gtk_label_new(_utf("ECC/RS02"));
-      gtk_container_add(GTK_CONTAINER(radio3), lab);
+	 radio2 = gtk_radio_button_new_from_widget(GTK_RADIO_BUTTON(radio1));
+	 g_signal_connect(G_OBJECT(radio2), "toggled", G_CALLBACK(imgsize_cb), (gpointer)1);
+	 gtk_box_pack_start(GTK_BOX(hbox), radio2, FALSE, FALSE, 0);
+	 lab = gtk_label_new(_utf("ISO/UDF"));
+	 gtk_container_add(GTK_CONTAINER(radio2), lab);
 
-      switch(Closure->querySize)
-      {  case 0: gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio1), TRUE); break;
-         case 1: gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio2), TRUE); break;
-         case 2: gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio3), TRUE); break;
+	 radio3 = gtk_radio_button_new_from_widget(GTK_RADIO_BUTTON(radio2));
+	 g_signal_connect(G_OBJECT(radio3), "toggled", G_CALLBACK(imgsize_cb), (gpointer)2);
+	 gtk_box_pack_start(GTK_BOX(hbox), radio3, FALSE, FALSE, 0);
+	 lab = gtk_label_new(_utf("ECC/RS02"));
+	 gtk_container_add(GTK_CONTAINER(radio3), lab);
+
+	 switch(Closure->querySize)
+	 {  case 0: gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio1), TRUE); break;
+            case 1: gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio2), TRUE); break;
+            case 2: gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio3), TRUE); break;
+	 }
+
+	 if(!i)
+	 {  pc->radioDriveA = radio1;
+	    pc->radioISOA   = radio2;
+	    pc->radioECCA   = radio3;
+	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	 }
+	 else  
+	 {  pc->radioDriveB = radio1;
+	    pc->radioISOB   = radio2;
+	    pc->radioECCB   = radio3;
+	    AddHelpWidget(lwoh, hbox);
+	 }
       }
 
-      gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+      AddHelpParagraph(lwoh, 
+		       _("<b>Image size determination</b>\n\n"
+			 "Use <i>ECC/RS02</i> for reading images augmented with error correction data;\n"
+			 "else pick <i>ISO/UDF</i>.\n\n"
+
+			 "<b>ECC/RS02:</b> The Image size is determined from the error correction data.\n"
+			 "Reading RS02 augmented images requires this option; otherwise the images\n"
+			 "may be incomplete. However if the medium does not contain error correction\n"
+			 "data, the start of the reading operation may be delayed significantly.\n\n"
+
+			 "<b>ISO/UDF:</b> The image size is determined from the ISO/UDF file system.\n"
+			 "Caution: This is only suitable for working with error correction files.\n"
+			 "Images containing RS02 error correction information may be truncated.\n\n"
+			 "<b>Drive:</b> The image size reported by the drive will be used.\n"
+			 "As this information is typically wrong for DVD-RW/+RW/-RAM media this option \n"
+			 "is only present for backwards compatibility with older dvdisaster versions."));
 
       /* file extension */
 
@@ -702,17 +808,65 @@ void CreatePreferencesWindow(void)
       gtk_container_set_border_width(GTK_CONTAINER(vbox2), 10);
       gtk_container_add(GTK_CONTAINER(frame), vbox2);
 
-      button = gtk_check_button_new_with_label(_utf("Automatically add .iso and .ecc file suffixes"));
-      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->autoSuffix);
-      g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_SUFFIX));
-      gtk_box_pack_start(GTK_BOX(vbox2), button, FALSE, FALSE, 0);
+      lwoh = CreateLabelWithOnlineHelp(_("Automatic file suffixes"), _("Automatically add .iso and .ecc file suffixes"));
+      g_ptr_array_add(pc->helpPages, lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
+	 GtkWidget *button = gtk_check_button_new();
+
+	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
+	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
+
+	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->autoSuffix);
+	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_SUFFIX));
+
+	 if(!i)
+	 {  pc->suffixA = button;
+	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	 }
+	 else
+	 {  pc->suffixB = button;
+	    AddHelpWidget(lwoh, hbox);
+	 }
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Automatically add file suffixes</b>\n\n"
+			 "When this switch is set, files will be automatically appended with \".iso\" \n"
+			 "or \".ecc\" suffixes if no other file name extension is already present."));
 
       /* 2GB button */
 
-      button = gtk_check_button_new_with_label(_utf("Split files into segments <= 2GB"));
-      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->splitFiles);
-      g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_2GB));
-      gtk_box_pack_start(GTK_BOX(vbox2), button, FALSE, FALSE, 0);
+      lwoh = CreateLabelWithOnlineHelp(_("File splitting"), _("Split files into segments &lt;= 2GB"));
+      g_ptr_array_add(pc->helpPages, lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
+	 GtkWidget *button = gtk_check_button_new();
+
+	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
+	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
+	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->splitFiles);
+	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_2GB));
+
+	 if(!i)
+	 {  pc->splitA = button;
+	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	 }
+	 else
+	 {  pc->splitB = button;
+	    AddHelpWidget(lwoh, hbox);
+	 }
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>File splitting</b>\n\n"
+			 "Allows working with file systems which are limited to 2GB per file, e.g.\n"
+			 "FAT from Windows. Created files are spread over upto 100 segments\n"
+			 "called \"medium00.iso\", \"medium01.iso\" etc. at the cost of a small\n"
+			 "performance hit."));
+
 
       /*** Automatic file creation and deletion */
 
@@ -994,8 +1148,8 @@ void CreatePreferencesWindow(void)
 
       for(i=0; i<2; i++)
       {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
+	 GtkWidget *button = gtk_check_button_new();
 
-	 button = gtk_check_button_new();
 	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
 	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
 
@@ -1021,51 +1175,106 @@ void CreatePreferencesWindow(void)
 			 "session media."));
 
       /* byte filling */
-      
-      hbox = gtk_hbox_new(FALSE, 4);
 
-      pc->byteCheck = check = gtk_check_button_new();
-      g_signal_connect(check, "toggled", G_CALLBACK(bytefill_check_cb), pc);
-      gtk_box_pack_start(GTK_BOX(hbox), check, FALSE, FALSE, 0);
-      lab = gtk_label_new(_utf("Fill unreadable sectors with byte:"));
-      gtk_container_add(GTK_CONTAINER(check), lab);
+      lwoh = CreateLabelWithOnlineHelp(_("Filling of unreadable sectors"), 
+				       _("Fill unreadable sectors with byte:"));
+      g_ptr_array_add(pc->helpPages, lwoh);
 
-      pc->byteEntry = entry = gtk_entry_new();
-      g_signal_connect(entry, "activate", G_CALLBACK(bytefill_cb), pc);
-      gtk_entry_set_width_chars(GTK_ENTRY(entry), 5);
-      gtk_box_pack_start(GTK_BOX(hbox), entry, FALSE, FALSE, 0);
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 4);
+	 GtkWidget *check, *entry;
 
-      gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	 check = gtk_check_button_new();
+	 g_signal_connect(check, "toggled", G_CALLBACK(bytefill_check_cb), pc);
+	 gtk_box_pack_start(GTK_BOX(hbox), check, FALSE, FALSE, 0);
+	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
 
-      if(Closure->fillUnreadable >= 0)
-      {  char value[11];
+	 entry = gtk_entry_new();
+	 g_signal_connect(entry, "activate", G_CALLBACK(bytefill_cb), pc);
+	 gtk_entry_set_width_chars(GTK_ENTRY(entry), 5);
+	 gtk_box_pack_start(GTK_BOX(hbox), entry, FALSE, FALSE, 0);
+
+	 if(!i)
+	 {  pc->byteCheckA = check;
+	    pc->byteEntryA = entry;
+	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	 }
+	 else
+	 {  pc->byteCheckB = check;
+	    pc->byteEntryB = entry;
+	    AddHelpWidget(lwoh, hbox);
+	 }
+
+	 if(Closure->fillUnreadable >= 0)
+	 {  char value[11];
 	
-	 g_snprintf(value, 10, "0x%x", Closure->fillUnreadable);
-	 gtk_entry_set_text(GTK_ENTRY(pc->byteEntry), value);
-	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->byteCheck), TRUE);
+	    g_snprintf(value, 10, "0x%02x", Closure->fillUnreadable);
+	    gtk_entry_set_text(GTK_ENTRY(entry), value);
+	    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), TRUE);
+	 }
+	 else gtk_widget_set_sensitive(entry, FALSE);
       }
-      else gtk_widget_set_sensitive(pc->byteEntry, FALSE);
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Filling of unreadable sectors</b>\n\n"
+
+			 "dvdisaster marks unreadable sectors with a special filling pattern which\n"
+			 "is very unlikely to occur in undamaged media.\n"
+			 "In other data recovery software it is common to fill unreadable sectors\n"
+			 "with a certain byte value. To allow interoperability with such programs,\n"
+			 "you can specify the byte value they are using:\n"));
+
+      AddHelpItemList(lwoh,
+		      _("- 0xb0 (176 decimal): for compatibility with h2cdimage published by \"c't\",\n"
+			"a German periodical.\n"));
+
+      AddHelpParagraph(lwoh,
+		       _("<b>Note:</b> Using zero filling (0x00, decimal 0) is highly discouraged.\n"
+			 "Most media contain regular zero filled sectors which can not be told apart\n"
+			 "from unreadable sectors if zero filling is used."));
 
       /** Drive initialisation */
 
       frame = gtk_frame_new(_utf("Drive initialisation"));
       gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
 
-      hbox = gtk_hbox_new(FALSE, 4);
-      gtk_container_add(GTK_CONTAINER(frame), hbox);
-      gtk_container_set_border_width(GTK_CONTAINER(hbox), 10);
+      lwoh = CreateLabelWithOnlineHelp(_("Drive initialisation"), 
+				       _("Wait"));
+      g_ptr_array_add(pc->helpPages, lwoh);
 
-      lab = gtk_label_new(_utf("Wait"));
-      gtk_box_pack_start(GTK_BOX(hbox), lab, FALSE, FALSE, 0);
+      lwoh_clone = CloneLabelWithOnlineHelp(lwoh, _("seconds for drive to spin up"));
+      g_ptr_array_add(pc->helpPages, lwoh_clone);
 
-      spin = gtk_spin_button_new_with_range(0, 30, 1);
-      gtk_entry_set_width_chars(GTK_ENTRY(spin), 3);
-      gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin), Closure->spinupDelay);
-      g_signal_connect(spin, "value-changed", G_CALLBACK(spin_cb), (gpointer)SPIN_DELAY);
-      gtk_box_pack_start(GTK_BOX(hbox), spin, FALSE, FALSE, 0);
 
-      lab = gtk_label_new(_utf("seconds for drive to spin up"));
-      gtk_box_pack_start(GTK_BOX(hbox), lab, FALSE, FALSE, 0);
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 4);
+	 GtkWidget *spin;
+
+	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
+
+	 spin = gtk_spin_button_new_with_range(0, 30, 1);
+	 gtk_entry_set_width_chars(GTK_ENTRY(spin), 3);
+	 gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin), Closure->spinupDelay);
+	 g_signal_connect(spin, "value-changed", G_CALLBACK(spin_cb), (gpointer)SPIN_DELAY);
+	 gtk_box_pack_start(GTK_BOX(hbox), spin, FALSE, FALSE, 0);
+
+	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh_clone->normalLabel : lwoh_clone->linkBox, FALSE, FALSE, 0);
+	 gtk_container_set_border_width(GTK_CONTAINER(hbox), 10);
+
+	 if(!i)
+	 {  pc->spinUpA = spin;
+	    gtk_container_add(GTK_CONTAINER(frame), hbox);
+	 }
+	 else
+	 {  pc->spinUpB = spin;
+	    AddHelpWidget(lwoh, hbox);
+	 }
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Drive initialisation</b>\n\n"
+			 "Waits the specified amount of seconds for letting the drive spin up.\n"
+			 "This avoids speed jumps at the beginning of the reading curve."));
 
       /*** "Error correction" page */
 

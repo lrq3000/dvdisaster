@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-22 17:18+0200\n"
+"POT-Creation-Date: 2006-10-29 16:01+0100\n"
 "PO-Revision-Date: 2005-01-01 14:24+0100\n"
 "Last-Translator: Andrea Polverini <polve@polve.com>\n"
 "Language-Team: Italian <>\n"
@@ -476,11 +476,11 @@ msgstr ""
 msgid "Image file %s not deleted: %s\n"
 msgstr "Il file immagine %s non è stato rimosso: %s\n"
 
-#: help-dialogs.c:312
+#: help-dialogs.c:337
 msgid "windowtitle|Log data"
 msgstr "Protocollo"
 
-#: help-dialogs.c:313
+#: help-dialogs.c:338
 msgid ""
 "<big>Log data</big>\n"
 "<i>Protocol of the current or previous action</i>"
@@ -488,11 +488,11 @@ msgstr ""
 "<big>Protocollo</big>\n"
 "<i>Protocollo dell'operazione corrente o precedente</i>"
 
-#: help-dialogs.c:329
+#: help-dialogs.c:354
 msgid "windowtitle|GNU General Public License"
 msgstr "Licenza pubblica GNU"
 
-#: help-dialogs.c:330
+#: help-dialogs.c:355
 msgid ""
 "<big>GNU General Public License</big>\n"
 "<i>The license terms of dvdisaster.</i>"
@@ -500,7 +500,7 @@ msgstr ""
 "<big>Licenza pubblica GNU</big>\n"
 "<i>Termini di Licenza di dvdisaster.</i>"
 
-#: help-dialogs.c:402
+#: help-dialogs.c:427
 #, c-format
 msgid ""
 "File\n"
@@ -511,31 +511,31 @@ msgstr ""
 "%s\n"
 "non presente"
 
-#: help-dialogs.c:485
+#: help-dialogs.c:510
 msgid "windowtitle|Modifying dvdisaster"
 msgstr ""
 
-#: help-dialogs.c:486
+#: help-dialogs.c:511
 msgid ""
 "<big>Modifying dvdisaster</big>\n"
 "<i>Your changes are not ours.</i>"
 msgstr ""
 
-#: help-dialogs.c:625
+#: help-dialogs.c:650
 msgid "windowtitle|About dvdisaster"
 msgstr "Info su dvdisaster"
 
-#: help-dialogs.c:645
+#: help-dialogs.c:670
 msgid ""
 "Modified version Copyright 2006 (please fill in - [directions])\n"
 "Copyright 2004-2006 Carsten Gnoerlich"
 msgstr ""
 
-#: help-dialogs.c:649
+#: help-dialogs.c:674
 msgid "Copyright 2004-2006 Carsten Gnoerlich"
 msgstr "Copyright 2004-2006 Carsten Gnörlich"
 
-#: help-dialogs.c:656
+#: help-dialogs.c:681
 msgid ""
 "dvdisaster provides a margin of safety against data loss\n"
 "on CD and DVD media caused by aging or scratches.\n"
@@ -547,7 +547,7 @@ msgstr ""
 "Crea dei dati di correzione degli errori che saranno poi utilizzati per recuperare\n"
 "i settori illeggibili se il supporto dovesse danneggiarsi col tempo.\n"
 
-#: help-dialogs.c:661
+#: help-dialogs.c:686
 msgid ""
 "This software comes with  <b>absolutely no warranty</b>.\n"
 "This is free software and you are welcome to redistribute it\n"
@@ -559,7 +559,7 @@ msgstr ""
 "\n"
 "Traduzione italiana di Andrea Polverini (info@polve.com).\n"
 
-#: help-dialogs.c:667
+#: help-dialogs.c:692
 msgid ""
 "\n"
 "This program is <b>not the original</b>. It is based on the\n"
@@ -569,7 +569,7 @@ msgid ""
 "([www.dvdisaster.org]) about issues with this version.\n"
 msgstr ""
 
-#: help-dialogs.c:682
+#: help-dialogs.c:707
 msgid ""
 "\n"
 "e-mail: carsten@dvdisaster.com   -or-   cgnoerlich@fsfe.org"
@@ -577,7 +577,7 @@ msgstr ""
 "\n"
 "e-mail: carsten@dvdisaster.com    o   cgnoerlich@fsfe.org"
 
-#: help-dialogs.c:685
+#: help-dialogs.c:710
 msgid ""
 "\n"
 "Darwin port (Mac OS X): Julian Einwag &lt;julian@einwag.de&gt;"
@@ -919,91 +919,142 @@ msgstr ""
 "* dvdisaster - Impossibile proseguire:\n"
 "*\n"
 
-#: preferences.c:217
+#: preferences.c:238
 msgid "Switched to the linear reading strategy."
 msgstr "Settata la strategia di lettura lineare"
 
-#: preferences.c:485
+#: preferences.c:542
 msgid "Disabled automatic error correction file generation."
 msgstr "Disabilitata la generazione automatica della correzione dei file."
 
-#: preferences.c:624
+#: preferences.c:697
 msgid "Preferences"
 msgstr "Preferenze"
 
-#: preferences.c:654
+#: preferences.c:727
 msgid "General"
 msgstr "Generale"
 
-#: preferences.c:658
+#: preferences.c:731
 msgid "Medium and image filesystem"
 msgstr "Filesystem dell'immagine e del supporto"
 
-#: preferences.c:667
+#: preferences.c:738
+msgid "Image size determination"
+msgstr ""
+
+#: preferences.c:738
 msgid "Get Image size from: "
 msgstr ""
 
-#: preferences.c:673
+#: preferences.c:750
 msgid "Drive"
 msgstr "Drive"
 
-#: preferences.c:679
+#: preferences.c:756
 msgid "ISO/UDF"
 msgstr ""
 
-#: preferences.c:685
+#: preferences.c:762
 msgid "ECC/RS02"
 msgstr ""
 
-#: preferences.c:698
+#: preferences.c:786
+msgid ""
+"<b>Image size determination</b>\n"
+"\n"
+"Use <i>ECC/RS02</i> for reading images augmented with error correction data;\n"
+"else pick <i>ISO/UDF</i>.\n"
+"\n"
+"<b>ECC/RS02:</b> The Image size is determined from the error correction data.\n"
+"Reading RS02 augmented images requires this option; otherwise the images\n"
+"may be incomplete. However if the medium does not contain error correction\n"
+"data, the start of the reading operation may be delayed significantly.\n"
+"\n"
+"<b>ISO/UDF:</b> The image size is determined from the ISO/UDF file system.\n"
+"Caution: This is only suitable for working with error correction files.\n"
+"Images containing RS02 error correction information may be truncated.\n"
+"\n"
+"<b>Drive:</b> The image size reported by the drive will be used.\n"
+"As this information is typically wrong for DVD-RW/+RW/-RAM media this option \n"
+"is only present for backwards compatibility with older dvdisaster versions."
+msgstr ""
+
+#: preferences.c:804
 msgid "Local files (on hard disc)"
 msgstr "File locali (sul disco rigido)"
 
-#: preferences.c:705
+#: preferences.c:811
+msgid "Automatic file suffixes"
+msgstr ""
+
+#: preferences.c:811
 msgid "Automatically add .iso and .ecc file suffixes"
 msgstr "Aggiungi automaticamente i suffissi .iso e .ecc"
 
-#: preferences.c:712
-msgid "Split files into segments <= 2GB"
-msgstr "Suddividere l'immagine in file <= 2GB"
+#: preferences.c:835
+msgid ""
+"<b>Automatically add file suffixes</b>\n"
+"\n"
+"When this switch is set, files will be automatically appended with \".iso\" \n"
+"or \".ecc\" suffixes if no other file name extension is already present."
+msgstr ""
 
-#: preferences.c:719
+#: preferences.c:841
+msgid "File splitting"
+msgstr ""
+
+#: preferences.c:841
+msgid "Split files into segments &lt;= 2GB"
+msgstr ""
+
+#: preferences.c:864
+msgid ""
+"<b>File splitting</b>\n"
+"\n"
+"Allows working with file systems which are limited to 2GB per file, e.g.\n"
+"FAT from Windows. Created files are spread over upto 100 segments\n"
+"called \"medium00.iso\", \"medium01.iso\" etc. at the cost of a small\n"
+"performance hit."
+msgstr ""
+
+#: preferences.c:873
 msgid "Automatic file creation and deletion"
 msgstr "Creazione e cancellazione file automatica"
 
-#: preferences.c:728
+#: preferences.c:882
 msgid "Create error correction file after reading image"
 msgstr "Creazione del file di correzione errore dopo la lettura dell'immagine"
 
-#: preferences.c:736
+#: preferences.c:890
 msgid "Remove image after error correction file creation"
 msgstr "Rimuovi l'immagine dopo la creazione del file di correzione degli errori"
 
-#: preferences.c:743
+#: preferences.c:897
 msgid "Read & Scan"
 msgstr "Leggi e Scansiona"
 
-#: preferences.c:747
+#: preferences.c:901
 msgid "Reading preferences"
 msgstr "Preferenze di Lettura"
 
-#: preferences.c:756
+#: preferences.c:910
 msgid "Reading strategy"
 msgstr ""
 
-#: preferences.c:756
+#: preferences.c:910
 msgid "Reading strategy: "
 msgstr "Strategia di lettura:"
 
-#: preferences.c:770
+#: preferences.c:924
 msgid "Linear"
 msgstr "Lineare"
 
-#: preferences.c:778
+#: preferences.c:932
 msgid "Adaptive (for defective media)"
 msgstr "Adattiva (per supporti difettosi)"
 
-#: preferences.c:790
+#: preferences.c:944
 msgid ""
 "<b>Reading strategy</b>\n"
 "The linear strategy is optimized for undamaged media\n"
@@ -1011,19 +1062,19 @@ msgid ""
 "for media already containing read errors."
 msgstr ""
 
-#: preferences.c:797
+#: preferences.c:951
 msgid "Reading range"
 msgstr ""
 
-#: preferences.c:797
+#: preferences.c:951
 msgid "Read/Scan from sector"
 msgstr "Leggi/Scansiona dal settore"
 
-#: preferences.c:822
+#: preferences.c:976
 msgid "to sector"
 msgstr "al settore"
 
-#: preferences.c:840
+#: preferences.c:994
 msgid ""
 "<b>Reading range</b>\n"
 "\n"
@@ -1036,19 +1087,19 @@ msgid ""
 "These settings are only effective for the current session and will not be saved."
 msgstr ""
 
-#: preferences.c:850
+#: preferences.c:1004
 msgid "Read error treatment"
 msgstr ""
 
-#: preferences.c:859
+#: preferences.c:1013
 msgid "Raw reading"
 msgstr ""
 
-#: preferences.c:859
+#: preferences.c:1013
 msgid "Read and analyze raw sectors"
 msgstr ""
 
-#: preferences.c:880
+#: preferences.c:1034
 msgid ""
 "<b>Raw reading</b>\n"
 "\n"
@@ -1060,16 +1111,16 @@ msgid ""
 "raw data are checked to make sure that the sector was correctly read."
 msgstr ""
 
-#: preferences.c:890
+#: preferences.c:1044
 msgid "Number of reading attempts"
 msgstr ""
 
-#: preferences.c:896 preferences.c:897
+#: preferences.c:1050 preferences.c:1051
 #, c-format
 msgid "Perform upto %d reading attempts per sector"
 msgstr ""
 
-#: preferences.c:918
+#: preferences.c:1072
 msgid ""
 "<b>Reading attempts</b>\n"
 "\n"
@@ -1078,21 +1129,21 @@ msgid ""
 "mechanical wear on the drive."
 msgstr ""
 
-#: preferences.c:926
+#: preferences.c:1080
 msgid "Treatment of unreadable areas"
 msgstr ""
 
-#: preferences.c:930
+#: preferences.c:1084
 #, c-format
 msgid "Skip %d sectors after read error"
 msgstr "Salta %d settori dopo l'errore di lettura"
 
-#: preferences.c:931
+#: preferences.c:1085
 #, c-format
 msgid "Stop reading when unreadable intervals &lt; %d"
 msgstr ""
 
-#: preferences.c:957
+#: preferences.c:1111
 msgid ""
 "<b>Treatment of unreadable areas</b>\n"
 "\n"
@@ -1101,7 +1152,7 @@ msgid ""
 "mechanical wear on the drive, but leaves larger gaps in the image file.\n"
 msgstr ""
 
-#: preferences.c:963
+#: preferences.c:1117
 msgid ""
 "Effects on the <b>linear reading strategy</b>:\n"
 "- Skipping a large number of sectors (e.g. 1024) gives a quick overview of\n"
@@ -1110,7 +1161,7 @@ msgid ""
 "considerably shortened, but still enough data for repairing the image is collected.\n"
 msgstr ""
 
-#: preferences.c:970
+#: preferences.c:1124
 msgid ""
 "The <b>adaptive reading strategy</b> uses this setting only if no error correction data\n"
 "is available. In that case the reading process will stop when no unread areas\n"
@@ -1123,19 +1174,19 @@ msgid ""
 "reasons. Therefore selecting a value less than 16 is not recommended for DVD."
 msgstr ""
 
-#: preferences.c:983
+#: preferences.c:1137
 msgid "Image properties"
 msgstr "Proprietà dell'immagine"
 
-#: preferences.c:992
+#: preferences.c:1146
 msgid "DAO mode"
 msgstr ""
 
-#: preferences.c:992
+#: preferences.c:1146
 msgid "Assume image to be written in DAO mode (don't truncate)"
 msgstr "Assumi che l'immagine verrà scritta in modalità DAO (non troncare)"
 
-#: preferences.c:1012
+#: preferences.c:1166
 msgid ""
 "<b>Assume DAO mode</b>\n"
 "\n"
@@ -1152,41 +1203,77 @@ msgid ""
 "session media."
 msgstr ""
 
-#: preferences.c:1030
+#: preferences.c:1179
+msgid "Filling of unreadable sectors"
+msgstr ""
+
+#: preferences.c:1180
 msgid "Fill unreadable sectors with byte:"
 msgstr "Riempi i settori illeggibili con il byte:"
 
-#: preferences.c:1051
+#: preferences.c:1219
+msgid ""
+"<b>Filling of unreadable sectors</b>\n"
+"\n"
+"dvdisaster marks unreadable sectors with a special filling pattern which\n"
+"is very unlikely to occur in undamaged media.\n"
+"In other data recovery software it is common to fill unreadable sectors\n"
+"with a certain byte value. To allow interoperability with such programs,\n"
+"you can specify the byte value they are using:\n"
+msgstr ""
+
+#: preferences.c:1228
+msgid ""
+"- 0xb0 (176 decimal): for compatibility with h2cdimage published by \"c't\",\n"
+"a German periodical.\n"
+msgstr ""
+
+#: preferences.c:1232
+msgid ""
+"<b>Note:</b> Using zero filling (0x00, decimal 0) is highly discouraged.\n"
+"Most media contain regular zero filled sectors which can not be told apart\n"
+"from unreadable sectors if zero filling is used."
+msgstr ""
+
+#: preferences.c:1238 preferences.c:1241
 msgid "Drive initialisation"
 msgstr "Inizializzazione del drive"
 
-#: preferences.c:1058
+#: preferences.c:1242
 msgid "Wait"
 msgstr "Attendere"
 
-#: preferences.c:1067
+#: preferences.c:1245
 msgid "seconds for drive to spin up"
 msgstr "secondi per far avviare il drive"
 
-#: preferences.c:1074
+#: preferences.c:1275
+msgid ""
+"<b>Drive initialisation</b>\n"
+"\n"
+"Waits the specified amount of seconds for letting the drive spin up.\n"
+"This avoids speed jumps at the beginning of the reading curve."
+msgstr ""
+
+#: preferences.c:1283
 msgid "Error correction"
 msgstr "Correzione dell'errore"
 
-#: preferences.c:1077
+#: preferences.c:1286
 msgid "Storage method:"
 msgstr ""
 
-#: print-sense.c:589
+#: print-sense.c:590
 #, c-format
 msgid "Sense error (0x%02x); "
 msgstr "Errore sense 0x%02x; "
 
-#: print-sense.c:591
+#: print-sense.c:592
 #, c-format
 msgid "Sense error: %s%c "
 msgstr ""
 
-#: print-sense.c:605
+#: print-sense.c:606
 #, c-format
 msgid "unknown asc/ascq code (0x%02x, 0x%02x)."
 msgstr "Codice asc/ascq sconosciuto (0x%02x, 0x%02x)."
@@ -3128,17 +3215,17 @@ msgstr ""
 msgid "Setting the drive speed failed:\n"
 msgstr "Settaggio della velocità del drive fallito:\n"
 
-#: scsi-layer.c:1222
+#: scsi-layer.c:1225
 #, c-format
 msgid "Sector %lld, try %d: %s\n"
 msgstr ""
 
-#: scsi-layer.c:1231
+#: scsi-layer.c:1234
 #, c-format
 msgid "Sector %lld, try %d: success\n"
 msgstr ""
 
-#: scsi-layer.c:1253
+#: scsi-layer.c:1256
 #, c-format
 msgid ""
 "\n"
@@ -3147,7 +3234,7 @@ msgstr ""
 "\n"
 "Periferica: %s, %s\n"
 
-#: scsi-layer.c:1257
+#: scsi-layer.c:1260
 #, c-format
 msgid ""
 "\n"
@@ -3156,53 +3243,53 @@ msgstr ""
 "\n"
 "Periferica: %s (%s), %s\n"
 
-#: scsi-layer.c:1268
+#: scsi-layer.c:1271
 msgid "Using READ CD"
 msgstr ""
 
-#: scsi-layer.c:1271
+#: scsi-layer.c:1274
 msgid ", RAW reading"
 msgstr ""
 
-#: scsi-layer.c:1277
+#: scsi-layer.c:1280
 #, c-format
 msgid ", Mode page 1 ERP = %02xh"
 msgstr ""
 
-#: scsi-layer.c:1285
+#: scsi-layer.c:1288
 msgid "Using READ(10).\n"
 msgstr ""
 
-#: scsi-layer.c:1299
+#: scsi-layer.c:1302
 #, c-format
 msgid "Medium: %s, %lld sectors%s %d layer(s)"
 msgstr "Supporto: %s, %lld settori%s %d strato(i)"
 
-#: scsi-layer.c:1304
+#: scsi-layer.c:1307
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s %d layer(s), created %s"
 msgstr "Supporto \"%s\": %s, %lld settori%s %d strato(i), creato %s"
 
-#: scsi-layer.c:1316
+#: scsi-layer.c:1319
 #, c-format
 msgid "Medium: %s, %lld sectors%s"
 msgstr "Supporto: %s, %lld Settori%s"
 
-#: scsi-layer.c:1320
+#: scsi-layer.c:1323
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s created %s"
 msgstr "Supporto \"%s\": %s, %lld settori%s creato %s"
 
-#: scsi-layer.c:1334
+#: scsi-layer.c:1337
 #, c-format
 msgid "This software does not support \"%s\" type media."
 msgstr ""
 
-#: scsi-layer.c:1341
+#: scsi-layer.c:1344
 msgid "This software does not support encrypted media.\n"
 msgstr ""
 
-#: scsi-layer.c:1348
+#: scsi-layer.c:1351
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr ""
@@ -3352,6 +3439,9 @@ msgstr ""
 #: welcome-window.c:141
 msgid "<i>New in this Version:</i>"
 msgstr ""
+
+#~ msgid "Split files into segments <= 2GB"
+#~ msgstr "Suddividere l'immagine in file <= 2GB"
 
 #~ msgid "sizeof(EccHeader) is %d, but must be 4096.\n"
 #~ msgstr "sizeof(EccHeader) è %d, ma deve essere 4096.\n"

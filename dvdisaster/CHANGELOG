@@ -1,7 +1,12 @@
 Warning: CD/DVD reading is currently being reworked. DO NOT USE for production work;
 	 images might contain wrong data.
 
-0.72 (devel-5) 22-10.2006
+0.72 (devel-6) 29-10-2006
+	- completed migration of "Read and Scan" documentation from HTML docs into
+	  preferences GUI
+	- re-inserted heuristical L-EC from Andrei Grecu
+
+0.72 (devel-5) 22-10-2006
 	- more fine-tuning on the plain RAW reading capabilities
 	- removed some rarely used error messages from localization
 	  to relieve the translators

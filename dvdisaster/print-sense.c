@@ -548,6 +548,7 @@ static struct error_info additional[] =
   {0xff,0x05,R,"Atapi/scsi driver possibly broken (invalid zero sector)"},
   {0xff,0x06,R,"Sector accumulated for analysis"},
   {0xff,0x07,R,"Recovery failed"},
+  {0xff,0x08,R,"Atapi/scsi driver possibly broken (possibly random data returned)"},
 
   /*
    * Faked error by defect simulation mode

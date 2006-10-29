@@ -535,13 +535,13 @@ typedef struct _LabelWithOnlineHelp
    GtkWidget *vbox;
   
    char *windowTitle;
-   char *windowHeadline;
    char *normalText;
    char *highlitText;
    int inside;
 } LabelWithOnlineHelp;
 
 LabelWithOnlineHelp* CreateLabelWithOnlineHelp(char*, char*);
+LabelWithOnlineHelp* CloneLabelWithOnlineHelp(LabelWithOnlineHelp*, char*);
 void FreeLabelWithOnlineHelp(LabelWithOnlineHelp*);
 void SetOnlineHelpLinkText(LabelWithOnlineHelp*, char*);
 void AddHelpItemList(LabelWithOnlineHelp*, char*, ...);
@@ -854,30 +854,29 @@ typedef struct _RawBuffer
 
    unsigned char *recovered;  /* working buffer for cd frame recovery */
    unsigned char *byteState;  /* state of error correction */
-   int *pList[N_P_VECTORS];   /* list of suspicious p vectors */
-   int *qList[N_Q_VECTORS];   /* list of suspicious q vectors */
-   int pIndex[N_P_VECTORS];   /* index for list above */
-   int qIndex[N_Q_VECTORS];
+
+   unsigned char *pParity1[N_P_VECTORS];
+   unsigned char *pParity2[N_P_VECTORS];
+   int pParityN[N_P_VECTORS][2];
+
+   unsigned char *qParity1[N_Q_VECTORS];
+   unsigned char *qParity2[N_Q_VECTORS];
+   int qParityN[N_Q_VECTORS][2];
+   
    int lba;                   /* sector number were currently working on */
 } RawBuffer;
+
+enum                          /* values for byteState */
+{  FRAME_BYTE_UNKNOWN,        /* state of byte is unknown */
+   FRAME_BYTE_ERROR,          /* byte is wrong (= erasure for ecc) */
+   FRAME_BYTE_GOOD            /* byte is correct */
+};
 
 RawBuffer* CreateRawBuffer(int);
 void FreeRawBuffer(RawBuffer*);
 
 int ValidateRawSector(RawBuffer*, unsigned char*);
 int TryCDFrameRecovery(RawBuffer*, unsigned char*);
-
-void InitializeCDFrame(unsigned char*, int);
-int CheckEDC(unsigned char*);
-
-/***
- *** recover-raw2.c
- ***/
-
-int Level1_L_EC(RawBuffer*);
-int Level2_L_EC(unsigned char*, RawBuffer*, unsigned char*);
-int SearchBestSector(RawBuffer*);
-int SearchPlausibleSector(RawBuffer*);
 
 /*** 
  *** scsi-layer.c

@@ -92,13 +92,13 @@ LabelWithOnlineHelp* CreateLabelWithOnlineHelp(char *title, char *ascii_text)
    /*** Initialize online help context */
 
    lwoh = g_malloc0(sizeof(LabelWithOnlineHelp));
-   lwoh->normalLabel = gtk_label_new(_utf(ascii_text));
+   lwoh->normalLabel = gtk_label_new(NULL);
    lwoh->linkLabel = gtk_label_new(NULL);
    lwoh->linkBox = ebox;
    lwoh->windowTitle = g_locale_to_utf8(title, -1, NULL, NULL, NULL);
-   //   g_sprintf(text, "<span color=\"blue\">%s</span>", ascii_text);
-   //   g_sprintf(text, "<span color=\"blue\">%s</span>", ascii_text);
    SetOnlineHelpLinkText(lwoh, ascii_text);
+
+   gtk_label_set_markup(GTK_LABEL(lwoh->normalLabel), lwoh->normalText);
 
    /*** Create the help window */
 
@@ -117,11 +117,6 @@ LabelWithOnlineHelp* CreateLabelWithOnlineHelp(char *title, char *ascii_text)
    lwoh->vbox = vbox = gtk_vbox_new(FALSE, 0);
    gtk_container_add(GTK_CONTAINER(window), vbox);
    
-   //   lwoh->topVBox = gtk_vbox_new(FALSE, 0);
-   //   gtk_box_pack_start(GTK_BOX(vbox), lwoh->topVBox, FALSE, FALSE, 0);
-
-   //   gtk_box_pack_start(GTK_BOX(vbox), gtk_hseparator_new(), FALSE, FALSE, 10);
-
    hbox = gtk_hbox_new(FALSE, 0);
    gtk_box_pack_end(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 
@@ -131,13 +126,44 @@ LabelWithOnlineHelp* CreateLabelWithOnlineHelp(char *title, char *ascii_text)
 
    gtk_box_pack_end(GTK_BOX(vbox), gtk_hseparator_new(), FALSE, FALSE, 6);
 
-   /*** Put label into an event box and return it to the client */
+   /*** Put link label into an event box */
 
    gtk_widget_set_events(ebox, GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK | GDK_BUTTON_PRESS_MASK);
    g_signal_connect(G_OBJECT(ebox), "button_press_event", G_CALLBACK(help_cb), (gpointer)lwoh);
    g_signal_connect(G_OBJECT(ebox), "enter_notify_event", G_CALLBACK(help_cb), (gpointer)lwoh);
    g_signal_connect(G_OBJECT(ebox), "leave_notify_event", G_CALLBACK(help_cb), (gpointer)lwoh);
 
+   gtk_label_set_markup(GTK_LABEL(lwoh->linkLabel), lwoh->normalText);
+   gtk_container_add(GTK_CONTAINER(ebox), lwoh->linkLabel);
+
+   return lwoh;
+}
+
+LabelWithOnlineHelp* CloneLabelWithOnlineHelp(LabelWithOnlineHelp *orig, char *ascii_text)
+{  LabelWithOnlineHelp *lwoh;
+   GtkWidget *ebox  = gtk_event_box_new();
+ 
+   /*** Initialize online help context from given one */
+
+   lwoh = g_malloc0(sizeof(LabelWithOnlineHelp));
+   lwoh->helpWindow = orig->helpWindow;
+
+   /*** Only replace the labels */
+
+   lwoh->normalLabel = gtk_label_new(NULL);
+   lwoh->linkLabel   = gtk_label_new(NULL);
+   lwoh->linkBox     = ebox;
+   lwoh->windowTitle = g_strdup("ignore");
+   SetOnlineHelpLinkText(lwoh, ascii_text);
+
+   /*** Put link label into an event box */
+
+   gtk_widget_set_events(ebox, GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK | GDK_BUTTON_PRESS_MASK);
+   g_signal_connect(G_OBJECT(ebox), "button_press_event", G_CALLBACK(help_cb), (gpointer)lwoh);
+   g_signal_connect(G_OBJECT(ebox), "enter_notify_event", G_CALLBACK(help_cb), (gpointer)lwoh);
+   g_signal_connect(G_OBJECT(ebox), "leave_notify_event", G_CALLBACK(help_cb), (gpointer)lwoh);
+
+   gtk_label_set_markup(GTK_LABEL(lwoh->normalLabel), lwoh->normalText);
    gtk_label_set_markup(GTK_LABEL(lwoh->linkLabel), lwoh->normalText);
    gtk_container_add(GTK_CONTAINER(ebox), lwoh->linkLabel);
 
@@ -158,7 +184,6 @@ void SetOnlineHelpLinkText(LabelWithOnlineHelp *lwoh, char *ascii_text)
 void FreeLabelWithOnlineHelp(LabelWithOnlineHelp *lwoh)
 {
   g_free(lwoh->windowTitle);
-  g_free(lwoh->windowHeadline);
   g_free(lwoh->normalText);
   g_free(lwoh->highlitText);
   g_free(lwoh);
@@ -689,4 +714,3 @@ void AboutDialog()
 
    gtk_widget_show_all(about);
 }
-
