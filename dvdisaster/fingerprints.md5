@@ -1,4 +1,4 @@
-df163750bc8225c12660f63b0bbe4af9 *dvdisaster.h
+dc141cf2a58432b532dd7c06967be701 *dvdisaster.h
 8f0376b9d0f6963e11677a9c2e446cc6 *galois-inlines.h
 c27628ad149e3f8564b24a86642b54b6 *md5.h
 bcc539132868e8c92929302de62ef434 *rs01-includes.h
@@ -27,14 +27,14 @@ cd4ad1831e8f743a8d2328ffdda6f82d *menubar.c
 b8bf60bf225e79825b212d03c454c895 *method.c
 eecfd7e236c89cc36e1de2062754ac2e *method-link.c
 37bb377a5daf2492681772ce056904f2 *misc.c
-1fe41fa98d87eb974f42e9cd009035c3 *preferences.c
+4fb604dfb5e254bcc521d4436214b79a *preferences.c
 bfbda27200513f3d132b564d1c56723c *print-sense.c
 cdde449dd2a8f64b560ff18a36f86234 *random.c
 66112f5f30e65b6adc43a1ba12780131 *read-adaptive.c
 5a37967ccb84d6e7535cb78e5cb0f227 *read-adaptive-window.c
 a7b31cd642321d0886f0056b39d38904 *read-linear.c
 8f6dd00126b3e613c0a388390dcb549b *read-linear-window.c
-f7f5e9ef8d2adf12f27ef55637bd04fb *recover-raw.c
+772402d5366593adbf69a66cda4f0686 *recover-raw.c
 1edd34d022eaea0ceb3b438754cf0d67 *rs01-common.c
 e536474cb285a8cd9d2d17b5cc1dd880 *rs01-create.c
 f7d9f82d17c221ea5fb6de84588ce2ea *rs01-fix.c

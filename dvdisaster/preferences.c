@@ -67,7 +67,8 @@ typedef struct _prefs_context
    GtkWidget *byteEntryA, *byteEntryB;
    GtkWidget *byteCheckA, *byteCheckB;
    GtkWidget *spinUpA, *spinUpB;
-   GtkWidget *readAndCreateButton;
+   GtkWidget *readAndCreateButtonA, *readAndCreateButtonB;
+   GtkWidget *unlinkImageButtonA, *unlinkImageButtonB;
    GtkWidget *mainNotebook;
    GtkWidget *methodChooser;
    GtkWidget *methodNotebook;
@@ -225,6 +226,8 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
    switch(action)
    {  case TOGGLE_READ_CREATE:
 	Closure->readAndCreate = state;
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->readAndCreateButtonA), state);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->readAndCreateButtonB), state);
 	if(state && Closure->adaptiveRead)  /* set reading strategy to linear */
 	{  prefs_context *pc = Closure->prefsContext;
 
@@ -243,6 +246,8 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 
       case TOGGLE_UNLINK:
 	Closure->unlinkImage = state;
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->unlinkImageButtonA), state);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->unlinkImageButtonB), state);
 	break;
 
       case TOGGLE_SUFFIX:
@@ -537,7 +542,8 @@ static void strategy_cb(GtkWidget *widget, gpointer data)
 	 if(Closure->readAndCreate)
 	 {  Closure->readAndCreate = FALSE;
 
-	    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->readAndCreateButton), FALSE);
+	    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->readAndCreateButtonA), FALSE);
+	    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->readAndCreateButtonB), FALSE);
 	    ShowMessage(Closure->prefsWindow,
 			_("Disabled automatic error correction file generation."), 
 			GTK_MESSAGE_INFO);
@@ -879,18 +885,62 @@ void CreatePreferencesWindow(void)
 
       /* automatic creation */
 
-      button = gtk_check_button_new_with_label(_utf("Create error correction file after reading image"));
-      pc->readAndCreateButton = button;
-      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->readAndCreate);
-      g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_READ_CREATE));
-      gtk_box_pack_start(GTK_BOX(vbox2), button, FALSE, FALSE, 0);
+      lwoh = CreateLabelWithOnlineHelp(_("Automatic .ecc file creation"), _("Create error correction file after reading image"));
+      g_ptr_array_add(pc->helpPages, lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
+	 GtkWidget *button = gtk_check_button_new();
+
+	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
+      	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
+	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->readAndCreate);
+	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_READ_CREATE));
+
+	 if(!i)
+	 {  pc->readAndCreateButtonA = button;
+	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	 }
+	 else
+	 {  pc->readAndCreateButtonB = button;
+	    AddHelpWidget(lwoh, hbox);
+	 }
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Automatic error correction file creation</b>\n\n"
+			 "Automatically creates an error correction file after reading in an image.\n"
+			 "Together with the \"Remove image\" option this will speed up error correction\n"
+			 "file generation for a series of different media."));
 
       /* automatic deletion */
 
-      button = gtk_check_button_new_with_label(_utf("Remove image after error correction file creation"));
-      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->unlinkImage);
-      g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_UNLINK));
-      gtk_box_pack_start(GTK_BOX(vbox2), button, FALSE, FALSE, 0);
+      lwoh = CreateLabelWithOnlineHelp(_("Automatic image file removal"), _("Remove image after error correction file creation"));
+      g_ptr_array_add(pc->helpPages, lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
+	 GtkWidget *button = gtk_check_button_new();
+
+	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
+      	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
+	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->unlinkImage);
+	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_UNLINK));
+
+	 if(!i)
+	 {  pc->unlinkImageButtonA = button;
+	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	 }
+	 else
+	 {  pc->unlinkImageButtonB = button;
+	    AddHelpWidget(lwoh, hbox);
+	 }
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Automatic image file removal</b>\n\n"
+			 "If this switch is set the image file will be deleted following the successful\n"
+			 "generation of the respective error correction file."));
 
       /*** Read & Scan page */
 

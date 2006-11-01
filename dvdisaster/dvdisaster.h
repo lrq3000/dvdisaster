@@ -862,6 +862,8 @@ typedef struct _RawBuffer
    unsigned char *qParity1[N_Q_VECTORS];
    unsigned char *qParity2[N_Q_VECTORS];
    int qParityN[N_Q_VECTORS][2];
+
+   int *pLoad,*qLoad;
    
    int lba;                   /* sector number were currently working on */
 } RawBuffer;

@@ -1,9 +1,14 @@
 Warning: CD/DVD reading is currently being reworked. DO NOT USE for production work;
 	 images might contain wrong data.
 
-0.72 (devel-6) 29-10-2006
-	- completed migration of "Read and Scan" documentation from HTML docs into
+0.73 (devel-7) 01-11-2006
+	- renamed Level2_L_EC; "unrolled" store_[p|q]_conditional
+	- completed migration of "General" preferences documentation from HTML docs into
 	  preferences GUI
+
+0.72 (devel-6) 29-10-2006
+	- completed migration of "Read and Scan" preferences documentation from 
+	  HTML docs into preferences GUI
 	- re-inserted heuristical L-EC from Andrei Grecu
 
 0.72 (devel-5) 22-10-2006

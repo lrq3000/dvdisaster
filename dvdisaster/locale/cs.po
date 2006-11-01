@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-29 16:01+0100\n"
+"POT-Creation-Date: 2006-11-01 19:46+0100\n"
 "PO-Revision-Date: 2006-03-16 20:40+0100\n"
 "Last-Translator: Luboš Staněk <lubek@users.sourceforge.net>\n"
 "Language-Team: čeština <cs@li.org>\n"
@@ -927,47 +927,47 @@ msgstr ""
 "* dvdisaster - nemůže pokračovat:\n"
 "*\n"
 
-#: preferences.c:238
+#: preferences.c:241
 msgid "Switched to the linear reading strategy."
 msgstr "Přepnuto na strategii lineárního čtení."
 
-#: preferences.c:542
+#: preferences.c:548
 msgid "Disabled automatic error correction file generation."
 msgstr "Zakázána automatická tvorba souboru oprav chyb."
 
-#: preferences.c:697
+#: preferences.c:703
 msgid "Preferences"
 msgstr "Nastavení"
 
-#: preferences.c:727
+#: preferences.c:733
 msgid "General"
 msgstr "Obecné"
 
-#: preferences.c:731
+#: preferences.c:737
 msgid "Medium and image filesystem"
 msgstr "Souborové systémy média a obrazu"
 
-#: preferences.c:738
+#: preferences.c:744
 msgid "Image size determination"
 msgstr ""
 
-#: preferences.c:738
+#: preferences.c:744
 msgid "Get Image size from: "
 msgstr ""
 
-#: preferences.c:750
+#: preferences.c:756
 msgid "Drive"
 msgstr ""
 
-#: preferences.c:756
+#: preferences.c:762
 msgid "ISO/UDF"
 msgstr ""
 
-#: preferences.c:762
+#: preferences.c:768
 msgid "ECC/RS02"
 msgstr ""
 
-#: preferences.c:786
+#: preferences.c:792
 msgid ""
 "<b>Image size determination</b>\n"
 "\n"
@@ -988,19 +988,19 @@ msgid ""
 "is only present for backwards compatibility with older dvdisaster versions."
 msgstr ""
 
-#: preferences.c:804
+#: preferences.c:810
 msgid "Local files (on hard disc)"
 msgstr "Lokální soubory (na pevném disku)"
 
-#: preferences.c:811
+#: preferences.c:817
 msgid "Automatic file suffixes"
 msgstr ""
 
-#: preferences.c:811
+#: preferences.c:817
 msgid "Automatically add .iso and .ecc file suffixes"
 msgstr "Automaticky přidat souborové přípony .iso a .ecc"
 
-#: preferences.c:835
+#: preferences.c:841
 msgid ""
 "<b>Automatically add file suffixes</b>\n"
 "\n"
@@ -1008,15 +1008,15 @@ msgid ""
 "or \".ecc\" suffixes if no other file name extension is already present."
 msgstr ""
 
-#: preferences.c:841
+#: preferences.c:847
 msgid "File splitting"
 msgstr ""
 
-#: preferences.c:841
+#: preferences.c:847
 msgid "Split files into segments &lt;= 2GB"
 msgstr ""
 
-#: preferences.c:864
+#: preferences.c:870
 msgid ""
 "<b>File splitting</b>\n"
 "\n"
@@ -1026,43 +1026,68 @@ msgid ""
 "performance hit."
 msgstr ""
 
-#: preferences.c:873
+#: preferences.c:879
 msgid "Automatic file creation and deletion"
 msgstr "Automatická tvorba a mazání souborů"
 
-#: preferences.c:882
+#: preferences.c:888
+msgid "Automatic .ecc file creation"
+msgstr ""
+
+#: preferences.c:888
 msgid "Create error correction file after reading image"
 msgstr "Vytvořit soubor oprav chyb po načtení obrazu"
 
-#: preferences.c:890
+#: preferences.c:911
+msgid ""
+"<b>Automatic error correction file creation</b>\n"
+"\n"
+"Automatically creates an error correction file after reading in an image.\n"
+"Together with the \"Remove image\" option this will speed up error correction\n"
+"file generation for a series of different media."
+msgstr ""
+
+#: preferences.c:918
+msgid "Automatic image file removal"
+msgstr ""
+
+#: preferences.c:918
 msgid "Remove image after error correction file creation"
 msgstr "Odstranit obraz po vytvoření souboru oprav chyb"
 
-#: preferences.c:897
+#: preferences.c:941
+msgid ""
+"<b>Automatic image file removal</b>\n"
+"\n"
+"If this switch is set the image file will be deleted following the successful\n"
+"generation of the respective error correction file."
+msgstr ""
+
+#: preferences.c:947
 msgid "Read & Scan"
 msgstr "Čtení a skenování"
 
-#: preferences.c:901
+#: preferences.c:951
 msgid "Reading preferences"
 msgstr "Nastavení čtení"
 
-#: preferences.c:910
+#: preferences.c:960
 msgid "Reading strategy"
 msgstr ""
 
-#: preferences.c:910
+#: preferences.c:960
 msgid "Reading strategy: "
 msgstr "Strategie čtení: "
 
-#: preferences.c:924
+#: preferences.c:974
 msgid "Linear"
 msgstr "Lineární"
 
-#: preferences.c:932
+#: preferences.c:982
 msgid "Adaptive (for defective media)"
 msgstr "Adaptivní (pro vadná média)"
 
-#: preferences.c:944
+#: preferences.c:994
 msgid ""
 "<b>Reading strategy</b>\n"
 "The linear strategy is optimized for undamaged media\n"
@@ -1070,19 +1095,19 @@ msgid ""
 "for media already containing read errors."
 msgstr ""
 
-#: preferences.c:951
+#: preferences.c:1001
 msgid "Reading range"
 msgstr ""
 
-#: preferences.c:951
+#: preferences.c:1001
 msgid "Read/Scan from sector"
 msgstr "Číst/Skenovat od sektoru"
 
-#: preferences.c:976
+#: preferences.c:1026
 msgid "to sector"
 msgstr "po sektor"
 
-#: preferences.c:994
+#: preferences.c:1044
 msgid ""
 "<b>Reading range</b>\n"
 "\n"
@@ -1095,19 +1120,19 @@ msgid ""
 "These settings are only effective for the current session and will not be saved."
 msgstr ""
 
-#: preferences.c:1004
+#: preferences.c:1054
 msgid "Read error treatment"
 msgstr ""
 
-#: preferences.c:1013
+#: preferences.c:1063
 msgid "Raw reading"
 msgstr ""
 
-#: preferences.c:1013
+#: preferences.c:1063
 msgid "Read and analyze raw sectors"
 msgstr ""
 
-#: preferences.c:1034
+#: preferences.c:1084
 msgid ""
 "<b>Raw reading</b>\n"
 "\n"
@@ -1119,16 +1144,16 @@ msgid ""
 "raw data are checked to make sure that the sector was correctly read."
 msgstr ""
 
-#: preferences.c:1044
+#: preferences.c:1094
 msgid "Number of reading attempts"
 msgstr ""
 
-#: preferences.c:1050 preferences.c:1051
+#: preferences.c:1100 preferences.c:1101
 #, c-format
 msgid "Perform upto %d reading attempts per sector"
 msgstr ""
 
-#: preferences.c:1072
+#: preferences.c:1122
 msgid ""
 "<b>Reading attempts</b>\n"
 "\n"
@@ -1137,21 +1162,21 @@ msgid ""
 "mechanical wear on the drive."
 msgstr ""
 
-#: preferences.c:1080
+#: preferences.c:1130
 msgid "Treatment of unreadable areas"
 msgstr ""
 
-#: preferences.c:1084
+#: preferences.c:1134
 #, c-format
 msgid "Skip %d sectors after read error"
 msgstr "Přeskočit %d sektorů po chybě čtení"
 
-#: preferences.c:1085
+#: preferences.c:1135
 #, c-format
 msgid "Stop reading when unreadable intervals &lt; %d"
 msgstr ""
 
-#: preferences.c:1111
+#: preferences.c:1161
 msgid ""
 "<b>Treatment of unreadable areas</b>\n"
 "\n"
@@ -1160,7 +1185,7 @@ msgid ""
 "mechanical wear on the drive, but leaves larger gaps in the image file.\n"
 msgstr ""
 
-#: preferences.c:1117
+#: preferences.c:1167
 msgid ""
 "Effects on the <b>linear reading strategy</b>:\n"
 "- Skipping a large number of sectors (e.g. 1024) gives a quick overview of\n"
@@ -1169,7 +1194,7 @@ msgid ""
 "considerably shortened, but still enough data for repairing the image is collected.\n"
 msgstr ""
 
-#: preferences.c:1124
+#: preferences.c:1174
 msgid ""
 "The <b>adaptive reading strategy</b> uses this setting only if no error correction data\n"
 "is available. In that case the reading process will stop when no unread areas\n"
@@ -1182,19 +1207,19 @@ msgid ""
 "reasons. Therefore selecting a value less than 16 is not recommended for DVD."
 msgstr ""
 
-#: preferences.c:1137
+#: preferences.c:1187
 msgid "Image properties"
 msgstr "Vlastnosti obrazu"
 
-#: preferences.c:1146
+#: preferences.c:1196
 msgid "DAO mode"
 msgstr ""
 
-#: preferences.c:1146
+#: preferences.c:1196
 msgid "Assume image to be written in DAO mode (don't truncate)"
 msgstr "Předpokládat, že obraz má být zapsán v režimu DAO (nezkracovat)"
 
-#: preferences.c:1166
+#: preferences.c:1216
 msgid ""
 "<b>Assume DAO mode</b>\n"
 "\n"
@@ -1211,15 +1236,15 @@ msgid ""
 "session media."
 msgstr ""
 
-#: preferences.c:1179
+#: preferences.c:1229
 msgid "Filling of unreadable sectors"
 msgstr ""
 
-#: preferences.c:1180
+#: preferences.c:1230
 msgid "Fill unreadable sectors with byte:"
 msgstr "Vyplnit nečitelné sektory bajtem:"
 
-#: preferences.c:1219
+#: preferences.c:1269
 msgid ""
 "<b>Filling of unreadable sectors</b>\n"
 "\n"
@@ -1230,32 +1255,32 @@ msgid ""
 "you can specify the byte value they are using:\n"
 msgstr ""
 
-#: preferences.c:1228
+#: preferences.c:1278
 msgid ""
 "- 0xb0 (176 decimal): for compatibility with h2cdimage published by \"c't\",\n"
 "a German periodical.\n"
 msgstr ""
 
-#: preferences.c:1232
+#: preferences.c:1282
 msgid ""
 "<b>Note:</b> Using zero filling (0x00, decimal 0) is highly discouraged.\n"
 "Most media contain regular zero filled sectors which can not be told apart\n"
 "from unreadable sectors if zero filling is used."
 msgstr ""
 
-#: preferences.c:1238 preferences.c:1241
+#: preferences.c:1288 preferences.c:1291
 msgid "Drive initialisation"
 msgstr "Inicializace mechaniky"
 
-#: preferences.c:1242
+#: preferences.c:1292
 msgid "Wait"
 msgstr "Čekat"
 
-#: preferences.c:1245
+#: preferences.c:1295
 msgid "seconds for drive to spin up"
 msgstr "sekund na roztočení mechaniky"
 
-#: preferences.c:1275
+#: preferences.c:1325
 msgid ""
 "<b>Drive initialisation</b>\n"
 "\n"
@@ -1263,11 +1288,11 @@ msgid ""
 "This avoids speed jumps at the beginning of the reading curve."
 msgstr ""
 
-#: preferences.c:1283
+#: preferences.c:1333
 msgid "Error correction"
 msgstr "Oprava chyb"
 
-#: preferences.c:1286
+#: preferences.c:1336
 msgid "Storage method:"
 msgstr ""
 

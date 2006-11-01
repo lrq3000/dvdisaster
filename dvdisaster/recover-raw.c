@@ -90,6 +90,10 @@ RawBuffer *CreateRawBuffer(int sample_length)
       rb->qParity2[i] = g_malloc(Closure->readAttempts);
    }
 
+
+   rb->pLoad = g_malloc0(Closure->readAttempts);
+   rb->qLoad = g_malloc0(Closure->readAttempts);
+
    return rb;
 }
 
@@ -111,6 +115,9 @@ void FreeRawBuffer(RawBuffer *rb)
    {  g_free(rb->qParity1[i]);
       g_free(rb->qParity2[i]);
    }
+
+   g_free(rb->pLoad);
+   g_free(rb->qLoad);
 
    FreeAlignedBuffer(rb->workBuf);
    g_free(rb->zeroSector);
@@ -462,7 +469,7 @@ static int q_decode(RawBuffer *rb, unsigned char *vector, unsigned char *state)
 
 //#define DEBUG_ITERATIVE
 
-int iterative_recovery(RawBuffer *rb)
+int iterative_lec(RawBuffer *rb)
 {  unsigned char p_vector[P_VECTOR_SIZE];
    unsigned char q_vector[Q_VECTOR_SIZE];
    int p_failures, q_failures;
@@ -555,92 +562,83 @@ int iterative_recovery(RawBuffer *rb)
  *** Andrei Grecu, 2006
  */
 
-typedef struct _QCandidate
+static int eval_q_candidate(RawBuffer *rb, unsigned char *q_vector, int q, 
+			    int *p_failures_out, int *p_errors_out)
 {
-   unsigned char q_vector[45];
-   int p_failures;
-   int p_errors;
-} QCandidate;
-
-typedef struct _PCandidate
-{
-   unsigned char p_vector[26];
-   int q_failures;
-   int q_errors;
-} PCandidate;
-
-static int StoreQConditional(RawBuffer *rb, unsigned char *q_vector, int q, QCandidate *q_candidates, int *numQCandidates)
-{
-   unsigned char  p_vector[26];
-   unsigned char sq_vector[45];
-   int erasures[45];
+   unsigned char     p_vector[P_VECTOR_SIZE];
+   unsigned char old_q_vector[Q_VECTOR_SIZE];
+   int erasures[Q_VECTOR_SIZE];
    int p, p_errors = 0;
+   int p_failures = 0;
+   int err;
    
-   GetQVector(rb->recovered, sq_vector, q);
-   SetQVector(rb->recovered,  q_vector, q);
+   GetQVector(rb->recovered, old_q_vector, q);
+   SetQVector(rb->recovered,     q_vector, q);
    
    /* Count P failures after setting our Q vector. */
-   int p_failures = 0;
-   for(p = 0; p < 86; p++)
+
+   for(p = 0; p < N_P_VECTORS; p++)
    {
       GetPVector(rb->recovered, p_vector, p);
-      int err = DecodePQ(rb->rt, p_vector, P_PADDING, erasures, 0);
-      	  if(err <  0) p_failures++;
+      err = DecodePQ(rb->rt, p_vector, P_PADDING, erasures, 0);
+      if(err <  0) p_failures++;
       else if(err == 1) p_errors++;
    }            
 
-   SetQVector(rb->recovered, sq_vector, q);
+   SetQVector(rb->recovered, old_q_vector, q);
 
-   memcpy(q_candidates[*numQCandidates].q_vector, q_vector, 45);
-   q_candidates[*numQCandidates].p_failures = p_failures;
-   q_candidates[*numQCandidates].p_errors   = p_errors;
-   (*numQCandidates)++;
+   *p_failures_out = p_failures;
+   *p_errors_out   = p_errors;
+
    return TRUE;
 }
 
-static int StorePConditional(RawBuffer *rb, unsigned char *p_vector, int p, PCandidate *p_candidates, int *numPCandidates)
+static void eval_p_candidate(RawBuffer *rb, unsigned char *p_vector, int p, 
+			    int *q_failures_out, int *q_errors_out)
 {
-   unsigned char  q_vector[45];
-   unsigned char sp_vector[26];
-   int erasures[26];
+   unsigned char     q_vector[Q_VECTOR_SIZE];
+   unsigned char old_p_vector[P_VECTOR_SIZE];
+   int erasures[P_VECTOR_SIZE];
    int q, q_errors = 0;
+   int q_failures = 0;
+   int err;
    
-   GetPVector(rb->recovered, sp_vector, p);
-   SetPVector(rb->recovered,  p_vector, p);
+   GetPVector(rb->recovered, old_p_vector, p);
+   SetPVector(rb->recovered,     p_vector, p);
    
    /* Count Q failures after setting our P vector. */
-   int q_failures = 0;
-   for(q = 0; q < 52; q++)
+
+   for(q = 0; q < N_Q_VECTORS; q++)
    {
       GetQVector(rb->recovered, q_vector, q);
-      int err = DecodePQ(rb->rt, q_vector, Q_PADDING, erasures, 0);
-      	  if(err <  0) q_failures++;
+      err = DecodePQ(rb->rt, q_vector, Q_PADDING, erasures, 0);
+      if(err <  0) q_failures++;
       else if(err == 1) q_errors++;
    }            
 
-   SetPVector(rb->recovered, sp_vector, p);
+   SetPVector(rb->recovered, old_p_vector, p);
 
-   memcpy(p_candidates[*numPCandidates].p_vector, p_vector, 26);
-   p_candidates[*numPCandidates].q_failures = q_failures;
-   p_candidates[*numPCandidates].q_errors   = q_errors;
-   (*numPCandidates)++;
-   return TRUE;
+   *q_failures_out = q_failures;
+   *q_errors_out = q_errors;
 }
+
 
 /*
  * An enhanced L-EC loop
  */   
 
-int Level2_L_EC(unsigned char *cd_frame, RawBuffer *rb, unsigned char *out)
+#define DEBUG_HEURISTIC_LEC
+
+static int heuristic_lec(unsigned char *cd_frame, RawBuffer *rb, unsigned char *out)
 {
-   unsigned char p_vector[26];
-   unsigned char q_vector[45];
-   unsigned char p_state[26];
-   unsigned char q_state[45];
-   int erasures[45], decimated_erasures[2], erasure_count;
+   unsigned char p_vector[P_VECTOR_SIZE];
+   unsigned char q_vector[Q_VECTOR_SIZE];
+   unsigned char p_state[P_VECTOR_SIZE];
+   unsigned char q_state[Q_VECTOR_SIZE];
+   int erasures[Q_VECTOR_SIZE], decimated_erasures[2], erasure_count;
    int p_failures, q_failures;
    int p_corrected, q_corrected;
-   int p,q;
+   int i,p,q;
    int iteration=1;
    int p_err, q_err;
    int p_decimated, q_decimated;
@@ -648,58 +646,56 @@ int Level2_L_EC(unsigned char *cd_frame, RawBuffer *rb, unsigned char *out)
    int last_q_err = N_Q_VECTORS;
    int last_p_failures = N_P_VECTORS;
    int last_q_failures = N_Q_VECTORS;
-   
-   QCandidate q_candidates[45 * 44];
-   PCandidate p_candidates[45 * 44];
-   int numQCandidates;
-   int numPCandidates;
-
-   memset(rb->byteState, FRAME_BYTE_UNKNOWN, 2352);
-   
-   /* Count initial P failures */
    int max_p_failures = 0;
    int max_p_errors = 0;
-   for(p = 0; p < 86; p++)
+   int max_q_failures = 0;
+   int max_q_errors = 0;
+   int err;
+
+   memset(rb->byteState, FRAME_BYTE_UNKNOWN, rb->sampleLength);
+   
+   /* Count initial P failures */
+
+   for(p = 0; p < N_P_VECTORS; p++)
    {
       GetPVector(rb->recovered, p_vector, p);
-      int err = DecodePQ(rb->rt, p_vector, P_PADDING, erasures, 0);
+      err = DecodePQ(rb->rt, p_vector, P_PADDING, erasures, 0);
       if(err < 0) max_p_failures++;
       if(err == 1) max_p_errors++;
    }
 
    /* Count initial Q failures */
-   int max_q_failures = 0;
-   int max_q_errors = 0;
-   for(q = 0; q < 52; q++)
+
+   for(q = 0; q < N_Q_VECTORS; q++)
    {
       GetQVector(rb->recovered, q_vector, q);
-      int err = DecodePQ(rb->rt, q_vector, Q_PADDING, erasures, 0);
+      err = DecodePQ(rb->rt, q_vector, Q_PADDING, erasures, 0);
       if(err < 0) max_q_failures++;
       if(err == 1) max_q_errors++;
    }   
    
+#ifdef DEBUG_HEURISTIC_LEC
    Verbose("      P-failures/corrected/errors + decimated: %2d/%2d/ 0 + 0\n", max_p_failures, max_p_errors);
    Verbose("      Q-failures/corrected/errors + decimated: %2d/%2d/ 0 + 0\n", max_q_failures, max_q_errors);
+#endif
 
    for(; ;) /* iterate over P- and Q-Parity until failures converge */
    {   
-      p_failures = q_failures = 0;
+      p_failures  = q_failures = 0;
       p_corrected = q_corrected = 0;
       p_err = q_err = 0;
       p_decimated = q_decimated = 0;
 
       /* Perform P-Parity error correction */
 
-      for(p=0; p<86; p++)
+      for(p=0; p<N_P_VECTORS; p++)
       {  
-         int err = 0,i;
-
          /* Determine number of erasures */
 
          GetPVector(rb->byteState, p_state, p);
          erasure_count = 0;
 
-         for(i=0; i<26-2; i++)
+         for(i=0; i<P_VECTOR_SIZE; i++)
             if(p_state[i] == FRAME_BYTE_ERROR) erasures[erasure_count++] = i;
 
          /* First try to see whether P is correctable without erasure markings. */
@@ -715,15 +711,20 @@ int Level2_L_EC(unsigned char *cd_frame, RawBuffer *rb, unsigned char *out)
             p_err += err;
          }
             
-         /* If there are more than 2 erasures we have have to decimate them to 2. */
-         /* The case for 2 erasure is also included here. */
+         /* Erasure markings are overly pessimistic as each failing vector will mark
+	    a full row as an erasure. We assume that there are only 2 real erasures
+	    and try all combinations.
+	    The case for 2 erasure is also included here. */
 
          if(err < 0 && erasure_count > 1) 
-         {
+	 {  unsigned char best_p[P_VECTOR_SIZE];
+	    int best_q_failures = N_Q_VECTORS;
+	    int best_q_errors = N_Q_VECTORS;
+ 	    int candidate = FALSE;
+	    int a, b;
+
             /* Try error correction with decimated erasures */
-            numPCandidates = 0;
             
-            int a, b;
             for(a = 0; a < erasure_count - 1; a++)
             {
                for(b = a + 1; b < erasure_count; b++)
@@ -733,27 +734,24 @@ int Level2_L_EC(unsigned char *cd_frame, RawBuffer *rb, unsigned char *out)
                   GetPVector(rb->recovered, p_vector, p);
                   err = DecodePQ(rb->rt, p_vector, P_PADDING, decimated_erasures, 2);
                   if(err == 2) 
-                  { 
-                     StorePConditional(rb, p_vector, p, p_candidates, &numPCandidates);
-                  }
+		  {  int q_err, q_fail;
+
+		     candidate = TRUE;
+		     eval_p_candidate(rb, p_vector, p, &q_fail, &q_err);
+
+		     if(q_fail <= best_q_failures && q_err <= best_q_errors)
+		     {  best_q_failures = q_fail;
+		        best_q_errors   = q_err;
+			memcpy(best_p, p_vector, P_VECTOR_SIZE); 
+		     }
+		  }
                }
             }
-            if(numPCandidates == 0) err = -1; /* If P failed */
+
+            if(!candidate) err = -1; /* If P failed */
             else
-            {
-               int bestIndex = -1, bestQ_failures = 52, bestQ_errors = 52;
-               
-               for(i = 0; i < numPCandidates; i++)
-               {
-                  if(p_candidates[i].q_failures <= bestQ_failures && p_candidates[i].q_errors <= bestQ_errors)
-                  {
-                     bestQ_failures = p_candidates[i].q_failures;
-                     bestQ_errors = p_candidates[i].q_errors;
-                     bestIndex = i;
-                  }
-               }
-               FillPVector(rb->byteState, FRAME_BYTE_GOOD, p);
-               SetPVector(rb->recovered, p_candidates[bestIndex].p_vector, p);
+            {  FillPVector(rb->byteState, FRAME_BYTE_GOOD, p);
+               SetPVector(rb->recovered, best_p, p);
                
                err = 0;
                p_err += 2;
@@ -770,20 +768,18 @@ int Level2_L_EC(unsigned char *cd_frame, RawBuffer *rb, unsigned char *out)
          }
       }
 
-//      if(check_edc(rb->recovered)) break;
+      if(check_edc(rb->recovered)) break;
 
       /* Perform Q-Parity error correction */
 
-      for(q=0; q<52; q++)
+      for(q=0; q<N_Q_VECTORS; q++)
       {  
-         int i,err = 0;
-
          /* Determine number of erasures */
 
          GetQVector(rb->byteState, q_state, q);
          erasure_count = 0;
 
-         for(i=0; i<45-2; i++)
+         for(i=0; i<Q_VECTOR_SIZE-2; i++)
             if(q_state[i] == FRAME_BYTE_ERROR) erasures[erasure_count++] = i;
 
          /* First try to see whether Q is correctable without erasure markings. */
@@ -803,11 +799,14 @@ int Level2_L_EC(unsigned char *cd_frame, RawBuffer *rb, unsigned char *out)
          /* The case for 2 erasure is also included here. */
 
          if(err < 0 && erasure_count > 1) 
-         {
+	 {  unsigned char best_q[Q_VECTOR_SIZE];
+	    int best_p_failures = N_P_VECTORS;
+	    int best_p_errors = N_P_VECTORS;
+	    int candidate = FALSE;
+	    int a, b;      
+
             /* Try error correction with decimated erasures */
-            numQCandidates = 0;
             
-            int a, b;      
             for(a = 0; a < erasure_count - 1; a++)
             {
                for(b = a + 1; b < erasure_count; b++)
@@ -817,27 +816,24 @@ int Level2_L_EC(unsigned char *cd_frame, RawBuffer *rb, unsigned char *out)
                   GetQVector(rb->recovered, q_vector, q);
                   err = DecodePQ(rb->rt, q_vector, Q_PADDING, decimated_erasures, 2);
                   if(err == 2) 
-                  { 
-                     StoreQConditional(rb, q_vector, q, q_candidates, &numQCandidates);
+		  {  int p_err, p_fail;
+
+		     candidate = TRUE;
+                     eval_q_candidate(rb, q_vector, q, &p_fail, &p_err);
+
+		     if(p_fail <= best_p_failures && p_err <= best_p_errors)
+		     {  best_p_failures = p_fail;
+		        best_p_errors   = p_err;
+			memcpy(best_q, q_vector, Q_VECTOR_SIZE); 
+		     }
                   }
                }
             }
-            if(numQCandidates == 0) err = -1; /* If Q failed */
+
+            if(!candidate) err = -1; /* If Q failed */
             else
-            {
-               int bestIndex = -1, bestP_failures = 86, bestP_errors = 86;
-               
-               for(i = 0; i < numQCandidates; i++)
-               {
-                  if(q_candidates[i].p_failures <= bestP_failures && q_candidates[i].p_errors <= bestP_errors)
-                  {
-                     bestP_failures = q_candidates[i].p_failures;
-                     bestP_errors = q_candidates[i].p_errors;
-                     bestIndex = i;
-                  }
-               }
-               FillQVector(rb->byteState, FRAME_BYTE_GOOD, q);
-               SetQVector(rb->recovered, q_candidates[bestIndex].q_vector, q);
+            {  FillQVector(rb->byteState, FRAME_BYTE_GOOD, q);
+               SetQVector(rb->recovered, best_q, q);
                
                err = 0;
                q_err += 2;
@@ -856,18 +852,18 @@ int Level2_L_EC(unsigned char *cd_frame, RawBuffer *rb, unsigned char *out)
 
       /* See if there was an improvement */
 
+#ifdef DEBUG_HEURISTIC_LEC
       Verbose("L-EC: iteration %d\n", iteration); 
       Verbose("      P-failures/corrected/errors + decimated: %2d/%2d/%2d + %2d\n", p_failures, p_corrected, p_err, p_decimated);
       Verbose("      Q-failures/corrected/errors + decimated: %2d/%2d/%2d + %2d\n", q_failures, q_corrected, q_err, q_decimated);
-
-		if(p_failures + p_err + q_failures + q_err == 0) break;
-		if(last_p_err <= p_err && last_q_err <= q_err && last_p_failures <= p_failures && last_q_failures <= q_failures) break;
+#endif
+      
+      if(p_failures + p_err + q_failures + q_err == 0) break;
+      if(last_p_err <= p_err && last_q_err <= q_err && last_p_failures <= p_failures && last_q_failures <= q_failures) break;
 		
-      if(iteration > 15) break;
-      if(p_failures == 0)
-      {
-         if(check_edc(rb->recovered)) break;
-      }
+      if(iteration > N_P_VECTORS + N_Q_VECTORS) break;
+      
+      if(check_edc(rb->recovered)) break;
 
       last_p_err = p_err;
       last_q_err = q_err;
@@ -1011,7 +1007,7 @@ static int check_p_plausibility(RawBuffer *rb, unsigned char *target_p_vector,
 }
 
 static int find_better_p(RawBuffer *rb, int p, int refError)
-{  unsigned char p_vector[26];
+{  unsigned char p_vector[P_VECTOR_SIZE];
    int np1, np2;
    int dummy[2];
    int err;
@@ -1039,7 +1035,7 @@ static int find_better_p(RawBuffer *rb, int p, int refError)
 }
 
 static int find_better_q(RawBuffer *rb, int q, int refError)
-{  unsigned char q_vector[45];
+{  unsigned char q_vector[Q_VECTOR_SIZE];
    int nq1, nq2;
    int dummy[2];
    int err;
@@ -1067,52 +1063,29 @@ static int find_better_q(RawBuffer *rb, int q, int refError)
 }
 
 static void initialize_frame(RawBuffer *rb)
-{  unsigned char q_vector[45];
-   unsigned char p_vector[26];
-   int q_load[rb->samplesRead];
-   int p_load[rb->samplesRead];  
-   int dummy[2];
+{  int best_sector = -1;
+   int max_load = 2 * (N_P_VECTORS + N_Q_VECTORS);
    int i;
-   int q, p;
 	
-   /* Estimate P and Q load on all samples. */
-   for(i = 0; i < rb->samplesRead; i++)
-   {
-      q_load[i] = 0;
-      for(q = 0; q < 52; q++)
-      {
-         GetQVector(rb->rawBuf[i], q_vector, q);
-         int err = DecodePQ(rb->rt, q_vector, Q_PADDING, dummy, 0);
-         if(err <  0) q_load[i] += 2;
-         if(err == 1) q_load[i]++; /* We assume without any erasures specified there can't be more than 1 errors corrected. */
-      }      
-      p_load[i] = 0;
-      for(p = 0; p < 86; p++)
-      {
-         GetPVector(rb->rawBuf[i], p_vector, p);
-         int err = DecodePQ(rb->rt, p_vector, P_PADDING, dummy, 0);
-         if(err <  0) p_load[i] += 2;
-         if(err == 1) p_load[i]++; /* We assume without any erasures specified there can't be more than 1 errors corrected. */
-      }      
-   }   
-
    /* Initialize sector header. */
 
    initialize_cd_frame(rb->recovered, rb->lba);
 
    /* Search for block with least P and Q load and load into the frame. */
-   int bestBlock = -1, max_load = 2 * (86 + 52);
+
    for(i = 0; i < rb->samplesRead; i++) 
    {
-     if(q_load[i] + p_load[i] < max_load)
+     if(rb->qLoad[i] + rb->pLoad[i] < max_load)
      {
-       max_load = q_load[i] + p_load[i];
-       bestBlock = i;
+       max_load = rb->pLoad[i] + rb->qLoad[i];
+       best_sector = i;
      }
    }
    
-   memcpy(&(rb->recovered[16]), &(rb->rawBuf[bestBlock][16]), rb->sampleLength - 16);
+   memcpy(&(rb->recovered[16]), &(rb->rawBuf[best_sector][16]), rb->sampleLength - 16);
 }
+
+#define DEBUG_SEARCH_PLAUSIBLE
 
 int search_plausible_sector(RawBuffer *rb)
 {
@@ -1133,7 +1106,7 @@ int search_plausible_sector(RawBuffer *rb)
    
    /* Initialize sector */     
 
-   initialize_frame(rb); /* TODO: can also be updated incrementally */
+   initialize_frame(rb);
 	
    for(; ;) /* iterate over P- and Q-Parity until failures converge */
    {   
@@ -1144,7 +1117,7 @@ int search_plausible_sector(RawBuffer *rb)
 
       /* Perform Q-Parity error correction */
 
-      for(q=0; q<52; q++)
+      for(q=0; q<N_Q_VECTORS; q++)
       {  
       	/* Check whether Q is correct. */
       	GetQVector(rb->recovered, q_vector, q);
@@ -1179,12 +1152,13 @@ int search_plausible_sector(RawBuffer *rb)
 	  /* If correction is not plausible or possible then try 2 error-decimation. */
 	  if(err < 0)
 	  {
-	    /* Try error correction with decimated erasures */
+	    /* Try error correction with decimated erasures.
+	       Note that no erasure information for the parity bytes is available */
 	    int a, b; 
 	    int solFound = FALSE;     
-	    for(a = 0; a < 45 - 2; a++)
+	    for(a = 0; a < Q_VECTOR_SIZE - 2; a++)
 	    {
-	      for(b = a + 1; b < 44 - 2; b++)
+	      for(b = a + 1; b < Q_VECTOR_SIZE - 2; b++)
 	      {
 		decimated_erasures[0] = a;
 		decimated_erasures[1] = b;
@@ -1221,7 +1195,7 @@ int search_plausible_sector(RawBuffer *rb)
 
       /* Perform P-Parity error correction */
 
-      for(p=0; p<86; p++)
+      for(p=0; p<N_P_VECTORS; p++)
       {  
       	/* Check whether P is correct. */
       	GetPVector(rb->recovered, p_vector, p);
@@ -1259,9 +1233,9 @@ int search_plausible_sector(RawBuffer *rb)
 	    /* Try error correction with decimated erasures */
 	    int a, b; 
 	    int solFound = FALSE;     
-	    for(a = 0; a < 26 - 2; a++)
+	    for(a = 0; a < P_VECTOR_SIZE; a++)
 	    {
-	      for(b = a + 1; b < 25 - 2; b++)
+	      for(b = a + 1; b < P_VECTOR_SIZE; b++)
 	      {
 		decimated_erasures[0] = a;
 		decimated_erasures[1] = b;
@@ -1298,14 +1272,16 @@ int search_plausible_sector(RawBuffer *rb)
 
       /* See if there was an improvement */
 
+#ifdef DEBUG_SEARCH_PLAUSIBLE
       Verbose("SPS L-EC: iteration %d\n", iteration); 
       Verbose("      Q-f/c/e + d: %2d/%2d/%2d + %2d\n", q_failures, q_corrected, q_err, q_decimated);
       Verbose("      P-f/c/e + d: %2d/%2d/%2d + %2d\n", p_failures, p_corrected, p_err, p_decimated);
+#endif
       
       if(p_failures + p_err + q_failures + q_err == 0) break;
       if(last_p_err <= p_err && last_q_err <= q_err && last_p_failures <= p_failures && last_q_failures <= q_failures) break;
       
-      if(iteration > 15) break;
+      if(iteration > N_P_VECTORS + N_Q_VECTORS) break;
       if(p_failures == 0)
       {
          if(check_edc(rb->recovered)) break;
@@ -1324,6 +1300,36 @@ int search_plausible_sector(RawBuffer *rb)
 /***
  *** Auxiliary functions for collecting some stuff incrementally
  ***/
+
+/*
+ * Determine work load of P/Q vectors in the given frame
+ */
+
+static void calculate_pq_load(RawBuffer *rb)
+{  unsigned char q_vector[N_Q_VECTORS];
+   unsigned char p_vector[N_P_VECTORS];
+   int frame_idx = rb->samplesRead - 1;
+   unsigned char *new_frame = rb->rawBuf[frame_idx];
+   int ignore[2];
+   int q, p;
+   int err;
+	
+   for(q = 0; q < N_Q_VECTORS; q++)
+   {
+     GetQVector(new_frame, q_vector, q);
+     err = DecodePQ(rb->rt, q_vector, Q_PADDING, ignore, 0);
+     if(err <  0) rb->qLoad[frame_idx] += 2;
+     if(err == 1) rb->qLoad[frame_idx]++; /* We assume without any erasures specified there can't be more than 1 errors corrected. */
+   }      
+
+   for(p = 0; p < N_P_VECTORS; p++)
+   {
+     GetPVector(new_frame, p_vector, p);
+     err = DecodePQ(rb->rt, p_vector, P_PADDING, ignore, 0);
+     if(err <  0) rb->pLoad[frame_idx] += 2;
+     if(err == 1) rb->pLoad[frame_idx]++; /* We assume without any erasures specified there can't be more than 1 errors corrected. */
+   }      
+}   
 
 /*
  * Collect a list of all seen P/Q parity bytes.
@@ -1456,7 +1462,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
    memcpy(rb->recovered, new_frame, rb->sampleLength);
    memset(rb->byteState, 0, rb->sampleLength);
 
-   iterative_recovery(rb);
+   iterative_lec(rb);
 
    if(   check_edc(rb->recovered)
       && check_msf(rb->recovered, rb->lba))
@@ -1473,6 +1479,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
 
    /* Incremental update of our data */
 
+   calculate_pq_load(rb);
    update_pq_parity_list(rb, new_frame);
 
    /* The actual heuristics */
@@ -1487,7 +1494,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
       return 0; 
    }
 
-   Level2_L_EC(rb->recovered, rb, outbuf);
+   heuristic_lec(rb->recovered, rb, outbuf);
 
    if(check_edc(rb->recovered))
    {  PrintCLIorLabel(Closure->status, 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-29 16:01+0100\n"
+"POT-Creation-Date: 2006-11-01 19:59+0100\n"
 "PO-Revision-Date: 2004-11-30 19:48+0100\n"
 "Last-Translator: Carsten Gnörlich <carsten@dvdisaster.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -983,49 +983,49 @@ msgstr ""
 "* dvdisaster - kann Ausführung nicht fortsetzen:\n"
 "*\n"
 
-#: preferences.c:238
+#: preferences.c:241
 msgid "Switched to the linear reading strategy."
 msgstr "Lineares Leseverfahren wurde ausgewählt."
 
-#: preferences.c:542
+#: preferences.c:548
 msgid "Disabled automatic error correction file generation."
 msgstr ""
 "Automatisches Erzeugen der Fehlerkorrektur-Datei\n"
 "wurde abgeschaltet."
 
-#: preferences.c:697
+#: preferences.c:703
 msgid "Preferences"
 msgstr "Einstellungen"
 
-#: preferences.c:727
+#: preferences.c:733
 msgid "General"
 msgstr "Allgemein"
 
-#: preferences.c:731
+#: preferences.c:737
 msgid "Medium and image filesystem"
 msgstr "Dateisystem-Einstellungen für Datenträger und Abbilder"
 
-#: preferences.c:738
+#: preferences.c:744
 msgid "Image size determination"
 msgstr "Ermittlung der Abbild-Größe"
 
-#: preferences.c:738
+#: preferences.c:744
 msgid "Get Image size from: "
 msgstr "Abbild-Größe ermitteln durch:"
 
-#: preferences.c:750
+#: preferences.c:756
 msgid "Drive"
 msgstr "Laufwerk"
 
-#: preferences.c:756
+#: preferences.c:762
 msgid "ISO/UDF"
 msgstr "ISO/UDF"
 
-#: preferences.c:762
+#: preferences.c:768
 msgid "ECC/RS02"
 msgstr "ECC/RS02"
 
-#: preferences.c:786
+#: preferences.c:792
 msgid ""
 "<b>Image size determination</b>\n"
 "\n"
@@ -1063,19 +1063,19 @@ msgstr ""
 "Dieser Wert ist bei DVD-RW/+RW/-RAM typischerweise falsch. Diese Wahl-\n"
 "möglichkeit gibt es nur noch zur Kompatibilität mit älteren dvdisaster-Versionen."
 
-#: preferences.c:804
+#: preferences.c:810
 msgid "Local files (on hard disc)"
 msgstr "Lokale Dateien (auf Festplatte)"
 
-#: preferences.c:811
+#: preferences.c:817
 msgid "Automatic file suffixes"
 msgstr "Automatisches Anfügen von Dateiendungen"
 
-#: preferences.c:811
+#: preferences.c:817
 msgid "Automatically add .iso and .ecc file suffixes"
 msgstr "Automatisches Anfügen der .iso- und .ecc-Dateiendungen"
 
-#: preferences.c:835
+#: preferences.c:841
 msgid ""
 "<b>Automatically add file suffixes</b>\n"
 "\n"
@@ -1088,15 +1088,15 @@ msgstr ""
 "oder \".ecc\" versehen werden, sofern nicht bereits eine andere Endung\n"
 "angegeben wurde."
 
-#: preferences.c:841
+#: preferences.c:847
 msgid "File splitting"
 msgstr "Dateien aufteilen"
 
-#: preferences.c:841
+#: preferences.c:847
 msgid "Split files into segments &lt;= 2GB"
 msgstr "Dateien in Segmente von &lt;= 2GB aufteilen"
 
-#: preferences.c:864
+#: preferences.c:870
 msgid ""
 "<b>File splitting</b>\n"
 "\n"
@@ -1112,43 +1112,78 @@ msgstr ""
 "werden bis zu 100 Segmente \"abbild00.iso\", \"abbild01.iso\" usw. verwendet;\n"
 "dies kostet etwas Geschwindigkeit."
 
-#: preferences.c:873
+#: preferences.c:879
 msgid "Automatic file creation and deletion"
 msgstr "Automatisches Erzeugen und Löschen von Dateien"
 
-#: preferences.c:882
+#: preferences.c:888
+msgid "Automatic .ecc file creation"
+msgstr "Fehlerkorrektur-Datei automatisch erzeugen"
+
+#: preferences.c:888
 msgid "Create error correction file after reading image"
 msgstr "Fehlerkorrektur-Datei erzeugen, nachdem Abbild eingelesen wurde"
 
-#: preferences.c:890
+#: preferences.c:911
+msgid ""
+"<b>Automatic error correction file creation</b>\n"
+"\n"
+"Automatically creates an error correction file after reading in an image.\n"
+"Together with the \"Remove image\" option this will speed up error correction\n"
+"file generation for a series of different media."
+msgstr ""
+"<b>Fehlerkorrektur-Datei automatisch erzeugen</b>\n"
+"\n"
+"Nach dem erfolgreichen Einlesen eines Abbilds wird automatisch eine\n"
+"Fehlerkorrektur-Datei erzeugt. Zusammen mit der \"Abbild löschen\"-\n"
+"Funktion beschleunigt dies das Erstellen von Fehlerkorrektur-Dateien\n"
+"für mehrere Datenträger."
+
+#: preferences.c:918
+msgid "Automatic image file removal"
+msgstr "Abbild-Datei automatisch löschen"
+
+#: preferences.c:918
 msgid "Remove image after error correction file creation"
 msgstr "Abbild löschen, wenn Fehlerkorrekturdatei erfolgreich erstellt wurde"
 
-#: preferences.c:897
+#: preferences.c:941
+msgid ""
+"<b>Automatic image file removal</b>\n"
+"\n"
+"If this switch is set the image file will be deleted following the successful\n"
+"generation of the respective error correction file."
+msgstr ""
+"<b>Abbild-Datei automatisch löschen</b>\n"
+"\n"
+"Nach dem erfolgreichen Erstellen einer Fehlerkorrektur-Datei wird die\n"
+"zugehörige Abbild-Datei gelöscht, wenn dieser Schalter aktiviert ist."
+
+#: preferences.c:947
 msgid "Read & Scan"
 msgstr "Lesen & Prüfen"
 
-#: preferences.c:901
+#: preferences.c:951
 msgid "Reading preferences"
 msgstr "Einstellungen zum Lesen"
 
-#: preferences.c:910
+#: preferences.c:960
 msgid "Reading strategy"
 msgstr "Lese-Verfahren"
 
-#: preferences.c:910
+#: preferences.c:960
 msgid "Reading strategy: "
 msgstr "Lese-Verfahren: "
 
-#: preferences.c:924
+#: preferences.c:974
 msgid "Linear"
 msgstr "Linear"
 
-#: preferences.c:932
+#: preferences.c:982
 msgid "Adaptive (for defective media)"
 msgstr "Angepaßt (an beschädigte Datenträger)"
 
-#: preferences.c:944
+#: preferences.c:994
 msgid ""
 "<b>Reading strategy</b>\n"
 "The linear strategy is optimized for undamaged media\n"
@@ -1160,19 +1195,19 @@ msgstr ""
 "Das lineare Verfahren ist für unbeschädigte Datenträger vorgesehen;\n"
 "das angepaßte Verfahren eignet sich besser für Datenträger mit Lesefehlern."
 
-#: preferences.c:951
+#: preferences.c:1001
 msgid "Reading range"
 msgstr "Lese-Bereich"
 
-#: preferences.c:951
+#: preferences.c:1001
 msgid "Read/Scan from sector"
 msgstr "Lesen/Prüfen von Sektor"
 
-#: preferences.c:976
+#: preferences.c:1026
 msgid "to sector"
 msgstr "bis Sektor"
 
-#: preferences.c:994
+#: preferences.c:1044
 msgid ""
 "<b>Reading range</b>\n"
 "\n"
@@ -1195,19 +1230,19 @@ msgstr ""
 "\n"
 "Diese Einstellungen gelten nur für die aktuelle Sitzung und werden nicht gespeichert."
 
-#: preferences.c:1004
+#: preferences.c:1054
 msgid "Read error treatment"
 msgstr "Behandlung von Lesefehlern"
 
-#: preferences.c:1013
+#: preferences.c:1063
 msgid "Raw reading"
 msgstr "\"Raw\"-Lesen"
 
-#: preferences.c:1013
+#: preferences.c:1063
 msgid "Read and analyze raw sectors"
 msgstr "Sektoren \"raw\" lesen und untersuchen"
 
-#: preferences.c:1034
+#: preferences.c:1084
 msgid ""
 "<b>Raw reading</b>\n"
 "\n"
@@ -1227,16 +1262,16 @@ msgstr ""
 "Es rechnet die L-EC P/Q Vektoren, EDC-Prüfsummen sowie das MSF-Adreßfeld\n"
 "aus den Rohdaten nach um sicherzustellen daß der Sektor korrekt gelesen wurde."
 
-#: preferences.c:1044
+#: preferences.c:1094
 msgid "Number of reading attempts"
 msgstr "Leseversuche für einen Sektor"
 
-#: preferences.c:1050 preferences.c:1051
+#: preferences.c:1100 preferences.c:1101
 #, c-format
 msgid "Perform upto %d reading attempts per sector"
 msgstr "Bis zu %d Leseversuche für einen Sektor durchführen"
 
-#: preferences.c:1072
+#: preferences.c:1122
 msgid ""
 "<b>Reading attempts</b>\n"
 "\n"
@@ -1250,21 +1285,21 @@ msgstr ""
 "erhöhen, die sich an der Grenze zur Unlesbarkeit befinden. Es erhöht aber\n"
 "auch die Bearbeitungszeit und den Verschleiß des Laufwerks."
 
-#: preferences.c:1080
+#: preferences.c:1130
 msgid "Treatment of unreadable areas"
 msgstr "Behandlung von unlesbaren Bereichen"
 
-#: preferences.c:1084
+#: preferences.c:1134
 #, c-format
 msgid "Skip %d sectors after read error"
 msgstr "Überspringe %d Sektoren nach einem Lesefehler"
 
-#: preferences.c:1085
+#: preferences.c:1135
 #, c-format
 msgid "Stop reading when unreadable intervals &lt; %d"
 msgstr "Lesen beenden wenn unlesbare Bereiche &lt; %d"
 
-#: preferences.c:1111
+#: preferences.c:1161
 msgid ""
 "<b>Treatment of unreadable areas</b>\n"
 "\n"
@@ -1279,7 +1314,7 @@ msgstr ""
 "Lesefehler verringert die Bearbeitungszeit und die mechanische Beanspruchung\n"
 "des Laufwerkes, hinterläßt aber größere Lücken in der Abbild-Datei.\n"
 
-#: preferences.c:1117
+#: preferences.c:1167
 msgid ""
 "Effects on the <b>linear reading strategy</b>:\n"
 "- Skipping a large number of sectors (e.g. 1024) gives a quick overview of\n"
@@ -1294,7 +1329,7 @@ msgstr ""
 "- Kleinere Werte von 16, 32 oder 64 sind ein guter Kompromiß zwischen verringerter\n"
 "Bearbeitungszeit und Wiederherstellbarkeit des Datenträger-Abbildes.\n"
 
-#: preferences.c:1124
+#: preferences.c:1174
 msgid ""
 "The <b>adaptive reading strategy</b> uses this setting only if no error correction data\n"
 "is available. In that case the reading process will stop when no unread areas\n"
@@ -1317,19 +1352,19 @@ msgstr ""
 "Auf DVD-Datenträgern erstrecken sich Lesefehler aus technischen Gründen über \n"
 "mindestens 16 Sektoren. Daher sind Werte kleiner als 16 für DVD nicht sinnvoll."
 
-#: preferences.c:1137
+#: preferences.c:1187
 msgid "Image properties"
 msgstr "Abbild-Eigenschaften"
 
-#: preferences.c:1146
+#: preferences.c:1196
 msgid "DAO mode"
 msgstr "DAO-Abbild"
 
-#: preferences.c:1146
+#: preferences.c:1196
 msgid "Assume image to be written in DAO mode (don't truncate)"
 msgstr "Unterstelle DAO-Abbild (nicht am Ende kürzen)"
 
-#: preferences.c:1166
+#: preferences.c:1216
 msgid ""
 "<b>Assume DAO mode</b>\n"
 "\n"
@@ -1362,15 +1397,15 @@ msgstr ""
 "<b>Tip:</b> Brennen Sie CDs im Modus \"DAO / Disc at once\" (manchmal auch\n"
 "\"SAO / Session at once\" genannt), um diese Probleme zu vermeiden."
 
-#: preferences.c:1179
+#: preferences.c:1229
 msgid "Filling of unreadable sectors"
 msgstr "Auffüllen von unlesbaren Sektoren"
 
-#: preferences.c:1180
+#: preferences.c:1230
 msgid "Fill unreadable sectors with byte:"
 msgstr "Unlesbare Sektoren auffüllen mit Byte:"
 
-#: preferences.c:1219
+#: preferences.c:1269
 msgid ""
 "<b>Filling of unreadable sectors</b>\n"
 "\n"
@@ -1388,7 +1423,7 @@ msgstr ""
 "mit einem bestimmten Byte aufgefüllt sind. Um den Austausch von Abbildern mit\n"
 "diesen Programmen zu ermöglichen, müssen Sie das \"richtige\" Byte angeben:\n"
 
-#: preferences.c:1228
+#: preferences.c:1278
 msgid ""
 "- 0xb0 (176 decimal): for compatibility with h2cdimage published by \"c't\",\n"
 "a German periodical.\n"
@@ -1396,7 +1431,7 @@ msgstr ""
 "- 0xb0 (dezimal 176): bewirkt Kompatibilität mit dem Programm h2cdimage des\n"
 "c't-Magazins.\n"
 
-#: preferences.c:1232
+#: preferences.c:1282
 msgid ""
 "<b>Note:</b> Using zero filling (0x00, decimal 0) is highly discouraged.\n"
 "Most media contain regular zero filled sectors which can not be told apart\n"
@@ -1407,19 +1442,19 @@ msgstr ""
 "die mit Null aufgefüllt sind. Diese Sektoren können später nicht von unlesbaren\n"
 "Sektoren unterschieden werden, wenn Nullen zur Markierung verwendet werden."
 
-#: preferences.c:1238 preferences.c:1241
+#: preferences.c:1288 preferences.c:1291
 msgid "Drive initialisation"
 msgstr "Laufwerk vorbereiten"
 
-#: preferences.c:1242
+#: preferences.c:1292
 msgid "Wait"
 msgstr "Warte"
 
-#: preferences.c:1245
+#: preferences.c:1295
 msgid "seconds for drive to spin up"
 msgstr "Sekunden auf das Hochdrehen des Laufwerks"
 
-#: preferences.c:1275
+#: preferences.c:1325
 msgid ""
 "<b>Drive initialisation</b>\n"
 "\n"
@@ -1431,11 +1466,11 @@ msgstr ""
 "Gibt dem Laufwerk die angegebene Anzahl Sekunden Zeit zum Hochdrehen. Dadurch\n"
 "erscheinen keine abrupten Geschwindigkeitsänderungen am Anfang der Lesekurve."
 
-#: preferences.c:1283
+#: preferences.c:1333
 msgid "Error correction"
 msgstr "Fehlerkorrektur"
 
-#: preferences.c:1286
+#: preferences.c:1336
 msgid "Storage method:"
 msgstr "Abspeichern in:"
 
