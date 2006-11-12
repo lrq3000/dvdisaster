@@ -70,7 +70,9 @@ RawBuffer *CreateRawBuffer(int sample_length)
    rb->gt = CreateGaloisTables(0x11d);
    rb->rt = CreateReedSolomonTables(rb->gt, 0, 1, 10);
 
-   rb->workBuf   = CreateAlignedBuffer(2352*16);
+   rb->dataOffset = 16;  /* default for mode1 data sectors */
+
+   rb->workBuf   = CreateAlignedBuffer(2352*16);  /* max lba...lba+15 are read at once */
    rb->zeroSector= g_malloc0(2352);
    rb->rawBuf    = g_malloc(Closure->readAttempts * sizeof(unsigned char*));
    rb->recovered = g_malloc(sample_length);
@@ -223,19 +225,28 @@ static int check_for_sync_pattern(unsigned char *new_frame)
  * Returns TRUE if frame is good.
  */
 
-static int check_edc(unsigned char *cd_frame)
+static int check_edc(unsigned char *cd_frame, int xa_mode)
 { unsigned int expected_crc, real_crc;
 
    /* Get CRC from CD frame (byte position 2064) */
 
-   expected_crc =  cd_frame[0x810] << 24
-                 | cd_frame[0x811] << 16
-                 | cd_frame[0x812] <<  8
-                 | cd_frame[0x813];
+   if(xa_mode)
+   {  expected_crc =  cd_frame[2072] << 24
+                    | cd_frame[2073] << 16
+                    | cd_frame[2074] <<  8
+                    | cd_frame[2075];
+   }
+   else
+   {  expected_crc =  cd_frame[0x810] << 24
+                    | cd_frame[0x811] << 16
+                    | cd_frame[0x812] <<  8
+                    | cd_frame[0x813];
+   }
 
    expected_crc = SwapBytes32(expected_crc);  /* CRC on disc is big endian */
 
-   real_crc = EDCCrc32(cd_frame, 2064);
+   if(xa_mode) real_crc = EDCCrc32(cd_frame+16, 2056);
+   else        real_crc = EDCCrc32(cd_frame, 2064);
 
    return expected_crc == real_crc;
 }
@@ -349,6 +360,7 @@ static int simple_lec(RawBuffer *rb, unsigned char *frame)
 
 int ValidateRawSector(RawBuffer *rb, unsigned char *frame)
 {  int lec_did_sth = FALSE;
+   unsigned char saved_msf[4];
 
   /* Do simple L-EC.
      It seems that drives stop their internal L-EC as soon as the
@@ -356,12 +368,21 @@ int ValidateRawSector(RawBuffer *rb, unsigned char *frame)
      Since we are also interested in the user data only and doing the
      L-EC is expensive, we skip our L-EC as well when the EDC is fine. */
 
-  if(!check_edc(frame))
+  if(rb->xaMode)
+  {  memcpy(saved_msf, frame+12, 4);
+     memset(frame+12, 0, 4);
+  }
+
+  if(!check_edc(frame, rb->xaMode))
     lec_did_sth = simple_lec(rb, frame);
+
+
+  if(rb->xaMode)
+    memcpy(frame+12, saved_msf, 4);
 
   /* Test internal sector checksum again */
 
-  if(!check_edc(frame))
+  if(!check_edc(frame, rb->xaMode))
   {  RememberSense(16, 255, 1);
        return FALSE;
   }
@@ -542,7 +563,7 @@ int iterative_lec(RawBuffer *rb)
       printf("      P-failures/corrected: %2d/%2d\n", p_failures, p_corrected);
 #endif
 
-      if(check_edc(rb->recovered) || p_failures + q_failures == 0)
+      if(check_edc(rb->recovered, rb->xaMode) || p_failures + q_failures == 0)
 	break;
 
       if(   last_p_failures > p_failures
@@ -768,7 +789,7 @@ static int heuristic_lec(unsigned char *cd_frame, RawBuffer *rb, unsigned char *
          }
       }
 
-      if(check_edc(rb->recovered)) break;
+      if(check_edc(rb->recovered, rb->xaMode)) break;
 
       /* Perform Q-Parity error correction */
 
@@ -863,7 +884,7 @@ static int heuristic_lec(unsigned char *cd_frame, RawBuffer *rb, unsigned char *
 		
       if(iteration > N_P_VECTORS + N_Q_VECTORS) break;
       
-      if(check_edc(rb->recovered)) break;
+      if(check_edc(rb->recovered, rb->xaMode)) break;
 
       last_p_err = p_err;
       last_q_err = q_err;
@@ -1063,7 +1084,7 @@ static int find_better_q(RawBuffer *rb, int q, int refError)
 }
 
 static void initialize_frame(RawBuffer *rb)
-{  int best_sector = -1;
+{  int best_sector = 0;
    int max_load = 2 * (N_P_VECTORS + N_Q_VECTORS);
    int i;
 	
@@ -1284,7 +1305,7 @@ int search_plausible_sector(RawBuffer *rb)
       if(iteration > N_P_VECTORS + N_Q_VECTORS) break;
       if(p_failures == 0)
       {
-         if(check_edc(rb->recovered)) break;
+	if(check_edc(rb->recovered, rb->xaMode)) break;
       }
       
       last_p_err = p_err;
@@ -1445,6 +1466,9 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
 
    /* Okay, accept sector as a valid sample for recovery. */
 
+   if(rb->xaMode)
+     memset(new_frame+12, 0, 4); 
+
    memcpy(rb->rawBuf[rb->samplesRead], new_frame, rb->sampleLength);
    rb->samplesRead++;
 
@@ -1464,14 +1488,13 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
 
    iterative_lec(rb);
 
-   if(   check_edc(rb->recovered)
-      && check_msf(rb->recovered, rb->lba))
+   if(check_edc(rb->recovered, rb->xaMode))
    {
        PrintCLIorLabel(Closure->status, 
 		       "Sector %d: Recovered in raw reader by iterative L-EC\n",
 		       rb->lba);
 
-       memcpy(outbuf, rb->recovered+16, 2048);
+       memcpy(outbuf, rb->recovered+rb->dataOffset, 2048);
        return 0;
    }
 
@@ -1486,21 +1509,21 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
 
    search_plausible_sector(rb);
 
-   if(check_edc(rb->recovered))
+   if(check_edc(rb->recovered, rb->xaMode))
    {  PrintCLIorLabel(Closure->status, 
 		      "Sector %d: Recovered in raw reader by plausible sector search\n",
 		      rb->lba);
-      memcpy(outbuf, rb->recovered+16, 2048);
+      memcpy(outbuf, rb->recovered+rb->dataOffset, 2048);
       return 0; 
    }
 
    heuristic_lec(rb->recovered, rb, outbuf);
 
-   if(check_edc(rb->recovered))
+   if(check_edc(rb->recovered, rb->xaMode))
    {  PrintCLIorLabel(Closure->status, 
 		      "Sector %d: Recovered in raw reader by heuristic L-EC\n",
 		      rb->lba);
-      memcpy(outbuf, rb->recovered+16, 2048);
+      memcpy(outbuf, rb->recovered+rb->dataOffset, 2048);
       return 0; 
    }
 

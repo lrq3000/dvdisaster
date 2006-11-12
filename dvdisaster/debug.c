@@ -700,6 +700,7 @@ void RawSector(char *arg)
    DeviceHandle *dh;
    gint64 lba;
    int length=0,status;
+   int offset=16;
 
    /*** Open the device */
 
@@ -731,8 +732,19 @@ void RawSector(char *arg)
    memset(cdb, 0, MAX_CDB_SIZE);
    cdb[0]  = 0xbe;         /* READ CD */
    switch(dh->subType)     /* Expected sector type */
-   {  case DATA1: cdb[1] = 2<<2; length=2352; break;  /* data mode 1 */
-      case XA21:  cdb[1] = 4<<2; length=2328; break;  /* xa mode 2 form 1 */
+   {  case DATA1:          /* data mode 1 */ 
+        cdb[1] = 2<<2; 
+	cdb[9] = 0xb8;    /* we want Sync + Header + User data + EDC/ECC */
+	length=2352; 
+	offset=16;
+	break;  
+
+      case XA21:           /* xa mode 2 form 1 */
+	cdb[1] = 4<<2; 
+	cdb[9] = 0xf8;
+	length=2352; 
+	offset=24;
+	break;  
    }
 
    cdb[2]  = (lba >> 24) & 0xff;
@@ -743,7 +755,6 @@ void RawSector(char *arg)
    cdb[7]  = 0;  
    cdb[8]  = 1;        /* read nsectors */
 
-   cdb[9]  = 0xb8;     /* we want Sync + Header + User data + EDC/ECC */
    cdb[10] = 0;        /* reserved stuff */
    cdb[11] = 0;        /* no special wishes for the control byte */
 
@@ -761,7 +772,7 @@ void RawSector(char *arg)
          CDump(ab->buf, lba, length, 16);
      else 
      {   HexDump(ab->buf, length, 32);
-         g_printf("CRC32 = %04x\n", Crc32(ab->buf, 2048));
+         g_printf("CRC32 = %04x\n", Crc32(ab->buf+offset, 2048));
      }
    }
 

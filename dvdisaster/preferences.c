@@ -70,7 +70,7 @@ typedef struct _prefs_context
    GtkWidget *readAndCreateButtonA, *readAndCreateButtonB;
    GtkWidget *unlinkImageButtonA, *unlinkImageButtonB;
    GtkWidget *mainNotebook;
-   GtkWidget *methodChooser;
+   GtkWidget *methodChooserA,*methodChooserB;
    GtkWidget *methodNotebook;
 
    non_linear_info *jumpScaleInfoA, *jumpScaleInfoB;
@@ -642,8 +642,21 @@ static void method_select_cb(GtkWidget *widget, gpointer data)
    /* Switch methods if selection changed */
 
    if(strncmp(Closure->methodName, method->name, 4))
-   {  strncpy(Closure->methodName, method->name, 4);
+   {  GtkWidget *other;
+
+      strncpy(Closure->methodName, method->name, 4);
       gtk_notebook_set_current_page(GTK_NOTEBOOK(pc->methodNotebook), n);
+
+      if(pc->methodChooserA == widget)
+	   other = pc->methodChooserB;
+      else other = pc->methodChooserA;
+
+#if GTK_MINOR_VERSION >= 4
+      gtk_combo_box_set_active(GTK_COMBO_BOX(other), n);
+#else
+      gtk_option_menu_set_history(GTK_OPTION_MENU(other), n);
+#endif
+
    }
 }
 
@@ -656,9 +669,9 @@ static gboolean notebook_idle_func(gpointer data)
    int n;
 
 #if GTK_MINOR_VERSION >= 4
-   n = gtk_combo_box_get_active(GTK_COMBO_BOX(pc->methodChooser));
+   n = gtk_combo_box_get_active(GTK_COMBO_BOX(pc->methodChooserA));
 #else
-   n = gtk_option_menu_get_history(GTK_OPTION_MENU(pc->methodChooser));
+   n = gtk_option_menu_get_history(GTK_OPTION_MENU(pc->methodChooserA));
 #endif
 
    if(n>=0)
@@ -790,19 +803,20 @@ void CreatePreferencesWindow(void)
 
       AddHelpParagraph(lwoh, 
 		       _("<b>Image size determination</b>\n\n"
-			 "Use <i>ECC/RS02</i> for reading images augmented with error correction data;\n"
+			 "Use <i>ECC/RS02</i> for reading images augmented with error correction data; "
 			 "else pick <i>ISO/UDF</i>.\n\n"
 
-			 "<b>ECC/RS02:</b> The Image size is determined from the error correction data.\n"
-			 "Reading RS02 augmented images requires this option; otherwise the images\n"
-			 "may be incomplete. However if the medium does not contain error correction\n"
+			 "<b>ECC/RS02:</b> The Image size is determined from the error correction data. "
+			 "Reading RS02 augmented images requires this option; otherwise the images "
+			 "may be incomplete. However if the medium does not contain error correction "
 			 "data, the start of the reading operation may be delayed significantly.\n\n"
 
 			 "<b>ISO/UDF:</b> The image size is determined from the ISO/UDF file system.\n"
-			 "Caution: This is only suitable for working with error correction files.\n"
+			 "Caution: This is only suitable for working with error correction files. "
 			 "Images containing RS02 error correction information may be truncated.\n\n"
-			 "<b>Drive:</b> The image size reported by the drive will be used.\n"
-			 "As this information is typically wrong for DVD-RW/+RW/-RAM media this option \n"
+
+			 "<b>Drive:</b> The image size reported by the drive will be used. "
+			 "As this information is typically wrong for DVD-RW/+RW/-RAM media this option "
 			 "is only present for backwards compatibility with older dvdisaster versions."));
 
       /* file extension */
@@ -839,7 +853,7 @@ void CreatePreferencesWindow(void)
 
       AddHelpParagraph(lwoh, 
 		       _("<b>Automatically add file suffixes</b>\n\n"
-			 "When this switch is set, files will be automatically appended with \".iso\" \n"
+			 "When this switch is set, files will be automatically appended with \".iso\" "
 			 "or \".ecc\" suffixes if no other file name extension is already present."));
 
       /* 2GB button */
@@ -868,9 +882,9 @@ void CreatePreferencesWindow(void)
 
       AddHelpParagraph(lwoh, 
 		       _("<b>File splitting</b>\n\n"
-			 "Allows working with file systems which are limited to 2GB per file, e.g.\n"
-			 "FAT from Windows. Created files are spread over upto 100 segments\n"
-			 "called \"medium00.iso\", \"medium01.iso\" etc. at the cost of a small\n"
+			 "Allows working with file systems which are limited to 2GB per file, e.g. "
+			 "FAT from Windows. Created files are spread over upto 100 segments "
+			 "called \"medium00.iso\", \"medium01.iso\" etc. at the cost of a small "
 			 "performance hit."));
 
 
@@ -909,8 +923,8 @@ void CreatePreferencesWindow(void)
 
       AddHelpParagraph(lwoh, 
 		       _("<b>Automatic error correction file creation</b>\n\n"
-			 "Automatically creates an error correction file after reading in an image.\n"
-			 "Together with the \"Remove image\" option this will speed up error correction\n"
+			 "Automatically creates an error correction file after reading an image. "
+			 "Together with the \"Remove image\" option this will speed up error correction "
 			 "file generation for a series of different media."));
 
       /* automatic deletion */
@@ -939,7 +953,7 @@ void CreatePreferencesWindow(void)
 
       AddHelpParagraph(lwoh, 
 		       _("<b>Automatic image file removal</b>\n\n"
-			 "If this switch is set the image file will be deleted following the successful\n"
+			 "If this switch is set the image file will be deleted following the successful "
 			 "generation of the respective error correction file."));
 
       /*** Read & Scan page */
@@ -992,8 +1006,8 @@ void CreatePreferencesWindow(void)
 
       AddHelpParagraph(lwoh, 
 		       _("<b>Reading strategy</b>\n"
-		         "The linear strategy is optimized for undamaged media\n"
-			 "while the adaptive strategy is better suited\n"
+		         "The linear strategy is optimized for undamaged media "
+			 "while the adaptive strategy is better suited "
 			 "for media already containing read errors."));
 
       /* Reading range */
@@ -1042,10 +1056,10 @@ void CreatePreferencesWindow(void)
 
       AddHelpParagraph(lwoh, 
 		       _("<b>Reading range</b>\n\n"
-			 "Reading can be limited to a part of the medium (in sectors holding 2KB each).\n"
+			 "Reading can be limited to a part of the medium (in sectors holding 2KB each). "
 			 "The values include the borders: 0-100 will read 101 sectors.\n\n"
 
-			 "<b>Note:</b> Limiting the reading range is not recommended for <i>adaptive reading</i> since it might\n"
+			 "<b>Note:</b> Limiting the reading range is not recommended for <i>adaptive reading</i> since it might "
 			 "prevent sectors from being read which are required for a succesful error correction.\n\n"
 			 "These settings are only effective for the current session and will not be saved."));
 
@@ -1082,10 +1096,10 @@ void CreatePreferencesWindow(void)
 
       AddHelpParagraph(lwoh, 
 		       _("<b>Raw reading</b>\n\n"
-			 "Some CD/DVD drives may deliver unreliable results when their\n"
+			 "Some CD/DVD drives may deliver unreliable results when their "
 			 "internal error correction approaches its maximum capacity.\n\n"
-			 "Activating this option makes dvdisaster read sectors in raw mode.\n"
-			 "The L-EC P/Q vectors, EDC checksum and MSF address contained in the\n"
+			 "Activating this option makes dvdisaster read sectors in raw mode. "
+			 "The L-EC P/Q vectors, EDC checksum and MSF address contained in the "
 			 "raw data are checked to make sure that the sector was correctly read."
 			 ));
 
@@ -1120,8 +1134,8 @@ void CreatePreferencesWindow(void)
 
       AddHelpParagraph(lwoh, 
 		       _("<b>Reading attempts</b>\n\n"
-			 "Increasing the number of reading attempts may improve data recovery\n"
-			 "on marginal media, but will also increase processing time and\n"
+			 "Increasing the number of reading attempts may improve data recovery "
+			 "on marginal media, but will also increase processing time and "
 			 "mechanical wear on the drive."));
 
 
@@ -1159,26 +1173,28 @@ void CreatePreferencesWindow(void)
 
       AddHelpParagraph(lwoh, 
 		       _("<b>Treatment of unreadable areas</b>\n\n"
-			 "Defective media usually contain numerous read errors in a contigous region.\n"
-			 "Skipping sectors after a read error reduces the processing time and the\n"
-			 "mechanical wear on the drive, but leaves larger gaps in the image file.\n"));
+			 "Defective media usually contain numerous read errors in a contigous region. "
+			 "Skipping sectors after a read error reduces the processing time and the "
+			 "mechanical wear on the drive, but leaves larger gaps in the image file.\n\n"
+			 "Effects on the <b>linear reading strategy</b>:"));
 
-      AddHelpItemList(lwoh, 
-		       _("Effects on the <b>linear reading strategy</b>:\n"
-			 "- Skipping a large number of sectors (e.g. 1024) gives a quick overview of\n"
-			 "damaged areas, but will usually not collect enough data for repairing the image.\n"
-			 "- Smaller values like 16, 32 or 64 are a good trade-off: The processing time will be\n"
+      AddHelpListItem(lwoh, 
+		       _("Skipping a large number of sectors (e.g. 1024) gives a quick overview of "
+			 "damaged areas, but will usually not collect enough data for repairing the image."));
+      
+      AddHelpListItem(lwoh, 
+		      _("Smaller values like 16, 32 or 64 are a good trade-off: The processing time will be"
 			 "considerably shortened, but still enough data for repairing the image is collected.\n"));
 
       AddHelpParagraph(lwoh, 
-		       _("The <b>adaptive reading strategy</b> uses this setting only if no error correction data\n"
-			 "is available. In that case the reading process will stop when no unread areas\n"
-			 "larger than the selected size remain. Values smaller than 128 <i>are not recommended</i>\n"
-			 "as they cause the drive to carry out lots of laser head repositioning during the\n"
-			 "final phase of the reading process. If adaptive reading with a setting of 128 is not\n"
+		       _("The <b>adaptive reading strategy</b> uses this setting only if no error correction data "
+			 "is available. In that case the reading process will stop when no unread areas "
+			 "larger than the selected size remain. Values smaller than 128 <i>are not recommended</i> "
+			 "as they cause the drive to carry out lots of laser head repositioning during the "
+			 "final phase of the reading process. If adaptive reading with a setting of 128 is not "
 			 "sufficient, try reading the remaining sectors with an additional linear reading pass.\n\n"
 
-			 "On DVD media read errors do usually extend over at least 16 sectors for technical\n"
+			 "On DVD media read errors do usually extend over at least 16 sectors for technical "
 			 "reasons. Therefore selecting a value less than 16 is not recommended for DVD."
 			 ));
 
@@ -1214,14 +1230,16 @@ void CreatePreferencesWindow(void)
 
       AddHelpParagraph(lwoh, 
 		       _("<b>Assume DAO mode</b>\n\n"
-			 "Media written in \"TAO\" (\"track at once\") mode may contain two sectors\n"
+			 "Media written in \"TAO\" (\"track at once\") mode may contain two sectors "
 			 "with pseudo read errors at the end. By default these two sectors are ignored.\n\n"
-			 "If you are extremely unlucky to have a \"DAO\" (\"disc at once\") medium\n"
-			 "with exactly one or two real read errors at the end, dvdisaster may treat\n"
-			 "this as a \"TAO\" disc and truncate the image by two sectors. In that case\n"
+
+			 "If you are extremely unlucky to have a \"DAO\" (\"disc at once\") medium "
+			 "with exactly one or two real read errors at the end, dvdisaster may treat "
+			 "this as a \"TAO\" disc and truncate the image by two sectors. In that case "
 			 "activate this option to have the last two read errors handled correctly.\n\n"
-			 "<b>Tip:</b> To avoid these problems, consider using the \"DAO / Disc at once\"\n"
-			 "(sometimes also called \"SAO / Session at once\") mode for writing single\n"
+
+			 "<b>Tip:</b> To avoid these problems, consider using the \"DAO / Disc at once\" "
+			 "(sometimes also called \"SAO / Session at once\") mode for writing single "
 			 "session media."));
 
       /* byte filling */
@@ -1268,19 +1286,19 @@ void CreatePreferencesWindow(void)
       AddHelpParagraph(lwoh, 
 		       _("<b>Filling of unreadable sectors</b>\n\n"
 
-			 "dvdisaster marks unreadable sectors with a special filling pattern which\n"
+			 "dvdisaster marks unreadable sectors with a special filling pattern which "
 			 "is very unlikely to occur in undamaged media.\n"
-			 "In other data recovery software it is common to fill unreadable sectors\n"
-			 "with a certain byte value. To allow interoperability with such programs,\n"
+			 "In other data recovery software it is common to fill unreadable sectors "
+			 "with a certain byte value. To allow interoperability with such programs, "
 			 "you can specify the byte value they are using:\n"));
 
-      AddHelpItemList(lwoh,
-		      _("- 0xb0 (176 decimal): for compatibility with h2cdimage published by \"c't\",\n"
+      AddHelpListItem(lwoh,
+		      _("0xb0 (176 decimal): for compatibility with h2cdimage published by \"c't\", "
 			"a German periodical.\n"));
 
       AddHelpParagraph(lwoh,
-		       _("<b>Note:</b> Using zero filling (0x00, decimal 0) is highly discouraged.\n"
-			 "Most media contain regular zero filled sectors which can not be told apart\n"
+		       _("<b>Note:</b> Using zero filling (0x00, decimal 0) is highly discouraged. "
+			 "Most media contain regular zero filled sectors which can not be told apart "
 			 "from unreadable sectors if zero filling is used."));
 
       /** Drive initialisation */
@@ -1323,7 +1341,7 @@ void CreatePreferencesWindow(void)
 
       AddHelpParagraph(lwoh, 
 		       _("<b>Drive initialisation</b>\n\n"
-			 "Waits the specified amount of seconds for letting the drive spin up.\n"
+			 "Waits the specified amount of seconds for letting the drive spin up. "
 			 "This avoids speed jumps at the beginning of the reading curve."));
 
       /*** "Error correction" page */
@@ -1332,49 +1350,86 @@ void CreatePreferencesWindow(void)
 
       vbox = create_page(notebook, _utf("Error correction"));
 
-      hbox = gtk_hbox_new(FALSE, 4);
-      lab = gtk_label_new(_utf("Storage method:")); 
-      gtk_box_pack_start(GTK_BOX(hbox), lab, FALSE, FALSE, 0);
-      gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
+      lwoh = CreateLabelWithOnlineHelp(_("Error correction method"), 
+				       _("Storage method:"));
+      g_ptr_array_add(pc->helpPages, lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 4);
+	 GtkWidget *chooser;
+	 int j;
+
+	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
 
 #if GTK_MINOR_VERSION >= 4
-      pc->methodChooser = gtk_combo_box_new_text();
 
-      g_signal_connect(G_OBJECT(pc->methodChooser), "changed", G_CALLBACK(method_select_cb), pc);
+	 chooser = gtk_combo_box_new_text();
 
-      for(i=0; i<Closure->methodList->len; i++)
-      {  Method *method = g_ptr_array_index(Closure->methodList, i);
+       	 g_signal_connect(G_OBJECT(chooser), "changed", G_CALLBACK(method_select_cb), pc);
 
-	 gtk_combo_box_append_text(GTK_COMBO_BOX(pc->methodChooser), method->menuEntry); 
+	 for(j=0; j<Closure->methodList->len; j++)
+	 {  Method *method = g_ptr_array_index(Closure->methodList, j);
 
-	 if(!strncmp(Closure->methodName, method->name, 4))
-	   method_idx = i;
-      }
+	    gtk_combo_box_append_text(GTK_COMBO_BOX(chooser), method->menuEntry); 
 
+	    if(!strncmp(Closure->methodName, method->name, 4))
+	      method_idx = j;
+	 }
 
-      gtk_combo_box_set_active(GTK_COMBO_BOX(pc->methodChooser), method_idx);
-      gtk_box_pack_start(GTK_BOX(hbox), pc->methodChooser, FALSE, FALSE, 0);
+	 gtk_combo_box_set_active(GTK_COMBO_BOX(chooser), method_idx);
+	 gtk_box_pack_start(GTK_BOX(hbox), chooser, FALSE, FALSE, 0);
 #else
-      pc->methodChooser = gtk_option_menu_new();
+	 chooser = gtk_option_menu_new();
 
-      g_signal_connect(G_OBJECT(pc->methodChooser), "changed", G_CALLBACK(method_select_cb), pc);
-      option_menu_strip = gtk_menu_new(); 
+	 g_signal_connect(G_OBJECT(chooser), "changed", G_CALLBACK(method_select_cb), pc);
+	 option_menu_strip = gtk_menu_new(); 
 
-      for(i=0; i<Closure->methodList->len; i++)
-      {  Method *method = g_ptr_array_index(Closure->methodList, i);
-	 GtkWidget *item;
+	 for(j=0; j<Closure->methodList->len; j++)
+	 {  Method *method = g_ptr_array_index(Closure->methodList, j);
+	    GtkWidget *item;
 
-	 item = gtk_menu_item_new_with_label(method->menuEntry);
-	 gtk_menu_shell_append(GTK_MENU_SHELL(option_menu_strip), item);
+	    item = gtk_menu_item_new_with_label(method->menuEntry);
+	    gtk_menu_shell_append(GTK_MENU_SHELL(option_menu_strip), item);
 
-	 if(!strncmp(Closure->methodName, method->name, 4))
-	   method_idx = i;
+	    if(!strncmp(Closure->methodName, method->name, 4))
+	      method_idx = j;
+	 }
+
+	 gtk_option_menu_set_menu(GTK_OPTION_MENU(chooser), option_menu_strip);
+	 gtk_option_menu_set_history(GTK_OPTION_MENU(chooser), method_idx);
+	 gtk_box_pack_start(GTK_BOX(hbox), chooser, FALSE, FALSE, 0);
+#endif
+	 
+	 if(!i)
+	 {  pc->methodChooserA = chooser;
+	    gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
+	 }
+	 else
+	 {  pc->methodChooserB = chooser;
+	    AddHelpWidget(lwoh, hbox);
+	 }
       }
 
-      gtk_option_menu_set_menu(GTK_OPTION_MENU(pc->methodChooser), option_menu_strip);
-      gtk_option_menu_set_history(GTK_OPTION_MENU(pc->methodChooser), method_idx);
-      gtk_box_pack_start(GTK_BOX(hbox), pc->methodChooser, FALSE, FALSE, 0);
-#endif
+      AddHelpParagraph(lwoh, _("<b>Error correction method</b>\n\n"
+			       "dvdisaster creates error correction data which is used to recover "
+			       "unreadable sectors if the disc becomes damaged later on.\n"
+			       "Currently two Reed-Solomon based error correction methods are available. "
+			       "provide different ways for storing the error correction information:\n"));
+
+      AddHelpListItem(lwoh, _("RS01 creates error correction files which are stored separately "
+			      "from the image they belong to. Since data protection at the file level "
+			      "is difficult, error correction files must be stored on media which are "
+			      "protected against data loss by dvdisaster, too.\n"));
+
+      AddHelpListItem(lwoh, _("RS02 places the error correction data directly on the medium which is "
+			      "to be protected. This requires creating an image on hard disk using "
+			      "a CD/DVD writing software, as the image must be augmented with error "
+			      "correction data prior to writing it to the medium.\n"
+			      "Therefore the data to be protected and the error correction information "
+			      "are located at the same medium. Damaged sectors in the error correction "
+			      "information reduce the data recovery capacity, but do not make recovery "
+			      "impossible - a second medium for keeping or protecting the error correction "
+			      "information is not required."));
 
       /* sub pages for individual method configuration */
       

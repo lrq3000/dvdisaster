@@ -1097,6 +1097,7 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
    RawBuffer *rb;
    int ret = -1;
    int i,s;
+   int offset = 16;
 
    /* Sanity checks */ 
 
@@ -1118,9 +1119,21 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
    memset(cdb, 0, MAX_CDB_SIZE);
    cdb[0]  = 0xbe;         /* READ CD */
    switch(dh->subType)     /* Expected sector type */
-   {  case DATA1: cdb[1] = 2<<2; rb->sampleLength=2352; break;  /* data mode 1 */
-      case XA21:  cdb[1] = 4<<2; rb->sampleLength=2328; break;  /* xa mode 2 form 1 */
+   {  case DATA1:          /* data mode 1 */ 
+        cdb[1] = 2<<2; 
+	cdb[9] = 0xb8;    /* we want Sync + Header + User data + EDC/ECC */
+	rb->sampleLength=2352; 
+	offset=16;
+	break;  
+
+      case XA21:           /* xa mode 2 form 1 */
+	cdb[1] = 4<<2; 
+	cdb[9] = 0xf8;
+	rb->sampleLength=2352; 
+	offset=24;
+	break;  
    }
+
    cdb[2]  = (lba >> 24) & 0xff;
    cdb[3]  = (lba >> 16) & 0xff;
    cdb[4]  = (lba >>  8) & 0xff;
@@ -1129,7 +1142,6 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
    cdb[7]  = 0;  
    cdb[8]  = nsectors; /* read nsectors */
 
-   cdb[9]  = 0xb8;     /* we want Sync + Header + User data + EDC/ECC */
    cdb[10] = 0;        /* reserved stuff */
    cdb[11] = 0;        /* no special wishes for the control byte */
 
@@ -1140,7 +1152,7 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
 
    ret = SendPacket(dh, cdb, 12, rb->workBuf->buf, nsectors*rb->sampleLength, sense, DATA_READ);
    RememberSense(sense->sense_key, sense->asc, sense->ascq);
-         
+
    /*** Read failed. See how to proceed if defective sector reading is enabled. */
 
    if(ret<0 && dh->canReadDefective)
@@ -1174,7 +1186,7 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
    {  if(!ValidateRawSector(rb, rb->workBuf->buf+s))
         return -1;
 
-      memcpy(outbuf, rb->workBuf->buf+s+16, 2048);
+      memcpy(outbuf, rb->workBuf->buf+s+offset, 2048);
       outbuf += 2048;
       rb->lba++;
    }
@@ -1271,6 +1283,11 @@ DeviceHandle* OpenAndQueryDevice(char *device)
         PrintLog(_("Using READ CD"));
 	if(Closure->readRaw)
 	{  dh->rawBuffer = CreateRawBuffer(2352);
+
+	   if(dh->subType == XA21)
+	   {  dh->rawBuffer->dataOffset = 24;
+	      dh->rawBuffer->xaMode = TRUE;
+	   }
 	   PrintLog(_(", RAW reading"));
 
 	   if(Closure->readAttempts > 1)

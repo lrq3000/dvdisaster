@@ -544,7 +544,7 @@ LabelWithOnlineHelp* CreateLabelWithOnlineHelp(char*, char*);
 LabelWithOnlineHelp* CloneLabelWithOnlineHelp(LabelWithOnlineHelp*, char*);
 void FreeLabelWithOnlineHelp(LabelWithOnlineHelp*);
 void SetOnlineHelpLinkText(LabelWithOnlineHelp*, char*);
-void AddHelpItemList(LabelWithOnlineHelp*, char*, ...);
+void AddHelpListItem(LabelWithOnlineHelp*, char*, ...);
 void AddHelpParagraph(LabelWithOnlineHelp*, char*, ...);
 void AddHelpWidget(LabelWithOnlineHelp*, GtkWidget*);
 
@@ -851,6 +851,8 @@ typedef struct _RawBuffer
    unsigned char **rawBuf;    /* buffer for raw read attempts */
    int samplesRead;           /* number of samples read */
    int sampleLength;          /* length of samples */
+   int dataOffset;            /* offset to user data in frame */
+   int xaMode;                /* frame is in XA21 mode */
 
    unsigned char *recovered;  /* working buffer for cd frame recovery */
    unsigned char *byteState;  /* state of error correction */

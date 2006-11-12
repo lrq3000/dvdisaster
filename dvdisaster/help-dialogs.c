@@ -154,6 +154,7 @@ LabelWithOnlineHelp* CloneLabelWithOnlineHelp(LabelWithOnlineHelp *orig, char *a
    lwoh->linkLabel   = gtk_label_new(NULL);
    lwoh->linkBox     = ebox;
    lwoh->windowTitle = g_strdup("ignore");
+
    SetOnlineHelpLinkText(lwoh, ascii_text);
 
    /*** Put link label into an event box */
@@ -193,6 +194,21 @@ void FreeLabelWithOnlineHelp(LabelWithOnlineHelp *lwoh)
  * Add a paragraph of text to the help window
  */
 
+static gboolean wrapper_fix_cb(GtkWidget *widget, GdkEventExpose *event, gpointer data)
+{  LabelWithOnlineHelp *lwoh = (LabelWithOnlineHelp*)data;
+   GtkRequisition req;
+   int width,height;
+
+   gtk_widget_size_request(lwoh->vbox, &req);
+   gtk_widget_get_size_request(widget, &width, &height);
+
+   //   if(req.width != width)  /* avoid infinite loop */
+   if(width < 0)  /* avoid infinite loop */
+     gtk_widget_set_size_request(widget, req.width, -1);
+
+   return FALSE;
+}
+
 void AddHelpParagraph(LabelWithOnlineHelp *lwoh, char *format, ...)
 {  GtkWidget *label = gtk_label_new(NULL);
    va_list argp;
@@ -202,7 +218,6 @@ void AddHelpParagraph(LabelWithOnlineHelp *lwoh, char *format, ...)
    text = g_strdup_vprintf(format, argp);
    va_end(argp);
 
-
    utf = g_locale_to_utf8(text, -1, NULL, NULL, NULL);
    gtk_label_set_markup(GTK_LABEL(label), utf);
    g_free(utf);
@@ -210,6 +225,15 @@ void AddHelpParagraph(LabelWithOnlineHelp *lwoh, char *format, ...)
 
    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.0);
    gtk_box_pack_start(GTK_BOX(lwoh->vbox), label, TRUE, TRUE, 0);
+
+
+   /* Work around some bugs in the gtk line wrapper code.
+      By default lines are wrapped at the length of 
+      "This long string gives a good enough length for any line to have."
+      which is, well, stupid. */ 
+
+   gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
+   g_signal_connect(label, "expose_event", G_CALLBACK(wrapper_fix_cb), lwoh);
 }
 
 /*
@@ -217,68 +241,38 @@ void AddHelpParagraph(LabelWithOnlineHelp *lwoh, char *format, ...)
  * The list may be preceeded by an optional paragraph of text.
  */
 
-void AddHelpItemList(LabelWithOnlineHelp *lwoh, char *format, ...)
+void AddHelpListItem(LabelWithOnlineHelp *lwoh, char *format, ...)
 {  GtkWidget *label = gtk_label_new(NULL);
+   GtkWidget *bullet = gtk_label_new(" - ");
+   GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
    va_list argp;
-   char *text,*utf,*c;
-   int list_mode = FALSE;
-   GString *list = g_string_new("");
+   char *text,*utf;
+
+   gtk_box_pack_start(GTK_BOX(lwoh->vbox), hbox, TRUE, TRUE, 0);
+
+   gtk_misc_set_alignment(GTK_MISC(bullet), 0.0, 0.0);
+   gtk_box_pack_start(GTK_BOX(hbox), bullet, FALSE, FALSE, 0);
 
    va_start(argp, format);
    text = g_strdup_vprintf(format, argp);
    va_end(argp);
-   
-   c=text;
-   while(*c)
-   {  char *first = c;
-
-      while(*c && *c != '\n')  /* Extract next line */
-	c++;
-
-      /* optional text paragraph at the beginning */
-
-      if(*first != '-' && !list_mode)
-      {  if(first == c)
-	 {  g_string_append_c(list, '\n');
-	    c++;
-	 }
-	 else
-	 {  *c++ = 0; 
-	     g_string_append_printf(list, "%s\n", first);
-	 }
-
-	 continue;
-      }
-
-      /* do list indenting */ 
-
-      if(*first == '-')
-      {  list_mode = TRUE;
-	 *c++ = 0;
-	 g_string_append_printf(list, "%s\n", first);
-      }
-      else
-      {  if(first == c)
-	 {  g_string_append_c(list, '\n');
-	    c++;
-	 }
-	 else
-	 {  *c++ = 0; 
-	   g_string_append_printf(list, "<span color=\"#%s\">-</span> %s\n", 
-				  Closure->bgString, first);
-	 }
-      }
-   }
-
-   g_free(text);
-   text = g_string_free(list, FALSE);
 
    utf = g_locale_to_utf8(text, -1, NULL, NULL, NULL);
    gtk_label_set_markup(GTK_LABEL(label), utf);
    g_free(utf);
+   g_free(text);
 
    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.0);
-   gtk_box_pack_start(GTK_BOX(lwoh->vbox), label, TRUE, TRUE, 0);
+   gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
+
+
+   /* Work around some bugs in the gtk line wrapper code.
+      By default lines are wrapped at the length of 
+      "This long string gives a good enough length for any line to have."
+      which is, well, stupid. */ 
+
+   gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
+   g_signal_connect(label, "expose_event", G_CALLBACK(wrapper_fix_cb), lwoh);
 }
 
 /*
