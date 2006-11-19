@@ -335,8 +335,6 @@ void CreateMainWindow(int *argc, char ***argv)
 
     /*** Initialize GTK+ */
 
-    g_thread_init(NULL);
-    Closure->mainThread = g_thread_self();
     gtk_init(argc, argv);
 
     /*** Some style tinkering */

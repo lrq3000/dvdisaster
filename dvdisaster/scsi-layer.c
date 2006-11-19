@@ -1273,7 +1273,27 @@ DeviceHandle* OpenAndQueryDevice(char *device)
 	    device, dh->aspiUsed ? "ASPI" : "SPTI", dh->devinfo);
 #endif
 
+   /* Query the type and fail immediately if incompatible medium is found
+      so that the later tests are not derailed by the wrong medium type */
+
    query_type(dh, 0);
+
+   if(dh->subType == UNSUPPORTED)
+   {  char *td = alloca(strlen(dh->typedescr)+1);
+
+      strcpy(td, dh->typedescr);
+      CloseDevice(dh);
+      Stop(_("This software does not support \"%s\" type media."), td);
+      return NULL;
+   }
+
+   if(dh->sessions>1)
+   {  int sessions = dh->sessions;
+
+      CloseDevice(dh);
+      Stop(_("This software does not support multisession (%d sessions) media."), sessions);
+      return NULL;
+   }
 
    /* Activate raw reading features if possible,
       output used reading mode */
@@ -1359,14 +1379,6 @@ DeviceHandle* OpenAndQueryDevice(char *device)
    if(dh->mainType == DVD && query_copyright(dh))
    {  CloseDevice(dh);
       Stop(_("This software does not support encrypted media.\n"));
-   }
-
-   if(dh->sessions>1)
-   {  int sessions = dh->sessions;
-
-      CloseDevice(dh);
-      Stop(_("This software does not support multisession (%d sessions) media."), sessions);
-      return NULL;
    }
 
    /* Create the bitmap of simulated defects */

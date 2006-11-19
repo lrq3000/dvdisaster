@@ -188,6 +188,11 @@ int main(int argc, char *argv[])
 
     InitClosure();
 
+    /*** Setup for multithreading */
+
+    g_thread_init(NULL);
+    Closure->mainThread = g_thread_self();
+
     /*** Setup the locale.
          Try the local source directory first (it may be more recent),
          then fall back to the global installation directory.

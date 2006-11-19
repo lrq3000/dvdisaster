@@ -10,7 +10,7 @@ daa7ec033afb7fcfa5e4591cdda6ffac *bitmap.c
 6a6405a04d801afc20d2f282ae9fba3b *crc32.c
 f6bfabe0fea5d9cc05500692056d9a77 *curve.c
 fe41ae30d88ae63ae9e80156802aff2e *debug.c
-6d781c5cc0ed617b1119cd5eeb7ef297 *dvdisaster.c
+3743959663cf8f478a29365276d0409f *dvdisaster.c
 445852905059a696fc89b86015eefc72 *ecc-rs01.c
 e3556e136b8303501536314332fb0df2 *ecc-rs02.c
 255f47cdc89a7edb4c091a5e92379550 *endian.c
@@ -20,7 +20,7 @@ e3556e136b8303501536314332fb0df2 *ecc-rs02.c
 da4bb1a3fde494c707b86dbbedca907a *icon-factory.c
 7ea547219ab8184458047f34153d9f0f *large-io.c
 9ee1a5881e7621797b10c05197674160 *l-ec.c
-8483b30798ebc2d5eff003408e327607 *main-window.c
+b4a61c11dafdc357934dfb3b6a1e051f *main-window.c
 9f8e7da67068ae5229eef9bab8fa18a2 *md5.c
 c20a9ced3a33577cef8a102e2f8f842d *memtrack.c
 cd4ad1831e8f743a8d2328ffdda6f82d *menubar.c
@@ -32,7 +32,7 @@ bfbda27200513f3d132b564d1c56723c *print-sense.c
 cdde449dd2a8f64b560ff18a36f86234 *random.c
 66112f5f30e65b6adc43a1ba12780131 *read-adaptive.c
 5a37967ccb84d6e7535cb78e5cb0f227 *read-adaptive-window.c
-a7b31cd642321d0886f0056b39d38904 *read-linear.c
+a5ed343d04b976fe3f188a278049397a *read-linear.c
 8f6dd00126b3e613c0a388390dcb549b *read-linear-window.c
 6c5fc1382704406e52e482a2706018df *recover-raw.c
 1edd34d022eaea0ceb3b438754cf0d67 *rs01-common.c
@@ -47,7 +47,7 @@ f747d0e89474d40f3833da319fcdc88b *rs02-verify.c
 08574c4ea55dc96fa1757a3a0bcfe0d7 *rs02-window.c
 4c4c6afc2328404c7d03d5dd318bdf61 *scsi-darwin.c
 2e213180cdfa1951e959c74d60086916 *scsi-freebsd.c
-4e01df048a2ac7221dbccdc048e759ab *scsi-layer.c
+ee2f333c78539f16e834c24c771902a2 *scsi-layer.c
 0bf3231d5866f05e16c9903630545997 *scsi-linux.c
 79a515b5dc4addb8ffbe301e5ee88b72 *scsi-unknown.c
 e0b1e12036b027f0dbb0c1e50ffe2192 *scsi-win32.c

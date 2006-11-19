@@ -29,12 +29,31 @@
  *** Local data package used during reading 
  ***/
 
+#define READ_BUFFERS 32
+
+enum { BUF_EMPTY, BUF_FULL, BUF_EOF };
+
 typedef struct
 {  LargeFile *image;
    struct _DeviceHandle *dh;
    EccInfo *ei;
+   GThread *worker;
+   struct MD5Context md5ctxt;
+
+   /* Data exchange between reader and worker */
+
+   AlignedBuffer *alignedBuf[READ_BUFFERS];
+   gint64 bufferedSector[READ_BUFFERS];
+   int nSectors[READ_BUFFERS];
+   int bufState[READ_BUFFERS];
+   GMutex *mutex;
+   GCond *canRead, *canWrite;
+   int readPtr,writePtr;
+   char *workerError;
+
+   /* for usage within the reader */
+
    char *msg;
-   unsigned char *bufbase;
    GTimer *speedTimer,*readTimer;
    int unreportedError;
    int earlyTermination;
@@ -42,11 +61,51 @@ typedef struct
    gint64 readOK;
 } read_closure;
 
+/*
+ * Send EOF to the worker thread
+ */
+
+static void send_eof(read_closure *rc)
+{
+   g_mutex_lock(rc->mutex);
+   while(rc->bufState[rc->readPtr] != BUF_EMPTY)
+     g_cond_wait(rc->canRead, rc->mutex);
+
+   rc->bufState[rc->readPtr] = BUF_EOF;
+   rc->readPtr++;
+   if(rc->readPtr >= READ_BUFFERS)
+     rc->readPtr = 0;
+
+   g_cond_signal(rc->canWrite);
+   g_mutex_unlock(rc->mutex);
+}
+
+/*
+ * Cleanup. 
+ */
+
 static void cleanup(gpointer data)
 {  read_closure *rc = (read_closure*)data;
    int full_read = FALSE;
    int aborted   = rc->earlyTermination;
    int scan_mode = rc->scanMode;
+   int i;
+
+   /* This is a failure condition */
+
+   if(g_thread_self() == rc->worker)
+   {  g_printf("Reading/Scanning terminated from worker thread - trouble ahead\n");
+      return;
+   }
+
+   /* Make sure worker thread exits gracefully */
+
+   if(rc->worker && !rc->workerError)
+   {  send_eof(rc);
+      g_thread_join(rc->worker);
+   }
+
+   /* Clean up reader thread */
 
    if(rc->dh)
      full_read = (rc->readOK == rc->dh->sectors && !Closure->crcErrors);
@@ -64,8 +123,17 @@ static void cleanup(gpointer data)
        Stop(_("Error closing image file:\n%s"), strerror(errno));
    if(rc->dh)      CloseDevice(rc->dh);
    if(rc->ei)      FreeEccInfo(rc->ei);
+
+   if(rc->mutex)    g_mutex_free(rc->mutex);
+   if(rc->canRead)  g_cond_free(rc->canRead);
+   if(rc->canWrite) g_cond_free(rc->canWrite);
+   if(rc->workerError) g_free(rc->workerError);
+
+   for(i=0; i<READ_BUFFERS; i++)
+     if(rc->alignedBuf[i])
+       FreeAlignedBuffer(rc->alignedBuf[i]);
+
    if(rc->msg)     g_free(rc->msg);
-   if(rc->bufbase) g_free(rc->bufbase);
    if(rc->speedTimer) g_timer_destroy(rc->speedTimer);
    if(rc->readTimer)  g_timer_destroy(rc->readTimer);
    g_free(rc);
@@ -97,6 +165,97 @@ static void cleanup(gpointer data)
  *** Try reading the medium and create the image and map.
  ***/
 
+/* 
+ * The writer / checksum part
+ */
+
+static gpointer worker_thread(read_closure *rc)
+{  gint64 s;
+   int nsectors;
+   int i;
+
+   for(;;)
+   {  
+      /* See if more buffers are available for processing */
+
+      g_mutex_lock(rc->mutex);
+
+      while(rc->bufState[rc->writePtr] == BUF_EMPTY)
+      {  g_cond_wait(rc->canWrite, rc->mutex);
+      }
+
+      if(rc->bufState[rc->writePtr] == BUF_EOF)
+      {  g_mutex_unlock(rc->mutex);
+	 return 0;
+      }
+
+      s = rc->bufferedSector[rc->writePtr];
+      nsectors = rc->nSectors[rc->writePtr];
+      g_mutex_unlock(rc->mutex);
+
+      /* Write out buffer, update checksums if not in scan mode */
+	
+      if(!rc->scanMode)
+      {  int n;
+
+	 if(!LargeSeek(rc->image, (gint64)(2048*s)))
+	 {  rc->workerError = g_strdup_printf(_("Failed seeking to sector %lld in image [%s]: %s"),
+					      s, "store", strerror(errno));
+	    return 0;
+	 }
+
+	 n = LargeWrite(rc->image, rc->alignedBuf[rc->writePtr]->buf, 2048*nsectors);
+	 if(n != 2048*nsectors)
+	 {  rc->workerError = g_strdup_printf(_("Failed writing to sector %lld in image [%s]: %s"),
+	                                      s, "store", strerror(errno));
+	    return 0;
+	 }
+
+	 /* On-the-fly CRC/MD5 calculation */
+
+	 if(!Closure->checkCrc && Closure->crcCache)  
+	 {  for(i=0; i<nsectors; i++)
+	     Closure->crcCache[s+i] = Crc32(rc->alignedBuf[rc->writePtr]->buf+2048*i, 2048);
+
+	    MD5Update(&rc->md5ctxt, rc->alignedBuf[rc->writePtr]->buf, 2048*nsectors);
+	 }
+      }
+
+      /* Just do on-the-fly CRC testing if in scan mode */         
+
+      if(Closure->checkCrc)
+	for(i=0; i<nsectors; i++)
+	{  guint32 crc = Crc32(rc->alignedBuf[rc->writePtr]->buf+2048*i, 2048);
+
+	   if(s+i < rc->ei->sectors)
+	   {  if(Closure->crcCache[s+i] != crc)
+	      {  PrintCLI(_("* CRC error, sector: %lld\n"), (long long int)s+i);
+		 Closure->crcErrors++;
+	      }
+	   }
+	   else Closure->crcCache[s+i] = crc; /* add CRCsums for additional sectors */
+
+	   MD5Update(&rc->md5ctxt, rc->alignedBuf[rc->writePtr]->buf+2048*i, 2048);
+	}
+
+      /* Release this buffer */
+
+      g_mutex_lock(rc->mutex);
+      rc->bufState[rc->writePtr] = BUF_EMPTY;
+      rc->writePtr++;
+      if(rc->writePtr >= READ_BUFFERS)
+	rc->writePtr = 0;
+      g_cond_signal(rc->canRead);
+      g_mutex_unlock(rc->mutex);
+   }
+
+   return NULL;
+}
+
+/*
+ * The reader part
+ */
+
 static void insert_buttons(GtkDialog *dialog)
 {  
   gtk_dialog_add_buttons(dialog, 
@@ -107,7 +266,7 @@ static void insert_buttons(GtkDialog *dialog)
 
 void ReadMediumLinear(gpointer data)
 {  read_closure *rc = g_malloc0(sizeof(read_closure));
-   int scan_mode = GPOINTER_TO_INT(data);
+   GError *err = NULL;
    int nsectors; 
    gint64 start,end,s,read_marker;
    gint64 image_size;
@@ -117,14 +276,13 @@ void ReadMediumLinear(gpointer data)
    int rereading = 0;
    gint previous_read_errors = 0;
    gint previous_crc_errors = 0;
-   unsigned char *buf = NULL;
    char *t;
    int status,n;
    gint64 sectors,last_read_ok,last_errors_printed;
    double speed = 0.0;
    int tao_tail = 0;
    int ignore_fatal = FALSE;
-   struct MD5Context md5ctxt;
+   int i;
 
    Closure->additionalSpiralColor = -1;
 
@@ -132,9 +290,9 @@ void ReadMediumLinear(gpointer data)
 
    rc->unreportedError  = TRUE;
    rc->earlyTermination = TRUE;
-   rc->scanMode = scan_mode;
+   rc->scanMode = GPOINTER_TO_INT(data);
 
-   if(scan_mode)  /* Output messages differ in read and scan mode */
+   if(rc->scanMode)  /* Output messages differ in read and scan mode */
    {  RegisterCleanup(_("Scanning aborted"), cleanup, rc);
       if(Closure->guiMode)
 	SetLabelText(GTK_LABEL(Closure->readLinearHeadline), "<big>%s</big>\n<i>%s</i>",
@@ -149,7 +307,7 @@ void ReadMediumLinear(gpointer data)
 		    _("Medium: not yet determined"));
    }
 
-   if(Closure->readAndCreate && !scan_mode)
+   if(Closure->readAndCreate && !rc->scanMode)
    {  gint64 ignore;
       if(LargeStat(Closure->eccName, &ignore))
       { if(Closure->guiMode)
@@ -174,12 +332,10 @@ void ReadMediumLinear(gpointer data)
    rc->speedTimer = g_timer_new();
    rc->readTimer  = g_timer_new();
 
-   /*** Align the buffer at a 4096 boundary.
-	Might be needed by some SCSI drivers. */
+   /*** Create the aligned buffers. */
 
-   rc->bufbase = g_malloc(32768 + 4096);
-   buf = rc->bufbase + (4096 - ((unsigned long)rc->bufbase & 4095));
-
+   for(i=0; i<READ_BUFFERS; i++)
+     rc->alignedBuf[i] = CreateAlignedBuffer(32768);
 
    /*** Open Device and query medium properties */
 
@@ -192,6 +348,7 @@ void ReadMediumLinear(gpointer data)
    rc->ei = OpenEccFile(READABLE_ECC | PRINT_MODE);
    if(rc->ei) /* Compare the fingerprint sectors */
    {  struct MD5Context md5ctxt;
+      unsigned char *buf = rc->alignedBuf[0]->buf;
       guint8 fingerprint[16];
 
       status = ReadSectors(rc->dh, buf, rc->ei->eh->fpSector, 1);
@@ -232,7 +389,7 @@ void ReadMediumLinear(gpointer data)
 
    /*** See if we already have an image file. */
 
-   if(scan_mode)  /* don't care if in scan mode */
+   if(rc->scanMode)  /* don't care if in scan mode */
    {  
       rc->msg = g_strdup(_("Scanning medium for read errors."));
 
@@ -276,7 +433,8 @@ reopen_image:
      }
      else
      {  char *t = _("Completing existing medium image.");
-        int unknown_fingerprint = FALSE;
+        unsigned char *buf = rc->alignedBuf[0]->buf;
+	int unknown_fingerprint = FALSE;
 
         /* Use the existing file as a starting point.
 	   Set the read_marker at the end of the file
@@ -351,7 +509,7 @@ reopen_image:
 
    /*** If start > read_marker, fill the gap with dead sector markers. */
 
-   if(!scan_mode && start > read_marker)
+   if(!rc->scanMode && start > read_marker)
    {  s = read_marker;
 
       if(!LargeSeek(rc->image, (gint64)(2048*s)))
@@ -371,13 +529,13 @@ reopen_image:
    /* a) a full image read is attempted, and the image CRC32 
          and md5sum are calculated on the fly. */
 
-   if(   !scan_mode && !rereading && start == 0 && end == sectors-1)
+   if(   !rc->scanMode && !rereading && start == 0 && end == sectors-1)
    {  Closure->crcCache = g_try_malloc(sizeof(guint32) * sectors);
 
       if(Closure->crcCache)
 	Closure->crcImageName = g_strdup(Closure->imageName);
 
-      MD5Init(&md5ctxt);
+      MD5Init(&rc->md5ctxt);
    }
 
    /* b) we have a suitable ecc file and compare CRC32sum against
@@ -419,9 +577,20 @@ reopen_image:
 	   SetLabelText(GTK_LABEL(Closure->readLinearHeadline),
 			"<big>%s</big>\n<i>%s</i>", rc->msg, rc->dh->mediumDescr);
 
-	 MD5Init(&md5ctxt);
+	 MD5Init(&rc->md5ctxt);
       }
    }
+
+   /*** Start the worker thread. We concentrate on reading from the drive here;
+	writing the image file and calculating the checksums is done in a
+	concurrent thread. */
+
+   rc->mutex = g_mutex_new();
+   rc->canRead = g_cond_new();
+   rc->canWrite = g_cond_new();
+   rc->worker = g_thread_create((GThreadFunc)worker_thread, (gpointer)rc, TRUE, &err);
+   if(!rc->worker)
+     Stop("Could not create worker thread: %s", err->message);
 
    /*** Prepare the speed timing */
 
@@ -435,7 +604,7 @@ reopen_image:
      SwitchAndSetFootline(Closure->readLinearNotebook, 0, Closure->readLinearFootline, "ignore");
 
    if(Closure->spinupDelay)  /* eliminate initial seek time from timing */
-     ReadSectors(rc->dh, buf, start, 1); 
+     ReadSectors(rc->dh, rc->alignedBuf[0]->buf, start, 1); 
    g_timer_start(rc->speedTimer);
    g_timer_start(rc->readTimer);
 
@@ -454,6 +623,9 @@ reopen_image:
 	rc->unreportedError = FALSE;  /* suppress respective error message */
         goto terminate;
       }
+
+      if(rc->workerError)       /* something went wrong in the worker thread */
+	Stop(rc->workerError);
 
       /*** Decide between reading in fast mode (16 sectors at once)
 	   or reading one sector at a time.
@@ -476,7 +648,7 @@ reopen_image:
 	   in a previous session. */
 
 reread:
-      if(!scan_mode && s < read_marker)
+      if(!rc->scanMode && s < read_marker)
       {  int i,ok = 0;
 	 int num_compare = nsectors;
 
@@ -488,12 +660,14 @@ reread:
 	   num_compare = read_marker-s;
 
 	 for(i=0; i<num_compare; i++)
-	 {  n = LargeRead(rc->image, buf, 2048);
+	 {  unsigned char sector_buf[2048];
+
+	    n = LargeRead(rc->image, sector_buf, 2048);
 
 	    if(n != 2048)
 	      Stop(_("unexpected read error in image for sector %lld"),s);
 
-	    if(memcmp(buf, Closure->deadSector, n))
+	    if(memcmp(sector_buf, Closure->deadSector, n))
 	      ok++;
 	 }
 
@@ -519,11 +693,19 @@ printf("Sector %lld: %d sectors still missing.\n", s, nsectors-ok);
 #ifdef DEBUG
 printf("Sector %lld: reading %2d sectors\n",s,nsectors);
 #endif
-      /*** Try reading the next <nsectors> sector(s).
-      	   Medium Error (3) and Illegal Request (5) may result from 
-	   a medium read problem, but other errors are regarded as fatal. */
+     /*** Try reading the next <nsectors> sector(s). */
 
-      status = ReadSectors(rc->dh, buf, s, nsectors);
+      g_mutex_lock(rc->mutex);
+      while(rc->bufState[rc->readPtr] != BUF_EMPTY)
+      {  g_cond_wait(rc->canRead, rc->mutex);
+      }
+      g_mutex_unlock(rc->mutex);
+
+      status = ReadSectors(rc->dh, rc->alignedBuf[rc->readPtr]->buf, s, nsectors);
+
+
+      /*** Medium Error (3) and Illegal Request (5) may result from 
+	   a medium read problem, but other errors are regarded as fatal. */
 
       if(status && !ignore_fatal 
 	 && rc->dh->sense.sense_key && rc->dh->sense.sense_key != 3 && rc->dh->sense.sense_key != 5)
@@ -551,7 +733,23 @@ printf("Sector %lld: reading %2d sectors\n",s,nsectors);
 	 }
       }
 
-      /*** Process the read error. */
+      /*** Pass sector(s) to the worker thread (if reading succeeded) */
+
+      if(!status)
+      { g_mutex_lock(rc->mutex);
+	rc->bufferedSector[rc->readPtr] = s;
+	rc->nSectors[rc->readPtr] = nsectors;
+	rc->bufState[rc->readPtr] = BUF_FULL;
+	rc->readPtr++;
+	if(rc->readPtr >= READ_BUFFERS)
+	  rc->readPtr = 0;
+	g_cond_signal(rc->canWrite);
+	g_mutex_unlock(rc->mutex);
+
+	rc->readOK += nsectors;
+      }
+
+      /*** Process the read error if reading failed. */
 
       if(status)
       {  int nfill;
@@ -574,7 +772,7 @@ printf("Sector %lld: reading %2d sectors\n",s,nsectors);
 	 /* If we are reading past the read marker we must take care 
             to fill up any holes with dead sector markers before skipping forward. */
 
-	 if(!scan_mode && s+nsectors >= read_marker)
+	 if(!rc->scanMode && s+nsectors >= read_marker)
 	 {  int i;
 
 	    /* Write nfill of "dead sector" markers so that
@@ -629,52 +827,6 @@ printf("Sector %lld: filling %d sectors\n",s,nfill);
 	       Closure->readErrors++;
 	    }
 	 }
-      }
-      else
-      { int i;
-	/*** Store sector(s) in the image file */
-
-	rc->readOK += nsectors;
-
-	if(!scan_mode)
-	{  if(!LargeSeek(rc->image, (gint64)(2048*s)))
-	     Stop(_("Failed seeking to sector %lld in image [%s]: %s"),
-		  s, "store", strerror(errno));
-
-#ifdef DEBUG
-printf("Sector %lld: writing %2d sectors\n",s,nsectors);
-#endif
-           n = LargeWrite(rc->image, buf, 2048*nsectors);
-	   if(n != 2048*nsectors)
-	     Stop(_("Failed writing to sector %lld in image [%s]: %s"),
-		  s, "store", strerror(errno));
-
-	   /* On-the-fly CRC/MD5 calculation */
-
-	   if(!Closure->checkCrc && Closure->crcCache)  
-	   {  for(i=0; i<nsectors; i++)
-		Closure->crcCache[s+i] = Crc32(buf+2048*i, 2048);
-
-	      MD5Update(&md5ctxt, buf, 2048*nsectors);
-	   }
-	}
-
-	/* On-the-fly CRC testing */         
-
-	if(Closure->checkCrc)
-	  for(i=0; i<nsectors; i++)
-	  {  guint32 crc = Crc32(buf+2048*i, 2048);
-
-	     if(s+i < rc->ei->sectors)
-	     {  if(Closure->crcCache[s+i] != crc)
-	        {  PrintCLI(_("* CRC error, sector: %lld\n"), (long long int)s+i);
-		   Closure->crcErrors++;
-		}
-	     }
-	     else Closure->crcCache[s+i] = crc; /* add CRCsums for additional sectors */
-
-	     MD5Update(&md5ctxt, buf+2048*i, 2048);
-	  }
       }
 
       /*** Step the progress counter */
@@ -769,8 +921,16 @@ step_counter:
       }
    }
 
+   /*** Signal EOF to writer thread; wait for it to finish */
+
+   send_eof(rc);
+   g_thread_join(rc->worker);
+   rc->worker = NULL;
+
+   /*** Print summary */
+
    if(Closure->crcCache)
-     MD5Final(Closure->md5Cache, &md5ctxt);
+     MD5Final(Closure->md5Cache, &rc->md5ctxt);
 
    if(rereading)
    {  if(!Closure->readErrors) t = g_strdup_printf(_("%lld sectors read.     "),rc->readOK);
@@ -799,9 +959,9 @@ step_counter:
    }
    PrintLog("\n%s\n",t);
    if(Closure->guiMode)
-   {  if(scan_mode) SwitchAndSetFootline(Closure->readLinearNotebook, 1, Closure->readLinearFootline, 
+   {  if(rc->scanMode) SwitchAndSetFootline(Closure->readLinearNotebook, 1, Closure->readLinearFootline, 
 					 "%s%s",_("Scanning finished: "),t);
-      else          SwitchAndSetFootline(Closure->readLinearNotebook, 1, Closure->readLinearFootline, 
+      else             SwitchAndSetFootline(Closure->readLinearNotebook, 1, Closure->readLinearFootline, 
 					 "%s%s",_("Reading finished: "),t);
    }
    g_free(t);
@@ -827,7 +987,7 @@ step_counter:
      
       sectors -= tao_tail;
 
-      if(!scan_mode && answer)
+      if(!rc->scanMode && answer)
         if(!LargeTruncate(rc->image, (gint64)(2048*sectors)))
 	  Stop(_("Could not truncate %s: %s\n"),Closure->imageName,strerror(errno));
    }
