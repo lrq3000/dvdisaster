@@ -57,7 +57,8 @@ typedef struct _prefs_context
    GtkWidget *splitA, *splitB;
    GtkWidget *radioLinearA, *radioLinearB;
    GtkWidget *radioAdaptiveA, *radioAdaptiveB;
-   GtkWidget *attemptsScaleA, *attemptsScaleB;
+   GtkWidget *minAttemptsScaleA, *minAttemptsScaleB;
+   GtkWidget *maxAttemptsScaleA, *maxAttemptsScaleB;
    GtkWidget *rangeToggleA, *rangeToggleB;
    GtkWidget *rangeSpin1A, *rangeSpin1B;
    GtkWidget *rangeSpin2A, *rangeSpin2B;
@@ -76,8 +77,9 @@ typedef struct _prefs_context
    non_linear_info *jumpScaleInfoA, *jumpScaleInfoB;
    LabelWithOnlineHelp *jumpScaleLwoh;
 
-   non_linear_info *attemptsScaleInfoA, *attemptsScaleInfoB;
-   LabelWithOnlineHelp *attemptsScaleLwoh;
+   non_linear_info *minAttemptsScaleInfoA, *minAttemptsScaleInfoB;
+   non_linear_info *maxAttemptsScaleInfoA, *maxAttemptsScaleInfoB;
+   LabelWithOnlineHelp *minAttemptsScaleLwoh, *maxAttemptsScaleLwoh;
 } prefs_context;
 
 void FreePreferences(void *context)
@@ -95,10 +97,14 @@ void FreePreferences(void *context)
 
    if(pc->jumpScaleInfoA) g_free(pc->jumpScaleInfoA);
    if(pc->jumpScaleInfoB) g_free(pc->jumpScaleInfoB);
-   if(pc->attemptsScaleInfoA->format) g_free(pc->attemptsScaleInfoA->format);
-   if(pc->attemptsScaleInfoB->format) g_free(pc->attemptsScaleInfoB->format);
-   if(pc->attemptsScaleInfoA) g_free(pc->attemptsScaleInfoA);
-   if(pc->attemptsScaleInfoB) g_free(pc->attemptsScaleInfoB);
+   if(pc->minAttemptsScaleInfoA->format) g_free(pc->minAttemptsScaleInfoA->format);
+   if(pc->minAttemptsScaleInfoB->format) g_free(pc->minAttemptsScaleInfoB->format);
+   if(pc->minAttemptsScaleInfoA) g_free(pc->minAttemptsScaleInfoA);
+   if(pc->minAttemptsScaleInfoB) g_free(pc->minAttemptsScaleInfoB);
+   if(pc->maxAttemptsScaleInfoA->format) g_free(pc->maxAttemptsScaleInfoA->format);
+   if(pc->maxAttemptsScaleInfoB->format) g_free(pc->maxAttemptsScaleInfoB->format);
+   if(pc->maxAttemptsScaleInfoA) g_free(pc->maxAttemptsScaleInfoA);
+   if(pc->maxAttemptsScaleInfoB) g_free(pc->maxAttemptsScaleInfoB);
 
    g_free(pc);
 }
@@ -195,7 +201,8 @@ enum
    SPIN_DELAY,
    
    SLIDER_JUMP,
-   SLIDER_READ_ATTEMPTS
+   SLIDER_MIN_READ_ATTEMPTS,
+   SLIDER_MAX_READ_ATTEMPTS
 };
 
 /*
@@ -384,8 +391,10 @@ static int jump_values[] = { 0, 16, 32, 64, 128, 256, 384, 512, 768, 1024, 2048,
  20480 };
 #define JUMP_VALUE_LENGTH 14
 
-static int attempts_values[] = { 1, 2, 3, 4, 5, 7, 9, 11, 15, 20, 25, 30, 40, 50}; 
-#define ATTEMPTS_VALUE_LENGTH 14
+static int min_attempts_values[] = { 1, 2, 3, 4, 5, 7, 9, 11, 15, 20, 25, 30, 40, 50}; 
+static int max_attempts_values[] = { 1, 2, 3, 4, 5, 7, 9, 11, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100}; 
+#define MIN_ATTEMPTS_VALUE_LENGTH 14
+#define MAX_ATTEMPTS_VALUE_LENGTH 19
 
 static void non_linear_cb(GtkWidget *widget, gpointer data)
 {  non_linear_info *nli = (non_linear_info*)data;
@@ -407,16 +416,45 @@ static void non_linear_cb(GtkWidget *widget, gpointer data)
 	SetOnlineHelpLinkText(nli->pc->jumpScaleLwoh, text);
 	break;
 
-      case SLIDER_READ_ATTEMPTS:
-        Closure->readAttempts = nli->values[index];
+      case SLIDER_MIN_READ_ATTEMPTS:
+      { int max  = gtk_range_get_value(GTK_RANGE(nli->pc->maxAttemptsScaleA));
 
-	gtk_range_set_value(GTK_RANGE(nli->pc->attemptsScaleB), index);
-	gtk_label_set_markup(GTK_LABEL(nli->pc->attemptsScaleInfoB->label), utf);
+        Closure->minReadAttempts = nli->values[index];
 
-	gtk_range_set_value(GTK_RANGE(nli->pc->attemptsScaleA), index);
-	gtk_label_set_markup(GTK_LABEL(nli->pc->attemptsScaleInfoA->label), utf);
-	SetOnlineHelpLinkText(nli->pc->attemptsScaleLwoh, text);
-	break;
+	gtk_range_set_value(GTK_RANGE(nli->pc->minAttemptsScaleB), index);
+	gtk_label_set_markup(GTK_LABEL(nli->pc->minAttemptsScaleInfoB->label), utf);
+
+	gtk_range_set_value(GTK_RANGE(nli->pc->minAttemptsScaleA), index);
+	gtk_label_set_markup(GTK_LABEL(nli->pc->minAttemptsScaleInfoA->label), utf);
+	SetOnlineHelpLinkText(nli->pc->minAttemptsScaleLwoh, text);
+
+	if(index > max)
+	{
+	   gtk_range_set_value(GTK_RANGE(nli->pc->maxAttemptsScaleA), index);
+	   gtk_range_set_value(GTK_RANGE(nli->pc->maxAttemptsScaleB), index);
+	}
+      }
+      break;
+
+      case SLIDER_MAX_READ_ATTEMPTS:
+      { int min  = gtk_range_get_value(GTK_RANGE(nli->pc->minAttemptsScaleA));
+
+        Closure->maxReadAttempts = nli->values[index];
+
+	gtk_range_set_value(GTK_RANGE(nli->pc->maxAttemptsScaleB), index);
+	gtk_label_set_markup(GTK_LABEL(nli->pc->maxAttemptsScaleInfoB->label), utf);
+
+	gtk_range_set_value(GTK_RANGE(nli->pc->maxAttemptsScaleA), index);
+	gtk_label_set_markup(GTK_LABEL(nli->pc->maxAttemptsScaleInfoA->label), utf);
+	SetOnlineHelpLinkText(nli->pc->maxAttemptsScaleLwoh, text);
+
+	if(index < min)
+	{
+	   gtk_range_set_value(GTK_RANGE(nli->pc->minAttemptsScaleA), index);
+	   gtk_range_set_value(GTK_RANGE(nli->pc->minAttemptsScaleB), index);
+	}
+      }
+      break;
    }
 
    g_free(utf);
@@ -1103,41 +1141,84 @@ void CreatePreferencesWindow(void)
 			 "raw data are checked to make sure that the sector was correctly read."
 			 ));
 
-      /* Reading attempts */
+      /* Minimum reading attempts */
 
-      lwoh = CreateLabelWithOnlineHelp(_("Number of reading attempts"), "ignore");
+      lwoh = CreateLabelWithOnlineHelp(_("Minimum number of reading attempts"), "ignore");
       g_ptr_array_add(pc->helpPages, lwoh);
 
-      pc->attemptsScaleLwoh = lwoh;
-      pc->attemptsScaleInfoA = g_malloc0(sizeof(non_linear_info));
-      pc->attemptsScaleInfoB = g_malloc0(sizeof(non_linear_info));
-      pc->attemptsScaleInfoA->format = g_strdup(_utf("Perform upto %d reading attempts per sector"));
-      pc->attemptsScaleInfoB->format = g_strdup(_utf("Perform upto %d reading attempts per sector"));
+      pc->minAttemptsScaleLwoh = lwoh;
+      pc->minAttemptsScaleInfoA = g_malloc0(sizeof(non_linear_info));
+      pc->minAttemptsScaleInfoB = g_malloc0(sizeof(non_linear_info));
+      pc->minAttemptsScaleInfoA->format = g_strdup(_utf("Min. %d reading attempts per sector"));
+      pc->minAttemptsScaleInfoB->format = g_strdup(_utf("Min. %d reading attempts per sector"));
 
-      pc->attemptsScaleInfoA->lwoh = lwoh;
+      pc->minAttemptsScaleInfoA->lwoh = lwoh;
 
       for(i=0; i<2; i++)
 	{  GtkWidget *scale,*scale_box;
 
 	 scale = non_linear_scale(&scale_box, 
-				  i ? pc->attemptsScaleInfoB : pc->attemptsScaleInfoA,
+				  i ? pc->minAttemptsScaleInfoB : pc->minAttemptsScaleInfoA,
 				  i ? lwoh->normalLabel : lwoh->linkLabel, 
-				  pc, SLIDER_READ_ATTEMPTS, attempts_values, ATTEMPTS_VALUE_LENGTH,
-				  Closure->readAttempts);
+				  pc, SLIDER_MIN_READ_ATTEMPTS, min_attempts_values, MIN_ATTEMPTS_VALUE_LENGTH,
+				  Closure->minReadAttempts);
 
-	 if(!i) pc->attemptsScaleA = scale;
-	 else   pc->attemptsScaleB = scale;
+	 if(!i) pc->minAttemptsScaleA = scale;
+	 else   pc->minAttemptsScaleB = scale;
 
 	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), scale_box, FALSE, FALSE, 0);
 	 else   AddHelpWidget(lwoh, scale_box);
       }
 
       AddHelpParagraph(lwoh, 
-		       _("<b>Reading attempts</b>\n\n"
+		       _("<b>Minimum number of reading attempts</b>\n\n"
+			 "If an unreadable sector is encountered, "
+			 "dvdisaster tries to re-read it the given number of times.\n\n" 
 			 "Increasing the number of reading attempts may improve data recovery "
 			 "on marginal media, but will also increase processing time and "
 			 "mechanical wear on the drive."));
 
+      /* Maximum reading attempts */
+
+      lwoh = CreateLabelWithOnlineHelp(_("Maximum number of reading attempts"), "ignore");
+      g_ptr_array_add(pc->helpPages, lwoh);
+
+      pc->maxAttemptsScaleLwoh = lwoh;
+      pc->maxAttemptsScaleInfoA = g_malloc0(sizeof(non_linear_info));
+      pc->maxAttemptsScaleInfoB = g_malloc0(sizeof(non_linear_info));
+      pc->maxAttemptsScaleInfoA->format = g_strdup(_utf("Max. %d reading attempts per sector"));
+      pc->maxAttemptsScaleInfoB->format = g_strdup(_utf("Max. %d reading attempts per sector"));
+
+      pc->maxAttemptsScaleInfoA->lwoh = lwoh;
+
+      for(i=0; i<2; i++)
+	{  GtkWidget *scale,*scale_box;
+
+	 scale = non_linear_scale(&scale_box, 
+				  i ? pc->maxAttemptsScaleInfoB : pc->maxAttemptsScaleInfoA,
+				  i ? lwoh->normalLabel : lwoh->linkLabel, 
+				  pc, SLIDER_MAX_READ_ATTEMPTS, max_attempts_values, MAX_ATTEMPTS_VALUE_LENGTH,
+				  Closure->maxReadAttempts);
+
+	 if(!i) pc->maxAttemptsScaleA = scale;
+	 else   pc->maxAttemptsScaleB = scale;
+
+	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), scale_box, FALSE, FALSE, 0);
+	 else   AddHelpWidget(lwoh, scale_box);
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Maximum number of reading attempts</b>\n\n"
+			 "When the minimum number of reading attempts is reached "
+			 "without success, dvdisaster might choose to perform additional "
+			 "reading attempts upto this number.\n\n"
+
+			 "The decision to do more attempts depends on the quality of "
+			 "data gathered so far, which in turn is influenced by the "
+			 "capabilities of your CD/DVD drive and the operating system. "
+			 "So depending on your configuration, you may or "
+			 "may not see dvdisaster using the maximum value."
+			 ));
 
       /* Jump selector */
 

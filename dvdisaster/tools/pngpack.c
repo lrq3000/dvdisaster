@@ -1,9 +1,6 @@
 /*  pngpack: lossless image compression for a series of screen shots
  *  Copyright (C) 2005,2006 Carsten Gnoerlich.
  *
- *  NSIS library wrapper for pngpack
- *  Copyright (C) 2006 Lubos Stanek.
- *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -48,12 +45,6 @@
 #include <png.h>
 
 #include "md5.h"
-
-#ifdef BUILD_DLL
-  #define MINGW_EXPORT __declspec(dllexport)
-  #include <windows.h>
-  #include "exdll.h"
-#endif
 
 guint32 SwapBytes32(guint32 in)
 {
@@ -986,7 +977,6 @@ static void render_image(image *pi)
  *** main()
  ***/
 
-#ifndef BUILD_DLL
 int main(int argc, char *argv[])
 {  
    fprintf(stdout, "pngpack-0.10 *** Copyright 2005,2006 Carsten Gnoerlich.\n"
@@ -1065,86 +1055,3 @@ int main(int argc, char *argv[])
 
    return EXIT_SUCCESS;
 }
-#endif /* not building the .dll */
-
-/***
- *** Build the .dll for direct inclusion into the NSIS installer
- ***
- *   Copyright (C) 2006 Lubos Stanek.
- */
-
-#ifdef BUILD_DLL
-HINSTANCE g_hInstance;
-
-HWND g_hwndParent;
-
-void ExtractAll(HWND hwndParent, int string_size,
-                char *variables, stack_t **stacktop,
-                extra_parameters *extra)
-{
-  int Result;
-  FILE *stream;
-
-  g_hwndParent=hwndParent;
-
-  EXDLL_INIT();
-
- 	unsigned int i;
- 	char source[MAX_PATH+1];
- 	
- 	popstring((char *) source);
-
-  Result = 0;
-
-  if((stream = freopen("unpngpack.log", "w", stdout)) == NULL)
-  {
-      pushstring("error");
-      return;
-  }
-
-  fprintf(stdout, "pngpack-0.10 *** Copyright 2005,2006 Carsten Gnoerlich.\n");
-  fprintf(stdout, "NSIS library wrapper %s *** Copyright 2006 Lubos Stanek.\n", UNPNGPACK_VERSION); 
-	fprintf(stdout, "This software comes with  ABSOLUTELY NO WARRANTY.  This\n"
-	                "is free software and you are welcome to redistribute it\n"
-		              "under the conditions of the GNU GENERAL PUBLIC LICENSE.\n"  
-		              "See the file \"COPYING\" for further information.\n\n");
-
-  init_tile_database();
-
-	load_ppk(source);
-
-  for(i=0; i<img_n; i++)
-  {
-    image *pi = img_list[i];
-
-    fprintf(stdout, "rendering %s (opcodes %d - %d)",pi->name,pi->first_opcode,pi->last_opcode);
-
-	  pi->bytesize = sizeof(unsigned int) * pi->width*pi->height;
-	  pi->image = malloc(pi->bytesize);
-	  if(!pi->image)
-	  {
-	  	/* probably out of memory - try other images */
-	  	Result++;
-	  	continue;
-	  }
-	  render_image(pi);
-	  save_png(pi, pi->name);
-	  free(pi->image);
-  }
-
-  stream = freopen("CON", "w", stdout);
-
-  if(Result > 0)
-    pushstring("error");
-  else
-    pushstring("success");
-}
-
-
-BOOL WINAPI DllMain(HANDLE hInst, ULONG ul_reason_for_call, LPVOID lpReserved)
-{
-  g_hInstance=hInst;
-	return TRUE;
-}
-
-#endif

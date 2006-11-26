@@ -1,6 +1,11 @@
 Warning: CD/DVD reading is currently being reworked. DO NOT USE for production work;
 	 images might contain wrong data.
 
+0.72 (devel-10) 26-11-2006
+	- more fine tuning of the raw reader
+	- removed preferences and command line sections from documentation
+	- removed NSIS support
+
 0.72 (devel-9) 19-11-2006
 	- added multi threading to the linear reader
 	- Fixed program hanging on CD-Audio/Multisession media.

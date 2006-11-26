@@ -359,8 +359,9 @@ void ReadDotfile()
       if(!strcmp(symbol, "medium-size"))     { Closure->mediumSize  = atoll(value); continue; }
       if(!strcmp(symbol, "method-name"))     { if(Closure->methodName) g_free(Closure->methodName);
 	                                       Closure->methodName = g_strdup(value); continue; }
+      if(!strcmp(symbol, "max-read-attempts"))   { Closure->maxReadAttempts = atoi(value); continue; }
+      if(!strcmp(symbol, "min-read-attempts"))   { Closure->minReadAttempts = atoi(value); continue; }
       if(!strcmp(symbol, "query-size"))      { Closure->querySize  = atoi(value); continue; }
-      if(!strcmp(symbol, "read-attempts"))   { Closure->readAttempts = atoi(value); continue; }
       if(!strcmp(symbol, "read-and-create")) { Closure->readAndCreate = atoi(value); continue; }
       if(!strcmp(symbol, "read-raw"))        { Closure->readRaw = atoi(value); continue; }
       if(!strcmp(symbol, "redundancy"))      { if(Closure->redundancy) g_free(Closure->redundancy);
@@ -403,33 +404,34 @@ static void update_dotfile()
 	       "# which will be overwritten each time dvdisaster is run.\n\n"),
 	     VERSION);
 
-   g_fprintf(dotfile, "last-device:     %s\n", Closure->device);
-   g_fprintf(dotfile, "last-image:      %s\n", Closure->imageName);
-   g_fprintf(dotfile, "last-ecc:        %s\n", Closure->eccName);
-   g_fprintf(dotfile, "browser:         %s\n\n", Closure->browser);
+   g_fprintf(dotfile, "last-device:       %s\n", Closure->device);
+   g_fprintf(dotfile, "last-image:        %s\n", Closure->imageName);
+   g_fprintf(dotfile, "last-ecc:          %s\n", Closure->eccName);
+   g_fprintf(dotfile, "browser:           %s\n\n", Closure->browser);
 
-   g_fprintf(dotfile, "adaptive-read:   %d\n", Closure->adaptiveRead);
-   g_fprintf(dotfile, "auto-suffix:     %d\n", Closure->autoSuffix);
-   g_fprintf(dotfile, "cache-size:      %d\n", Closure->cacheMB);
-   g_fprintf(dotfile, "cd-size:         %lld\n", (long long int)Closure->cdSize);
-   g_fprintf(dotfile, "dao:             %d\n", Closure->noTruncate);
-   g_fprintf(dotfile, "dotfile-version: %d\n", Closure->dotFileVersion);
-   g_fprintf(dotfile, "dvd-size1:       %lld\n", (long long int)Closure->dvdSize1);
-   g_fprintf(dotfile, "dvd-size2:       %lld\n", (long long int)Closure->dvdSize2);
-   g_fprintf(dotfile, "fill-unreadable: %d\n", Closure->fillUnreadable);
-   g_fprintf(dotfile, "jump:            %d\n", Closure->sectorSkip);
-   g_fprintf(dotfile, "medium-size:     %lld\n", (long long int)Closure->mediumSize);
-   g_fprintf(dotfile, "method-name:     %s\n", Closure->methodName);
-   g_fprintf(dotfile, "query-size:      %d\n", Closure->querySize);
-   g_fprintf(dotfile, "read-attempts:   %d\n", Closure->readAttempts);
-   g_fprintf(dotfile, "read-and-create: %d\n", Closure->readAndCreate);
-   g_fprintf(dotfile, "read-raw:        %d\n", Closure->readRaw);
+   g_fprintf(dotfile, "adaptive-read:     %d\n", Closure->adaptiveRead);
+   g_fprintf(dotfile, "auto-suffix:       %d\n", Closure->autoSuffix);
+   g_fprintf(dotfile, "cache-size:        %d\n", Closure->cacheMB);
+   g_fprintf(dotfile, "cd-size:           %lld\n", (long long int)Closure->cdSize);
+   g_fprintf(dotfile, "dao:               %d\n", Closure->noTruncate);
+   g_fprintf(dotfile, "dotfile-version:   %d\n", Closure->dotFileVersion);
+   g_fprintf(dotfile, "dvd-size1:         %lld\n", (long long int)Closure->dvdSize1);
+   g_fprintf(dotfile, "dvd-size2:         %lld\n", (long long int)Closure->dvdSize2);
+   g_fprintf(dotfile, "fill-unreadable:   %d\n", Closure->fillUnreadable);
+   g_fprintf(dotfile, "jump:              %d\n", Closure->sectorSkip);
+   g_fprintf(dotfile, "medium-size:       %lld\n", (long long int)Closure->mediumSize);
+   g_fprintf(dotfile, "method-name:       %s\n", Closure->methodName);
+   g_fprintf(dotfile, "max-read-attempts: %d\n", Closure->maxReadAttempts);
+   g_fprintf(dotfile, "min-read-attempts: %d\n", Closure->minReadAttempts);
+   g_fprintf(dotfile, "query-size:        %d\n", Closure->querySize);
+   g_fprintf(dotfile, "read-and-create:   %d\n", Closure->readAndCreate);
+   g_fprintf(dotfile, "read-raw:          %d\n", Closure->readRaw);
    if(Closure->redundancy)
-     g_fprintf(dotfile, "redundancy:    %s\n", Closure->redundancy);
-   g_fprintf(dotfile, "spinup-delay:    %d\n", Closure->spinupDelay);
-   g_fprintf(dotfile, "split-files:     %d\n", Closure->splitFiles);
-   g_fprintf(dotfile, "unlink:          %d\n", Closure->unlinkImage);
-   g_fprintf(dotfile, "welcome-msg:     %d\n", Closure->welcomeMessage);
+     g_fprintf(dotfile, "redundancy:        %s\n", Closure->redundancy);
+   g_fprintf(dotfile, "spinup-delay:      %d\n", Closure->spinupDelay);
+   g_fprintf(dotfile, "split-files:       %d\n", Closure->splitFiles);
+   g_fprintf(dotfile, "unlink:            %d\n", Closure->unlinkImage);
+   g_fprintf(dotfile, "welcome-msg:       %d\n", Closure->welcomeMessage);
 
    if(fclose(dotfile))
      g_fprintf(stderr, "Error closing configuration file %s: %s\n", 
@@ -499,7 +501,8 @@ void InitClosure()
    Closure->methodList  = g_ptr_array_new();
    Closure->methodName  = g_strdup("RS01");
    Closure->cacheMB     = 32;
-   Closure->readAttempts= 1;
+   Closure->minReadAttempts = 1;
+   Closure->maxReadAttempts = 1;
    Closure->sectorSkip  = 16;
    Closure->spinupDelay = 5;
    Closure->querySize   = 2;

@@ -23,13 +23,11 @@
 
 #include "scsi-layer.h"
 
-//#define DEBUG 1
-
 /***
  *** Local data package used during reading 
  ***/
 
-#define READ_BUFFERS 32
+#define READ_BUFFERS 128   /* equals 4MB of buffer space */
 
 enum { BUF_EMPTY, BUF_FULL, BUF_EOF };
 
@@ -201,14 +199,14 @@ static gpointer worker_thread(read_closure *rc)
 	 if(!LargeSeek(rc->image, (gint64)(2048*s)))
 	 {  rc->workerError = g_strdup_printf(_("Failed seeking to sector %lld in image [%s]: %s"),
 					      s, "store", strerror(errno));
-	    return 0;
+	    goto update_mutex;
 	 }
 
 	 n = LargeWrite(rc->image, rc->alignedBuf[rc->writePtr]->buf, 2048*nsectors);
 	 if(n != 2048*nsectors)
 	 {  rc->workerError = g_strdup_printf(_("Failed writing to sector %lld in image [%s]: %s"),
 	                                      s, "store", strerror(errno));
-	    return 0;
+	    goto update_mutex;
 	 }
 
 	 /* On-the-fly CRC/MD5 calculation */
@@ -240,6 +238,7 @@ static gpointer worker_thread(read_closure *rc)
 
       /* Release this buffer */
 
+update_mutex:
       g_mutex_lock(rc->mutex);
       rc->bufState[rc->writePtr] = BUF_EMPTY;
       rc->writePtr++;
@@ -247,6 +246,9 @@ static gpointer worker_thread(read_closure *rc)
 	rc->writePtr = 0;
       g_cond_signal(rc->canRead);
       g_mutex_unlock(rc->mutex);
+
+      if(rc->workerError)
+	return NULL;
    }
 
    return NULL;
@@ -624,9 +626,6 @@ reopen_image:
         goto terminate;
       }
 
-      if(rc->workerError)       /* something went wrong in the worker thread */
-	Stop(rc->workerError);
-
       /*** Decide between reading in fast mode (16 sectors at once)
 	   or reading one sector at a time.
 	   Fast mode gains some reading speed due to transfering fewer
@@ -671,18 +670,12 @@ reread:
 	      ok++;
 	 }
 
-	 if(ok == nsectors)
+	 if(ok == nsectors)  /* All sectors already present. */
 	 {
-#ifdef DEBUG
-printf("Sector %lld: %d sectors already present.\n", s, nsectors);
-#endif
 	   goto step_counter;
 	 }
-	 else
+	 else                /* Some sectors still missing */
 	 {
-#ifdef DEBUG
-printf("Sector %lld: %d sectors still missing.\n", s, nsectors-ok);
-#endif
            if(nsectors > 1 && ok > 0)
 	   {  nsectors = 1;
 	      goto reread;
@@ -690,12 +683,13 @@ printf("Sector %lld: %d sectors still missing.\n", s, nsectors-ok);
 	 }
       }
 
-#ifdef DEBUG
-printf("Sector %lld: reading %2d sectors\n",s,nsectors);
-#endif
      /*** Try reading the next <nsectors> sector(s). */
 
       g_mutex_lock(rc->mutex);
+      if(rc->workerError)       /* something went wrong in the worker thread */
+      {	g_mutex_unlock(rc->mutex);
+	Stop(rc->workerError);
+      }
       while(rc->bufState[rc->readPtr] != BUF_EMPTY)
       {  g_cond_wait(rc->canRead, rc->mutex);
       }
@@ -777,21 +771,32 @@ printf("Sector %lld: reading %2d sectors\n",s,nsectors);
 
 	    /* Write nfill of "dead sector" markers so that
 	       they are tried again in the following iterations / sessions. */
-#ifdef DEBUG
-printf("Sector %lld: filling %d sectors\n",s,nfill);
-#endif
-	    if(!LargeSeek(rc->image, (gint64)(2048*s)))
-	      Stop(_("Failed seeking to sector %lld in image [%s]: %s"),
-		   s, "nfill", strerror(errno));
 
 	    for(i=0; i<nfill; i++)
-	    {  n = LargeWrite(rc->image, Closure->deadSector, 2048);
-	       if(n != 2048)
-		 Stop(_("Failed writing to sector %lld in image [%s]: %s"),
-		      s, "nfill", strerror(errno));
+	    {
+	       g_mutex_lock(rc->mutex);
+	       if(rc->workerError)       /* something went wrong in the worker thread */
+	       {  g_mutex_unlock(rc->mutex);
+		  Stop(rc->workerError);
+	       }
+	       
+	       while(rc->bufState[rc->readPtr] != BUF_EMPTY)
+	       {  g_cond_wait(rc->canRead, rc->mutex);
+	       }
+
+	       memcpy(rc->alignedBuf[rc->readPtr]->buf, Closure->deadSector, 2048);
+
+	       rc->bufferedSector[rc->readPtr] = s+i;
+	       rc->nSectors[rc->readPtr] = 1;
+	       rc->bufState[rc->readPtr] = BUF_FULL;
+	       rc->readPtr++;
+	       if(rc->readPtr >= READ_BUFFERS)
+		 rc->readPtr = 0;
+	       g_cond_signal(rc->canWrite);
+	       g_mutex_unlock(rc->mutex);
 	    }
 	 }
-	 
+
 	 /* If sectorSkip is set, perform the skip.
 	    nfill has been calculated so that the skip lands
 	    at a multiple of 16. Therefore nsectors can remain

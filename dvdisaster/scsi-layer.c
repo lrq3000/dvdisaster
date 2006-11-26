@@ -308,8 +308,8 @@ assume_cd:
    cmd[0] = 0x43;  /* READ TOC/PMA/ATIP */
    cmd[2] = 0;     /* format; we want the TOC */
    cmd[6] = 1;     /* track/session number */
-   cmd[7] = 0;     /* allocation length */
-   cmd[8] = length;
+   cmd[7] = (length>>8) & 0xff; /* allocation length */
+   cmd[8] = length & 0xff;
 
    if(SendPacket(dh, cmd, 10, buf, length, &sense, DATA_READ)<0)
    {  FreeAlignedBuffer(ab);
@@ -358,8 +358,8 @@ assume_cd:
    cmd[1] = 0x02;  /* TIME bit required for this format */
    cmd[2] = 2;     /* format; we want the full TOC */
    cmd[6] = 1;     /* track/session number */
-   cmd[7] = 0;     /* allocation length */
-   cmd[8] = length;
+   cmd[7] = (length>>8) & 0xff; /* allocation length */
+   cmd[8] = length & 0xff;
 
    if(SendPacket(dh, cmd, 10, buf, length, &sense, DATA_READ)<0)
    {  FreeAlignedBuffer(ab);
@@ -982,7 +982,7 @@ void SpinupDevice(DeviceHandle *dh)
 
       if(s>=dh->sectors) return;
  
-      status = ReadSectors(dh, ab->buf, s, 16);
+      status = ReadSectorsFast(dh, ab->buf, s, 16);
       if(status) return;
 
       elapsed = g_timer_elapsed(timer, &ignore);
@@ -1102,12 +1102,12 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
    /* Sanity checks */ 
 
    if(!dh->rawBuffer)
-   {  RememberSense(16, 255, 4);
+   {  RememberSense(3, 255, 4);  /* RAW buffer not allocated */
       return -1;
    }
 
    if(nsectors > 16)
-   {  RememberSense(16, 255, 3);
+   {  RememberSense(3, 255, 3); /* RAW reading > 16 sectors not supported */
       return -1;
    }
 
@@ -1153,7 +1153,15 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
    ret = SendPacket(dh, cdb, 12, rb->workBuf->buf, nsectors*rb->sampleLength, sense, DATA_READ);
    RememberSense(sense->sense_key, sense->asc, sense->ascq);
 
-   /*** Read failed. See how to proceed if defective sector reading is enabled. */
+   /* The drive screws up sometimes and returns a damaged sector as good. 
+      When nsectors==1, this sectors is still interesting for data recovery.
+      We flag it as bad so that the next if() will pick it up correctly. */
+
+   if(!ret && nsectors == 1 && !ValidateRawSector(rb, rb->workBuf->buf))
+   {  ret = -1;
+   }
+
+   /*** See if defective sector reading is enabled and applicable. */
 
    if(ret<0 && dh->canReadDefective)
    {  
@@ -1173,7 +1181,7 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
    for(i=0, s=0; i<nsectors; i++, s+=rb->sampleLength)
      if(!memcmp(rb->workBuf->buf+s, Closure->deadSector, 2048))
      {  if(dh->canReadDefective)
- 	  RememberSense(16, 255, 0); /* report that nothing came back */
+ 	  RememberSense(3, 255, 0); /* report that nothing came back */
         return -1;
      }
 
@@ -1201,6 +1209,7 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
 
 int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
 {  int retry,status = -1;
+   int recommended_attempts = Closure->minReadAttempts;
 
    /* See if we are in a simulated defective area */ 
 
@@ -1221,33 +1230,88 @@ int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
 
    if(Closure->readRaw && dh->readRaw)
    {  dh->rawBuffer->samplesRead  = 0;
+      dh->rawBuffer->recommendedAttempts = Closure->minReadAttempts;
    }
 
    /* Try normal read */
 
-   for(retry=1; retry<=Closure->readAttempts; retry++)
+   for(retry=1; retry<=recommended_attempts; retry++)
    {  
+      /* Dispatch between normal reader and raw reader */
+
       if(Closure->readRaw && dh->readRaw)
 	   status = dh->readRaw(dh, buf, s, nsectors);
       else status = dh->read(dh, buf, s, nsectors);
 
+      if(dh->readRaw)
+	recommended_attempts = dh->rawBuffer->recommendedAttempts;
+
       if(status)  /* current try was unsucessful */
-      {  if(Closure->readAttempts > 1)
+      {
+	 if(recommended_attempts > 1)
+	 {
+
+	   /* Do not attempt multiple re-reads if nsectors > 1 and sectorSkip == 0
+	      as these will be re-read with nsectors==1 anyways. */
+
+	   if(dh->canReadDefective && nsectors > 1 && Closure->sectorSkip == 0)
+	   {  PrintCLIorLabel(Closure->status,
+			      _("Sectors %lld - %lld: %s\n"),
+			      s, s+nsectors-1, GetLastSenseString(FALSE));
+	      return status;
+	   }
+
+	   /* Print results of current attempt */
+
 	   PrintCLIorLabel(Closure->status,
 			   _("Sector %lld, try %d: %s\n"),
 			   s, retry, GetLastSenseString(FALSE));
 
-	 if(dh->canReadDefective && Closure->readAttempts > 1 && retry == Closure->readAttempts)
-	   RememberSense(16, 255, 7);
+	   /* Last attempt; create failure notice */
+
+	   if(dh->canReadDefective && retry >= recommended_attempts)
+	     RememberSense(3, 255, 7);  /* Recovery failed */
+	 }
       }
       else 
-      {  if(Closure->readAttempts > 1 && retry > 1)
+      {  if(recommended_attempts > 1 && retry > 1)
 	  PrintCLIorLabel(Closure->status,
 			  _("Sector %lld, try %d: success\n"), s, retry);
 
          break;
       }
    }
+
+   return status;
+}
+
+/*
+ * Sector reading through the device handle.
+ * dh->read dispatches to one the routines above.
+ * No reading retries and/or raw reading are used.
+ */
+
+int ReadSectorsFast(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
+{  int status = -1;
+
+   /* See if we are in a simulated defective area */ 
+
+   if(dh->defects)
+   {  gint64 i,idx;
+
+     for(idx=s,i=0; i<nsectors; idx++,i++)
+       if(GetBit(dh->defects, idx))
+       {  dh->sense.sense_key = 3;
+	  dh->sense.asc       = 255;
+	  dh->sense.ascq      = 255;
+	  RememberSense(dh->sense.sense_key, dh->sense.asc, dh->sense.ascq);
+	  return TRUE;
+       }
+   }
+
+   /* Try normal read */
+
+   status = dh->read(dh, buf, s, nsectors);
 
    return status;
 }
@@ -1310,7 +1374,7 @@ DeviceHandle* OpenAndQueryDevice(char *device)
 	   }
 	   PrintLog(_(", RAW reading"));
 
-	   if(Closure->readAttempts > 1)
+	   if(Closure->minReadAttempts > 1)
 	   {  dh->canReadDefective = SetRawMode(dh, 0x20, MODE_PAGE_OR);
 
 	      if(dh->canReadDefective)

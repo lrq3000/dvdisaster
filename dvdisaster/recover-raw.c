@@ -74,27 +74,27 @@ RawBuffer *CreateRawBuffer(int sample_length)
 
    rb->workBuf   = CreateAlignedBuffer(2352*16);  /* max lba...lba+15 are read at once */
    rb->zeroSector= g_malloc0(2352);
-   rb->rawBuf    = g_malloc(Closure->readAttempts * sizeof(unsigned char*));
+   rb->rawBuf    = g_malloc(Closure->maxReadAttempts * sizeof(unsigned char*));
    rb->recovered = g_malloc(sample_length);
    rb->byteState = g_malloc(sample_length);
 
-   for(i=0; i<Closure->readAttempts; i++)
+   for(i=0; i<Closure->maxReadAttempts; i++)
    {  rb->rawBuf[i] = g_malloc(sample_length);
    }
 
    for(i=0; i<N_P_VECTORS; i++)
-   {  rb->pParity1[i] = g_malloc(Closure->readAttempts);
-      rb->pParity2[i] = g_malloc(Closure->readAttempts);
+   {  rb->pParity1[i] = g_malloc(Closure->maxReadAttempts);
+      rb->pParity2[i] = g_malloc(Closure->maxReadAttempts);
    }
 
    for(i=0; i<N_Q_VECTORS; i++)
-   {  rb->qParity1[i] = g_malloc(Closure->readAttempts);
-      rb->qParity2[i] = g_malloc(Closure->readAttempts);
+   {  rb->qParity1[i] = g_malloc(Closure->maxReadAttempts);
+      rb->qParity2[i] = g_malloc(Closure->maxReadAttempts);
    }
 
 
-   rb->pLoad = g_malloc0(Closure->readAttempts);
-   rb->qLoad = g_malloc0(Closure->readAttempts);
+   rb->pLoad = g_malloc0(Closure->maxReadAttempts * sizeof(int));
+   rb->qLoad = g_malloc0(Closure->maxReadAttempts * sizeof(int));
 
    return rb;
 }
@@ -105,7 +105,7 @@ void FreeRawBuffer(RawBuffer *rb)
    FreeGaloisTables(rb->gt);
    FreeReedSolomonTables(rb->rt);
 
-   for(i=0; i<Closure->readAttempts; i++)
+   for(i=0; i<Closure->maxReadAttempts; i++)
      g_free(rb->rawBuf[i]);
 
    for(i=0; i<N_P_VECTORS; i++)
@@ -345,7 +345,7 @@ static int simple_lec(RawBuffer *rb, unsigned char *frame)
    if(q_failures || p_failures || q_corrected || p_corrected)
    {
      PrintCLIorLabel(Closure->status, 
-		     "Sector %d  L-EC P/Q results: %d/%d failures, %d/%d corrected\n",
+		     "Sector %d  L-EC P/Q results: %d/%d failures, %d/%d corrected.\n",
 		     rb->lba, p_failures, q_failures, p_corrected, q_corrected);
      return 1;
    }
@@ -383,14 +383,14 @@ int ValidateRawSector(RawBuffer *rb, unsigned char *frame)
   /* Test internal sector checksum again */
 
   if(!check_edc(frame, rb->xaMode))
-  {  RememberSense(16, 255, 1);
+  {  RememberSense(3, 255, 1);  /* EDC failure in RAW sector */
        return FALSE;
   }
 
   /* Test internal sector address */
 
   if(!check_msf(frame, rb->lba))
-  {  RememberSense(16, 255, 2);
+  {  RememberSense(3, 255, 2);  /* Wrong MSF in RAW sector */
      return FALSE;
   }
 
@@ -398,7 +398,7 @@ int ValidateRawSector(RawBuffer *rb, unsigned char *frame)
 
   if(lec_did_sth)
     PrintCLIorLabel(Closure->status, 
-		    "Sector %d: Recovered in raw reader by L-EC\n",
+		    "Sector %d: Recovered in raw reader by L-EC.\n",
 		    rb->lba);
 
    return TRUE;
@@ -648,7 +648,7 @@ static void eval_p_candidate(RawBuffer *rb, unsigned char *p_vector, int p,
  * An enhanced L-EC loop
  */   
 
-#define DEBUG_HEURISTIC_LEC
+//#define DEBUG_HEURISTIC_LEC
 
 static int heuristic_lec(unsigned char *cd_frame, RawBuffer *rb, unsigned char *out)
 {
@@ -901,7 +901,7 @@ static int heuristic_lec(unsigned char *cd_frame, RawBuffer *rb, unsigned char *
  *** Andrei Grecu, 2006
  */
 
-#define DEBUG_SEARCHPLAUSIBLESECTOR
+//#define DEBUG_SEARCHPLAUSIBLESECTOR
 
 static int check_q_plausibility(RawBuffer *rb, unsigned char *target_q_vector, 
 				int q, int pos_a, int pos_b)
@@ -1106,7 +1106,7 @@ static void initialize_frame(RawBuffer *rb)
    memcpy(&(rb->recovered[16]), &(rb->rawBuf[best_sector][16]), rb->sampleLength - 16);
 }
 
-#define DEBUG_SEARCH_PLAUSIBLE
+//#define DEBUG_SEARCH_PLAUSIBLE
 
 int search_plausible_sector(RawBuffer *rb)
 {
@@ -1433,7 +1433,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
    /* See if the buffer was returned unchanged. */
 
    if(!memcmp(new_frame, Closure->deadSector, 2048))
-   {  RememberSense(16, 255, 0);
+   {  RememberSense(3, 255, 0);  /* No data returned */
       return -1;
    }
 
@@ -1444,7 +1444,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
       signalled an error. */
 
    if(!memcmp(new_frame, rb->zeroSector, 2352))
-   {  RememberSense(16, 255, 5);
+   {  RememberSense(3, 255, 5); /* Atapi/scsi drive possibly broken (zero sector) */
       return -1;
    }
 
@@ -1452,7 +1452,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
       If the sync sequence is missing, reject the sector. */
 
    if(!check_for_sync_pattern(new_frame))
-   {  RememberSense(16,255, 8);
+   {  RememberSense(3,255, 8); /* Atapi/scsi drive possibly broken (random data) */
       return -1;
    }
 
@@ -1460,7 +1460,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
       from wrong places in RAW mode. */
 
    if(!check_msf(new_frame, rb->lba))
-   {  RememberSense(16, 255, 2);
+   {  RememberSense(3, 255, 2); /* Wrong MSF in raw sector */
       return -1;
    }
 
@@ -1491,7 +1491,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
    if(check_edc(rb->recovered, rb->xaMode))
    {
        PrintCLIorLabel(Closure->status, 
-		       "Sector %d: Recovered in raw reader by iterative L-EC\n",
+		       "Sector %d: Recovered in raw reader by iterative L-EC.\n",
 		       rb->lba);
 
        memcpy(outbuf, rb->recovered+rb->dataOffset, 2048);
@@ -1511,7 +1511,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
 
    if(check_edc(rb->recovered, rb->xaMode))
    {  PrintCLIorLabel(Closure->status, 
-		      "Sector %d: Recovered in raw reader by plausible sector search\n",
+		      "Sector %d: Recovered in raw reader by plausible sector search.\n",
 		      rb->lba);
       memcpy(outbuf, rb->recovered+rb->dataOffset, 2048);
       return 0; 
@@ -1521,7 +1521,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
 
    if(check_edc(rb->recovered, rb->xaMode))
    {  PrintCLIorLabel(Closure->status, 
-		      "Sector %d: Recovered in raw reader by heuristic L-EC\n",
+		      "Sector %d: Recovered in raw reader by heuristic L-EC.\n",
 		      rb->lba);
       memcpy(outbuf, rb->recovered+rb->dataOffset, 2048);
       return 0; 
@@ -1529,6 +1529,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
 
    /*** Recovery failed */
 
-   RememberSense(16, 255, 6);
+   RememberSense(3, 255, 6);  /* Sector accumulated for analysis */
+   rb->recommendedAttempts = Closure->maxReadAttempts;
    return -1;
 }

@@ -483,7 +483,27 @@ int main(int argc, char *argv[])
 	   if(optarg) Closure->randomSeed = atoi(optarg);
 	   break;
          case MODIFIER_READ_ATTEMPTS:
-	   if(optarg) Closure->readAttempts = atoi(optarg);
+	   if(optarg) 
+	   {  char copy[strlen(optarg)+1];
+	      char *cpos;
+
+	      strcpy(copy, optarg);
+	      cpos = strchr(copy,'-');
+
+	      if(!cpos)
+	      {  Closure->minReadAttempts = Closure->maxReadAttempts = atoi(optarg); 
+	      }
+	      else
+	      {  *cpos = 0;
+		 Closure->minReadAttempts = atoi(copy);
+		 Closure->maxReadAttempts = atoi(cpos+1);
+	      }
+	      
+	      if(Closure->minReadAttempts < 1)
+		Closure->minReadAttempts = 1;
+	      if(Closure->maxReadAttempts < Closure->minReadAttempts)
+		Closure->maxReadAttempts = Closure->minReadAttempts;
+	   }
 	   break;
          case MODIFIER_READ_RAW:
 	   Closure->readRaw = TRUE;
@@ -759,7 +779,7 @@ int main(int argc, char *argv[])
 	     "  --dao                  - assume DAO disc; do not trim image end\n"
 	     "  --fill-unreadable n    - fill unreadable sectors with byte n\n"
       	     "  --query-size n         - query drive/udf/ecc for image size (default: ecc)\n"   
-	     "  --read-attempts n      - attempts n reads of a defective sector\n"
+	     "  --read-attempts n-m    - attempts n upto m reads of a defective sector\n"
 	     "  --read-raw             - performs read in raw mode if possible\n"
 	     "  --speed-warning n      - print warning if speed changes by more than n percent\n"
 	     "  --spinup-delay n       - wait n seconds for drive to spin up\n"

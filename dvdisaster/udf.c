@@ -33,7 +33,7 @@ static int read_fingerprint(DeviceHandle *dh, unsigned char *fingerprint, gint64
    struct MD5Context md5ctxt;
    int status;
 
-   status = ReadSectors(dh, ab->buf, sector, 1);
+   status = ReadSectorsFast(dh, ab->buf, sector, 1);
 
    if(status) 
    {  FreeAlignedBuffer(ab);
@@ -61,7 +61,7 @@ static int try_sector(DeviceHandle *dh, gint64 pos, EccHeader **ehptr, unsigned 
 
    Verbose("udf/try_sector: trying sector %lld\n", pos);
 
-   if(ReadSectors(dh, secbuf, pos, 2))
+   if(ReadSectorsFast(dh, secbuf, pos, 2))
    {  Verbose("udf/try_sector: read error, trying next header\n");
       return TRY_NEXT_HEADER;
    }
@@ -581,7 +581,7 @@ static IsoInfo* examine_iso(DeviceHandle *dh)
    /*** Iterate over the volume decriptors */
 
    for(sector=16; sector<32; sector++)
-   {  status = ReadSectors(dh, buf, sector, 1);
+   {  status = ReadSectorsFast(dh, buf, sector, 1);
 
       if(status)
       {  Verbose("  Sector %2d: unreadable\n", sector);

@@ -517,7 +517,7 @@ done
 if ! test -e $workdir/de; then mkdir $workdir/de; fi
 cd $workdir/de
 create_subpages index de "0 10 20 30"
-create_subpages example de "0 10 20 21 22 30 40 50 80 81 82 83 84 90"
+create_subpages example de "0 10 20 21 22 30 40 50"
 create_subpages download de "0 10 20"
 create_subpages qa de "0 10 20"
 create_subpages background de "0 10 20 30 40 50 60 70"
@@ -539,7 +539,7 @@ done
 if ! test -e $workdir/en; then mkdir $workdir/en; fi
 cd $workdir/en
 create_subpages index en "0 10 20 30"
-create_subpages example en "0 10 20 21 22 30 40 50 80 81 82 83 84 90"
+create_subpages example en "0 10 20 21 22 30 40 50"
 create_subpages download en "0 10 20"
 create_subpages qa en "0 10 20"
 create_subpages background en "0 10 20 30 40 50 60 70"

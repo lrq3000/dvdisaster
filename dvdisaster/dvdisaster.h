@@ -126,7 +126,8 @@ typedef struct _GlobalClosure
    int sectorSkip;      /* Number of sectors to skip after read error occurs */
    char *redundancy;    /* Error correction code redundancy */
    int readRaw;         /* Read CD sectors raw + verify them */
-   int readAttempts;    /* Reading attempts */
+   int minReadAttempts; /* minimum reading attempts */
+   int maxReadAttempts; /* maximal reading attempts */
    int adaptiveRead;    /* Use optimized strategy for reading defective images */
    int speedWarning;    /* Print warning if speed changes by more than given percentage */
    int fillUnreadable;  /* Byte value for filling unreadable sectors or -1 */
@@ -853,6 +854,7 @@ typedef struct _RawBuffer
    int sampleLength;          /* length of samples */
    int dataOffset;            /* offset to user data in frame */
    int xaMode;                /* frame is in XA21 mode */
+   int recommendedAttempts;   /* number of retries recommended by reading heuristics */
 
    unsigned char *recovered;  /* working buffer for cd frame recovery */
    unsigned char *byteState;  /* state of error correction */

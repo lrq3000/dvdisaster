@@ -52,7 +52,6 @@ static const char *snstext[] = {
     "Miscompare",               /* Source data and data on the medium
                                    do not agree */
     "Key=15",                   /* Reserved */
-    "Raw Reader"                /* internal errors, NOT part of the SCSI standard */
 };
 
 struct error_info{
@@ -548,7 +547,7 @@ static struct error_info additional[] =
   {0xff,0x05,R,"Atapi/scsi driver possibly broken (invalid zero sector)"},
   {0xff,0x06,R,"Sector accumulated for analysis"},
   {0xff,0x07,R,"Recovery failed"},
-  {0xff,0x08,R,"Atapi/scsi driver possibly broken (possibly random data returned)"},
+  {0xff,0x08,R,"Atapi/scsi driver maybe broken (possibly random data returned)"},
 
   /*
    * Faked error by defect simulation mode
@@ -583,14 +582,30 @@ void RememberSense(int k, int a, int aq)
 char *GetSenseString(int sense_key, int asc, int ascq, int verbose)
 {  static char text[256];
    struct error_info *ei;
-   char sep = sense_key == 16 ? ':' : ';';
+   int raw_reader_error;
+   const char *sns_text;
+   char sep;
    int idx,len;
 
-   if(sense_key <0 || sense_key > 16) 
+   /* Special treatment for our fake SCSI errors */
+
+   raw_reader_error = (asc == 255) && (ascq < 255);
+   if(!raw_reader_error) 
+   {  sep = ';';
+      sns_text = snstext[sense_key];
+   }
+   else
+   {  sep = ':';
+      sns_text = "Raw Reader";
+   }
+
+   /* Go print them */
+
+   if(sense_key <0 || sense_key > 15) 
         g_snprintf(text, 255, _("Sense error (0x%02x); "),sense_key);
    else 
-   {   if(verbose) g_snprintf(text, 255, _("Sense error: %s%c "),snstext[sense_key],sep);
-       else        g_snprintf(text, 255, "%s%c ",snstext[sense_key],sep);
+   {   if(verbose) g_snprintf(text, 255, _("Sense error: %s%c "),sns_text, sep);
+       else        g_snprintf(text, 255, "%s%c ",sns_text, sep);
    }
 
    idx = strlen(text); 

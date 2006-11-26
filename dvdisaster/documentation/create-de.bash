@@ -280,14 +280,6 @@ function example_contents_de()
    link40)   link_title="Datenträger-Abbild rekonstruieren" ;;
    link50)   link_title="Informationen über Abbild und Fehlerkorrektur-Daten anzeigen" ;;
 
-   link80)   link_title="Einstellmöglichkeiten" ;;
-   link81)   link_title="Allgemein" ;;
-   link82)   link_title="Lesen und Prüfen" ;;
-   link83)   link_title="Fehlerkorrektur/Dateien" ;;
-   link84)   link_title="Fehlerkorrektur/Abbilder" ;;
-
-   link90)   link_title="Aufrufmöglichkeiten" ;;
-
    content*) eval "example$page$lang $file" ;;
    esac 
 }
@@ -364,19 +356,19 @@ als eigenständige Datei abgelegt werden.
 <li><a href="example50.html">Informationen über
                              Abbild- und Fehlerkorrektur-Daten anzeigen</a><p></li>
 
-<li><a href="example80.html">Einstellmöglichkeiten (graphische Benutzeroberfläche)</a><p></li>
-
-<ul>
-<li><a href="example81.html">Allgemeine Einstellungen</a><p></li>
-<li><a href="example82.html">Einstellungen zum Lesen und Prüfen</a><p></li>
-<li><a href="example83.html">Einstellungen zum Erzeugen von Fehlerkorrektur-Dateien</a><p></li>
-<li><a href="example84.html">Einstellungen zum Erweitern von Abbildern mit Fehlerkorrektur-Daten</a><p></li>
-</ul>
-
-<li><a href="example90.html">Aufrufmöglichkeiten (Kommandozeile)</a><p></li>
-
 <li><a href="background70.html">Tips zum Aufbewahren der Fehlerkorrektur-Datei</a></li>
 </ul>
+
+Die <b>vollständigen Informationen zur Bedienung von dvdisaster</b> befinden sich ab 
+Version 0.72 nicht mehr in diesen Seiten, sondern an folgenden Stellen:
+
+<ul>
+<li>Einstellmöglichkeiten in der Benutzeroberfläche:<br>
+Die entsprechenden Dialoge enthalten Verweise in das eingebaute Hilfesystem.<p></li>
+<li>Kommandozeile:<br>
+Die möglichen Aufrufparameter sind in der "Unix manual page" zu dvdisaster beschrieben.</li>
+</ul>
+
 EOF
 }
 
@@ -461,13 +453,15 @@ Das <img src="../images/open-ecc.png" alt="Dateiauswahl-Knopf" align="middle">-S
  
 <tr valign="top" $BGCOLOR2>
 <td>3b.</td>
-<td>
+<td colspan="2">
 nur bei Verwendung von erweiterten Abbildern (RS02):<p>
 
-Wählen Sie "ECC/RS02" bei den Einstellungen zur Ermittlung der Abbild-Größe,
+Öffnen Sie den Einstellungs-Dialog mit dem 
+<img src="../images/open-preferences.png" alt="Einstellungs-Knopf" align=middle>-Symbol.
+Wählen Sie "ECC/RS02" bei den  Einstellungen zur Ermittlung der Abbild-Größe,
 damit der Datenträger vollständig überprüft wird.<p>
+<img src="images/select-size.png" alt="Bildschirmfoto">
 </td>
-<td><a href="example81.html#imagesize"><img src="images/prefs-general.png" alt="Bildschirmfoto" width="200"></a></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
@@ -703,9 +697,7 @@ function example21de()
 <tr valign="top" $BGCOLOR1>
 <td>3.</td>
 <td>Wählen Sie eine Abbild-Datei aus.
-Achten Sie darauf, genügend Speicherplatz für das Abbild zu haben. Aktivieren Sie das
-<a href="example81.html#localfiles">Aufteilen von Dateien</a> wenn Ihr 
-Dateisystem keine Dateigrößen von mehr als 2GB unterstützt. <p>
+Achten Sie darauf, genügend Speicherplatz für das Abbild zu haben.<p>
 </td>
 <td><img src="../images/btn-image.png" alt="Abbild-Datei-Auswahl"><p>
 Das <img src="../images/open-img.png" alt="Dateiauswahl-Knopf" align="middle">-Symbol öffnet die Dateiauswahl.</td>
@@ -752,11 +744,12 @@ Das <img src="../images/open-ecc.png" alt="Dateiauswahl-Knopf" align="middle">-S
 
 <tr valign="top" $BGCOLOR1>
 <td>3.</td>
-<td>
-Stellen Sie die Fehlerkorrektur nach Ihren Wünschen ein.<p>
-Wählen Sie "Abspeichern in: Fehlerkorrektur-Datei (RS01)".</li>
+<td colspan="2">
+Öffnen Sie den Einstellungs-Dialog mit dem 
+<img src="../images/open-preferences.png" alt="Einstellungs-Knopf" align=middle>-Symbol.<br>
+Wählen Sie "Abspeichern in: Fehlerkorrektur-Datei (RS01)".<p>
+<img src="images/select-rs01.png" alt="Bildschirmfoto">
 </td>
-<td><a href="example83.html"><img src="images/prefs-ecc-0.png" alt="Bildschirmfoto" width="200"></a></td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
@@ -920,11 +913,12 @@ Das <img src="../images/open-img.png" alt="Dateiauswahl-Knopf" align="middle">-S
 
 <tr valign="top" $BGCOLOR1>
 <td>3.</td>
-<td>
-Stellen Sie die Fehlerkorrektur nach Ihren Wünschen ein.<p>
-Wählen Sie "Abspeichern in: Erweitertes Abbild (RS02)".</li>
+<td colspan="2">
+Öffnen Sie den Einstellungs-Dialog mit dem 
+<img src="../images/open-preferences.png" alt="Einstellungs-Knopf" align=middle>-Symbol.<br>
+Wählen Sie "Abspeichern in: Erweitertes Abbild (RS02)".<p>
+<img src="images/select-rs02.png" alt="Bildschirmfoto">
 </td>
-<td><a href="example84.html"><img src="images/prefs-rs02-0.png" alt="Bildschirmfoto" width="200"></a></td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
@@ -1193,21 +1187,25 @@ Das <img src="../images/open-ecc.png" alt="Dateiauswahl-Knopf" align="middle">-S
 
 <tr valign="top" $BGCOLOR1>
 <td>4b.</td>
-<td>
+<td colspan="2">
 nur bei Verwendung von erweiterten Abbildern (RS02):<p>
 
-Wählen Sie "ECC/RS02" bei den Einstellungen zur Ermittlung der Abbild-Größe,
-damit der Datenträger vollständig eingelesen wird.<p>
+Öffnen Sie den Einstellungs-Dialog mit dem 
+<img src="../images/open-preferences.png" alt="Einstellungs-Knopf" align=middle>-Symbol.
+Wählen Sie "ECC/RS02" bei den  Einstellungen zur Ermittlung der Abbild-Größe,
+damit der Datenträger vollständig gelesen wird.<p>
+<img src="images/select-size.png" alt="Bildschirmfoto">
 </td>
-<td><a href="example81.html#imagesize"><img src="images/prefs-general.png" alt="Bildschirmfoto" width="200"></a></td>
 </tr>
 
 <tr valign="top" $BGCOLOR2>
 <td>5.</td>
-<td>
+<td colspan="2">
+Öffnen Sie den Einstellungs-Dialog mit dem 
+<img src="../images/open-preferences.png" alt="Einstellungs-Knopf" align=middle>-Symbol.<br>
 Wählen Sie das angepaßte Leseverfahren aus.<p>
+<img src="images/select-adaptive.png" alt="Bildschirmfoto">
 </td>
-<td><a href="example82.html"><img src="images/prefs-read.png" alt="Bildschirmfoto" width="200"></a></td>
 </tr>
 
 <tr valign="top" $BGCOLOR1>
@@ -1614,902 +1612,6 @@ Fehlerkorrektur-Daten: Erzeugt von dvdisaster-0.70<br>
 - CRC-md5sum        : 105381481a7d5e490d3a53ae66e19f79 (gut)<br>
 - Ecc-md5sum        : 5d04d3746a228dd8ad23442aeb80d838 (gut)
 </td></tr></table><p>
-
-EOF
-}
-
-function example80de()
-{  cat >> $1 <<EOF
-<h3>Einstellmöglichkeiten</h3>
-
-Drücken Sie den 
-<img src="../images/open-preferences.png" align="middle" alt="Preferences button">-Knopf rechts oben
-in der Werkzeugleiste, um den Dialog zum Ändern der Grundeinstellungen zu öffnen.
-Der Dialog enthält die folgenden Reiterkarten:<p>
-
-<center>
-<a href="example81.html">
-<img src="images/prefs-general.png" alt="Bildschirmfoto"><br>
-Allgemeine Einstellungen
-</a>
-</center>
-<br clear="all">
-
-<center>
-<a href="example82.html">
-<img src="images/prefs-read.png" alt="Bildschirmfoto"><br>
-Einstellungen zum Lesen und Prüfen
-</a>
-</center>
-<br clear="all">
-
-<center>
-<a href="example83.html">
-<img src="images/prefs-ecc.png" alt="Bildschirmfoto"><br>
-Einstellungen zum Erstellen von Fehlerkorrektur-Dateien
-</a>
-</center>
-<br clear="all">
-
-<center>
-<a href="example84.html">
-<img src="images/prefs-rs02.png" alt="Bildschirmfoto"><br>
-Einstellungen zum Erweitern von Abbildern mit Fehlerkorrektur-Daten
-</a>
-</center>
-
-<br clear="all">
-EOF
-}
-
-
-function example81de()
-{  cat >> $1 <<EOF
-<h3>Allgemeine Einstellungen</h3>
-
-Mehr Informationen über die Reiterkarte mit allgemeinen Einstellungen befinden sich
-weiter unten.<p>
-
-<center><img src="images/prefs-general.png" alt="Bildschirmfoto"></center>
-<br clear="all">
-
-<p><hr><p>
-
-<a name="imagesize"></a>
-<b>Dateisystem-Einstellungen für Datenträger und Abbilder</b><p>
-
-<center><img src="images/prefs-general-1.png" alt="Bildschirmfoto"></center>
-<br clear="all">
-
-Diese Einstellung legt fest, wie dvdisaster die Größe der einzulesenden Abbilder bestimmt.<p>
-
-<b>ECC/RS02</b>: dvdisaster wertet die 
-<a href="background30.html">RS02</a>-Fehlerkorrektur-Informationen 
-aus, um die Abbild-Größe zu ermitteln. Diese Option <i>muß</i> beim Einlesen von erweiterten
-Abbildern ausgewählt sein, da sonst das Abbild möglicherweise nur unvollständig 
-eingelesen wird.<br>
-
-Sie können mit dieser Einstellung auch Abbilder einlesen, die keine
-RS02-Fehlerkorrektur-Informationen enthalten. In diesem Fall wird
-die Abbildgröße wie bei "ISO/UDF" ermittelt. 
-Das Suchen nach den Fehlerkorrektur-Informationen kann den Beginn des 
-Einlesens allerdings eine Weile verzögern.<p>
-
-<b>ISO/UDF</b>: Aktivieren Sie diese Option, 
-damit dvdisaster die Größenangaben für das Abbild aus dem
-ISO- bzw. UDF-Dateisystem ermittelt.<br>
-Vorsicht: Dies ist nur zum Arbeiten mit Fehlerkorrektur-Dateien geeignet,
-denn es führt zum unvollständigen Einlesen von Abbildern,
-die <a href="background30.html">RS02</a>-Fehlerkorrektur-Informationen enthalten.<p>
-
-<b>Laufwerk</b>: Es wird die Abbild-Größe verwendet, die das Laufwerk zurückmeldet.
-Weil diese Information häufig bei <a href="qa20.html#plusrw">DVD-RW/+RW</a> 
-falsch ist, ist diese Option nur noch zur Kompatibilität mit älteren dvdisaster-Versionen
-vorhanden.<p>
-
-<p><hr><p>
-
-<a name="localfiles"></a>
-<b>Einstellungen für lokale Dateien (auf der Festplatte)</b><p>
-
-<center><img src="images/prefs-general-2.png" alt="Bildschirmfoto"></center>
-<br clear="all">
-
-<b>Dateien automatisch mit Endungen versehen <font color="red">(1)</font>:</b> 
-Dieser Schalter bewirkt, daß Dateien automatisch
-mit den Endungen ".iso" oder ".ecc" versehen werden, sofern nicht bereits eine andere Endung
-angegeben wurde.<p>
-
-<b>Dateien in Segmente aufteilen <font color="red">(2)</font>:</b> 
-Ermöglicht das Arbeiten mit Dateisystemen, 
-die nur Dateien mit einer Maximalgröße von 2GB zulassen 
-(z.B. FAT unter Windows). <br>
-Anstelle einer einzigen Datei "abbild.iso" werden bis zu 100
-Segmente "abbild00.iso", "abbild01.iso" usw. verwendet; dies kostet
-etwas Geschwindigkeit.<p> 
-
-<p><hr><p>
-
-<a name="auto"> </a>
-<b>Automatisches Erzeugen und Löschen von Dateien</b><p>
-
-<center><img src="images/prefs-general-3.png" alt="Bildschirmfoto"></center>
-<br clear="all">
-
-<b>Fehlerkorrektur-Datei erzeugen <font color="red">(1)</font>:</b> Nach dem erfolgreichen 
-Einlesen eines Abbilds wird automatisch eine Fehlerkorrektur-Datei erzeugt. Zusammen mit
-der "Abbild löschen"-Funktion beschleunigt dies das Erstellen von Fehlerkorrektur-Dateien
-für mehrere Datenträger.<p>
-
-<b>Abbild löschen <font color="red">(2)</font>:</b> Nach dem erfolgreichen 
-Erstellen einer Fehlerkorrektur-Datei wird
-die zugehörige Abbild-Datei gelöscht, wenn dieser Schalter aktiviert ist.
-EOF
-}
-
-
-function example82de()
-{  cat >> $1 <<EOF
-<h3>Einstellungen zum Lesen und Prüfen</h3>
-
-Mehr Informationen über die Reiterkarte zum Lesen und Prüfen befinden sich
-weiter unten.<p>
-
-<center><img src="images/prefs-read.png" alt="Einstellungen zum Lesen und Prüfen"></center><br clear="all">
-
-<p><hr><p>
-
-<a name="read"></a>
-<b>Einstellungen zum Lesen</b><p>
-
-<center><img src="images/prefs-read-1.png" alt="Bildschirmfoto"></center>
-<br clear="all">
-
-<b>Leseverfahren <font color="red">(1)</font>:</b> Wählen Sie zwischen dem
-<a href="background40.html">linearen Leseverfahren</a> und dem
-<a href="background50.html">angepaßten Leseverfahren</a>.
-Das lineare Verfahren eignet sich für unbeschädigte Datenträger 
-und das angepaßte Verfahren ist besser für Datenträger mit Lesefehlern.<p>
-
-<b>Lesebereich <font color="red">(2)</font>:</b> Anwählen dieses Schalters
-beschränkt die einzulesenden Sektoren auf den angegebenen Bereich
-(inklusiv; 0-100 liest also 101 Sektoren ein). Diese Einstellungen gelten nur für
-die aktuelle Sitzung, d.h. sie werden nicht gespeichert.<p>
-
-<b>Überspringe x Sektoren nach einem Lesefehler /<br>
-Lesen beenden wenn unlesbare Bereiche < x <font color="red">(3)</font></b><br>
-Mit dem Schieberegler wird die Behandlung von Lesefehlern beeinflußt. Seine
-Auswirkungen sind leicht unterschiedlich für 
-das <a href="background40.html#configure">lineare</a> und 
-das <a href="background50.html#configure">angepaßte</a> Leseverfahren.
-Größere Werte verringern die Bearbeitungszeit und die mechanische Beanspruchung 
-des Laufwerkes, lassen aber größere Lücken beim Einlesen defekter Bereiche.
-
-<p><hr><p>
-
-<a name="image"></a>
-<b>Abbild-Eigenschaften</b><p>
-<center><img src="images/prefs-read-2.png" alt="Bildschirmfoto"></center>
-<br clear="all">
-
-<b>DAO-Abbild <font color="red">(1)</font>:</b> 
-Verhindert ein <a href="qa20.html#tao">sehr seltenes Problem</a> beim
-Erstellen von Abbildern von "DAO" ("disc at once") - CD-R.<p>
-
-<b>Unlesbare Sektoren auffüllen <font color="red">(2)</font>:</b> 
-Stellt die Kompatibilität mit anderen Datenrettungsprogrammen her.
-Momentan bekannte Einstellungen und Programme sind:<p>
-<i>0xb0 (dezimal 176)</i> -- h2cdimage/dares (c't-Magazin)<p>
-Schalten Sie dieses Feld aus, wenn Sie Ihre Abbilder ausschließlich
-mit dvdisaster verarbeiten.
-
-<p><hr><p>
-
-<b>Laufwerk vorbereiten</b><p>
-
-<center><img src="images/prefs-read-3.png" alt="Bildschirmfoto"></center>
-<br clear="all">
-
-Gibt dem Laufwerk die angegebene Anzahl Sekunden Zeit zum Hochdrehen bevor
-der Lesevorgang beginnt. Dadurch erscheinen keine abrupten 
-Geschwindigkeitsänderungen am Anfang der Lesekurve.
-EOF
-}
-
-
-function example83de()
-{  cat >> $1 <<EOF
-<h3>Einstellungen zum Erzeugen von Fehlerkorrektur-Dateien</h3>
-
-Mehr Informationen über diese Reiterkarte befinden sich
-weiter unten.<p>
-
-<center><img src="images/prefs-ecc.png" alt="Fehlerkorrektur-Einstellungen"></center><br clear="all">
-
-<p><hr><p>
-
-<a name="ecc-method"></a>
-<b>Auswahl des Fehlerkorrektur-Verfahrens</b> <p>
-
-<center><img src="images/prefs-ecc-0.png"  alt="Bildschirmfoto"></center><br clear="all">
-
-Wählen Sie "Fehlerkorrektur-Datei (RS01)", um die Fehlerkorrektur-Informationen
-<a href="background30.html">in eigenständigen Fehlerkorrektur-Dateien</a> abzulegen.
-
-<p><hr><p>
-
-<a name="redundancy"></a>
-<b>Redundanz für neu erstellte Fehlerkorrekturdateien</b> <p>
-
-<center><img src="images/prefs-ecc-1.png"  alt="Bildschirmfoto"></center><br clear="all">
-
-Die Redundanz gibt an, wieviel Prozent der 
-Originaldaten <a href="background10.html">im günstigsten Fall</a>
-korrigiert werden können. Da der Idealfall natürlich selten eintritt, sollten
-Sie die Redundanz großzügig mit einer der folgenden Möglichkeiten auswählen:<p>
-
-<font color="red">(1)</font> / <font color="red">(2)</font> Die Voreinstellungen
-<b>normal</b> und <b>hoch</b> liefern eine Redundanz von 14.3% bzw. 33.5%. 
-Mit diesen beiden Einstellungen werden Fehlerkorrektur-Dateien durch optimierten Programmcode
-besonders schnell erzeugt.<p>
-
-
-<font color="red">(3)</font> Einstellung der Redundanz in <b>Prozentwerten</b>.
-Beachten Sie dabei:
-<ul>
-<li> Eine Fehlerkorrekturdatei mit x% Redundanz benötigt 
-auch etwa x% der Größe des zugehörigen Abbilds an Speicherplatz.</li>
-<li> Die Leistung der Fehlerkorrektur hängt von der Verteilung der Lesefehler ab.
-Erst Änderungen der Redundanz um etwa 5 Prozentpunkte 
-haben einen spürbaren Einfluß auf die Fehlerkorrektur.</li>
-</ul><p>
-
-<font color="red">(4)</font> Größe der Fehlerkorrektur-Datei (in MB) vorgeben.
-In diesem Fall wählt dvdisaster eine geeignete Redundanz, damit die
-Fehlerkorrektur-Datei nicht größer als angegeben wird.<p>
-
-Vorsicht: Wenn man unterschiedlich große Abbilder 
-mit der gleichen Einstellung bearbeitet, erhalten die kleineren Abbilder 
-mehr Fehlerkorrekturinformationen als die großen Abbilder.<p>
-
-<p><hr><p>
-
-<b>Speichernutzung.</b><p>
-
-<center><img src="images/prefs-ecc-2.png"  alt="Bildschirmfoto"></center><br clear="all">
-
-Zugriffe auf die Abbild- und Fehlerkorrektur-Datei werden durch einen eigenen
-Zwischenspeicher optimiert. Die Voreinstellung von 32MB ist für die meisten Systeme passend.<p>
-EOF
-}
-
-function example84de()
-{  cat >> $1 <<EOF
-<h3>Einstellungen zum Erweitern von Abbildern mit Fehlerkorrektur-Daten</h3>
-
-Mehr Informationen über diese Reiterkarte befinden sich
-weiter unten.<p>
-
-<center><img src="images/prefs-rs02.png" alt="Fehlerkorrektur-Einstellungen"></center><br clear="all">
-
-<p><hr><p>
-
-<a name="ecc-method"></a>
-<b>Auswahl des Fehlerkorrektur-Verfahrens</b> <p>
-
-<center><img src="images/prefs-rs02-0.png"  alt="Bildschirmfoto"></center><br clear="all">
-
-Wählen Sie "Erweitertes Abbild (RS02)", um die Fehlerkorrektur-Informationen 
-<a href="background30.html">direkt in dem Abbild abzulegen</a>.
-
-<p><hr><p>
-
-<a name="max-image-size"></a>
-<b>Größte mögliche Abbildlänge</b> <p>
-
-<center><img src="images/prefs-rs02-1.png"  alt="Bildschirmfoto"></center><br clear="all">
-
-dvdisaster muß wissen, wieviel Platz auf einem Datenträger insgesamt verfügbar ist.
-Daraus wird beim Erweitern des Abbilds der noch ungenutzte Platz ermittelt und mit 
-Fehlerkorrektur-Informationen aufgefüllt.<p>
-
-<b>"Verwende kleinsten möglichen Wert aus folgender Tabelle"</b>:
-Wenn diese Einstellung ausgewählt ist, nimmt dvdisaster an, 
-daß Sie den kleinstmöglichen Datenträger (CD oder DVD) verwenden möchten.
-Das Abbild wird auf die entsprechende Größe erweitert.<p>
-
-Die typischen Größen einer 80min-CD sowie einer ein- und zweischichtigen DVD
-sind in der Tabelle voreingestellt. Wenn Sie Rohlinge mit anderen Größen
-besitzen, können Sie die entsprechenden Werte dort eintragen (in Sektoren von 2KB Größe).<p>
-
-Mit dem Knopf "Datenträger abfragen" wird die betreffende Einstellung
-vom Laufwerk ermittelt und eingetragen;
-dies liefert aber manchmal falsche Werte. Der gelbe Pfeil setzt den Wert
-auf den zuletzt gespeicherten zurück.<p>
-
-<b>"Verwende höchstens ... Sektoren"</b>:
-Aktivieren Sie diesen Eintrag, um die obigen Einstellungen aufzuheben.
-Geben Sie hier die Anzahl von Sektoren an,
-die das erweiterte Abbild höchstens umfassen soll. Damit können Sie auch Abbilder
-auf DVD-Größe erweitern, die noch auf eine CD passen würden.<p>
-
-<a name="size-hints">Hinweise:</a><p>
-
-<ul>
-<li>Aus technischen Gründen wird das Abbild nicht bis zum letzten möglichen Sektor aufgefüllt.</li>
-<li>Stellen Sie keinen Wert ein, der zum "Überbrennen" des Datenträgers führt.</li>
-<li>Wenn das Abbild weniger als ein Drittel der Datenträger-Größe umfaßt, 
-wird das erweiterte Abbild den Datenträger nicht völlig ausfüllen,
-weil die größtmögliche Redundanz 200% ist.</li>
-</ul>
-
-<p><hr><p>
-
-<b>Speichernutzung.</b><p>
-
-<center><img src="images/prefs-ecc-2.png"  alt="Bildschirmfoto"></center><br clear="all">
-
-Zugriffe auf die Abbild- und Fehlerkorrektur-Daten werden durch einen eigenen
-Zwischenspeicher optimiert. Die Voreinstellung von 32MB ist für die meisten Systeme passend.<p>
-EOF
-}
-
-function example90de()
-{  cat >> $1 <<EOF
-<h3>Aufrufmöglichkeiten</h3>
-
-<b>Verwenden der Kommandozeile.</b> dvdisaster arbeitet in der Kommandozeilen-Betriebsart,
-wenn Sie beim Aufruf einen der untenstehenden
-<a href="#modes">Aktionsparameter</a> (read, create, scan, fix, test) angeben. 
-Anderenfalls öffnet es ein Fenster
-für die graphische Betriebsart.<p>
-
-In der Kommandozeile werden Einstellungen aus der graphischen Oberfläche
-bzw. der <i>.dvdisaster</i>-Datei ignoriert. Ebenso haben die auf dieser Seite
-beschriebenen Kommandozeilen-Parameter keine Wirkung in der graphischen Betriebsart.<p>
-
-Aus technischen Gründen gibt es unter Windows zwei Programmversionen:<p>
-<table>
-<tr><td><i>dvdisaster.exe</i></td><td>--</td><td>für die Kommandozeilen-Betriebsart</td></tr>
-<tr><td><i>dvdisaster-win.exe</i></td><td>--</td><td>für die graphische Benutzeroberfläche</td></tr>
-</table><p>
-
-<b><a name="modes">Aktionen.</a>&nbsp;</b>dvdisaster benötigt beim Aufruf die Angabe einer Aktion entweder
-in Langform (--read) oder mit dem Anfangsbuchstaben in Kurzform (-r):<p>
-
-<table>
-<tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#scan">--scan</a></td><td>Datenträger auf Lesefehler überprüfen</tr>
-<tr valign=top><td></td><td><a href="#read">--read</a></td><td>Abbild des Datenträgers einlesen</td></tr>
-<tr valign=top><td></td><td><a href="#create">--create</a> &nbsp; &nbsp;</td><td>Fehlerkorrektur-Datei erzeugen</td></tr>
-<tr valign=top><td></td><td><a href="#fix">--fix</a></td><td>Versucht, ein Abbild mit Hilfe der Fehlerkorrektur-Datei zu reparieren</td></tr>
-<tr valign=top><td></td><td><a href="#test">--test</a></td><td>Überprüft, ob Abbild- und  Fehlerkorrektur-Datei zusammengehören</td></tr>
-<tr valign=top><td></td><td><a href="#unlink">--unlink</a></td><td>Löscht die Abbild-Datei beim Beenden des Programms</td></tr>
-</table>
-<pre> </pre> 
-
-<b><a name="drive">Laufwerks- und Dateinamen.</a></b> Diese Optionen haben ebenfalls eine Langform (--device) und eine
-Kurzform (-d). Sie dienen dazu, andere als die voreingestellten Laufwerke und Dateinamen zu verwenden.<p>
-
-<table>
-<tr><td>&nbsp; &nbsp;</td><td><a href="#device">--device</a>  &nbsp; &nbsp;</td><td>Laufwerk auswählen</td></tr>
-<tr><td></td><td><a href="#prefix">--prefix</a></td><td>Präfix für Abbild- und Fehlerkode-Dateien</td></tr>
-<tr><td></td><td><a href="#image">--image</a></td><td>Name der Abbild-Datei</td></tr>
-<tr valign=top><td></td><td><a href="#ecc">--ecc</a></td><td>Name der Fehlerkode-Datei<p></td></tr>
-<tr><td></td><td><a href="#list">--list</a></td><td>Zeigt verfügbare Laufwerke unter ASPI &nbsp; (nur in der Windows-Version)</td></tr>
-</table><pre> </pre> 
-
-<b><a name="options">Weitere Optionen.</a></b> Diese weniger häufig benutzten Optionen verwenden nur die Langform,
-sofern nicht anders angegeben.<p>
-
-<table>
-<tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#adaptiveread">--adaptive-read</a></td><td>Angepaßtes Leseverfahren für defekte Datenträger verwenden</td></tr>
-<tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#autosuffix">--auto-suffix</a></td><td>Automatisches Anfügen der .iso- und .ecc-Dateiendungen</td></tr>
-<tr valign=top><td>&nbsp; &nbsp;</td><td><a href="#cache">--cache-size</a></td><td>Zwischenspeicher-Größe während der Fehlerkode-Berechnung</td></tr>
-<tr valign=top><td></td><td><a href="#dao">--dao</a></td><td>Behandelt Datenträger als "disk at once"</td></tr>
-<tr valign=top><td></td><td><a href="#fillunreadable">--fill-unreadable [n]</a></td><td>Füllt unlesbare Sektoren mit Byte n auf</td></tr>
-<tr valign=top><td></td><td><a href="#jump">-j / --jump</a></td><td>Überspringt Sektoren nach einem Lesefehler</td></tr>
-<tr valign=top><td></td><td><a href="#method">-m / --method</a>&nbsp; &nbsp;</td><td>Fehlerkorrektur-Methode auswählen</td></tr>
-<tr valign=top><td></td><td>-n / --redundancy &nbsp; &nbsp;</td><td><a href="#redundancy-rs01">Redundanz der Fehlerkorrektur-Datei festlegen (RS01)</a></td></tr>
-<tr valign=top><td></td><td></td><td><a href="#redundancy-rs02">Höchstmögliche Größe für Fehlerkorrektur-Abbilder angeben (RS02)</a></td></tr>
-<tr valign=top><td></td><td><a href="#query-size">--query-size</a>&nbsp; &nbsp;</td><td>Abbildgröße durch Laufwerk oder udf/ecc-Dateisysteme ermitteln</td></tr>
-<tr valign=top><td></td><td><a href="#speedwarn">--speed-warning [n]</a>&nbsp; &nbsp;</td><td>Warnung bei Einbrüchen der Lesegeschwindigkeit</td></tr>
-<tr valign=top><td></td><td><a href="#spinup">--spinup-delay [n]</a>&nbsp; &nbsp;</td><td>Gibt dem Laufwerk Zeit zum Hochdrehen</td></tr>
-<tr valign=top><td></td><td><a href="#split">--split-files</a>&nbsp; &nbsp;</td><td>Teilt Dateien in Segmente <=2GB auf</td></tr>
-<tr valign=top><td></td><td><a href="#verbose">-v / --verbose</a>&nbsp; &nbsp;</td><td>Mehr erläuternde Ausgaben</td></tr>
-
-</table>
-
-<h3>Aktionen.</h3>
-
-<a name="scan"><b>--scan [n-m]: Datenträger auf Lesefehler überprüfen</b></a><p>
-
-Liest jeden Sektor des Datenträgers 
-und gibt am Ende die Anzahl der nicht lesbaren Sektoren aus.<p>
-
-Die einzulesenden Sektoren können auf einen bestimmten Bereich eingeschränkt
-werden. Die Sektornumerierung beginnt bei 0; "end" bezeichnet den letzten Sektor.
-Das angegebene Intervall wird inklusive der Grenzen eingelesen; 0-100 liest also 101 Sektoren ein.<p>
-
-In der Kurzform sind zwischen dem "-s" und dem Intervall keine Leerzeichen zulässig:
-<pre>
-dvdisaster -s0-100            # liest Sektoren 0 bis 101
-dvdisaster --scan 0-100       # Langform
-dvdisaster --scan 3000-end    # liest von Sektor 3000 bis zum Datenträger-Ende
-
-</pre>
-<div align=right><a href="#modes">&uarr;</a></div><p>
-
-
-
-<a name="read"><b>--read [n-m]: Abbild des Datenträgers erzeugen</b></a><p>
-
-Erzeugt ein Abbild des Datenträgers auf der Festplatte.<p>
-
-Falls die Abbild-Datei bereits existiert, werden nur diejenigen Sektoren
-eingelesen, die noch nicht in der Abbild-Datei vorhanden sind.
-Dies ermöglicht es, ein Abbild durch mehrere Leseversuche zu ergänzen
-und dabei verschiedene Laufwerke einzusetzen.<p>
-
-Ohne weitere Angaben setzt --read 
-das <a href="background40.html">lineare Leseverfahren</a> ein. 
-Verwenden Sie zusätzlich die <a href="example90.html#adaptiveread">--adaptive-read</a>--Option,
-um das <a href="background50.html">angepaßte Leseverfahren</a> einzusetzen.<p>
-
-Die einzulesenden Sektoren können wie bei 
-der <a href="example90.html#scan">--scan</a>-Option auf einen 
-bestimmten Bereich eingeschränkt werden. 
-
-<div align=right><a href="#modes">&uarr;</a></div><p>
-
-
-
-<a name="create"><b>--create: Fehlerkorrektur-Datei erzeugen</b></a><p>
-
-Erzeugt eine Fehlerkorrekturdatei zu einem Abbild.<p>
-
-<div align=right><a href="#modes">&uarr;</a></div><p>
-
-
-
-<a name="fix"><b>--fix: Abbild reparieren</b></a><p>
-
-Versucht, ein Abbild mit Hilfe der Fehlerkorrektur-Datei zu reparieren.<p>
-
-Falls es im ersten Anlauf nicht gelingt, alle Sektoren zu reparieren,
-können Sie einen weiteren Durchlauf mit <a href="#read">--read</a> versuchen
-<a href="background60.html#reading-tips">(ein paar Tips dazu)</a>.
-Dabei werden gegebenenfalls genügend fehlende Sektoren eingelesen
-um eine erfolgreiche Reparatur des Abbildes durchzuführen.<p>
-
-<div align=right><a href="#modes">&uarr;</a></div><p>
-
-
-
-<a name="test"><b>--test: Abbild- und Fehlerkorrektur-Datei überprüfen</b></a><p>
-
-Überprüft, ob die Abbild- und  Fehlerkorrektur-Dateien zu dem gleichen Datenträger
-gehören und ob ihre internen Prüfsummen korrekt sind.<p>
-Siehe auch <a href="qa20.html#crc">Punkt 3.3</a> in den <a href="qa20.html">Fragen und
-Antworten</a>.
-
-<div align=right><a href="#modes">&uarr;</a></div><p>
-
-
-
-<a name="unlink"><b>--unlink: Löscht die Abbild-Datei beim Beenden des Programms</b></a><p>
-
-Diese Funktion löscht die Abbild-Datei, wenn alle Aktionen mit Erfolg durchgeführt
-worden sind. 
-
-<div align=right><a href="#modes">&uarr;</a></div><p>
-
-
-
-<h3>Laufwerks- und Dateinamen.</h3>
-
-<a name="device"><b>--device &lt;Laufwerk&gt;: Laufwerk auswählen</b></a><p>
-
-Voreingestellt sind "/dev/cdrom" unter Linux bzw. das erste CD/DVD-Laufwerk
-(nach Laufwerksbuchstabe) unter Windows.<p>
-
-<b>FreeBSD:</b>
-<table class="example-bsd" width=100%><tr><td>
-user@freebsd&gt; dvdisaster <b>-d /dev/pass0</b> -r
-</td></tr></table><p>
-
-dvdisaster unterstützt Laufwerke, 
-die über den "passthrough"-Treiber <tt>/dev/pass*</tt> eingebunden sind
-und den MMC-3 Standard implementieren.
-ATAPI-Laufwerke werden möglicherweise
-erst nach einem <a href="download20.html#freebsd">Neuübersetzen des Kernels</a>
-verfügbar.<p>
-
-<b>Linux:</b> 
-<table class="example" width=100% bgcolor=#ffffe0><tr><td>
-user@linux&gt; dvdisaster <b>-d /dev/hdc</b> -r
-</td></tr></table><p>
-
-dvdisaster unterstützt Laufwerke, die über den einheitlichen
-CD-ROM-Treiber von Linux angesteuert werden und den MMC3-Standard implementieren.
-Dies sind insbesondere ATAPI-Laufwerke
-mit den symbolischen Geräten <tt>/dev/hd*</tt> sowie SCSI-Laufwerke mit den 
-symbolischen Geräten <tt>/dev/scd*</tt>. Externe Laufwerke mit anderen Bussystemen
-(z.B. USB, IEEE 1394) erscheinen typischerweise ebenfalls als SCSI-Geräte.<p>
-
-Das Einbinden von ATAPI-Geräten über das <i>ide-scsi</i>-Modul wird nicht empfohlen; 
-diese Geräte sind aber normalerweise über <tt>/dev/scd*</tt> problemlos nutzbar.<p>
-
-Der allgemeine SCSI-Treiber <i>sg</i> (<tt>/dev/sg*</tt>) wird nicht
-unterstützt. Dies sollte kein Problem darstellen, da die jeweiligen Geräte
-normalerweise auch über <tt>/dev/scd*</tt> oder <tt>/dev/sr*</tt> verfügbar sind.<p>
-
-<b>Windows:</b>
-<table class="example-win" width=100% bgcolor=#e0e0ff><tr><td>
-user@windows&gt; dvdisaster <b>-d E:</b> -r
-</td></tr></table><p>
-
-dvdisaster unterstützt lokale Laufwerke, die den MMC3-Standard
-implementieren und mit einem Laufwerksbuchstaben im System erscheinen.<p>
-
-
-
-<div align=right><a href="#drive">&uarr;</a></div><p>
-
-<a name="prefix"><b>--prefix &lt;Präfix&gt;: Präfix für Abbild- und Fehlerkorrektur-Datei</b></a><p>
-
-Voreingestellt ist "medium"; die Abbild- und Fehlerkorrekturdateien erhalten automatisch
-die Endungen ".iso" bzw. ".ecc".
-
-<div align=right><a href="#drive">&uarr;</a></div><p>
-
-<a name="image"><b>--image &lt;Dateiname&gt;: Name der Abbild-Datei</b></a><p>
-
-Voreingestellt ist "medium.iso"; der angegebene Dateiname wird genau (ohne automatisches
-Anfügen einer Endung) für die Abbild-Datei übernommen, 
-sofern die <a href="#autosuffix">--auto-suffix</a>--Option nicht ebenfalls verwendet wird.
-
-<div align=right><a href="#drive">&uarr;</a></div><p>
-
-<a name="ecc"><b>--ecc &lt;Dateiname&gt;: Name der Fehlerkorrektur-Datei</b></a><p>
-
-Voreingestellt ist "medium.ecc"; der angegebene Dateiname wird genau (ohne automatisches
-Anfügen einer Endung) für die Fehlerkorrektur-Datei übernommen,
-sofern die <a href="#autosuffix">--auto-suffix</a>--Option nicht ebenfalls verwendet wird.
-
-
-<div align=right><a href="#drive">&uarr;</a></div><p>
-
-<a name="list"><b>--list: Zeigt verfügbare Laufwerke unter ASPI</b></a><p>
-
-Diese Funktion zeigt alle CD/DVD-Laufwerke an, die unter Windows durch
-die <a href="qa10.html#aspi">ASPI</a>-Schicht ansprechbar sind:<p>
-
-<table class="example-win" width=100% bgcolor=#e0e0ff><tr><td>
-user@windows&gt; dvdisaster <b>-l</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
-<i>[... der Rest des GPL-Begrüßungstextes ...]</i><p>
-
-List of ASPI CD/DVD drives:<p>
- 1: (H:) ATAPI DVD+RW 8X4X12 B2K7<br>
- 2: (I:) MYDRIVE CD-R MY-401610X 1.05<p>
-
-Um die Benutzung von ASPI anstelle von SPTI zu erzwingen,<br>
-verwenden Sie die obigen Laufwerksnummern,<br>
-also 1:, 2:,... anstelle von C:, D:,...
-</td></tr></table><p>
-
-dvdisaster verwendet standardmäßig nur dann ASPI, wenn ein Zugriff
-auf die Laufwerke über SPTI nicht möglich ist.
-Die Benutzung von ASPI läßt sich durch
-Angabe der Laufwerksnummer anstelle des Laufwerksbuchstabens
-erzwingen. Um einen Datenträger per ASPI in dem "MYDRIVE"-Laufwerk 
-des obigen Beispiels einzulesen, geben Sie also ein:<p>
-
-<table class="example-win" width="100%" bgcolor="#e0e0ff"><tr><td>
-user@windows&gt; dvdisaster <b>-d 2:</b> -r<br>
-</td></tr>
-</table>
-
-<div align=right><a href="#drive">&uarr;</a></div><p>
-
-
-<h3>Weitere Optionen.</h3>
-
-<a name="adaptiveread"><b>--adaptive-read: Angepaßtes Leseverfahren für defekte Datenträger verwenden</b></a><p>
-
-Dieser Schalter aktiviert in Verbindung mit <a href="#read">-r/--read</a>
-das <a href="background50.html">angepaßte Leseverfahren</a>,
-das besonders gut für das Einlesen von beschädigten Datenträgern geeignet ist.<p>
-
-Wenn Sie mit Fehlerkorrektur-Dateien arbeiten, geben Sie diese mit
-<a href="#ecc">-e/--ecc</a> an, damit das Verfahren anhand der Fehlerkorrektur-Daten
-entscheiden kann, wann genügend Informationen für eine erfolgreiche Wiederherstellung des
-Abbildes eingelesen worden sind. Bei mit Fehlerkorrektur-Daten erweiterten 
-Abbildern geschieht dies automatisch.
-<p>
-
-<div align=right><a href="#options">&uarr;</a></div><p>
-
-
-
-<a name="autosuffix"><b>--auto-suffix: Automatisches Anfügen der .iso- und .ecc-Dateiendungen</b></a><p>
-
-Diese Option bewirkt, daß an die mit den <a href="#image">-i/--image</a>- bzw. <a href="#ecc">-e/--ecc</a>-Optionen angegebenen Dateinamen die Endungen ".iso" bzw. ".ecc" angehängt werden,
-sofern nicht bereits eine andere Endung vorhanden ist.
-
-<div align=right><a href="#options">&uarr;</a></div><p>
-
-
-
-<a name="cache"><b>--cache-size &lt;Größe in MB&gt;: Zwischenspeicher-Größe einstellen</b></a><p>
-
-dvdisaster optimiert den Zugriff auf die Abbild- und
-Fehlerkorrektur-Daten durch einen eigenen Zwischenspeicher,
-dessen Größe zwischen 1 und 2048 MB betragen kann. Voreingestellt sind 32MB,
-was für die meisten Systeme passend ist. <p>
-
-Diese Option hat nur bei der <a href="#create">--create</a>--Aktion eine Wirkung.
-
-<div align=right><a href="#options">&uarr;</a></div><p>
-
-
-
-<a name="dao"><b>--dao: Behandelt Datenträger als "disc at once"</b></a><p>
-
-Datenträger, die im "TAO"-Modus ("track at once") gebrannt wurden,
-können am Ende zwei Sektoren 
-mit <a href="qa20.html#tao">Pseudo-Lesefehlern</a> enthalten. 
-Daher ignoriert dvdisaster in der Grundeinstellung bis zu 2 Lesefehler
-am Ende des Datenträgers. <p>
-
-Wenn Sie nun das ausgesprochene Pech haben,
-einen "DAO" ("disc at once") - Datenträger mit genau ein oder zwei echten
-Lesefehlern am Ende zu besitzen, erreichen Sie durch Angabe
-der  "--dao"-Option eine korrekte Behandlung des Datenträger-Endes.
-
-<div align=right><a href="#options">&uarr;</a></div><p>
-
-
-<a name="fillunreadable"><b>--fill-unreadable &lt;Füll-Byte&gt;: Unlesbare Sektoren mit angegebenen Byte auffüllen </b></a><p>
-
-dvdisaster kennzeichnet unlesbare Sektoren mit einem Fülltext, dessen Vorkommen auf einem
-unbeschädigten Datenträger sehr unwahrscheinlich ist.<br>
-Einige andere Datenrettungsprogramme erwarten hingegen, daß unlesbare Sektoren mit einem
-bestimmten Byte aufgefüllt sind. Um den Austausch von Abbildern mit anderen Programmen zu
-ermöglichen, müssen Sie das "richtige" Byte angeben:<p>
-
-<ul>
-<li><b>0xb0 (dezimal 176)</b>: bewirkt Kompatibilität mit dem Programm <i>h2cdimage</i> 
-des c't-Magazins.
-</li>
-</ul>
-
-Hinweis: Das Auffüllen mit Nullen (0x00, dezimal 0) ist <b>nicht empfehlenswert</b>.
-Die meisten Datenträger enthalten auch im unbeschädigten Zustand Sektoren, die mit Null
-aufgefüllt sind. Diese Sektoren können später nicht von unlesbaren Sektoren unterschieden werden.
-
-<div align=right><a href="#options">&uarr;</a></div><p>
-
-
-
-<a name="jump"><b>-j / --jump &lt;Anzahl Sektoren&gt;: Überspringe Sektoren nach einem Lesefehler </b></a><p>
-
-Die Auswirkungen dieser Option hängen von dem verwendeten Leseverfahren ab:
-<ul>
-<li>bei dem <a href="background40.html#configure">linearen Lese-Verfahren</a> 
-(Grundeinstellung) wird die angegebene Anzahl von nachfolgenden Sektoren 
-nach einem Lesefehler übersprungen.</li>
-<li>bei dem <a href="background50.html#configure">angepaßten Lese-Verfahren</a> 
-(<a href="#adaptiveread">--adaptive--read</a>--Option)
-wird das Einlesen abgebrochen,
-sobald keine unlesbaren Bereiche mehr existieren, die länger als der angegebene Wert sind.</li>
-</ul> 
-Größere Werte verringern die Bearbeitungszeit und die mechanische Beanspruchung des Laufwerkes,
-lassen aber größere Lücken beim Einlesen defekter Bereiche.
-Die Anzahl der zu überspringenden Sektoren muß ein Vielfaches von 16 sein.
-
-<div align=right><a href="#options">&uarr;</a></div><p>
-
-
-
-<a name="method"><b>-m / --method &lt;m&gt;: Fehlerkorrektur-Verfahren auswählen</b></a><p>
-
-Wählen Sie zwischen den Verfahren 
-<a href="background30.html">RS01</a> (Voreinstellung) 
-und <a href="background30.html">RS02</a>.
-
-<div align=right><a href="#options">&uarr;</a></div><p>
-
-
-
-<a name="query-size"><b>--query-size &lt;m&gt;: Abbildgröße durch Laufwerk oder udf/ecc-Dateisysteme ermitteln</b></a><p>
-
-Diese Einstellung legt fest, wie dvdisaster die Größe der einzulesenden Abbilder 
-bestimmt. &lt;m&gt; kann die folgenden Werte annehmen:<p>
-
-<b>ecc</b>: Dies ist die Grundeinstellung. dvdisaster wertet die 
-<a href="background30.html">RS02</a>-Fehlerkorrektur-Informationen 
-aus, um die Abbild-Größe zu ermitteln. Diese Option <i>muß</i> beim Einlesen von erweiterten
-Abbildern ausgewählt sein, da sonst das Abbild möglicherweise nur unvollständig 
-eingelesen wird.<br>
-
-Sie können mit dieser Einstellung auch Abbilder einlesen, die keine
-RS02-Fehlerkorrektur-Informationen enthalten. In diesem Fall wird
-die Abbildgröße wie bei "udf" ermittelt. 
-Das Suchen nach den Fehlerkorrektur-Informationen kann den Beginn des 
-Einlesens allerdings eine Weile verzögern.<p>
-
-<b>udf</b>: Aktivieren Sie diese Option, 
-damit dvdisaster die Größenangaben für das Abbild aus dem
-ISO- bzw. UDF-Dateisystem ermittelt.<br>
-Vorsicht: Dies ist nur zum Arbeiten mit Fehlerkorrektur-Dateien geeignet,
-denn es führt zum unvollständigen Einlesen von Abbildern,
-die <a href="background30.html">RS02</a>-Fehlerkorrektur-Informationen enthalten.<p>
-
-<b>Laufwerk</b>: Es wird die Abbild-Größe verwendet, die das Laufwerk zurückmeldet.
-Weil diese Information häufig bei <a href="qa20.html#plusrw">DVD-RW/+RW</a> 
-falsch ist, ist diese Option nur noch zur Kompatibilität mit älteren dvdisaster-Versionen
-vorhanden.<p>
-
-<div align=right><a href="#options">&uarr;</a></div><p>
-
-
-
-<a name="redundancy-rs01">
-<b>-n / --redundancy: Redundanz der Fehlerkorrektur-Datei festlegen (RS01)</b></a><p>
-
-Die Redundanz gibt an, wieviel Prozent der 
-Originaldaten <a href="background10.html">im günstigsten Fall</a>
-durch die <a href="background30.html">Fehlerkorrektur-Datei</a>
-rekonstruiert werden können. 
-Daher sollten Sie die Redundanz großzügig wählen und dabei auch beachten:<p>
-
-<ul>
-<li> Eine Fehlerkorrekturdatei mit x% Redundanz benötigt 
-auch etwa x% der Größe des zugehörigen Abbilds an Speicherplatz.</li>
-<li> Die Leistung der Fehlerkorrektur hängt von der Verteilung der Lesefehler ab.
-Erst Änderungen der Redundanz um etwa 5 Prozentpunkte 
-haben einen spürbaren Einfluß auf die Fehlerkorrektur.</li>
-</ul>
-
-Zur Einstellung der Redundanz gibt es mehrere Möglichkeiten:<p>
-
-<ol>
-<li> <b>"normal" oder "hoch"</b><p>
-
-Geben Sie "normal" oder "high" an, um die folgenden Redundanzen zu erhalten:<p>
-
-<table border="1" cellpadding="3">
-<tr><td align=center>Wert</td><td>Redundanz</td></tr>
-<tr><td><tt>-n normal</tt></td><td align=center>14.3%</td></tr>
-<tr><td><tt>-n high</tt></td><td align=center>33.5%</td></tr>
-</table><p>
-
-Mit diesen beiden Einstellungen werden Fehlerkorrektur-Dateien durch 
-optimierten Programmcode besonders schnell erzeugt.
-
-Der Wert "normal" ist die Voreinstellung.<p>
-</li>
-
-<li> <b>Angabe in Prozent</b><p>
-
-Sie können die Redundanz auch direkt in Prozent angeben:<p> 
-
-<table border="1" cellpadding="3">
-<tr><td>Beispiel</td><td>Wertebereich</td></tr>
-<tr><td><tt>-n 25%</tt></td><td align=center>3.2% bis 64.5%</td></tr>
-</table><p>
-
-Aus technischen Gründen kann die wirklich verwendete Redundanz um einige
-Nachkommastellen von der Vorgabe abweichen.<p></li>
-
-<li> <b>Korrigierbare Fehler pro Fehlerkorrekturbereich</b><p>
-
-Wenn Sie keine Maßeinheit bei der Redundanz angeben, wird der Wert
-so interpretiert, daß Sie einen (255, 255-x)-Reed-Solomon-Kode
-erzeugen möchten:<p>
-
-<table border="1" cellpadding="3">
-<tr><td>Beispiel</td><td>Wertebereich</td></tr>
-<tr><td><tt>-n 32</tt></td><td align=center>8 bis 100</td></tr>
-</table><p>
-
-Dies führt dazu, daß jeweils 255-x Datenträger-Sektoren zu einem
-Fehlerkorrekturbereich zusammengefaßt werden, innerhalb dessen bis zu
-x unlesbare Sektoren korrigiert werden können.<p>
-
-Dabei gilt der folgende Zusammenhang: &nbsp; &nbsp; Redundanz in Prozent = (100 * x) / (255 - x)<p>
-</li>
-
-<li> <b>Maximalgröße der Fehlerkorrekturdatei</b><p>
-
-Eine weitere Möglichkeit besteht darin, die Größe der
-Fehlerkorrekturdatei (in MB) vorzugeben:<p>
-
-<table border="1" cellpadding="3">
-<tr><td>Beispiel</td><td>Wertebereich</td></tr>
-<tr><td><tt>-n 50m</tt></td><td align=center>3.2% bis 64.5% der Abbild-Größe</td></tr>
-</table><p>
-
-In diesem Fall wählt dvdisaster eine geeignete Redundanz, damit die
-Fehlerkorrektur-Datei nicht größer als angegeben wird.<p>
-
-Vorsicht: Wenn man unterschiedlich große Abbilder 
-mit der gleichen Einstellung bearbeitet, erhalten die kleineren Abbilder 
-mehr Fehlerkorrekturinformationen als die großen Abbilder.<p>
-</li>
-</ol>
-
-<div align=right><a href="#options">&uarr;</a></div><p>
-
-
-<a name="redundancy-rs02"></a>
-<b>-n / --redundancy: Höchstmögliche Größe für Fehlerkorrektur-Abbilder angeben (RS02)</b><p>
-
-Beim Erzeugen von <a href="background30.html">erweiterten Abbildern</a> wird die
-höchstmögliche Größe des Datenträgers (in Sektoren von 2KB) mit dieser Option 
-angegeben. Das Abbild wird mit Fehlerkorrektur-Daten aufgefüllt wobei die angegebene
-Größe nicht überschritten wird.<p>
-
-Außer einer direkten Angabe der Anzahl von Sektoren können auch die Werte
-CD, DVD, und DVD9 angegeben werden, die 
-den <a href="example84.html#max-image-size">Grundeinstellungen</a> 
-in der graphischen Benutzeroberfläche für die jeweilige Datenträgergröße entsprechen.<p>
-
-Falls die -n/--redundancy-Option nicht angegeben wird, erweitert dvdisaster das Abbild so,
-daß der kleinstmögliche Datenträger (CD, ein- oder zweischichtige DVD) verwendet
-werden kann.
-
-<div align=right><a href="#options">&uarr;</a></div><p>
-
-
-
-<a name="speedwarn"><b>--speed-warning [n]: Warnung bei Einbrüchen der Lesegeschwindigkeit</b></a><p>
-
-Gibt eine Warnung aus, wenn sich die Lesegeschwindigkeit um mehr als <i>n</i> Prozent
-verändert. Dies ist hilfreich, um beginnende Datenträgerprobleme zu erkennen. 
-Wenn der optionale Wert [n] nicht angegeben wird, sind 10 Prozent voreingestellt.
-
-<div align=right><a href="#options">&uarr;</a></div><p>
-
-
-<a name="spinup"><b>--spinup-delay [n]: Gibt dem Laufwerk Zeit zum Hochdrehen</b></a><p>
-
-Gibt dem Laufwerk die angegebene Anzahl Sekunden Zeit zum Hochdrehen bevor
-der Lesevorgang beginnt. Dadurch erscheinen keine abrupten Geschwindigkeitsänderungen
-beim Beginn des Lesens und entsprechende Warnungen in Verbindung mit der
-<a href="#speedwarn">--speed-warning</a>-Option werden vermieden.<br>
-
-Für den optionalen Wert [n] sind 5 Sekunden voreingestellt.
-
-<div align=right><a href="#options">&uarr;</a></div><p>
-
-
-<a name="split"><b>--split-files: Teilt Dateien in Segmente <= 2GB auf</b></a><p>
-
-Ermöglicht das Anlegen von Abbildern und Fehlerkorrektur-Dateien 
-auf Dateisystemen, 
-die nur Dateien mit einer Maximalgröße von 2GB zulassen 
-(z.B. FAT unter Windows). <br>
-Anstelle einer einzigen Datei "abbild.iso" werden bis zu 100
-Segmente "abbild00.iso", "abbild01.iso" usw. verwendet; dies kostet
-etwas Geschwindigkeit.<p> 
-
-Geben Sie weiterhin den Dateinamen als "abbild.iso" bei der <a href="#image">--image</a>-Option an; 
-die Nummern werden automatisch hinzugefügt, wenn dieser Schalter aktiv ist.<p>
-
-<div align=right><a href="#options">&uarr;</a></div><p>
-
-
-
-<a name="verbose"><b>--verbose: Mehr erläuternde Ausgaben</b></a><p>
-
-dvdisaster gibt mehr erläuternde Informationen aus wenn dieser Schalter verwendet
-wird. Im Gegensatz zu anderen Kommandozeilen-Schaltern wirkt dieser auch in
-der graphischen Benutzeroberfläche; die zusätzlichen Ausgaben erscheinen
-dort im "Protokoll"-Fenster.
-
-<div align=right><a href="#options">&uarr;</a></div><p>
 
 EOF
 }

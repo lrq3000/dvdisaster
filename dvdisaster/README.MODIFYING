@@ -21,7 +21,7 @@ separate file which might get unbundled from the changed source.
 
 New files start with your copyright notice; modified files 
 get an additional entry under the original copyright notice. 
-See the files md5.c and tools/pngpack.c for an example.
+See the file md5.c for an example.
 
 But this is not enough; most people will not read the source
 code as they are using binary distributions. Give them a way

@@ -33,8 +33,6 @@ LIBS = $(EFENCE_LIBS) $(BZ2_LIBS) $(PNG_LIBS) -lm
 CFILES = $(CFG_CFILES)
 OFILES = $(CFG_OFILES)
 
-DLLWRAP = dllwrap
-
 ######################################################################
 # Compilation related
 ######################################################################
@@ -53,11 +51,6 @@ pngpack: $(OFILES)
 	@echo "Linking  : pngpack";
 	@if test $(CFG_SYS_OPTIONS) == -DSYS_MINGW; \
 	then $(CC) $(LOPTS) $(OFILES) $(LIBS) -lz --static -o pngpack; \
-	     echo "Creating DLL"; \
-	     $(CC) $(COPTS) -DPNGPACK -DBUILD_DLL -c pngpack.c -o unpngpack.o; \
-	     $(DLLWRAP) --driver-name $(CC) -mdll -s --def unpngpack.def \
-	                $(LOPTS) md5.o unpngpack.o $(LIBS) -DBUILD_DLL -lz \
-	                --static -o unpngpack.dll -Wl,--out-implib,unpngpack.dll.a;\
 	else $(CC) $(LOPTS) $(OFILES) $(LIBS) -o pngpack; \
 	fi
 
@@ -97,7 +90,7 @@ show:
 
 distclean:
 	@echo "Removing local .png and .pngpack files in ./tools"
-	@rm -f *.png *.tpk
+	@rm -f *.png
 	@echo "Removing symbolic links in ./tools"
 	@rm -f md5.h md5.c
 	@echo "Removing configuration files in ./tools"

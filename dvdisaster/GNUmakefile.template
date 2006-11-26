@@ -205,7 +205,7 @@ show:
 
 .PHONY : install uninstall clean distclean arch www 
 .PHONY : berlios-images berlios sf sf-images 
-.PHONY : srcdist innodist nsisdist zipdist
+.PHONY : srcdist innodist zipdist
 
 install: dvdisaster html images
 	@echo "Installing package..."
@@ -293,8 +293,8 @@ distclean: clean
 clean:
 	@echo "Removing rebuildable files"
 	@rm -rf *.o medium.* dvdisaster simple-md5sum *.exe *.zip .dvdisaster core *.core *.stackdump
-	@rm -f inlined-icons.h help-dialogs.h installer.iss signature
-	@rm -f wininst/version.nsh
+	@rm -f inlined-icons.h help-dialogs.h
+	@rm -f wininst/installer.iss wininst/signature
 	@find . -name \*\~ -print | xargs rm -f;
 	@find . -name \*.mo -print | xargs rm -f;
 	@rm -rf documentation/cs/*.html documentation/de/*.html documentation/en/*.html
@@ -383,31 +383,9 @@ prepare-dist:
 	  cp $(GTK_BINDIR)/../lib/locale/$$i/LC_MESSAGES/gtk*.mo win-build-dir/lib/locale/$$i/LC_MESSAGES; \
 	done
 
-wininst/version.nsh:
-	@echo ";NSIS install script definitions" > wininst/version.nsh
-	@echo ";Do not change manually." >> wininst/version.nsh
-	@echo ";These are automatically created by the configure." >> wininst/version.nsh
-	@echo ";" >> wininst/version.nsh
-	@echo ";!define CFG_PACKAGE \"$(CFG_PACKAGE)\"" >> wininst/version.nsh
-	@echo "!define CFG_VERSION \"$(CFG_VERSION)\"" >> wininst/version.nsh
-	@if test "$(RELEASE_MICRO)" == ""; \
-	then echo "!define RELEASE_MICRO \"0\"" >> wininst/version.nsh; \
-	else echo "!define RELEASE_MICRO \"$(RELEASE_MICRO)\"" >> wininst/version.nsh; \
-	fi
-	@if test "$(RELEASE_STATUS)" == ""; \
-	then echo "!define RELEASE_STATUS \"stable\"" >> wininst/version.nsh; \
-	else echo "!define RELEASE_STATUS \"$(RELEASE_STATUS)\"" >> wininst/version.nsh; \
-	fi
-	@echo "!define CFG_PKGNAME \"$(PKGNAME)\"" >> wininst/version.nsh
-
-
 innodist: dvdisaster html pack-images prepare-dist
-	@sed 's/dvdisaster-%version%/$(PKGNAME)/' <installer.template >installer.iss
-	@iscc installer.iss
-
-nsisdist: dvdisaster html pack-images prepare-dist wininst/version.nsh
-	@echo "Making NSIS package"
-	@cd wininst; makensis dvdisaster.nsi > dvdisaster.nsi.log
+	@sed 's/dvdisaster-%version%/$(PKGNAME)/' <wininst/installer.template >wininst/installer.iss
+	@iscc wininst/installer.iss
 
 zipdist: prepare-dist
 	@echo "Packaging with zip"

@@ -268,6 +268,7 @@ int InquireDevice(DeviceHandle*, int);
 int SetRawMode(DeviceHandle*, int, int);
 void SpinupDevice(DeviceHandle*);
 int ReadSectors(DeviceHandle*, unsigned char*, gint64, int);
+int ReadSectorsFast(DeviceHandle*, unsigned char*, gint64, int);
 void CloseDevice(DeviceHandle*);
 
 #endif /* SCSI_LAYER_H */
