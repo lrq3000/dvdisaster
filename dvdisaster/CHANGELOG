@@ -1,6 +1,9 @@
 Warning: CD/DVD reading is currently being reworked. DO NOT USE for production work;
 	 images might contain wrong data.
 
+0.72 (devel-11)
+	- more segfault hunting on the raw reader
+
 0.72 (devel-10) 26-11-2006
 	- more fine tuning of the raw reader
 	- removed preferences and command line sections from documentation

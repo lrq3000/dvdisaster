@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-26 16:43+0100\n"
+"POT-Creation-Date: 2006-11-26 20:46+0100\n"
 "PO-Revision-Date: 2006-03-16 20:40+0100\n"
 "Last-Translator: Luboš Staněk <lubek@users.sourceforge.net>\n"
 "Language-Team: čeština <cs@li.org>\n"
@@ -931,43 +931,43 @@ msgstr ""
 msgid "Switched to the linear reading strategy."
 msgstr "Přepnuto na strategii lineárního čtení."
 
-#: preferences.c:568
+#: preferences.c:586
 msgid "Disabled automatic error correction file generation."
 msgstr "Zakázána automatická tvorba souboru oprav chyb."
 
-#: preferences.c:736
+#: preferences.c:754
 msgid "Preferences"
 msgstr "Nastavení"
 
-#: preferences.c:766
+#: preferences.c:784
 msgid "General"
 msgstr "Obecné"
 
-#: preferences.c:770
+#: preferences.c:788
 msgid "Medium and image filesystem"
 msgstr "Souborové systémy média a obrazu"
 
-#: preferences.c:777
+#: preferences.c:795
 msgid "Image size determination"
 msgstr ""
 
-#: preferences.c:777
+#: preferences.c:795
 msgid "Get Image size from: "
 msgstr ""
 
-#: preferences.c:789
+#: preferences.c:807
 msgid "Drive"
 msgstr ""
 
-#: preferences.c:795
+#: preferences.c:813
 msgid "ISO/UDF"
 msgstr ""
 
-#: preferences.c:801
+#: preferences.c:819
 msgid "ECC/RS02"
 msgstr ""
 
-#: preferences.c:825
+#: preferences.c:843
 msgid ""
 "<b>Image size determination</b>\n"
 "\n"
@@ -981,117 +981,117 @@ msgid ""
 "<b>Drive:</b> The image size reported by the drive will be used. As this information is typically wrong for DVD-RW/+RW/-RAM media this option is only present for backwards compatibility with older dvdisaster versions."
 msgstr ""
 
-#: preferences.c:844
+#: preferences.c:862
 msgid "Local files (on hard disc)"
 msgstr "Lokální soubory (na pevném disku)"
 
-#: preferences.c:851
+#: preferences.c:869
 msgid "Automatic file suffixes"
 msgstr ""
 
-#: preferences.c:851
+#: preferences.c:869
 msgid "Automatically add .iso and .ecc file suffixes"
 msgstr "Automaticky přidat souborové přípony .iso a .ecc"
 
-#: preferences.c:875
+#: preferences.c:893
 msgid ""
 "<b>Automatically add file suffixes</b>\n"
 "\n"
 "When this switch is set, files will be automatically appended with \".iso\" or \".ecc\" suffixes if no other file name extension is already present."
 msgstr ""
 
-#: preferences.c:881
+#: preferences.c:899
 msgid "File splitting"
 msgstr ""
 
-#: preferences.c:881
+#: preferences.c:899
 msgid "Split files into segments &lt;= 2GB"
 msgstr ""
 
-#: preferences.c:904
+#: preferences.c:922
 msgid ""
 "<b>File splitting</b>\n"
 "\n"
 "Allows working with file systems which are limited to 2GB per file, e.g. FAT from Windows. Created files are spread over upto 100 segments called \"medium00.iso\", \"medium01.iso\" etc. at the cost of a small performance hit."
 msgstr ""
 
-#: preferences.c:913
+#: preferences.c:931
 msgid "Automatic file creation and deletion"
 msgstr "Automatická tvorba a mazání souborů"
 
-#: preferences.c:922
+#: preferences.c:940
 msgid "Automatic .ecc file creation"
 msgstr ""
 
-#: preferences.c:922
+#: preferences.c:940
 msgid "Create error correction file after reading image"
 msgstr "Vytvořit soubor oprav chyb po načtení obrazu"
 
-#: preferences.c:945
+#: preferences.c:963
 msgid ""
 "<b>Automatic error correction file creation</b>\n"
 "\n"
 "Automatically creates an error correction file after reading an image. Together with the \"Remove image\" option this will speed up error correction file generation for a series of different media."
 msgstr ""
 
-#: preferences.c:952
+#: preferences.c:970
 msgid "Automatic image file removal"
 msgstr ""
 
-#: preferences.c:952
+#: preferences.c:970
 msgid "Remove image after error correction file creation"
 msgstr "Odstranit obraz po vytvoření souboru oprav chyb"
 
-#: preferences.c:975
+#: preferences.c:993
 msgid ""
 "<b>Automatic image file removal</b>\n"
 "\n"
 "If this switch is set the image file will be deleted following the successful generation of the respective error correction file."
 msgstr ""
 
-#: preferences.c:981
+#: preferences.c:999
 msgid "Read & Scan"
 msgstr "Čtení a skenování"
 
-#: preferences.c:985
+#: preferences.c:1003
 msgid "Reading preferences"
 msgstr "Nastavení čtení"
 
-#: preferences.c:994
+#: preferences.c:1012
 msgid "Reading strategy"
 msgstr ""
 
-#: preferences.c:994
+#: preferences.c:1012
 msgid "Reading strategy: "
 msgstr "Strategie čtení: "
 
-#: preferences.c:1008
+#: preferences.c:1026
 msgid "Linear"
 msgstr "Lineární"
 
-#: preferences.c:1016
+#: preferences.c:1034
 msgid "Adaptive (for defective media)"
 msgstr "Adaptivní (pro vadná média)"
 
-#: preferences.c:1028
+#: preferences.c:1046
 msgid ""
 "<b>Reading strategy</b>\n"
 "The linear strategy is optimized for undamaged media while the adaptive strategy is better suited for media already containing read errors."
 msgstr ""
 
-#: preferences.c:1035
+#: preferences.c:1053
 msgid "Reading range"
 msgstr ""
 
-#: preferences.c:1035
+#: preferences.c:1053
 msgid "Read/Scan from sector"
 msgstr "Číst/Skenovat od sektoru"
 
-#: preferences.c:1060
+#: preferences.c:1078
 msgid "to sector"
 msgstr "po sektor"
 
-#: preferences.c:1078
+#: preferences.c:1096
 msgid ""
 "<b>Reading range</b>\n"
 "\n"
@@ -1102,19 +1102,19 @@ msgid ""
 "These settings are only effective for the current session and will not be saved."
 msgstr ""
 
-#: preferences.c:1088
+#: preferences.c:1106
 msgid "Read error treatment"
 msgstr ""
 
-#: preferences.c:1097
+#: preferences.c:1115
 msgid "Raw reading"
 msgstr ""
 
-#: preferences.c:1097
+#: preferences.c:1115
 msgid "Read and analyze raw sectors"
 msgstr ""
 
-#: preferences.c:1118
+#: preferences.c:1136
 msgid ""
 "<b>Raw reading</b>\n"
 "\n"
@@ -1123,16 +1123,16 @@ msgid ""
 "Activating this option makes dvdisaster read sectors in raw mode. The L-EC P/Q vectors, EDC checksum and MSF address contained in the raw data are checked to make sure that the sector was correctly read."
 msgstr ""
 
-#: preferences.c:1128
+#: preferences.c:1146
 msgid "Minimum number of reading attempts"
 msgstr ""
 
-#: preferences.c:1134 preferences.c:1135
+#: preferences.c:1152 preferences.c:1153
 #, c-format
 msgid "Min. %d reading attempts per sector"
 msgstr ""
 
-#: preferences.c:1156
+#: preferences.c:1174
 msgid ""
 "<b>Minimum number of reading attempts</b>\n"
 "\n"
@@ -1141,16 +1141,16 @@ msgid ""
 "Increasing the number of reading attempts may improve data recovery on marginal media, but will also increase processing time and mechanical wear on the drive."
 msgstr ""
 
-#: preferences.c:1165
+#: preferences.c:1183
 msgid "Maximum number of reading attempts"
 msgstr ""
 
-#: preferences.c:1171 preferences.c:1172
+#: preferences.c:1189 preferences.c:1190
 #, c-format
 msgid "Max. %d reading attempts per sector"
 msgstr ""
 
-#: preferences.c:1193
+#: preferences.c:1211
 msgid ""
 "<b>Maximum number of reading attempts</b>\n"
 "\n"
@@ -1159,21 +1159,21 @@ msgid ""
 "The decision to do more attempts depends on the quality of data gathered so far, which in turn is influenced by the capabilities of your CD/DVD drive and the operating system. So depending on your configuration, you may or may not see dvdisaster using the maximum value."
 msgstr ""
 
-#: preferences.c:1207
+#: preferences.c:1225
 msgid "Treatment of unreadable areas"
 msgstr ""
 
-#: preferences.c:1211
+#: preferences.c:1229
 #, c-format
 msgid "Skip %d sectors after read error"
 msgstr "Přeskočit %d sektorů po chybě čtení"
 
-#: preferences.c:1212
+#: preferences.c:1230
 #, c-format
 msgid "Stop reading when unreadable intervals &lt; %d"
 msgstr ""
 
-#: preferences.c:1238
+#: preferences.c:1256
 msgid ""
 "<b>Treatment of unreadable areas</b>\n"
 "\n"
@@ -1182,34 +1182,34 @@ msgid ""
 "Effects on the <b>linear reading strategy</b>:"
 msgstr ""
 
-#: preferences.c:1245
+#: preferences.c:1263
 msgid "Skipping a large number of sectors (e.g. 1024) gives a quick overview of damaged areas, but will usually not collect enough data for repairing the image."
 msgstr ""
 
-#: preferences.c:1249
+#: preferences.c:1267
 msgid "Smaller values like 16, 32 or 64 are a good trade-off: The processing time will beconsiderably shortened, but still enough data for repairing the image is collected.\n"
 msgstr ""
 
-#: preferences.c:1253
+#: preferences.c:1271
 msgid ""
 "The <b>adaptive reading strategy</b> uses this setting only if no error correction data is available. In that case the reading process will stop when no unread areas larger than the selected size remain. Values smaller than 128 <i>are not recommended</i> as they cause the drive to carry out lots of laser head repositioning during the final phase of the reading process. If adaptive reading with a setting of 128 is not sufficient, try reading the remaining sectors with an additional linear reading pass.\n"
 "\n"
 "On DVD media read errors do usually extend over at least 16 sectors for technical reasons. Therefore selecting a value less than 16 is not recommended for DVD."
 msgstr ""
 
-#: preferences.c:1266
+#: preferences.c:1284
 msgid "Image properties"
 msgstr "Vlastnosti obrazu"
 
-#: preferences.c:1275
+#: preferences.c:1293
 msgid "DAO mode"
 msgstr ""
 
-#: preferences.c:1275
+#: preferences.c:1293
 msgid "Assume image to be written in DAO mode (don't truncate)"
 msgstr "Předpokládat, že obraz má být zapsán v režimu DAO (nezkracovat)"
 
-#: preferences.c:1295
+#: preferences.c:1313
 msgid ""
 "<b>Assume DAO mode</b>\n"
 "\n"
@@ -1220,15 +1220,15 @@ msgid ""
 "<b>Tip:</b> To avoid these problems, consider using the \"DAO / Disc at once\" (sometimes also called \"SAO / Session at once\") mode for writing single session media."
 msgstr ""
 
-#: preferences.c:1310
+#: preferences.c:1328
 msgid "Filling of unreadable sectors"
 msgstr ""
 
-#: preferences.c:1311
+#: preferences.c:1329
 msgid "Fill unreadable sectors with byte:"
 msgstr "Vyplnit nečitelné sektory bajtem:"
 
-#: preferences.c:1350
+#: preferences.c:1368
 msgid ""
 "<b>Filling of unreadable sectors</b>\n"
 "\n"
@@ -1236,46 +1236,46 @@ msgid ""
 "In other data recovery software it is common to fill unreadable sectors with a certain byte value. To allow interoperability with such programs, you can specify the byte value they are using:\n"
 msgstr ""
 
-#: preferences.c:1359
+#: preferences.c:1377
 msgid "0xb0 (176 decimal): for compatibility with h2cdimage published by \"c't\", a German periodical.\n"
 msgstr ""
 
-#: preferences.c:1363
+#: preferences.c:1381
 msgid "<b>Note:</b> Using zero filling (0x00, decimal 0) is highly discouraged. Most media contain regular zero filled sectors which can not be told apart from unreadable sectors if zero filling is used."
 msgstr ""
 
-#: preferences.c:1369 preferences.c:1372
+#: preferences.c:1387 preferences.c:1390
 msgid "Drive initialisation"
 msgstr "Inicializace mechaniky"
 
-#: preferences.c:1373
+#: preferences.c:1391
 msgid "Wait"
 msgstr "Čekat"
 
-#: preferences.c:1376
+#: preferences.c:1394
 msgid "seconds for drive to spin up"
 msgstr "sekund na roztočení mechaniky"
 
-#: preferences.c:1406
+#: preferences.c:1424
 msgid ""
 "<b>Drive initialisation</b>\n"
 "\n"
 "Waits the specified amount of seconds for letting the drive spin up. This avoids speed jumps at the beginning of the reading curve."
 msgstr ""
 
-#: preferences.c:1414
+#: preferences.c:1432
 msgid "Error correction"
 msgstr "Oprava chyb"
 
-#: preferences.c:1416
+#: preferences.c:1434
 msgid "Error correction method"
 msgstr ""
 
-#: preferences.c:1417
+#: preferences.c:1435
 msgid "Storage method:"
 msgstr ""
 
-#: preferences.c:1476
+#: preferences.c:1494
 msgid ""
 "<b>Error correction method</b>\n"
 "\n"
@@ -1283,11 +1283,11 @@ msgid ""
 "Currently two Reed-Solomon based error correction methods are available. provide different ways for storing the error correction information:\n"
 msgstr ""
 
-#: preferences.c:1482
+#: preferences.c:1500
 msgid "RS01 creates error correction files which are stored separately from the image they belong to. Since data protection at the file level is difficult, error correction files must be stored on media which are protected against data loss by dvdisaster, too.\n"
 msgstr ""
 
-#: preferences.c:1487
+#: preferences.c:1505
 msgid ""
 "RS02 places the error correction data directly on the medium which is to be protected. This requires creating an image on hard disk using a CD/DVD writing software, as the image must be augmented with error correction data prior to writing it to the medium.\n"
 "Therefore the data to be protected and the error correction information are located at the same medium. Damaged sectors in the error correction information reduce the data recovery capacity, but do not make recovery impossible - a second medium for keeping or protecting the error correction information is not required."

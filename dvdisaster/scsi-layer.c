@@ -1229,7 +1229,7 @@ int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
    /* Reset raw reading buffer (if there is one) */
 
    if(Closure->readRaw && dh->readRaw)
-   {  dh->rawBuffer->samplesRead  = 0;
+   {  ResetRawBuffer(dh->rawBuffer);
       dh->rawBuffer->recommendedAttempts = Closure->minReadAttempts;
    }
 
@@ -1374,7 +1374,7 @@ DeviceHandle* OpenAndQueryDevice(char *device)
 	   }
 	   PrintLog(_(", RAW reading"));
 
-	   if(Closure->minReadAttempts > 1)
+	   if(Closure->maxReadAttempts > 1)
 	   {  dh->canReadDefective = SetRawMode(dh, 0x20, MODE_PAGE_OR);
 
 	      if(dh->canReadDefective)

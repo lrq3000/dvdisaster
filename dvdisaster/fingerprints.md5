@@ -1,4 +1,4 @@
-397199eeab4b4eaac39c56a01d7d84ef *dvdisaster.h
+9281086433cb9d16be59a9120c92800e *dvdisaster.h
 8f0376b9d0f6963e11677a9c2e446cc6 *galois-inlines.h
 c27628ad149e3f8564b24a86642b54b6 *md5.h
 bcc539132868e8c92929302de62ef434 *rs01-includes.h
@@ -34,7 +34,7 @@ cdde449dd2a8f64b560ff18a36f86234 *random.c
 5a37967ccb84d6e7535cb78e5cb0f227 *read-adaptive-window.c
 16e79314220d2974650348c3a474071e *read-linear.c
 8f6dd00126b3e613c0a388390dcb549b *read-linear-window.c
-a9a35fcd0111913de485ee7116a4ec9d *recover-raw.c
+aa7b69f8fda6f52ffdb64872cf0ae4f8 *recover-raw.c
 1edd34d022eaea0ceb3b438754cf0d67 *rs01-common.c
 e536474cb285a8cd9d2d17b5cc1dd880 *rs01-create.c
 f7d9f82d17c221ea5fb6de84588ce2ea *rs01-fix.c
@@ -47,7 +47,7 @@ f747d0e89474d40f3833da319fcdc88b *rs02-verify.c
 08574c4ea55dc96fa1757a3a0bcfe0d7 *rs02-window.c
 4c4c6afc2328404c7d03d5dd318bdf61 *scsi-darwin.c
 2e213180cdfa1951e959c74d60086916 *scsi-freebsd.c
-d5e5b4e36b72628a088f62df90c81a35 *scsi-layer.c
+470d570e2f6a1e5296ee9c6aaa44904c *scsi-layer.c
 0bf3231d5866f05e16c9903630545997 *scsi-linux.c
 79a515b5dc4addb8ffbe301e5ee88b72 *scsi-unknown.c
 e0b1e12036b027f0dbb0c1e50ffe2192 *scsi-win32.c

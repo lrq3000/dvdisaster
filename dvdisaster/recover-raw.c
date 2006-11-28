@@ -99,6 +99,18 @@ RawBuffer *CreateRawBuffer(int sample_length)
    return rb;
 }
 
+void ResetRawBuffer(RawBuffer *rb)
+{  int i;
+
+   rb->samplesRead = 0;
+
+   for(i=0; i<N_P_VECTORS; i++)
+     rb->pParityN[i][0] = rb->pParityN[i][1] = 0;
+
+   for(i=0; i<N_Q_VECTORS; i++)
+     rb->qParityN[i][0] = rb->qParityN[i][1] = 0;
+}
+
 void FreeRawBuffer(RawBuffer *rb)
 {  int i;
 

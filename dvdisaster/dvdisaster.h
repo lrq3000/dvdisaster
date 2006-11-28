@@ -879,6 +879,7 @@ enum                          /* values for byteState */
 };
 
 RawBuffer* CreateRawBuffer(int);
+void ResetRawBuffer(RawBuffer*);
 void FreeRawBuffer(RawBuffer*);
 
 int ValidateRawSector(RawBuffer*, unsigned char*);
