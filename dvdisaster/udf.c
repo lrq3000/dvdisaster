@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2006 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2007 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -143,12 +143,50 @@ static int try_sector(DeviceHandle *dh, gint64 pos, EccHeader **ehptr, unsigned 
    return TRY_NEXT_HEADER;
 }
 
+/*
+ * Dialog components for disabling RS02 search
+ */
+
+static void no_rs02_cb(GtkWidget *widget, gpointer data)
+{  int state  = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+  
+  if(state) Closure->querySize = 1;
+  else      Closure->querySize = 2;
+
+  UpdatePrefsQuerySize();
+}
+
+static void insert_buttons(GtkDialog *dialog)
+{  GtkWidget *check,*align;
+
+   gtk_dialog_add_buttons(dialog, 
+			  _utf("Skip RS02 test"), 1,
+			  _utf("Continue searching"), 0, NULL);
+
+   align = gtk_alignment_new(0.5, 0.5, 0.0, 0.0);
+   gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), align, FALSE, FALSE, 0);
+
+   check = gtk_check_button_new_with_label(_utf("Disable RS02 initialization in the preferences"));
+   gtk_container_add(GTK_CONTAINER(align), check);
+   gtk_container_set_border_width(GTK_CONTAINER(align), 10);
+   g_signal_connect(G_OBJECT(check), "toggled", G_CALLBACK(no_rs02_cb), NULL);
+
+   gtk_widget_show(align);
+   gtk_widget_show(check);
+} 
+
+/*
+ * RS02 header search
+ */
+
 EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
 {  AlignedBuffer *ab = CreateAlignedBuffer(4096);
    EccHeader *eh = NULL;
    Bitmap *try_next_header, *try_next_modulo;
    gint64 pos;
    gint64 header_modulo;
+   int read_count = 0;
+   int answered_continue = FALSE;
 
    /*** Quick search at fixed offsets relative to ISO filesystem */
 
@@ -195,6 +233,9 @@ EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
       while(pos > 0)
       {  int result;
 	
+	 if(Closure->stopActions)
+	   goto bail_out;
+
 	 if(GetBit(try_next_header, pos))
 	 {  Verbose("Sector %lld cached; skipping\n", pos);
 	    goto check_next_header;
@@ -210,6 +251,17 @@ EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
 	 switch(result)
 	 {  case TRY_NEXT_HEADER:
 	       SetBit(try_next_header, pos);
+	       read_count++;
+	       if(!answered_continue && read_count > 5)
+	       {  int answer = ModalDialog(GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, insert_buttons,
+					   _("Faster medium initialization\n\n"
+					     "Searching rewriteable media for error correction data may take a long time.\n"
+					     "Press \"Skip RS02 test\" if you are certain that this medium was\n"
+					     "not augmented with RS02 error correction data."));
+		 
+		  if(answer) goto bail_out;
+		  answered_continue = TRUE;
+	       }
 	       goto check_next_header;
 	    case TRY_NEXT_MODULO:
 	       SetBit(try_next_modulo, pos);
@@ -229,6 +281,7 @@ EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
       header_modulo >>= 1;
    }
 
+bail_out:
    FreeBitmap(try_next_header);
    FreeBitmap(try_next_modulo);
    FreeAlignedBuffer(ab);
@@ -581,7 +634,10 @@ static IsoInfo* examine_iso(DeviceHandle *dh)
    /*** Iterate over the volume decriptors */
 
    for(sector=16; sector<32; sector++)
-   {  status = ReadSectorsFast(dh, buf, sector, 1);
+   {  if(Closure->stopActions) 
+        continue;
+
+      status = ReadSectorsFast(dh, buf, sector, 1);
 
       if(status)
       {  Verbose("  Sector %2d: unreadable\n", sector);

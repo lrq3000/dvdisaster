@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2006 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2007 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -57,7 +57,6 @@ void FreeAlignedBuffer(AlignedBuffer *ab)
 
 /***
  *** CD and DVD query routines.
- *** Everything below should be system independent.
  ***/
 
 /*
@@ -955,6 +954,10 @@ gint64 CurrentImageCapacity()
    return 0;
 }
 
+/***
+ *** Optional drive settings
+ ***/
+
 /*
  * Spin up drive.
  * Most drive give a *beep* about sending the START STOP CDB,
@@ -992,6 +995,110 @@ void SpinupDevice(DeviceHandle *dh)
 
    FreeAlignedBuffer(ab);
    g_timer_destroy(timer);
+}
+
+/*
+ * Load/eject the medium
+ */
+
+void LoadMedium(DeviceHandle *dh, int load)
+{  Sense sense;
+   unsigned char cmd[MAX_CDB_SIZE];
+
+   /* Try to load or eject the medium */
+
+   memset(cmd, 0, MAX_CDB_SIZE);
+   cmd[0] = 0x1b;                /* START STOP */
+   cmd[4] = load ? 0x03 : 0x02;  /* LOEJ=1; START=load/eject */
+
+   if(SendPacket(dh, cmd, 12, NULL, 0, &sense, DATA_READ)<0
+      && (sense.asc != 0x53 || sense.ascq != 0x02))
+   {
+      PrintLog(_("%s\nCould not load/unload the medium.\n"), 
+		 GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
+      return;
+   }
+
+   if(load) return;
+
+   /* Some drives lock the tray when it was closed via START STOP.
+      That sucks especially under newer Linux kernels as we need to
+      be root to unlock it. Try anyways; maybe this changes in
+      future kernels. */
+
+   memset(cmd, 0, MAX_CDB_SIZE);
+   cmd[0] = 0x1e;                /* PREVENT ALLOW MEDIUM REMOVAL */
+
+   if(SendPacket(dh, cmd, 12, NULL, 0, &sense, DATA_READ)<0)
+      PrintLog(_("%s\nCould not unlock the medium.\n"), 
+	       GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
+
+   /* Try ejecting again */
+
+   memset(cmd, 0, MAX_CDB_SIZE);
+   cmd[0] = 0x1b;                /* START STOP */
+   cmd[4] = 0x02;                /* LOEJ=1; START=eject */
+
+   if(SendPacket(dh, cmd, 12, NULL, 0, &sense, DATA_READ)<0)
+      PrintLog(_("%s\nCould not load/unload the medium.\n"), 
+	       GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
+}
+
+/*
+ * Wait for the drive to become ready
+ */
+
+int TestUnitReady(DeviceHandle *dh)
+{  unsigned char cmd[MAX_CDB_SIZE];
+   int i;
+
+   /*** Send TEST UNIT READY, return if drive says go */
+
+   memset(cmd, 0, MAX_CDB_SIZE);
+   cmd[0] = 0x00;     /* TEST UNIT READY */
+
+   if(SendPacket(dh, cmd, 12, NULL, 0, &dh->sense, DATA_READ) != -1)
+      return TRUE;
+
+   /*** If no medium present, try closing the tray. */
+
+   if(   dh->sense.sense_key == 2  /* Not Ready */
+      && dh->sense.asc == 0x3a)    /* Medium not present */
+      LoadMedium(dh, TRUE);
+
+   /*** Wait 10 seconds for drives reporting that they are
+        becoming ready */
+
+   for(i=0; i<10; i++)
+   {  memset(cmd, 0, MAX_CDB_SIZE);
+      cmd[0] = 0x00;     /* TEST UNIT READY */
+
+      if(SendPacket(dh, cmd, 12, NULL, 0, &dh->sense, DATA_READ) != -1)
+      {  if(Closure->guiMode)
+	    SetLabelText(Closure->status, "");
+	 return TRUE;
+      }
+
+      if(   dh->sense.sense_key == 2   /* Not Ready */
+	 && dh->sense.asc  == 0x04     /* but in process of becoming so */
+	 && dh->sense.ascq == 0x01)
+      {  PrintCLIorLabel(Closure->status,
+			 _("Waiting 10 seconds for drive: %d\n"),9-i);
+
+	 if(Closure->stopActions)
+	    return FALSE;
+
+	 usleep(G_USEC_PER_SEC);
+	 continue;
+      }
+
+      break;  /* Something is wrong with the drive */
+   }
+
+   if(Closure->guiMode)
+      SetLabelText(Closure->status, "");
+
+   return FALSE;
 }
 
 /*
@@ -1033,10 +1140,12 @@ static void set_speed(DeviceHandle *dh)
 }
 #endif
 
+/***
+ *** Sector reading routines
+ ***/
+
 /*
  * Sector reading using the packet interface.
- * Using read() hangs some Linux systems on read errors,
- * so we can't go that route.
  */
 
 static int read_dvd_sector(DeviceHandle *dh, unsigned char *buf, int lba, int nsectors)
@@ -1243,7 +1352,7 @@ int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
 	   status = dh->readRaw(dh, buf, s, nsectors);
       else status = dh->read(dh, buf, s, nsectors);
 
-      if(dh->readRaw)
+      if(Closure->readRaw)
 	recommended_attempts = dh->rawBuffer->recommendedAttempts;
 
       if(status)  /* current try was unsucessful */
@@ -1281,7 +1390,10 @@ int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
          break;
       }
    }
-
+#if 0
+   if(status && Closure->defectiveDump)
+     SaveDefectiveSector(dh->rawBuffer);
+#endif
    return status;
 }
 
@@ -1327,6 +1439,14 @@ DeviceHandle* OpenAndQueryDevice(char *device)
 
    dh = OpenDevice(device);
    InquireDevice(dh, 0);
+
+   if(!TestUnitReady(dh))
+   {  if(   dh->sense.sense_key == 2  /* Not Ready */
+	 && dh->sense.asc == 0x3a)    /* Medium not present */
+	   Stop(_("Device %s: no medium present\n"), device);
+      else Stop(_("Device %s does not become ready:\n%s\n\n"), device,
+		GetSenseString(dh->sense.sense_key, dh->sense.asc, dh->sense.ascq, FALSE));
+   }
 
 #ifdef SYS_LINUX
    PrintLog(_("\nDevice: %s, %s\n"),device, dh->devinfo);

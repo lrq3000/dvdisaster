@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2006 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2007 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -56,7 +56,7 @@ void InitializeCurve(int max_speed, gint64 start, gint64 end, gint64 medium_size
 
    if(Closure->readLinearSpiral)
      for(i=Closure->lastPercent-1; i>=0; i--)
-       Closure->readLinearSpiral->segmentColor[i] = Closure->blue;
+       Closure->readLinearSpiral->segmentColor[i] = Closure->blueSector;
 
    g_idle_add(max_speed_idle_func, NULL);
 }
@@ -93,11 +93,11 @@ static gboolean curve_idle_func(gpointer data)
 
    for(i=Closure->lastSegment; i<Closure->percent; i++)
      switch(Closure->readLinearCurve->ivalue[i])
-     {  case 0: DrawSpiralSegment(Closure->readLinearSpiral, Closure->blue, i); break;
-        case 1: DrawSpiralSegment(Closure->readLinearSpiral, Closure->green, i); break;
-        case 2: DrawSpiralSegment(Closure->readLinearSpiral, Closure->red, i); break;
-        case 3: DrawSpiralSegment(Closure->readLinearSpiral, Closure->darkgreen, i); break;
-        case 4: DrawSpiralSegment(Closure->readLinearSpiral, Closure->yellow, i); break;
+     {  case 0: DrawSpiralSegment(Closure->readLinearSpiral, Closure->blueSector, i); break;
+        case 1: DrawSpiralSegment(Closure->readLinearSpiral, Closure->greenSector, i); break;
+        case 2: DrawSpiralSegment(Closure->readLinearSpiral, Closure->redSector, i); break;
+        case 3: DrawSpiralSegment(Closure->readLinearSpiral, Closure->darkSector, i); break;
+        case 4: DrawSpiralSegment(Closure->readLinearSpiral, Closure->yellowSector, i); break;
      }
 
    Closure->lastSegment = Closure->percent;
@@ -125,7 +125,7 @@ static gboolean curve_idle_func(gpointer data)
    y0 = CurveY(Closure->readLinearCurve, Closure->readLinearCurve->fvalue[Closure->lastPlotted]);
    if(Closure->lastPlottedY) y0 = Closure->lastPlottedY;
 
-   gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->blue);
+   gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->curveColor);
 
    for(i=Closure->lastPlotted+1; i<=Closure->percent; i++)
    {  gint x1 = CurveX(Closure->readLinearCurve, i);
@@ -222,7 +222,7 @@ static void redraw_curve(void)
    /* Draw and label the spiral */
 
    x = Closure->readLinearCurve->rightX + 20;
-   gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->blue);
+   gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->curveColor);
    SetText(Closure->readLinearCurve->layout, _("Media state"), &w, &h);
    gdk_draw_layout(d, Closure->drawGC, 
 		   x,
@@ -231,21 +231,21 @@ static void redraw_curve(void)
 
    if(Closure->additionalSpiralColor == 0)
      DrawSpiralLabel(Closure->readLinearSpiral, Closure->readLinearCurve->layout,
-		     _("Not touched this time"), Closure->blue, x, -1);
+		     _("Not touched this time"), Closure->curveColor, x, -1);
 
    if(Closure->additionalSpiralColor == 3)
      DrawSpiralLabel(Closure->readLinearSpiral, Closure->readLinearCurve->layout,
-		     _("Already present"), Closure->darkgreen, x, -1);
+		     _("Already present"), Closure->darkSector, x, -1);
 
    DrawSpiralLabel(Closure->readLinearSpiral, Closure->readLinearCurve->layout,
-		   _("Successfully read"), Closure->green, x, pos++);
+		   _("Successfully read"), Closure->greenSector, x, pos++);
 
    if(Closure->checkCrc || Closure->crcErrors)
      DrawSpiralLabel(Closure->readLinearSpiral, Closure->readLinearCurve->layout,
-		     _("Sectors with CRC errors"), Closure->yellow, x, pos++);
+		     _("Sectors with CRC errors"), Closure->yellowSector, x, pos++);
    
    DrawSpiralLabel(Closure->readLinearSpiral, Closure->readLinearCurve->layout,
-		   _("Unreadable / skipped"), Closure->red, x, pos++);
+		   _("Unreadable / skipped"), Closure->redSector, x, pos++);
 
    DrawSpiral(Closure->readLinearSpiral);
 

@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2006 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2007 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -55,7 +55,8 @@ static void ecc_cleanup(gpointer data)
    if(Closure->guiMode)
    {  if(ec->earlyTermination)
         SetLabelText(GTK_LABEL(ec->wl->encFootline),
-		     _("<span color=\"red\">Aborted by unrecoverable error.</span>")); 
+		     _("<span %s>Aborted by unrecoverable error.</span>"),
+		     Closure->redMarkup); 
       AllowActions(TRUE);
    }
 
@@ -102,11 +103,13 @@ static void abort_encoding(ecc_closure *ec, int truncate)
 	Stop(_("Could not truncate %s: %s\n"),Closure->imageName,strerror(errno));
 
       SetLabelText(GTK_LABEL(wl->encFootline), 
-		   _("<span color=\"red\">Aborted by user request!</span> (partial ecc data removed from image)")); 
+		   _("<span %s>Aborted by user request!</span> (partial ecc data removed from image)"),
+		   Closure->redMarkup); 
    }
    else
    {  SetLabelText(GTK_LABEL(wl->encFootline), 
-		   _("<span color=\"red\">Aborted by user request!</span>")); 
+		   _("<span %s>Aborted by user request!</span>"),
+		   Closure->redMarkup); 
    }
 
    ec->earlyTermination = FALSE;   /* suppress respective error message */

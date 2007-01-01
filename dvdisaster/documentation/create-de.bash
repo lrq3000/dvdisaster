@@ -1,7 +1,7 @@
 #! /bin/bash
 
 #  dvdisaster: German homepage translation
-#  Copyright (C) 2004-2006 Carsten Gnörlich
+#  Copyright (C) 2004-2007 Carsten Gnörlich
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ function dictionary_de()
    trans_hosting="Diese Seiten liegen auf"
 
    trans_fdl="Die unveränderte Wiedergabe und Verteilung dieses gesamten Textes in beliebiger Form ist gestattet, sofern dieser Hinweis erhalten bleibt."
-   trans_copyright="Copyright 2004-2006 Carsten Gnörlich."
+   trans_copyright="Copyright 2004-2007 Carsten Gnörlich."
    trans_modified="Die Informationen in diesem Handbuch beziehen sich auf die Originalversion von dvdisaster und sind möglicherweise nicht zutreffend."
 }
 
@@ -524,7 +524,7 @@ In der Kommandozeilen-Betriebsart benötigen Sie die folgenden Parameter
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>dvdisaster -s -d /dev/hdc -e korrektur.ecc</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnörlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnörlich.<br>
 Dies ist freie Software; es gelten die Bedingungen der<br>
 GNU GENERAL PUBLIC LICENSE aus dem Quelltext.<p>
 
@@ -794,7 +794,7 @@ Zum Einlesen des Abbildes benötigen Sie die folgenden Parameter
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>dvdisaster -r -d /dev/hdc -i abbild.iso</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnörlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnörlich.<br>
 Dies ist freie Software; es gelten die Bedingungen der<br>
 GNU GENERAL PUBLIC LICENSE aus dem Quelltext.<p>
 
@@ -832,7 +832,7 @@ Fehlerkorrektur-Datei mit folgendem Aufruf:<p>
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>dvdisaster -c -i abbild.iso -e korrektur.ecc </b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnörlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnörlich.<br>
 Dies ist freie Software; es gelten die Bedingungen der<br>
 GNU GENERAL PUBLIC LICENSE aus dem Quelltext.<p>
 
@@ -1030,7 +1030,7 @@ Wenn Sie mit der Brennsoftware das Abbild "abbild.iso" erzeugt haben, geben Sie 
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>dvdisaster -c -mRS02 -i abbild.iso</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnörlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnörlich.<br>
 Dies ist freie Software; es gelten die Bedingungen der<br>
 GNU GENERAL PUBLIC LICENSE aus dem Quelltext.<p>
 
@@ -1074,7 +1074,7 @@ Lesen Sie das Abbild nach dem Brennen mit dvdisaster wieder ein:<p>
 
 <table class="example" width="100%" bgcolor="#ffffe0"><tr><td>
 user@linux&gt; <b>dvdisaster -r -d/dev/hdc -i abbild-neu.iso</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnörlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnörlich.<br>
 Dies ist freie Software; es gelten die Bedingungen der<br>
 GNU GENERAL PUBLIC LICENSE aus dem Quelltext.<p>
 
@@ -1103,7 +1103,7 @@ Alle Sektoren erfolgreich eingelesen.
 
 <table class="example" width="100%" bgcolor="#ffffe0"><tr><td>
 user@linux&gt; <b>dvdisaster -t -i abbild-neu.iso</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnörlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnörlich.<br>
 Dies ist freie Software; es gelten die Bedingungen der<br>
 GNU GENERAL PUBLIC LICENSE aus dem Quelltext.<p>
 
@@ -1265,7 +1265,7 @@ Beispiel zum Lesen eines beschädigten Datenträgers mit Hilfe einer <b>Fehlerkorr
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>dvdisaster -r --adaptive-read -i abbild.iso -e korrektur.ecc</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnörlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnörlich.<br>
 Dies ist freie Software; es gelten die Bedingungen der<br>
 GNU GENERAL PUBLIC LICENSE aus dem Quelltext.<p>
 
@@ -1286,7 +1286,7 @@ Beispiel zum Lesen eines beschädigten Datenträgers mit einem <b>erweiterten Abbi
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>dvdisaster -r --adaptive-read -i abbild.iso</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnörlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnörlich.<br>
 Dies ist freie Software; es gelten die Bedingungen der<br>
 GNU GENERAL PUBLIC LICENSE aus dem Quelltext.<p>
 
@@ -1434,7 +1434,7 @@ Fehlerkorrektur-Datei.<p>
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>dvdisaster -f -i abbild.iso -e korrektur.ecc</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnörlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnörlich.<br>
 Dies ist freie Software; es gelten die Bedingungen der<br>
 GNU GENERAL PUBLIC LICENSE aus dem Quelltext.<p>
 
@@ -1574,7 +1574,7 @@ Beispiel zum Vergleichen eines Abbilds mit der zugehörigen Fehlerkorrektur-Datei
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>dvdisaster -t -i abbild.iso -e korrektur.ecc</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnörlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnörlich.<br>
 Dies ist freie Software; es gelten die Bedingungen der<br>
 GNU GENERAL PUBLIC LICENSE aus dem Quelltext.<p>
 
@@ -1596,7 +1596,7 @@ Beispiel zum Prüfen eines mit Fehlerkorrektur-Daten erweiterten Abbilds:<p>
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>dvdisaster -t -i abbild.iso</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnörlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnörlich.<br>
 Dies ist freie Software; es gelten die Bedingungen der<br>
 GNU GENERAL PUBLIC LICENSE aus dem Quelltext.<p>
 
@@ -1661,18 +1661,18 @@ der Quellkode-Version gibt es <a href="download20.html">Installationshinweise</a
 <b>Aktuelle Version</b><p> 
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.70</b></td><td align="right">30-Jul-2006</td></tr>
+<tr><td><b>dvdisaster-0.70</b></td><td align="right">10-Dez-2006</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Quellkode für alle Betriebssysteme:&nbsp;</td>
-        <td><a href="${tar_0_70}">dvdisaster-0.70.1.tar.bz2</a></td></tr>
+        <td><a href="${tar_0_70}">dvdisaster-0.70.3.tar.bz2</a></td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><a href="${tar_0_70_sig}">dvdisaster-0.70.1.tar.bz2.gpg</a></td></tr>
+        <td><a href="${tar_0_70_sig}">dvdisaster-0.70.3.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Binärversion für Windows:&nbsp;</td>
-        <td><a href="${setup_0_70}">dvdisaster-0.70.1-setup.exe</a></td></tr>
+        <td><a href="${setup_0_70}">dvdisaster-0.70.3-setup.exe</a></td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><a href="${setup_0_70_sig}">dvdisaster-0.70.1-setup.exe.gpg</a></td></tr>
+        <td><a href="${setup_0_70_sig}">dvdisaster-0.70.3-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
@@ -1690,9 +1690,20 @@ Daniel Nylander hat die Bildschirmtexte ins Schwedische übersetzt.<p>
 
 <b>Patches</b> (kleine Änderungen nach Version 0.70; die obigen Dateien wurden erneuert):<br>
 
+<b>pl3</b> behebt einen Fehler bei der Erkennung von nicht unterstützten CDs,
+der unter Umständen einen blauen Bildschirm unter Windows erzeugte.
+Abbruchmöglichkeit während der RS02-Erkennung für DVD RW hinzugefügt.
+<i>(10-Dez-2006)</i>.<p>
+
+<b>pl2</b> behebt eine fehlerhafte Speicherfreigabe beim Schließen des Programms.
+Das Auspacken der Bildschirmfotos für die Dokumentation auf PPC-Plattformen wurde
+korrigiert. Nur die Quellkode-Archive wurden erneuert. 
+<i>(03-Okt-2006)</i>.<p>
+
 <b>pl1</b> behebt einen Fehler im angepaßten Lesen für RS02, durch den unter bestimmten
 Bedingungen nicht genügend Daten für eine erfolgreiche Wiederherstellung gelesen wurden.
 Ein paar kleine Verbesserungen an der Dokumentation und der Benutzbarkeit sind auch dabei.
+<i>(30-Jul-2006)</i>
 </td></tr></table><p>
 
 Der dvdisaster-Quellkode wird auch in einem

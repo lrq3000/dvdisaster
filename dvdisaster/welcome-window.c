@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2006 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2007 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -47,31 +47,25 @@ static gboolean expose_cb(GtkWidget *widget, GdkEventExpose *event, gpointer dat
 
       memcpy(Closure->background, bg, sizeof(GdkColor));
 
-      gdk_colormap_alloc_color(cmap, Closure->black, FALSE, TRUE);
-
-      Closure->white->red = Closure->white->green = Closure->white->blue = 0xffff;
-      gdk_colormap_alloc_color(cmap, Closure->white, FALSE, TRUE);
-
-      Closure->red->red   = 0xffff;
-      gdk_colormap_alloc_color(cmap, Closure->red, FALSE, TRUE);
-
-      Closure->yellow->red   = 0xffff;
-      Closure->yellow->green = 0xc000;
-      gdk_colormap_alloc_color(cmap, Closure->yellow, FALSE, TRUE);
-
-      Closure->green->green = (bg->red + bg->green + bg->blue) / 3;
-      gdk_colormap_alloc_color(cmap, Closure->green, FALSE, TRUE);
-
-      Closure->darkgreen->green = 0x8000,
-      gdk_colormap_alloc_color(cmap, Closure->darkgreen, FALSE, TRUE);
-
-      Closure->blue->blue = 0xffff;
-      gdk_colormap_alloc_color(cmap, Closure->blue, FALSE, TRUE);
+      gdk_colormap_alloc_color(cmap, Closure->foreground, FALSE, TRUE);
 
       Closure->grid->red = bg->red-bg->red/8;
       Closure->grid->green = bg->green-bg->green/8;
       Closure->grid->blue = bg->blue-bg->blue/8;
       gdk_colormap_alloc_color(cmap, Closure->grid, FALSE, TRUE);
+
+      /* This can't be done at closure.c */
+
+      gdk_colormap_alloc_color(cmap, Closure->redText, FALSE, TRUE);
+      gdk_colormap_alloc_color(cmap, Closure->greenText, FALSE, TRUE);
+      gdk_colormap_alloc_color(cmap, Closure->barColor, FALSE, TRUE);
+      gdk_colormap_alloc_color(cmap, Closure->curveColor, FALSE, TRUE);
+      gdk_colormap_alloc_color(cmap, Closure->redSector, FALSE, TRUE);
+      gdk_colormap_alloc_color(cmap, Closure->yellowSector, FALSE, TRUE);
+      gdk_colormap_alloc_color(cmap, Closure->greenSector, FALSE, TRUE);
+      gdk_colormap_alloc_color(cmap, Closure->blueSector, FALSE, TRUE);
+      gdk_colormap_alloc_color(cmap, Closure->whiteSector, FALSE, TRUE);
+      gdk_colormap_alloc_color(cmap, Closure->darkSector, FALSE, TRUE);
 
       /* Dirty trick for indenting the list:
 	 draw an invisible dash before each indented line */
@@ -79,12 +73,13 @@ static gboolean expose_cb(GtkWidget *widget, GdkEventExpose *event, gpointer dat
       if(Closure->welcomeMessage || Closure->version != Closure->dotFileVersion)
       {  GtkWidget *button;
 
-	 snprintf(Closure->bgString, 16, "%04x%04x%04x", bg->red, bg->green, bg->blue);
-
-	 AboutText(box, _("- RS02 error correction method fully supported\n"
-			  "<span color=\"#%s\">-</span> in the graphical user interface.\n"
-			  "- Adaptive reading supports RS02 images.\n"),
-		   Closure->bgString);
+	 Closure->invisibleDash = g_strdup_printf("<span color=\"#%02x%02x%02x\">-</span>",
+						  bg->red>>8, bg->green>>8, bg->blue>>8);
+	 AboutText(box, _("- New raw reading mode for CD media.\n"
+			  "- Number of reading attempts can be selected\n"
+			  "%s per sector and for the whole medium.\n"
+			  "- Redesigned preferences dialog."),
+		   Closure->invisibleDash);
 
 	 gtk_box_pack_start(GTK_BOX(box), gtk_hseparator_new(), FALSE, FALSE, 10);
 

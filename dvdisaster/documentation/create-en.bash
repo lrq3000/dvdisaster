@@ -1,7 +1,7 @@
 #! /bin/bash
 
 #  dvdisaster: English homepage translation
-#  Copyright (C) 2004-2006 Carsten Gnörlich
+#  Copyright (C) 2004-2007 Carsten Gnörlich
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ function dictionary_en()
    trans_hosting="Hosted by"
 
    trans_fdl="Verbatim copying and distribution of this entire article is permitted in any medium, provided this notice is preserved."
-   trans_copyright="Copyright 2004-2006 Carsten Gnörlich."
+   trans_copyright="Copyright 2004-2007 Carsten Gnörlich."
    trans_modified="Information in this handbook relates to the original version of dvdisaster and may not be applicable."
 }
 
@@ -516,7 +516,7 @@ Scanning requires the following parameters (defaults are given in parenthesis):
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>dvdisaster -s -d /dev/hdc -e corrdata.ecc</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnoerlich.<br>
 <i>[... remainder of the GPL announcement ...]</i><p>
 
 Device: /dev/cdrom, &nbsp;ATAPI DVD+RW 8X4X12 B2K7<br>
@@ -784,7 +784,7 @@ You will need the following parameters for reading the image
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>dvdisaster -r -d /dev/hdc -i image.iso</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnoerlich.<br>
 This software comes with &nbsp;ABSOLUTELY NO WARRANTY. &nbsp;This<br>
 is free software and you are welcome to redistribute it<br>
 under the conditions of the GNU GENERAL PUBLIC LICENSE.<br>
@@ -824,7 +824,7 @@ create the error correction file:<p>
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>dvdisaster -c -i image.iso -e corrdata.ecc </b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnoerlich.<br>
 <i>[... remainder of the GPL announcement ...]</i><p>
 
 Opening image.iso: 2224288 medium sectors.<br>
@@ -1014,7 +1014,7 @@ When you have created the image "image.iso" using the CD/DVD writing software, e
 
 <table class="example" width="100%" bgcolor="#ffffe0"><tr><td>
 user@linux&gt; <b>dvdisaster -c -mRS02 -i image.iso</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnoerlich.<br>
 <i>[... remainder of the GPL announcement ...]</i><p>
 
 Opening /dvd/image.iso: 284234 medium sectors.<p>
@@ -1056,7 +1056,7 @@ Re-read the image with dvdisaster after burning the medium:<p>
 
 <table class="example" width="100%" bgcolor="#ffffe0"><tr><td>
 user@linux&gt; <b>dvdisaster -r -d/dev/hdc -i image-new.iso</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnoerlich.<br>
 <i>[... remainder of the GPL announcement ...]</i><p>
 
 Device: /dev/hdc, &nbsp;ATAPI DVD+RW 8X4X12 B2K7<br>
@@ -1084,7 +1084,7 @@ Check the image:<p>
 
 <table class="example" width="100%" bgcolor="#ffffe0"><tr><td>
 user@linux&gt; <b>dvdisaster -t -i image-new.iso</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnörlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnörlich.<br>
 <i>[... remainder of the GPL announcement ...]</i><p>
 
 dvd/new-image.iso: present, contains 357818 medium sectors.<br>
@@ -1239,7 +1239,7 @@ Example for reading a defective medium using <b>error correction files (RS01):</
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>dvdisaster -r --adaptive-read -i image.iso -e corrdata.ecc</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnoerlich.<br>
 <i>[... remainder of the GPL announcement ...]</i><p>
 
 Device: /dev/cdrom, &nbsp;ATAPI DVD+RW 8X4X12 B2K7<br>
@@ -1259,7 +1259,7 @@ Example for reading a defective medium containing an <b>augmented image (RS02):<
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>dvdisaster -r --adaptive-read -i image.iso</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnoerlich.<br>
 <i>[... remainder of the GPL announcement ...]</i><p>
 
 Device: /dev/cdrom, &nbsp;ATAPI DVD+RW 8X4X12 B2K7<br>
@@ -1396,7 +1396,7 @@ No error correction file needs to be specified when augmented images are used.<p
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>dvdisaster -f -i image.iso -e corrdata.ecc</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnoerlich.<br>
 <i>[... remainder of the GPL announcement ...]</i><p>
 
 Opening image.iso: 2224288 medium sectors.<p>
@@ -1531,7 +1531,7 @@ Example for verifying an image with the respective error correction file:<p>
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>dvdisaster -t -i image.iso -e corrdata.ecc</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnörlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnörlich.<br>
 <i>[... remainder of the GPL announcement ...]</i><p>
 
 /dvd/image.iso: present, contains 2224288 medium sectors.<br>
@@ -1552,7 +1552,7 @@ Example for checking an augmented image:<p>
 
 <table class="example" width=100% bgcolor=#ffffe0><tr><td>
 user@linux&gt; <b>dvdisaster -t -i image.iso</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnörlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnörlich.<br>
 <i>[... remainder of the GPL announcement ...]</i><p>
 
 /dvd/image.iso: present, contains 2281713 medium sectors.<br>
@@ -1614,18 +1614,18 @@ For the source code version see the <a href="download20.html">installation instr
 <b>Current version</b><p>
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.70</b></td><td align="right">30-Jul-2006</td></tr>
+<tr><td><b>dvdisaster-0.70</b></td><td align="right">10-Dec-2006</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
-        <td><a href="${tar_0_70}">dvdisaster-0.70.1.tar.bz2</a></td></tr>
+        <td><a href="${tar_0_70}">dvdisaster-0.70.3.tar.bz2</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="${tar_0_70_sig}">dvdisaster-0.70.1.tar.bz2.gpg</a></td></tr>
+        <td><a href="${tar_0_70_sig}">dvdisaster-0.70.3.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Binary for Windows:&nbsp;</td>
-        <td><a href="${setup_0_70}">dvdisaster-0.70.1-setup.exe</a></td></tr>
+        <td><a href="${setup_0_70}">dvdisaster-0.70.3-setup.exe</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="${setup_0_70_sig}">dvdisaster-0.70.1-setup.exe.gpg</a></td></tr>
+        <td><a href="${setup_0_70_sig}">dvdisaster-0.70.3-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
@@ -1642,9 +1642,19 @@ Daniel Nylander provided Swedish translations of the screen texts.<p>
 
 <b>Patches</b> (small changes after version 0.70; files above have been updated):<br>
 
+<b>pl3</b> fixes incorrect recognization of unsupported CD formats which
+produced a Windows blue screen under rare circumstances. Added cancel option
+during RS02 initialization on DVD RW media.
+<i>(10-Dec-2006)</i>.<p>
+
+<b>pl2</b> fixes incorrect memory freeing when the program window is closed.
+Unpacking of documentation screen shots is fixed for PPC platforms.
+Only the source code archives have been updated.
+<i>(03-Oct-2006)</i>.<p>
+
 <b>pl1</b> fixes a bug in adaptive reading for RS02 which would sometimes result in
 reading insufficient data for a successful recovery. Adds some small
-improvements of documentation and usability.
+improvements of documentation and usability. <i>(30-Jul-2006)</i>
 </td></tr></table><p>
 
 The dvdisaster source code is also

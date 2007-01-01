@@ -292,7 +292,7 @@ distclean: clean
 
 clean:
 	@echo "Removing rebuildable files"
-	@rm -rf *.o medium.* dvdisaster simple-md5sum *.exe *.zip .dvdisaster core *.core *.stackdump
+	@rm -rf *.o medium.* dvdisaster simple-md5sum *.exe *.zip .dvdisaster core core.* *.core *.stackdump
 	@rm -f inlined-icons.h help-dialogs.h
 	@rm -f wininst/installer.iss wininst/signature
 	@find . -name \*\~ -print | xargs rm -f;

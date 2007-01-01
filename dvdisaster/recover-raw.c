@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2006 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2007 Carsten Gnoerlich.
  *  Copyright (C) 2006 Andrei Grecu
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
@@ -26,12 +26,17 @@
  * Debugging function
  */
 
-//#define DUMP_MODE
-
-#ifdef DUMP_MODE
-static void dump_sector(RawBuffer *rb)
-{  FILE *file = fopen("test-cases/dump.h", "w");
+void DumpSector(RawBuffer *rb, char *path)
+{  FILE *file;
+   char *filename;
    int i;
+
+   if(rb->samplesRead <= 0)
+     return;
+
+   filename = g_strdup_printf("%s%d.h", path, rb->lba);
+
+   file = fopen(filename, "w");
    
    fprintf(file, 
 	   "#define SAMPLES_READ %d\n"
@@ -54,8 +59,11 @@ static void dump_sector(RawBuffer *rb)
    fprintf(file, "};\n");
 
    fclose(file);
+
+   PrintCLI(_("Sector %d dumped to %s\n"), rb->lba, filename);
+
+   g_free(filename);
 }
-#endif
 
 /***
  *** Create our local working context
@@ -63,7 +71,7 @@ static void dump_sector(RawBuffer *rb)
 
 RawBuffer *CreateRawBuffer(int sample_length)
 {  RawBuffer *rb;
-   int i;
+   int i,j;
 
    rb = g_malloc0(sizeof(RawBuffer));
 
@@ -72,8 +80,8 @@ RawBuffer *CreateRawBuffer(int sample_length)
 
    rb->dataOffset = 16;  /* default for mode1 data sectors */
 
-   rb->workBuf   = CreateAlignedBuffer(2352*16);  /* max lba...lba+15 are read at once */
-   rb->zeroSector= g_malloc0(2352);
+   rb->workBuf   = CreateAlignedBuffer(sample_length*16);  /* max lba...lba+15 are read at once */
+   rb->zeroSector= g_malloc0(sample_length);
    rb->rawBuf    = g_malloc(Closure->maxReadAttempts * sizeof(unsigned char*));
    rb->recovered = g_malloc(sample_length);
    rb->byteState = g_malloc(sample_length);
@@ -92,9 +100,26 @@ RawBuffer *CreateRawBuffer(int sample_length)
       rb->qParity2[i] = g_malloc(Closure->maxReadAttempts);
    }
 
-
    rb->pLoad = g_malloc0(Closure->maxReadAttempts * sizeof(int));
    rb->qLoad = g_malloc0(Closure->maxReadAttempts * sizeof(int));
+
+   for(i=0; i<N_P_VECTORS; i++)
+   {  rb->pCount[i] = g_malloc(Closure->maxReadAttempts * sizeof(int));
+      rb->pList[i]  = g_malloc(Closure->maxReadAttempts * sizeof(char*));
+   }
+
+   for(i=0; i<N_P_VECTORS; i++)
+     for(j=0; j<Closure->maxReadAttempts; j++)
+       rb->pList[i][j] = g_malloc(P_VECTOR_SIZE);
+
+   for(i=0; i<N_Q_VECTORS; i++)
+   {  rb->qCount[i] = g_malloc(Closure->maxReadAttempts * sizeof(int));
+      rb->qList[i]  = g_malloc(Closure->maxReadAttempts * sizeof(char*));
+   }
+
+   for(i=0; i<N_Q_VECTORS; i++)
+     for(j=0; j<Closure->maxReadAttempts; j++)
+       rb->qList[i][j] = g_malloc(Q_VECTOR_SIZE);
 
    return rb;
 }
@@ -156,6 +181,16 @@ static void lba_to_msf(int lba, unsigned char *minute, unsigned char *second, un
   *second = lba % 60;
   *minute = lba / 60;
 }
+
+#if 0  /* currently unused */
+static int msf_to_lba(unsigned char minute_bcd, unsigned char second_bcd, unsigned char frame_bcd)
+{  int minute = (minute_bcd & 0x0f) + 10*((minute_bcd >> 4) & 0x0f);
+   int second = (second_bcd & 0x0f) + 10*((second_bcd >> 4) & 0x0f);
+   int frame = (frame_bcd & 0x0f) + 10*((frame_bcd >> 4) & 0x0f);
+
+   return (int)frame + 75 * (second - 2 + 60 * minute);
+}
+#endif
 
 /* Convert byte into BCD notation */
 
@@ -374,16 +409,44 @@ int ValidateRawSector(RawBuffer *rb, unsigned char *frame)
 {  int lec_did_sth = FALSE;
    unsigned char saved_msf[4];
 
+   /* See if the buffer was returned unchanged. */
+
+   if(!memcmp(frame, Closure->deadSector, 2048))
+   {  RememberSense(3, 255, 0);  /* No data returned */
+      return FALSE;
+   }
+
+   /* A fully zeroed out buffer is suspicious since at least the
+      sync byte sequence and address fields should not be zero.  
+      This is usually a sign that the atapi/scsi driver is broken; 
+      e.g. that it does not pass through data when the drive 
+      signalled an error. */
+
+   if(!memcmp(frame, rb->zeroSector, 2352))
+   {  RememberSense(3, 255, 5); /* zero sector */
+      return FALSE;
+   }
+
+   /* Some operating systems are even worse - random data is returned.
+      If the sync sequence is missing, reject the sector. */
+
+   if(!check_for_sync_pattern(frame))
+   {  RememberSense(3,255, 8); /* random data */
+      return FALSE;
+   }
+
+   /* Adapt for XA mode */
+
+   if(rb->xaMode)
+   {  memcpy(saved_msf, frame+12, 4);
+      memset(frame+12, 0, 4);
+   }
+
   /* Do simple L-EC.
      It seems that drives stop their internal L-EC as soon as the
      EDC is okay, so we may see uncorrected errors in the parity bytes.
      Since we are also interested in the user data only and doing the
      L-EC is expensive, we skip our L-EC as well when the EDC is fine. */
-
-  if(rb->xaMode)
-  {  memcpy(saved_msf, frame+12, 4);
-     memset(frame+12, 0, 4);
-  }
 
   if(!check_edc(frame, rb->xaMode))
     lec_did_sth = simple_lec(rb, frame);
@@ -502,7 +565,7 @@ static int q_decode(RawBuffer *rb, unsigned char *vector, unsigned char *state)
 
 //#define DEBUG_ITERATIVE
 
-int iterative_lec(RawBuffer *rb)
+static int iterative_lec(RawBuffer *rb)
 {  unsigned char p_vector[P_VECTOR_SIZE];
    unsigned char q_vector[Q_VECTOR_SIZE];
    int p_failures, q_failures;
@@ -529,7 +592,7 @@ int iterative_lec(RawBuffer *rb)
 
 	 /* See what we've got */
 
-	 if(err > 2)  /* Uncorrectable. Mark bytes are erasure. */
+	 if(err > 2)  /* Uncorrectable. Mark bytes as erasure. */
 	 {  q_failures++;
 	    AndQVector(rb->byteState, ~1, q);
 	 }
@@ -1456,7 +1519,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
       signalled an error. */
 
    if(!memcmp(new_frame, rb->zeroSector, 2352))
-   {  RememberSense(3, 255, 5); /* Atapi/scsi drive possibly broken (zero sector) */
+   {  RememberSense(3, 255, 5); /* zero sector */
       return -1;
    }
 
@@ -1464,7 +1527,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
       If the sync sequence is missing, reject the sector. */
 
    if(!check_for_sync_pattern(new_frame))
-   {  RememberSense(3,255, 8); /* Atapi/scsi drive possibly broken (random data) */
+   {  RememberSense(3,255, 8); /* random data */
       return -1;
    }
 
@@ -1483,10 +1546,6 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
 
    memcpy(rb->rawBuf[rb->samplesRead], new_frame, rb->sampleLength);
    rb->samplesRead++;
-
-#ifdef DUMP_MODE
-     dump_sector(rb);
-#endif
 
    /*** Cheap shot: See if we can recover the sector itself
 	(without using the more complex heuristics and other

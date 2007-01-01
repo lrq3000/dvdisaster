@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2006 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2007 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -122,7 +122,8 @@ static void ecc_cleanup(gpointer data)
    if(Closure->guiMode)
    {  if(ec->earlyTermination)
         SetLabelText(GTK_LABEL(ec->wl->encFootline),
-		     _("<span color=\"red\">Aborted by unrecoverable error.</span>")); 
+		     _("<span %s>Aborted by unrecoverable error.</span>"),
+		     Closure->redMarkup); 
       AllowActions(TRUE);
    }
 
@@ -285,7 +286,8 @@ void RS01Create(Method *self)
 	 if(Closure->stopActions)   
 	 {
 	   SetLabelText(GTK_LABEL(wl->encFootline), 
-			_("<span color=\"red\">Aborted by user request!</span> (partial error correction file removed)")); 
+			_("<span %s>Aborted by user request!</span> (partial error correction file removed)"),
+			Closure->redMarkup); 
 	   ec->earlyTermination = FALSE;  /* suppress respective error message */
 	   goto terminate;
 	 }
@@ -419,7 +421,8 @@ void RS01Create(Method *self)
 
 	    if(Closure->stopActions) /* User hit the Stop button */
 	    {  SetLabelText(GTK_LABEL(wl->encFootline), 
-			    _("<span color=\"red\">Aborted by user request!</span> (partial error correction file removed)")); 
+			    _("<span %s>Aborted by user request!</span> (partial error correction file removed)"),
+			    Closure->redMarkup); 
 	       ec->earlyTermination = FALSE;  /* suppress respective error message */
 	       LargeClose(ei->file);
 	       ei->file = NULL;
@@ -510,7 +513,8 @@ void RS01Create(Method *self)
 
 	    if(Closure->stopActions) /* User hit the Stop button */
 	    {  SetLabelText(GTK_LABEL(wl->encFootline), 
-			    _("<span color=\"red\">Aborted by user request!</span> (partial error correction file removed)")); 
+			    _("<span %s>Aborted by user request!</span> (partial error correction file removed)"),
+			    Closure->redMarkup); 
 	       ec->earlyTermination = FALSE;   /* suppress respective error message */
 	       LargeClose(ei->file);
 	       ei->file = NULL;
@@ -636,7 +640,8 @@ void RS01Create(Method *self)
 
 	    if(Closure->stopActions) /* User hit the Stop button */
 	    {  SetLabelText(GTK_LABEL(wl->encFootline), 
-			    _("<span color=\"red\">Aborted by user request!</span>")); 
+			    _("<span %s>Aborted by user request!</span>"),
+			    Closure->redMarkup); 
 	       ec->earlyTermination = FALSE;   /* suppress respective error message */
 	       LargeClose(ei->file);
 	       ei->file = NULL;

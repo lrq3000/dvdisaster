@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2006 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2007 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -143,7 +143,7 @@ static void print_greetings(FILE *where)
    if(greetings_shown) return;
 
    greetings_shown = 1;
-   g_fprintf(where, _("dvdisaster-%s%sCopyright 2004-2006 Carsten Gnoerlich.\n"),
+   g_fprintf(where, _("dvdisaster-%s%sCopyright 2004-2007 Carsten Gnoerlich.\n"),
 	     VERSION, strstr(VERSION,"pl") ? " " : "  ");
    /* TRANSLATORS: Excluding all kinds of warranty might be harmful under your
       legislature. If in doubt, just translate the following like "This is free
@@ -964,19 +964,21 @@ void SwitchAndSetFootline(GtkWidget *notebook, int page, GtkWidget *label, char 
  * 
  * gtk_dialog_set_alternative_button_order()
  * has been introduced since gtk+2.6,
- * but seems to work only in 2.8.
+ * but does not seem to work correctly.
  */
 
 void ReverseCancelOK(GtkDialog *dialog)
-{  
-#if GTK_MINOR_VERSION <= 6
-   GtkWidget *box, *button ;
+{  GtkWidget *box, *button ;
+
+   if(!Closure->reverseCancelOK)
+      return;
 
    box = dialog->action_area; 
    button = ((GtkBoxChild*)(g_list_first(GTK_BOX(box)->children)->data))->widget;
 
    gtk_box_reorder_child(GTK_BOX(box), button, 1);
-#else
+
+#if 0
    gtk_dialog_set_alternative_button_order(GTK_DIALOG(dialog),
 					   GTK_RESPONSE_OK,
 					   GTK_RESPONSE_CANCEL,
@@ -1002,4 +1004,52 @@ void TimedInsensitive(GtkWidget *widget, int delay)
   gtk_widget_set_sensitive(widget, FALSE);
 
   g_timeout_add(delay, insensitive_timeout_func, (gpointer)widget);
+}
+
+/*
+ * Get the width of a label text
+ */
+
+int GetLabelWidth(GtkLabel *label, char *format, ...)
+{  PangoLayout *layout;
+   PangoRectangle rect;
+   va_list argp;
+   char *text;
+
+   va_start(argp, format);
+   text = g_strdup_vprintf(format, argp);
+   va_end(argp);
+
+   layout = gtk_label_get_layout(label);
+   pango_layout_set_text(layout, text, -1);
+   pango_layout_get_pixel_extents(layout, NULL, &rect);
+
+   g_free(text);
+
+   return rect.width;
+}
+ 
+
+/*
+ * Lock the size of a label to that of the given sample text.
+ */
+
+void LockLabelSize(GtkLabel *label, char *format, ...)
+{  PangoLayout *layout;
+   PangoRectangle rect;
+   va_list argp;
+   char *text;
+
+   va_start(argp, format);
+   text = g_strdup_vprintf(format, argp);
+   va_end(argp);
+
+   layout = gtk_label_get_layout(label);
+   pango_layout_set_text(layout, text, -1);
+   pango_layout_get_pixel_extents(layout, NULL, &rect);
+
+   gtk_widget_set_size_request(GTK_WIDGET(label), rect.width, rect.height);
+   gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.0);
+
+   g_free(text);
 }

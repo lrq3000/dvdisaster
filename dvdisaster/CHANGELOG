@@ -1,8 +1,15 @@
 Warning: CD/DVD reading is currently being reworked. DO NOT USE for production work;
 	 images might contain wrong data.
 
-0.72 (devel-11)
+0.72 (devel-11) 01-01-2007  Happy new year :-)
 	- more segfault hunting on the raw reader
+	- Added dialog for skipping RS02 detection of DVD RW
+	- Added appearance preferences (thanks to Christian N. for explaining
+	  the need for this!)
+	- Preferences restructuring completed; Help texts need more work, though
+	- Added automatic media ejection after successful read
+	- Added automatic media loading when Read/Scan is attempted while
+	  the drive tray is left open
 
 0.72 (devel-10) 26-11-2006
 	- more fine tuning of the raw reader

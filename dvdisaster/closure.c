@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2006 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2007 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -283,6 +283,95 @@ find_dotfile:
 }
 
 /***
+ *** Set/get color values
+ ***/
+
+/*
+ * Update color string for the <span color="#f00baa">...</span> string
+ */
+
+void UpdateMarkup(char **string, GdkColor *color)
+{  int hexval;
+ 
+   hexval  = (color->red  << 8) & 0xff0000;
+   hexval |=  color->green      & 0xff00;
+   hexval |= (color->blue >> 8) & 0xff;
+
+   if(*string) g_free(*string);
+   *string = g_strdup_printf("color=\"#%06x\"", hexval);
+}
+
+/*
+ * Default color values
+ */
+
+void DefaultColors()
+{
+   Closure->redText->red        = 0xffff;
+   Closure->redText->green      = 0;
+   Closure->redText->blue       = 0;
+
+   Closure->greenText->red      = 0;
+   Closure->greenText->green    = 0x8000;
+   Closure->greenText->blue     = 0;
+
+   Closure->barColor->red       = 0xffff;
+   Closure->barColor->green     = 0;
+   Closure->barColor->blue      = 0;
+
+   Closure->curveColor->red     = 0;
+   Closure->curveColor->green   = 0;
+   Closure->curveColor->blue    = 0xffff;
+
+   Closure->redSector->red      = 0xffff;
+   Closure->redSector->green    = 0;
+   Closure->redSector->blue     = 0;
+
+   Closure->yellowSector->red   = 0xffff;
+   Closure->yellowSector->green = 0xc000;
+   Closure->yellowSector->blue  = 0;
+      
+   Closure->greenSector->red    = 0;
+   Closure->greenSector->green  = 0xdb00;
+   Closure->greenSector->blue   = 0;
+
+   Closure->darkSector->red     = 0;
+   Closure->darkSector->green   = 0x8000;
+   Closure->darkSector->blue    = 0;
+
+   Closure->blueSector->red     = 0;
+   Closure->blueSector->green   = 0;
+   Closure->blueSector->blue    = 0xffff;
+
+   Closure->whiteSector->red    = 0xffff;
+   Closure->whiteSector->green  = 0xffff;
+   Closure->whiteSector->blue   = 0xffff;
+
+   UpdateMarkup(&Closure->redMarkup, Closure->redText);
+   UpdateMarkup(&Closure->greenMarkup, Closure->greenText);
+}
+
+static void save_colors(FILE *dotfile, char *symbol, GdkColor *color)
+{  char *blanks="                    ";
+   char *pad;
+   int len=strlen(symbol);
+
+   if(len>19) pad=blanks+19;
+   else       pad=blanks+len;
+
+   fprintf(dotfile, "%s:%s%02x%02x%02x\n", symbol, pad,
+	   color->red>>8, color->green>>8, color->blue>>8);
+}
+
+static void get_color(GdkColor *color, char *value)
+{  unsigned int hex = strtol(value, NULL, 16);
+   
+   color->red   = (hex>>8)&0xff00;
+   color->green = hex&0xff00;
+   color->blue  = (hex<<8)&0xff00;
+}
+
+/***
  *** Save and restore user settings to/from the .dvdisaster file
  ***/
 
@@ -351,6 +440,7 @@ void ReadDotfile()
       if(!strcmp(symbol, "dotfile-version")) { Closure->dotFileVersion = atoi(value); continue; }
       if(!strcmp(symbol, "dvd-size1"))       { Closure->dvdSize1 = Closure->savedDVDSize1 = atoll(value); continue; }
       if(!strcmp(symbol, "dvd-size2"))       { Closure->dvdSize2 = Closure->savedDVDSize2 = atoll(value); continue; }
+      if(!strcmp(symbol, "eject"))           { Closure->eject  = atoi(value); continue; }
       if(!strcmp(symbol, "fill-unreadable")) { Closure->fillUnreadable = atoi(value); 
 	                                       PrepareDeadSector();
 	                                       continue; 
@@ -366,10 +456,28 @@ void ReadDotfile()
       if(!strcmp(symbol, "read-raw"))        { Closure->readRaw = atoi(value); continue; }
       if(!strcmp(symbol, "redundancy"))      { if(Closure->redundancy) g_free(Closure->redundancy);
                                                Closure->redundancy  = g_strdup(value); continue; }
+      if(!strcmp(symbol, "reverse-cancel-ok")) { Closure->reverseCancelOK = atoi(value); continue; }
       if(!strcmp(symbol, "spinup-delay"))    { Closure->spinupDelay = atoi(value); continue; }
       if(!strcmp(symbol, "split-files"))     { Closure->splitFiles  = atoi(value); continue; }
       if(!strcmp(symbol, "unlink"))          { Closure->unlinkImage = atoi(value); continue; }
       if(!strcmp(symbol, "welcome-msg"))     { Closure->welcomeMessage = atoi(value); continue; }
+
+      if(!strcmp(symbol, "positive-text"))   { get_color(Closure->greenText, value); 
+	                                       UpdateMarkup(&Closure->greenMarkup, Closure->greenText);
+	                                       continue; 
+                                             }
+      if(!strcmp(symbol, "negative-text"))   { get_color(Closure->redText, value);
+	                                       UpdateMarkup(&Closure->redMarkup, Closure->redText); 
+					       continue; 
+                                             }
+      if(!strcmp(symbol, "bar-color"))       { get_color(Closure->barColor, value); continue; }
+      if(!strcmp(symbol, "curve-color"))     { get_color(Closure->curveColor, value); continue; }
+      if(!strcmp(symbol, "defective-sector")){ get_color(Closure->redSector, value); continue; }
+      if(!strcmp(symbol, "bad-checksum-sector")){ get_color(Closure->yellowSector, value); continue; }
+      if(!strcmp(symbol, "good-sector"))     { get_color(Closure->greenSector, value); continue; }
+      if(!strcmp(symbol, "ignored-sector"))  { get_color(Closure->blueSector, value); continue; }
+      if(!strcmp(symbol, "highlit-sector"))  { get_color(Closure->whiteSector, value); continue; }
+      if(!strcmp(symbol, "present-sector"))  { get_color(Closure->darkSector, value); continue; }
    }
 
    if(fclose(dotfile))
@@ -417,6 +525,7 @@ static void update_dotfile()
    g_fprintf(dotfile, "dotfile-version:   %d\n", Closure->dotFileVersion);
    g_fprintf(dotfile, "dvd-size1:         %lld\n", (long long int)Closure->dvdSize1);
    g_fprintf(dotfile, "dvd-size2:         %lld\n", (long long int)Closure->dvdSize2);
+   g_fprintf(dotfile, "eject:             %d\n", Closure->eject);
    g_fprintf(dotfile, "fill-unreadable:   %d\n", Closure->fillUnreadable);
    g_fprintf(dotfile, "jump:              %d\n", Closure->sectorSkip);
    g_fprintf(dotfile, "medium-size:       %lld\n", (long long int)Closure->mediumSize);
@@ -428,15 +537,26 @@ static void update_dotfile()
    g_fprintf(dotfile, "read-raw:          %d\n", Closure->readRaw);
    if(Closure->redundancy)
      g_fprintf(dotfile, "redundancy:        %s\n", Closure->redundancy);
+   g_fprintf(dotfile, "reverse-cancel-ok: %d\n", Closure->reverseCancelOK);
    g_fprintf(dotfile, "spinup-delay:      %d\n", Closure->spinupDelay);
    g_fprintf(dotfile, "split-files:       %d\n", Closure->splitFiles);
    g_fprintf(dotfile, "unlink:            %d\n", Closure->unlinkImage);
-   g_fprintf(dotfile, "welcome-msg:       %d\n", Closure->welcomeMessage);
+   g_fprintf(dotfile, "welcome-msg:       %d\n\n", Closure->welcomeMessage);
+
+   save_colors(dotfile, "positive-text",      Closure->greenText);
+   save_colors(dotfile, "negative-text",      Closure->redText);
+   save_colors(dotfile, "bar-color",          Closure->barColor);
+   save_colors(dotfile, "curve-color",        Closure->curveColor);
+   save_colors(dotfile, "defective-sector",   Closure->redSector);
+   save_colors(dotfile, "bad-checksum-sector",Closure->yellowSector);
+   save_colors(dotfile, "good-sector",        Closure->greenSector);
+   save_colors(dotfile, "ignored-sector",     Closure->blueSector);
+   save_colors(dotfile, "highlit-sector",     Closure->whiteSector);
+   save_colors(dotfile, "present-sector",     Closure->darkSector);
 
    if(fclose(dotfile))
      g_fprintf(stderr, "Error closing configuration file %s: %s\n", 
 	       Closure->dotFile, strerror(errno));
-
 }
 
 /***
@@ -518,14 +638,21 @@ void InitClosure()
    Closure->logString = g_string_sized_new(1024);
 
    Closure->background = g_malloc0(sizeof(GdkColor));
-   Closure->black = g_malloc0(sizeof(GdkColor));
-   Closure->white = g_malloc0(sizeof(GdkColor));
-   Closure->red   = g_malloc0(sizeof(GdkColor));
-   Closure->yellow= g_malloc0(sizeof(GdkColor));
-   Closure->green = g_malloc0(sizeof(GdkColor));
-   Closure->darkgreen = g_malloc0(sizeof(GdkColor));
-   Closure->blue  = g_malloc0(sizeof(GdkColor));
-   Closure->grid  = g_malloc0(sizeof(GdkColor));
+   Closure->foreground = g_malloc0(sizeof(GdkColor));
+   Closure->grid       = g_malloc0(sizeof(GdkColor));
+
+   Closure->redText     = g_malloc0(sizeof(GdkColor));
+   Closure->greenText   = g_malloc0(sizeof(GdkColor));
+   Closure->barColor    = g_malloc0(sizeof(GdkColor));
+   Closure->curveColor  = g_malloc0(sizeof(GdkColor));
+   Closure->redSector   = g_malloc0(sizeof(GdkColor));
+   Closure->yellowSector= g_malloc0(sizeof(GdkColor));
+   Closure->greenSector = g_malloc0(sizeof(GdkColor));
+   Closure->blueSector  = g_malloc0(sizeof(GdkColor));
+   Closure->whiteSector = g_malloc0(sizeof(GdkColor));
+   Closure->darkSector  = g_malloc0(sizeof(GdkColor));
+
+   DefaultColors();
 
    memset(Closure->bs, '\b', 255);
 
@@ -597,6 +724,7 @@ void FreeClosure()
    cond_free(Closure->browser);
    cond_free(Closure->deadSector);
    cond_free(Closure->errorTitle);
+   cond_free(Closure->defectiveDump);
 
    if(Closure->prefsContext)
      FreePreferences(Closure->prefsContext);
@@ -606,15 +734,24 @@ void FreeClosure()
 
    if(Closure->drawGC)
      g_object_unref(Closure->drawGC);
-   cond_free(Closure->red);
-   cond_free(Closure->yellow);
-   cond_free(Closure->green);
-   cond_free(Closure->darkgreen);
-   cond_free(Closure->blue);
-   cond_free(Closure->black);
-   cond_free(Closure->white);
-   cond_free(Closure->grid);
+
    cond_free(Closure->background);
+   cond_free(Closure->foreground);
+   cond_free(Closure->grid);
+   cond_free(Closure->redText);
+   cond_free(Closure->greenText);
+   cond_free(Closure->barColor);
+   cond_free(Closure->curveColor);
+   cond_free(Closure->redSector);
+   cond_free(Closure->yellowSector);
+   cond_free(Closure->greenSector);
+   cond_free(Closure->blueSector);
+   cond_free(Closure->whiteSector);
+   cond_free(Closure->darkSector);
+
+   cond_free(Closure->redMarkup);
+   cond_free(Closure->greenMarkup);
+   cond_free(Closure->invisibleDash);
 
    if(Closure->readLinearCurve)
      FreeCurve(Closure->readLinearCurve);

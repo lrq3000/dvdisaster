@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2006 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2007 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -270,6 +270,9 @@ int DecodePQ(ReedSolomonTables *rt, unsigned char *data, int padding,
    erasure_list[0] += padding;
    erasure_list[1] += padding;
 
+   if(erasure_count > 2)  /* sanity check */
+     erasure_count = 0;
+
    if(erasure_count > 0)
    {  lambda[1] = gt->alphaTo[mod_fieldmax(LEC_PRIM_ELEM*(GF_FIELDMAX-1-erasure_list[0]))];
 
@@ -430,6 +433,12 @@ int DecodePQ(ReedSolomonTables *rt, unsigned char *data, int padding,
 	 corrected++;
 	 data[location-padding] ^= gt->alphaTo[mod_fieldmax(gt->indexOf[num1] + gt->indexOf[num2] 
 							    + GF_FIELDMAX - gt->indexOf[den])];
+
+	 /* If no erasures were given, at most one error was corrected.
+	    Return its position in erasure_list[0]. */
+
+	 if(!erasure_count)
+	    erasure_list[0] = location-padding;
       }
 #if 1
       else return -3;

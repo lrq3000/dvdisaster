@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2006 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2007 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -36,13 +36,25 @@ typedef struct
    struct _prefs_context *pc;
 } non_linear_info;
 
+/* color button housekeeping */
+
+typedef struct 
+{  GtkWidget *button;
+   GtkWidget *dialog;
+   GtkWidget *frame;
+   GtkWidget *image;
+   GdkColor  *color;
+   GdkPixmap *pixmap;
+   GdkGC     *gc;
+   int userData;
+} color_button_info;
+
 /***
  *** Preferences window housekeeping
  ***/
 
 typedef struct _prefs_context
-{  //char **jumpFormat;
-   char *formatLinear;
+{  char *formatLinear;
    char *formatAdaptive;
 
    GPtrArray *helpPages;   /* The online help frame structures */
@@ -68,11 +80,24 @@ typedef struct _prefs_context
    GtkWidget *byteEntryA, *byteEntryB;
    GtkWidget *byteCheckA, *byteCheckB;
    GtkWidget *spinUpA, *spinUpB;
+   GtkWidget *ejectA, *ejectB;
    GtkWidget *readAndCreateButtonA, *readAndCreateButtonB;
    GtkWidget *unlinkImageButtonA, *unlinkImageButtonB;
    GtkWidget *mainNotebook;
    GtkWidget *methodChooserA,*methodChooserB;
    GtkWidget *methodNotebook;
+   GtkWidget *cancelOKA, *cancelOKB;
+
+   color_button_info *redA, *redB;
+   color_button_info *yellowA, *yellowB;
+   color_button_info *greenA, *greenB;
+   color_button_info *blueA, *blueB;
+   color_button_info *whiteA, *whiteB;
+   color_button_info *darkA, *darkB;
+   color_button_info *redTextA, *redTextB;
+   color_button_info *greenTextA, *greenTextB;
+   color_button_info *barColorA, *barColorB;
+   color_button_info *curveColorA, *curveColorB;
 
    non_linear_info *jumpScaleInfoA, *jumpScaleInfoB;
    LabelWithOnlineHelp *jumpScaleLwoh;
@@ -185,6 +210,37 @@ static void close_cb(GtkWidget *widget, gpointer data)
    HidePreferences();
 }
 
+/***
+ *** Setting preferences from external functions 
+ ***/
+
+void UpdatePrefsQuerySize(void)
+{  prefs_context *pc = (prefs_context*)Closure->prefsContext;
+
+   if(Closure->prefsContext)
+     switch(Closure->querySize)
+     {  case 0: gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioDriveA), TRUE); 
+	        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioDriveB), TRUE); 
+	        break;
+        case 1: gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioISOA), TRUE);
+	        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioISOB), TRUE);
+	        break;
+        case 2: gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioECCA), TRUE);
+	        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioECCB), TRUE);
+	        break;
+     }
+}
+
+/*
+ * Register a preferences help window 
+ */
+
+void RegisterPreferencesHelpWindow(LabelWithOnlineHelp *lwoh)
+{  prefs_context *pc = (prefs_context*)Closure->prefsContext;
+
+   g_ptr_array_add(pc->helpPages, lwoh);
+}
+
 /*
  * Actions used in the preferences
  */
@@ -197,12 +253,25 @@ enum
    TOGGLE_2GB,
    TOGGLE_RANGE,
    TOGGLE_RAW,
+   TOGGLE_CANCEL_OK,
+   TOGGLE_EJECT,
 
    SPIN_DELAY,
    
    SLIDER_JUMP,
    SLIDER_MIN_READ_ATTEMPTS,
-   SLIDER_MAX_READ_ATTEMPTS
+   SLIDER_MAX_READ_ATTEMPTS,
+
+   COLOR_RED,
+   COLOR_YELLOW,
+   COLOR_GREEN,
+   COLOR_BLUE,
+   COLOR_WHITE,
+   COLOR_DARK,
+   COLOR_RED_TEXT,
+   COLOR_GREEN_TEXT,
+   COLOR_BAR,
+   COLOR_CURVE
 };
 
 /*
@@ -263,6 +332,12 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->suffixB), state);
 	break;
 
+      case TOGGLE_CANCEL_OK:
+	Closure->reverseCancelOK = state;
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->cancelOKA), state);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->cancelOKB), state);
+	break;
+
       case TOGGLE_DAO:
 	Closure->noTruncate = state;
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->daoButtonA), state);
@@ -279,6 +354,12 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 	Closure->readRaw = state;
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->rawButtonA), state);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->rawButtonB), state);
+	break;
+
+      case TOGGLE_EJECT:
+	Closure->eject = state;
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->ejectA), state);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->ejectB), state);
 	break;
 
       case TOGGLE_RANGE:
@@ -381,6 +462,183 @@ static void read_range_cb(GtkWidget *widget, gpointer data)
 	   gtk_spin_button_set_value(GTK_SPIN_BUTTON(pc->rangeSpin2A), to);
       }
    }
+}
+
+/***
+ *** Color buttons
+ ***/
+
+/*
+ * Create a color button. We need to do this manually as the GTK color button
+ * won't let us manipulate the button order.
+ */
+
+#define COLOR_BUTTON_WIDTH 32
+#define COLOR_BUTTON_HEIGHT 12
+
+static gboolean color_delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
+{  color_button_info *cbi = (color_button_info*)data;
+
+   cbi->dialog = NULL;
+   return FALSE;
+}
+
+static void update_color_buttons(color_button_info *a, color_button_info *b, int redraw)
+{  GdkRectangle rect;
+   GdkWindow *window;
+   gint ignore;
+
+   /* Note that a->color and b->color point to the same object. */
+
+   gdk_colormap_alloc_color(gdk_colormap_get_system(), a->color, FALSE, TRUE);
+
+   gdk_gc_set_rgb_fg_color(a->gc, a->color);   
+   gdk_gc_set_rgb_bg_color(a->gc, a->color);
+   gdk_gc_set_rgb_fg_color(b->gc, b->color);   
+   gdk_gc_set_rgb_bg_color(b->gc, b->color);
+
+   gdk_draw_rectangle(a->pixmap, a->gc, TRUE, 0, 0, COLOR_BUTTON_WIDTH, COLOR_BUTTON_HEIGHT);
+   gdk_draw_rectangle(b->pixmap, b->gc, TRUE, 0, 0, COLOR_BUTTON_WIDTH, COLOR_BUTTON_HEIGHT);
+
+   /* Trigger an expose event for the button. Since the button has no own window
+      this will actually redraw the whole dialog box. */
+
+   if(redraw) /* Useful when all buttons are reset to default at once */
+   {  window = gtk_widget_get_parent_window(a->button);
+      if(window) 
+      {  gdk_window_get_geometry(window, &rect.x, &rect.y, &rect.width, &rect.height, &ignore);
+
+	 gdk_window_invalidate_rect(a->button->window, &rect, TRUE); 
+      }
+   }
+
+   window = gtk_widget_get_parent_window(b->button);
+   if(window)
+   {  gdk_window_get_geometry(window, &rect.x, &rect.y, &rect.width, &rect.height, &ignore);
+	 
+      gdk_window_invalidate_rect(window, &rect, TRUE); 
+   }
+}
+
+static void color_ok_cb(GtkWidget *widget, gpointer data)
+{  color_button_info *cbi = (color_button_info*)data;
+   prefs_context *pc = (prefs_context*)Closure->prefsContext;
+
+
+   gtk_color_selection_get_current_color(GTK_COLOR_SELECTION(((GtkColorSelectionDialog*)cbi->dialog)->colorsel), cbi->color);
+
+   switch(cbi->userData)
+   {  case COLOR_RED:
+	 update_color_buttons(pc->redA, pc->redB, TRUE);
+	 break;
+
+      case COLOR_YELLOW:
+	 update_color_buttons(pc->yellowA, pc->yellowB, TRUE);
+	 break;
+
+      case COLOR_GREEN:
+	 update_color_buttons(pc->greenA, pc->greenB, TRUE);
+	 break;
+
+      case COLOR_BLUE:
+	 update_color_buttons(pc->blueA, pc->blueB, TRUE);
+	 break;
+
+      case COLOR_WHITE:
+	 update_color_buttons(pc->whiteA, pc->whiteB, TRUE);
+	 break;
+
+      case COLOR_DARK:
+	 update_color_buttons(pc->darkA, pc->darkB, TRUE);
+	 break;
+
+      case COLOR_RED_TEXT:
+	 update_color_buttons(pc->redTextA, pc->redTextB, TRUE);
+	 UpdateMarkup(&Closure->redMarkup, Closure->redText);
+	 break;
+
+      case COLOR_GREEN_TEXT:
+	 update_color_buttons(pc->greenTextA, pc->greenTextB, TRUE);
+	 UpdateMarkup(&Closure->greenMarkup, Closure->greenText);
+	 break;
+
+      case COLOR_BAR:
+	 update_color_buttons(pc->barColorA, pc->barColorB, TRUE);
+	 break;
+
+      case COLOR_CURVE:
+	 update_color_buttons(pc->curveColorA, pc->curveColorB, TRUE);
+	 break;
+   }
+
+   gtk_widget_hide(cbi->dialog);
+}
+
+static void color_cancel_cb(GtkWidget *widget, gpointer data)
+{  color_button_info *cbi = (color_button_info*)data;
+
+   gtk_widget_hide(cbi->dialog);
+}
+
+static void color_choose_cb(GtkWidget *widget, gpointer data)
+{  color_button_info *cbi = (color_button_info*)data;
+
+   if(!cbi->dialog)
+   {  GtkColorSelectionDialog *csd;
+      cbi->dialog = gtk_color_selection_dialog_new(_utf("Color selection"));
+      g_signal_connect(cbi->dialog, "delete_event", G_CALLBACK(color_delete_cb), cbi);
+
+      csd = (GtkColorSelectionDialog*)cbi->dialog;
+      g_signal_connect(G_OBJECT(csd->cancel_button), "clicked", G_CALLBACK(color_cancel_cb), cbi);
+      g_signal_connect(G_OBJECT(csd->ok_button), "clicked", G_CALLBACK(color_ok_cb), cbi);
+
+      ReverseCancelOK(GTK_DIALOG(cbi->dialog));
+   }
+
+   gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(((GtkColorSelectionDialog*)cbi->dialog)->colorsel), cbi->color);
+   gtk_widget_show(cbi->dialog);
+}
+
+static void default_color_cb(GtkWidget *widget, gpointer data)
+{  prefs_context *pc = (prefs_context*)Closure->prefsContext;
+
+   DefaultColors();
+
+   update_color_buttons(pc->redA, pc->redB, FALSE);
+   update_color_buttons(pc->yellowA, pc->yellowB, FALSE);
+   update_color_buttons(pc->greenA, pc->greenB, FALSE);
+   update_color_buttons(pc->blueA, pc->blueB, FALSE);
+   update_color_buttons(pc->whiteA, pc->whiteB, FALSE);
+   update_color_buttons(pc->darkA, pc->darkB, FALSE);
+   update_color_buttons(pc->redTextA, pc->redTextB, FALSE);
+   update_color_buttons(pc->greenTextA, pc->greenTextB, FALSE);
+   update_color_buttons(pc->barColorA, pc->barColorB, FALSE);
+   update_color_buttons(pc->curveColorA, pc->curveColorB, TRUE);
+}
+
+static color_button_info *create_color_button(GdkColor *color, int user_data)
+{  color_button_info *cbi = g_malloc0(sizeof(color_button_info));
+
+   cbi->button = gtk_button_new();
+   cbi->frame  = gtk_frame_new(NULL);
+   gtk_container_set_border_width(GTK_CONTAINER(cbi->frame), 1);
+   gtk_frame_set_shadow_type(GTK_FRAME(cbi->frame), GTK_SHADOW_ETCHED_OUT);
+   gtk_container_add(GTK_CONTAINER(cbi->button), cbi->frame); 
+   cbi->pixmap = gdk_pixmap_new(gdk_get_default_root_window(), COLOR_BUTTON_WIDTH, COLOR_BUTTON_HEIGHT, -1);
+   cbi->image  = gtk_image_new_from_pixmap(cbi->pixmap, NULL);
+   gtk_container_add(GTK_CONTAINER(cbi->frame), cbi->image); 
+
+   cbi->gc    = gdk_gc_new(cbi->pixmap);
+   gdk_gc_set_foreground(cbi->gc, color);   
+   gdk_gc_set_background(cbi->gc, color);
+   gdk_draw_rectangle(cbi->pixmap, cbi->gc, TRUE, 0, 0, COLOR_BUTTON_WIDTH, COLOR_BUTTON_HEIGHT);
+   cbi->color = color;
+   cbi->userData = user_data;
+   g_signal_connect(G_OBJECT(cbi->button), "clicked", G_CALLBACK(color_choose_cb), cbi);
+
+   return cbi;
+
+  //   gtk_widget_modify_bg(ebox, GTK_STATE_NORMAL, color);
 }
 
 /***
@@ -737,7 +995,8 @@ void UpdateMethodPreferences(void)
 void CreatePreferencesWindow(void)
 {  
    if(!Closure->prefsWindow)  /* No window to reuse? */
-   {  GtkWidget *window, *outer_box, *hbox, *vbox, *vbox2, *notebook, *space, *button, *frame;
+   {  GtkWidget *window, *outer_box, *notebook, *space;
+      GtkWidget *hbox, *vbox, *vbox2, *button, *frame, *table;
       GtkWidget *lab;
 #if GTK_MINOR_VERSION < 4
       GtkWidget *option_menu_strip;
@@ -779,13 +1038,13 @@ void CreatePreferencesWindow(void)
       gtk_box_pack_end(GTK_BOX(hbox), button, FALSE, FALSE, 0);
       g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(close_cb), NULL);
 
-      /*** "General" page */
+      /*** Image creation page */
 
-      vbox = create_page(notebook, _utf("General"));
+      vbox = create_page(notebook, _utf("Image"));
 
-      /* medium/image file system */
+      /** Image size */
 
-      frame = gtk_frame_new(_utf("Medium and image filesystem"));
+      frame = gtk_frame_new(_utf("Image size"));
       gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
 
       vbox2 = gtk_vbox_new(FALSE, 15);
@@ -793,7 +1052,7 @@ void CreatePreferencesWindow(void)
       gtk_container_add(GTK_CONTAINER(frame), vbox2);
 
       lwoh = CreateLabelWithOnlineHelp(_("Image size determination"), _("Get Image size from: "));
-      g_ptr_array_add(pc->helpPages, lwoh);
+      RegisterPreferencesHelpWindow(lwoh);
 
       for(i=0; i<2; i++)
       {  GtkWidget *hbox = gtk_hbox_new(FALSE, 4);
@@ -857,150 +1116,9 @@ void CreatePreferencesWindow(void)
 			 "As this information is typically wrong for DVD-RW/+RW/-RAM media this option "
 			 "is only present for backwards compatibility with older dvdisaster versions."));
 
-      /* file extension */
-
-      frame = gtk_frame_new(_utf("Local files (on hard disc)"));
-      gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
-
-      vbox2 = gtk_vbox_new(FALSE, 15);
-      gtk_container_set_border_width(GTK_CONTAINER(vbox2), 10);
-      gtk_container_add(GTK_CONTAINER(frame), vbox2);
-
-      lwoh = CreateLabelWithOnlineHelp(_("Automatic file suffixes"), _("Automatically add .iso and .ecc file suffixes"));
-      g_ptr_array_add(pc->helpPages, lwoh);
-
-      for(i=0; i<2; i++)
-      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
-	 GtkWidget *button = gtk_check_button_new();
-
-	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
-	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
-
-	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->autoSuffix);
-	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_SUFFIX));
-
-	 if(!i)
-	 {  pc->suffixA = button;
-	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
-	 }
-	 else
-	 {  pc->suffixB = button;
-	    AddHelpWidget(lwoh, hbox);
-	 }
-      }
-
-      AddHelpParagraph(lwoh, 
-		       _("<b>Automatically add file suffixes</b>\n\n"
-			 "When this switch is set, files will be automatically appended with \".iso\" "
-			 "or \".ecc\" suffixes if no other file name extension is already present."));
-
-      /* 2GB button */
-
-      lwoh = CreateLabelWithOnlineHelp(_("File splitting"), _("Split files into segments &lt;= 2GB"));
-      g_ptr_array_add(pc->helpPages, lwoh);
-
-      for(i=0; i<2; i++)
-      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
-	 GtkWidget *button = gtk_check_button_new();
-
-	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
-	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
-	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->splitFiles);
-	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_2GB));
-
-	 if(!i)
-	 {  pc->splitA = button;
-	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
-	 }
-	 else
-	 {  pc->splitB = button;
-	    AddHelpWidget(lwoh, hbox);
-	 }
-      }
-
-      AddHelpParagraph(lwoh, 
-		       _("<b>File splitting</b>\n\n"
-			 "Allows working with file systems which are limited to 2GB per file, e.g. "
-			 "FAT from Windows. Created files are spread over upto 100 segments "
-			 "called \"medium00.iso\", \"medium01.iso\" etc. at the cost of a small "
-			 "performance hit."));
-
-
-      /*** Automatic file creation and deletion */
-
-      frame = gtk_frame_new(_utf("Automatic file creation and deletion"));
-      gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
-
-      vbox2 = gtk_vbox_new(FALSE, 15);
-      gtk_container_set_border_width(GTK_CONTAINER(vbox2), 10);
-      gtk_container_add(GTK_CONTAINER(frame), vbox2);
-
-      /* automatic creation */
-
-      lwoh = CreateLabelWithOnlineHelp(_("Automatic .ecc file creation"), _("Create error correction file after reading image"));
-      g_ptr_array_add(pc->helpPages, lwoh);
-
-      for(i=0; i<2; i++)
-      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
-	 GtkWidget *button = gtk_check_button_new();
-
-	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
-      	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
-	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->readAndCreate);
-	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_READ_CREATE));
-
-	 if(!i)
-	 {  pc->readAndCreateButtonA = button;
-	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
-	 }
-	 else
-	 {  pc->readAndCreateButtonB = button;
-	    AddHelpWidget(lwoh, hbox);
-	 }
-      }
-
-      AddHelpParagraph(lwoh, 
-		       _("<b>Automatic error correction file creation</b>\n\n"
-			 "Automatically creates an error correction file after reading an image. "
-			 "Together with the \"Remove image\" option this will speed up error correction "
-			 "file generation for a series of different media."));
-
-      /* automatic deletion */
-
-      lwoh = CreateLabelWithOnlineHelp(_("Automatic image file removal"), _("Remove image after error correction file creation"));
-      g_ptr_array_add(pc->helpPages, lwoh);
-
-      for(i=0; i<2; i++)
-      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
-	 GtkWidget *button = gtk_check_button_new();
-
-	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
-      	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
-	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->unlinkImage);
-	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_UNLINK));
-
-	 if(!i)
-	 {  pc->unlinkImageButtonA = button;
-	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
-	 }
-	 else
-	 {  pc->unlinkImageButtonB = button;
-	    AddHelpWidget(lwoh, hbox);
-	 }
-      }
-
-      AddHelpParagraph(lwoh, 
-		       _("<b>Automatic image file removal</b>\n\n"
-			 "If this switch is set the image file will be deleted following the successful "
-			 "generation of the respective error correction file."));
-
-      /*** Read & Scan page */
-
-      vbox = create_page(notebook, _utf("Read & Scan"));
-
       /** Reading preferences */
       
-      frame = gtk_frame_new(_utf("Reading preferences"));
+      frame = gtk_frame_new(_utf("Image creation"));
       gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
 
       vbox2 = gtk_vbox_new(FALSE, 20);
@@ -1010,7 +1128,7 @@ void CreatePreferencesWindow(void)
       /* Reading strategy */
 
       lwoh = CreateLabelWithOnlineHelp(_("Reading strategy"), _("Reading strategy: "));
-      g_ptr_array_add(pc->helpPages, lwoh);
+      RegisterPreferencesHelpWindow(lwoh);
 
       for(i=0; i<2; i++)
       {  GtkWidget *hbox = gtk_hbox_new(FALSE, 4);
@@ -1051,7 +1169,7 @@ void CreatePreferencesWindow(void)
       /* Reading range */
 
       lwoh = CreateLabelWithOnlineHelp(_("Reading range"), _("Read/Scan from sector"));
-      g_ptr_array_add(pc->helpPages, lwoh);
+      RegisterPreferencesHelpWindow(lwoh);
 
       for(i=0; i<2; i++)
       {  GtkWidget *hbox = gtk_hbox_new(FALSE, 4);
@@ -1101,9 +1219,202 @@ void CreatePreferencesWindow(void)
 			 "prevent sectors from being read which are required for a succesful error correction.\n\n"
 			 "These settings are only effective for the current session and will not be saved."));
 
+      /** Image properties */
+
+      frame = gtk_frame_new(_utf("Image properties"));
+      gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
+
+      vbox2 = gtk_vbox_new(FALSE, 15);
+      gtk_container_set_border_width(GTK_CONTAINER(vbox2), 10);
+      gtk_container_add(GTK_CONTAINER(frame), vbox2);
+
+      /* DAO button */
+
+      lwoh = CreateLabelWithOnlineHelp(_("DAO mode"), _("Assume image to be written in DAO mode (don't truncate)"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
+	 GtkWidget *button = gtk_check_button_new();
+
+	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
+	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
+
+	 if(!i) pc->daoButtonA = button;
+	 else   pc->daoButtonB = button;
+
+	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->noTruncate);
+	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_DAO));
+	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	 else   AddHelpWidget(lwoh, hbox);
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Assume DAO mode</b>\n\n"
+			 "Media written in \"TAO\" (\"track at once\") mode may contain two sectors "
+			 "with pseudo read errors at the end. By default these two sectors are ignored.\n\n"
+
+			 "If you are extremely unlucky to have a \"DAO\" (\"disc at once\") medium "
+			 "with exactly one or two real read errors at the end, dvdisaster may treat "
+			 "this as a \"TAO\" disc and truncate the image by two sectors. In that case "
+			 "activate this option to have the last two read errors handled correctly.\n\n"
+
+			 "<b>Tip:</b> To avoid these problems, consider using the \"DAO / Disc at once\" "
+			 "(sometimes also called \"SAO / Session at once\") mode for writing single "
+			 "session media."));
+
+      /* byte filling */
+
+      lwoh = CreateLabelWithOnlineHelp(_("Filling of unreadable sectors"), 
+				       _("Fill unreadable sectors with byte:"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 4);
+	 GtkWidget *check, *entry;
+
+	 check = gtk_check_button_new();
+	 g_signal_connect(check, "toggled", G_CALLBACK(bytefill_check_cb), pc);
+	 gtk_box_pack_start(GTK_BOX(hbox), check, FALSE, FALSE, 0);
+	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
+
+	 entry = gtk_entry_new();
+	 g_signal_connect(entry, "activate", G_CALLBACK(bytefill_cb), pc);
+	 gtk_entry_set_width_chars(GTK_ENTRY(entry), 5);
+	 gtk_box_pack_start(GTK_BOX(hbox), entry, FALSE, FALSE, 0);
+
+	 if(!i)
+	 {  pc->byteCheckA = check;
+	    pc->byteEntryA = entry;
+	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	 }
+	 else
+	 {  pc->byteCheckB = check;
+	    pc->byteEntryB = entry;
+	    AddHelpWidget(lwoh, hbox);
+	 }
+
+	 if(Closure->fillUnreadable >= 0)
+	 {  char value[11];
+	
+	    g_snprintf(value, 10, "0x%02x", Closure->fillUnreadable);
+	    gtk_entry_set_text(GTK_ENTRY(entry), value);
+	    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), TRUE);
+	 }
+	 else gtk_widget_set_sensitive(entry, FALSE);
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Filling of unreadable sectors</b>\n\n"
+
+			 "dvdisaster marks unreadable sectors with a special filling pattern which "
+			 "is very unlikely to occur in undamaged media.\n"
+			 "In other data recovery software it is common to fill unreadable sectors "
+			 "with a certain byte value. To allow interoperability with such programs, "
+			 "you can specify the byte value they are using:\n"));
+
+      AddHelpListItem(lwoh,
+		      _("0xb0 (176 decimal): for compatibility with h2cdimage published by \"c't\", "
+			"a German periodical.\n"));
+
+      AddHelpParagraph(lwoh,
+		       _("<b>Note:</b> Using zero filling (0x00, decimal 0) is highly discouraged. "
+			 "Most media contain regular zero filled sectors which can not be told apart "
+			 "from unreadable sectors if zero filling is used."));
+
+      /*** Drive parameters page */
+
+      vbox = create_page(notebook, _utf("Drive"));
+
+      /** Drive initialisation */
+
+      frame = gtk_frame_new(_utf("Drive initialisation"));
+      gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
+
+      lwoh = CreateLabelWithOnlineHelp(_("Drive initialisation"), 
+				       _("Wait"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      lwoh_clone = CloneLabelWithOnlineHelp(lwoh, _("seconds for drive to spin up"));
+      RegisterPreferencesHelpWindow(lwoh_clone);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 4);
+	 GtkWidget *spin;
+
+	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
+
+	 spin = gtk_spin_button_new_with_range(0, 30, 1);
+	 gtk_entry_set_width_chars(GTK_ENTRY(spin), 3);
+	 gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin), Closure->spinupDelay);
+	 g_signal_connect(spin, "value-changed", G_CALLBACK(spin_cb), (gpointer)SPIN_DELAY);
+	 gtk_box_pack_start(GTK_BOX(hbox), spin, FALSE, FALSE, 0);
+
+	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh_clone->normalLabel : lwoh_clone->linkBox, FALSE, FALSE, 0);
+	 gtk_container_set_border_width(GTK_CONTAINER(hbox), 10);
+
+	 if(!i)
+	 {  pc->spinUpA = spin;
+	    gtk_container_add(GTK_CONTAINER(frame), hbox);
+	 }
+	 else
+	 {  pc->spinUpB = spin;
+	    AddHelpWidget(lwoh, hbox);
+	 }
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Drive initialisation</b>\n\n"
+			 "Waits the specified amount of seconds for letting the drive spin up. "
+			 "This avoids speed jumps at the beginning of the reading curve."));
+
+      /* Eject medium */
+
+      frame = gtk_frame_new(_utf("Media ejection"));
+      gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
+
+      lwoh = CreateLabelWithOnlineHelp(_("Eject medium after sucessful read"), 
+				       _("Eject medium after sucessful read"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 4);
+	 GtkWidget *toggle;
+
+	 toggle = gtk_check_button_new();
+	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(toggle), Closure->eject);
+       	 g_signal_connect(G_OBJECT(toggle), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_EJECT));
+	 gtk_box_pack_start(GTK_BOX(hbox), toggle, FALSE, FALSE, 0);
+
+	 if(!i)
+	 {  pc->ejectA = toggle;
+	    gtk_box_pack_start(GTK_BOX(hbox), lwoh->linkBox, FALSE, FALSE, 0);
+	    gtk_container_add(GTK_CONTAINER(frame), hbox);
+   gtk_container_set_border_width(GTK_CONTAINER(hbox), 12);
+	 }
+	 else
+	 {  pc->ejectB = toggle;
+	    gtk_box_pack_start(GTK_BOX(hbox), lwoh->normalLabel, FALSE, FALSE, 0);
+	    AddHelpWidget(lwoh, hbox);
+	 }
+      }	 
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Medium ejection</b>\n\n"
+			 "Activate this option to have the medium ejected after "
+			 "a successful read or scan operation.\n\n"
+			 "Note that the desktop environment "
+			 "may prevent other applications from ejecting media. "
+			 "In that case eject the medium through the desktop "
+			 "user interface."));
+
+      /*** "Read attempts" page */
+
+      vbox = create_page(notebook, _utf("Read attempts"));
+
       /** Reading preferences */
       
-      frame = gtk_frame_new(_utf("Read error treatment"));
+      frame = gtk_frame_new(_utf("Sector read errors"));
       gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
 
       vbox2 = gtk_vbox_new(FALSE, 20);
@@ -1113,7 +1424,7 @@ void CreatePreferencesWindow(void)
       /* Raw verify */
 
       lwoh = CreateLabelWithOnlineHelp(_("Raw reading"), _("Read and analyze raw sectors"));
-      g_ptr_array_add(pc->helpPages, lwoh);
+      RegisterPreferencesHelpWindow(lwoh);
 
       for(i=0; i<2; i++)
       {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
@@ -1144,7 +1455,9 @@ void CreatePreferencesWindow(void)
       /* Minimum reading attempts */
 
       lwoh = CreateLabelWithOnlineHelp(_("Minimum number of reading attempts"), "ignore");
-      g_ptr_array_add(pc->helpPages, lwoh);
+      RegisterPreferencesHelpWindow(lwoh);
+      LockLabelSize(GTK_LABEL(lwoh->normalLabel), _utf("Min. %d reading attempts per sector"), 99);
+      LockLabelSize(GTK_LABEL(lwoh->linkLabel), _utf("Min. %d reading attempts per sector"), 99);
 
       pc->minAttemptsScaleLwoh = lwoh;
       pc->minAttemptsScaleInfoA = g_malloc0(sizeof(non_linear_info));
@@ -1181,7 +1494,9 @@ void CreatePreferencesWindow(void)
       /* Maximum reading attempts */
 
       lwoh = CreateLabelWithOnlineHelp(_("Maximum number of reading attempts"), "ignore");
-      g_ptr_array_add(pc->helpPages, lwoh);
+      RegisterPreferencesHelpWindow(lwoh);
+      LockLabelSize(GTK_LABEL(lwoh->normalLabel), _utf("Max. %d reading attempts per sector"), 100);
+      LockLabelSize(GTK_LABEL(lwoh->linkLabel), _utf("Max. %d reading attempts per sector"), 100);
 
       pc->maxAttemptsScaleLwoh = lwoh;
       pc->maxAttemptsScaleInfoA = g_malloc0(sizeof(non_linear_info));
@@ -1223,7 +1538,16 @@ void CreatePreferencesWindow(void)
       /* Jump selector */
 
       lwoh = CreateLabelWithOnlineHelp(_("Treatment of unreadable areas"), "ignore");
-      g_ptr_array_add(pc->helpPages, lwoh);
+      RegisterPreferencesHelpWindow(lwoh);
+      if(  GetLabelWidth(GTK_LABEL(lwoh->normalLabel), _utf("Skip %d sectors after read error"), 20480)
+	 > GetLabelWidth(GTK_LABEL(lwoh->normalLabel), _utf("Stop reading when unreadable intervals &lt; %d"), 20480))
+      {    LockLabelSize(GTK_LABEL(lwoh->normalLabel), _utf("Skip %d sectors after read error"), 20480);
+	   LockLabelSize(GTK_LABEL(lwoh->linkLabel), _utf("Skip %d sectors after read error"), 20480);
+      }
+      else 
+      {    LockLabelSize(GTK_LABEL(lwoh->normalLabel), _utf("Stop reading when unreadable intervals &lt; %d"), 20480);
+	   LockLabelSize(GTK_LABEL(lwoh->linkLabel), _utf("Stop reading when unreadable intervals &lt; %d"), 20480);
+      }
 
       pc->jumpScaleLwoh = lwoh;
       pc->formatLinear = g_strdup(_utf("Skip %d sectors after read error"));
@@ -1279,152 +1603,6 @@ void CreatePreferencesWindow(void)
 			 "reasons. Therefore selecting a value less than 16 is not recommended for DVD."
 			 ));
 
-      /** Image properties */
-
-      frame = gtk_frame_new(_utf("Image properties"));
-      gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
-
-      vbox2 = gtk_vbox_new(FALSE, 15);
-      gtk_container_set_border_width(GTK_CONTAINER(vbox2), 10);
-      gtk_container_add(GTK_CONTAINER(frame), vbox2);
-
-      /* DAO button */
-
-      lwoh = CreateLabelWithOnlineHelp(_("DAO mode"), _("Assume image to be written in DAO mode (don't truncate)"));
-      g_ptr_array_add(pc->helpPages, lwoh);
-
-      for(i=0; i<2; i++)
-      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
-	 GtkWidget *button = gtk_check_button_new();
-
-	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
-	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
-
-	 if(!i) pc->daoButtonA = button;
-	 else   pc->daoButtonB = button;
-
-	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->noTruncate);
-	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_DAO));
-	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
-	 else   AddHelpWidget(lwoh, hbox);
-      }
-
-      AddHelpParagraph(lwoh, 
-		       _("<b>Assume DAO mode</b>\n\n"
-			 "Media written in \"TAO\" (\"track at once\") mode may contain two sectors "
-			 "with pseudo read errors at the end. By default these two sectors are ignored.\n\n"
-
-			 "If you are extremely unlucky to have a \"DAO\" (\"disc at once\") medium "
-			 "with exactly one or two real read errors at the end, dvdisaster may treat "
-			 "this as a \"TAO\" disc and truncate the image by two sectors. In that case "
-			 "activate this option to have the last two read errors handled correctly.\n\n"
-
-			 "<b>Tip:</b> To avoid these problems, consider using the \"DAO / Disc at once\" "
-			 "(sometimes also called \"SAO / Session at once\") mode for writing single "
-			 "session media."));
-
-      /* byte filling */
-
-      lwoh = CreateLabelWithOnlineHelp(_("Filling of unreadable sectors"), 
-				       _("Fill unreadable sectors with byte:"));
-      g_ptr_array_add(pc->helpPages, lwoh);
-
-      for(i=0; i<2; i++)
-      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 4);
-	 GtkWidget *check, *entry;
-
-	 check = gtk_check_button_new();
-	 g_signal_connect(check, "toggled", G_CALLBACK(bytefill_check_cb), pc);
-	 gtk_box_pack_start(GTK_BOX(hbox), check, FALSE, FALSE, 0);
-	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
-
-	 entry = gtk_entry_new();
-	 g_signal_connect(entry, "activate", G_CALLBACK(bytefill_cb), pc);
-	 gtk_entry_set_width_chars(GTK_ENTRY(entry), 5);
-	 gtk_box_pack_start(GTK_BOX(hbox), entry, FALSE, FALSE, 0);
-
-	 if(!i)
-	 {  pc->byteCheckA = check;
-	    pc->byteEntryA = entry;
-	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
-	 }
-	 else
-	 {  pc->byteCheckB = check;
-	    pc->byteEntryB = entry;
-	    AddHelpWidget(lwoh, hbox);
-	 }
-
-	 if(Closure->fillUnreadable >= 0)
-	 {  char value[11];
-	
-	    g_snprintf(value, 10, "0x%02x", Closure->fillUnreadable);
-	    gtk_entry_set_text(GTK_ENTRY(entry), value);
-	    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), TRUE);
-	 }
-	 else gtk_widget_set_sensitive(entry, FALSE);
-      }
-
-      AddHelpParagraph(lwoh, 
-		       _("<b>Filling of unreadable sectors</b>\n\n"
-
-			 "dvdisaster marks unreadable sectors with a special filling pattern which "
-			 "is very unlikely to occur in undamaged media.\n"
-			 "In other data recovery software it is common to fill unreadable sectors "
-			 "with a certain byte value. To allow interoperability with such programs, "
-			 "you can specify the byte value they are using:\n"));
-
-      AddHelpListItem(lwoh,
-		      _("0xb0 (176 decimal): for compatibility with h2cdimage published by \"c't\", "
-			"a German periodical.\n"));
-
-      AddHelpParagraph(lwoh,
-		       _("<b>Note:</b> Using zero filling (0x00, decimal 0) is highly discouraged. "
-			 "Most media contain regular zero filled sectors which can not be told apart "
-			 "from unreadable sectors if zero filling is used."));
-
-      /** Drive initialisation */
-
-      frame = gtk_frame_new(_utf("Drive initialisation"));
-      gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
-
-      lwoh = CreateLabelWithOnlineHelp(_("Drive initialisation"), 
-				       _("Wait"));
-      g_ptr_array_add(pc->helpPages, lwoh);
-
-      lwoh_clone = CloneLabelWithOnlineHelp(lwoh, _("seconds for drive to spin up"));
-      g_ptr_array_add(pc->helpPages, lwoh_clone);
-
-
-      for(i=0; i<2; i++)
-      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 4);
-	 GtkWidget *spin;
-
-	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
-
-	 spin = gtk_spin_button_new_with_range(0, 30, 1);
-	 gtk_entry_set_width_chars(GTK_ENTRY(spin), 3);
-	 gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin), Closure->spinupDelay);
-	 g_signal_connect(spin, "value-changed", G_CALLBACK(spin_cb), (gpointer)SPIN_DELAY);
-	 gtk_box_pack_start(GTK_BOX(hbox), spin, FALSE, FALSE, 0);
-
-	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh_clone->normalLabel : lwoh_clone->linkBox, FALSE, FALSE, 0);
-	 gtk_container_set_border_width(GTK_CONTAINER(hbox), 10);
-
-	 if(!i)
-	 {  pc->spinUpA = spin;
-	    gtk_container_add(GTK_CONTAINER(frame), hbox);
-	 }
-	 else
-	 {  pc->spinUpB = spin;
-	    AddHelpWidget(lwoh, hbox);
-	 }
-      }
-
-      AddHelpParagraph(lwoh, 
-		       _("<b>Drive initialisation</b>\n\n"
-			 "Waits the specified amount of seconds for letting the drive spin up. "
-			 "This avoids speed jumps at the beginning of the reading curve."));
-
       /*** "Error correction" page */
 
       /* Method chooser menu */
@@ -1433,7 +1611,7 @@ void CreatePreferencesWindow(void)
 
       lwoh = CreateLabelWithOnlineHelp(_("Error correction method"), 
 				       _("Storage method:"));
-      g_ptr_array_add(pc->helpPages, lwoh);
+      RegisterPreferencesHelpWindow(lwoh);
 
       for(i=0; i<2; i++)
       {  GtkWidget *hbox = gtk_hbox_new(FALSE, 4);
@@ -1493,24 +1671,26 @@ void CreatePreferencesWindow(void)
 
       AddHelpParagraph(lwoh, _("<b>Error correction method</b>\n\n"
 			       "dvdisaster creates error correction data which is used to recover "
-			       "unreadable sectors if the disc becomes damaged later on.\n"
-			       "Currently two Reed-Solomon based error correction methods are available. "
-			       "provide different ways for storing the error correction information:\n"));
+			       "unreadable sectors if the disc becomes damaged later on. There are "
+			       "two different ways available for storing the error correction "
+			       "information:\n"));
 
-      AddHelpListItem(lwoh, _("RS01 creates error correction files which are stored separately "
-			      "from the image they belong to. Since data protection at the file level "
-			      "is difficult, error correction files must be stored on media which are "
-			      "protected against data loss by dvdisaster, too.\n"));
+      AddHelpListItem(lwoh, _("Error correction files (RS01 method)\n"
+			      "Error correction files are the only way of protecting existing media "
+			      "as they can be stored somewhere else. They are kept on a separate "
+			      "medium which must also be protected by dvdisaster, as data loss in "
+			      "an error correction file will render it unusable.\n"));
 
-      AddHelpListItem(lwoh, _("RS02 places the error correction data directly on the medium which is "
-			      "to be protected. This requires creating an image on hard disk using "
-			      "a CD/DVD writing software, as the image must be augmented with error "
-			      "correction data prior to writing it to the medium.\n"
-			      "Therefore the data to be protected and the error correction information "
-			      "are located at the same medium. Damaged sectors in the error correction "
+
+      AddHelpListItem(lwoh, _("Augmented images (RS02 method)\n"
+			      "The error correction data will be stored along with the user data on the "
+			      "same CD/DVD. This requires the creation of an image file prior to writing the "
+			      "medium. The error correction data will be appended to that image. " 
+			      "Damaged sectors in the error correction "
 			      "information reduce the data recovery capacity, but do not make recovery "
 			      "impossible - a second medium for keeping or protecting the error correction "
 			      "information is not required."));
+
 
       /* sub pages for individual method configuration */
       
@@ -1539,6 +1719,525 @@ void CreatePreferencesWindow(void)
       }
 
       g_idle_add(notebook_idle_func, pc);
+
+      /*** "Files" page */
+
+      vbox = create_page(notebook, _utf("Files"));
+
+      /* file extension */
+
+      frame = gtk_frame_new(_utf("Local files (on hard disc)"));
+      gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
+
+      vbox2 = gtk_vbox_new(FALSE, 15);
+      gtk_container_set_border_width(GTK_CONTAINER(vbox2), 10);
+      gtk_container_add(GTK_CONTAINER(frame), vbox2);
+
+      lwoh = CreateLabelWithOnlineHelp(_("Automatic file suffixes"), _("Automatically add .iso and .ecc file suffixes"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
+	 GtkWidget *button = gtk_check_button_new();
+
+	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
+	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
+
+	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->autoSuffix);
+	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_SUFFIX));
+
+	 if(!i)
+	 {  pc->suffixA = button;
+	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	 }
+	 else
+	 {  pc->suffixB = button;
+	    AddHelpWidget(lwoh, hbox);
+	 }
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Automatically add file suffixes</b>\n\n"
+			 "When this switch is set, files will be automatically appended with \".iso\" "
+			 "or \".ecc\" suffixes if no other file name extension is already present."));
+
+      /* 2GB button */
+
+      lwoh = CreateLabelWithOnlineHelp(_("File splitting"), _("Split files into segments &lt;= 2GB"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
+	 GtkWidget *button = gtk_check_button_new();
+
+	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
+	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
+	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->splitFiles);
+	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_2GB));
+
+	 if(!i)
+	 {  pc->splitA = button;
+	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	 }
+	 else
+	 {  pc->splitB = button;
+	    AddHelpWidget(lwoh, hbox);
+	 }
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>File splitting</b>\n\n"
+			 "Allows working with file systems which are limited to 2GB per file, e.g. "
+			 "FAT from Windows. Created files are spread over upto 100 segments "
+			 "called \"medium00.iso\", \"medium01.iso\" etc. at the cost of a small "
+			 "performance hit."));
+
+
+      /*** Automatic file creation and deletion */
+
+      frame = gtk_frame_new(_utf("Automatic file creation and deletion"));
+      gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
+
+      vbox2 = gtk_vbox_new(FALSE, 15);
+      gtk_container_set_border_width(GTK_CONTAINER(vbox2), 10);
+      gtk_container_add(GTK_CONTAINER(frame), vbox2);
+
+      /* automatic creation */
+
+      lwoh = CreateLabelWithOnlineHelp(_("Automatic .ecc file creation"), _("Create error correction file after reading image"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
+	 GtkWidget *button = gtk_check_button_new();
+
+	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
+      	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
+	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->readAndCreate);
+	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_READ_CREATE));
+
+	 if(!i)
+	 {  pc->readAndCreateButtonA = button;
+	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	 }
+	 else
+	 {  pc->readAndCreateButtonB = button;
+	    AddHelpWidget(lwoh, hbox);
+	 }
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Automatic error correction file creation</b>\n\n"
+			 "Automatically creates an error correction file after reading an image. "
+			 "Together with the \"Remove image\" option this will speed up error correction "
+			 "file generation for a series of different media."));
+
+      /* automatic deletion */
+
+      lwoh = CreateLabelWithOnlineHelp(_("Automatic image file removal"), _("Remove image after error correction file creation"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
+	 GtkWidget *button = gtk_check_button_new();
+
+	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
+      	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
+	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->unlinkImage);
+	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_UNLINK));
+
+	 if(!i)
+	 {  pc->unlinkImageButtonA = button;
+	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	 }
+	 else
+	 {  pc->unlinkImageButtonB = button;
+	    AddHelpWidget(lwoh, hbox);
+	 }
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Automatic image file removal</b>\n\n"
+			 "If this switch is set the image file will be deleted following the successful "
+			 "generation of the respective error correction file."));
+
+      /*** GUI page */
+
+      vbox = create_page(notebook, _utf("Appearance"));
+
+      /** Color scheme */
+
+      table = gtk_table_new(2,4, FALSE);
+      gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 0);
+
+      frame = gtk_frame_new(_utf("Sector coloring"));
+      gtk_table_attach(GTK_TABLE(table), frame, 
+		       0, 1, 0, 4, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 5, 5);
+
+      vbox2 = gtk_vbox_new(FALSE, 20);
+      gtk_container_set_border_width(GTK_CONTAINER(vbox2), 10);
+      gtk_container_add(GTK_CONTAINER(frame), vbox2);
+
+      /* Green color */
+
+      lwoh = CreateLabelWithOnlineHelp(_("Good sectors"), _("Good sector"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox  = gtk_hbox_new(FALSE, 4);
+	 color_button_info *cbi;
+
+	 cbi = create_color_button(Closure->greenSector, COLOR_GREEN);
+	 gtk_box_pack_start(GTK_BOX(hbox), cbi->button, FALSE, FALSE, 0);
+
+	 if(!i)
+	 {  gtk_box_pack_start(GTK_BOX(hbox), lwoh->linkBox, FALSE, FALSE, 0);
+	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	    pc->greenA = cbi;
+	 }
+	 else
+	 {  
+	    gtk_box_pack_start(GTK_BOX(hbox), lwoh->normalLabel, FALSE, FALSE, 0);
+	    AddHelpWidget(lwoh, hbox);
+	    pc->greenB = cbi;
+	 }
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Good sectors</b>\n\n"
+		         "This color indicates good sectors."));
+
+      /* Yellow color */
+
+      lwoh = CreateLabelWithOnlineHelp(_("Checksum errors"), _("Checksum error"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox  = gtk_hbox_new(FALSE, 4);
+	 color_button_info *cbi;
+
+	 cbi = create_color_button(Closure->yellowSector, COLOR_YELLOW);
+	 gtk_box_pack_start(GTK_BOX(hbox), cbi->button, FALSE, FALSE, 0);
+
+	 if(!i)
+	 {  gtk_box_pack_start(GTK_BOX(hbox), lwoh->linkBox, FALSE, FALSE, 0);
+	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	    pc->yellowA = cbi;
+	 }
+	 else
+	 {  
+	    gtk_box_pack_start(GTK_BOX(hbox), lwoh->normalLabel, FALSE, FALSE, 0);
+	    AddHelpWidget(lwoh, hbox);
+	    pc->yellowB = cbi;
+	 }
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Checksum errors</b>\n\n"
+		         "This color is used for displaying sectors with wrong check sums."));
+
+      /* Red color */
+
+      lwoh = CreateLabelWithOnlineHelp(_("Unreadable sectors"), _("Unreadable"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox  = gtk_hbox_new(FALSE, 4);
+	 color_button_info *cbi;
+
+	 cbi = create_color_button(Closure->redSector, COLOR_RED);
+	 gtk_box_pack_start(GTK_BOX(hbox), cbi->button, FALSE, FALSE, 0);
+
+	 if(!i)
+	 {  gtk_box_pack_start(GTK_BOX(hbox), lwoh->linkBox, FALSE, FALSE, 0);
+	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	    pc->redA = cbi;
+	 }
+	 else
+	 {  
+	    gtk_box_pack_start(GTK_BOX(hbox), lwoh->normalLabel, FALSE, FALSE, 0);
+	    AddHelpWidget(lwoh, hbox);
+	    pc->redB = cbi;
+	 }
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Unreadable sectors</b>\n\n"
+		         "This color is used for marking unreadable sectors."));
+
+      /* Dark color */
+
+      lwoh = CreateLabelWithOnlineHelp(_("Present sectors"), _("Present sector"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox  = gtk_hbox_new(FALSE, 4);
+	 color_button_info *cbi;
+
+	 cbi = create_color_button(Closure->darkSector, COLOR_DARK);
+	 gtk_box_pack_start(GTK_BOX(hbox), cbi->button, FALSE, FALSE, 0);
+
+	 if(!i)
+	 {  gtk_box_pack_start(GTK_BOX(hbox), lwoh->linkBox, FALSE, FALSE, 0);
+	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	    pc->darkA = cbi;
+	 }
+	 else
+	 {  
+	    gtk_box_pack_start(GTK_BOX(hbox), lwoh->normalLabel, FALSE, FALSE, 0);
+	    AddHelpWidget(lwoh, hbox);
+	    pc->darkB = cbi;
+	 }
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Present sectors</b>\n\n"
+		         "Sectors which are already present are marked with this color."));
+
+      /* Blue color */
+
+      lwoh = CreateLabelWithOnlineHelp(_("Ignored sectors"), _("Ignored sector"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox  = gtk_hbox_new(FALSE, 4);
+	 color_button_info *cbi;
+
+	 cbi = create_color_button(Closure->blueSector, COLOR_BLUE);
+	 gtk_box_pack_start(GTK_BOX(hbox), cbi->button, FALSE, FALSE, 0);
+
+	 if(!i)
+	 {  gtk_box_pack_start(GTK_BOX(hbox), lwoh->linkBox, FALSE, FALSE, 0);
+	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	    pc->blueA = cbi;
+	 }
+	 else
+	 {  
+	    gtk_box_pack_start(GTK_BOX(hbox), lwoh->normalLabel, FALSE, FALSE, 0);
+	    AddHelpWidget(lwoh, hbox);
+	    pc->blueB = cbi;
+	 }
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Ignored sectors</b>\n\n"
+		         "Sectors marked with this color will not be processed "
+			 "in the current run."));
+
+      /* White color */
+
+      lwoh = CreateLabelWithOnlineHelp(_("Highlit sectors"), _("Highlit sector"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox  = gtk_hbox_new(FALSE, 4);
+	 color_button_info *cbi;
+
+	 cbi = create_color_button(Closure->whiteSector, COLOR_WHITE);
+	 gtk_box_pack_start(GTK_BOX(hbox), cbi->button, FALSE, FALSE, 0);
+
+	 if(!i)
+	 {  gtk_box_pack_start(GTK_BOX(hbox), lwoh->linkBox, FALSE, FALSE, 0);
+	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	    pc->whiteA = cbi;
+	 }
+	 else
+	 {  
+	    gtk_box_pack_start(GTK_BOX(hbox), lwoh->normalLabel, FALSE, FALSE, 0);
+	    AddHelpWidget(lwoh, hbox);
+	    pc->whiteB = cbi;
+	 }
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Highlit sectors</b>\n\n"
+		         "This color is used for temporarily highlighting "
+			 "sectors during adaptive reading."));
+
+      /** Text colors */
+
+      frame = gtk_frame_new(_utf("Text colors"));
+      gtk_table_attach(GTK_TABLE(table), frame, 
+		       1, 2, 0, 1, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 5, 5);
+
+      vbox2 = gtk_vbox_new(FALSE, 20);
+      gtk_container_set_border_width(GTK_CONTAINER(vbox2), 10);
+      gtk_container_add(GTK_CONTAINER(frame), vbox2);
+
+      /* Positive text */
+
+      lwoh = CreateLabelWithOnlineHelp(_("Positive text"), _("Positive text"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox  = gtk_hbox_new(FALSE, 4);
+	 color_button_info *cbi;
+
+	 cbi = create_color_button(Closure->greenText, COLOR_GREEN_TEXT);
+	 gtk_box_pack_start(GTK_BOX(hbox), cbi->button, FALSE, FALSE, 0);
+
+	 if(!i)
+	 {  gtk_box_pack_start(GTK_BOX(hbox), lwoh->linkBox, FALSE, FALSE, 0);
+	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	    pc->greenTextA = cbi;
+	 }
+	 else
+	 {  
+	    gtk_box_pack_start(GTK_BOX(hbox), lwoh->normalLabel, FALSE, FALSE, 0);
+	    AddHelpWidget(lwoh, hbox);
+	    pc->greenTextB = cbi;
+	 }
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Positive text</b>\n\n"
+		         "Good news are printed in this color."));
+
+      /* Positive text */
+
+      lwoh = CreateLabelWithOnlineHelp(_("Negative text"), _("Negative text"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox  = gtk_hbox_new(FALSE, 4);
+	 color_button_info *cbi;
+
+	 cbi = create_color_button(Closure->redText, COLOR_RED_TEXT);
+	 gtk_box_pack_start(GTK_BOX(hbox), cbi->button, FALSE, FALSE, 0);
+
+	 if(!i)
+	 {  gtk_box_pack_start(GTK_BOX(hbox), lwoh->linkBox, FALSE, FALSE, 0);
+	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	    pc->redTextA = cbi;
+	 }
+	 else
+	 {  
+	    gtk_box_pack_start(GTK_BOX(hbox), lwoh->normalLabel, FALSE, FALSE, 0);
+	    AddHelpWidget(lwoh, hbox);
+	    pc->redTextB = cbi;
+	 }
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Negative text</b>\n\n"
+		         "Bad news are printed in this color."));
+
+      /** Curve colors */
+
+      frame = gtk_frame_new(_utf("Curve colors"));
+      gtk_table_attach(GTK_TABLE(table), frame, 
+		       1, 2, 1, 2, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 5, 5);
+      vbox2 = gtk_vbox_new(FALSE, 20);
+      gtk_container_set_border_width(GTK_CONTAINER(vbox2), 10);
+      gtk_container_add(GTK_CONTAINER(frame), vbox2);
+
+      /* Reading speed curve */
+
+      lwoh = CreateLabelWithOnlineHelp(_("Curve color"), _("Curve color"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox  = gtk_hbox_new(FALSE, 4);
+	 color_button_info *cbi;
+
+	 cbi = create_color_button(Closure->curveColor, COLOR_CURVE);
+	 gtk_box_pack_start(GTK_BOX(hbox), cbi->button, FALSE, FALSE, 0);
+
+	 if(!i)
+	 {  gtk_box_pack_start(GTK_BOX(hbox), lwoh->linkBox, FALSE, FALSE, 0);
+	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	    pc->curveColorA = cbi;
+	 }
+	 else
+	 {  
+	    gtk_box_pack_start(GTK_BOX(hbox), lwoh->normalLabel, FALSE, FALSE, 0);
+	    AddHelpWidget(lwoh, hbox);
+	    pc->curveColorB = cbi;
+	 }
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Curve color and labels</b>\n\n"
+		         "The reading speed curve, its left side and top labels "
+			 "are printed in this color."));
+
+      /* Error correction load */
+
+      lwoh = CreateLabelWithOnlineHelp(_("Error correction load"), _("Error correction load"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox  = gtk_hbox_new(FALSE, 4);
+	 color_button_info *cbi;
+
+	 cbi = create_color_button(Closure->barColor, COLOR_BAR);
+	 gtk_box_pack_start(GTK_BOX(hbox), cbi->button, FALSE, FALSE, 0);
+
+	 if(!i)
+	 {  gtk_box_pack_start(GTK_BOX(hbox), lwoh->linkBox, FALSE, FALSE, 0);
+	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	    pc->barColorA = cbi;
+	 }
+	 else
+	 {  
+	    gtk_box_pack_start(GTK_BOX(hbox), lwoh->normalLabel, FALSE, FALSE, 0);
+	    AddHelpWidget(lwoh, hbox);
+	    pc->barColorB = cbi;
+	 }
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Error correction load</b>\n\n"
+		         "The bar graph showing the error correction load "
+			 "is rendered in this color during the \"Fix\" operation."));
+
+      /* Padding space */
+
+      lab = gtk_label_new("");
+      gtk_table_attach(GTK_TABLE(table), lab, 
+		       1, 2, 2, 3, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 5, 5);
+
+      /* Default color scheme */
+
+      button = gtk_button_new_with_label(_utf("Default color scheme"));
+      gtk_table_attach(GTK_TABLE(table), button, 
+		       1, 2, 3, 4, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 5, 5);
+
+      g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(default_color_cb), NULL);
+
+      /** Reverse OK and Cancel buttons */
+
+      frame = gtk_frame_new(_utf("Dialog boxes"));
+      gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
+
+      lwoh = CreateLabelWithOnlineHelp(_("Reverse OK / Cancel buttons"), _("Reverse OK / Cancel buttons"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
+	 GtkWidget *button = gtk_check_button_new();
+
+	 gtk_container_set_border_width(GTK_CONTAINER(hbox), 10);
+	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
+      	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
+	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->reverseCancelOK);
+	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_CANCEL_OK));
+
+	 if(!i)
+	 {  pc->cancelOKA = button;
+	    gtk_container_add(GTK_CONTAINER(frame), hbox);
+	 }
+	 else
+	 {  pc->cancelOKB = button;
+	    AddHelpWidget(lwoh, hbox);
+	 }
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Reverse OK / Cancel buttons</b>\n\n"
+			 "This switch reverses the order of dialog buttons "
+			 "(e.g. OK, Cancel).\n\n"
+			 "Changes will become active after restarting dvdisaster."));
    }
 
    /* Show the created / reused window */

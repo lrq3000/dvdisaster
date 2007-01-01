@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2006 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2007 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -89,16 +89,18 @@ void RS01AddVerifyValues(Method *method, int percent,
      return;
 
    if(newMissing) 
-     SetLabelText(GTK_LABEL(wl->cmpMissingSectors), "<span color=\"red\">%lld</span>", totalMissing);
+     SetLabelText(GTK_LABEL(wl->cmpMissingSectors), "<span %s>%lld</span>", 
+		  Closure->redMarkup, totalMissing);
 
    if(newCrcErrors) 
-     SetLabelText(GTK_LABEL(wl->cmpChkSumErrors), "<span color=\"red\">%lld</span>", totalCrcErrors);
+     SetLabelText(GTK_LABEL(wl->cmpChkSumErrors), "<span %s>%lld</span>", 
+		  Closure->redMarkup, totalCrcErrors);
 
    sii->cmpSpiral = wl->cmpSpiral;
 
-   sii->segColor = Closure->green;
-   if(newCrcErrors) sii->segColor = Closure->yellow;
-   if(newMissing) sii->segColor = Closure->red;
+   sii->segColor = Closure->greenSector;
+   if(newCrcErrors) sii->segColor = Closure->yellowSector;
+   if(newMissing) sii->segColor = Closure->redSector;
 
    sii->from = wl->lastPercent+1;
    sii->to   = percent;
@@ -115,13 +117,13 @@ static void redraw_spiral(RS01Widgets *wl)
 {  int x = wl->cmpSpiral->mx - wl->cmpSpiral->diameter/2 + 10;
 
    DrawSpiralLabel(wl->cmpSpiral, wl->cmpLayout,
-		   _("Good sectors"), Closure->green, x, 1);
+		   _("Good sectors"), Closure->greenSector, x, 1);
 
    DrawSpiralLabel(wl->cmpSpiral, wl->cmpLayout,
-		   _("Sectors with CRC errors"), Closure->yellow, x, 2);
+		   _("Sectors with CRC errors"), Closure->yellowSector, x, 2);
 
    DrawSpiralLabel(wl->cmpSpiral, wl->cmpLayout,
-		   _("Missing sectors"), Closure->red, x, 3);
+		   _("Missing sectors"), Closure->redSector, x, 3);
 
    DrawSpiral(wl->cmpSpiral);
 }
@@ -424,7 +426,8 @@ void RS01Verify(Method *self)
 
       if(Closure->stopActions)   
       {  SetLabelText(GTK_LABEL(wl->cmpImageResult), 
-		      _("<span color=\"red\">Aborted by user request!</span>")); 
+		      _("<span %s>Aborted by user request!</span>"),
+		      Closure->redMarkup); 
          goto terminate;
       }
 
@@ -439,8 +442,8 @@ void RS01Verify(Method *self)
 	    PrintLog(_("* truncated image  : %lld sectors too short\n"), diff);
 	    if(Closure->guiMode)
 	      SetLabelText(GTK_LABEL(wl->cmpImageSectors), 
-			   _("<span color=\"red\">%lld (%lld sectors too short)</span>"),
-			   ii->sectors, diff);
+			   _("<span %s>%lld (%lld sectors too short)</span>"),
+			   Closure->redMarkup, ii->sectors, diff);
 	    ii->sectorsMissing += diff;
 	 }
 	 if(ii->sectors > eh_sectors)
@@ -453,20 +456,21 @@ void RS01Verify(Method *self)
       if(Closure->guiMode)
       {  if(ii->crcErrors)
 	    SetLabelText(GTK_LABEL(wl->cmpChkSumErrors), 
-			 "<span color=\"red\">%lld</span>", ii->crcErrors);
+			 "<span %s>%lld</span>", Closure->redMarkup, ii->crcErrors);
          if(ii->sectorsMissing)
 	    SetLabelText(GTK_LABEL(wl->cmpMissingSectors), 
-			 "<span color=\"red\">%lld</span>", ii->sectorsMissing);
+			 "<span %s>%lld</span>", Closure->redMarkup, ii->sectorsMissing);
       }
 
       if(excess_sectors)
       {  PrintLog(_("* image too long   : %lld excess sectors\n"), excess_sectors);
          if(Closure->guiMode)
 	 {   SetLabelText(GTK_LABEL(wl->cmpImageSectors), 
-			  _("<span color=\"red\">%lld (%lld excess sectors)</span>"),
-			  ii->sectors, excess_sectors);
+			  _("<span %s>%lld (%lld excess sectors)</span>"),
+			  Closure->redMarkup, ii->sectors, excess_sectors);
 	     SetLabelText(GTK_LABEL(wl->cmpImageResult),
-			  _("<span color=\"red\">Bad image.</span>"));
+			  _("<span %s>Bad image.</span>"),
+			  Closure->redMarkup);
 	 }
       } 
       else
@@ -478,7 +482,7 @@ void RS01Verify(Method *self)
 	    {  PrintLog(_("- good image       : all sectors present\n"
 		          "- image md5sum     : %s\n"),idigest);
 	       if(Closure->guiMode)
-	       {  SetLabelText(GTK_LABEL(wl->cmpImageResult),_("<span color=\"#008000\">Good image.</span>"));
+	       {  SetLabelText(GTK_LABEL(wl->cmpImageResult),_("<span %s>Good image.</span>"), Closure->greenMarkup);
 	          SetLabelText(GTK_LABEL(wl->cmpImageMd5Sum), "%s", idigest);
 	       }
 	    }
@@ -487,7 +491,7 @@ void RS01Verify(Method *self)
 		          "- image md5sum     : %s\n"),ii->crcErrors,idigest);
 
 	       if(Closure->guiMode)
-	       {  SetLabelText(GTK_LABEL(wl->cmpImageResult), _("<span color=\"red\">Image complete, but contains checksum errors!</span>"));
+	       {  SetLabelText(GTK_LABEL(wl->cmpImageResult), _("<span %s>Image complete, but contains checksum errors!</span>"), Closure->redMarkup);
 	          SetLabelText(GTK_LABEL(wl->cmpImageMd5Sum), "%s", idigest);
 	       }
 	    }
@@ -499,7 +503,7 @@ void RS01Verify(Method *self)
 		         ii->sectorsMissing, ii->crcErrors);
 	    if(Closure->guiMode)
 	      SetLabelText(GTK_LABEL(wl->cmpImageResult),
-			   _("<span color=\"red\">Bad image.</span>"));
+			   _("<span %s>Bad image.</span>"), Closure->redMarkup);
          }
       }
    }
@@ -551,24 +555,29 @@ void RS01Verify(Method *self)
 	    else
 	    {  if(eh->methodFlags[3] & MFLAG_DEVEL) 
 	       {  format = "%s-%d.%d (devel-%d)";
-		  color_format = "%s-%d.%d <span color=\"red\">(devel-%d)</span>";
+		  color_format = "%s-%d.%d <span %s>(devel-%d)</span>";
 	       }
 	       else if(eh->methodFlags[3] & MFLAG_RC) 
 	       {  format = "%s-%d.%d (rc-%d)";
-	          color_format = "%s-%d.%d <span color=\"red\">(rc-%d)</span>";
+	          color_format = "%s-%d.%d <span %s>(rc-%d)</span>";
 	       }
 	       else format = "%s-%d.%d (pl%d)";
 	    }
 	    PrintLog(format, _("created by dvdisaster"), major, minor, pl);
 	    PrintLog("\n");
 
-	    if(!color_format) color_format = format;
-
 	    if(Closure->guiMode)
-	      SwitchAndSetFootline(wl->cmpEccNotebook, 1,
-				   wl->cmpEccCreatedBy, 
-				   color_format, "dvdisaster",
-				   major, minor, pl);
+	    {  if(color_format)
+		  SwitchAndSetFootline(wl->cmpEccNotebook, 1,
+				       wl->cmpEccCreatedBy, 
+				       color_format, "dvdisaster",
+				       major, minor, Closure->redMarkup, pl);
+	       else
+		  SwitchAndSetFootline(wl->cmpEccNotebook, 1,
+				       wl->cmpEccCreatedBy, 
+				       format, "dvdisaster",
+				       major, minor, pl);
+	    }
 	 }
 	 else
 	 {  PrintLog(_("created by dvdisaster-%d.%d\n"), 
@@ -612,11 +621,12 @@ void RS01Verify(Method *self)
 
          if(Closure->guiMode)
 	 {  SetLabelText(GTK_LABEL(wl->cmpEccRequires), 
-			 "<span color=\"red\">dvdisaster-%d.%d</span>",
+			 "<span %s>dvdisaster-%d.%d</span>",
+			 Closure->redMarkup,
 			 eh->neededVersion/10000,
 			 (eh->neededVersion%10000)/100);
 	 if(!ecc_advice) 
-	   ecc_advice = g_strdup(_("<span color=\"red\">Please upgrade your version of dvdisaster!</span>"));
+	    ecc_advice = g_strdup_printf(_("<span %s>Please upgrade your version of dvdisaster!</span>"), Closure->redMarkup);
 	 }
       }
 
@@ -646,17 +656,17 @@ void RS01Verify(Method *self)
 	   {    PrintLog(_("* medium sectors   : %lld (BAD, perhaps TAO/DAO mismatch)\n"),eh_sectors);
 	        if(Closure->guiMode)
 		{  if(!in_last)  
-		        SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), "<span color=\"red\">%lld</span>", eh_sectors);
-		  else SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), "<span color=\"red\">%lld sectors + %d bytes</span>", eh_sectors-1, in_last);
+		      SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), "<span %s>%lld</span>", Closure->redMarkup, eh_sectors);
+		  else SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), "<span %s>%lld sectors + %d bytes</span>", Closure->redMarkup, eh_sectors-1, in_last);
 		}
 	   }
            else 
 	   {    if(!in_last)
 	        {  PrintLog(_("* medium sectors   : %lld (BAD)\n"),eh_sectors);
 	           if(Closure->guiMode)
-		   {  SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), "<span color=\"red\">%lld</span>", eh_sectors);
+		   {  SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), "<span %s>%lld</span>", Closure->redMarkup, eh_sectors);
 		      if(!ecc_advice)
-			ecc_advice = g_strdup(_("<span color=\"red\">Image size does not match error correction file.</span>"));
+			ecc_advice = g_strdup_printf(_("<span %s>Image size does not match error correction file.</span>"), Closure->redMarkup);
 		   }
 		}
 	        else
@@ -664,10 +674,10 @@ void RS01Verify(Method *self)
 			    eh_sectors-1, in_last);
 	           if(Closure->guiMode)
 		   {  SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), 
-				   _("<span color=\"red\">%lld sectors + %d bytes</span>"), 
-				   eh_sectors-1, in_last);
+				   _("<span %s>%lld sectors + %d bytes</span>"), 
+				   Closure->redMarkup, eh_sectors-1, in_last);
 		      if(!ecc_advice)
-			ecc_advice = g_strdup(_("<span color=\"red\">Image size does not match error correction file.</span>"));
+			 ecc_advice = g_strdup_printf(_("<span %s>Image size does not match error correction file.</span>"), Closure->redMarkup);
 		   }
 		}
 	   }
@@ -699,8 +709,8 @@ void RS01Verify(Method *self)
 	 if(Closure->guiMode)
 	 {  if(n) SetLabelText(GTK_LABEL(wl->cmpEccImgMd5Sum), "%s", edigest);
 	    else  
-	    {  SetLabelText(GTK_LABEL(wl->cmpEccImgMd5Sum), "<span color=\"red\">%s</span>", edigest);
-	       SetLabelText(GTK_LABEL(wl->cmpImageMd5Sum), "<span color=\"red\">%s</span>", idigest);
+	    {  SetLabelText(GTK_LABEL(wl->cmpEccImgMd5Sum), "<span %s>%s</span>", Closure->redMarkup, edigest);
+	       SetLabelText(GTK_LABEL(wl->cmpImageMd5Sum), "<span %s>%s</span>", Closure->redMarkup, idigest);
 	    }
 	 }
       }
@@ -714,17 +724,17 @@ void RS01Verify(Method *self)
       {  if(!memcmp(ii->mediumFP, "\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000", 16))
 	 {    PrintLog(_("* fingerprint match: NOT POSSIBLE - related sector is missing in image!\n"));
 	      if(Closure->guiMode)
-		SetLabelText(GTK_LABEL(wl->cmpEccFingerprint), _("<span color=\"red\">missing sector prevents calculation</span>"));
+		 SetLabelText(GTK_LABEL(wl->cmpEccFingerprint), _("<span %s>missing sector prevents calculation</span>"), Closure->redMarkup);
 	 }
          else
 	 if(memcmp(ii->mediumFP, eh->mediumFP, 16)) 
 	 {    PrintLog(_("* fingerprint match: MISMATCH - .iso and .ecc don't belong together!\n"));
 	      if(Closure->guiMode)
 	      {  SetLabelText(GTK_LABEL(wl->cmpEccFingerprint), 
-			      _("<span color=\"red\">mismatch</span>"));
+			      _("<span %s>mismatch</span>"), Closure->redMarkup);
 
 		 if(!ecc_advice)
-		   ecc_advice = g_strdup(_("<span color=\"red\">Image and error correction files do not belong together!</span>"));
+		    ecc_advice = g_strdup_printf(_("<span %s>Image and error correction files do not belong together!</span>"), Closure->redMarkup);
 	      }
 	 }
          else 
@@ -745,7 +755,7 @@ void RS01Verify(Method *self)
       else
       {    PrintLog(_("* ecc blocks       : %lld (BAD, expected %lld)\n"),ecc_blocks,ecc_expected);
 	   if(Closure->guiMode)
-	     SetLabelText(GTK_LABEL(wl->cmpEccBlocks), _("<span color=\"red\">%lld (bad, expected %lld)</span>"),ecc_blocks,ecc_expected);
+	      SetLabelText(GTK_LABEL(wl->cmpEccBlocks), _("<span %s>%lld (bad, expected %lld)</span>"),Closure->redMarkup,ecc_blocks,ecc_expected);
       }
 
       /*** Test ecc file against its own md5sum */
@@ -773,7 +783,7 @@ void RS01Verify(Method *self)
 
 	 if(Closure->stopActions)   
 	 {  SetLabelText(GTK_LABEL(wl->cmpEccResult), 
-			 _("<span color=\"red\">Aborted by user request!</span>")); 
+			 _("<span %s>Aborted by user request!</span>"), Closure->redMarkup); 
 	   goto terminate;
 	 }
       }
@@ -783,9 +793,9 @@ void RS01Verify(Method *self)
       if(memcmp(eh->eccSum, digest, 16))
       {	   PrintLog(_("* ecc md5sum       : BAD, ecc file may be damaged!\n"));
 	   if(Closure->guiMode)
-	   {  SetLabelText(GTK_LABEL(wl->cmpEccMd5Sum), _("<span color=\"red\">bad</span>"));
+	   {  SetLabelText(GTK_LABEL(wl->cmpEccMd5Sum), _("<span %s>bad</span>"), Closure->redMarkup);
 	      if(!ecc_advice)
-		ecc_advice = g_strdup(_("<span color=\"red\">Error correction file may be damaged!</span>"));
+		 ecc_advice = g_strdup_printf(_("<span %s>Error correction file may be damaged!</span>"), Closure->redMarkup);
 	   }
       }
       else 
@@ -803,7 +813,8 @@ void RS01Verify(Method *self)
          g_free(ecc_advice);
       }
       else SetLabelText(GTK_LABEL(wl->cmpEccResult),
-		        _("<span color=\"#008000\">Good error correction file.</span>"));
+		        _("<span %s>Good error correction file.</span>"), 
+			Closure->greenMarkup);
    }
 
    /*** Close and clean up */

@@ -37,7 +37,7 @@ function dictionary_cs()
    trans_hosting="Hostováno pod"
 
    trans_fdl="Doslovné kopírování a distribuce celého tohoto článku jsou pro jakékoli médium povoleny za předpokladu, že tato poznámka zůstane zachována."
-   trans_copyright="Autorská práva 2004-2006 Carsten Gnörlich, k překladu 2006 Luboš Staněk."
+   trans_copyright="Autorská práva 2004-2007 Carsten Gnörlich, k překladu 2006 Luboš Staněk."
    trans_modified="Information in this handbook relates to the original version of dvdisaster and may not be applicable."
 }
 
@@ -500,7 +500,7 @@ Skenování vyžaduje následující parametry (výchozí hodnoty jsou uvedeny v
 
 <table class="example" width="100%" bgcolor="#ffffe0"><tr><td>
 user@linux&gt; <b>dvdisaster -s -d /dev/hdc -e medium.ecc</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnoerlich.<br>
 [... zbytek oznámení GPL ...]<p>
 
 Zařízení: /dev/cdrom, HL-DT-STDVDRAM GSA-4165B DL04<br>
@@ -753,7 +753,7 @@ Pro načtení obrazu budete potřebovat následující parametry
 
 <table class="example" width="100%" bgcolor="#ffffe0"><tr><td>
 user@linux&gt; <b>dvdisaster -r -d /dev/hdc -i medium.iso</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnoerlich.<br>
 [... zbytek oznámení GPL ...]<p>
 
 Zařízení: /dev/cdrom, HL-DT-STDVDRAM GSA-4165B DL04<br>
@@ -793,7 +793,7 @@ Jakmile je načtení dokončeno, vytvořte soubor oprav chyb:<p>
 
 <table class="example" width="100%" bgcolor="#ffffe0"><tr><td>
 user@linux&gt; <b>dvdisaster -c -i medium.iso -e medium.ecc </b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnoerlich.<br>
 [... zbytek oznámení GPL ...]<p>
 
 Otevírání medium.iso: 2224288 sektorů média.<br>
@@ -882,7 +882,7 @@ CD/DVD, zadejte:<p>
 
 <table class="example" width="100%" bgcolor="#ffffe0"><tr><td>
 user@linux&gt; <b>dvdisaster -c -mRS02 -i image.iso</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnoerlich.<br>
 [... zbytek oznámení GPL ...]<p>
 
 Otevírání /dvd/image.iso: 284234 sektorů média.<p>
@@ -926,7 +926,7 @@ Znovu načtěte obraz pomocí programu dvdisaster po vypálení média:<p>
 
 <table class="example" width="100%" bgcolor="#ffffe0"><tr><td>
 user@linux&gt; <b>dvdisaster -r -d/dev/hdc -i image-new.iso</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnoerlich.<br>
 [... zbytek oznámení GPL ...]<p>
 
 Zařízení: /dev/hdc, &nbsp;ATAPI DVD+RW 8X4X12 B2K7<br>
@@ -956,7 +956,7 @@ Zkontrolujte obraz:<p>
 
 <table class="example" width="100%" bgcolor="#ffffe0"><tr><td>
 user@linux&gt; <b>dvdisaster -t -i image-new.iso</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnörlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnörlich.<br>
 [... zbytek oznámení GPL ...]<p>
 
 dvd/new-image.iso: přítomen, obsahuje 357818 sektorů média.<br>
@@ -1102,7 +1102,7 @@ V takovém případě se program dvdisaster pokusí znovu načíst pouze chyběj
 
 <table class="example" width="100%" bgcolor="#ffffe0"><tr><td>
 user@linux&gt; <b>dvdisaster -r --adaptive-read -i medium.iso -e medium.ecc</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnoerlich.<br>
 [... zbytek oznámení GPL ...]<p>
 
 Zařízení: /dev/cdrom, HL-DT-STDVDRAM GSA-4165B DL04<br>
@@ -1239,7 +1239,7 @@ Oprava vyžaduje následující parametry (výchozí hodnoty jsou uvedeny v záv
 
 <table class="example" width="100%" bgcolor="#ffffe0"><tr><td>
 user@linux&gt; <b>dvdisaster -f -i medium.iso -e medium.ecc</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnoerlich.<br>
 [... zbytek oznámení GPL ...]<p>
 
 Otevírání medium.iso: 2224288 sektorů média.<p>
@@ -1366,7 +1366,7 @@ Budete potřebovat následující parametry (výchozí hodnoty jsou uvedeny v z�
 
 <table class="example" width="100%" bgcolor="#ffffe0"><tr><td>
 user@linux&gt; <b>dvdisaster -t -i medium.iso -e medium.ecc</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnörlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnörlich.<br>
 [... zbytek oznámení GPL ...]<p>
 
 /dvd/medium.iso: přítomen, obsahuje 2224288 sektorù média.<br>
@@ -1847,7 +1847,7 @@ vrstvy <a href="qa10.html#aspi">ASPI</a> ve Windows:<p>
 
 <table class="example-win" width="100%" bgcolor="#e0e0ff"><tr><td>
 user@windows&gt; dvdisaster <b>-l</b><br>
-dvdisaster-${project_version} Copyright 2004-2006 Carsten Gnoerlich.<br>
+dvdisaster-${project_version} Copyright 2004-2007 Carsten Gnoerlich.<br>
 [... zbytek oznámení GPL ...]<p>
 
 Seznam ASPI CD/DVD mechanik:<p>
@@ -2175,18 +2175,18 @@ U verze ve zdrojovém kódu si přečtěte <a href="download20.html">instalačn�
 
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.70</b></td><td align="right">30-Jul-2006</td></tr>
+<tr><td><b>dvdisaster-0.70</b></td><td align="right">10-Dec-2006</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
-        <td><a href="${tar_0_70}">dvdisaster-0.70.1.tar.bz2</a></td></tr>
+        <td><a href="${tar_0_70}">dvdisaster-0.70.3.tar.bz2</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="${tar_0_70_sig}">dvdisaster-0.70.1.tar.bz2.gpg</a></td></tr>
+        <td><a href="${tar_0_70_sig}">dvdisaster-0.70.3.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Binary for Windows:&nbsp;</td>
-        <td><a href="${setup_0_70}">dvdisaster-0.70.1-setup.exe</a></td></tr>
+        <td><a href="${setup_0_70}">dvdisaster-0.70.3-setup.exe</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="${setup_0_70_sig}">dvdisaster-0.70.1-setup.exe.gpg</a></td></tr>
+        <td><a href="${setup_0_70_sig}">dvdisaster-0.70.3-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
@@ -2203,9 +2203,19 @@ Daniel Nylander provided Swedish translations of the screen texts.<p>
 
 <b>Patches</b> (small changes after version 0.70; files above have been updated):<br>
 
+<b>pl3</b> fixes incorrect recognization of unsupported CD formats which
+produced a Windows blue screen under rare circumstances. Added cancel option
+during RS02 initialization on DVD RW media.
+<i>(10-Dec-2006)</i>.<p>
+
+<b>pl2</b> fixes incorrect memory freeing when the program window is closed.
+Unpacking of documentation screen shots is fixed for PPC platforms.
+Only the source code archives have been updated.
+<i>(03-Oct-2006)</i>.<p>
+
 <b>pl1</b> fixes a bug in adaptive reading for RS02 which would sometimes result in
 reading insufficient data for a successful recovery. Adds some small
-improvements of documentation and usability.
+improvements of documentation and usability. <i>(30-Jul-2006)</i>
 </td></tr></table><p>
 
 The dvdisaster source code is also

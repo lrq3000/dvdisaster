@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2006 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2007 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -72,11 +72,11 @@ static void redraw_labels(GtkWidget *widget, int erase_mask)
    /* Draw the labels */
 
    x = 10; 
-   gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->black);
+   gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->foreground);
 
    y = Closure->readAdaptiveSpiral->my - Closure->readAdaptiveSpiral->diameter/2;
    h = draw_text(d, Closure->readLinearCurve->layout, 
-		 _("Adaptive reading:"), x, y, Closure->black, erase_mask & REDRAW_TITLE); 
+		 _("Adaptive reading:"), x, y, Closure->foreground, erase_mask & REDRAW_TITLE); 
 
    y += h+h/2;
    if(Closure->readAdaptiveSubtitle)
@@ -88,35 +88,35 @@ static void redraw_labels(GtkWidget *widget, int erase_mask)
       if(c)                   /* split text into two lines */
       {  *c = 0;
 	 h = draw_text(d, Closure->readLinearCurve->layout, 
-		       Closure->readAdaptiveSubtitle, x, y, Closure->black, 
+		       Closure->readAdaptiveSubtitle, x, y, Closure->foreground, 
 		       erase_mask & REDRAW_SUBTITLE); 
 	 h = draw_text(d, Closure->readLinearCurve->layout, 
-			c+1, x, y+h, Closure->black, 
+			c+1, x, y+h, Closure->foreground, 
 			erase_mask & REDRAW_SUBTITLE); 
 	 *c = ' ';
       }
       else                    /* draw text in one line */
       {  h = draw_text(d, Closure->readLinearCurve->layout, 
-		       Closure->readAdaptiveSubtitle, x, y, Closure->black, 
+		       Closure->readAdaptiveSubtitle, x, y, Closure->foreground, 
 		       erase_mask & REDRAW_SUBTITLE); 
       }
    }
 
    y += 4*h;
    h = draw_text(d, Closure->readLinearCurve->layout, 
-		 _("Sectors processed"), x, y, Closure->black, erase_mask & REDRAW_TITLE); 
+		 _("Sectors processed"), x, y, Closure->foreground, erase_mask & REDRAW_TITLE); 
 
    y += h;
    snprintf(buf, 255, "  %s: %lld", _("readable"), readable);
-   h = draw_text(d, Closure->readLinearCurve->layout, buf, x, y, Closure->black, erase_mask & REDRAW_PROGRESS); 
+   h = draw_text(d, Closure->readLinearCurve->layout, buf, x, y, Closure->foreground, erase_mask & REDRAW_PROGRESS); 
 
    y += h;
    snprintf(buf, 255, "  %s: %lld", _("correctable"), correctable);
-   h = draw_text(d, Closure->readLinearCurve->layout, buf, x, y, Closure->black, erase_mask & REDRAW_PROGRESS); 
+   h = draw_text(d, Closure->readLinearCurve->layout, buf, x, y, Closure->foreground, erase_mask & REDRAW_PROGRESS); 
 
    y += h;
    snprintf(buf, 255, "  %s: %lld", _("missing"), missing);
-   h = draw_text(d, Closure->readLinearCurve->layout, buf, x, y, Closure->black, erase_mask & REDRAW_PROGRESS); 
+   h = draw_text(d, Closure->readLinearCurve->layout, buf, x, y, Closure->foreground, erase_mask & REDRAW_PROGRESS); 
 
    if(min_required > 0 && readable > 0)
    {  int percent = round(((1000*readable)/(readable+correctable+missing)));
@@ -128,12 +128,12 @@ static void redraw_labels(GtkWidget *widget, int erase_mask)
       snprintf(buf, 255, _("Readable: %d.%d%% / %d.%d%% required"), 
 	       percent/10, percent%10,
 	       min_required/10, min_required%10);
-      h = draw_text(d, Closure->readLinearCurve->layout, buf, x, y, Closure->black, erase_mask & REDRAW_PROGRESS); 
+      h = draw_text(d, Closure->readLinearCurve->layout, buf, x, y, Closure->foreground, erase_mask & REDRAW_PROGRESS); 
    }
 
    y += h;
    snprintf(buf, 255, _("Total recoverable: %d.%d%%"), percent/10, percent%10);
-   h = draw_text(d, Closure->readLinearCurve->layout, buf, x, y, Closure->black, erase_mask & REDRAW_PROGRESS); 
+   h = draw_text(d, Closure->readLinearCurve->layout, buf, x, y, Closure->foreground, erase_mask & REDRAW_PROGRESS); 
 
 
    if(Closure->readAdaptiveErrorMsg && erase_mask & REDRAW_ERRORMSG)
@@ -249,7 +249,7 @@ static gboolean remove_fill_idle_func(gpointer data)
    int i;
 
    for(i=0; i<spiral->segmentCount; i++)
-     if(spiral->segmentColor[i] == Closure->white)
+     if(spiral->segmentColor[i] == Closure->whiteSector)
        DrawSpiralSegment(spiral, Closure->background, i);
 
    return FALSE;

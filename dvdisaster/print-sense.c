@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2006 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2007 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -544,10 +544,10 @@ static struct error_info additional[] =
   {0xff,0x02,R,"Wrong MSF in RAW sector"},
   {0xff,0x03,R,"RAW reading > 16 sectors at once not supported"},
   {0xff,0x04,R,"RAW buffer not allocated"},
-  {0xff,0x05,R,"Atapi/scsi driver possibly broken (invalid zero sector)"},
+  {0xff,0x05,R,"Invalid zero sector"},
   {0xff,0x06,R,"Sector accumulated for analysis"},
   {0xff,0x07,R,"Recovery failed"},
-  {0xff,0x08,R,"Atapi/scsi driver maybe broken (possibly random data returned)"},
+  {0xff,0x08,R,"Invalid sector; possibly random data returned"},
 
   /*
    * Faked error by defect simulation mode

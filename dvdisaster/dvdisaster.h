@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2006 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2007 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -147,6 +147,13 @@ typedef struct _GlobalClosure
    int welcomeMessage;  /* just print dvdisaster logo if FALSE */
    int dotFileVersion;  /* version of dotfile */
    int simulateDefects; /* if >0, this is the percentage of simulated media defects */
+   char *defectiveDump; /* dump non-recoverable sectors into given path */
+   int reverseCancelOK; /* if TRUE the button order is reversed */
+   int eject;           /* eject medium on success */
+   int mediumRetries;   /* try to read medium n times */
+   int pauseAfter;      /* pause after given amount of minutes */
+   int pauseDuration;   /* duration of pause in minutes */
+   int pauseEject;      /* Eject medium during pause */
   
    char *deadSector;    /* Copy of our "dead sector" marker. */
    char *dotFile;       /* path to .dvdisaster file */
@@ -217,9 +224,20 @@ typedef struct _GlobalClosure
    /*** Common stuff for drawing curves and spirals */
 
    GdkGC     *drawGC;
-   GdkColor  *background,*grid,*black,*white;
-   GdkColor  *red,*yellow,*green,*darkgreen,*blue;
-   char      bgString[16];
+   GdkColor  *background,*foreground,*grid;
+   GdkColor  *redText;
+   char      *redMarkup;
+   GdkColor  *greenText;
+   char      *greenMarkup;
+   GdkColor  *barColor;
+   GdkColor  *curveColor;
+   GdkColor  *redSector;
+   GdkColor  *yellowSector;
+   GdkColor  *greenSector;
+   GdkColor  *blueSector;
+   GdkColor  *whiteSector;
+   GdkColor  *darkSector;
+   char      *invisibleDash;
    gint      lastPercent;
    gint      lastSegment;
    gint      lastPlotted;
@@ -367,6 +385,8 @@ void FreeBitmap(Bitmap*);
  ***/
 
 void InitClosure(void);
+void UpdateMarkup(char**, GdkColor*);
+void DefaultColors(void);
 void ClearCrcCache(void);
 void FreeClosure(void);
 void ReadDotfile(void);
@@ -773,6 +793,9 @@ void SwitchAndSetFootline(GtkWidget*, int, GtkWidget*, char*, ...);
 void ReverseCancelOK(GtkDialog*);
 void TimedInsensitive(GtkWidget*, int);
 
+int GetLabelWidth(GtkLabel*, char*, ...);
+void LockLabelSize(GtkLabel*, char*, ...);
+
 /***
  *** preferences.c
  ***/
@@ -781,6 +804,9 @@ void CreatePreferencesWindow(void);
 void UpdateMethodPreferences(void);
 void HidePreferences(void);
 void FreePreferences(void*);
+
+void UpdatePrefsQuerySize(void);
+void RegisterPreferencesHelpWindow(LabelWithOnlineHelp*);
 
 /***
  *** print_sense.c
@@ -841,6 +867,22 @@ void ChangeSpiralCursor(int);
 void RemoveFillMarkers();
 
 /***
+ *** recover-cache.c
+ ***/
+
+typedef struct _dsh
+{  unsigned char mediumFP[16];       /* Medium fingerprint */
+   gint64 lba;                       /* LBA of this sector */
+   gint32 sectorSize;                /* Sector size in bytes */
+   gint32 properties;                /* Flags for future use */
+   gint32 dshFormat;                 /* Format of this file */
+   gint32 nSectors;                  /* Number of sectors in this file */
+} DefectiveSectorHeader;
+
+struct _RawBuffer *rawbuffer_forward;
+void SaveDefectiveSector(struct _RawBuffer*);
+
+/***
  *** recover-raw.c
  ***/
 
@@ -858,6 +900,7 @@ typedef struct _RawBuffer
 
    unsigned char *recovered;  /* working buffer for cd frame recovery */
    unsigned char *byteState;  /* state of error correction */
+   int lba;                   /* sector number were currently working on */
 
    unsigned char *pParity1[N_P_VECTORS];
    unsigned char *pParity2[N_P_VECTORS];
@@ -868,8 +911,17 @@ typedef struct _RawBuffer
    int qParityN[N_Q_VECTORS][2];
 
    int *pLoad,*qLoad;
+
+   /* data structures for the slow_lec */
+
+   unsigned char **pList[N_P_VECTORS];
+   int *pCount[N_P_VECTORS];
+   int pn[N_P_VECTORS];
+
+   unsigned char **qList[N_Q_VECTORS];
+   int *qCount[N_Q_VECTORS];
+   int qn[N_Q_VECTORS];
    
-   int lba;                   /* sector number were currently working on */
 } RawBuffer;
 
 enum                          /* values for byteState */
@@ -881,6 +933,8 @@ enum                          /* values for byteState */
 RawBuffer* CreateRawBuffer(int);
 void ResetRawBuffer(RawBuffer*);
 void FreeRawBuffer(RawBuffer*);
+
+void DumpSector(RawBuffer*, char*);
 
 int ValidateRawSector(RawBuffer*, unsigned char*);
 int TryCDFrameRecovery(RawBuffer*, unsigned char*);

@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2006 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2007 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -113,7 +113,8 @@ static void cleanup(gpointer data)
    if(Closure->guiMode)
    {  if(rc->unreportedError)
          SwitchAndSetFootline(Closure->readLinearNotebook, 1, Closure->readLinearFootline, 
-			      _("<span color=\"red\">Aborted by unrecoverable error.</span> %lld sectors read, %lld sectors unreadable/skipped so far."),rc->readOK,Closure->readErrors); 
+			      _("<span %s>Aborted by unrecoverable error.</span> %lld sectors read, %lld sectors unreadable/skipped so far."),
+			      Closure->redMarkup, rc->readOK, Closure->readErrors); 
    }
 
    if(rc->image)   
@@ -261,9 +262,9 @@ update_mutex:
 static void insert_buttons(GtkDialog *dialog)
 {  
   gtk_dialog_add_buttons(dialog, 
-			 _("Ignore once"), 1,
-			 _("Ignore always"), 2,
-			 _("Abort"), 0, NULL);
+			 _utf("Ignore once"), 1,
+			 _utf("Ignore always"), 2,
+			 _utf("Abort"), 0, NULL);
 } 
 
 void ReadMediumLinear(gpointer data)
@@ -321,7 +322,8 @@ void ReadMediumLinear(gpointer data)
 
 	  if(!answer)
 	  {  SwitchAndSetFootline(Closure->readLinearNotebook, 1, Closure->readLinearFootline, 
-				_("<span color=\"red\">Aborted by user request!</span>")); 
+				  _("<span %s>Aborted by user request!</span>"), 
+				  Closure->redMarkup); 
 	     rc->unreportedError = FALSE;
 	     goto terminate;
 	  }
@@ -473,8 +475,9 @@ reopen_image:
 	      if(!answer)
 	      {  rc->unreportedError = FALSE;
 		 SwitchAndSetFootline(Closure->readLinearNotebook, 1, Closure->readLinearFootline, 
-				      _("<span color=\"red\">Reading aborted.</span> Please select a different image file.")); 
-		 goto terminate;
+				      _("<span %s>Reading aborted.</span> Please select a different image file."),
+				      Closure->redMarkup); 
+ 		 goto terminate;
 	      }
 	      else
 	      {  LargeClose(rc->image);
@@ -620,8 +623,8 @@ reopen_image:
    {  if(Closure->stopActions)   /* somebody hit the Stop button */
       {
 	SwitchAndSetFootline(Closure->readLinearNotebook, 1, Closure->readLinearFootline, 
-			     _("<span color=\"red\">Aborted by user request!</span> %lld sectors read, %lld sectors unreadable/skipped so far."),
-			     rc->readOK,Closure->readErrors); 
+			     _("<span %s>Aborted by user request!</span> %lld sectors read, %lld sectors unreadable/skipped so far."),
+			     Closure->redMarkup, rc->readOK,Closure->readErrors); 
 	rc->unreportedError = FALSE;  /* suppress respective error message */
         goto terminate;
       }
@@ -720,8 +723,8 @@ reread:
 
 	 if(!answer)
 	 {  SwitchAndSetFootline(Closure->readLinearNotebook, 1, Closure->readLinearFootline, 
-				_("<span color=\"red\">Aborted by user request!</span> %lld sectors read, %lld sectors unreadable/skipped so far."),
-				 rc->readOK,Closure->readErrors); 
+				_("<span %s>Aborted by user request!</span> %lld sectors read, %lld sectors unreadable/skipped so far."),
+				 Closure->redMarkup, rc->readOK,Closure->readErrors); 
 	    rc->unreportedError = FALSE;  /* suppress respective error message */
 	    goto terminate;
 	 }
@@ -997,6 +1000,11 @@ step_counter:
 	  Stop(_("Could not truncate %s: %s\n"),Closure->imageName,strerror(errno));
    }
    else if(Closure->readErrors) exitCode = EXIT_FAILURE;
+
+   /*** Eject medium */
+
+   if(Closure->eject && !Closure->readErrors)
+      LoadMedium(rc->dh, FALSE);
 
    /*** Close and clean up */
 

@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2006 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2007 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -82,11 +82,15 @@ typedef struct
 
    /*** Widgets in the Preferences window */
 
-   GtkWidget *radio1,*radio2;
-   GtkWidget *cdButton, *dvdButton1, *dvdButton2;
-   GtkWidget *cdUndoButton, *dvdUndoButton1, *dvdUndoButton2;
-   GtkWidget *cdEntry, *dvdEntry1, *dvdEntry2, *otherEntry;
-   GtkWidget *cacheScale;
+   GtkWidget *radio1A, *radio1B, *radio2A, *radio2B;
+   GtkWidget *cdButtonA, *dvdButton1A, *dvdButton2A;
+   GtkWidget *cdButtonB, *dvdButton1B, *dvdButton2B;
+   GtkWidget *cdUndoButtonA, *dvdUndoButton1A, *dvdUndoButton2A;
+   GtkWidget *cdUndoButtonB, *dvdUndoButton1B, *dvdUndoButton2B;
+   GtkWidget *cdEntryA, *dvdEntry1A, *dvdEntry2A, *otherEntryA;
+   GtkWidget *cdEntryB, *dvdEntry1B, *dvdEntry2B, *otherEntryB;
+   GtkWidget *cacheScaleA, *cacheScaleB;
+   LabelWithOnlineHelp *cacheLwoh;
 
    /*** Some state vars used during fixing */
 

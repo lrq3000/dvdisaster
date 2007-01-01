@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2006 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2007 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -264,11 +264,16 @@ enum
 };
 
 DeviceHandle* OpenAndQueryDevice(char*);
+void CloseDevice(DeviceHandle*);
+
 int InquireDevice(DeviceHandle*, int); 
 int SetRawMode(DeviceHandle*, int, int);
+
 void SpinupDevice(DeviceHandle*);
+void LoadMedium(struct _DeviceHandle*, int);
+int  TestUnitReady(DeviceHandle*);
+
 int ReadSectors(DeviceHandle*, unsigned char*, gint64, int);
 int ReadSectorsFast(DeviceHandle*, unsigned char*, gint64, int);
-void CloseDevice(DeviceHandle*);
 
 #endif /* SCSI_LAYER_H */

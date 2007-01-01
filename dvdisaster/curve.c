@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2006 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2007 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -144,12 +144,12 @@ void RedrawAxes(Curve *curve)
 
    /* Draw and label the left coordinate axis */
 
-   gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->black);
+   gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->foreground);
 
    gdk_draw_line(d, Closure->drawGC,
 		 curve->leftX, curve->topY, curve->leftX, curve->bottomY);
 
-   gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->blue);
+   gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->curveColor);
    SetText(curve->layout, curve->leftLabel, &w, &h);
    x = curve->leftX - w/2;
    if(x < 5) x = 5;
@@ -166,15 +166,15 @@ void RedrawAxes(Curve *curve)
       SetText(curve->layout, buf, &w, &h);
 
       y = yg = CurveY(curve, i);
-      gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->blue);
+      gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->curveColor);
       gdk_draw_layout(d, Closure->drawGC, curve->leftX-9-w, y-h/2, curve->layout);
-      gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->black);
+      gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->foreground);
       gdk_draw_line(d, Closure->drawGC, curve->leftX-6, y, curve->leftX, y);
 
       gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->grid);
       gdk_draw_line(d, Closure->drawGC, curve->leftX, y, curve->rightX, y);
 
-      gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->black);
+      gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->foreground);
       y = CurveY(curve, i+step/2);
       if(y >= curve->topY)
         gdk_draw_line(d, Closure->drawGC, curve->leftX-3, y, curve->leftX, y);
@@ -183,7 +183,7 @@ void RedrawAxes(Curve *curve)
 
    /* Draw the right coordinate axis */
 
-   gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->black);
+   gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->foreground);
 
    gdk_draw_line(d, Closure->drawGC,
 		 curve->rightX, curve->topY, curve->rightX, curve->bottomY);
@@ -191,7 +191,7 @@ void RedrawAxes(Curve *curve)
 
    /* Draw and label the bottom coordinate axis */
 
-   gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->black);
+   gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->foreground);
 
    gdk_draw_line(d, Closure->drawGC,
 		 curve->leftX, curve->bottomY, curve->rightX, curve->bottomY);
@@ -225,7 +225,7 @@ void RedrawAxes(Curve *curve)
          gdk_draw_line(d, Closure->drawGC, x, curve->bottomY-1, x, yg);
       }
 
-      gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->black);
+      gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->foreground);
       x = CurveLX(curve,i+step/2)-1;
       if(x < curve->rightX)
         gdk_draw_line(d, Closure->drawGC, x, curve->bottomY+3, x, curve->bottomY);
@@ -242,7 +242,7 @@ void RedrawCurve(Curve *curve, int last, int which)
    x0  = CurveX(curve, 0);
    fy0 = CurveY(curve, curve->fvalue[0]);
 
-   gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->blue);
+   gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->curveColor);
 
    /* Draw the curve */
 
@@ -253,7 +253,7 @@ void RedrawCurve(Curve *curve, int last, int which)
 
       if(which & REDRAW_FCURVE && curve->fvalue[i] >= 0)
       {  if(x0 < x1)
-	 {  gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->blue);
+	 {  gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->curveColor);
 	    gdk_draw_line(curve->widget->window, Closure->drawGC, x0, fy0, x1, fy1);
 	    fy0 = fy1;
 	 }
@@ -262,7 +262,7 @@ void RedrawCurve(Curve *curve, int last, int which)
 
       if(which & REDRAW_ICURVE)
       {  if(curve->ivalue[i] > 0)
-	 {  gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->red);
+	 {  gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->barColor);
 	    gdk_draw_rectangle(curve->widget->window,
 			       Closure->drawGC, TRUE,
 			       x0, iy, x0==x1 ? 1 : x1-x0, curve->bottomY-iy);

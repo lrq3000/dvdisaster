@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2006 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2007 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -131,7 +131,7 @@ static void cleanup(gpointer data)
 bail_out:
    if(Closure->guiMode)
    {  if(rc->earlyTermination)
-        SetAdaptiveReadFootline(_("Aborted by unrecoverable error."), Closure->red);
+        SetAdaptiveReadFootline(_("Aborted by unrecoverable error."), Closure->redText);
 
       AllowActions(TRUE);
    }
@@ -321,13 +321,15 @@ static void mark_sector(read_closure *rc, gint64 sector, GdkColor *color)
    {  GdkColor *old = Closure->readAdaptiveSpiral->segmentColor[segment];
       GdkColor *new = old;
 
-      if(color == Closure->red && old != Closure->red)
+      if(color == Closure->redSector && old != Closure->redSector)
 	new = color;
 
-      if(color == Closure->yellow && old != Closure->red && old != Closure->yellow)
+      if(   color == Closure->yellowSector
+	 && old != Closure->redSector
+	 && old != Closure->yellowSector)
 	new = color;
 
-      if(color == Closure->green)
+      if(color == Closure->greenSector)
       {  rc->segmentState[segment]++;
 
 	 if(rc->segmentState[segment] >= rc->sectorsPerSegment)
@@ -458,7 +460,7 @@ static void check_size(read_closure *rc)
 			    rc->sectors);
 
       if(!answer)
-      {  SetAdaptiveReadFootline(_("Aborted by user request!"), Closure->red);
+      {  SetAdaptiveReadFootline(_("Aborted by user request!"), Closure->redText);
 	 rc->earlyTermination = FALSE;
 	 cleanup((gpointer)rc);
       }
@@ -474,7 +476,7 @@ static void check_size(read_closure *rc)
 			     rc->sectors);
 
       if(!answer)
-      {  SetAdaptiveReadFootline(_("Aborted by user request!"), Closure->red);
+      {  SetAdaptiveReadFootline(_("Aborted by user request!"), Closure->redText);
 	 rc->earlyTermination = FALSE;
 	 cleanup((gpointer)rc);
       }
@@ -533,7 +535,7 @@ static void check_fingerprint(read_closure *rc)
 			    rc->eh->fpSector);
 
       if(!answer)
-      {  SetAdaptiveReadFootline(_("Aborted by user request!"), Closure->red);
+      {  SetAdaptiveReadFootline(_("Aborted by user request!"), Closure->redText);
 	 rc->earlyTermination = FALSE;
 	 cleanup((gpointer)rc);
       }
@@ -590,7 +592,7 @@ int check_image_fingerprint(read_closure *rc)
         if(!answer)
 	{  rc->earlyTermination = FALSE;
 	   SetAdaptiveReadFootline(_("Reading aborted. Please select a different image file."), 
-				   Closure->red);
+				   Closure->redText);
 	   cleanup((gpointer)rc);
 	}
 	else
@@ -620,7 +622,7 @@ void check_image_size(read_closure *rc, gint64 image_file_sectors)
 			    image_file_sectors-rc->sectors, image_file_sectors, rc->sectors);
 
       if(!answer)
-      {  SetAdaptiveReadFootline(_("Aborted by user request!"), Closure->red);
+      {  SetAdaptiveReadFootline(_("Aborted by user request!"), Closure->redText);
 	 rc->earlyTermination = FALSE;
 	 cleanup((gpointer)rc);
       }
@@ -673,7 +675,7 @@ void build_interval_from_image(read_closure *rc)
       /* Check for user interruption. */
 
       if(Closure->stopActions)   
-      {  SetAdaptiveReadFootline(_("Aborted by user request!"), Closure->red);
+      {  SetAdaptiveReadFootline(_("Aborted by user request!"), Closure->redText);
 	 rc->earlyTermination = FALSE;
 	 cleanup((gpointer)rc);
       }
@@ -689,7 +691,7 @@ void build_interval_from_image(read_closure *rc)
       current_missing = !memcmp(rc->buf, Closure->deadSector, n);
 
       if(current_missing)
-	mark_sector(rc, s, Closure->red);
+	mark_sector(rc, s, Closure->redSector);
 
       /* Compare checksums if available */
 
@@ -716,7 +718,7 @@ void build_interval_from_image(read_closure *rc)
 	 crc = Crc32(rc->buf, 2048); 
 	 if(crc != rc->crcbuf[crcidx++] && !current_missing)
 	 {  current_missing = 1;
-	    mark_sector(rc, s, Closure->yellow);
+	    mark_sector(rc, s, Closure->yellowSector);
 	 }
       }
 
@@ -731,7 +733,7 @@ void build_interval_from_image(read_closure *rc)
 	 if(rc->map)
 	   SetBit(rc->map, s);
 
-	 mark_sector(rc, s, Closure->green);
+	 mark_sector(rc, s, Closure->greenSector);
 
 #ifdef CHECK_VISITED
 	 rc->count[s]++;
@@ -815,7 +817,7 @@ void build_interval_from_image(read_closure *rc)
 #ifdef CHECK_VISITED
 		  count[layer_idx]++;
 #endif
-		  mark_sector(rc, layer_idx, Closure->green);
+		  mark_sector(rc, layer_idx, Closure->greenSector);
 	       }
 
 	       layer_idx += rc->rs01LayerSectors;
@@ -848,7 +850,7 @@ void build_interval_from_image(read_closure *rc)
 		   && !GetBit(rc->map, sector))
 	       {  SetBit(rc->map, sector);
 		  rc->correctable++;
-		  mark_sector(rc, sector, Closure->green);
+		  mark_sector(rc, sector, Closure->greenSector);
 	       }
 	    }
 	 }
@@ -890,12 +892,12 @@ static void mark_rs02_headers(read_closure *rc)
    while(hpos < end)
    {  if(!GetBit(rc->map, hpos))
       {  SetBit(rc->map, hpos);
-	 mark_sector(rc, hpos, Closure->green);
+	 mark_sector(rc, hpos, Closure->greenSector);
 	 rc->correctable++;
       }
       if(!GetBit(rc->map, hpos+1))
       {  SetBit(rc->map, hpos+1);
-         mark_sector(rc, hpos+1, Closure->green);
+         mark_sector(rc, hpos+1, Closure->greenSector);
 	 rc->correctable++;
       }
 
@@ -910,9 +912,9 @@ static void mark_rs02_headers(read_closure *rc)
 static void insert_buttons(GtkDialog *dialog)
 {  
   gtk_dialog_add_buttons(dialog, 
-			 _("Ignore once"), 1,
-			 _("Ignore always"), 2,
-			 _("Abort"), 0, NULL);
+			 _utf("Ignore once"), 1,
+			 _utf("Ignore always"), 2,
+			 _utf("Abort"), 0, NULL);
 } 
 
 /*
@@ -974,7 +976,7 @@ void fill_gap(read_closure *rc)
 	     
      if(Closure->stopActions)
      {  if(Closure->guiMode)
-	 SetAdaptiveReadFootline(_("Aborted by user request!"), Closure->red);
+	 SetAdaptiveReadFootline(_("Aborted by user request!"), Closure->redText);
 
         rc->earlyTermination = FALSE;  /* suppress respective error message */
 	cleanup((gpointer)rc);
@@ -994,7 +996,7 @@ void fill_gap(read_closure *rc)
      {  int segment = i / rc->sectorsPerSegment;
        
         if(Closure->readAdaptiveSpiral->segmentColor[segment] == Closure->background)
-	  ChangeSegmentColor(Closure->white, segment);
+	  ChangeSegmentColor(Closure->whiteSector, segment);
      }
   }
 
@@ -1172,7 +1174,7 @@ reopen_image:
       {  char *t = _("\nSufficient data for reconstructing the image is available.\n");
 	 PrintLog(t);
 	 if(Closure->guiMode)
-	   SetAdaptiveReadFootline(t, Closure->darkgreen);
+	   SetAdaptiveReadFootline(t, Closure->greenText);
 	 goto finished;
       }
 
@@ -1211,7 +1213,7 @@ reopen_image:
  
 	 if(Closure->stopActions)          /* somebody hit the Stop button */
 	 {  if(Closure->guiMode)
-	       SetAdaptiveReadFootline(_("Aborted by user request!"), Closure->red);
+	       SetAdaptiveReadFootline(_("Aborted by user request!"), Closure->redText);
 
 	    rc->earlyTermination = FALSE;  /* suppress respective error message */
 	    goto terminate;
@@ -1281,7 +1283,7 @@ reopen_image:
 	      ignore_fatal = TRUE;
 
 	    if(!answer)
-	    {  SetAdaptiveReadFootline(_("Aborted by unrecoverable error."), Closure->red);
+	    {  SetAdaptiveReadFootline(_("Aborted by unrecoverable error."), Closure->redText);
 
 	       rc->earlyTermination = FALSE;  /* suppress respective error message */
 	       goto terminate;
@@ -1340,7 +1342,7 @@ reopen_image:
 		      Stop(_("Failed writing to sector %lld in image [%s]: %s"),
 			   b, "unv", strerror(errno));
 
-		    mark_sector(rc, b, Closure->yellow);
+		    mark_sector(rc, b, Closure->yellowSector);
 
 		    if(rc->highestWrittenSector < b)
 		      rc->highestWrittenSector = b;
@@ -1354,7 +1356,7 @@ reopen_image:
 		    SetBit(rc->map, b);
 		    rc->readable++;
 
-		    mark_sector(rc, b, Closure->green);
+		    mark_sector(rc, b, Closure->greenSector);
 		    
 		    if(rc->highestWrittenSector < b)
 		      rc->highestWrittenSector = b;
@@ -1371,7 +1373,7 @@ reopen_image:
 		    SetBit(rc->map, b);
 		  rc->readable++;
 
-		  mark_sector(rc, b, Closure->green);
+		  mark_sector(rc, b, Closure->greenSector);
 
 		  if(rc->highestWrittenSector < b)
 		    rc->highestWrittenSector = b;
@@ -1409,7 +1411,7 @@ reopen_image:
 			   && !GetBit(rc->map, layer_idx))
 			{  SetBit(rc->map, layer_idx);
 			   rc->correctable++;
-			   mark_sector(rc, layer_idx, Closure->green);
+			   mark_sector(rc, layer_idx, Closure->greenSector);
 
 #ifdef CHECK_VISITED
 			   count[layer_idx]++;
@@ -1452,7 +1454,7 @@ reopen_image:
 			   && !GetBit(rc->map, sector))
 			{  SetBit(rc->map, sector);
 			   rc->correctable++;
-			   mark_sector(rc, sector, Closure->green);
+			   mark_sector(rc, sector, Closure->greenSector);
 			   fill_correctable_gap(rc, sector);
 			}
 		     }
@@ -1477,7 +1479,9 @@ reopen_image:
 	       print_progress(rc, TRUE);
 	       PrintLog(t);
 	       if(Closure->guiMode && rc->ei)
-		 SetAdaptiveReadFootline(t, Closure->black);
+		  SetAdaptiveReadFootline(t, Closure->foreground);
+	       if(Closure->eject)
+		  LoadMedium(rc->dh, FALSE);
 	       goto finished;
 	    }
 	 }  /* end of if(!status) (successful reading of sector(s)) */
@@ -1505,7 +1509,7 @@ reopen_image:
 		 Stop(_("Failed writing to sector %lld in image [%s]: %s"),
 		      s, "nds", strerror(errno));
 
-	       mark_sector(rc, s+i, Closure->red);
+	       mark_sector(rc, s+i, Closure->redSector);
 	    }
 
 	    if(rc->highestWrittenSector < s+nsectors)
@@ -1623,7 +1627,7 @@ finished:
 		  "(%lld readable,  %lld correctable,  %lld still missing).\n"),
 		t, rc->readable, rc->correctable, rc->sectors-total);
       if(Closure->guiMode)
-	 SetAdaptiveReadFootline(t, Closure->black);
+	 SetAdaptiveReadFootline(t, Closure->foreground);
 
       g_free(t);
       exitCode = EXIT_FAILURE;
@@ -1636,7 +1640,9 @@ finished:
       {  char *t = _("\nGood! All sectors have been read.\n"); 
 	 PrintLog(t);
 	 if(Closure->guiMode)
-	   SetAdaptiveReadFootline(t, Closure->black);
+	   SetAdaptiveReadFootline(t, Closure->foreground);
+	 if(Closure->eject)
+	    LoadMedium(rc->dh, FALSE);
       }
       else
       {  int percent = (int)((1000LL*rc->readable)/rc->sectors);
@@ -1648,7 +1654,7 @@ finished:
 		   t, percent/10, percent%10, rc->readable);
 
 	 if(Closure->guiMode)
-	   SetAdaptiveReadFootline(t, Closure->black);
+	   SetAdaptiveReadFootline(t, Closure->foreground);
 	 g_free(t);
 	 exitCode = EXIT_FAILURE;
       }

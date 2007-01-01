@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2006 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2007 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -135,7 +135,7 @@ static gboolean results_idle_func(gpointer data)
 {  RS02Widgets *wl = (RS02Widgets*)data;
 
    SetLabelText(GTK_LABEL(wl->fixCorrected), _("Repaired: %lld"), wl->corrected); 
-   SetLabelText(GTK_LABEL(wl->fixUncorrected), _("Unrepairable: <span color=\"red\">%lld</span>"), wl->uncorrected); 
+   SetLabelText(GTK_LABEL(wl->fixUncorrected), _("Unrepairable: <span %s>%lld</span>"),Closure->redMarkup, wl->uncorrected); 
    SetLabelText(GTK_LABEL(wl->fixProgress), _("Progress: %3d.%1d%%"), wl->percent/10, wl->percent%10);
 
    return FALSE;
@@ -182,7 +182,7 @@ static gboolean curve_idle_func(gpointer data)
    /*** Draw the error value */
 
    if(wl->fixCurve->ivalue[wl->percent] > 0)
-   {  gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->red);
+   {  gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->barColor);
       gdk_draw_rectangle(wl->fixCurve->widget->window,
 			 Closure->drawGC, TRUE,
 			 x0, y, x0==x1 ? 1 : x1-x0, wl->fixCurve->bottomY-y);
@@ -192,7 +192,7 @@ static gboolean curve_idle_func(gpointer data)
    /* Redraw the ecc capacity threshold line */
 
    y = CurveY(wl->fixCurve, wl->eccBytes);  
-   gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->green);
+   gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->greenSector);
    gdk_draw_line(wl->fixCurve->widget->window,
 		 Closure->drawGC,
 		 wl->fixCurve->leftX-6, y, wl->fixCurve->rightX+6, y);
@@ -244,7 +244,7 @@ static void redraw_curve(RS02Widgets *wl)
    /* Ecc capacity threshold line */
 
    y = CurveY(wl->fixCurve, wl->eccBytes);  
-   gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->green);
+   gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->greenSector);
    gdk_draw_line(wl->fixCurve->widget->window,
 		 Closure->drawGC,
 		 wl->fixCurve->leftX-6, y, wl->fixCurve->rightX+6, y);
@@ -362,7 +362,7 @@ static gchar* format_cb(GtkScale *scale, gdouble value, gpointer data)
    char *label;
 
    if(GPOINTER_TO_INT(data) == PREF_CACHE)
-     label = g_strdup_printf(_utf("%d MB of system memory"), cache_size[nroots]);
+     label = g_strdup(" ");
    else
      label = g_strdup_printf(_utf("%4.1f%% redundancy (%d roots)"),
 			    ((double)nroots*100.0)/(double)ndata,
@@ -372,11 +372,23 @@ static gchar* format_cb(GtkScale *scale, gdouble value, gpointer data)
    return label;
 }
 
-static void scale_cb(GtkWidget *widget, gpointer data)
-{  int value = gtk_range_get_value(GTK_RANGE(widget));
+static void cache_cb(GtkWidget *widget, gpointer data)
+{  RS02Widgets *wl = (RS02Widgets*)data;
+   LabelWithOnlineHelp *lwoh = wl->cacheLwoh;
+   int value;
+   char *text, *utf;
 
+   value = gtk_range_get_value(GTK_RANGE(widget));
    Closure->cacheMB = cache_size[value];
+	
+   text = g_strdup_printf(_("%d MB of file cache"), Closure->cacheMB);
+   utf  = g_locale_to_utf8(text, -1, NULL, NULL, NULL);
+   gtk_label_set_markup(GTK_LABEL(lwoh->normalLabel), utf);
+   gtk_label_set_markup(GTK_LABEL(lwoh->linkLabel), utf);
+   SetOnlineHelpLinkText(lwoh, text);
    UpdateMethodPreferences();
+   g_free(text);
+   g_free(utf);
 }
 
 static void toggle_cb(GtkWidget *widget, gpointer data)
@@ -386,37 +398,80 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 
    if(state == TRUE)
    {  
-      if(widget == wl->radio1) /* automatic */
+      if(widget == wl->radio1A) /* automatic */
       {  
-	 gtk_widget_set_sensitive(wl->cdEntry, TRUE);
-	 gtk_widget_set_sensitive(wl->dvdEntry1, TRUE);
-	 gtk_widget_set_sensitive(wl->dvdEntry2, TRUE);
-	 gtk_widget_set_sensitive(wl->cdButton, TRUE);
-	 gtk_widget_set_sensitive(wl->dvdButton1, TRUE);
-	 gtk_widget_set_sensitive(wl->dvdButton2, TRUE);
-	 gtk_widget_set_sensitive(wl->cdUndoButton, TRUE);
-	 gtk_widget_set_sensitive(wl->dvdUndoButton1, TRUE);
-	 gtk_widget_set_sensitive(wl->dvdUndoButton2, TRUE);
+	 gtk_widget_set_sensitive(wl->cdEntryA, TRUE);
+	 gtk_widget_set_sensitive(wl->dvdEntry1A, TRUE);
+	 gtk_widget_set_sensitive(wl->dvdEntry2A, TRUE);
+	 gtk_widget_set_sensitive(wl->cdButtonA, TRUE);
+	 gtk_widget_set_sensitive(wl->dvdButton1A, TRUE);
+	 gtk_widget_set_sensitive(wl->dvdButton2A, TRUE);
+	 gtk_widget_set_sensitive(wl->cdUndoButtonA, TRUE);
+	 gtk_widget_set_sensitive(wl->dvdUndoButton1A, TRUE);
+	 gtk_widget_set_sensitive(wl->dvdUndoButton2A, TRUE);
 
-	 gtk_widget_set_sensitive(wl->otherEntry, FALSE);
+	 gtk_widget_set_sensitive(wl->otherEntryA, FALSE);
+
+	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wl->radio1B), TRUE);
 
          Closure->mediumSize = 0;
       }
 
-      if(widget == wl->radio2) /* user specified value */
-      {  const char *value = gtk_entry_get_text(GTK_ENTRY(wl->otherEntry));
+      if(widget == wl->radio1B) /* automatic */
+      {  
+	 gtk_widget_set_sensitive(wl->cdEntryB, TRUE);
+	 gtk_widget_set_sensitive(wl->dvdEntry1B, TRUE);
+	 gtk_widget_set_sensitive(wl->dvdEntry2B, TRUE);
+	 gtk_widget_set_sensitive(wl->cdButtonB, TRUE);
+	 gtk_widget_set_sensitive(wl->dvdButton1B, TRUE);
+	 gtk_widget_set_sensitive(wl->dvdButton2B, TRUE);
+	 gtk_widget_set_sensitive(wl->cdUndoButtonB, TRUE);
+	 gtk_widget_set_sensitive(wl->dvdUndoButton1B, TRUE);
+	 gtk_widget_set_sensitive(wl->dvdUndoButton2B, TRUE);
 
-	 gtk_widget_set_sensitive(wl->cdEntry, FALSE);
-	 gtk_widget_set_sensitive(wl->dvdEntry1, FALSE);
-	 gtk_widget_set_sensitive(wl->dvdEntry2, FALSE);
-	 gtk_widget_set_sensitive(wl->cdButton, FALSE);
-	 gtk_widget_set_sensitive(wl->dvdButton1, FALSE);
-	 gtk_widget_set_sensitive(wl->dvdButton2, FALSE);
-	 gtk_widget_set_sensitive(wl->cdUndoButton, FALSE);
-	 gtk_widget_set_sensitive(wl->dvdUndoButton1, FALSE);
-	 gtk_widget_set_sensitive(wl->dvdUndoButton2, FALSE);
+	 gtk_widget_set_sensitive(wl->otherEntryB, FALSE);
 
-	 gtk_widget_set_sensitive(wl->otherEntry, TRUE);
+	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wl->radio1A), TRUE);
+
+         Closure->mediumSize = 0;
+      }
+
+      if(widget == wl->radio2A) /* user specified value */
+      {  const char *value = gtk_entry_get_text(GTK_ENTRY(wl->otherEntryA));
+
+	 gtk_widget_set_sensitive(wl->cdEntryA, FALSE);
+	 gtk_widget_set_sensitive(wl->dvdEntry1A, FALSE);
+	 gtk_widget_set_sensitive(wl->dvdEntry2A, FALSE);
+	 gtk_widget_set_sensitive(wl->cdButtonA, FALSE);
+	 gtk_widget_set_sensitive(wl->dvdButton1A, FALSE);
+	 gtk_widget_set_sensitive(wl->dvdButton2A, FALSE);
+	 gtk_widget_set_sensitive(wl->cdUndoButtonA, FALSE);
+	 gtk_widget_set_sensitive(wl->dvdUndoButton1A, FALSE);
+	 gtk_widget_set_sensitive(wl->dvdUndoButton2A, FALSE);
+
+	 gtk_widget_set_sensitive(wl->otherEntryA, TRUE);
+
+	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wl->radio2B), TRUE);
+
+	 Closure->mediumSize = atoll(value);
+      }
+
+      if(widget == wl->radio2B) /* user specified value */
+      {  const char *value = gtk_entry_get_text(GTK_ENTRY(wl->otherEntryB));
+
+	 gtk_widget_set_sensitive(wl->cdEntryB, FALSE);
+	 gtk_widget_set_sensitive(wl->dvdEntry1B, FALSE);
+	 gtk_widget_set_sensitive(wl->dvdEntry2B, FALSE);
+	 gtk_widget_set_sensitive(wl->cdButtonB, FALSE);
+	 gtk_widget_set_sensitive(wl->dvdButton1B, FALSE);
+	 gtk_widget_set_sensitive(wl->dvdButton2B, FALSE);
+	 gtk_widget_set_sensitive(wl->cdUndoButtonB, FALSE);
+	 gtk_widget_set_sensitive(wl->dvdUndoButton1B, FALSE);
+	 gtk_widget_set_sensitive(wl->dvdUndoButton2B, FALSE);
+
+	 gtk_widget_set_sensitive(wl->otherEntryB, TRUE);
+
+	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wl->radio2A), TRUE);
 
 	 Closure->mediumSize = atoll(value);
       }
@@ -435,28 +490,81 @@ static void query_cb(GtkWidget *widget, gpointer data)
    size = CurrentImageCapacity();
    g_snprintf(value, 40, "%lld", (long long int)size);
 
-   if(widget == wl->cdButton)
-     gtk_entry_set_text(GTK_ENTRY(wl->cdEntry), value);
+   if(widget == wl->cdButtonA || widget == wl->cdButtonB)
+   {  gtk_entry_set_text(GTK_ENTRY(wl->cdEntryA), value);
+      gtk_entry_set_text(GTK_ENTRY(wl->cdEntryB), value);
+   }
 
-   if(widget == wl->cdUndoButton)
+   if(widget == wl->cdUndoButtonA || widget == wl->cdUndoButtonB)
    {  g_snprintf(value, 40, "%lld", (long long int)Closure->savedCDSize);
-      gtk_entry_set_text(GTK_ENTRY(wl->cdEntry), value);
+      gtk_entry_set_text(GTK_ENTRY(wl->cdEntryA), value);
+      gtk_entry_set_text(GTK_ENTRY(wl->cdEntryB), value);
    }
 
-   if(widget == wl->dvdButton1)
-     gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry1), value);
+   if(widget == wl->dvdButton1A || widget == wl->dvdButton1B)
+   {  gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry1A), value);
+      gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry1B), value);
+   }
 
-   if(widget == wl->dvdUndoButton1)
+   if(widget == wl->dvdUndoButton1A || widget == wl->dvdUndoButton1B)
    {  g_snprintf(value, 40, "%lld", (long long int)Closure->savedDVDSize1);
-      gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry1), value);
+      gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry1A), value);
+      gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry1B), value);
    }
 
-   if(widget == wl->dvdButton2)
-     gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry2), value);
+   if(widget == wl->dvdButton2A || widget == wl->dvdButton2B)
+   {  gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry2A), value);
+      gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry2B), value);
+   }
 
-   if(widget == wl->dvdUndoButton2)
+   if(widget == wl->dvdUndoButton2A || widget == wl->dvdUndoButton2B )
    {  g_snprintf(value, 40, "%lld", (long long int)Closure->savedDVDSize2);
-      gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry2), value);
+      gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry2A), value);
+      gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry2B), value);
+   }
+}
+
+/*
+ * Track changes of entry widgets
+ */
+
+static void entry_tracker_cb(GtkWidget *widget, gpointer data)
+{  RS02Widgets *wl = (RS02Widgets*)data;
+
+   if(widget == wl->cdEntryA)
+   {  const char *text = gtk_entry_get_text(GTK_ENTRY(wl->cdEntryA));
+      gtk_entry_set_text(GTK_ENTRY(wl->cdEntryB), text);
+   }
+   if(widget == wl->cdEntryB)
+   {  const char *text = gtk_entry_get_text(GTK_ENTRY(wl->cdEntryB));
+      gtk_entry_set_text(GTK_ENTRY(wl->cdEntryA), text);
+   }
+
+   if(widget == wl->dvdEntry1A)
+   {  const char *text = gtk_entry_get_text(GTK_ENTRY(wl->dvdEntry1A));
+      gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry1B), text);
+   }
+   if(widget == wl->dvdEntry1B)
+   {  const char *text = gtk_entry_get_text(GTK_ENTRY(wl->dvdEntry1B));
+      gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry1A), text);
+   }
+
+   if(widget == wl->dvdEntry2A)
+   {  const char *text = gtk_entry_get_text(GTK_ENTRY(wl->dvdEntry2A));
+      gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry2B), text);
+   }
+   if(widget == wl->dvdEntry2B)
+   {  const char *text = gtk_entry_get_text(GTK_ENTRY(wl->dvdEntry2B));
+      gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry2A), text);
+   }
+
+   if(widget == wl->otherEntryA)
+   {  const char *text = gtk_entry_get_text(GTK_ENTRY(wl->otherEntryA));
+      gtk_entry_set_text(GTK_ENTRY(wl->otherEntryB), text);
+   }
+   if(widget == wl->otherEntryB)
+   {  const char *text = gtk_entry_get_text(GTK_ENTRY(wl->otherEntryB));
+      gtk_entry_set_text(GTK_ENTRY(wl->otherEntryA), text);
    }
 }
 
@@ -473,7 +581,8 @@ void ResetRS02PrefsPage(Method *method)
      if(cache_size[index] > Closure->cacheMB)
        break;
 
-   gtk_range_set_value(GTK_RANGE(wl->cacheScale), index > 0 ? index-1 : index);
+   gtk_range_set_value(GTK_RANGE(wl->cacheScaleA), index > 0 ? index-1 : index);
+   gtk_range_set_value(GTK_RANGE(wl->cacheScaleB), index > 0 ? index-1 : index);
 }
 
 /*
@@ -486,19 +595,19 @@ void ReadRS02Preferences(Method *method)
 {  RS02Widgets *wl = (RS02Widgets*)method->widgetList;
    gint64 value;
 
-   value = atoll(gtk_entry_get_text(GTK_ENTRY(wl->cdEntry)));
+   value = atoll(gtk_entry_get_text(GTK_ENTRY(wl->cdEntryA)));
    Closure->cdSize = value > 0 ? value : 0; 
-   value = atoll(gtk_entry_get_text(GTK_ENTRY(wl->dvdEntry1)));
+   value = atoll(gtk_entry_get_text(GTK_ENTRY(wl->dvdEntry1A)));
    Closure->dvdSize1 = value > 0 ? value : 0; 
-   value = atoll(gtk_entry_get_text(GTK_ENTRY(wl->dvdEntry2)));
+   value = atoll(gtk_entry_get_text(GTK_ENTRY(wl->dvdEntry2A)));
    Closure->dvdSize2 = value > 0 ? value : 0; 
 
-   if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wl->radio1)))   
+   if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wl->radio1A)))   
    {  Closure->mediumSize = 0;
    }
 
-   if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wl->radio2)))   
-   {  value = atoll(gtk_entry_get_text(GTK_ENTRY(wl->otherEntry)));
+   if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wl->radio2A)))   
+   {  value = atoll(gtk_entry_get_text(GTK_ENTRY(wl->otherEntryA)));
    
       Closure->mediumSize = value > 0 ? value : 0; 
    }
@@ -511,9 +620,11 @@ void ReadRS02Preferences(Method *method)
 void CreateRS02PrefsPage(Method *method, GtkWidget *parent)
 {  RS02Widgets *wl = (RS02Widgets*)method->widgetList;
    GtkWidget *frame, *hbox, *vbox, *vbox2, *lab, *scale, *table;
-   GtkWidget *radio1, *radio2, *icon; 
+   GtkWidget *radio, *icon; 
+   LabelWithOnlineHelp *lwoh;
    unsigned int index;
-   char value[40];
+   char *text,value[40];
+   int i;
 
    /*** Redundancy selection */
 
@@ -527,132 +638,353 @@ void CreateRS02PrefsPage(Method *method, GtkWidget *parent)
    hbox = gtk_hbox_new(FALSE, 0);
    gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 
+   /* Drive capacity table header */
+
+   lwoh = CreateLabelWithOnlineHelp(_("Using the smallest possible size from table"), _("Use smallest possible size from following table (in sectors):"));
+   RegisterPreferencesHelpWindow(lwoh);
+
    vbox2 = gtk_vbox_new(FALSE, 0);
    gtk_box_pack_start(GTK_BOX(hbox), vbox2, FALSE, FALSE, 0);
-   wl->radio1 = radio1 = gtk_radio_button_new(NULL);
-   g_signal_connect(G_OBJECT(radio1), "toggled", G_CALLBACK(toggle_cb), method);
-   gtk_box_pack_start(GTK_BOX(vbox2), radio1, FALSE, FALSE, 0);
+
+   for(i=0; i<2; i++)
+   {  
+      radio = gtk_radio_button_new(NULL);
+      g_signal_connect(G_OBJECT(radio), "toggled", G_CALLBACK(toggle_cb), method);
+
+      if(!i)
+      {  wl->radio1A = radio;
+	 gtk_box_pack_start(GTK_BOX(vbox2), radio, FALSE, FALSE, 0);
+      }
+      else
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 4);
+         wl->radio1B = radio;
+	 gtk_box_pack_start(GTK_BOX(hbox), radio, FALSE, FALSE, 0);
+	 gtk_box_pack_start(GTK_BOX(hbox), lwoh->normalLabel, FALSE, FALSE, 0);
+	 AddHelpWidget(lwoh, hbox);
+      }
+   }
+
+   AddHelpParagraph(lwoh, _("<b>Determine augmented image size from table</b>\n\n"
+			    "Augmented images fill up unused medium space "
+			    "with error correction information. Activate this option "
+			    "if you want the augmented image to fit on the smallest "
+			    "possible medium.\n\n"
+
+			    "In order to pick a suitable medium the available media "
+			    "capacities must be known. Default sizes for CD and "
+			    "one/two layered DVD are given in the table. You can edit "
+			    "these sizes according to your needs."));
 
    table = gtk_table_new(5, 4, FALSE);
    gtk_box_pack_start(GTK_BOX(hbox), table, FALSE, FALSE, 0);
 
-   lab = gtk_label_new(_utf("Use smallest possible size from following table (in sectors):"));
-   gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
-   gtk_table_attach(GTK_TABLE(table), lab, 0, 5, 0, 1, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+   gtk_misc_set_alignment(GTK_MISC(lwoh->linkLabel), 0.0, 0.0); 
+   gtk_table_attach(GTK_TABLE(table), lwoh->linkBox, 0, 5, 0, 1, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
 
-   lab = gtk_label_new(_("CD-R / CD-RW:"));
-   gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
-   gtk_table_attach(GTK_TABLE(table), lab, 0, 1, 1, 2, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+   /* CD capacity table row */
 
-   lab = gtk_label_new(_("DVD 1 layer:"));
-   gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
-   gtk_table_attach(GTK_TABLE(table), lab, 0, 1, 2, 3, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+   lwoh = CreateLabelWithOnlineHelp(_("CD-R / CD-RW:"), _("CD-R / CD-RW:"));
+   RegisterPreferencesHelpWindow(lwoh);
 
-   lab = gtk_label_new(_("DVD 2 layers:"));
-   gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
-   gtk_table_attach(GTK_TABLE(table), lab, 0, 1, 3, 4, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+     gtk_misc_set_alignment(GTK_MISC(lwoh->linkLabel), 0.0, 0.0); 
+     gtk_table_attach(GTK_TABLE(table), lwoh->linkBox, 0, 1, 1, 2, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
 
-   wl->cdEntry = gtk_entry_new();
-   gtk_entry_set_width_chars(GTK_ENTRY(wl->cdEntry), 9);
-   gtk_table_attach(GTK_TABLE(table), wl->cdEntry, 1, 2, 1, 2, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+     wl->cdEntryA = gtk_entry_new();
+     gtk_entry_set_width_chars(GTK_ENTRY(wl->cdEntryA), 9);
+     g_signal_connect(G_OBJECT(wl->cdEntryA), "activate", G_CALLBACK(entry_tracker_cb), wl);
+     gtk_table_attach(GTK_TABLE(table), wl->cdEntryA, 1, 2, 1, 2, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
 
-   wl->dvdEntry1 = gtk_entry_new();
-   gtk_entry_set_width_chars(GTK_ENTRY(wl->dvdEntry1), 9);
-   gtk_table_attach(GTK_TABLE(table), wl->dvdEntry1, 1, 2, 2, 3, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+     wl->cdButtonA = gtk_button_new_with_label(_utf("query medium"));
+     g_signal_connect(G_OBJECT(wl->cdButtonA), "clicked", G_CALLBACK(query_cb), wl);
+     gtk_table_attach(GTK_TABLE(table), wl->cdButtonA, 2, 3, 1, 2, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
 
-   wl->dvdEntry2 = gtk_entry_new();
-   gtk_entry_set_width_chars(GTK_ENTRY(wl->dvdEntry2), 9);
-   gtk_table_attach(GTK_TABLE(table), wl->dvdEntry2, 1, 2, 3, 4, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+     icon = gtk_image_new_from_stock(GTK_STOCK_UNDO, GTK_ICON_SIZE_SMALL_TOOLBAR);
+     wl->cdUndoButtonA = gtk_button_new();
+     gtk_container_add(GTK_CONTAINER(wl->cdUndoButtonA), icon);
+     g_signal_connect(G_OBJECT(wl->cdUndoButtonA), "clicked", G_CALLBACK(query_cb), wl);
+     gtk_table_attach(GTK_TABLE(table), wl->cdUndoButtonA, 3, 4, 1, 2, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
 
-   wl->cdButton = gtk_button_new_with_label(_utf("query medium"));
-   g_signal_connect(G_OBJECT(wl->cdButton), "clicked", G_CALLBACK(query_cb), wl);
-   gtk_table_attach(GTK_TABLE(table), wl->cdButton, 2, 3, 1, 2, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+   hbox = gtk_hbox_new(FALSE, 4);
 
-   wl->dvdButton1 = gtk_button_new_with_label(_utf("query medium"));
-   g_signal_connect(G_OBJECT(wl->dvdButton1), "clicked", G_CALLBACK(query_cb), wl);
-   gtk_table_attach(GTK_TABLE(table), wl->dvdButton1, 2, 3, 2, 3, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+   gtk_box_pack_start(GTK_BOX(hbox), lwoh->normalLabel, FALSE, FALSE, 0);
 
-   wl->dvdButton2 = gtk_button_new_with_label(_utf("query medium"));
-   g_signal_connect(G_OBJECT(wl->dvdButton2), "clicked", G_CALLBACK(query_cb), wl);
-   gtk_table_attach(GTK_TABLE(table), wl->dvdButton2, 2, 3, 3, 4, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+   wl->cdEntryB = gtk_entry_new();
+   gtk_entry_set_width_chars(GTK_ENTRY(wl->cdEntryB), 9);
+   g_signal_connect(G_OBJECT(wl->cdEntryB), "activate", G_CALLBACK(entry_tracker_cb), wl);
+   gtk_box_pack_start(GTK_BOX(hbox), wl->cdEntryB, FALSE, FALSE, 0);
 
-   icon = gtk_image_new_from_stock(GTK_STOCK_UNDO, GTK_ICON_SIZE_SMALL_TOOLBAR);
-   wl->cdUndoButton = gtk_button_new();
-   gtk_container_add(GTK_CONTAINER(wl->cdUndoButton), icon);
-   g_signal_connect(G_OBJECT(wl->cdUndoButton), "clicked", G_CALLBACK(query_cb), wl);
-   gtk_table_attach(GTK_TABLE(table), wl->cdUndoButton, 3, 4, 1, 2, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+   wl->cdButtonB = gtk_button_new_with_label(_utf("query medium"));
+   g_signal_connect(G_OBJECT(wl->cdButtonB), "clicked", G_CALLBACK(query_cb), wl);
+   gtk_box_pack_start(GTK_BOX(hbox), wl->cdButtonB, FALSE, FALSE, 0);
 
    icon = gtk_image_new_from_stock(GTK_STOCK_UNDO, GTK_ICON_SIZE_SMALL_TOOLBAR);
-   wl->dvdUndoButton1 = gtk_button_new();
-   gtk_container_add(GTK_CONTAINER(wl->dvdUndoButton1), icon);
-   g_signal_connect(G_OBJECT(wl->dvdUndoButton1), "clicked", G_CALLBACK(query_cb), wl);
-   gtk_table_attach(GTK_TABLE(table), wl->dvdUndoButton1, 3, 4, 2, 3, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+   wl->cdUndoButtonB = gtk_button_new();
+   gtk_container_add(GTK_CONTAINER(wl->cdUndoButtonB), icon);
+   g_signal_connect(G_OBJECT(wl->cdUndoButtonB), "clicked", G_CALLBACK(query_cb), wl);
+   gtk_box_pack_start(GTK_BOX(hbox), wl->cdUndoButtonB, FALSE, FALSE, 0);
+
+   AddHelpWidget(lwoh, hbox);
+
+   AddHelpParagraph(lwoh, _("<b>CD medium size</b>\n\n"
+			    "This is the maximum capacity assumed for 80min CD media. "
+			    "Images smaller than this value will be "
+			    "augmented with error correction information "
+			    "so that they will fit on the specified CD.\n\n"
+			    "You can enter the medium size in sectors of 2K each, "
+			    "or press the \"query medium\" button to use the size "
+			    "of a medium currently inserted in the selected "
+			    "drive. Sometimes this value is incorrect, though.\n"
+			    "Use the arrow button to revert to the last saved value.\n\n"
+			    "Please note that augmented images will at most triple "
+			    "in size as the highest possible redundancy is 200%%.\n"
+			    "Even if this limit is not reached the augmented image "
+			    "may be a few sectors smaller than specified for "
+			    "technical reasons."));
+
+   /* DVD capacity table row */
+
+   lwoh = CreateLabelWithOnlineHelp(_("DVD 1 layer:"), _("DVD 1 layer:"));
+   RegisterPreferencesHelpWindow(lwoh);
+
+     gtk_misc_set_alignment(GTK_MISC(lwoh->linkLabel), 0.0, 0.0); 
+     gtk_table_attach(GTK_TABLE(table), lwoh->linkBox, 0, 1, 2, 3, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+
+     wl->dvdEntry1A = gtk_entry_new();
+     gtk_entry_set_width_chars(GTK_ENTRY(wl->dvdEntry1A), 9);
+     g_signal_connect(G_OBJECT(wl->dvdEntry1A), "activate", G_CALLBACK(entry_tracker_cb), wl);
+     gtk_table_attach(GTK_TABLE(table), wl->dvdEntry1A, 1, 2, 2, 3, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+
+     wl->dvdButton1A = gtk_button_new_with_label(_utf("query medium"));
+     g_signal_connect(G_OBJECT(wl->dvdButton1A), "clicked", G_CALLBACK(query_cb), wl);
+     gtk_table_attach(GTK_TABLE(table), wl->dvdButton1A, 2, 3, 2, 3, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+
+     icon = gtk_image_new_from_stock(GTK_STOCK_UNDO, GTK_ICON_SIZE_SMALL_TOOLBAR);
+     wl->dvdUndoButton1A = gtk_button_new();
+     gtk_container_add(GTK_CONTAINER(wl->dvdUndoButton1A), icon);
+     g_signal_connect(G_OBJECT(wl->dvdUndoButton1A), "clicked", G_CALLBACK(query_cb), wl);
+     gtk_table_attach(GTK_TABLE(table), wl->dvdUndoButton1A, 3, 4, 2, 3, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+
+   hbox = gtk_hbox_new(FALSE, 4);
+
+   gtk_box_pack_start(GTK_BOX(hbox), lwoh->normalLabel, FALSE, FALSE, 0);
+
+   wl->dvdEntry1B = gtk_entry_new();
+   gtk_entry_set_width_chars(GTK_ENTRY(wl->dvdEntry1B), 9);
+   g_signal_connect(G_OBJECT(wl->dvdEntry1B), "activate", G_CALLBACK(entry_tracker_cb), wl);
+   gtk_box_pack_start(GTK_BOX(hbox), wl->dvdEntry1B, FALSE, FALSE, 0);
+
+   wl->dvdButton1B = gtk_button_new_with_label(_utf("query medium"));
+   g_signal_connect(G_OBJECT(wl->dvdButton1B), "clicked", G_CALLBACK(query_cb), wl);
+   gtk_box_pack_start(GTK_BOX(hbox), wl->dvdButton1B, FALSE, FALSE, 0);
 
    icon = gtk_image_new_from_stock(GTK_STOCK_UNDO, GTK_ICON_SIZE_SMALL_TOOLBAR);
-   wl->dvdUndoButton2 = gtk_button_new();
-   gtk_container_add(GTK_CONTAINER(wl->dvdUndoButton2), icon);
-   g_signal_connect(G_OBJECT(wl->dvdUndoButton2), "clicked", G_CALLBACK(query_cb), wl);
-   gtk_table_attach(GTK_TABLE(table), wl->dvdUndoButton2, 3, 4, 3, 4, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+   wl->dvdUndoButton1B = gtk_button_new();
+   gtk_container_add(GTK_CONTAINER(wl->dvdUndoButton1B), icon);
+   g_signal_connect(G_OBJECT(wl->dvdUndoButton1B), "clicked", G_CALLBACK(query_cb), wl);
+   gtk_box_pack_start(GTK_BOX(hbox), wl->dvdUndoButton1B, FALSE, FALSE, 0);
+
+   AddHelpWidget(lwoh, hbox);
+
+   AddHelpParagraph(lwoh, _("<b>Single layer DVD medium size</b>\n\n"
+			    "This is the maximum capacity assumed for single layer DVD media. "
+			    "Images exceeding the smaller media sizes but smaller "
+			    "than this value will be augmented with error correction information "
+			    "so that they will fit on the specified DVD.\n\n"
+			    "You can enter the medium size in sectors of 2K each, "
+			    "or press the \"query medium\" button to use the size "
+			    "of a medium currently inserted in the selected "
+			    "drive. Sometimes this value is incorrect, though.\n"
+			    "Use the arrow button to revert to the last saved value.\n\n"
+			    "Please note that augmented images will at most triple "
+			    "in size as the highest possible redundancy is 200%%.\n"
+			    "Even if this limit is not reached the augmented image "
+			    "may be a few sectors smaller than specified for "
+			    "technical reasons."));
+
+   /* DVD capacity table row */
+
+   lwoh = CreateLabelWithOnlineHelp(_("DVD 2 layers"), _("DVD 2 layers:"));
+   RegisterPreferencesHelpWindow(lwoh);
+
+     gtk_misc_set_alignment(GTK_MISC(lwoh->linkLabel), 0.0, 0.0); 
+     gtk_table_attach(GTK_TABLE(table), lwoh->linkBox, 0, 1, 3, 4, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+
+     wl->dvdEntry2A = gtk_entry_new();
+     gtk_entry_set_width_chars(GTK_ENTRY(wl->dvdEntry2A), 9);
+     g_signal_connect(G_OBJECT(wl->dvdEntry2A), "activate", G_CALLBACK(entry_tracker_cb), wl);
+     gtk_table_attach(GTK_TABLE(table), wl->dvdEntry2A, 1, 2, 3, 4, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+
+     wl->dvdButton2A = gtk_button_new_with_label(_utf("query medium"));
+     g_signal_connect(G_OBJECT(wl->dvdButton2A), "clicked", G_CALLBACK(query_cb), wl);
+     gtk_table_attach(GTK_TABLE(table), wl->dvdButton2A, 2, 3, 3, 4, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+
+     icon = gtk_image_new_from_stock(GTK_STOCK_UNDO, GTK_ICON_SIZE_SMALL_TOOLBAR);
+     wl->dvdUndoButton2A = gtk_button_new();
+     gtk_container_add(GTK_CONTAINER(wl->dvdUndoButton2A), icon);
+     g_signal_connect(G_OBJECT(wl->dvdUndoButton2A), "clicked", G_CALLBACK(query_cb), wl);
+     gtk_table_attach(GTK_TABLE(table), wl->dvdUndoButton2A, 3, 4, 3, 4, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+
+   hbox = gtk_hbox_new(FALSE, 4);
+
+   gtk_box_pack_start(GTK_BOX(hbox), lwoh->normalLabel, FALSE, FALSE, 0);
+
+   wl->dvdEntry2B = gtk_entry_new();
+   gtk_entry_set_width_chars(GTK_ENTRY(wl->dvdEntry2B), 9);
+   g_signal_connect(G_OBJECT(wl->dvdEntry2B), "activate", G_CALLBACK(entry_tracker_cb), wl);
+   gtk_box_pack_start(GTK_BOX(hbox), wl->dvdEntry2B, FALSE, FALSE, 0);
+
+   wl->dvdButton2B = gtk_button_new_with_label(_utf("query medium"));
+   g_signal_connect(G_OBJECT(wl->dvdButton2B), "clicked", G_CALLBACK(query_cb), wl);
+   gtk_box_pack_start(GTK_BOX(hbox), wl->dvdButton2B, FALSE, FALSE, 0);
+
+   icon = gtk_image_new_from_stock(GTK_STOCK_UNDO, GTK_ICON_SIZE_SMALL_TOOLBAR);
+   wl->dvdUndoButton2B = gtk_button_new();
+   gtk_container_add(GTK_CONTAINER(wl->dvdUndoButton2B), icon);
+   g_signal_connect(G_OBJECT(wl->dvdUndoButton2B), "clicked", G_CALLBACK(query_cb), wl);
+   gtk_box_pack_start(GTK_BOX(hbox), wl->dvdUndoButton2B, FALSE, FALSE, 0);
+
+   AddHelpWidget(lwoh, hbox);
+
+   AddHelpParagraph(lwoh, _("<b>Two layered DVD medium size</b>\n\n"
+			    "This is the maximum capacity assumed for two layered DVD media. "
+			    "Images exceeding the smaller media sizes but smaller "
+			    "than this value will be augmented with error correction information "
+			    "so that they will fit on the specified DVD.\n\n"
+			    "You can enter the medium size in sectors of 2K each, "
+			    "or press the \"query medium\" button to use the size "
+			    "of a medium currently inserted in the selected "
+			    "drive. Sometimes this value is incorrect, though.\n"
+			    "Use the arrow button to revert to the last saved value.\n\n"
+			    "Please note that augmented images will at most triple "
+			    "in size as the highest possible redundancy is 200%%.\n"
+			    "Even if this limit is not reached the augmented image "
+			    "may be a few sectors smaller than specified for "
+			    "technical reasons."));
+
+   /* Fill in values from the closure */
 
    g_snprintf(value, 40, "%lld", (long long int)Closure->cdSize);
-   gtk_entry_set_text(GTK_ENTRY(wl->cdEntry), value);
+   gtk_entry_set_text(GTK_ENTRY(wl->cdEntryB), value);
+   gtk_entry_set_text(GTK_ENTRY(wl->cdEntryA), value);
    g_snprintf(value, 40, "%lld", (long long int)Closure->dvdSize1);
-   gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry1), value);
+   gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry1A), value);
+   gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry1B), value);
    g_snprintf(value, 40, "%lld", (long long int)Closure->dvdSize2);
-   gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry2), value);
+   gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry2A), value);
+   gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry2B), value);
 
    /* custom value selection */
 
-   hbox = gtk_hbox_new(FALSE, 4);
-   gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
+   lwoh = CreateLabelWithOnlineHelp(_("Use at most"), _("Use at most"));
+   RegisterPreferencesHelpWindow(lwoh);
 
-   wl->radio2 = radio2 = gtk_radio_button_new_from_widget(GTK_RADIO_BUTTON(radio1));
-   g_signal_connect(G_OBJECT(radio2), "toggled", G_CALLBACK(toggle_cb), method);
-   gtk_box_pack_start(GTK_BOX(hbox), radio2, FALSE, FALSE, 0);
-   lab = gtk_label_new(_utf("Use at most"));
-   gtk_container_add(GTK_CONTAINER(radio2), lab);
+   for(i=0; i<2; i++)
+   {  GtkWidget *hbox = gtk_hbox_new(FALSE, 4);
+      GtkWidget *entry;
 
-   wl->otherEntry = gtk_entry_new();
-   gtk_entry_set_width_chars(GTK_ENTRY(wl->otherEntry), 9);
-   gtk_box_pack_start(GTK_BOX(hbox), wl->otherEntry, FALSE, FALSE, 0);
+      if(!i) wl->radio2A = radio = gtk_radio_button_new_from_widget(GTK_RADIO_BUTTON(wl->radio1A));
+      else   wl->radio2B = radio = gtk_radio_button_new_from_widget(GTK_RADIO_BUTTON(wl->radio1B));
 
-   lab = gtk_label_new(_utf("sectors."));
-   gtk_box_pack_start(GTK_BOX(hbox), lab, FALSE, FALSE, 0);
+      g_signal_connect(G_OBJECT(radio), "toggled", G_CALLBACK(toggle_cb), method);
+      gtk_box_pack_start(GTK_BOX(hbox), radio, FALSE, FALSE, 0);
+
+      gtk_box_pack_start(GTK_BOX(hbox), !i ? lwoh->linkBox : lwoh->normalLabel, FALSE, FALSE, 0);
+ 
+      entry = gtk_entry_new();
+      gtk_entry_set_width_chars(GTK_ENTRY(entry), 9);
+      g_signal_connect(G_OBJECT(entry), "activate", G_CALLBACK(entry_tracker_cb), wl);
+      gtk_box_pack_start(GTK_BOX(hbox), entry, FALSE, FALSE, 0);
+
+      lab = gtk_label_new(_utf("sectors."));
+      gtk_box_pack_start(GTK_BOX(hbox), lab, FALSE, FALSE, 0);
+
+      if(!i)
+      {  wl->otherEntryA = entry;
+	 gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
+      }
+      else
+      {  wl->otherEntryB = entry;
+	 AddHelpWidget(lwoh, hbox);
+      }
+   }
+
+   AddHelpParagraph(lwoh, _("<b>Use at most ... sectors</b>\n\n"
+			    "Use this option to override the table settings; "
+			    "the augmented image will be expanded to the size "
+			    "given in this field.\n"
+			    "This allows for the creation of DVD-sized augmented images "
+			    "which would normally be fitted to CD size, and to use "
+			    "non standard media.\n\n"
+			    "Please note that augmented images will at most triple "
+			    "in size as the highest possible redundancy is 200%%.\n"
+			    "Even if this limit is not reached the augmented image "
+			    "may be a few sectors smaller than specified for "
+			    "technical reasons."));
 
    g_snprintf(value, 40, "%lld", (long long int)Closure->mediumSize);
-   gtk_entry_set_text(GTK_ENTRY(wl->otherEntry), value);
+   gtk_entry_set_text(GTK_ENTRY(wl->otherEntryA), value);
+   gtk_entry_set_text(GTK_ENTRY(wl->otherEntryB), value);
 
    /* Initialize radio buttons */
 
    if(Closure->mediumSize)
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio2), TRUE);
+   {    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wl->radio2A), TRUE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wl->radio2B), TRUE);
+   }
    else 
-   {    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio1), TRUE);
-        gtk_widget_set_sensitive(wl->otherEntry, FALSE);
+   {    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wl->radio1A), TRUE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wl->radio1B), TRUE);
+        gtk_widget_set_sensitive(wl->otherEntryA, FALSE);
+        gtk_widget_set_sensitive(wl->otherEntryB, FALSE);
    }
 
    /* Memory utilization */
-   
+
    frame = gtk_frame_new(_utf("Memory utilization"));
    gtk_box_pack_start(GTK_BOX(parent), frame, FALSE, FALSE, 0);
 
-   hbox = gtk_hbox_new(FALSE, 4);
-   gtk_container_set_border_width(GTK_CONTAINER(hbox), 10);
-   gtk_container_add(GTK_CONTAINER(frame), hbox);
+   text = g_strdup_printf(_("%d MB of file cache"), Closure->cacheMB);
+   lwoh = CreateLabelWithOnlineHelp(_("File cache"), text);
+   RegisterPreferencesHelpWindow(lwoh);
+   g_free(text);
 
-   lab = gtk_label_new(_utf("Use"));
-   gtk_box_pack_start(GTK_BOX(hbox), lab, FALSE, FALSE, 0);
+   wl->cacheLwoh = lwoh;
+   LockLabelSize(GTK_LABEL(lwoh->normalLabel), _utf("%d MB of file cache"), 2222);
+   LockLabelSize(GTK_LABEL(lwoh->linkLabel), _utf("%d MB of file cache"), 2222);
 
-   for(index = 0; index < sizeof(cache_size)/sizeof(int); index++)
-     if(cache_size[index] > Closure->cacheMB)
-       break;
+   for(i=0; i<2; i++)
+   {  GtkWidget *hbox = gtk_hbox_new(FALSE, 4);
 
-   scale = wl->cacheScale = gtk_hscale_new_with_range(0,16,1);
-   gtk_scale_set_value_pos(GTK_SCALE(scale), GTK_POS_RIGHT);
-   gtk_range_set_increments(GTK_RANGE(scale), 1, 1);
-   gtk_range_set_value(GTK_RANGE(scale), index > 0 ? index-1 : index);
-   g_signal_connect(scale, "format-value", G_CALLBACK(format_cb), (gpointer)PREF_CACHE);
-   g_signal_connect(scale, "value-changed", G_CALLBACK(scale_cb), (gpointer)PREF_CACHE);
-   gtk_box_pack_start(GTK_BOX(hbox), scale, TRUE, TRUE, 0);
+      lab = gtk_label_new(_utf("Use"));
+      gtk_box_pack_start(GTK_BOX(hbox), lab, FALSE, FALSE, 0);
 
+      for(index = 0; index < sizeof(cache_size)/sizeof(int); index++)
+	if(cache_size[index] > Closure->cacheMB)
+	  break;
+
+      scale = gtk_hscale_new_with_range(0,16,1);
+      gtk_scale_set_value_pos(GTK_SCALE(scale), GTK_POS_RIGHT);
+      gtk_range_set_increments(GTK_RANGE(scale), 1, 1);
+      gtk_range_set_value(GTK_RANGE(scale), index > 0 ? index-1 : index);
+      g_signal_connect(scale, "format-value", G_CALLBACK(format_cb), (gpointer)PREF_CACHE);
+      g_signal_connect(scale, "value-changed", G_CALLBACK(cache_cb), (gpointer)wl);
+      gtk_box_pack_start(GTK_BOX(hbox), scale, TRUE, TRUE, 0);
+
+      if(!i)
+      {  wl->cacheScaleA = scale; 
+	 gtk_container_set_border_width(GTK_CONTAINER(hbox), 10);
+	 gtk_box_pack_start(GTK_BOX(hbox), lwoh->linkBox, FALSE, FALSE, 0);
+	 gtk_container_add(GTK_CONTAINER(frame), hbox);
+      }
+      else
+      {  wl->cacheScaleB = scale; 
+	 gtk_box_pack_start(GTK_BOX(hbox), lwoh->normalLabel, FALSE, FALSE, 0);
+	 AddHelpWidget(lwoh, hbox);
+      }
+   }
+
+   AddHelpParagraph(lwoh, _("<b>File cache</b>\n\n"
+			    "dvdisaster optimizes access to the image and error correction "
+			    "files by maintaining its own cache. "
+			    "The preset of 32MB is suitable for most systems."));
 }

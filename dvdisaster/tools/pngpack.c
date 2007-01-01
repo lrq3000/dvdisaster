@@ -1,5 +1,5 @@
 /*  pngpack: lossless image compression for a series of screen shots
- *  Copyright (C) 2005,2006 Carsten Gnoerlich.
+ *  Copyright (C) 2005-2007 Carsten Gnoerlich.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -979,7 +979,7 @@ static void render_image(image *pi)
 
 int main(int argc, char *argv[])
 {  
-   fprintf(stdout, "pngpack-0.10 *** Copyright 2005,2006 Carsten Gnoerlich.\n"
+   fprintf(stdout, "pngpack-0.10 *** Copyright 2005-2007 Carsten Gnoerlich.\n"
 	           "This software comes with  ABSOLUTELY NO WARRANTY.  This\n"
 	           "is free software and you are welcome to redistribute it\n"
 		   "under the conditions of the GNU GENERAL PUBLIC LICENSE.\n"  

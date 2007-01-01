@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2006 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2007 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -193,7 +193,7 @@ void DrawSpiralLabel(Spiral *spiral, PangoLayout *layout,
    gdk_draw_rectangle(d, Closure->drawGC, TRUE, x, y+(h-6)/2, 6, 6);
    gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->grid);
    gdk_draw_rectangle(d, Closure->drawGC, FALSE, x, y+(h-6)/2, 6, 6);
-   gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->black);
+   gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->foreground);
    gdk_draw_layout(d, Closure->drawGC, x+10, y, layout);
 }
 
@@ -231,5 +231,5 @@ void MoveSpiralCursor(Spiral *spiral, int to_segment)
   /* Draw cursor at new place */
 
   spiral->colorUnderCursor = spiral->segmentColor[to_segment];
-  DrawSpiralSegment(spiral, Closure->blue, to_segment);
+  DrawSpiralSegment(spiral, Closure->blueSector, to_segment);
 }

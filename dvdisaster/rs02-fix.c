@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2006 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2007 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -50,7 +50,8 @@ static void fix_cleanup(gpointer data)
    {  if(fc->earlyTermination)
          SwitchAndSetFootline(fc->wl->fixNotebook, 1,
 			      fc->wl->fixFootline,
-			      _("<span color=\"red\">Aborted by unrecoverable error.</span>")); 
+			      _("<span %s>Aborted by unrecoverable error.</span>"),
+			      Closure->redMarkup); 
       AllowActions(TRUE);
    }
 
@@ -223,7 +224,8 @@ void RS02Fix(Method *self)
         if(!answer)
         {  SwitchAndSetFootline(fc->wl->fixNotebook, 1,
 				fc->wl->fixFootline,
-				_("<span color=\"red\">Aborted by user request!</span>")); 
+				_("<span %s>Aborted by user request!</span>"),
+				Closure->redMarkup); 
 	   fc->earlyTermination = FALSE;  /* suppress respective error message */
 	   goto terminate;
 	}
@@ -243,7 +245,8 @@ void RS02Fix(Method *self)
        if(!answer)
        {  SwitchAndSetFootline(fc->wl->fixNotebook, 1,
 			       fc->wl->fixFootline,
-			       _("<span color=\"red\">Aborted by user request!</span>")); 
+			       _("<span %s>Aborted by user request!</span>"),
+			       Closure->redMarkup); 
 	  fc->earlyTermination = FALSE;  /* suppress respective error message */
 	  goto terminate;
        }
@@ -333,7 +336,8 @@ void RS02Fix(Method *self)
      if(Closure->stopActions) 
      {   SwitchAndSetFootline(fc->wl->fixNotebook, 1,
 			      fc->wl->fixFootline,
-			      _("<span color=\"red\">Aborted by user request!</span>")); 
+			      _("<span %s>Aborted by user request!</span>"),
+			      Closure->redMarkup); 
          fc->earlyTermination = FALSE;  /* suppress respective error message */
 	 goto terminate;
      }
@@ -802,8 +806,8 @@ skip:
       if(Closure->guiMode)
         SwitchAndSetFootline(wl->fixNotebook, 1, wl->fixFootline,
 			     _("Image sectors could not be fully restored "
-			       "(%lld repaired; <span color=\"red\">%lld unrepaired</span>)"),
-			     corrected, uncorrected);
+			       "(%lld repaired; <span %s>%lld unrepaired</span>)"),
+			     corrected, Closure->redMarkup, uncorrected);
    }
    else
    {  if(!corrected)

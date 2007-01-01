@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2006 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2007 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -143,6 +143,8 @@ typedef enum
    MODIFIER_CDUMP, 
    MODIFIER_DAO, 
    MODIFIER_DEBUG,
+   MODIFIER_DEFECTIVE_DUMP,
+   MODIFIER_EJECT,
    MODIFIER_FILL_UNREADABLE,
    MODIFIER_QUERY_SIZE,
    MODIFIER_RANDOM_SEED,
@@ -330,9 +332,11 @@ int main(int argc, char *argv[])
 	{"clv", 1, 0, MODIFIER_CLV_SPEED },
 	{"create", 0, 0, 'c'},
 	{"dao", 0, 0, MODIFIER_DAO },
-	{"debug", 0, 0, MODIFIER_DEBUG }, 
+	{"debug", 0, 0, MODIFIER_DEBUG },
+	{"defective-dump", 1, 0, MODIFIER_DEFECTIVE_DUMP },
 	{"device", 0, 0, 'd'},
         {"ecc", 1, 0, 'e'},
+	{"eject", 0, 0, MODIFIER_EJECT },
 	{"erase", 1, 0, MODE_ERASE },
 	{"fill-unreadable", 1, 0, MODIFIER_FILL_UNREADABLE },
 	{"fix", 0, 0, 'f'},
@@ -344,8 +348,8 @@ int main(int argc, char *argv[])
 #endif
 	{"marked-image", 1, 0, MODE_MARKED_IMAGE },
 	{"method", 2, 0, 'm' },
-	{"query-size", 1, 0, MODIFIER_QUERY_SIZE },
         {"prefix", 1, 0, 'p'},
+	{"query-size", 1, 0, MODIFIER_QUERY_SIZE },
 	{"random-errors", 1, 0, MODE_RANDOM_ERR },
 	{"random-image", 1, 0, MODE_RANDOM_IMAGE },
 	{"random-seed", 1, 0, MODIFIER_RANDOM_SEED },
@@ -460,6 +464,9 @@ int main(int argc, char *argv[])
          case MODIFIER_DAO: 
 	   Closure->noTruncate = 1; 
 	   break;
+         case MODIFIER_EJECT: 
+	   Closure->eject = 1; 
+	   break;
          case MODIFIER_FILL_UNREADABLE:
 	   if(optarg) Closure->fillUnreadable = strtol(optarg, NULL, 0);
 	   break;
@@ -472,6 +479,9 @@ int main(int argc, char *argv[])
 	   break;
          case MODIFIER_DEBUG:
 	   Closure->debugMode = TRUE;
+	   break;
+         case MODIFIER_DEFECTIVE_DUMP:
+	   Closure->defectiveDump = g_strdup(optarg);
 	   break;
          case MODIFIER_QUERY_SIZE:
 	        if(!strcmp(optarg, "drive")) Closure->querySize = 0;
@@ -777,6 +787,7 @@ int main(int argc, char *argv[])
 	     "  --auto-suffix          - automatically add .iso and .ecc file suffixes\n"
 	     "  --cache-size n         - image cache size in MB during -c mode (default: 32MB)\n"
 	     "  --dao                  - assume DAO disc; do not trim image end\n"
+	     "  --eject                - eject medium after successful read\n"
 	     "  --fill-unreadable n    - fill unreadable sectors with byte n\n"
       	     "  --query-size n         - query drive/udf/ecc for image size (default: ecc)\n"   
 	     "  --read-attempts n-m    - attempts n upto m reads of a defective sector\n"
@@ -790,6 +801,7 @@ int main(int argc, char *argv[])
 	     "  --debug           - enables the following options\n"
 	     "  --byteset s,i,b   - set byte i in sector s to b\n"
              "  --cdump           - creates C #include file dumps instead of hexdumps\n" 
+	     "  --defective-dump p  creates C #include file dumps for unrecoverable sectors\n"
 	     "  --erase sector    - erase the given sector\n"
 	     "  --erase n-m       - erase sectors n - m, inclusively\n"
 	     "  --marked-image n  - create image with n marked random sectors\n"
