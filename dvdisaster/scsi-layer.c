@@ -1327,6 +1327,7 @@ int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
 
      for(idx=s,i=0; i<nsectors; idx++,i++)
        if(GetBit(dh->defects, idx))
+	  //if(GetBit(dh->defects, idx) && (Random() & 1))
        {  dh->sense.sense_key = 3;
 	  dh->sense.asc       = 255;
 	  dh->sense.ascq      = 255;
@@ -1337,7 +1338,7 @@ int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
 
    /* Reset raw reading buffer (if there is one) */
 
-   if(Closure->readRaw && dh->readRaw)
+   if(Closure->readRaw && dh->rawBuffer)
    {  ResetRawBuffer(dh->rawBuffer);
       dh->rawBuffer->recommendedAttempts = Closure->minReadAttempts;
    }
@@ -1352,7 +1353,7 @@ int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
 	   status = dh->readRaw(dh, buf, s, nsectors);
       else status = dh->read(dh, buf, s, nsectors);
 
-      if(Closure->readRaw)
+      if(Closure->readRaw && dh->rawBuffer)
 	recommended_attempts = dh->rawBuffer->recommendedAttempts;
 
       if(status)  /* current try was unsucessful */

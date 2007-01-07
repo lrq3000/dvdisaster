@@ -172,11 +172,13 @@ typedef struct request_sense {
 /***
  ***  The DeviceHandle is pretty much our device abstraction layer. 
  ***
- * It contains info about the opened device and the inserted medium
+ * It contains info about the opened device and the inserted medium.
  */
 
 typedef struct _DeviceHandle
-{
+{  /*
+    * OS-specific data for device access
+    */
 #ifdef SYS_LINUX
    int fd;                    /* device file descriptor */
 #endif
@@ -196,31 +198,62 @@ typedef struct _DeviceHandle
    SCSITaskInterface **taskInterface;
    IOVirtualRange *range;
 #endif
-   char *device;
-   char devinfo[34];          /* whole device info string */
+   
+   /*
+    * OS-independent data about the device
+    */
+
+   char *device;              /* /dev/foo or whatever the OS uses to name it */
+   char devinfo[34];          /* whole device info string from INQUIRY */
    char vendor[34];           /* vendor and product info only */
-   int category;
-   int canReadDefective;      /* TRUE if drive can raw read uncorrectable sectors */
+
+   Sense sense;               /* sense data from last operation */
+
+   double singleRate;         /* supposed KB/sec @ single speed */
+   int maxRate;               /* guessed maximum transfer rate */
+
+   /*
+    * Raw reading support
+    */
+
+   int canReadDefective;      /* TRUE if drive claims to raw read uncorrectable sectors */
    int previousReadMode;      /* read mode prior to switching to raw reads */
    int currentReadMode;       /* current raw read mode */
    RawBuffer *rawBuffer;      /* for performing raw read analysis */
    int (*read)(struct _DeviceHandle*, unsigned char*, int, int);
    int (*readRaw)(struct _DeviceHandle*, unsigned char*, int, int);
-   Sense sense;               /* sense data from last operation */
+
+   /* 
+    * Information about currently inserted medium 
+    */
+
+   gint64 sectors;            /* Number of sectors */
+   int sessions;              
+   int layers;
+   int mainType;              /* CD or DVD */
+   int subType;               /* see enum below */
+   char *typedescr;           /* human readable form of subType */
+   int rewriteable;
+   char *mediumDescr;         /* textual description of medium */
+
+   /*
+    * size alternatives from different sources 
+    */
+
    gint64 userAreaSize;       /* size of user area according to DVD Info struct */
    gint64 rs02Size;           /* size reported in RS02 header */
+
+   /*
+    * file system(s) found on medium
+    */
+   
    EccHeader *rs02Header;     /* copy of RS02 header */
-   int sessions;
-   int layers;
-   int mainType;
-   int subType;
-   char *typedescr;
-   int rewriteable;
-   gint64 sectors;            /* Number of sectors */
-   double singleRate;         /* supposed KB/sec @ single speed */
-   int maxRate;               /* guessed maximum transfer rate */
-   char *mediumDescr;         /* textual description of medium */
    struct _IsoInfo *isoInfo;  /* Information gathered from ISO filesystem */
+
+   /*
+    * debugging stuff
+    */
+
    Bitmap *defects;           /* for defect simulation */
 } DeviceHandle;
 

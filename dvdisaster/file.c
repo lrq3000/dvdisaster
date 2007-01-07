@@ -178,12 +178,6 @@ EccInfo* OpenEccFile(int mode)
 
 void FreeEccInfo(EccInfo *ei)
 {
-#if 0
-   if(ei->oldfile) 
-     if(fclose(ei->oldfile))
-       Stop(_("Error closing error correction file:\n%s"), strerror(errno));
-#endif
-
    if(ei->file)
      if(!LargeClose(ei->file))
        Stop(_("Error closing error correction file:\n%s"), strerror(errno));

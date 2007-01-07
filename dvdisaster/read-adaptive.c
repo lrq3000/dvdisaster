@@ -489,31 +489,36 @@ static void check_size(read_closure *rc)
  * Limit reading to user selected range
  */
 
-static void get_reading_range(read_closure *rc)
-{
+void GetReadingRange(gint64 sectors, gint64 *firstSector, gint64 *lastSector)
+{  gint64 first, last;
+
    if(Closure->readStart || Closure->readEnd)
    {  if(!Closure->guiMode) /* more range checks are made below */ 
-      {  rc->firstSector = Closure->readStart;
-         rc->lastSector  = Closure->readEnd < 0 ? rc->sectors-1 : Closure->readEnd;
+      {  first = Closure->readStart;
+         last  = Closure->readEnd < 0 ? sectors-1 : Closure->readEnd;
       }
       else  /* be more permissive in GUI mode */
-      {  rc->firstSector = 0;
- 	 rc->lastSector  = rc->sectors-1;
+      {  first = 0;
+ 	 last  = sectors-1;
 
 	 if(Closure->readStart <= Closure->readEnd)
-	 {  rc->firstSector = Closure->readStart < rc->sectors ? Closure->readStart : rc->sectors-1;
-	    rc->lastSector  = Closure->readEnd   < rc->sectors ? Closure->readEnd   : rc->sectors-1;
+	 {  first = Closure->readStart < sectors ? Closure->readStart : sectors-1;
+	    last  = Closure->readEnd   < sectors ? Closure->readEnd   : sectors-1;
 	 }
       }
 
-      if(rc->firstSector > rc->lastSector || rc->firstSector < 0 || rc->lastSector >= rc->sectors)
-	Stop(_("Sectors must be in range [0..%lld].\n"),rc->sectors-1);
+      if(first > last || first < 0 || last >= sectors)
+	Stop(_("Sectors must be in range [0..%lld].\n"), sectors-1);
 
-      PrintLog(_("Limiting sector range to [%lld,%lld].\n"),rc->firstSector,rc->lastSector);
+      PrintLog(_("Limiting sector range to [%lld,%lld].\n"), first, last);
    }
    else 
-   {  rc->firstSector = 0; rc->lastSector = rc->sectors-1;
+   {  first = 0; 
+      last  = sectors-1;
    }
+
+   *firstSector = first;
+   *lastSector = last;
 }
 
 /*
@@ -523,7 +528,7 @@ static void get_reading_range(read_closure *rc)
 static void check_fingerprint(read_closure *rc)
 {  unsigned char digest[16];
    int status;
-   
+
    status = ReadSectors(rc->dh, rc->buf, rc->eh->fpSector, 1);
 
    if(status) /* Not readable. Bad luck. */
@@ -940,7 +945,12 @@ void fill_gap(read_closure *rc)
   gint64 i,j;
   gint64 firstUnwritten;
 
-  firstUnwritten = rc->highestWrittenSector + 1;
+  /*** Start filling after rc->highestWrittenSector unless we are
+       skipping from Sector 0 to the user selected start area. */
+
+  if(rc->firstSector > 0 && rc->highestWrittenSector == 0)
+       firstUnwritten = 0;
+  else firstUnwritten = rc->highestWrittenSector + 1;
 
   /*** Tell user what's going on */
 
@@ -1071,21 +1081,21 @@ void ReadMediumAdaptive(gpointer data)
 
    open_and_determine_mode(rc);
 
+   /*** Compare image and ecc fingerprints (only if RS01 type .ecc is available) */
+
+   if(rc->readMode == ECC_IN_FILE)
+      check_fingerprint(rc);
+
    /*** Validate image size against ecc data */
    
    check_size(rc);
 
    /*** Limit the read range from users choice */
 
-   get_reading_range(rc);
+   GetReadingRange(rc->sectors, &rc->firstSector, &rc->lastSector);
    rc->intervalStart = rc->firstSector;
    rc->intervalEnd   = rc->lastSector;
    rc->intervalSize  = rc->intervalEnd - rc->intervalStart + 1;
-
-   /*** Compare image and ecc fingerprints (only if RS01 type .ecc is available) */
-
-   if(rc->readMode == ECC_IN_FILE)
-     check_fingerprint(rc);
 
    /*** Initialize the sector bitmap if ecc information is present.
 	This is used to stop when sufficient data for error correction

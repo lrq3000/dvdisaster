@@ -71,6 +71,7 @@ typedef struct _prefs_context
    GtkWidget *radioAdaptiveA, *radioAdaptiveB;
    GtkWidget *minAttemptsScaleA, *minAttemptsScaleB;
    GtkWidget *maxAttemptsScaleA, *maxAttemptsScaleB;
+   GtkWidget *readMediumA, *readMediumB;
    GtkWidget *rangeToggleA, *rangeToggleB;
    GtkWidget *rangeSpin1A, *rangeSpin1B;
    GtkWidget *rangeSpin2A, *rangeSpin2B;
@@ -257,7 +258,8 @@ enum
    TOGGLE_EJECT,
 
    SPIN_DELAY,
-   
+   SPIN_READ_MEDIUM,
+
    SLIDER_JUMP,
    SLIDER_MIN_READ_ATTEMPTS,
    SLIDER_MAX_READ_ATTEMPTS,
@@ -412,6 +414,18 @@ static void spin_cb(GtkWidget *widget, gpointer data)
 	if(widget == pc->spinUpB)
 	{  if(pc->spinUpA)
 	     gtk_spin_button_set_value(GTK_SPIN_BUTTON(pc->spinUpA), value);
+	}
+	break;
+
+      case SPIN_READ_MEDIUM:
+	Closure->readMedium = value;
+	if(widget == pc->readMediumA)
+	{  if(pc->readMediumB)
+	     gtk_spin_button_set_value(GTK_SPIN_BUTTON(pc->readMediumB), value);
+	}
+	if(widget == pc->readMediumB)
+	{  if(pc->readMediumA)
+	     gtk_spin_button_set_value(GTK_SPIN_BUTTON(pc->readMediumA), value);
 	}
 	break;
    }
@@ -1602,6 +1616,47 @@ void CreatePreferencesWindow(void)
 			 "On DVD media read errors do usually extend over at least 16 sectors for technical "
 			 "reasons. Therefore selecting a value less than 16 is not recommended for DVD."
 			 ));
+
+      /** Media re-reads */
+      
+      frame = gtk_frame_new(_utf("Media read attempts"));
+      gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
+
+      lwoh = CreateLabelWithOnlineHelp(_("Media read attempts"), 
+				       _("Read the whole medium "));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
+	 GtkWidget *spin;
+	 GtkWidget *label;
+
+      	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
+	 spin = gtk_spin_button_new_with_range(1, 20, 1);
+	 gtk_entry_set_width_chars(GTK_ENTRY(spin), 3);
+	 gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin), 
+				   Closure->readMedium < 2 ? 1 : Closure->readMedium);
+	 g_signal_connect(spin, "value-changed", G_CALLBACK(spin_cb), (gpointer)SPIN_READ_MEDIUM);
+	 gtk_box_pack_start(GTK_BOX(hbox), spin, FALSE, FALSE, 0);
+	 label = gtk_label_new(_utf(" times"));
+	 gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+
+	 if(!i)
+	 {  pc->readMediumA = spin;
+	    gtk_container_set_border_width(GTK_CONTAINER(hbox), 10);
+	    gtk_container_add(GTK_CONTAINER(frame), hbox);
+	 }
+	 else
+	 {  pc->readMediumB = spin;
+	    AddHelpWidget(lwoh, hbox);
+	 }
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Media read attempts</b> for the linear reading strategy\n\n"
+			 "If unreadable sectors remain after reading the medium from start to end, "
+			 "the medium is read again upto he given number of times.\n\n"
+			 "Only the missing sectors will be tried in the additional reading passes."));
 
       /*** "Error correction" page */
 

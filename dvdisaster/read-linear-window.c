@@ -80,10 +80,7 @@ static gboolean curve_idle_func(gpointer data)
    gtk_label_set_text(GTK_LABEL(Closure->readLinearSpeed), utf);
    g_free(utf);
 
-   if(!Closure->crcErrors)
-        g_snprintf(buf, 80, _("Unreadable / skipped sectors: %lld"), Closure->readErrors);
-   else g_snprintf(buf, 80, _("Unreadable / skipped sectors: %lld, CRC errors: %lld"), 
-		   Closure->readErrors, Closure->crcErrors);
+   g_snprintf(buf, 80, _("Unreadable / skipped sectors: %lld"), Closure->readErrors);
 
    utf = g_locale_to_utf8(buf, -1, NULL, NULL, NULL);
    gtk_label_set_text(GTK_LABEL(Closure->readLinearErrors), utf);

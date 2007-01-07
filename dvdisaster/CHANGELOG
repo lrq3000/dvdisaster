@@ -1,7 +1,26 @@
-Warning: CD/DVD reading is currently being reworked. DO NOT USE for production work;
-	 images might contain wrong data.
+Warning: CD/DVD reading is currently being reworked. 
+	 DO NOT USE for production work; images might contain wrong data.
 
-0.72 (devel-11) 01-01-2007  Happy new year :-)
+Warning: 0.71 devel-9 upto devel-11 have a serious bug when completing
+	 already existing images. Do not trust or use images created
+	 with those versions; they are likely to contain garbled sectors.
+
+0.71 (devel-12) 07-01-2007
+	- Fixed a DEAD SERIOUS race condition in the linear reader while
+	  completing existing images (0.71 devel-9 to devel-11 are affected).
+	- Changelog had 0.71 misrepresented as 0.72. Fixed.
+	- Linear reading wrote some dead sector markers twice. That did not hurt,
+	  but was unnecessary. Fixed.
+	- Earlier versions of 0.71 had linear reading count unreable sectors also
+	  as CRC failures. Fixed.
+	- Adaptive reading: Fixed garbled contents of "size mismatch" dialog;
+	  move fingerprint check before size check 
+	- When limiting the reading range for adaptive reading sector 0 would
+	  not be marked as missing. Fixed.
+	- added multiple media read entry in the preferences,
+	  but it is not functional yet.
+
+0.71 (devel-11) 01-01-2007  Happy new year :-)
 	- more segfault hunting on the raw reader
 	- Added dialog for skipping RS02 detection of DVD RW
 	- Added appearance preferences (thanks to Christian N. for explaining
@@ -11,44 +30,44 @@ Warning: CD/DVD reading is currently being reworked. DO NOT USE for production w
 	- Added automatic media loading when Read/Scan is attempted while
 	  the drive tray is left open
 
-0.72 (devel-10) 26-11-2006
+0.71 (devel-10) 26-11-2006
 	- more fine tuning of the raw reader
 	- removed preferences and command line sections from documentation
 	- removed NSIS support
 
-0.72 (devel-9) 19-11-2006
+0.71 (devel-9) 19-11-2006
 	- added multi threading to the linear reader
 	- Fixed program hanging on CD-Audio/Multisession media.
 	  They are unsupported, but we must not crash on them.
 	  Thanks to Robert Hruby for reporting this problem!
 
-0.72 (devel-8) 12-11-2006
+0.71 (devel-8) 12-11-2006
 	- added support for CD XA21 sectors in raw reading and frame recovery
 	- added automatic word wrapping to preferences help system
 
-0.72 (devel-7) 01-11-2006
+0.71 (devel-7) 01-11-2006
 	- renamed Level2_L_EC; "unrolled" store_[p|q]_conditional
 	- completed migration of "General" preferences documentation from HTML docs into
 	  preferences GUI
 
-0.72 (devel-6) 29-10-2006
+0.71 (devel-6) 29-10-2006
 	- completed migration of "Read and Scan" preferences documentation from 
 	  HTML docs into preferences GUI
 	- re-inserted heuristical L-EC from Andrei Grecu
 
-0.72 (devel-5) 22-10-2006
+0.71 (devel-5) 22-10-2006
 	- more fine-tuning on the plain RAW reading capabilities
 	- removed some rarely used error messages from localization
 	  to relieve the translators
 
-0.72 (devel-4) 17-10-2006
+0.71 (devel-4) 17-10-2006
 	- rearranged raw reading and number of reading attempts
 
-0.72 (devel-3) 01-10-2006
+0.71 (devel-3) 01-10-2006
 	- added recognition of wrong sectors (e.g. the respective sector was not
 	  requested)
 
-0.72 (devel-2)
+0.71 (devel-2)
 	- added experimental l-ec to raw reading algorithm. Won't work reliably yet.
 
 0.71 (devel-1)

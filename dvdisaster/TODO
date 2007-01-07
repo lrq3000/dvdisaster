@@ -1,7 +1,9 @@
 
 CURRENTLY WORKING ON
 
-- 0.72: introduce multi threading for multicore processor support
+- 0.72: improved data recovery for CD
+
+- 0.74: multi threaded encoding/decoding for multicore processor support
 
 TODO  (with no particular order / schedule)
 
@@ -15,9 +17,8 @@ TODO  (with no particular order / schedule)
 - add real UDF parsing to udf.c 
   (currently only the backward compatibility ISO structures are used)
 
-- Graceful handling of situations where the SCSI/IDE bus 
-  becomes temporarily unavailable (does this happen on ATAPI at all?)
-
 - See if we can support the graphical GNU Installer 
 
 - Add support for .h2i files
+
+- provide a command line only version (without linking against GTK+)

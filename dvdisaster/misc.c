@@ -324,9 +324,9 @@ void PrintTimeToLog(GTimer *timer, char *format, ...)
      return;
 
    va_start(argp, format);
-
    tmp1 = g_strdup_vprintf(format, argp);
    tmp2 = g_strdup_printf("%02d:%02d:%04.1f %s", hours, minutes, seconds, tmp1);
+   va_end(argp);
 
    if(Closure->guiMode)
    { 
@@ -342,8 +342,6 @@ void PrintTimeToLog(GTimer *timer, char *format, ...)
 
       fflush(stderr);   /* at least needed for Windows */
    }
-
-   va_end(argp);
 
    g_free(tmp1);
    g_free(tmp2);
@@ -885,9 +883,13 @@ int ModalWarning(GtkMessageType mt, GtkButtonsType bt,
 
    va_start(argp, msg);
    vlog_warning(msg, argp);
-   if(Closure->guiMode)
-     result = vmodal_dialog(mt, bt, button_fn, msg, argp);
    va_end(argp);
+   
+   if(Closure->guiMode)
+   { va_start(argp, msg);
+     result = vmodal_dialog(mt, bt, button_fn, msg, argp);
+     va_end(argp);
+   }
 
    return result;
 }

@@ -149,6 +149,7 @@ typedef enum
    MODIFIER_QUERY_SIZE,
    MODIFIER_RANDOM_SEED,
    MODIFIER_READ_ATTEMPTS,
+   MODIFIER_READ_MEDIUM,
    MODIFIER_READ_RAW,
    MODIFIER_SIMULATE_DEFECTS,
    MODIFIER_SPEED_WARNING, 
@@ -356,6 +357,7 @@ int main(int argc, char *argv[])
 	{"raw-sector", 1, 0, MODE_RAW_SECTOR},
 	{"read", 2, 0,'r'},
 	{"read-attempts", 1, 0, MODIFIER_READ_ATTEMPTS },
+	{"read-medium", 1, 0, MODIFIER_READ_MEDIUM },
 	{"read-sector", 1, 0, MODE_READ_SECTOR},
 	{"read-raw", 0, 0, MODIFIER_READ_RAW},
 	{"redundancy", 1, 0, 'n'},
@@ -514,6 +516,9 @@ int main(int argc, char *argv[])
 	      if(Closure->maxReadAttempts < Closure->minReadAttempts)
 		Closure->maxReadAttempts = Closure->minReadAttempts;
 	   }
+	   break;
+         case MODIFIER_READ_MEDIUM:
+	   Closure->readMedium = atoi(optarg);
 	   break;
          case MODIFIER_READ_RAW:
 	   Closure->readRaw = TRUE;
@@ -791,6 +796,7 @@ int main(int argc, char *argv[])
 	     "  --fill-unreadable n    - fill unreadable sectors with byte n\n"
       	     "  --query-size n         - query drive/udf/ecc for image size (default: ecc)\n"   
 	     "  --read-attempts n-m    - attempts n upto m reads of a defective sector\n"
+	     "  --read-medium n        - read the whole medium up to n times\n"
 	     "  --read-raw             - performs read in raw mode if possible\n"
 	     "  --speed-warning n      - print warning if speed changes by more than n percent\n"
 	     "  --spinup-delay n       - wait n seconds for drive to spin up\n"

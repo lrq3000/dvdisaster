@@ -150,7 +150,7 @@ typedef struct _GlobalClosure
    char *defectiveDump; /* dump non-recoverable sectors into given path */
    int reverseCancelOK; /* if TRUE the button order is reversed */
    int eject;           /* eject medium on success */
-   int mediumRetries;   /* try to read medium n times */
+   int readMedium;      /* try to read medium n times */
    int pauseAfter;      /* pause after given amount of minutes */
    int pauseDuration;   /* duration of pause in minutes */
    int pauseEject;      /* Eject medium during pause */
@@ -845,6 +845,8 @@ void AddCurveValues(int, double, int);
 /*** 
  *** read-adaptive.c
  ***/
+
+void GetReadingRange(gint64, gint64*, gint64*);
 
 void ReadMediumAdaptive(gpointer);
 

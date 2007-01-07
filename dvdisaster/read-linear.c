@@ -29,10 +29,11 @@
 
 #define READ_BUFFERS 128   /* equals 4MB of buffer space */
 
-enum { BUF_EMPTY, BUF_FULL, BUF_EOF };
+enum { BUF_EMPTY, BUF_FULL, BUF_DEAD, BUF_EOF };
 
 typedef struct
-{  LargeFile *image;
+{  LargeFile *readerImage;  /* we need two file handles to prevent LargeSeek() */
+   LargeFile *writerImage;  /* race conditions between the reader and writer */
    struct _DeviceHandle *dh;
    EccInfo *ei;
    GThread *worker;
@@ -51,12 +52,18 @@ typedef struct
 
    /* for usage within the reader */
 
+   gint64 sectors;                   /* medium capacity */
+   gint64 firstSector, lastSector;   /* reading range */
+   gint64 readMarker;
+   int rereading;                    /* TRUE if working on existing image */
    char *msg;
    GTimer *speedTimer,*readTimer;
    int unreportedError;
    int earlyTermination;
    int scanMode;
    gint64 readOK;
+   gint64 deadWritten;
+   int pass;
 } read_closure;
 
 /*
@@ -117,8 +124,11 @@ static void cleanup(gpointer data)
 			      Closure->redMarkup, rc->readOK, Closure->readErrors); 
    }
 
-   if(rc->image)   
-     if(!LargeClose(rc->image))
+   if(rc->readerImage)   
+     if(!LargeClose(rc->readerImage))
+       Stop(_("Error closing image file:\n%s"), strerror(errno));
+   if(rc->writerImage)   
+     if(!LargeClose(rc->writerImage))
        Stop(_("Error closing image file:\n%s"), strerror(errno));
    if(rc->dh)      CloseDevice(rc->dh);
    if(rc->ei)      FreeEccInfo(rc->ei);
@@ -161,6 +171,272 @@ static void cleanup(gpointer data)
 }
 
 /***
+ *** Helper functions for the reader
+ ***/
+
+/*
+ * Register with different label texts depending on rc->scanMode
+ */
+
+static void register_reader(read_closure *rc)
+{
+   if(rc->scanMode)  /* Output messages differ in read and scan mode */
+   {  RegisterCleanup(_("Scanning aborted"), cleanup, rc);
+      if(Closure->guiMode)
+	SetLabelText(GTK_LABEL(Closure->readLinearHeadline), 
+		     "<big>%s</big>\n<i>%s</i>",
+		     _("Scanning medium for read errors."),
+		     _("Medium: not yet determined"));
+   }
+   else
+   {  RegisterCleanup(_("Reading aborted"), cleanup, rc);
+      if(Closure->guiMode)
+       SetLabelText(GTK_LABEL(Closure->readLinearHeadline), 
+		    "<big>%s</big>\n<i>%s</i>",
+		    _("Preparing for reading the medium image."),
+		    _("Medium: not yet determined"));
+   }
+}
+
+/* 
+ * If ecc file exists and automatic ecc creation is enabled,
+ * ask user if we may remove the existing one. 
+ */
+
+static void confirm_ecc_file_deletion(read_closure *rc)
+{
+   if(Closure->readAndCreate && !rc->scanMode)
+   {  gint64 ignore;
+
+      if(LargeStat(Closure->eccName, &ignore))
+      {  if(Closure->guiMode)
+	 {  int answer = ModalDialog(GTK_MESSAGE_QUESTION, GTK_BUTTONS_OK_CANCEL, NULL,
+				    _("Automatic error correction file creation is enabled,\n"
+				      "and \"%s\" already exists.\n"
+				      "Overwrite it?\n"),
+				    Closure->eccName);
+
+	    if(!answer)
+	    {  SwitchAndSetFootline(Closure->readLinearNotebook, 1, Closure->readLinearFootline, 
+				    _("<span %s>Aborted by user request!</span>"), 
+				    Closure->redMarkup); 
+	       rc->unreportedError = FALSE;
+	       cleanup((gpointer)rc);
+	    }
+	 }
+      }
+   }
+}
+
+/*
+ * See if we have an ecc file which belongs to the medium 
+ */
+
+static void check_ecc_file(read_closure *rc)
+{
+  rc->ei = OpenEccFile(READABLE_ECC | PRINT_MODE);
+
+  /* Compare the fingerprint sectors */
+
+  if(rc->ei) 
+  {  struct MD5Context md5ctxt;
+     unsigned char *buf = rc->alignedBuf[0]->buf;
+     guint8 fingerprint[16];
+     int status;
+
+     status = ReadSectorsFast(rc->dh, buf, rc->ei->eh->fpSector, 1);
+
+     MD5Init(&md5ctxt);
+     MD5Update(&md5ctxt, buf, 2048);
+     MD5Final(fingerprint, &md5ctxt);
+
+     if(!status && !memcmp(fingerprint, rc->ei->eh->mediumFP, 16))
+	Closure->checkCrc = TRUE;
+     else
+     {  Closure->checkCrc = FALSE;
+	FreeEccInfo(rc->ei);
+	rc->ei = NULL;
+     }
+  }
+}
+
+/*
+ * Find out current which mode we are operatin in:
+ * 1. Scanning
+ * 2. Creating a new image
+ * 3. Completing an existing image
+ * Output respective messages and prepare the image file.
+ */
+
+static void determine_mode(read_closure *rc)
+{  gint64 image_size;
+   unsigned char *buf = rc->alignedBuf[0]->buf;
+   int unknown_fingerprint = FALSE;
+   char *t;
+
+   /*** In scan mode we simply need to output some messages. */
+
+   if(rc->scanMode)
+   {  
+      rc->msg = g_strdup(_("Scanning medium for read errors."));
+
+      PrintLog("%s\n", rc->msg);
+      if(Closure->guiMode)
+      {  if(Closure->checkCrc)
+	   SetLabelText(GTK_LABEL(Closure->readLinearHeadline), 
+			"<big>%s</big>\n<i>- %s -</i>", rc->msg,
+			_("Reading CRC information from ecc file"));
+
+         else
+	   SetLabelText(GTK_LABEL(Closure->readLinearHeadline), 
+			"<big>%s</big>\n<i>%s</i>", rc->msg, rc->dh->mediumDescr);
+      }
+
+      rc->readMarker = 0;
+
+      if(Closure->guiMode)
+	 InitializeCurve(rc->dh->maxRate, rc->firstSector, rc->lastSector, rc->sectors);
+
+      return;
+   } 
+
+   /*** If no image file exists, open a new one. */
+
+reopen_image:
+   if(!LargeStat(Closure->imageName, &image_size))
+   {  
+      rc->msg = g_strdup(_("Reading new medium image."));
+      
+      if(!(rc->writerImage = LargeOpen(Closure->imageName, O_WRONLY | O_CREAT, IMG_PERMS)))
+	 Stop(_("Can't open %s:\n%s"),Closure->imageName,strerror(errno));
+      if(!(rc->readerImage = LargeOpen(Closure->imageName, O_RDONLY, IMG_PERMS)))
+	 Stop(_("Can't open %s:\n%s"),Closure->imageName,strerror(errno));
+
+      PrintLog(_("Creating new %s image.\n"),Closure->imageName);
+      if(Closure->guiMode)
+      {  if(Closure->checkCrc)
+	    SetLabelText(GTK_LABEL(Closure->readLinearHeadline),
+			 "<big>%s</big>\n<i>%s</i>", rc->msg,
+			 _("Reading CRC information from ecc file"));
+	 else
+	    SetLabelText(GTK_LABEL(Closure->readLinearHeadline),
+			 "<big>%s</big>\n<i>%s</i>", rc->msg, rc->dh->mediumDescr);
+      }
+      rc->rereading  = FALSE;
+      rc->readMarker = 0;
+
+      if(Closure->guiMode)
+	 InitializeCurve(rc->dh->maxRate, rc->firstSector, rc->lastSector, rc->sectors);
+
+      return;
+   }
+
+   /*** Examine the given image file */
+
+   t = _("Completing existing medium image.");
+
+   /* Use the existing file as a starting point.
+      Set the read marker at the end of the file
+      so that the reader looks for "dead_sector" markers
+      and skips already read blocks. */
+
+   if(!(rc->readerImage = LargeOpen(Closure->imageName, O_RDONLY, IMG_PERMS)))
+      Stop(_("Can't open %s:\n%s"),Closure->imageName,strerror(errno));
+   if(!(rc->writerImage = LargeOpen(Closure->imageName, O_WRONLY, IMG_PERMS)))
+      Stop(_("Can't open %s:\n%s"),Closure->imageName,strerror(errno));
+
+   rc->rereading  = 1;
+   rc->readMarker = image_size / 2048;
+
+   /* Try reading the media and image fingerprints. */
+      
+   if(!LargeSeek(rc->readerImage, (gint64)(2048*FINGERPRINT_SECTOR)))
+      unknown_fingerprint = TRUE;
+   else
+   {  int n = LargeRead(rc->readerImage, buf, 2048);
+      int status = ReadSectors(rc->dh, buf+2048, FINGERPRINT_SECTOR, 1);
+	 
+      if(n != 2048 || status || !memcmp(buf, Closure->deadSector, 2048))
+	 unknown_fingerprint = TRUE;
+   }
+
+   /* If fingerprints could be read, compare them. */
+      
+   if(!unknown_fingerprint && memcmp(buf, buf+2048, 2048))
+   {  	  
+      if(!Closure->guiMode)
+	 Stop(_("Image file does not match the CD/DVD."));
+      else
+      {  int answer = ModalDialog(GTK_MESSAGE_QUESTION, GTK_BUTTONS_OK_CANCEL, NULL,
+				  _("Image file already exists and does not match the CD/DVD.\n"
+				    "The existing image file will be deleted."));
+	   
+	 if(!answer)
+	 {  rc->unreportedError = FALSE;
+	    SwitchAndSetFootline(Closure->readLinearNotebook, 1, Closure->readLinearFootline, 
+				 _("<span %s>Reading aborted.</span> Please select a different image file."),
+				 Closure->redMarkup); 
+	       cleanup((gpointer)rc);
+	 }
+	 else  /* Start over with new file */
+	 {  LargeClose(rc->readerImage);
+	    LargeClose(rc->writerImage);
+	    LargeUnlink(Closure->imageName);
+	    goto reopen_image;
+	 } 
+      }
+   }
+
+   /*** If the image is not complete yet, first aim to read the
+	unvisited sectors before trying to re-read the missing ones. */
+      
+   Closure->checkCrc = 0; /* makes only sense if image is completely read */
+
+   if(!Closure->readStart && !Closure->readEnd && rc->readMarker < rc->sectors-1)
+   {  PrintLog(_("Completing image %s. Continuing with sector %lld.\n"),
+	       Closure->imageName, rc->readMarker);
+      rc->firstSector = rc->readMarker;
+      Closure->additionalSpiralColor = 0;  /* blue */
+   }
+   else 
+   {  PrintLog(_("Completing image %s. Only missing sectors will be read.\n"), Closure->imageName);
+      Closure->additionalSpiralColor = 3;  /* dark green*/
+   }
+      
+   if(Closure->guiMode)
+      SetLabelText(GTK_LABEL(Closure->readLinearHeadline),
+		   "<big>%s</big>\n<i>%s</i>",t,rc->dh->mediumDescr);
+
+   if(Closure->guiMode)
+      InitializeCurve(rc->dh->maxRate, rc->firstSector, rc->lastSector, rc->sectors);
+}
+
+/*
+ * Fill the gap between rc->readMarker and rc->firstSector
+ * with dead sector markers.
+ */
+
+static void fill_gap(read_closure *rc)
+{  gint64 s;
+
+
+   if(!rc->scanMode && rc->firstSector > rc->readMarker)
+   {  s = rc->readMarker;
+
+      if(!LargeSeek(rc->writerImage, (gint64)(2048*s)))
+	Stop(_("Failed seeking to sector %lld in image [%s]: %s"),
+	     s, "fill", strerror(errno));
+
+      while(s++ < rc->firstSector)
+      {  int n = LargeWrite(rc->writerImage, Closure->deadSector, 2048);
+	 if(n != 2048)
+	   Stop(_("Failed writing to sector %lld in image [%s]: %s"),
+		s, "fill", strerror(errno));
+      }
+   }
+}
+
+/***
  *** Try reading the medium and create the image and map.
  ***/
 
@@ -197,13 +473,13 @@ static gpointer worker_thread(read_closure *rc)
       if(!rc->scanMode)
       {  int n;
 
-	 if(!LargeSeek(rc->image, (gint64)(2048*s)))
+	 if(!LargeSeek(rc->writerImage, (gint64)(2048*s)))
 	 {  rc->workerError = g_strdup_printf(_("Failed seeking to sector %lld in image [%s]: %s"),
 					      s, "store", strerror(errno));
 	    goto update_mutex;
 	 }
 
-	 n = LargeWrite(rc->image, rc->alignedBuf[rc->writePtr]->buf, 2048*nsectors);
+	 n = LargeWrite(rc->writerImage, rc->alignedBuf[rc->writePtr]->buf, 2048*nsectors);
 	 if(n != 2048*nsectors)
 	 {  rc->workerError = g_strdup_printf(_("Failed writing to sector %lld in image [%s]: %s"),
 	                                      s, "store", strerror(errno));
@@ -222,7 +498,7 @@ static gpointer worker_thread(read_closure *rc)
 
       /* Just do on-the-fly CRC testing if in scan mode */         
 
-      if(Closure->checkCrc)
+      if(Closure->checkCrc && rc->bufState[rc->writePtr] != BUF_DEAD)
 	for(i=0; i<nsectors; i++)
 	{  guint32 crc = Crc32(rc->alignedBuf[rc->writePtr]->buf+2048*i, 2048);
 
@@ -236,6 +512,9 @@ static gpointer worker_thread(read_closure *rc)
 
 	   MD5Update(&rc->md5ctxt, rc->alignedBuf[rc->writePtr]->buf+2048*i, 2048);
 	}
+
+      if(rc->bufState[rc->writePtr] == BUF_DEAD)
+	 rc->deadWritten++;
 
       /* Release this buffer */
 
@@ -255,9 +534,9 @@ update_mutex:
    return NULL;
 }
 
-/*
- * The reader part
- */
+/***
+ *** The reader part
+ ***/
 
 static void insert_buttons(GtkDialog *dialog)
 {  
@@ -271,17 +550,15 @@ void ReadMediumLinear(gpointer data)
 {  read_closure *rc = g_malloc0(sizeof(read_closure));
    GError *err = NULL;
    int nsectors; 
-   gint64 start,end,s,read_marker;
-   gint64 image_size;
+   gint64 s;
    int percent, last_percent;
    double last_speed = -1.0;
    int first_speed_value = TRUE;
-   int rereading = 0;
    gint previous_read_errors = 0;
    gint previous_crc_errors = 0;
    char *t;
    int status,n;
-   gint64 sectors,last_read_ok,last_errors_printed;
+   gint64 last_read_ok,last_errors_printed;
    double speed = 0.0;
    int tao_tail = 0;
    int ignore_fatal = FALSE;
@@ -295,41 +572,14 @@ void ReadMediumLinear(gpointer data)
    rc->earlyTermination = TRUE;
    rc->scanMode = GPOINTER_TO_INT(data);
 
-   if(rc->scanMode)  /* Output messages differ in read and scan mode */
-   {  RegisterCleanup(_("Scanning aborted"), cleanup, rc);
-      if(Closure->guiMode)
-	SetLabelText(GTK_LABEL(Closure->readLinearHeadline), "<big>%s</big>\n<i>%s</i>",
-		     _("Scanning medium for read errors."),
-		     _("Medium: not yet determined"));
-   }
-   else
-   {  RegisterCleanup(_("Reading aborted"), cleanup, rc);
-      if(Closure->guiMode)
-       SetLabelText(GTK_LABEL(Closure->readLinearHeadline), "<big>%s</big>\n<i>%s</i>",
-		    _("Preparing for reading the medium image."),
-		    _("Medium: not yet determined"));
-   }
+   /* Register with different labels depending on rc->scanMode */
 
-   if(Closure->readAndCreate && !rc->scanMode)
-   {  gint64 ignore;
-      if(LargeStat(Closure->eccName, &ignore))
-      { if(Closure->guiMode)
-	{  int answer = ModalDialog(GTK_MESSAGE_QUESTION, GTK_BUTTONS_OK_CANCEL, NULL,
-				    _("Automatic error correction file creation is enabled,\n"
-				      "and \"%s\" already exists.\n"
-				      "Overwrite it?\n"),
-				    Closure->eccName);
+   register_reader(rc);
 
-	  if(!answer)
-	  {  SwitchAndSetFootline(Closure->readLinearNotebook, 1, Closure->readLinearFootline, 
-				  _("<span %s>Aborted by user request!</span>"), 
-				  Closure->redMarkup); 
-	     rc->unreportedError = FALSE;
-	     goto terminate;
-	  }
-	}
-      }
-   }
+   /* If ecc file exists and automatic ecc creation is enabled,
+      ask user if we may remove the existing one. */
+
+   confirm_ecc_file_deletion(rc);
 
    /*** Timer setup */
 
@@ -344,198 +594,38 @@ void ReadMediumLinear(gpointer data)
    /*** Open Device and query medium properties */
 
    rc->dh = OpenAndQueryDevice(Closure->device);
-   sectors = rc->dh->sectors;
+   rc->sectors = rc->dh->sectors;
    Closure->readErrors = Closure->crcErrors = rc->readOK = 0;
 
-   /*** See if the current ecc file belongs to the medium */
+   /*** See if we have an ecc file which belongs to the medium */
 
-   rc->ei = OpenEccFile(READABLE_ECC | PRINT_MODE);
-   if(rc->ei) /* Compare the fingerprint sectors */
-   {  struct MD5Context md5ctxt;
-      unsigned char *buf = rc->alignedBuf[0]->buf;
-      guint8 fingerprint[16];
-
-      status = ReadSectors(rc->dh, buf, rc->ei->eh->fpSector, 1);
-
-      MD5Init(&md5ctxt);
-      MD5Update(&md5ctxt, buf, 2048);
-      MD5Final(fingerprint, &md5ctxt);
-
-      if(!status && !memcmp(fingerprint, rc->ei->eh->mediumFP, 16))
-	Closure->checkCrc = TRUE;
-   }
+   check_ecc_file(rc);
 
    /*** See if user wants to limit the read range. */
 
-   if(Closure->readStart || Closure->readEnd)
-   {  if(!Closure->guiMode)
-      {  start = Closure->readStart;
-         end   = Closure->readEnd < 0 ? sectors-1 : Closure->readEnd;
-      }
-      else  /* be more permissive in GUI mode */
-      {  start = 0;
- 	 end   = sectors-1;
+   GetReadingRange(rc->sectors, &rc->firstSector, &rc->lastSector);
 
-	 if(Closure->readStart <= Closure->readEnd)
-	 {  start = Closure->readStart < sectors ? Closure->readStart : sectors-1;
-	    end   = Closure->readEnd   < sectors ? Closure->readEnd   : sectors-1;
-	 }
-      }
+   /*** Determine the reading mode. There are three possibilities:
+	1. scanning (rc->scanMode == TRUE)
+	2. reading into a new image file.
+	3. completing an existing image file.
+	After this function, files are prepared 
+	and respective UI messages have been output. */
 
-      if(start>end || start < 0 || end >= sectors)
-	Stop(_("Sectors must be in range [0..%lld].\n"),sectors-1);
+   determine_mode(rc);
 
-      PrintLog(_("Limiting sector range to [%lld,%lld].\n"),start,end);
-   }
-   else 
-   {  start = 0; end = sectors-1;
-   }
+   /*** If rc->firstSector > read_marker, fill the gap with dead sector markers. */
 
-   /*** See if we already have an image file. */
-
-   if(rc->scanMode)  /* don't care if in scan mode */
-   {  
-      rc->msg = g_strdup(_("Scanning medium for read errors."));
-
-      PrintLog("%s\n", rc->msg);
-      if(Closure->guiMode)
-      {  if(Closure->checkCrc)
-	   SetLabelText(GTK_LABEL(Closure->readLinearHeadline), 
-			"<big>%s</big>\n<i>- %s -</i>", rc->msg,
-			_("Reading CRC information from ecc file"));
-
-         else
-	   SetLabelText(GTK_LABEL(Closure->readLinearHeadline), 
-			"<big>%s</big>\n<i>%s</i>", rc->msg, rc->dh->mediumDescr);
-      }
-      read_marker = 0;
-   } 
-   else          
-   { 
-reopen_image:
-     if(!LargeStat(Closure->imageName, &image_size))
-     {  
-        rc->msg = g_strdup(_("Reading new medium image."));
-
-        /* Start with a fresh file. */
-
-	if(!(rc->image = LargeOpen(Closure->imageName, O_RDWR | O_CREAT, IMG_PERMS)))
-	  Stop(_("Can't open %s:\n%s"),Closure->imageName,strerror(errno));
-
-        PrintLog(_("Creating new %s image.\n"),Closure->imageName);
-	if(Closure->guiMode)
-	{  if(Closure->checkCrc)
-	     SetLabelText(GTK_LABEL(Closure->readLinearHeadline),
-			  "<big>%s</big>\n<i>%s</i>", rc->msg,
-			  _("Reading CRC information from ecc file"));
-	   else
-	     SetLabelText(GTK_LABEL(Closure->readLinearHeadline),
-			  "<big>%s</big>\n<i>%s</i>", rc->msg, rc->dh->mediumDescr);
-	}
-        rereading = 0;
-	read_marker = 0;
-     }
-     else
-     {  char *t = _("Completing existing medium image.");
-        unsigned char *buf = rc->alignedBuf[0]->buf;
-	int unknown_fingerprint = FALSE;
-
-        /* Use the existing file as a starting point.
-	   Set the read_marker at the end of the file
-	   so that the reader looks for "dead_sector" markers
-	   and skips already read blocks. */
-
-        if(!(rc->image = LargeOpen(Closure->imageName, O_RDWR, IMG_PERMS)))
-  	  Stop(_("Can't open %s:\n%s"),Closure->imageName,strerror(errno));
-
-        rereading = 1;
-	read_marker = image_size / 2048;
-
-	/* See if the media and image fingerprints match */
-
-	if(!LargeSeek(rc->image, (gint64)(2048*FINGERPRINT_SECTOR)))
-	  unknown_fingerprint = TRUE;
-	else
-	{  n = LargeRead(rc->image, buf, 2048);
-	   status = ReadSectors(rc->dh, buf+2048, FINGERPRINT_SECTOR, 1);
-
-	   if(n != 2048 || status || !memcmp(buf, Closure->deadSector, 2048))
-	     unknown_fingerprint = TRUE;
-        }
-
-	if(!unknown_fingerprint && memcmp(buf, buf+2048, 2048))
-	{  	  
-	   if(!Closure->guiMode)
-	     Stop(_("Image file does not match the CD/DVD."));
-	   else
-	   {  int answer = ModalDialog(GTK_MESSAGE_QUESTION, GTK_BUTTONS_OK_CANCEL, NULL,
-				       _("Image file already exists and does not match the CD/DVD.\n"
-					 "The existing image file will be deleted."));
-	   
-	      if(!answer)
-	      {  rc->unreportedError = FALSE;
-		 SwitchAndSetFootline(Closure->readLinearNotebook, 1, Closure->readLinearFootline, 
-				      _("<span %s>Reading aborted.</span> Please select a different image file."),
-				      Closure->redMarkup); 
- 		 goto terminate;
-	      }
-	      else
-	      {  LargeClose(rc->image);
-		 LargeUnlink(Closure->imageName);
-		 goto reopen_image;
-	      } 
-	   }
-	}
-
-	/* If the image is not complete yet, first aim to read the
-	   unvisited sectors before trying to re-read the missing ones. */
-
-	Closure->checkCrc = 0; /* makes only sense if image is completely read */
-
-	if(!Closure->readStart && !Closure->readEnd && read_marker < sectors-1)
-	{  PrintLog(_("Completing image %s. Continuing with sector %lld.\n"),
-	            Closure->imageName, read_marker);
-	   start = read_marker;
-	   Closure->additionalSpiralColor = 0;  /* blue */
-	}
-	else 
-	{  PrintLog(_("Completing image %s. Only missing sectors will be read.\n"), Closure->imageName);
-	   Closure->additionalSpiralColor = 3;  /* dark green*/
-	}
-	   
-	if(Closure->guiMode)
-	  SetLabelText(GTK_LABEL(Closure->readLinearHeadline),
-		       "<big>%s</big>\n<i>%s</i>",t,rc->dh->mediumDescr);
-     }
-   }
-
-   if(Closure->guiMode)
-     InitializeCurve(rc->dh->maxRate, start, end, sectors);
-
-   /*** If start > read_marker, fill the gap with dead sector markers. */
-
-   if(!rc->scanMode && start > read_marker)
-   {  s = read_marker;
-
-      if(!LargeSeek(rc->image, (gint64)(2048*s)))
-	Stop(_("Failed seeking to sector %lld in image [%s]: %s"),
-	     s, "fill", strerror(errno));
-
-      while(s++ < start)
-      {  n = LargeWrite(rc->image, Closure->deadSector, 2048);
-	 if(n != 2048)
-	   Stop(_("Failed writing to sector %lld in image [%s]: %s"),
-		s, "fill", strerror(errno));
-      }
-   }
+   fill_gap(rc);
 
    /*** Memory for the CRC32 sums is needed in two cases: */
 
    /* a) a full image read is attempted, and the image CRC32 
          and md5sum are calculated on the fly. */
 
-   if(   !rc->scanMode && !rereading && start == 0 && end == sectors-1)
-   {  Closure->crcCache = g_try_malloc(sizeof(guint32) * sectors);
+   if(   !rc->scanMode && !rc->rereading 
+      && rc->firstSector == 0 && rc->lastSector == rc->sectors-1)
+   {  Closure->crcCache = g_try_malloc(sizeof(guint32) * rc->sectors);
 
       if(Closure->crcCache)
 	Closure->crcImageName = g_strdup(Closure->imageName);
@@ -549,8 +639,8 @@ reopen_image:
    if(Closure->checkCrc)
    {  gint64 crc_sectors = rc->ei->sectors;
 
-      if(sectors > crc_sectors)  /* Allows completion of crc info */
-	crc_sectors = sectors;   /* when image contains additional sectors */
+      if(rc->sectors > crc_sectors)  /* Allows completion of crc info */
+	crc_sectors = rc->sectors;   /* when image contains additional sectors */
 
       Closure->crcCache = g_try_malloc(sizeof(guint32) * crc_sectors);
 
@@ -609,17 +699,24 @@ reopen_image:
      SwitchAndSetFootline(Closure->readLinearNotebook, 0, Closure->readLinearFootline, "ignore");
 
    if(Closure->spinupDelay)  /* eliminate initial seek time from timing */
-     ReadSectors(rc->dh, rc->alignedBuf[0]->buf, start, 1); 
+     ReadSectors(rc->dh, rc->alignedBuf[0]->buf, rc->firstSector, 1); 
    g_timer_start(rc->speedTimer);
    g_timer_start(rc->readTimer);
 
+   /*** Reset for the next reading pass */
+
+next_reading_pass:
+   if(rc->pass > 0)
+   {  Closure->readErrors = Closure->crcErrors = 0;
+   }
+
    /*** Read the medium image. */
 
-   s = start;
-   last_percent = (1000*s)/sectors;
+   s = rc->firstSector;
+   last_percent = (1000*s)/rc->sectors;
    last_read_ok = last_errors_printed = 0;
 
-   while(s<=end)
+   while(s<=rc->lastSector)
    {  if(Closure->stopActions)   /* somebody hit the Stop button */
       {
 	SwitchAndSetFootline(Closure->readLinearNotebook, 1, Closure->readLinearFootline, 
@@ -638,33 +735,33 @@ reopen_image:
            In order to treat the 2 read errors at the end of TAO discs correctly,
            we switch back to per sector reading at the end of the medium. */
 
-      if(s & 15 || s >= ((sectors - 2) & ~15) ) /* - 16 removed */ 
+      if(s & 15 || s >= ((rc->sectors - 2) & ~15) ) /* - 16 removed */ 
             nsectors = 1;
       else  nsectors = 16;
 
-      if(s+nsectors > end)    /* don't read past the (CD) media end */
-	nsectors = end-s+1;
+      if(s+nsectors > rc->lastSector)  /* don't read past the (CD) media end */
+	nsectors = rc->lastSector-s+1;
 
       /*** If s is lower than the read marker,
 	   check if the sector has already been read
 	   in a previous session. */
 
 reread:
-      if(!rc->scanMode && s < read_marker)
+      if(!rc->scanMode && s < rc->readMarker)
       {  int i,ok = 0;
 	 int num_compare = nsectors;
 
-	 if(!LargeSeek(rc->image, (gint64)(2048*s)))
+	 if(!LargeSeek(rc->readerImage, (gint64)(2048*s)))
 	   Stop(_("Failed seeking to sector %lld in image [%s]: %s"),
 		s, "reread", strerror(errno));
 
-	 if(s+nsectors > read_marker)
-	   num_compare = read_marker-s;
+	 if(s+nsectors > rc->readMarker)
+	   num_compare = rc->readMarker-s;
 
 	 for(i=0; i<num_compare; i++)
 	 {  unsigned char sector_buf[2048];
 
-	    n = LargeRead(rc->image, sector_buf, 2048);
+	    n = LargeRead(rc->readerImage, sector_buf, 2048);
 
 	    if(n != 2048)
 	      Stop(_("unexpected read error in image for sector %lld"),s);
@@ -699,7 +796,6 @@ reread:
       g_mutex_unlock(rc->mutex);
 
       status = ReadSectors(rc->dh, rc->alignedBuf[rc->readPtr]->buf, s, nsectors);
-
 
       /*** Medium Error (3) and Illegal Request (5) may result from 
 	   a medium read problem, but other errors are regarded as fatal. */
@@ -762,14 +858,17 @@ reread:
 
 	 if(nsectors>=Closure->sectorSkip) nfill = nsectors;
 	 else
-	 {  if(s+Closure->sectorSkip > end) nfill = end-s+1;
+	 {  if(s+Closure->sectorSkip > rc->lastSector) nfill = rc->lastSector-s+1;
 	    else nfill = Closure->sectorSkip - ((s + Closure->sectorSkip) & 15);
 	 }
 
-	 /* If we are reading past the read marker we must take care 
-            to fill up any holes with dead sector markers before skipping forward. */
+	 /* If we are reading past the dead marker we must take care 
+            to fill up any holes with dead sector markers before skipping forward. 
+	    When sectorSkip is 0 and nsectors > 16, we will re-read all these sectors
+	    again one by one, so we catch this case in order not to write the markers twice.  */
 
-	 if(!rc->scanMode && s+nsectors >= read_marker)
+	 if(!rc->scanMode && s+nfill > rc->readMarker
+	    && (Closure->sectorSkip || nsectors == 1))
 	 {  int i;
 
 	    /* Write nfill of "dead sector" markers so that
@@ -791,7 +890,7 @@ reread:
 
 	       rc->bufferedSector[rc->readPtr] = s+i;
 	       rc->nSectors[rc->readPtr] = 1;
-	       rc->bufState[rc->readPtr] = BUF_FULL;
+	       rc->bufState[rc->readPtr] = BUF_DEAD;
 	       rc->readPtr++;
 	       if(rc->readPtr >= READ_BUFFERS)
 		 rc->readPtr = 0;
@@ -831,7 +930,7 @@ reread:
 	    {  PrintCLIorLabel(Closure->status,
 			       _("Sector %lld: %s\n"),
 			       s, GetLastSenseString(FALSE));  
-	       if(s >= sectors - 2) tao_tail++;
+	       if(s >= rc->sectors - 2) tao_tail++;
 	       Closure->readErrors++;
 	    }
 	 }
@@ -847,8 +946,8 @@ step_counter:
       }
 
       s += nsectors;
-      if(s>read_marker) read_marker=s;
-      percent = (1000*s)/sectors;
+      if(s>rc->readMarker) rc->readMarker=s;
+      percent = (1000*s)/rc->sectors;
 
       if(last_percent != percent) 
       {  gulong ignore;
@@ -929,6 +1028,25 @@ step_counter:
       }
    }
 
+   /*** Consistency check */
+
+   if(rc->deadWritten != Closure->readErrors)
+      printf("Mismatch: %lld read errors, but %lld dead sectors written\n",
+	     (long long int)Closure->readErrors, 
+	     (long long int)rc->deadWritten);
+
+   /*** If multiple reading passes are allowed, see if we need another pass */
+#if 0
+   rc->pass++;
+   if((Closure->readErrors || Closure->crcErrors) && rc->pass < Closure->readMedium)
+   {  t = g_strdup_printf(_("Reading pass %d of %d: %lld sectors read; %lld CRC errors; %lld missing."),
+			  rc->pass, Closure->readMedium, 
+			  rc->readOK, Closure->crcErrors, Closure->readErrors);
+      PrintLog("\n%s\n",t);
+      goto next_reading_pass;
+   }
+#endif
+
    /*** Signal EOF to writer thread; wait for it to finish */
 
    send_eof(rc);
@@ -940,7 +1058,7 @@ step_counter:
    if(Closure->crcCache)
      MD5Final(Closure->md5Cache, &rc->md5ctxt);
 
-   if(rereading)
+   if(rc->rereading)
    {  if(!Closure->readErrors) t = g_strdup_printf(_("%lld sectors read.     "),rc->readOK);
       else                t = g_strdup_printf(_("%lld sectors read; %lld unreadable sectors."),rc->readOK,Closure->readErrors);
    }
@@ -951,7 +1069,8 @@ step_counter:
 	 {  
 	    if(rc->dh->sectors != rc->ei->sectors)
 	      t = g_strdup_printf(_("All sectors successfully read, but wrong image length (%lld sectors difference)"), rc->dh->sectors - rc->ei->sectors);
-	    else if(memcmp(rc->ei->eh->mediumSum, Closure->md5Cache, 16))
+	    else if(   rc->readOK == rc->sectors  /* no user limited range */  
+		    && memcmp(rc->ei->eh->mediumSum, Closure->md5Cache, 16))
 	      t = g_strdup_printf(_("All sectors successfully read, but wrong image checksum."));
 	    else t = g_strdup_printf(_("All sectors successfully read. Checksums match."));
 	 }
@@ -993,10 +1112,10 @@ step_counter:
 				"Use the --dao option to disable image truncating.\n"),
 			      tao_tail);
      
-      sectors -= tao_tail;
+      rc->sectors -= tao_tail;
 
       if(!rc->scanMode && answer)
-        if(!LargeTruncate(rc->image, (gint64)(2048*sectors)))
+        if(!LargeTruncate(rc->writerImage, (gint64)(2048*rc->sectors)))
 	  Stop(_("Could not truncate %s: %s\n"),Closure->imageName,strerror(errno));
    }
    else if(Closure->readErrors) exitCode = EXIT_FAILURE;
