@@ -5,6 +5,14 @@ Warning: 0.71 devel-9 upto devel-11 have a serious bug when completing
 	 already existing images. Do not trust or use images created
 	 with those versions; they are likely to contain garbled sectors.
 
+0.71 (devel-13)	20-01-2007
+	- Fixed crash when using command line mode with --query-size=ecc and
+	  rewriteable DVD without RS02 ecc data. Thanks to Vincent L. for 
+	  reporting this!
+	- Fixed crash caused by drives reporting unreasonable media sizes.
+	  Thanks to Rafal K. and Klaus-Maria P. for reporting this!
+	- added ADIP extraction for better medium type determination
+
 0.71 (devel-12) 07-01-2007
 	- Fixed a DEAD SERIOUS race condition in the linear reader while
 	  completing existing images (0.71 devel-9 to devel-11 are affected).

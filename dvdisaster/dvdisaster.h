@@ -98,6 +98,12 @@
 #define DVD_SL_SIZE      2295104  /* DVD+R/RW size used at least common denominator */
 #define DVD_DL_SIZE 	 4171712  /* also seen: 4148992 4173824  */
 
+/* Maximum accepted media sizes */
+
+#define MAX_CDR_SIZE     (100*60*75)  /* CDs can't have >100min w/o severe hacks  */
+#define MAX_DVD_SL_SIZE  2500000      /* I have to guess here */
+#define MAX_DVD_DL_SIZE  4600000      /* I have to guess here */
+
 /***
  *** Our global closure (encapsulation of global variables)
  ***/
@@ -154,6 +160,7 @@ typedef struct _GlobalClosure
    int pauseAfter;      /* pause after given amount of minutes */
    int pauseDuration;   /* duration of pause in minutes */
    int pauseEject;      /* Eject medium during pause */
+   int ignoreFatalSense;/* Continue reading after potential fatal sense errors */
   
    char *deadSector;    /* Copy of our "dead sector" marker. */
    char *dotFile;       /* path to .dvdisaster file */

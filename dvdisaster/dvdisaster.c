@@ -146,6 +146,7 @@ typedef enum
    MODIFIER_DEFECTIVE_DUMP,
    MODIFIER_EJECT,
    MODIFIER_FILL_UNREADABLE,
+   MODIFIER_IGNORE_FATAL_SENSE,
    MODIFIER_QUERY_SIZE,
    MODIFIER_RANDOM_SEED,
    MODIFIER_READ_ATTEMPTS,
@@ -342,6 +343,7 @@ int main(int argc, char *argv[])
 	{"fill-unreadable", 1, 0, MODIFIER_FILL_UNREADABLE },
 	{"fix", 0, 0, 'f'},
 	{"help", 0, 0, 'h'},
+	{"ignore-fatal-sense", 0, 0, MODIFIER_IGNORE_FATAL_SENSE },
         {"image", 1, 0, 'i'},
 	{"jump", 1, 0, 'j'},
 #ifdef SYS_MINGW
@@ -471,6 +473,9 @@ int main(int argc, char *argv[])
 	   break;
          case MODIFIER_FILL_UNREADABLE:
 	   if(optarg) Closure->fillUnreadable = strtol(optarg, NULL, 0);
+	   break;
+         case MODIFIER_IGNORE_FATAL_SENSE:
+	   Closure->ignoreFatalSense = TRUE;
 	   break;
          case MODIFIER_TRUNCATE: 
 	   if(optarg)                  /* debugging truncate mode */
@@ -794,6 +799,7 @@ int main(int argc, char *argv[])
 	     "  --dao                  - assume DAO disc; do not trim image end\n"
 	     "  --eject                - eject medium after successful read\n"
 	     "  --fill-unreadable n    - fill unreadable sectors with byte n\n"
+	     "  --ignore-fatal-sense   - continue reading after potentially fatal error conditon\n"
       	     "  --query-size n         - query drive/udf/ecc for image size (default: ecc)\n"   
 	     "  --read-attempts n-m    - attempts n upto m reads of a defective sector\n"
 	     "  --read-medium n        - read the whole medium up to n times\n"

@@ -561,7 +561,6 @@ void ReadMediumLinear(gpointer data)
    gint64 last_read_ok,last_errors_printed;
    double speed = 0.0;
    int tao_tail = 0;
-   int ignore_fatal = FALSE;
    int i;
 
    Closure->additionalSpiralColor = -1;
@@ -800,7 +799,7 @@ reread:
       /*** Medium Error (3) and Illegal Request (5) may result from 
 	   a medium read problem, but other errors are regarded as fatal. */
 
-      if(status && !ignore_fatal 
+      if(status && !Closure->ignoreFatalSense 
 	 && rc->dh->sense.sense_key && rc->dh->sense.sense_key != 3 && rc->dh->sense.sense_key != 5)
       {  int answer;
 
@@ -815,7 +814,7 @@ reread:
 			      s, GetLastSenseString(FALSE));
 
 	 if(answer == 2)
-	   ignore_fatal = TRUE;
+	   Closure->ignoreFatalSense = TRUE;
 
 	 if(!answer)
 	 {  SwitchAndSetFootline(Closure->readLinearNotebook, 1, Closure->readLinearFootline, 

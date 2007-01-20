@@ -230,6 +230,7 @@ typedef struct _DeviceHandle
    gint64 sectors;            /* Number of sectors */
    int sessions;              
    int layers;
+   char manuID[20];           /* Manufacturer info from ADIP/lead-in */
    int mainType;              /* CD or DVD */
    int subType;               /* see enum below */
    char *typedescr;           /* human readable form of subType */

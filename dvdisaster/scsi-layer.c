@@ -145,6 +145,9 @@ static int query_type(DeviceHandle *dh, int probe_only)
    unsigned int length;
    int control;
    unsigned int ua_start,ua_end,ua_end0;
+   int phy_info4, phy_info6;
+   int is_dvd_plus = FALSE;
+   int is_dvd_dash = FALSE;
 
    /*** If the medium is a DVD, the following query will succeed. */
 
@@ -202,54 +205,7 @@ static int query_type(DeviceHandle *dh, int probe_only)
       return FALSE;
    }
 
-   /* See what we've got */
-
-#if 0
-   {  int layer_type = buf[6] & 0x0f;
-      printf("Layer type(s): ");
-      if(layer_type & 0x01) printf("embossed ");
-      if(layer_type & 0x02) printf("recordable ");
-      if(layer_type & 0x04) printf("rewriteable ");
-      printf("\n");
-      fflush(stdout);
-   }
-#endif
-   dh->subType = DVD;
-
-   switch((buf[4]>>4) & 0x0f)   /* evaluate the book type */
-   {  case  1: dh->typedescr = "DVD-RAM"; 
-               dh->rewriteable = TRUE;
-               break;
-      case  2: dh->typedescr = "DVD-R"; 
-	       break;
-      case  3: dh->typedescr = "DVD-RW"; 
-               dh->rewriteable = TRUE;
-	       break;
-      case  9: dh->typedescr = "DVD+RW"; 
-               dh->rewriteable = TRUE;
-	       break;
-      case 10: dh->typedescr = "DVD+R"; 
-	       break;
-      case 14: dh->typedescr = "DVD+R9 DL"; 
-	       break;
-
-      case  0: 
-      {  int layer_type = buf[6] & 0x0f;
-
-	 if(layer_type & 0x06) 
-	    dh->typedescr = "DVD-ROM (faked book type)";
-	 else
-	 {  dh->typedescr = "DVD-ROM";
-	    dh->subType = UNSUPPORTED;
-	 }
-	 break;
-      }
-
-      default: 
-	g_sprintf(sbuf,"DVD book type 0x%02x",(buf[4]>>4) & 0x0f); 
-	dh->typedescr=sbuf; 
-	break;
-   }
+   /* Determine number of layers */
 
    dh->layers = 1 + ((buf[6] & 0x60) >> 5);
    dh->sessions = 1;
@@ -262,8 +218,169 @@ static int query_type(DeviceHandle *dh, int probe_only)
    ua_end0  = /*buf[16]<<24 |*/ buf[17]<<16 | buf[18]<<8 | buf[19];
 
    if(dh->layers == 1)
-        dh->userAreaSize = (gint64)(ua_end-ua_start);
-   else dh->userAreaSize = (gint64)(ua_end0-ua_start)*2;
+   {  dh->userAreaSize = (gint64)(ua_end-ua_start);
+
+      if(dh->userAreaSize < 0 || dh->userAreaSize > MAX_DVD_SL_SIZE)
+      {  LogWarning(_("READ DVD STRUCTURE: implausible medium size, %lld-%lld=%lld sectors\n"),
+		    (gint64)ua_end, (gint64)ua_start, (gint64)dh->userAreaSize);
+	 dh->userAreaSize = 0;
+      }
+   }
+   else 
+   {  dh->userAreaSize = (gint64)(ua_end0-ua_start)*2;
+
+      if(dh->userAreaSize < 0 || dh->userAreaSize > MAX_DVD_DL_SIZE)
+      {  LogWarning(_("READ DVD STRUCTURE: implausible medium size, %lld-%lld=%lld sectors\n"),
+		    (gint64)ua_end0, (gint64)ua_start, (gint64)dh->userAreaSize);
+	 dh->userAreaSize = 0;
+      }
+   }
+
+   /*** Find out medium type.*/
+
+   phy_info4 = buf[4];
+   phy_info6 = buf[6];
+   dh->manuID[0] = 0;
+
+   /* Try getting ADIP information. 
+      This is more reliable than the physical info. */
+
+   memset(cmd, 0, MAX_CDB_SIZE);
+   cmd[0] = 0xad;     /* READ DVD STRUCTURE */
+   cmd[6] = 0;        /* First layer */
+   cmd[7] = 0x11;     /* We want the ADIP */
+   cmd[8] = 0;        /* Allocation length */
+   cmd[9] = 2;
+
+   if(SendPacket(dh, cmd, 12, buf, 2, &sense, DATA_READ) == 0)
+   {  length = buf[0]<<8 | buf[1];
+      length += 2;
+
+      if(length < 4096)
+      {  memset(cmd, 0, MAX_CDB_SIZE);
+	 cmd[0] = 0xad;     /* READ DVD STRUCTURE */
+	 cmd[6] = 0;        /* First layer */
+	 cmd[7] = 0x11;     /* We want the ADIP */
+	 cmd[8] = (length>>8) & 0xff;  /* Allocation length */
+	 cmd[9] = length & 0xff;
+
+	 if(SendPacket(dh, cmd, 12, buf, length, &sense, DATA_READ) == 0)
+	 {  int i;
+
+	    is_dvd_plus = TRUE;
+	    phy_info4 = buf[4];
+	    phy_info6 = buf[6];
+
+	    for(i=0; i<11; i++)
+	       dh->manuID[i] = isprint(buf[23+i]) ? buf[23+i] : ' ';
+	    dh->manuID[11] = 0;
+
+	    for(i=10; i>=0; i--)
+	       if(dh->manuID[i] == ' ') dh->manuID[i] = 0;
+	       else break;
+	 }
+      }
+   }
+
+   /* Get pre-recorded info from lead-in (only on -R/-RW media).
+      Only used for getting the manufacturer ID. */
+   
+   memset(cmd, 0, MAX_CDB_SIZE);
+   cmd[0] = 0xad;     /* READ DVD STRUCTURE */
+   cmd[6] = 0;        /* First layer */
+   cmd[7] = 0x0E;     /* We want the lead-in info */
+   cmd[8] = 0;        /* Allocation length */
+   cmd[9] = 2;
+
+   if(SendPacket(dh, cmd, 12, buf, 2, &sense, DATA_READ) == 0)
+   {  length = buf[0]<<8 | buf[1];
+      length += 2;
+
+      if(length < 4096)
+      {  memset(cmd, 0, MAX_CDB_SIZE);
+	 cmd[0] = 0xad;     /* READ DVD STRUCTURE */
+	 cmd[6] = 0;        /* First layer */
+	 cmd[7] = 0x0E;     /* We want the lead-in info */
+	 cmd[8] = (length>>8) & 0xff;  /* Allocation length */
+	 cmd[9] = length & 0xff;
+
+	 if(SendPacket(dh, cmd, 12, buf, length, &sense, DATA_READ) == 0)
+	 {  int i;
+
+	    is_dvd_dash = TRUE;
+
+	    for(i=0; i<6; i++)
+	       dh->manuID[i] = isprint(buf[21+i]) ? buf[21+i] : ' ';
+	    dh->manuID[6] = ' ';
+
+	    for(i=0; i<6; i++)
+	       dh->manuID[i+7] = isprint(buf[29+i]) ? buf[29+i] : ' ';
+	    dh->manuID[13] = 0;
+
+	    for(i=11; i>=0; i--)
+	       if(dh->manuID[i] == ' ') dh->manuID[i] = 0;
+	       else break;
+	 }
+      }
+   }
+
+#if 0
+   {  int layer_type = phy_info6 & 0x0f;
+      printf("Layer type(s): ");
+      if(layer_type & 0x01) printf("embossed ");
+      if(layer_type & 0x02) printf("recordable ");
+      if(layer_type & 0x04) printf("rewriteable ");
+      printf("\n");
+      fflush(stdout);
+   }
+#endif
+   dh->subType = DVD;
+
+   switch((phy_info4>>4) & 0x0f)   /* evaluate the book type */
+   {  case  1: dh->typedescr = "DVD-RAM"; 
+               dh->rewriteable = TRUE;
+               break;
+      case  2: dh->typedescr = dh->layers == 1 ? "DVD-R" : "DVD-R DL"; 
+	       break;
+      case  3: dh->typedescr = "DVD-RW"; 
+               dh->rewriteable = TRUE;
+	       break;
+      case  9: dh->typedescr = "DVD+RW"; 
+               dh->rewriteable = TRUE;
+	       break;
+      case 10: dh->typedescr = "DVD+R"; 
+	       break;
+      case 14: dh->typedescr = "DVD+R DL"; 
+	       break;
+
+      case  0: /* tricky case: real or faked DVD-ROM? */
+      {  int layer_type = phy_info6 & 0x0f;
+
+	 if(is_dvd_dash)
+	 {  dh->typedescr = dh->layers == 1 ? "DVD-R/-RW" : "DVD-R DL"; 
+	    break;
+	 }
+
+	 if(is_dvd_plus)
+	 {  dh->typedescr = dh->layers == 1 ? "DVD+R/+RW" : "DVD+R DL"; 
+	    break;
+	 }
+
+	 if(layer_type & 0x06) /* strange thing: (re-)writeable but neither plus nor dash */ 
+	 {  dh->typedescr = "DVD-ROM (fake)";
+	    break;
+	 }
+
+	 dh->typedescr = "DVD-ROM";
+	 dh->subType = UNSUPPORTED;
+	 break;
+      }
+
+      default: 
+	g_sprintf(sbuf,"DVD book type 0x%02x",(phy_info4>>4) & 0x0f); 
+	dh->typedescr=sbuf; 
+	break;
+   }
 
    FreeAlignedBuffer(ab);
    return TRUE;
@@ -585,6 +702,8 @@ static int check_sector(DeviceHandle *dh, GString *msg_out, guint64 sector, int 
    int status,result;
    char *msg;
 
+   if(sector<2) return 4;
+
    status = read_dvd_sector(dh, scratch->buf, sector, n_sectors);
    FreeAlignedBuffer(scratch);
 
@@ -653,6 +772,7 @@ static unsigned int query_size(DeviceHandle *dh)
    unsigned char *buf = ab->buf; 
    unsigned char cmd[MAX_CDB_SIZE];
    gint64 read_capacity;
+   int implausible = FALSE;
 
    /*** Query size by doing READ CAPACITY */
 
@@ -669,12 +789,33 @@ static unsigned int query_size(DeviceHandle *dh)
    read_capacity = (gint64)(buf[0]<<24 | buf[1]<<16 | buf[2]<<8 | buf[3]);
    FreeAlignedBuffer(ab);
 
+   /*** Validate capacity */
+
+   if(dh->mainType == CD && read_capacity > MAX_CDR_SIZE)
+      implausible = TRUE;
+
+   if(dh->mainType == DVD && dh->layers == 1 && read_capacity > MAX_DVD_SL_SIZE)
+      implausible = TRUE;
+
+   if(dh->mainType == DVD && dh->layers == 2 && read_capacity > MAX_DVD_DL_SIZE)
+      implausible = TRUE;
+
+   if(implausible)
+   {  LogWarning(_("READ CAPACITY: implausible medium size, %lld sectors\n"), 
+		 (gint64)read_capacity);
+      read_capacity = 0;
+   }
+
    /*** If RS02 header search is enabled and we can find an appropriate header,
 	use it as an authoritative source for the medium size. */
 
    if(Closure->querySize >= 2)
    {  if(dh->rs02Size <= 0)
-	 dh->rs02Size = MediumLengthFromRS02(dh, MAX(read_capacity, dh->userAreaSize));
+      {  gint64 last_sector = MAX(read_capacity, dh->userAreaSize);
+      
+	 if(last_sector > 0)
+	    dh->rs02Size = MediumLengthFromRS02(dh, last_sector);
+      }
       else Verbose("Root header search succeeded!\n"); 
       if(dh->rs02Size > 0) 
       {  Verbose("Medium size obtained from ECC header: %lld sectors\n", dh->rs02Size);  
@@ -1391,7 +1532,7 @@ int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
          break;
       }
    }
-#if 0
+#if 1
    if(status && Closure->defectiveDump)
      SaveDefectiveSector(dh->rawBuffer);
 #endif
@@ -1519,37 +1660,28 @@ DeviceHandle* OpenAndQueryDevice(char *device)
    dh->sectors = query_size(dh);
 
    switch(dh->subType)
-   {  case DVD:
-        if(!dh->isoInfo) // || dh->rs02Size > 0)
-	  dh->mediumDescr = g_strdup_printf(_("Medium: %s, %lld sectors%s %d layer(s)"),
-					    dh->typedescr, dh->sectors, 
-					    dh->rs02Size ? ", Ecc," : ",",
-					    dh->layers);
-	else
-	  dh->mediumDescr = g_strdup_printf(_("Medium \"%s\": %s, %lld sectors%s %d layer(s), created %s"),
-					    dh->isoInfo->volumeLabel,
-					    dh->typedescr, dh->sectors, 
-					    dh->rs02Size ? ", Ecc," : ",",
-					    dh->layers, dh->isoInfo->creationDate);
-
-	PrintLog("%s\n\n", dh->mediumDescr);
-	break;
-
+   {  
+      case DVD:
       case DATA1:
       case XA21:
-        if(!dh->isoInfo) // || dh->rs02Size > 0)
-	  dh->mediumDescr = g_strdup_printf(_("Medium: %s, %lld sectors%s"),
-					    dh->typedescr, dh->sectors,
-					    dh->rs02Size ? ", Ecc" : " ");
-	else
-	  dh->mediumDescr = g_strdup_printf(_("Medium \"%s\": %s, %lld sectors%s created %s"),
-					    dh->isoInfo->volumeLabel,
-					    dh->typedescr, dh->sectors,
-					    dh->rs02Size ? ", Ecc," : ",",
-					    dh->isoInfo->creationDate);
+      {  char *tmp;
+         if(!dh->isoInfo) // || dh->rs02Size > 0)
+	    tmp = g_strdup_printf(_("Medium: %s, %lld sectors%s"),
+				  dh->typedescr, dh->sectors,
+				  dh->rs02Size ? ", Ecc" : "");
+	 else
+	    tmp = g_strdup_printf(_("Medium \"%s\": %s, %lld sectors%s created %s"),
+				  dh->isoInfo->volumeLabel,
+				  dh->typedescr, dh->sectors,
+				  dh->rs02Size ? ", Ecc," : ",",
+				  dh->isoInfo->creationDate);
 
-	PrintLog("%s\n\n", dh->mediumDescr);
-	break;
+	 if(dh->manuID[0]) dh->mediumDescr = g_strdup_printf("%s, %s %s.", tmp, _("Manuf.-ID:"), dh->manuID);
+	 else              dh->mediumDescr = g_strdup_printf("%s.", tmp);
+	 g_free(tmp);
+	 PrintLog("%s\n\n", dh->mediumDescr);
+	 break;
+      }
 
       default:
       {  char *td = alloca(strlen(dh->typedescr)+1);

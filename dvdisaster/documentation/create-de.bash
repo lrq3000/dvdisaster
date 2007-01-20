@@ -2181,11 +2181,12 @@ Unterstützte Datenträger nach Typ:<p>
 <li>Keine weiteren Einschränkungen bekannt.</li>
 </ul>
 
-<b>DVD-R9, DVD+R9 (zweischichtig)</b>
+<b>DVD-R DL, DVD+R DL (zweischichtig)</b>
 <ul>
-<li>Das Laufwerk muß die <a href="qa20.html#dvdrom">Erkennung
-des Datenträger-Typs</a> ermöglichen und damit klarkommen, daß
-DVD-R9 <a href="qa20.html#dash9">keinen eigenen "book type" </a> besitzt.
+<li>
+Das Laufwerk muß die <a href="qa20.html#dvdrom">Erkennung
+des Datenträger-Typs</a> ermöglichen. Dies erfordert typischerweise 
+Laufwerke, die auch zweischichtige Medien beschreiben können.
 </li>
 </ul>
 
@@ -2285,7 +2286,6 @@ function qa20de()
 <a href="#dvdrom">3.5 Selbstgebrannter Datenträger wird als "DVD-ROM" erkannt und abgelehnt.</a><p>
 <a href="#freebsd">3.6 Unter FreeBSD erscheinen keine Laufwerke.</a><p>
 <a href="#v40error">3.7 "Fehlerkorrekturdatei wurde mit Version 0.40.7 erzeugt"</a><p>
-<a href="#dash9">3.8 DVD-R9 werden falsch erkannt.</a><p>
 
 <pre> </pre><hr><pre> </pre>
 
@@ -2394,21 +2394,12 @@ abgeschnitten werden soll, antworten Sie mit "OK".
 
 <b><a name="dvdrom">3.5 Selbstgebrannter Datenträger wird als "DVD-ROM" erkannt und abgelehnt.</a></b><p>
 
-Dies kann die folgenden Ursachen haben:
- 
-<ol>
-<li> Der "book type" des Rohlings wurde auf "DVD-ROM" gesetzt.<br>
-In diesem Fall muß das Laufwerk es ermöglichen, 
-den wahren Typ des eingelegten Datenträgers zu erkennen.
-dvdisaster gibt dann "DVD-ROM (faked book type)" 
-(DVD-ROM, vorgetäuschter book type) aus.<p>
+Wahrscheinlich wurde der "book type" des Rohlings beim Brennen auf "DVD-ROM" gesetzt.
+dvdisaster kann solche Datenträger typischerweise nur auf Laufwerken verarbeiten,
+die das entsprechende Format auch schreiben können.<p>
 
-Nicht alle Laufwerke unterstützen jedoch die Erkennung eines vorgetäuschten
-book types.
-
-<li> Einige Laufwerke betrachten DVD-R9 oder DVD+R9 (zweischichtig) tatsächlich als DVD-ROM.
-</li>
-</ol>
+Eine zweischichtige DVD+R mit falschem "book type" wird zum Beispiel nur auf einem 
+Brenner angenommen, der auch solche Rohlinge schreiben kann.<p>
 
 Versuchen Sie in diesen Fällen, das Abbild mit einem anderen Laufwerk einzulesen.
 
@@ -2435,14 +2426,6 @@ dvdisaster markieren ihre Fehlerkorrektur-Dateien mit einem
 speziellen Bit. Dies bewirkt in den dvdisaster-Versionen bis einschließlich
 0.65 fälschlicherweise die obige Fehlermeldung. Bitte verwenden Sie die CVS-Versionen
 nur zusammen mit dvdisaster 0.66 oder neueren Versionen.
-
-<div align=right><a href="#top">&uarr;</a></div>
-
-<b><a name="dash9">3.8 DVD-R9 werden falsch erkannt.</a></b><p>
-
-DVD-R9 haben keinen eigenen "book type"; sie verwenden die gleiche Kennung
-wie DVD-R und werden bestenfalls auch so erkannt (nur DVD-R9-fähige Brenner
-können den Unterschied herausfinden).
 
 <div align=right><a href="#top">&uarr;</a></div>
 

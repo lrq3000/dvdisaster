@@ -187,29 +187,31 @@ EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
    gint64 header_modulo;
    int read_count = 0;
    int answered_continue = FALSE;
+   int warning_shown = FALSE;
 
    /*** Quick search at fixed offsets relative to ISO filesystem */
 
-   if(!max_sectors && dh->isoInfo)
-   {  gint64 iso_size = dh->isoInfo->volumeSize; 
+   if(!max_sectors)
+   {  if(dh->isoInfo)
+      {  gint64 iso_size = dh->isoInfo->volumeSize; 
 
-      /* Iso size is correct; look for root sector at +2 */
+	 /* Iso size is correct; look for root sector at +2 */
 
-      if(try_sector(dh, iso_size, &eh, ab->buf) == HEADER_FOUND)
-      {  Verbose("Root sector search at +0 successful\n");
-	 FreeAlignedBuffer(ab);
-	 return eh;
+	 if(try_sector(dh, iso_size, &eh, ab->buf) == HEADER_FOUND)
+	 {  Verbose("Root sector search at +0 successful\n");
+	    FreeAlignedBuffer(ab);
+	    return eh;
+	 }
+
+	 /* Strange stuff. Sometimes the iso size is increased by 150
+	    sectors by the burning software. */
+
+	 if(try_sector(dh, iso_size-150, &eh, ab->buf) == HEADER_FOUND)
+	 {  Verbose("Root sector search at -150 successful\n");
+	    FreeAlignedBuffer(ab);
+	    return eh;
+	 }
       }
-
-      /* Strange stuff. Sometimes the iso size is increased by 150
-	 sectors by the burning software. */
-
-      if(try_sector(dh, iso_size-150, &eh, ab->buf) == HEADER_FOUND)
-      {  Verbose("Root sector search at -150 successful\n");
-	 FreeAlignedBuffer(ab);
-	 return eh;
-      }
-
       FreeAlignedBuffer(ab);
       return NULL;
    }
@@ -253,14 +255,23 @@ EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
 	       SetBit(try_next_header, pos);
 	       read_count++;
 	       if(!answered_continue && read_count > 5)
-	       {  int answer = ModalDialog(GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, insert_buttons,
-					   _("Faster medium initialization\n\n"
-					     "Searching rewriteable media for error correction data may take a long time.\n"
-					     "Press \"Skip RS02 test\" if you are certain that this medium was\n"
-					     "not augmented with RS02 error correction data."));
+	       {  if(Closure->guiMode)
+		  {  int answer = ModalDialog(GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, insert_buttons,
+					      _("Faster medium initialization\n\n"
+						"Searching rewriteable media for error correction data may take a long time.\n"
+						"Press \"Skip RS02 test\" if you are certain that this medium was\n"
+						"not augmented with RS02 error correction data."));
 		 
-		  if(answer) goto bail_out;
-		  answered_continue = TRUE;
+		    if(answer) goto bail_out;
+		    answered_continue = TRUE;
+		  }
+		  if(!Closure->guiMode && !warning_shown)
+		  {  PrintCLI(_("\nSearching rewriteable media for error correction data may take a long time.\n"
+				"If you are certain that this medium was not augmented with RS02 error correction\n"
+				"data, you might wish to abort this command and re-run with the option\n"
+				"--query-size=udf\n"));
+		    warning_shown = TRUE;
+		  }
 	       }
 	       goto check_next_header;
 	    case TRY_NEXT_MODULO:
@@ -617,7 +628,7 @@ static IsoInfo* examine_primary_vd(unsigned char *buf)
    strcpy(ii->volumeLabel, (char*)vlabel);
    beautify_dchar(ii->volumeLabel);
    strcpy(ii->creationDate, (char*)date);
-   ii->creationDate[11] = 0;
+   ii->creationDate[10] = 0;
    return ii;
 }
 

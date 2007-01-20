@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-07 19:17+0100\n"
+"POT-Creation-Date: 2007-01-20 15:56+0100\n"
 "PO-Revision-Date: 2005-01-01 14:24+0100\n"
 "Last-Translator: Andrea Polverini <polve@polve.com>\n"
 "Language-Team: Italian <>\n"
@@ -57,9 +57,9 @@ msgid "Failed seeking to sector %lld in image: %s"
 msgstr ""
 
 #: debug.c:109 debug.c:194 debug.c:238 debug.c:363 debug.c:485 debug.c:530
-#: rs02-create.c:331 rs02-create.c:357 rs02-create.c:944 udf.c:1102 udf.c:1160
-#: udf.c:1217 udf.c:1230 udf.c:1235 udf.c:1238 udf.c:1241 udf.c:1244
-#: udf.c:1247 udf.c:1250
+#: rs02-create.c:331 rs02-create.c:357 rs02-create.c:944 udf.c:1113 udf.c:1171
+#: udf.c:1228 udf.c:1241 udf.c:1246 udf.c:1249 udf.c:1252 udf.c:1255
+#: udf.c:1258 udf.c:1261
 #, c-format
 msgid "Failed writing to sector %lld in image: %s"
 msgstr ""
@@ -137,7 +137,7 @@ msgstr ""
 msgid "Truncating image to %lld sectors.\n"
 msgstr ""
 
-#: debug.c:395 read-linear.c:1106 rs01-fix.c:197 rs01-fix.c:219 rs01-fix.c:235
+#: debug.c:395 read-linear.c:1118 rs01-fix.c:197 rs01-fix.c:219 rs01-fix.c:235
 #: rs01-fix.c:270 rs02-create.c:103 rs02-create.c:147 rs02-fix.c:236
 #: rs02-fix.c:257 rs02-fix.c:272
 #, c-format
@@ -242,19 +242,19 @@ msgstr ""
 #. TRANSLATORS:
 #. This is a dummy entry which is supposed to translate into "ok".
 #. Please do not return anything else here.
-#: dvdisaster.c:267 dvdisaster.c:280 dvdisaster.c:292
+#: dvdisaster.c:268 dvdisaster.c:281 dvdisaster.c:293
 msgid "test phrase for verifying the locale installation"
 msgstr "ok"
 
-#: dvdisaster.c:459
+#: dvdisaster.c:461
 msgid "--cache-size must at least be 1MB; 16MB or higher is recommended."
 msgstr "la --cache-size deve essere minimo 1MB; sono consigliati 16MB o più."
 
-#: dvdisaster.c:461
+#: dvdisaster.c:463
 msgid "--cache-size maximum is 2048MB."
 msgstr "La --cache-size massima è 2048MB."
 
-#: dvdisaster.c:547
+#: dvdisaster.c:552
 #, c-format
 msgid ""
 "\n"
@@ -265,12 +265,12 @@ msgstr ""
 "dvdisaster versione %s\n"
 "\n"
 
-#: dvdisaster.c:594
+#: dvdisaster.c:599
 #, c-format
 msgid "?? illegal getopt return value %d\n"
 msgstr "?? getopt ha restituito un valore illegale: %d\n"
 
-#: dvdisaster.c:627
+#: dvdisaster.c:632
 #, c-format
 msgid ""
 "dvdisaster is not properly installed.\n"
@@ -279,7 +279,7 @@ msgstr ""
 
 #. TRANSLATORS: Program options like -r and --read are not to be translated
 #. to avoid confusion when discussing the program in international forums.
-#: dvdisaster.c:763
+#: dvdisaster.c:768
 msgid ""
 "\n"
 "Common usage examples:\n"
@@ -303,7 +303,7 @@ msgstr ""
 "  dvdisaster -u,--unlink # Cancella i file .iso (Quando le altre azioni sono concluse)\n"
 "\n"
 
-#: dvdisaster.c:772
+#: dvdisaster.c:777
 #, c-format
 msgid ""
 "Drive and file specification:\n"
@@ -318,7 +318,7 @@ msgstr ""
 "  -i,--image  Nome       - Nome del file immagine   (Standard: medium.iso)\n"
 "  -e,--ecc    Nome       - Nome del file di Parità (Standard: medium.ecc)\n"
 
-#: dvdisaster.c:780
+#: dvdisaster.c:785
 msgid ""
 "  -l,--list              - list drives available under ASPI manager\n"
 "\n"
@@ -326,7 +326,7 @@ msgstr ""
 "  -l,--list              - Elenca i drive disponibili con ASPI manager\n"
 "\n"
 
-#: dvdisaster.c:785
+#: dvdisaster.c:790
 #, c-format
 msgid ""
 "Tweaking options (see manual before using!)\n"
@@ -341,6 +341,7 @@ msgid ""
 "  --dao                  - assume DAO disc; do not trim image end\n"
 "  --eject                - eject medium after successful read\n"
 "  --fill-unreadable n    - fill unreadable sectors with byte n\n"
+"  --ignore-fatal-sense   - continue reading after potentially fatal error conditon\n"
 "  --query-size n         - query drive/udf/ecc for image size (default: ecc)\n"
 "  --read-attempts n-m    - attempts n upto m reads of a defective sector\n"
 "  --read-medium n        - read the whole medium up to n times\n"
@@ -351,7 +352,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: dvdisaster.c:806
+#: dvdisaster.c:812
 #, c-format
 msgid ""
 "Debugging options (purposefully undocumented and possibly harmful)\n"
@@ -375,7 +376,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: dvdisaster.c:827
+#: dvdisaster.c:833
 msgid ""
 "NOTE: This is the Windows console version of dvdisaster.\n"
 "The version providing a graphical user interface is called\n"
@@ -1626,7 +1627,7 @@ msgstr ""
 "Il file immagine è %lld settori più lungo del supporto inserito\n"
 "(File immagine: %lld sectors; supporto: %lld sectors).\n"
 
-#: read-adaptive.c:662 read-linear.c:643 rs01-common.c:119 rs01-create.c:241
+#: read-adaptive.c:662 read-linear.c:654 rs01-common.c:119 rs01-create.c:241
 #: rs01-verify.c:769
 #, c-format
 msgid "Failed skipping the ecc header: %s"
@@ -1641,7 +1642,7 @@ msgstr "Analizzo il file immagine esistente"
 msgid "premature end in image (only %d bytes): %s\n"
 msgstr "Fine prematura dell'immagine (solo %d Bytes): %s\n"
 
-#: read-adaptive.c:716 read-adaptive.c:1334 read-linear.c:651
+#: read-adaptive.c:716 read-adaptive.c:1334 read-linear.c:662
 #: rs01-common.c:221
 #, c-format
 msgid "Error reading CRC information: %s"
@@ -1666,15 +1667,15 @@ msgstr "Analizzo il file immagine esistente: %lld leggibile, %lld correggibili, 
 msgid "Analysing existing image file: %lld readable, %lld still missing.\n"
 msgstr "Analizzo il file immagine esistente: %lld leggibile, %lld ancora mancanti.\n"
 
-#: read-adaptive.c:920 read-linear.c:519
+#: read-adaptive.c:920 read-linear.c:544
 msgid "Ignore once"
 msgstr "Ignora una volta"
 
-#: read-adaptive.c:921 read-linear.c:520
+#: read-adaptive.c:921 read-linear.c:545
 msgid "Ignore always"
 msgstr "Ignora sempre"
 
-#: read-adaptive.c:922 read-linear.c:521
+#: read-adaptive.c:922 read-linear.c:546
 msgid "Abort"
 msgstr "Ferma"
 
@@ -1684,7 +1685,7 @@ msgid "Filling image area [%lld..%lld]"
 msgstr "Riempio l'area immagine [%lld..%lld]"
 
 #: read-adaptive.c:970 read-adaptive.c:1035 read-adaptive.c:1309
-#: read-adaptive.c:1513 read-linear.c:452 read-linear.c:598 read-linear.c:743
+#: read-adaptive.c:1513 read-linear.c:427 read-linear.c:477 read-linear.c:754
 #: rs01-fix.c:444 rs01-fix.c:702 rs02-fix.c:741
 #, c-format
 msgid "Failed seeking to sector %lld in image [%s]: %s"
@@ -1692,7 +1693,7 @@ msgstr ""
 
 #: read-adaptive.c:982 read-adaptive.c:1040 read-adaptive.c:1352
 #: read-adaptive.c:1363 read-adaptive.c:1379 read-adaptive.c:1519
-#: read-linear.c:459 read-linear.c:604 rs01-fix.c:449
+#: read-linear.c:433 read-linear.c:484 rs01-fix.c:449
 #, c-format
 msgid "Failed writing to sector %lld in image [%s]: %s"
 msgstr ""
@@ -1730,7 +1731,7 @@ msgstr ""
 "\n"
 "Sono disponibili dati sufficienti per ricostruire l'immagine.\n"
 
-#: read-adaptive.c:1283 read-linear.c:796
+#: read-adaptive.c:1283 read-linear.c:807
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -1739,7 +1740,7 @@ msgstr ""
 "Settore %lld: %s\n"
 "Impossibile recuperare dall'errore suddetto."
 
-#: read-adaptive.c:1287 read-linear.c:800
+#: read-adaptive.c:1287 read-linear.c:811
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -1762,12 +1763,12 @@ msgstr ""
 msgid "CRC error in sector %lld\n"
 msgstr "Errore CRC nel settore %lld\n"
 
-#: read-adaptive.c:1502 scsi-layer.c:611
+#: read-adaptive.c:1502 scsi-layer.c:719
 #, c-format
 msgid "Sectors %lld-%lld: %s\n"
 msgstr "Settori %lld-%lld: %s\n"
 
-#: read-adaptive.c:1505 read-linear.c:919 scsi-layer.c:610
+#: read-adaptive.c:1505 read-linear.c:930 scsi-layer.c:718
 #, c-format
 msgid "Sector %lld: %s\n"
 msgstr "Settore %lld: %s\n"
@@ -1820,7 +1821,7 @@ msgstr "Modo di lettura adattivo:"
 msgid "Sectors processed"
 msgstr "Settori processati"
 
-#: read-adaptive-window.c:110 scsi-layer.c:592
+#: read-adaptive-window.c:110 scsi-layer.c:700
 msgid "readable"
 msgstr "Leggibile"
 
@@ -1882,7 +1883,7 @@ msgstr ""
 msgid "<span %s>Aborted by user request!</span>"
 msgstr "<span %s>Annullato dall'utente!</span>"
 
-#: read-linear.c:288 read-linear.c:320 read-linear.c:645
+#: read-linear.c:288 read-linear.c:320 read-linear.c:656
 msgid "Reading CRC information from ecc file"
 msgstr ""
 
@@ -1901,111 +1902,111 @@ msgstr "Completamento immagine %s. Continuo col settore %lld.\n"
 msgid "Completing image %s. Only missing sectors will be read.\n"
 msgstr "Completamento immagine %s. Solo i settori mancanti saranno letti.\n"
 
-#: read-linear.c:482 rs01-common.c:227 rs02-verify.c:736
+#: read-linear.c:507 rs01-common.c:227 rs02-verify.c:736
 #, c-format
 msgid "* CRC error, sector: %lld\n"
 msgstr "* Errore CRC, Settore : %lld\n"
 
-#: read-linear.c:657
+#: read-linear.c:668
 msgid "done.\n"
 msgstr "compiuto.\n"
 
-#: read-linear.c:682 scsi-layer.c:976
+#: read-linear.c:693 scsi-layer.c:1106
 #, c-format
 msgid "Waiting %d seconds for drive to spin up...\n"
 msgstr "Attendere %d secondi per far avviare il drive...\n"
 
-#: read-linear.c:711 read-linear.c:810
+#: read-linear.c:722 read-linear.c:821
 #, c-format
 msgid "<span %s>Aborted by user request!</span> %lld sectors read, %lld sectors unreadable/skipped so far."
 msgstr "<span %s>Annullato dall'utente!</span> %lld settori letti, %lld settori illeggibili/saltati.."
 
-#: read-linear.c:755
+#: read-linear.c:766
 #, c-format
 msgid "unexpected read error in image for sector %lld"
 msgstr "Errore di lettura inatteso nell'immagine per il settore %lld"
 
-#: read-linear.c:899
+#: read-linear.c:910
 #, c-format
 msgid "Sector %lld: %s Skipping %d sectors.\n"
 msgstr "Settore %lld: %s Salto di %d settori.\n"
 
-#: read-linear.c:932 read-linear-window.c:83
+#: read-linear.c:943 read-linear-window.c:83
 #, c-format
 msgid "Unreadable / skipped sectors: %lld"
 msgstr "Settori illeggibili / saltati: %lld"
 
-#: read-linear.c:999
+#: read-linear.c:1010
 #, c-format
 msgid "Sector %lld: Speed increased to %4.1fx\n"
 msgstr "Settore %lld: Velocità incrementata a %4.1fx\n"
 
-#: read-linear.c:1001
+#: read-linear.c:1012
 #, c-format
 msgid "Sector %lld: Speed dropped to %4.1fx\n"
 msgstr "Settore %lld: Velocità diminuita a %4.1fx\n"
 
-#: read-linear.c:1005
+#: read-linear.c:1016
 #, c-format
 msgid "Read position: %3d.%1d%% (%4.1fx)"
 msgstr "Settori processati: %3d.%1d%% (%4.1fx)"
 
-#: read-linear.c:1030
+#: read-linear.c:1041
 #, c-format
 msgid "Reading pass %d of %d: %lld sectors read; %lld CRC errors; %lld missing."
 msgstr ""
 
-#: read-linear.c:1049
+#: read-linear.c:1061
 #, c-format
 msgid "%lld sectors read.     "
 msgstr "%lld settori letti.      "
 
-#: read-linear.c:1050
+#: read-linear.c:1062
 #, c-format
 msgid "%lld sectors read; %lld unreadable sectors."
 msgstr "%lld settori letti; %lld settori illeggibili."
 
-#: read-linear.c:1058
+#: read-linear.c:1070
 #, c-format
 msgid "All sectors successfully read, but wrong image length (%lld sectors difference)"
 msgstr ""
 
-#: read-linear.c:1061
+#: read-linear.c:1073
 msgid "All sectors successfully read, but wrong image checksum."
 msgstr ""
 
-#: read-linear.c:1062
+#: read-linear.c:1074
 msgid "All sectors successfully read. Checksums match."
 msgstr ""
 
-#: read-linear.c:1064
+#: read-linear.c:1076
 msgid "All sectors successfully read."
 msgstr "Tutti i settori sono stati letti correttamente."
 
-#: read-linear.c:1068
+#: read-linear.c:1080
 #, c-format
 msgid "%lld unreadable sectors."
 msgstr "%lld settori illeggibili."
 
-#: read-linear.c:1070
+#: read-linear.c:1082
 #, c-format
 msgid "%lld CRC errors."
 msgstr "%lld errori CRC."
 
-#: read-linear.c:1071
+#: read-linear.c:1083
 #, c-format
 msgid "%lld CRC errors, %lld unreadable sectors."
 msgstr "%lld errori CRC, %lld settori illeggibili."
 
-#: read-linear.c:1077
+#: read-linear.c:1089
 msgid "Scanning finished: "
 msgstr "Scansione terminata:"
 
-#: read-linear.c:1079
+#: read-linear.c:1091
 msgid "Reading finished: "
 msgstr "Lettura terminata:"
 
-#: read-linear.c:1090
+#: read-linear.c:1102
 #, c-format
 msgid ""
 "%d sectors missing at the end of the disc.\n"
@@ -2016,7 +2017,7 @@ msgstr ""
 "Questo è corretto se il disco è stato scritto in modalità TAO (track at once).\n"
 "L'imagine sarà aggiustata di conseguenza.Leggere il manuale per i dettagli.\n"
 
-#: read-linear.c:1096
+#: read-linear.c:1108
 #, c-format
 msgid ""
 "%d sectors missing at the end of the disc.\n"
@@ -2062,6 +2063,12 @@ msgstr "Illeggibili / Saltati"
 #: read-linear-window.c:331
 msgid "Speed"
 msgstr "Velocità"
+
+#: recover-cache.c:29 recover-cache.c:44 rs01-verify.c:537 scsi-freebsd.c:113
+#: scsi-linux.c:98
+#, c-format
+msgid "Could not open %s: %s"
+msgstr "Non posso aprire %s: %s"
 
 #: recover-raw.c:63
 #, c-format
@@ -2575,11 +2582,6 @@ msgstr "- Controllo il file ecc -"
 #: rs01-verify.c:524
 msgid "No error correction file present."
 msgstr "File ecc non presente."
-
-#: rs01-verify.c:537 scsi-freebsd.c:113 scsi-linux.c:98
-#, c-format
-msgid "Could not open %s: %s"
-msgstr "Non posso aprire %s: %s"
 
 #: rs01-verify.c:566 rs02-verify.c:887
 msgid "created by dvdisaster"
@@ -3404,7 +3406,7 @@ msgstr "La periferica %s (%s) non è un CDROM."
 msgid "Device %s (%s) is a hard disk."
 msgstr "La periferica %s (%s) è un disco rigido."
 
-#: scsi-layer.c:174
+#: scsi-layer.c:177
 #, c-format
 msgid ""
 "%s\n"
@@ -3413,12 +3415,12 @@ msgstr ""
 "%s\n"
 "Non posso identificare la lunghezza della struttura del dvd.\n"
 
-#: scsi-layer.c:185
+#: scsi-layer.c:188
 #, c-format
 msgid "Could not query dvd physical structure - implausible packet length %d\n"
 msgstr "Non riesco ad identificare la struttura fisica del dvd - lunghezza pachetto non plausibile %d\n"
 
-#: scsi-layer.c:200
+#: scsi-layer.c:203
 #, c-format
 msgid ""
 "%s\n"
@@ -3427,7 +3429,12 @@ msgstr ""
 "%s\n"
 "Non riesco ad identificare la struttura fisica del dvd\n"
 
-#: scsi-layer.c:292
+#: scsi-layer.c:224 scsi-layer.c:233
+#, c-format
+msgid "READ DVD STRUCTURE: implausible medium size, %lld-%lld=%lld sectors\n"
+msgstr ""
+
+#: scsi-layer.c:398
 #, c-format
 msgid ""
 "%s\n"
@@ -3436,12 +3443,12 @@ msgstr ""
 "%s\n"
 "Non riesco ad indentificare lunghezza della TOC.\n"
 
-#: scsi-layer.c:302 scsi-layer.c:351
+#: scsi-layer.c:408 scsi-layer.c:457
 #, c-format
 msgid "TOC info too long (%d), probably multisession.\n"
 msgstr "TOC info troppo lunga (%d), probabile multisessione.\n"
 
-#: scsi-layer.c:315
+#: scsi-layer.c:421
 #, c-format
 msgid ""
 "%s\n"
@@ -3450,7 +3457,7 @@ msgstr ""
 "%s\n"
 "Non riesco a leggere la TOC.\n"
 
-#: scsi-layer.c:337
+#: scsi-layer.c:443
 #, c-format
 msgid ""
 "%s\n"
@@ -3459,12 +3466,12 @@ msgstr ""
 "%s\n"
 "Non riesco a leggere tutta la lunghezza della TOC.\n"
 
-#: scsi-layer.c:346
+#: scsi-layer.c:452
 #, c-format
 msgid "TOC info too short, length %d.\n"
 msgstr "TOC info troppo corta, lunghezza %d.\n"
 
-#: scsi-layer.c:365
+#: scsi-layer.c:471
 #, c-format
 msgid ""
 "%s\n"
@@ -3473,7 +3480,7 @@ msgstr ""
 "%s\n"
 "Non riesco a leggere tutta la TOC.\n"
 
-#: scsi-layer.c:372
+#: scsi-layer.c:478
 #, c-format
 msgid ""
 "\n"
@@ -3482,31 +3489,31 @@ msgstr ""
 "\n"
 "formato TOC inatteso (lunghezza %d):\n"
 
-#: scsi-layer.c:379
+#: scsi-layer.c:485
 msgid "Consider sending a bug report.\n"
 msgstr "Considera di inviare una comunicazione di errore.\n"
 
-#: scsi-layer.c:387
+#: scsi-layer.c:493
 msgid "Data CD mode 1"
 msgstr "CD Data Modo 1"
 
-#: scsi-layer.c:388
+#: scsi-layer.c:494
 msgid "CD-I"
 msgstr "CD-I"
 
-#: scsi-layer.c:389
+#: scsi-layer.c:495
 msgid "CD XA form 1"
 msgstr "CD XA Form 1"
 
-#: scsi-layer.c:390
+#: scsi-layer.c:496
 msgid "Unknown"
 msgstr "Sconosciuto"
 
-#: scsi-layer.c:393
+#: scsi-layer.c:499
 msgid "CD Audio"
 msgstr "CD Audio"
 
-#: scsi-layer.c:543
+#: scsi-layer.c:649
 #, c-format
 msgid ""
 "%s\n"
@@ -3515,14 +3522,14 @@ msgstr ""
 "%s\n"
 "Non posso identificare la lunghezza della struttura dvd per il format code 1.\n"
 
-#: scsi-layer.c:553
+#: scsi-layer.c:659
 #, c-format
 msgid "Could not query dvd copyright info - implausible packet length %d\n"
 msgstr ""
 "Non posso identificare le informazioni del copyright del dvd\n"
 "- lunghezza del pacchetto non plausibile %d\n"
 
-#: scsi-layer.c:568
+#: scsi-layer.c:674
 #, c-format
 msgid ""
 "%s\n"
@@ -3531,23 +3538,23 @@ msgstr ""
 "%s\n"
 "Non posso identificare le informazioni del copyright.\n"
 
-#: scsi-layer.c:626
+#: scsi-layer.c:734
 msgid "is undecideable because of read error"
 msgstr "Illeggibile per errori di lettura"
 
-#: scsi-layer.c:632
+#: scsi-layer.c:740
 msgid "looks GOOD"
 msgstr "sembra BUONA"
 
-#: scsi-layer.c:638
+#: scsi-layer.c:746
 msgid "gives unformatted size (UNUSABLE)"
 msgstr "rende la dimensione non formattata (INUTILIZZABILE)"
 
-#: scsi-layer.c:643
+#: scsi-layer.c:751
 msgid "is UNUSABLE"
 msgstr "è UTILIZZABILE"
 
-#: scsi-layer.c:664
+#: scsi-layer.c:773
 #, c-format
 msgid ""
 "%s\n"
@@ -3556,7 +3563,12 @@ msgstr ""
 "%s\n"
 "Non riesco ad indentificare la dimensione del supporto.\n"
 
-#: scsi-layer.c:734
+#: scsi-layer.c:793
+#, c-format
+msgid "READ CAPACITY: implausible medium size, %lld sectors\n"
+msgstr ""
+
+#: scsi-layer.c:864
 #, c-format
 msgid ""
 "Different media sizes depending on query method:\n"
@@ -3569,7 +3581,7 @@ msgstr ""
 "\"READ DVD STRUCTURE\": %lld Settori\n"
 "\n"
 
-#: scsi-layer.c:739
+#: scsi-layer.c:869
 msgid ""
 "Evaluation of returned medium sizes:\n"
 "\n"
@@ -3577,15 +3589,15 @@ msgstr ""
 "Valutazione della dimensione del media:\n"
 "\n"
 
-#: scsi-layer.c:794
+#: scsi-layer.c:924
 msgid "Using value from READ CAPACITY"
 msgstr "Usa il valore dalla READ CAPACITY"
 
-#: scsi-layer.c:798
+#: scsi-layer.c:928
 msgid "Using value from READ DVD STRUCTURE"
 msgstr "Usa il valore dalla READ DVD STRUCTURE"
 
-#: scsi-layer.c:808
+#: scsi-layer.c:938
 #, c-format
 msgid ""
 "FAILED to determine image size.\n"
@@ -3597,7 +3609,7 @@ msgstr ""
 "ma CONTINUATE A VOSTRO RISCHIO (l'immagine potrebbe essere\n"
 "incompleta o illeggibile)."
 
-#: scsi-layer.c:813
+#: scsi-layer.c:943
 #, c-format
 msgid ""
 "Final decision: %s\n"
@@ -3606,7 +3618,7 @@ msgstr ""
 "Decisione finale: %s\n"
 "\n"
 
-#: scsi-layer.c:821
+#: scsi-layer.c:951
 msgid ""
 "Failed to determine image size.\n"
 "Try using a different drive."
@@ -3614,50 +3626,50 @@ msgstr ""
 "Impossibile determinare la dimensione dell'immagine.\n"
 "Provare ad utilizzare un drive diverso."
 
-#: scsi-layer.c:1017 scsi-layer.c:1043
+#: scsi-layer.c:1147 scsi-layer.c:1173
 #, c-format
 msgid ""
 "%s\n"
 "Could not load/unload the medium.\n"
 msgstr ""
 
-#: scsi-layer.c:1033
+#: scsi-layer.c:1163
 #, c-format
 msgid ""
 "%s\n"
 "Could not unlock the medium.\n"
 msgstr ""
 
-#: scsi-layer.c:1086
+#: scsi-layer.c:1216
 #, c-format
 msgid "Waiting 10 seconds for drive: %d\n"
 msgstr ""
 
-#: scsi-layer.c:1137
+#: scsi-layer.c:1267
 msgid "Setting the drive speed failed:\n"
 msgstr "Settaggio della velocità del drive fallito:\n"
 
-#: scsi-layer.c:1369
+#: scsi-layer.c:1499
 #, c-format
 msgid "Sectors %lld - %lld: %s\n"
 msgstr ""
 
-#: scsi-layer.c:1377
+#: scsi-layer.c:1507
 #, c-format
 msgid "Sector %lld, try %d: %s\n"
 msgstr ""
 
-#: scsi-layer.c:1389
+#: scsi-layer.c:1519
 #, c-format
 msgid "Sector %lld, try %d: success\n"
 msgstr ""
 
-#: scsi-layer.c:1447
+#: scsi-layer.c:1577
 #, c-format
 msgid "Device %s: no medium present\n"
 msgstr ""
 
-#: scsi-layer.c:1448
+#: scsi-layer.c:1578
 #, c-format
 msgid ""
 "Device %s does not become ready:\n"
@@ -3665,7 +3677,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: scsi-layer.c:1453
+#: scsi-layer.c:1583
 #, c-format
 msgid ""
 "\n"
@@ -3674,7 +3686,7 @@ msgstr ""
 "\n"
 "Periferica: %s, %s\n"
 
-#: scsi-layer.c:1457
+#: scsi-layer.c:1587
 #, c-format
 msgid ""
 "\n"
@@ -3683,54 +3695,48 @@ msgstr ""
 "\n"
 "Periferica: %s (%s), %s\n"
 
-#: scsi-layer.c:1471 scsi-layer.c:1559
+#: scsi-layer.c:1601 scsi-layer.c:1680
 #, c-format
 msgid "This software does not support \"%s\" type media."
 msgstr ""
 
-#: scsi-layer.c:1479
+#: scsi-layer.c:1609
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr ""
 
-#: scsi-layer.c:1488
+#: scsi-layer.c:1618
 msgid "Using READ CD"
 msgstr ""
 
-#: scsi-layer.c:1496
+#: scsi-layer.c:1626
 msgid ", RAW reading"
 msgstr ""
 
-#: scsi-layer.c:1502
+#: scsi-layer.c:1632
 #, c-format
 msgid ", Mode page 1 ERP = %02xh"
 msgstr ""
 
-#: scsi-layer.c:1510
+#: scsi-layer.c:1640
 msgid "Using READ(10).\n"
 msgstr ""
 
-#: scsi-layer.c:1524
-#, c-format
-msgid "Medium: %s, %lld sectors%s %d layer(s)"
-msgstr "Supporto: %s, %lld settori%s %d strato(i)"
-
-#: scsi-layer.c:1529
-#, c-format
-msgid "Medium \"%s\": %s, %lld sectors%s %d layer(s), created %s"
-msgstr "Supporto \"%s\": %s, %lld settori%s %d strato(i), creato %s"
-
-#: scsi-layer.c:1541
+#: scsi-layer.c:1658
 #, c-format
 msgid "Medium: %s, %lld sectors%s"
-msgstr "Supporto: %s, %lld Settori%s"
+msgstr "Supporto: %s, %lld settori%s"
 
-#: scsi-layer.c:1545
+#: scsi-layer.c:1662
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s created %s"
 msgstr "Supporto \"%s\": %s, %lld settori%s creato %s"
 
-#: scsi-layer.c:1566
+#: scsi-layer.c:1668
+msgid "Manuf.-ID:"
+msgstr ""
+
+#: scsi-layer.c:1687
 msgid "This software does not support encrypted media.\n"
 msgstr ""
 
@@ -3855,7 +3861,7 @@ msgstr ""
 msgid "Disable RS02 initialization in the preferences"
 msgstr ""
 
-#: udf.c:257
+#: udf.c:260
 msgid ""
 "Faster medium initialization\n"
 "\n"
@@ -3864,7 +3870,16 @@ msgid ""
 "not augmented with RS02 error correction data."
 msgstr ""
 
-#: udf.c:530
+#: udf.c:269
+msgid ""
+"\n"
+"Searching rewriteable media for error correction data may take a long time.\n"
+"If you are certain that this medium was not augmented with RS02 error correction\n"
+"data, you might wish to abort this command and re-run with the option\n"
+"--query-size=udf\n"
+msgstr ""
+
+#: udf.c:541
 msgid "Unnamed"
 msgstr "Non intestato"
 
@@ -3901,6 +3916,9 @@ msgstr ""
 #: welcome-window.c:136
 msgid "<i>New in this Version:</i>"
 msgstr ""
+
+#~ msgid "Medium \"%s\": %s, %lld sectors%s, created %s"
+#~ msgstr "Supporto \"%s\": %s, %lld settori%s, creato %s"
 
 #~ msgid "Unreadable / skipped sectors: %lld, CRC errors: %lld"
 #~ msgstr "Settori illeggibili / saltati: %lld, errori CRC: %lld"

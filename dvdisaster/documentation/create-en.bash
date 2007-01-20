@@ -2120,10 +2120,10 @@ Usable media by type:<p>
 <li>No further limitations are known.</li>
 </ul>
 
-<b>DVD-R9, DVD+R9 (two layers)</b>
+<b>DVD-R DL, DVD+R DL (two layers)</b>
 <ul>
-<li>The drive must be able to <a href="qa20.html#dvdrom">identify the medium type</a>
-and tolerate that <a href="qa20.html#dash9">DVD-R9 has no specific book type</a>.</li>
+<li>The drive must be able to <a href="qa20.html#dvdrom">identify the medium type</a>.
+Typically this is only the case for drives which can also write two layered media.</li>
 </ul>
 
 <b>DVD-RW, DVD+RW</b><p>
@@ -2218,7 +2218,6 @@ function qa20en()
 <a href="#dvdrom">3.5 My self-written media is recognized as "DVD-ROM" and rejected.</a><p>
 <a href="#freebsd">3.6 No drives appear under FreeBSD.</a><p>
 <a href="#v40error">3.7 "Ecc file has been created with version 0.40.7."</a><p>
-<a href="#dash9">3.8 DVD-R9 are incorrectly recognized.</a><p>
 
 <pre> </pre><hr><pre> </pre>
 
@@ -2324,19 +2323,12 @@ answer "OK" when you are asked whether the image should be truncated.
 
 <b><a name="dvdrom">3.5 My self-written media is recognized as "DVD-ROM" and rejected.</a></b><p>
 
-This can have the following reasons:
- 
-<ol>
-<li> The medium book type has been set to "DVD-ROM".<br>
-In this case the drive must support another way to find out the
-real medium type. Only then dvdisaster will accept the medium and report it
-as "DVD-ROM (faked book type)".<p>
+The medium book type has probably been set to "DVD-ROM". Typically, a drive
+capable of writing the same media format is required for processing the medium
+with dvdisaster.<p>
 
-But some drives do not support the recognition of faked book types.
-
-<li> Some drives can not tell DVD-R9 or DVD+R9 (two layers) from DVD-ROM.
-</li>
-</ol>
+For example, a two-layered DVD+R with a wrong book type 
+may only be accepted on a burner which can write such media.<p>
 
 Try another drive for reading images in these cases.
 
@@ -2362,14 +2354,6 @@ The <a href="http://sourceforge.net/cvs/?group_id=157550">CVS versions</a>
 of dvdisaster mark their ecc files with a special bit. This causes dvdisaster
 versions upto 0.65 to falsely display the above error message. Please use the
 CVS versions only together with dvdisaster 0.66 or newer versions.
-
-<div align=right><a href="#top">&uarr;</a></div>
-
-<b><a name="dash9">3.8 DVD-R9 are incorrectly recognized.</a></b><p>
-
-DVD-R9 media has no specific book type; it shares its media code with DVD-R
-and will at best be recognized as such (only DVD-R9 enabled burners may tell the
-difference). 
 
 <div align=right><a href="#top">&uarr;</a></div>
 
