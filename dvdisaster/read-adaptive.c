@@ -91,6 +91,12 @@ static void cleanup(gpointer data)
 
    Closure->cleanupProc = NULL;
 
+   /* Reset temporary ignoring of fatal errors.
+      User has to set this in the preferences to make it permanent. */
+
+   if(Closure->ignoreFatalSense == 2)
+      Closure->ignoreFatalSense = 0;
+
    /* Rewrite the header sectors if we were reading an RS02 image;
       otherwise the image will not be recognized later. */
 
@@ -522,21 +528,21 @@ void GetReadingRange(gint64 sectors, gint64 *firstSector, gint64 *lastSector)
 }
 
 /*
- * Compare image fingerprint against fingerprint stored in error correction file 
+ * Compare medium fingerprint against fingerprint stored in error correction file 
  */
 
-static void check_fingerprint(read_closure *rc)
-{  unsigned char digest[16];
-   int status;
+static void check_ecc_fingerprint(read_closure *rc)
+{  guint8 digest[16];
+   int fp_read;
 
-   status = ReadSectors(rc->dh, rc->buf, rc->eh->fpSector, 1);
+   fp_read = GetMediumFingerprint(rc->dh, digest, rc->eh->fpSector);
 
-   if(status) /* Not readable. Bad luck. */
+   if(!fp_read) /* Not readable. Bad luck. */
    {  int answer;
 
       answer = ModalWarning(GTK_MESSAGE_WARNING, GTK_BUTTONS_OK_CANCEL, NULL,
-			    _("Sector %d is missing. Can not compare image and ecc fingerprints.\n"
-			      "Double check that image and ecc file belong together.\n"),
+			    _("Sector %d is missing. Can not compare medium and ecc fingerprints.\n"
+			      "Double check that the medium and the ecc file belong together.\n"),
 			    rc->eh->fpSector);
 
       if(!answer)
@@ -546,15 +552,10 @@ static void check_fingerprint(read_closure *rc)
       }
    }
    else 
-   {  struct MD5Context image_md5;
-
-      MD5Init(&image_md5);
-      MD5Update(&image_md5, rc->buf, 2048);
-      MD5Final(digest, &image_md5);
-
+   {  
       if(memcmp(digest, rc->eh->mediumFP, 16))
-	Stop(_("Fingerprints of image and ecc file do not match.\n"
-	       "Image and ecc file do not belong together.\n"));
+	Stop(_("Fingerprints of medium and ecc file do not match.\n"
+	       "Medium and ecc file do not belong together.\n"));
    }
 }
 
@@ -563,8 +564,10 @@ static void check_fingerprint(read_closure *rc)
  */
 
 int check_image_fingerprint(read_closure *rc)
-{  gint32 fingerprint_sector;
-   int status,n;
+{  struct MD5Context md5ctxt;
+   guint8 image_fp[16], medium_fp[16];
+   gint32 fingerprint_sector;
+   int fp_read,n;
   
    /* Determine fingerprint sector */
 
@@ -578,14 +581,18 @@ int check_image_fingerprint(read_closure *rc)
      return 0; /* can't tell, assume okay */
 
    n = LargeRead(rc->image, rc->buf, 2048);
-   status = ReadSectors(rc->dh, rc->buf+2048, fingerprint_sector, 1);
+   MD5Init(&md5ctxt);
+   MD5Update(&md5ctxt, rc->buf, 2048);
+   MD5Final(image_fp, &md5ctxt);
 
-   if(n != 2048 || status || !memcmp(rc->buf, Closure->deadSector, 2048))
+   fp_read = GetMediumFingerprint(rc->dh, medium_fp, fingerprint_sector);
+
+   if(n != 2048 || !fp_read || !memcmp(rc->buf, Closure->deadSector, 2048))
      return 0; /* can't tell, assume okay */
 
    /* If both could be read, compare them */
 
-   if(memcmp(rc->buf, rc->buf+2048, 2048))
+   if(memcmp(image_fp, medium_fp, 16))
    {  	  
      if(!Closure->guiMode)
        Stop(_("Image file does not match the CD/DVD."));
@@ -1084,7 +1091,7 @@ void ReadMediumAdaptive(gpointer data)
    /*** Compare image and ecc fingerprints (only if RS01 type .ecc is available) */
 
    if(rc->readMode == ECC_IN_FILE)
-      check_fingerprint(rc);
+      check_ecc_fingerprint(rc);
 
    /*** Validate image size against ecc data */
    
@@ -1219,7 +1226,6 @@ reopen_image:
 
       for(s=rc->intervalStart; s<=rc->intervalEnd; ) /* s is incremented elsewhere */
       {  int nsectors,cnt;
-	 int ignore_fatal = 0;
  
 	 if(Closure->stopActions)          /* somebody hit the Stop button */
 	 {  if(Closure->guiMode)
@@ -1274,13 +1280,14 @@ reopen_image:
 	 /* Medium Error (3) and Illegal Request (5) may result from 
 	    a medium read problem, but other errors are regarded as fatal. */
 
-	 if(status && !ignore_fatal
+	 if(status && !Closure->ignoreFatalSense
 	    && rc->dh->sense.sense_key 
 	    && rc->dh->sense.sense_key != 3 && rc->dh->sense.sense_key != 5)
 	 {  int answer;
 
 	    if(!Closure->guiMode)
-	      Stop(_("Sector %lld: %s\nCan not recover from above error."),
+	      Stop(_("Sector %lld: %s\nCan not recover from above error.\n"
+		     "Use the --ignore-fatal-sense option to override."),
 		   s, GetLastSenseString(FALSE));
 
 	    answer = ModalDialog(GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, insert_buttons,
@@ -1290,7 +1297,7 @@ reopen_image:
 				 s, GetLastSenseString(FALSE));
 
 	    if(answer == 2)
-	      ignore_fatal = TRUE;
+	      Closure->ignoreFatalSense = 2;
 
 	    if(!answer)
 	    {  SetAdaptiveReadFootline(_("Aborted by unrecoverable error."), Closure->redText);

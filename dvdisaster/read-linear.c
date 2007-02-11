@@ -96,6 +96,12 @@ static void cleanup(gpointer data)
    int scan_mode = rc->scanMode;
    int i;
 
+   /* Reset temporary ignoring of fatal errors.
+      User has to set this in the preferences to make it permanent. */
+
+   if(Closure->ignoreFatalSense == 2)
+      Closure->ignoreFatalSense = 0;
+
    /* This is a failure condition */
 
    if(g_thread_self() == rc->worker)
@@ -239,18 +245,12 @@ static void check_ecc_file(read_closure *rc)
   /* Compare the fingerprint sectors */
 
   if(rc->ei) 
-  {  struct MD5Context md5ctxt;
-     unsigned char *buf = rc->alignedBuf[0]->buf;
-     guint8 fingerprint[16];
-     int status;
+  {  guint8 fingerprint[16];
+     int fp_read;
 
-     status = ReadSectorsFast(rc->dh, buf, rc->ei->eh->fpSector, 1);
+     fp_read = GetMediumFingerprint(rc->dh, fingerprint, rc->ei->eh->fpSector);
 
-     MD5Init(&md5ctxt);
-     MD5Update(&md5ctxt, buf, 2048);
-     MD5Final(fingerprint, &md5ctxt);
-
-     if(!status && !memcmp(fingerprint, rc->ei->eh->mediumFP, 16))
+     if(fp_read && !memcmp(fingerprint, rc->ei->eh->mediumFP, 16))
 	Closure->checkCrc = TRUE;
      else
      {  Closure->checkCrc = FALSE;
@@ -269,7 +269,8 @@ static void check_ecc_file(read_closure *rc)
  */
 
 static void determine_mode(read_closure *rc)
-{  gint64 image_size;
+{  guint8 medium_fp[16], image_fp[16];
+   gint64 image_size;
    unsigned char *buf = rc->alignedBuf[0]->buf;
    int unknown_fingerprint = FALSE;
    char *t;
@@ -353,16 +354,23 @@ reopen_image:
    if(!LargeSeek(rc->readerImage, (gint64)(2048*FINGERPRINT_SECTOR)))
       unknown_fingerprint = TRUE;
    else
-   {  int n = LargeRead(rc->readerImage, buf, 2048);
-      int status = ReadSectors(rc->dh, buf+2048, FINGERPRINT_SECTOR, 1);
+   {  struct MD5Context md5ctxt;
+      int n = LargeRead(rc->readerImage, buf, 2048);
+      int fp_read;
+
+      MD5Init(&md5ctxt);
+      MD5Update(&md5ctxt, buf, 2048);
+      MD5Final(image_fp, &md5ctxt);
+
+      fp_read = GetMediumFingerprint(rc->dh, medium_fp, FINGERPRINT_SECTOR);
 	 
-      if(n != 2048 || status || !memcmp(buf, Closure->deadSector, 2048))
+      if(n != 2048 || !fp_read || !memcmp(buf, Closure->deadSector, 2048))
 	 unknown_fingerprint = TRUE;
    }
 
    /* If fingerprints could be read, compare them. */
       
-   if(!unknown_fingerprint && memcmp(buf, buf+2048, 2048))
+   if(!unknown_fingerprint && memcmp(image_fp, medium_fp, 16))
    {  	  
       if(!Closure->guiMode)
 	 Stop(_("Image file does not match the CD/DVD."));
@@ -804,7 +812,8 @@ reread:
       {  int answer;
 
 	 if(!Closure->guiMode)
-	    Stop(_("Sector %lld: %s\nCan not recover from above error."),
+	    Stop(_("Sector %lld: %s\nCan not recover from above error.\n"
+		   "Use the --ignore-fatal-sense option to override."),
 		 s, GetLastSenseString(FALSE));
 
 	 answer = ModalDialog(GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, insert_buttons,
@@ -814,7 +823,7 @@ reread:
 			      s, GetLastSenseString(FALSE));
 
 	 if(answer == 2)
-	   Closure->ignoreFatalSense = TRUE;
+	   Closure->ignoreFatalSense = 2;
 
 	 if(!answer)
 	 {  SwitchAndSetFootline(Closure->readLinearNotebook, 1, Closure->readLinearFootline, 

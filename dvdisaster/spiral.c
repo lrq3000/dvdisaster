@@ -104,7 +104,6 @@ void DrawSpiral(Spiral *spiral)
 
    scale_i = spiral->startRadius;
    scale_o = spiral->startRadius + spiral->segmentSize;
-
    xi0 = spiral->mx + spiral->startRadius;
    yi0 = yo0 = spiral->my;
    xo0 = xi0 + spiral->segmentSize;

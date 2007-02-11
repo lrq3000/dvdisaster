@@ -72,6 +72,10 @@ typedef struct _prefs_context
    GtkWidget *minAttemptsScaleA, *minAttemptsScaleB;
    GtkWidget *maxAttemptsScaleA, *maxAttemptsScaleB;
    GtkWidget *readMediumA, *readMediumB;
+   GtkWidget *cacheDefectiveA, *cacheDefectiveB;
+   GtkWidget *cacheDefectiveDirA, *cacheDefectiveDirB;
+   GtkWidget *cacheDefectiveChooser;
+   GtkWidget *cacheDefectivePrefixA, *cacheDefectivePrefixB;
    GtkWidget *rangeToggleA, *rangeToggleB;
    GtkWidget *rangeSpin1A, *rangeSpin1B;
    GtkWidget *rangeSpin2A, *rangeSpin2B;
@@ -81,6 +85,7 @@ typedef struct _prefs_context
    GtkWidget *byteEntryA, *byteEntryB;
    GtkWidget *byteCheckA, *byteCheckB;
    GtkWidget *spinUpA, *spinUpB;
+   GtkWidget *fatalSenseA, *fatalSenseB;
    GtkWidget *ejectA, *ejectB;
    GtkWidget *readAndCreateButtonA, *readAndCreateButtonB;
    GtkWidget *unlinkImageButtonA, *unlinkImageButtonB;
@@ -147,6 +152,7 @@ static gboolean delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
 void HidePreferences(void)
 {  prefs_context *pc = (prefs_context*)Closure->prefsContext;
    Method *method;
+   const char *value1, *value2;
    int method_index;
    int i;
 
@@ -168,7 +174,7 @@ void HidePreferences(void)
       int v1 = strtol(value1, NULL, 0);
       int v2 = strtol(value2, NULL, 0);
 
-      /* both field may contain different values */
+      /* both fields may contain different values */
 
       if(Closure->fillUnreadable != v2)
       {  Closure->fillUnreadable = v2;
@@ -187,6 +193,22 @@ void HidePreferences(void)
 	Closure->fillUnreadable = 255;
    }
    PrepareDeadSector();
+
+   /* Get defective sector cache prefix.
+      Both entries might contain different input. */
+
+   value1 = gtk_entry_get_text(GTK_ENTRY(pc->cacheDefectivePrefixA));
+   value2 = gtk_entry_get_text(GTK_ENTRY(pc->cacheDefectivePrefixB));
+   if(strcmp(Closure->dDumpPrefix, value1))
+   {  g_free(Closure->dDumpPrefix);
+      Closure->dDumpPrefix = g_strdup(value1);
+      gtk_entry_set_text(GTK_ENTRY(pc->cacheDefectivePrefixB), value1);
+   }
+   else if(strcmp(Closure->dDumpPrefix, value2))
+   {  g_free(Closure->dDumpPrefix);
+      Closure->dDumpPrefix = g_strdup(value2);
+      gtk_entry_set_text(GTK_ENTRY(pc->cacheDefectivePrefixA), value2);
+   }
 
    /* Ask currently selected method to update its settings
       from the preferences */
@@ -254,7 +276,9 @@ enum
    TOGGLE_2GB,
    TOGGLE_RANGE,
    TOGGLE_RAW,
+   TOGGLE_CACHE_DEFECTIVE,
    TOGGLE_CANCEL_OK,
+   TOGGLE_FATAL_SENSE,
    TOGGLE_EJECT,
 
    SPIN_DELAY,
@@ -334,6 +358,12 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->suffixB), state);
 	break;
 
+      case TOGGLE_CACHE_DEFECTIVE:
+	Closure->defectiveDump = state;
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->cacheDefectiveA), state);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->cacheDefectiveB), state);
+	break;
+
       case TOGGLE_CANCEL_OK:
 	Closure->reverseCancelOK = state;
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->cancelOKA), state);
@@ -356,6 +386,12 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 	Closure->readRaw = state;
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->rawButtonA), state);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->rawButtonB), state);
+	break;
+
+      case TOGGLE_FATAL_SENSE:
+	Closure->ignoreFatalSense = state;
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->fatalSenseA), state);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->fatalSenseB), state);
 	break;
 
       case TOGGLE_EJECT:
@@ -929,6 +965,94 @@ static void bytefill_check_cb(GtkWidget *widget, gpointer data)
    }
 }
 
+/*
+ * Enter the prefix for raw sector files
+ */
+
+static void defective_prefix_cb(GtkWidget *widget, gpointer data)
+{  prefs_context *pc = (prefs_context*)data;
+   const char *value = gtk_entry_get_text(GTK_ENTRY(widget));
+
+   if(!value || !*value)
+   {  gtk_entry_set_text(GTK_ENTRY(pc->cacheDefectivePrefixA), "sector-");
+      gtk_entry_set_text(GTK_ENTRY(pc->cacheDefectivePrefixB), "sector-");
+      return;
+
+   }
+
+   if(widget == pc->cacheDefectivePrefixA)
+      gtk_entry_set_text(GTK_ENTRY(pc->cacheDefectivePrefixB), value);
+
+   if(widget == pc->cacheDefectivePrefixB)
+      gtk_entry_set_text(GTK_ENTRY(pc->cacheDefectivePrefixA), value);
+}
+
+/*
+ * Run the file chooser for the raw sector files directory
+ */
+
+static void cache_defective_select_cb(GtkWidget *widget, gpointer data)
+{  prefs_context *pc = (prefs_context*)Closure->prefsContext;
+   int action = GPOINTER_TO_INT(data);
+
+   switch(action)
+   {  case 0:  /* destroy */
+	 pc->cacheDefectiveChooser = NULL;
+	 break;
+
+      case 1: /* OK */
+	 Closure->dDumpDir = g_strdup(gtk_file_selection_get_filename(GTK_FILE_SELECTION(pc->cacheDefectiveChooser)));
+	 printf("%s\n", Closure->dDumpDir);
+	 if(pc->cacheDefectiveDirA)
+	    gtk_label_set_text(GTK_LABEL(pc->cacheDefectiveDirA), Closure->dDumpDir);
+	 if(pc->cacheDefectiveDirB)
+	    gtk_label_set_text(GTK_LABEL(pc->cacheDefectiveDirB), Closure->dDumpDir);
+	 gtk_widget_hide(pc->cacheDefectiveChooser);
+	 break;
+
+      case 2: /* Cancel */
+	 gtk_widget_hide(pc->cacheDefectiveChooser);
+	 break;
+   }
+}
+
+static void cache_defective_dir_cb(GtkWidget *widget, gpointer data)
+{  prefs_context *pc = (prefs_context*)data;
+   GtkWidget *file_list;
+
+   if(!pc->cacheDefectiveChooser)
+   {  char filename[strlen(Closure->dDumpDir)+10];
+
+      pc->cacheDefectiveChooser = gtk_file_selection_new(_utf("Raw sector caching"));
+      ReverseCancelOK(GTK_DIALOG(pc->cacheDefectiveChooser));
+
+      g_signal_connect(G_OBJECT(pc->cacheDefectiveChooser), "destroy",
+		       G_CALLBACK(cache_defective_select_cb), 
+		       GINT_TO_POINTER(0));
+      g_signal_connect(G_OBJECT(GTK_FILE_SELECTION(pc->cacheDefectiveChooser)->ok_button),
+		       "clicked", G_CALLBACK(cache_defective_select_cb), GINT_TO_POINTER(1));
+      g_signal_connect(G_OBJECT(GTK_FILE_SELECTION(pc->cacheDefectiveChooser)->cancel_button),
+		       "clicked", G_CALLBACK(cache_defective_select_cb), GINT_TO_POINTER(2));
+
+      sprintf(filename, "%s/", Closure->dDumpDir);
+      gtk_file_selection_set_filename(GTK_FILE_SELECTION(pc->cacheDefectiveChooser),
+				      filename);
+      gtk_file_selection_hide_fileop_buttons(GTK_FILE_SELECTION(pc->cacheDefectiveChooser));
+
+      /* Hide the file selection parts */
+
+      file_list = GTK_FILE_SELECTION(pc->cacheDefectiveChooser)->file_list;
+      gtk_widget_set_sensitive(file_list, FALSE);
+      gtk_widget_hide(GTK_FILE_SELECTION(pc->cacheDefectiveChooser)->selection_entry);
+#if 0
+      gtk_widget_hide(file_list->parent);
+#endif
+   }
+
+   gtk_widget_show(pc->cacheDefectiveChooser);
+}
+
+
 /***
  *** Error correction method selection
  ***/
@@ -1382,6 +1506,46 @@ void CreatePreferencesWindow(void)
 			 "Waits the specified amount of seconds for letting the drive spin up. "
 			 "This avoids speed jumps at the beginning of the reading curve."));
 
+      /* Fatal error handling */
+
+      frame = gtk_frame_new(_utf("Fatal error handling"));
+      gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
+
+      lwoh = CreateLabelWithOnlineHelp(_("Fatal error handling"), 
+				       _("Ignore fatal errors"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 4);
+	 GtkWidget *toggle;
+
+	 toggle = gtk_check_button_new();
+	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(toggle), Closure->ignoreFatalSense);
+       	 g_signal_connect(G_OBJECT(toggle), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_FATAL_SENSE));
+	 gtk_box_pack_start(GTK_BOX(hbox), toggle, FALSE, FALSE, 0);
+
+	 if(!i)
+	 {  pc->fatalSenseA = toggle;
+	    gtk_box_pack_start(GTK_BOX(hbox), lwoh->linkBox, FALSE, FALSE, 0);
+	    gtk_container_add(GTK_CONTAINER(frame), hbox);
+	    gtk_container_set_border_width(GTK_CONTAINER(hbox), 12);
+	 }
+	 else
+	 {  pc->fatalSenseB = toggle;
+	    gtk_box_pack_start(GTK_BOX(hbox), lwoh->normalLabel, FALSE, FALSE, 0);
+	    AddHelpWidget(lwoh, hbox);
+	 }
+      }	 
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Fatal error handling</b>\n\n"
+			 "By default dvdisaster stops reading when the drive "
+			 "reports a fatal error. This prevents further fruitless "
+			 "read attempts and possible damage to the drive.\n"
+			 "However some drives produce unfounded fatal messages. "
+			 "For such drives ignoring fatal errors may be needed to "
+			 "do uninterrupted reading of damaged media."));
+
       /* Eject medium */
 
       frame = gtk_frame_new(_utf("Media ejection"));
@@ -1404,7 +1568,7 @@ void CreatePreferencesWindow(void)
 	 {  pc->ejectA = toggle;
 	    gtk_box_pack_start(GTK_BOX(hbox), lwoh->linkBox, FALSE, FALSE, 0);
 	    gtk_container_add(GTK_CONTAINER(frame), hbox);
-   gtk_container_set_border_width(GTK_CONTAINER(hbox), 12);
+	    gtk_container_set_border_width(GTK_CONTAINER(hbox), 12);
 	 }
 	 else
 	 {  pc->ejectB = toggle;
@@ -1657,6 +1821,99 @@ void CreatePreferencesWindow(void)
 			 "If unreadable sectors remain after reading the medium from start to end, "
 			 "the medium is read again upto he given number of times.\n\n"
 			 "Only the missing sectors will be tried in the additional reading passes."));
+
+      /** Defective sector caching */
+      
+      frame = gtk_frame_new(_utf("Raw sector caching"));
+      gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
+
+      vbox2 = gtk_vbox_new(FALSE, 20);
+      gtk_container_set_border_width(GTK_CONTAINER(vbox2), 10);
+      gtk_container_add(GTK_CONTAINER(frame), vbox2);
+
+      /* Toggle button */
+
+      lwoh = CreateLabelWithOnlineHelp(_("Raw sector caching"), 
+				       _("Keep uncorrectable raw sectors in the following directory:"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *table = gtk_table_new(3,2,FALSE);
+	 GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
+	 GtkWidget *label = gtk_label_new(Closure->dDumpDir);
+	 GtkWidget *select = gtk_button_new_with_label(_utf("Select"));
+
+	 button = gtk_check_button_new();
+	 gtk_table_attach(GTK_TABLE(table), button, 
+			  0, 1, 0, 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
+	 gtk_table_attach(GTK_TABLE(table), i ? lwoh->normalLabel : lwoh->linkBox,
+			  1, 2, 0, 1, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
+	 gtk_misc_set_alignment(GTK_MISC(lwoh->linkLabel), 0.0, 0.0);
+
+	 hbox = gtk_hbox_new(FALSE, 0);
+	 gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+	 gtk_table_attach(GTK_TABLE(table), hbox, 
+			  1, 2, 1, 2, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
+
+	 gtk_table_attach(GTK_TABLE(table), select, 
+			  2, 3, 0, 2, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
+	 g_signal_connect(G_OBJECT(select), "clicked", G_CALLBACK(cache_defective_dir_cb), pc);
+
+
+ 	 if(!i) 
+	 {    pc->cacheDefectiveA = button;
+	      pc->cacheDefectiveDirA = label;
+	 }
+	 else
+	 {    pc->cacheDefectiveB = button;
+	      pc->cacheDefectiveDirB = label;
+	 }
+
+	 if(Closure->readRaw && Closure->defectiveDump)
+	      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
+	 else gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), FALSE);
+         g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_CACHE_DEFECTIVE));
+
+	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), table, FALSE, FALSE, 0);
+	 else   AddHelpWidget(lwoh, table);
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Raw reading</b>\n\n"
+			 "Some CD/DVD drives may deliver unreliable results when their "
+			 "internal error correction approaches its maximum capacity.\n\n"
+			 "Activating this option makes dvdisaster read sectors in raw mode. "
+			 "The L-EC P/Q vectors, EDC checksum and MSF address contained in the "
+			 "raw data are checked to make sure that the sector was correctly read."
+			 ));
+
+      /* Sector cache file prefix */
+
+      lwoh = CreateLabelWithOnlineHelp(_("Raw sector file prefix"), 
+				       _("Sector file prefix: "));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
+	 GtkWidget *entry = gtk_entry_new();
+
+       	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
+	 g_signal_connect(entry, "activate", G_CALLBACK(defective_prefix_cb), pc);
+	 gtk_entry_set_width_chars(GTK_ENTRY(entry), 20);
+	 gtk_entry_set_text(GTK_ENTRY(entry), Closure->dDumpPrefix);
+	 gtk_box_pack_start(GTK_BOX(hbox), entry, FALSE, FALSE, 0);
+
+ 	 if(!i) pc->cacheDefectivePrefixA = entry;
+	 else   pc->cacheDefectivePrefixB = entry;
+
+	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	 else   AddHelpWidget(lwoh, hbox);
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Raw sector file prefix</b>\n\n"
+			 "Use a different prefix for each disk you are trying "
+			 "to recover, e.g. \"disk1-\" and so on.\n"));
 
       /*** "Error correction" page */
 

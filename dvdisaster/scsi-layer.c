@@ -1500,23 +1500,35 @@ int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
       if(status)  /* current try was unsucessful */
       {
 	 if(recommended_attempts > 1)
-	 {
+	 {  int last_key, last_asc, last_ascq;
 
-	   /* Do not attempt multiple re-reads if nsectors > 1 and sectorSkip == 0
-	      as these will be re-read with nsectors==1 anyways. */
+	    /* Do not attempt multiple re-reads if nsectors > 1 and sectorSkip == 0
+	       as these will be re-read with nsectors==1 anyways. */
 
-	   if(dh->canReadDefective && nsectors > 1 && Closure->sectorSkip == 0)
-	   {  PrintCLIorLabel(Closure->status,
-			      _("Sectors %lld - %lld: %s\n"),
-			      s, s+nsectors-1, GetLastSenseString(FALSE));
-	      return status;
-	   }
+	    if(dh->canReadDefective && nsectors > 1 && Closure->sectorSkip == 0)
+	    {  PrintCLIorLabel(Closure->status,
+			       _("Sectors %lld - %lld: %s\n"),
+			       s, s+nsectors-1, GetLastSenseString(FALSE));
+	       return status;
+	    }
 
-	   /* Print results of current attempt */
+	    /* Print results of current attempt.
+	       If the error was a wrong MSF in the sector, 
+	       print info about the sector which was returned. */
 
-	   PrintCLIorLabel(Closure->status,
-			   _("Sector %lld, try %d: %s\n"),
-			   s, retry, GetLastSenseString(FALSE));
+	    GetLastSense(&last_key, &last_asc, &last_ascq);
+
+	    if(last_key == 3 && last_asc == 255 && last_ascq == 2 && dh->rawBuffer)
+	    {  char *frame = dh->rawBuffer->workBuf->buf;
+	       PrintCLIorLabel(Closure->status,
+			       _("Sector %lld, try %d: %s Sector returned: %d.\n"),
+			       s, retry, GetLastSenseString(FALSE),
+			       MSFtoLBA(frame[12], frame[13], frame[14]));
+	    }
+	    else
+	       PrintCLIorLabel(Closure->status,
+			       _("Sector %lld, try %d: %s\n"),
+			       s, retry, GetLastSenseString(FALSE));
 
 	   /* Last attempt; create failure notice */
 
@@ -1532,10 +1544,17 @@ int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
          break;
       }
    }
-#if 1
-   if(status && Closure->defectiveDump)
-     SaveDefectiveSector(dh->rawBuffer);
-#endif
+
+   /* Update / use the defective sector cache */
+
+   if(dh->canReadDefective && status && Closure->defectiveDump)
+   {   
+       SaveDefectiveSector(dh->rawBuffer);
+       status = TryDefectiveSectorCache(dh->rawBuffer, buf);
+       if(status)
+	  RememberSense(3, 255, 7);  /* Recovery failed */
+   }
+
    return status;
 }
 
@@ -1630,6 +1649,8 @@ DeviceHandle* OpenAndQueryDevice(char *device)
 	if(Closure->readRaw)
 	{  dh->rawBuffer = CreateRawBuffer(2352);
 
+	   dh->rawBuffer->validFP = GetMediumFingerprint(dh, dh->rawBuffer->mediumFP, FINGERPRINT_SECTOR);
+	 
 	   if(dh->subType == XA21)
 	   {  dh->rawBuffer->dataOffset = 24;
 	      dh->rawBuffer->xaMode = TRUE;
@@ -1704,6 +1725,51 @@ DeviceHandle* OpenAndQueryDevice(char *device)
      dh->defects = SimulateDefects(dh->sectors);
 
    return dh;
+}
+
+/*
+ * Get the md5sum from the specified sector. Results are cached in the
+ * DeviceHandle as multiple queries may occur.
+ */
+
+int GetMediumFingerprint(DeviceHandle *dh, guint8 *fp_out, gint64 sector)
+{  AlignedBuffer *ab;
+   int status;
+
+   /* Sector already cached? */
+
+   if(dh->fpSector == sector)
+      switch(dh->fpState)
+      {  case 0:    /* not read */
+	    break;
+	 case 1:    /* unreadable */
+	    return FALSE;
+	 case 2:    /* already cached */
+	    memcpy(fp_out, dh->mediumFP, 16);
+	    return TRUE;
+      }
+
+     ab = CreateAlignedBuffer(2048);
+     status = ReadSectorsFast(dh, ab->buf, sector, 1);
+   
+     dh->fpSector = sector;
+     if(status)  /* read error */
+     {  dh->fpState = 1;
+     }
+     else
+     {  struct MD5Context md5ctxt;
+   
+	dh->fpState = 2;
+
+	MD5Init(&md5ctxt);
+	MD5Update(&md5ctxt, ab->buf, 2048);
+	MD5Final(dh->mediumFP, &md5ctxt);
+	memcpy(fp_out, dh->mediumFP, 16);
+     }
+
+     FreeAlignedBuffer(ab);
+
+     return dh->fpState == 2;
 }
 
 /***

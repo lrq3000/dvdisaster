@@ -488,7 +488,17 @@ int main(int argc, char *argv[])
 	   Closure->debugMode = TRUE;
 	   break;
          case MODIFIER_DEFECTIVE_DUMP:
-	   Closure->defectiveDump = g_strdup(optarg);
+	 {  char *c;
+	    Closure->defectiveDump = TRUE;
+	    g_free(Closure->dDumpDir);
+	    Closure->dDumpDir = g_strdup(optarg);
+	    c = strrchr(Closure->dDumpDir, '/');
+	    if(c)
+	    {  *c = 0;
+	       g_free(Closure->dDumpDir);
+	       Closure->dDumpPrefix = g_strdup(c+1);
+	    }
+	 }
 	   break;
          case MODIFIER_QUERY_SIZE:
 	        if(!strcmp(optarg, "drive")) Closure->querySize = 0;

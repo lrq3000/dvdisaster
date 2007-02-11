@@ -127,28 +127,37 @@ function index_contents_de()
 
 function index0de()
 {  cat >> $1 <<EOF
-<h3>Das dvdisaster-Projekt:</h3>
 
-dvdisaster erzeugt einen Sicherheitspuffer gegen  <b>Datenverluste</b>, die
-auf <a href="qa10.html#media">CD</a>- und  <a href="qa10.html#media">DVD</a>-Datenträgern 
-durch <b>Alterung</b> oder <b>Verkratzen</b> entstehen:
+<h3>Das dvdisaster-Projekt</h3>
+
+CD- und DVD-Datenträger behalten ihre Daten nur eine endlich lange Zeit (normalerweise
+viele Jahre). Danach beginnt typischerweise ein langsamer Datenverlust, 
+indem von außen nach innen immer mehr Lesefehler auftreten.<p>
+
+<b>Archivieren mit Schutz vor Datenverlust</b><p>
+
+dvdisaster archiviert Daten so auf CD/DVD (<a href="qa10.html#media">unterstützte Formate</a>), 
+daß sie auch dann noch wiederherstellbar sind, 
+wenn der Datenträger bereits einige Lesefehler enthält. Dadurch
+können Sie Ihre Daten noch vollständig auf einen neuen Datenträger retten.<p>
+
+Der Schutz vor Datenverlust geschieht durch das Anlegen von Fehlerkorrektur-Daten.
+Diese werden entweder dem Datenträger hinzugefügt oder
+in zusätzlichen Fehlerkorrektur-Dateien aufbewahrt. 
+dvdisaster arbeitet auf der <a href="background20.html">Abbild-Ebene</a> und ist dadurch
+vom Dateisystem und der Lage der Lesefehler unabhängig.
+Die maximale Kapazität der Fehlerkorrektur ist einstellbar.<p>
+
+<b>Häufige Mißverständnisse über dvdisaster:</b>
 
 <ul>
-<li>dvdisaster legt <b>Fehlerkorrektur-Daten</b> für die Fälle an,
-in denen vom Laufwerk nicht mehr korrigierbare Lesefehler auftreten.<p></p></li>
-
-<li>dvdisaster versucht so viele Daten wie möglich von einem defekten Datenträger zu lesen.
-Danach werden unlesbare Datenabschnitte durch die vorher erzeugten Fehlerkorrektur-Daten 
-rekonstruiert. 
-Die maximale Kapazität der Fehlerkorrektur ist einstellbar.<p></li>
-
-<li>dvdisaster arbeitet auf der <a href="background20.html">Abbild-Ebene</a> und ist dadurch
-vom Dateisystem unabhängig.<p></li>
+<li>dvdisaster kann defekte CDs/DVDs nicht wieder lesbar machen.
+Ohne Fehlerkorrektur-Daten kann ein beschädigter Datenträger <i>nicht</i> 
+wiederhergestellt werden.<p></li> 
+<li><img src="images/exclude_from_search_terms.png" align="middle"><br>
+dvdisaster enthält keine derartigen Funktionen. Diskussionen darüber sind zwecklos.</li>
 </ul>
-
-Wenn Sie die Fehlerkorrektur-Daten rechtzeitig erzeugen und gut aufheben,
-haben Sie bei typischen Lesefehlern eine gute Aussicht, Ihre Daten noch
-vollständig auf einen neuen Datenträger zu retten.
+</ul>
 
 <p>
 <a href="index10.html">Beispiele für die Fehlerkorrektur...</a>
@@ -2452,6 +2461,7 @@ function background_contents_de()
    link50)   link_title="Angepaßtes Lese-Verfahren" ;;   
    link60)   link_title="Bemerkungen zu Lesefehlern" ;;   
    link70)   link_title="Fehlerkorrektur-Datei aufbewahren" ;;
+   link80)   link_title="Arbeitsweise der Fehlerkorrektur" ;;
 
    content*) eval "background$page$lang $file"
 	    return 0
@@ -3113,7 +3123,6 @@ auf dem nächsten Datenträger ablegen.<p>
 
 EOF
 }
-
 
 # ----- Impressum
 

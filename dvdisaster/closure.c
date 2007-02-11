@@ -437,6 +437,9 @@ void ReadDotfile()
       if(!strcmp(symbol, "cache-size"))      { Closure->cacheMB     = atoi(value); continue; }
       if(!strcmp(symbol, "cd-size"))         { Closure->cdSize = Closure->savedCDSize = atoll(value); continue; }
       if(!strcmp(symbol, "dao"))             { Closure->noTruncate  = atoi(value); continue; }
+      if(!strcmp(symbol, "defective-dump"))  { Closure->defectiveDump = atoi(value); continue; }
+      if(!strcmp(symbol, "defective-dir"))   { Closure->dDumpDir = g_strdup(value); continue; }
+      if(!strcmp(symbol, "defective-prefix")){ Closure->dDumpPrefix = g_strdup(value); continue; }
       if(!strcmp(symbol, "dotfile-version")) { Closure->dotFileVersion = atoi(value); continue; }
       if(!strcmp(symbol, "dvd-size1"))       { Closure->dvdSize1 = Closure->savedDVDSize1 = atoll(value); continue; }
       if(!strcmp(symbol, "dvd-size2"))       { Closure->dvdSize2 = Closure->savedDVDSize2 = atoll(value); continue; }
@@ -445,6 +448,7 @@ void ReadDotfile()
 	                                       PrepareDeadSector();
 	                                       continue; 
                                              }
+      if(!strcmp(symbol, "ignore-fatal-sense")) { Closure->ignoreFatalSense  = atoi(value); continue; }
       if(!strcmp(symbol, "jump"))            { Closure->sectorSkip  = atoi(value); continue; }
       if(!strcmp(symbol, "medium-size"))     { Closure->mediumSize  = atoll(value); continue; }
       if(!strcmp(symbol, "method-name"))     { if(Closure->methodName) g_free(Closure->methodName);
@@ -523,11 +527,15 @@ static void update_dotfile()
    g_fprintf(dotfile, "cache-size:        %d\n", Closure->cacheMB);
    g_fprintf(dotfile, "cd-size:           %lld\n", (long long int)Closure->cdSize);
    g_fprintf(dotfile, "dao:               %d\n", Closure->noTruncate);
+   g_fprintf(dotfile, "defective-dump:    %d\n", Closure->defectiveDump);
+   g_fprintf(dotfile, "defective-dir:     %s\n", Closure->dDumpDir);
+   g_fprintf(dotfile, "defective-prefix:  %s\n", Closure->dDumpPrefix);
    g_fprintf(dotfile, "dotfile-version:   %d\n", Closure->dotFileVersion);
    g_fprintf(dotfile, "dvd-size1:         %lld\n", (long long int)Closure->dvdSize1);
    g_fprintf(dotfile, "dvd-size2:         %lld\n", (long long int)Closure->dvdSize2);
    g_fprintf(dotfile, "eject:             %d\n", Closure->eject);
    g_fprintf(dotfile, "fill-unreadable:   %d\n", Closure->fillUnreadable);
+   g_fprintf(dotfile, "ignore-fatal-sense: %d\n", Closure->ignoreFatalSense);
    g_fprintf(dotfile, "jump:              %d\n", Closure->sectorSkip);
    g_fprintf(dotfile, "medium-size:       %lld\n", (long long int)Closure->mediumSize);
    g_fprintf(dotfile, "method-name:       %s\n", Closure->methodName);
@@ -622,6 +630,8 @@ void InitClosure()
    Closure->browser     = g_strdup("gnome-open");
    Closure->methodList  = g_ptr_array_new();
    Closure->methodName  = g_strdup("RS01");
+   Closure->dDumpDir    = g_strdup("/tmp");
+   Closure->dDumpPrefix = g_strdup("sector-");
    Closure->cacheMB     = 32;
    Closure->minReadAttempts = 1;
    Closure->maxReadAttempts = 1;
@@ -726,7 +736,8 @@ void FreeClosure()
    cond_free(Closure->browser);
    cond_free(Closure->deadSector);
    cond_free(Closure->errorTitle);
-   cond_free(Closure->defectiveDump);
+   cond_free(Closure->dDumpDir);
+   cond_free(Closure->dDumpPrefix);
 
    if(Closure->prefsContext)
      FreePreferences(Closure->prefsContext);

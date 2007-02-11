@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-20 15:56+0100\n"
+"POT-Creation-Date: 2007-02-11 19:07+0100\n"
 "PO-Revision-Date: 2006-03-16 20:40+0100\n"
 "Last-Translator: Luboš Staněk <lubek@users.sourceforge.net>\n"
 "Language-Team: čeština <cs@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Generator: KBabel 1.11.1\n"
 "Plural-Forms:  nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: closure.c:511
+#: closure.c:515
 #, c-format
 msgid ""
 "# dvdisaster-%s configuration file\n"
@@ -60,9 +60,9 @@ msgid "Failed seeking to sector %lld in image: %s"
 msgstr "Selhalo vystavení na sektor %lld v obrazu: %s"
 
 #: debug.c:109 debug.c:194 debug.c:238 debug.c:363 debug.c:485 debug.c:530
-#: rs02-create.c:331 rs02-create.c:357 rs02-create.c:944 udf.c:1113 udf.c:1171
-#: udf.c:1228 udf.c:1241 udf.c:1246 udf.c:1249 udf.c:1252 udf.c:1255
-#: udf.c:1258 udf.c:1261
+#: rs02-create.c:331 rs02-create.c:357 rs02-create.c:944 udf.c:1093 udf.c:1151
+#: udf.c:1208 udf.c:1221 udf.c:1226 udf.c:1229 udf.c:1232 udf.c:1235
+#: udf.c:1238 udf.c:1241
 #, c-format
 msgid "Failed writing to sector %lld in image: %s"
 msgstr "Selhal zápis do sektoru %lld v obrazu: %s"
@@ -119,7 +119,7 @@ msgstr "Selhalo vystavení na začátek obrazu: %s\n"
 msgid "Could not write the new byte value"
 msgstr "Nelze zapsat novou hodnotu bajtu"
 
-#: debug.c:349 read-adaptive.c:511
+#: debug.c:349 read-adaptive.c:517
 #, c-format
 msgid "Sectors must be in range [0..%lld].\n"
 msgstr "Sektory musí být v rozsahu [0..%lld].\n"
@@ -139,16 +139,16 @@ msgstr "Nová délka musí být v rozsahu [0..%lld].\n"
 msgid "Truncating image to %lld sectors.\n"
 msgstr "Zkrácení obrazu na %lld sektorů.\n"
 
-#: debug.c:395 read-linear.c:1118 rs01-fix.c:197 rs01-fix.c:219 rs01-fix.c:235
+#: debug.c:395 read-linear.c:1127 rs01-fix.c:197 rs01-fix.c:219 rs01-fix.c:235
 #: rs01-fix.c:270 rs02-create.c:103 rs02-create.c:147 rs02-fix.c:236
 #: rs02-fix.c:257 rs02-fix.c:272
 #, c-format
 msgid "Could not truncate %s: %s\n"
 msgstr "Nelze zkrátit %s: %s\n"
 
-#: debug.c:421 file.c:59 file.c:125 file.c:145 read-adaptive.c:1133
-#: read-adaptive.c:1161 read-linear.c:311 read-linear.c:313 read-linear.c:344
-#: read-linear.c:346
+#: debug.c:421 file.c:59 file.c:125 file.c:145 read-adaptive.c:1140
+#: read-adaptive.c:1168 read-linear.c:312 read-linear.c:314 read-linear.c:345
+#: read-linear.c:347
 #, c-format
 msgid ""
 "Can't open %s:\n"
@@ -176,8 +176,8 @@ msgstr ""
 "dvdisaster --debug %s %lld --random-seed %d\n"
 "\n"
 
-#: debug.c:497 file.c:104 read-adaptive.c:141 read-linear.c:129
-#: read-linear.c:132
+#: debug.c:497 file.c:104 read-adaptive.c:147 read-linear.c:135
+#: read-linear.c:138
 #, c-format
 msgid ""
 "Error closing image file:\n"
@@ -258,7 +258,7 @@ msgstr "--cache-size musí být alespoň 1MB; je doporučeno 16MB nebo větší.
 msgid "--cache-size maximum is 2048MB."
 msgstr "--cache-size maximum je 2048MB."
 
-#: dvdisaster.c:552
+#: dvdisaster.c:562
 #, c-format
 msgid ""
 "\n"
@@ -269,12 +269,12 @@ msgstr ""
 "dvdisaster, verze %s\n"
 "\n"
 
-#: dvdisaster.c:599
+#: dvdisaster.c:609
 #, c-format
 msgid "?? illegal getopt return value %d\n"
 msgstr "?? neplatná návratová hodnota getopt %d\n"
 
-#: dvdisaster.c:632
+#: dvdisaster.c:642
 #, c-format
 msgid ""
 "dvdisaster is not properly installed.\n"
@@ -283,7 +283,7 @@ msgstr ""
 
 #. TRANSLATORS: Program options like -r and --read are not to be translated
 #. to avoid confusion when discussing the program in international forums.
-#: dvdisaster.c:768
+#: dvdisaster.c:778
 msgid ""
 "\n"
 "Common usage examples:\n"
@@ -307,7 +307,7 @@ msgstr ""
 "  dvdisaster -u,--unlink # Smaže soubor .iso (když se dokončí další akce)\n"
 "\n"
 
-#: dvdisaster.c:777
+#: dvdisaster.c:787
 #, c-format
 msgid ""
 "Drive and file specification:\n"
@@ -322,7 +322,7 @@ msgstr ""
 "  -i,--image  imagefile  - název souboru obrazu     (výchozí: medium.iso)\n"
 "  -e,--ecc    eccfile    - název souboru ecc        (výchozí: medium.ecc)\n"
 
-#: dvdisaster.c:785
+#: dvdisaster.c:795
 msgid ""
 "  -l,--list              - list drives available under ASPI manager\n"
 "\n"
@@ -330,7 +330,7 @@ msgstr ""
 "  -l,--list              - vypíše seznam mechanik dostupných pod ASPI\n"
 "\n"
 
-#: dvdisaster.c:790
+#: dvdisaster.c:800
 #, c-format
 msgid ""
 "Tweaking options (see manual before using!)\n"
@@ -356,7 +356,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: dvdisaster.c:812
+#: dvdisaster.c:822
 #, c-format
 msgid ""
 "Debugging options (purposefully undocumented and possibly harmful)\n"
@@ -380,7 +380,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: dvdisaster.c:833
+#: dvdisaster.c:843
 msgid ""
 "NOTE: This is the Windows console version of dvdisaster.\n"
 "The version providing a graphical user interface is called\n"
@@ -933,51 +933,55 @@ msgstr ""
 "* dvdisaster - nemůže pokračovat:\n"
 "*\n"
 
-#: preferences.c:319
+#: preferences.c:343
 msgid "Switched to the linear reading strategy."
 msgstr "Přepnuto na strategii lineárního čtení."
 
-#: preferences.c:602
+#: preferences.c:632
 msgid "Color selection"
 msgstr ""
 
-#: preferences.c:858
+#: preferences.c:888
 msgid "Disabled automatic error correction file generation."
 msgstr "Zakázána automatická tvorba souboru oprav chyb."
 
-#: preferences.c:1027
+#: preferences.c:1020 preferences.c:1821 preferences.c:1830
+msgid "Raw sector caching"
+msgstr ""
+
+#: preferences.c:1145
 msgid "Preferences"
 msgstr "Nastavení"
 
-#: preferences.c:1057
+#: preferences.c:1175
 msgid "Image"
 msgstr ""
 
-#: preferences.c:1061
+#: preferences.c:1179
 msgid "Image size"
 msgstr ""
 
-#: preferences.c:1068
+#: preferences.c:1186
 msgid "Image size determination"
 msgstr ""
 
-#: preferences.c:1068
+#: preferences.c:1186
 msgid "Get Image size from: "
 msgstr ""
 
-#: preferences.c:1080 preferences.c:1341
+#: preferences.c:1198 preferences.c:1459
 msgid "Drive"
 msgstr ""
 
-#: preferences.c:1086
+#: preferences.c:1204
 msgid "ISO/UDF"
 msgstr ""
 
-#: preferences.c:1092
+#: preferences.c:1210
 msgid "ECC/RS02"
 msgstr ""
 
-#: preferences.c:1116
+#: preferences.c:1234
 msgid ""
 "<b>Image size determination</b>\n"
 "\n"
@@ -991,45 +995,45 @@ msgid ""
 "<b>Drive:</b> The image size reported by the drive will be used. As this information is typically wrong for DVD-RW/+RW/-RAM media this option is only present for backwards compatibility with older dvdisaster versions."
 msgstr ""
 
-#: preferences.c:1135
+#: preferences.c:1253
 msgid "Image creation"
 msgstr ""
 
-#: preferences.c:1144
+#: preferences.c:1262
 msgid "Reading strategy"
 msgstr ""
 
-#: preferences.c:1144
+#: preferences.c:1262
 msgid "Reading strategy: "
 msgstr "Strategie čtení: "
 
-#: preferences.c:1158
+#: preferences.c:1276
 msgid "Linear"
 msgstr "Lineární"
 
-#: preferences.c:1166
+#: preferences.c:1284
 msgid "Adaptive (for defective media)"
 msgstr "Adaptivní (pro vadná média)"
 
-#: preferences.c:1178
+#: preferences.c:1296
 msgid ""
 "<b>Reading strategy</b>\n"
 "The linear strategy is optimized for undamaged media while the adaptive strategy is better suited for media already containing read errors."
 msgstr ""
 
-#: preferences.c:1185
+#: preferences.c:1303
 msgid "Reading range"
 msgstr ""
 
-#: preferences.c:1185
+#: preferences.c:1303
 msgid "Read/Scan from sector"
 msgstr "Číst/Skenovat od sektoru"
 
-#: preferences.c:1210
+#: preferences.c:1328
 msgid "to sector"
 msgstr "po sektor"
 
-#: preferences.c:1228
+#: preferences.c:1346
 msgid ""
 "<b>Reading range</b>\n"
 "\n"
@@ -1040,19 +1044,19 @@ msgid ""
 "These settings are only effective for the current session and will not be saved."
 msgstr ""
 
-#: preferences.c:1238
+#: preferences.c:1356
 msgid "Image properties"
 msgstr "Vlastnosti obrazu"
 
-#: preferences.c:1247
+#: preferences.c:1365
 msgid "DAO mode"
 msgstr ""
 
-#: preferences.c:1247
+#: preferences.c:1365
 msgid "Assume image to be written in DAO mode (don't truncate)"
 msgstr "Předpokládat, že obraz má být zapsán v režimu DAO (nezkracovat)"
 
-#: preferences.c:1267
+#: preferences.c:1385
 msgid ""
 "<b>Assume DAO mode</b>\n"
 "\n"
@@ -1063,15 +1067,15 @@ msgid ""
 "<b>Tip:</b> To avoid these problems, consider using the \"DAO / Disc at once\" (sometimes also called \"SAO / Session at once\") mode for writing single session media."
 msgstr ""
 
-#: preferences.c:1282
+#: preferences.c:1400
 msgid "Filling of unreadable sectors"
 msgstr ""
 
-#: preferences.c:1283
+#: preferences.c:1401
 msgid "Fill unreadable sectors with byte:"
 msgstr "Vyplnit nečitelné sektory bajtem:"
 
-#: preferences.c:1322
+#: preferences.c:1440
 msgid ""
 "<b>Filling of unreadable sectors</b>\n"
 "\n"
@@ -1079,42 +1083,58 @@ msgid ""
 "In other data recovery software it is common to fill unreadable sectors with a certain byte value. To allow interoperability with such programs, you can specify the byte value they are using:\n"
 msgstr ""
 
-#: preferences.c:1331
+#: preferences.c:1449
 msgid "0xb0 (176 decimal): for compatibility with h2cdimage published by \"c't\", a German periodical.\n"
 msgstr ""
 
-#: preferences.c:1335
+#: preferences.c:1453
 msgid "<b>Note:</b> Using zero filling (0x00, decimal 0) is highly discouraged. Most media contain regular zero filled sectors which can not be told apart from unreadable sectors if zero filling is used."
 msgstr ""
 
-#: preferences.c:1345 preferences.c:1348
+#: preferences.c:1463 preferences.c:1466
 msgid "Drive initialisation"
 msgstr "Inicializace mechaniky"
 
-#: preferences.c:1349
+#: preferences.c:1467
 msgid "Wait"
 msgstr "Čekat"
 
-#: preferences.c:1352
+#: preferences.c:1470
 msgid "seconds for drive to spin up"
 msgstr "sekund na roztočení mechaniky"
 
-#: preferences.c:1381
+#: preferences.c:1499
 msgid ""
 "<b>Drive initialisation</b>\n"
 "\n"
 "Waits the specified amount of seconds for letting the drive spin up. This avoids speed jumps at the beginning of the reading curve."
 msgstr ""
 
-#: preferences.c:1387
+#: preferences.c:1505 preferences.c:1508
+msgid "Fatal error handling"
+msgstr ""
+
+#: preferences.c:1509
+msgid "Ignore fatal errors"
+msgstr ""
+
+#: preferences.c:1535
+msgid ""
+"<b>Fatal error handling</b>\n"
+"\n"
+"By default dvdisaster stops reading when the drive reports a fatal error. This prevents further fruitless read attempts and possible damage to the drive.\n"
+"However some drives produce unfounded fatal messages. For such drives ignoring fatal errors may be needed to do uninterrupted reading of damaged media."
+msgstr ""
+
+#: preferences.c:1545
 msgid "Media ejection"
 msgstr ""
 
-#: preferences.c:1390 preferences.c:1391
+#: preferences.c:1548 preferences.c:1549
 msgid "Eject medium after sucessful read"
 msgstr ""
 
-#: preferences.c:1417
+#: preferences.c:1575
 msgid ""
 "<b>Medium ejection</b>\n"
 "\n"
@@ -1123,23 +1143,23 @@ msgid ""
 "Note that the desktop environment may prevent other applications from ejecting media. In that case eject the medium through the desktop user interface."
 msgstr ""
 
-#: preferences.c:1427
+#: preferences.c:1585
 msgid "Read attempts"
 msgstr ""
 
-#: preferences.c:1431
+#: preferences.c:1589
 msgid "Sector read errors"
 msgstr ""
 
-#: preferences.c:1440
+#: preferences.c:1598
 msgid "Raw reading"
 msgstr ""
 
-#: preferences.c:1440
+#: preferences.c:1598
 msgid "Read and analyze raw sectors"
 msgstr ""
 
-#: preferences.c:1461
+#: preferences.c:1619 preferences.c:1876
 msgid ""
 "<b>Raw reading</b>\n"
 "\n"
@@ -1148,16 +1168,16 @@ msgid ""
 "Activating this option makes dvdisaster read sectors in raw mode. The L-EC P/Q vectors, EDC checksum and MSF address contained in the raw data are checked to make sure that the sector was correctly read."
 msgstr ""
 
-#: preferences.c:1471
+#: preferences.c:1629
 msgid "Minimum number of reading attempts"
 msgstr ""
 
-#: preferences.c:1473 preferences.c:1474 preferences.c:1479 preferences.c:1480
+#: preferences.c:1631 preferences.c:1632 preferences.c:1637 preferences.c:1638
 #, c-format
 msgid "Min. %d reading attempts per sector"
 msgstr ""
 
-#: preferences.c:1501
+#: preferences.c:1659
 msgid ""
 "<b>Minimum number of reading attempts</b>\n"
 "\n"
@@ -1166,16 +1186,16 @@ msgid ""
 "Increasing the number of reading attempts may improve data recovery on marginal media, but will also increase processing time and mechanical wear on the drive."
 msgstr ""
 
-#: preferences.c:1510
+#: preferences.c:1668
 msgid "Maximum number of reading attempts"
 msgstr ""
 
-#: preferences.c:1512 preferences.c:1513 preferences.c:1518 preferences.c:1519
+#: preferences.c:1670 preferences.c:1671 preferences.c:1676 preferences.c:1677
 #, c-format
 msgid "Max. %d reading attempts per sector"
 msgstr ""
 
-#: preferences.c:1540
+#: preferences.c:1698
 msgid ""
 "<b>Maximum number of reading attempts</b>\n"
 "\n"
@@ -1184,21 +1204,21 @@ msgid ""
 "The decision to do more attempts depends on the quality of data gathered so far, which in turn is influenced by the capabilities of your CD/DVD drive and the operating system. So depending on your configuration, you may or may not see dvdisaster using the maximum value."
 msgstr ""
 
-#: preferences.c:1554
+#: preferences.c:1712
 msgid "Treatment of unreadable areas"
 msgstr ""
 
-#: preferences.c:1556 preferences.c:1558 preferences.c:1559 preferences.c:1567
+#: preferences.c:1714 preferences.c:1716 preferences.c:1717 preferences.c:1725
 #, c-format
 msgid "Skip %d sectors after read error"
 msgstr "Přeskočit %d sektorů po chybě čtení"
 
-#: preferences.c:1557 preferences.c:1562 preferences.c:1563 preferences.c:1568
+#: preferences.c:1715 preferences.c:1720 preferences.c:1721 preferences.c:1726
 #, c-format
 msgid "Stop reading when unreadable intervals &lt; %d"
 msgstr ""
 
-#: preferences.c:1594
+#: preferences.c:1752
 msgid ""
 "<b>Treatment of unreadable areas</b>\n"
 "\n"
@@ -1207,34 +1227,34 @@ msgid ""
 "Effects on the <b>linear reading strategy</b>:"
 msgstr ""
 
-#: preferences.c:1601
+#: preferences.c:1759
 msgid "Skipping a large number of sectors (e.g. 1024) gives a quick overview of damaged areas, but will usually not collect enough data for repairing the image."
 msgstr ""
 
-#: preferences.c:1605
+#: preferences.c:1763
 msgid "Smaller values like 16, 32 or 64 are a good trade-off: The processing time will beconsiderably shortened, but still enough data for repairing the image is collected.\n"
 msgstr ""
 
-#: preferences.c:1609
+#: preferences.c:1767
 msgid ""
 "The <b>adaptive reading strategy</b> uses this setting only if no error correction data is available. In that case the reading process will stop when no unread areas larger than the selected size remain. Values smaller than 128 <i>are not recommended</i> as they cause the drive to carry out lots of laser head repositioning during the final phase of the reading process. If adaptive reading with a setting of 128 is not sufficient, try reading the remaining sectors with an additional linear reading pass.\n"
 "\n"
 "On DVD media read errors do usually extend over at least 16 sectors for technical reasons. Therefore selecting a value less than 16 is not recommended for DVD."
 msgstr ""
 
-#: preferences.c:1622 preferences.c:1625
+#: preferences.c:1780 preferences.c:1783
 msgid "Media read attempts"
 msgstr ""
 
-#: preferences.c:1626
+#: preferences.c:1784
 msgid "Read the whole medium "
 msgstr ""
 
-#: preferences.c:1641
+#: preferences.c:1799
 msgid " times"
 msgstr ""
 
-#: preferences.c:1656
+#: preferences.c:1814
 msgid ""
 "<b>Media read attempts</b> for the linear reading strategy\n"
 "\n"
@@ -1243,272 +1263,295 @@ msgid ""
 "Only the missing sectors will be tried in the additional reading passes."
 msgstr ""
 
-#: preferences.c:1665
+#: preferences.c:1831
+msgid "Keep uncorrectable raw sectors in the following directory:"
+msgstr ""
+
+#: preferences.c:1838
+msgid "Select"
+msgstr ""
+
+#: preferences.c:1886
+msgid "Raw sector file prefix"
+msgstr ""
+
+#: preferences.c:1887
+msgid "Sector file prefix: "
+msgstr ""
+
+#: preferences.c:1908
+msgid ""
+"<b>Raw sector file prefix</b>\n"
+"\n"
+"Use a different prefix for each disk you are trying to recover, e.g. \"disk1-\" and so on.\n"
+msgstr ""
+
+#: preferences.c:1916
 msgid "Error correction"
 msgstr "Oprava chyb"
 
-#: preferences.c:1667
+#: preferences.c:1918
 msgid "Error correction method"
 msgstr ""
 
-#: preferences.c:1668
+#: preferences.c:1919
 msgid "Storage method:"
 msgstr ""
 
-#: preferences.c:1727
+#: preferences.c:1978
 msgid ""
 "<b>Error correction method</b>\n"
 "\n"
 "dvdisaster creates error correction data which is used to recover unreadable sectors if the disc becomes damaged later on. There are two different ways available for storing the error correction information:\n"
 msgstr ""
 
-#: preferences.c:1733
+#: preferences.c:1984
 msgid ""
 "Error correction files (RS01 method)\n"
 "Error correction files are the only way of protecting existing media as they can be stored somewhere else. They are kept on a separate medium which must also be protected by dvdisaster, as data loss in an error correction file will render it unusable.\n"
 msgstr ""
 
-#: preferences.c:1740
+#: preferences.c:1991
 msgid ""
 "Augmented images (RS02 method)\n"
 "The error correction data will be stored along with the user data on the same CD/DVD. This requires the creation of an image file prior to writing the medium. The error correction data will be appended to that image. Damaged sectors in the error correction information reduce the data recovery capacity, but do not make recovery impossible - a second medium for keeping or protecting the error correction information is not required."
 msgstr ""
 
-#: preferences.c:1780
+#: preferences.c:2031
 msgid "Files"
 msgstr ""
 
-#: preferences.c:1784
+#: preferences.c:2035
 msgid "Local files (on hard disc)"
 msgstr "Lokální soubory (na pevném disku)"
 
-#: preferences.c:1791
+#: preferences.c:2042
 msgid "Automatic file suffixes"
 msgstr ""
 
-#: preferences.c:1791
+#: preferences.c:2042
 msgid "Automatically add .iso and .ecc file suffixes"
 msgstr "Automaticky přidat souborové přípony .iso a .ecc"
 
-#: preferences.c:1815
+#: preferences.c:2066
 msgid ""
 "<b>Automatically add file suffixes</b>\n"
 "\n"
 "When this switch is set, files will be automatically appended with \".iso\" or \".ecc\" suffixes if no other file name extension is already present."
 msgstr ""
 
-#: preferences.c:1821
+#: preferences.c:2072
 msgid "File splitting"
 msgstr ""
 
-#: preferences.c:1821
+#: preferences.c:2072
 msgid "Split files into segments &lt;= 2GB"
 msgstr ""
 
-#: preferences.c:1844
+#: preferences.c:2095
 msgid ""
 "<b>File splitting</b>\n"
 "\n"
 "Allows working with file systems which are limited to 2GB per file, e.g. FAT from Windows. Created files are spread over upto 100 segments called \"medium00.iso\", \"medium01.iso\" etc. at the cost of a small performance hit."
 msgstr ""
 
-#: preferences.c:1853
+#: preferences.c:2104
 msgid "Automatic file creation and deletion"
 msgstr "Automatická tvorba a mazání souborů"
 
-#: preferences.c:1862
+#: preferences.c:2113
 msgid "Automatic .ecc file creation"
 msgstr ""
 
-#: preferences.c:1862
+#: preferences.c:2113
 msgid "Create error correction file after reading image"
 msgstr "Vytvořit soubor oprav chyb po načtení obrazu"
 
-#: preferences.c:1885
+#: preferences.c:2136
 msgid ""
 "<b>Automatic error correction file creation</b>\n"
 "\n"
 "Automatically creates an error correction file after reading an image. Together with the \"Remove image\" option this will speed up error correction file generation for a series of different media."
 msgstr ""
 
-#: preferences.c:1892
+#: preferences.c:2143
 msgid "Automatic image file removal"
 msgstr ""
 
-#: preferences.c:1892
+#: preferences.c:2143
 msgid "Remove image after error correction file creation"
 msgstr "Odstranit obraz po vytvoření souboru oprav chyb"
 
-#: preferences.c:1915
+#: preferences.c:2166
 msgid ""
 "<b>Automatic image file removal</b>\n"
 "\n"
 "If this switch is set the image file will be deleted following the successful generation of the respective error correction file."
 msgstr ""
 
-#: preferences.c:1921
+#: preferences.c:2172
 msgid "Appearance"
 msgstr ""
 
-#: preferences.c:1928
+#: preferences.c:2179
 msgid "Sector coloring"
 msgstr ""
 
-#: preferences.c:1938 rs01-verify.c:120 rs02-verify.c:115
+#: preferences.c:2189 rs01-verify.c:120 rs02-verify.c:115
 msgid "Good sectors"
 msgstr "Dobré sektory"
 
-#: preferences.c:1938
+#: preferences.c:2189
 msgid "Good sector"
 msgstr ""
 
-#: preferences.c:1962
+#: preferences.c:2213
 msgid ""
 "<b>Good sectors</b>\n"
 "\n"
 "This color indicates good sectors."
 msgstr ""
 
-#: preferences.c:1967
+#: preferences.c:2218
 msgid "Checksum errors"
 msgstr ""
 
-#: preferences.c:1967
+#: preferences.c:2218
 msgid "Checksum error"
 msgstr ""
 
-#: preferences.c:1991
+#: preferences.c:2242
 msgid ""
 "<b>Checksum errors</b>\n"
 "\n"
 "This color is used for displaying sectors with wrong check sums."
 msgstr ""
 
-#: preferences.c:1996
+#: preferences.c:2247
 msgid "Unreadable sectors"
 msgstr ""
 
-#: preferences.c:1996
+#: preferences.c:2247
 msgid "Unreadable"
 msgstr ""
 
-#: preferences.c:2020
+#: preferences.c:2271
 msgid ""
 "<b>Unreadable sectors</b>\n"
 "\n"
 "This color is used for marking unreadable sectors."
 msgstr ""
 
-#: preferences.c:2025
+#: preferences.c:2276
 msgid "Present sectors"
 msgstr ""
 
-#: preferences.c:2025
+#: preferences.c:2276
 msgid "Present sector"
 msgstr ""
 
-#: preferences.c:2049
+#: preferences.c:2300
 msgid ""
 "<b>Present sectors</b>\n"
 "\n"
 "Sectors which are already present are marked with this color."
 msgstr ""
 
-#: preferences.c:2054
+#: preferences.c:2305
 msgid "Ignored sectors"
 msgstr ""
 
-#: preferences.c:2054
+#: preferences.c:2305
 msgid "Ignored sector"
 msgstr ""
 
-#: preferences.c:2078
+#: preferences.c:2329
 msgid ""
 "<b>Ignored sectors</b>\n"
 "\n"
 "Sectors marked with this color will not be processed in the current run."
 msgstr ""
 
-#: preferences.c:2084
+#: preferences.c:2335
 msgid "Highlit sectors"
 msgstr ""
 
-#: preferences.c:2084
+#: preferences.c:2335
 msgid "Highlit sector"
 msgstr ""
 
-#: preferences.c:2108
+#: preferences.c:2359
 msgid ""
 "<b>Highlit sectors</b>\n"
 "\n"
 "This color is used for temporarily highlighting sectors during adaptive reading."
 msgstr ""
 
-#: preferences.c:2114
+#: preferences.c:2365
 msgid "Text colors"
 msgstr ""
 
-#: preferences.c:2124
+#: preferences.c:2375
 msgid "Positive text"
 msgstr ""
 
-#: preferences.c:2148
+#: preferences.c:2399
 msgid ""
 "<b>Positive text</b>\n"
 "\n"
 "Good news are printed in this color."
 msgstr ""
 
-#: preferences.c:2153
+#: preferences.c:2404
 msgid "Negative text"
 msgstr ""
 
-#: preferences.c:2177
+#: preferences.c:2428
 msgid ""
 "<b>Negative text</b>\n"
 "\n"
 "Bad news are printed in this color."
 msgstr ""
 
-#: preferences.c:2182
+#: preferences.c:2433
 msgid "Curve colors"
 msgstr ""
 
-#: preferences.c:2191
+#: preferences.c:2442
 msgid "Curve color"
 msgstr ""
 
-#: preferences.c:2215
+#: preferences.c:2466
 msgid ""
 "<b>Curve color and labels</b>\n"
 "\n"
 "The reading speed curve, its left side and top labels are printed in this color."
 msgstr ""
 
-#: preferences.c:2221
+#: preferences.c:2472
 msgid "Error correction load"
 msgstr ""
 
-#: preferences.c:2245
+#: preferences.c:2496
 msgid ""
 "<b>Error correction load</b>\n"
 "\n"
 "The bar graph showing the error correction load is rendered in this color during the \"Fix\" operation."
 msgstr ""
 
-#: preferences.c:2257
+#: preferences.c:2508
 msgid "Default color scheme"
 msgstr ""
 
-#: preferences.c:2265
+#: preferences.c:2516
 msgid "Dialog boxes"
 msgstr ""
 
-#: preferences.c:2268
+#: preferences.c:2519
 msgid "Reverse OK / Cancel buttons"
 msgstr ""
 
-#: preferences.c:2292
+#: preferences.c:2543
 msgid ""
 "<b>Reverse OK / Cancel buttons</b>\n"
 "\n"
@@ -1532,35 +1575,74 @@ msgstr ""
 msgid "unknown asc/ascq code (0x%02x, 0x%02x)."
 msgstr "neznámý kód asc/ascq (0x%02x, 0x%02x)."
 
-#: read-adaptive.c:134 read-adaptive.c:1296
+#: raw-sector-cache.c:34 raw-sector-cache.c:120 raw-sector-cache.c:198
+#: rs01-verify.c:537 scsi-freebsd.c:113 scsi-linux.c:98
+#, c-format
+msgid "Could not open %s: %s"
+msgstr "Nelze otevřít %s: %s"
+
+#: raw-sector-cache.c:48 raw-sector-cache.c:86 raw-sector-cache.c:133
+#, c-format
+msgid "Failed writing to defective sector file: %s"
+msgstr ""
+
+#: raw-sector-cache.c:68 raw-sector-cache.c:173 raw-sector-cache.c:208
+#, c-format
+msgid "Failed reading from defective sector file: %s"
+msgstr ""
+
+#: raw-sector-cache.c:72
+msgid "Defective sector file is truncated"
+msgstr ""
+
+#: raw-sector-cache.c:81 raw-sector-cache.c:127
+#, c-format
+msgid "Failed seeking in defective sector file: %s"
+msgstr ""
+
+#: raw-sector-cache.c:93
+msgid "Fingerprints of medium and defective sector cache do not match!"
+msgstr ""
+
+#: raw-sector-cache.c:114
+#, c-format
+msgid " [Creating new cache file %s]\n"
+msgstr ""
+
+#: raw-sector-cache.c:121
+#, c-format
+msgid " [Appending %d sectors to cache file %s; LBA=%lld, ssize=%d, %d sectors]\n"
+msgstr ""
+
+#: read-adaptive.c:140 read-adaptive.c:1303
 msgid "Aborted by unrecoverable error."
 msgstr "Zrušeno kvůli neopravitelné chybě."
 
-#: read-adaptive.c:260
+#: read-adaptive.c:266
 #, c-format
 msgid "Repairable: %2d.%1d%% (correctable: %lld; now reading [%lld..%lld], size %lld)"
 msgstr "Opravitelné: %2d.%1d%% (opravitelné: %lld; nyní načítám [%lld..%lld], velikost %lld)"
 
-#: read-adaptive.c:265
+#: read-adaptive.c:271
 #, c-format
 msgid "Repairable: %2d.%1d%% (missing: %lld; now reading [%lld..%lld], size %lld)"
 msgstr "Opravitelné: %2d.%1d%% (chybějící: %lld; nyní načítám [%lld..%lld], velikost %lld)"
 
-#: read-adaptive.c:415
+#: read-adaptive.c:421
 #, c-format
 msgid "Stopping when unreadable intervals < %d."
 msgstr "Zastavení po nečitelných úsecích < %d."
 
-#: read-adaptive.c:417 read-adaptive.c:423
+#: read-adaptive.c:423 read-adaptive.c:429
 #, c-format
 msgid "Adaptive reading: %s\n"
 msgstr "Adaptivní čtení: %s\n"
 
-#: read-adaptive.c:422
+#: read-adaptive.c:428
 msgid "Trying to collect enough data for error correction."
 msgstr "Pokouším se shromáždit dostatek dat pro opravu chyb."
 
-#: read-adaptive.c:456
+#: read-adaptive.c:462
 #, c-format
 msgid ""
 "Medium contains %lld sectors more as recorded in the .ecc file\n"
@@ -1571,13 +1653,13 @@ msgstr ""
 "(Médium: %lld sektorů; očekáváno podle souboru .ecc: %lld sektorů).\n"
 "Bude zpracováno pouze prvních %lld sektorů média.\n"
 
-#: read-adaptive.c:463 read-adaptive.c:479 read-adaptive.c:543
-#: read-adaptive.c:630 read-adaptive.c:683 read-adaptive.c:989
-#: read-adaptive.c:1226
+#: read-adaptive.c:469 read-adaptive.c:485 read-adaptive.c:549
+#: read-adaptive.c:637 read-adaptive.c:690 read-adaptive.c:996
+#: read-adaptive.c:1232
 msgid "Aborted by user request!"
 msgstr "Zrušeno uživatelem!"
 
-#: read-adaptive.c:473
+#: read-adaptive.c:479
 #, c-format
 msgid ""
 "Medium contains %lld sectors less as recorded in the .ecc file\n"
@@ -1586,33 +1668,29 @@ msgstr ""
 "Médium obsahuje o %lld sektor(y/ů) méně než je zapsáno v souboru .ecc\n"
 "(Médium: %lld sektorů; očekáváno podle souboru .ecc: %lld sektorů).\n"
 
-#: read-adaptive.c:513
+#: read-adaptive.c:519
 #, c-format
 msgid "Limiting sector range to [%lld,%lld].\n"
 msgstr "Omezení rozsahu sektorů na [%lld,%lld].\n"
 
-#: read-adaptive.c:538 rs01-fix.c:296
+#: read-adaptive.c:544
 #, c-format
 msgid ""
-"Sector %d is missing. Can not compare image and ecc fingerprints.\n"
-"Double check that image and ecc file belong together.\n"
+"Sector %d is missing. Can not compare medium and ecc fingerprints.\n"
+"Double check that the medium and the ecc file belong together.\n"
 msgstr ""
-"Sektor %d chybí. Nelze porovnat otisky obrazu a ecc.\n"
-"Důkladně zkontrolujte, že soubory obrazu a ecc patří k sobě.\n"
 
-#: read-adaptive.c:556 rs01-fix.c:309
+#: read-adaptive.c:557
 msgid ""
-"Fingerprints of image and ecc file do not match.\n"
-"Image and ecc file do not belong together.\n"
+"Fingerprints of medium and ecc file do not match.\n"
+"Medium and ecc file do not belong together.\n"
 msgstr ""
-"Velikosti obrazu a souboru ecc si neodpovídají.\n"
-"Obraz a soubor ecc k sobě nepatří.\n"
 
-#: read-adaptive.c:591 read-linear.c:368
+#: read-adaptive.c:598 read-linear.c:376
 msgid "Image file does not match the CD/DVD."
 msgstr "Soubor obrazu neodpovídá CD/DVD."
 
-#: read-adaptive.c:594 read-linear.c:371
+#: read-adaptive.c:601 read-linear.c:379
 msgid ""
 "Image file already exists and does not match the CD/DVD.\n"
 "The existing image file will be deleted."
@@ -1620,11 +1698,11 @@ msgstr ""
 "Soubor obrazu již existuje a nesouhlasí s CD/DVD.\n"
 "Existující soubor obrazu bude vymazán."
 
-#: read-adaptive.c:599
+#: read-adaptive.c:606
 msgid "Reading aborted. Please select a different image file."
 msgstr "Čtení zrušeno. Zvolte prosím jiný soubor obrazu."
 
-#: read-adaptive.c:625
+#: read-adaptive.c:632
 #, c-format
 msgid ""
 "Image file is %lld sectors longer than inserted medium\n"
@@ -1633,103 +1711,103 @@ msgstr ""
 "Soubor obrazu je o %lld sektor(y/ů) delší než vložené médium\n"
 "(Soubor obrazu: %lld sektorů; médium: %lld sektorů).\n"
 
-#: read-adaptive.c:662 read-linear.c:654 rs01-common.c:119 rs01-create.c:241
+#: read-adaptive.c:669 read-linear.c:662 rs01-common.c:119 rs01-create.c:241
 #: rs01-verify.c:769
 #, c-format
 msgid "Failed skipping the ecc header: %s"
 msgstr "Selhalo přeskočení hlavičky ecc: %s"
 
-#: read-adaptive.c:675
+#: read-adaptive.c:682
 msgid "Analysing existing image file"
 msgstr "Analyzování existujícího souboru obrazu"
 
-#: read-adaptive.c:692 rs01-common.c:158 rs02-verify.c:694
+#: read-adaptive.c:699 rs01-common.c:158 rs02-verify.c:694
 #, c-format
 msgid "premature end in image (only %d bytes): %s\n"
 msgstr "předčasný konec obrazu (pouze %d bajtů): %s\n"
 
-#: read-adaptive.c:716 read-adaptive.c:1334 read-linear.c:662
+#: read-adaptive.c:723 read-adaptive.c:1341 read-linear.c:670
 #: rs01-common.c:221
 #, c-format
 msgid "Error reading CRC information: %s"
 msgstr "Chyba při čtení CRC informací: %s"
 
-#: read-adaptive.c:776
+#: read-adaptive.c:783
 #, c-format
 msgid "Analysing existing image file: %2d%%"
 msgstr "Analyzování existujícího souboru obrazu: %2d%%"
 
-#: read-adaptive.c:793
+#: read-adaptive.c:800
 msgid "Determining correctable sectors"
 msgstr "Zjišťování opravitelných sektorů"
 
-#: read-adaptive.c:868
+#: read-adaptive.c:875
 #, c-format
 msgid "Analysing existing image file: %lld readable, %lld correctable, %lld still missing.\n"
 msgstr "Analyzování existujícího souboru obrazu: %lld čitelných, %lld opravitelných, %lld stále chybějících.\n"
 
-#: read-adaptive.c:870
+#: read-adaptive.c:877
 #, c-format
 msgid "Analysing existing image file: %lld readable, %lld still missing.\n"
 msgstr "Analyzování existujícího souboru obrazu: %lld čitelných, %lld stále chybějících.\n"
 
-#: read-adaptive.c:920 read-linear.c:544
+#: read-adaptive.c:927 read-linear.c:552
 msgid "Ignore once"
 msgstr "Ignorovat jednou"
 
-#: read-adaptive.c:921 read-linear.c:545
+#: read-adaptive.c:928 read-linear.c:553
 msgid "Ignore always"
 msgstr "Ignorovat vždy"
 
-#: read-adaptive.c:922 read-linear.c:546
+#: read-adaptive.c:929 read-linear.c:554
 msgid "Abort"
 msgstr "Přerušit"
 
-#: read-adaptive.c:957
+#: read-adaptive.c:964
 #, c-format
 msgid "Filling image area [%lld..%lld]"
 msgstr "Vyplňování oblasti obrazu [%lld..%lld]"
 
-#: read-adaptive.c:970 read-adaptive.c:1035 read-adaptive.c:1309
-#: read-adaptive.c:1513 read-linear.c:427 read-linear.c:477 read-linear.c:754
+#: read-adaptive.c:977 read-adaptive.c:1042 read-adaptive.c:1316
+#: read-adaptive.c:1520 read-linear.c:435 read-linear.c:485 read-linear.c:762
 #: rs01-fix.c:444 rs01-fix.c:702 rs02-fix.c:741
 #, c-format
 msgid "Failed seeking to sector %lld in image [%s]: %s"
 msgstr "Selhalo vystavení na sektor %lld v obrazu [%s]: %s"
 
-#: read-adaptive.c:982 read-adaptive.c:1040 read-adaptive.c:1352
-#: read-adaptive.c:1363 read-adaptive.c:1379 read-adaptive.c:1519
-#: read-linear.c:433 read-linear.c:484 rs01-fix.c:449
+#: read-adaptive.c:989 read-adaptive.c:1047 read-adaptive.c:1359
+#: read-adaptive.c:1370 read-adaptive.c:1386 read-adaptive.c:1526
+#: read-linear.c:441 read-linear.c:492 rs01-fix.c:449
 #, c-format
 msgid "Failed writing to sector %lld in image [%s]: %s"
 msgstr "Selhal zápis do sektoru %lld v obrazu [%s]: %s"
 
-#: read-adaptive.c:1074 read-linear.c:192
+#: read-adaptive.c:1081 read-linear.c:198
 msgid "Reading aborted"
 msgstr "Čtení zrušeno"
 
-#: read-adaptive.c:1077 read-linear.c:196
+#: read-adaptive.c:1084 read-linear.c:202
 msgid "Preparing for reading the medium image."
 msgstr "Příprava na čtení obrazu média."
 
-#: read-adaptive.c:1078 read-linear.c:189 read-linear.c:197
+#: read-adaptive.c:1085 read-linear.c:195 read-linear.c:203
 msgid "Medium: not yet determined"
 msgstr "Médium: dosud nebylo neurčeno"
 
-#: read-adaptive.c:1135 read-linear.c:315
+#: read-adaptive.c:1142 read-linear.c:316
 #, c-format
 msgid "Creating new %s image.\n"
 msgstr "Vytváření nového obrazu %s.\n"
 
-#: read-adaptive.c:1139 read-linear.c:308
+#: read-adaptive.c:1146 read-linear.c:309
 msgid "Reading new medium image."
 msgstr "Načítání nového obrazu média."
 
-#: read-adaptive.c:1155 read-linear.c:336
+#: read-adaptive.c:1162 read-linear.c:337
 msgid "Completing existing medium image."
 msgstr "Kompletování existujícího obrazu média."
 
-#: read-adaptive.c:1184 read-adaptive.c:1487
+#: read-adaptive.c:1191 read-adaptive.c:1494
 msgid ""
 "\n"
 "Sufficient data for reconstructing the image is available.\n"
@@ -1737,16 +1815,15 @@ msgstr ""
 "\n"
 "Je k dispozici dostatek dat pro rekonstrukci obrazu.\n"
 
-#: read-adaptive.c:1283 read-linear.c:807
+#: read-adaptive.c:1289 read-linear.c:815
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
-"Can not recover from above error."
+"Can not recover from above error.\n"
+"Use the --ignore-fatal-sense option to override."
 msgstr ""
-"Sektor %lld: %s\n"
-"Nelze se zotavit po uvedené chybě."
 
-#: read-adaptive.c:1287 read-linear.c:811
+#: read-adaptive.c:1294 read-linear.c:820
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -1759,32 +1836,32 @@ msgstr ""
 "Nemusí být možné se zotavit po této chybě.\n"
 "Má čtení pokračovat a ignorovat tuto chybu?"
 
-#: read-adaptive.c:1331 rs01-fix.c:38 rs02-fix.c:417
+#: read-adaptive.c:1338 rs01-fix.c:38 rs02-fix.c:417
 #, c-format
 msgid "Failed seeking in crc area: %s"
 msgstr "Selhalo vystavení na oblast crc: %s"
 
-#: read-adaptive.c:1347 rs01-fix.c:398 rs02-fix.c:430
+#: read-adaptive.c:1354 rs01-fix.c:398 rs02-fix.c:430
 #, c-format
 msgid "CRC error in sector %lld\n"
 msgstr "Chyba CRC v sektoru %lld\n"
 
-#: read-adaptive.c:1502 scsi-layer.c:719
+#: read-adaptive.c:1509 scsi-layer.c:730
 #, c-format
 msgid "Sectors %lld-%lld: %s\n"
 msgstr "Sektory %lld-%lld: %s\n"
 
-#: read-adaptive.c:1505 read-linear.c:930 scsi-layer.c:718
+#: read-adaptive.c:1512 read-linear.c:939 scsi-layer.c:729
 #, c-format
 msgid "Sector %lld: %s\n"
 msgstr "Sektor %lld: %s\n"
 
-#: read-adaptive.c:1633
+#: read-adaptive.c:1640
 #, c-format
 msgid "Only %2d.%1d%% of the image are readable or correctable"
 msgstr "Pouze %2d.%1d%% obrazu je čitelných nebo opravitelných"
 
-#: read-adaptive.c:1636
+#: read-adaptive.c:1643
 #, c-format
 msgid ""
 "\n"
@@ -1795,7 +1872,7 @@ msgstr ""
 "%s\n"
 "(%lld čitelných,  %lld opravitelných,  %lld stále chybějících).\n"
 
-#: read-adaptive.c:1650
+#: read-adaptive.c:1657
 msgid ""
 "\n"
 "Good! All sectors have been read.\n"
@@ -1803,12 +1880,12 @@ msgstr ""
 "\n"
 "V pořádku! Všechny sektory byly načteny.\n"
 
-#: read-adaptive.c:1659
+#: read-adaptive.c:1666
 #, c-format
 msgid "No unreadable intervals with >= %d sectors left."
 msgstr "Nezbyly žádné nečitelné úseky obsahující >= %d sektorů."
 
-#: read-adaptive.c:1662
+#: read-adaptive.c:1669
 #, c-format
 msgid ""
 "\n"
@@ -1827,7 +1904,7 @@ msgstr "Adaptivní čtení:"
 msgid "Sectors processed"
 msgstr "Sektorů zpracováno"
 
-#: read-adaptive-window.c:110 scsi-layer.c:700
+#: read-adaptive-window.c:110 scsi-layer.c:711
 msgid "readable"
 msgstr "čitelný"
 
@@ -1849,12 +1926,12 @@ msgstr ""
 msgid "Total recoverable: %d.%d%%"
 msgstr "Celkem opravitelných: %d.%d%%"
 
-#: read-linear.c:123
+#: read-linear.c:129
 #, c-format
 msgid "<span %s>Aborted by unrecoverable error.</span> %lld sectors read, %lld sectors unreadable/skipped so far."
 msgstr "<span %s>Zrušeno kvůli neopravitelné chybě.</span> Dosud načteno %lld sektorů, %lld sektorů nečitelných/přeskočeno."
 
-#: read-linear.c:154
+#: read-linear.c:160
 msgid ""
 "Automatic error correction file creation\n"
 "is only possible after a full reading pass.\n"
@@ -1862,15 +1939,15 @@ msgstr ""
 "Automatická tvorba souboru oprav chyb\n"
 "je možná pouze po plném průchodu čtení.\n"
 
-#: read-linear.c:184
+#: read-linear.c:190
 msgid "Scanning aborted"
 msgstr "Skenování zrušeno"
 
-#: read-linear.c:188 read-linear.c:281
+#: read-linear.c:194 read-linear.c:282
 msgid "Scanning medium for read errors."
 msgstr "Skenování média na chyby čtení."
 
-#: read-linear.c:214
+#: read-linear.c:220
 #, c-format
 msgid ""
 "Automatic error correction file creation is enabled,\n"
@@ -1881,7 +1958,7 @@ msgstr ""
 "a soubor \"%s\" již existuje.\n"
 "Má se přepsat?\n"
 
-#: read-linear.c:221 rs01-create.c:643 rs01-fix.c:187 rs01-fix.c:209
+#: read-linear.c:227 rs01-create.c:643 rs01-fix.c:187 rs01-fix.c:209
 #: rs01-fix.c:255 rs01-fix.c:285 rs01-fix.c:302 rs01-fix.c:355
 #: rs01-verify.c:429 rs01-verify.c:786 rs02-create.c:111 rs02-fix.c:227
 #: rs02-fix.c:248 rs02-fix.c:339 rs02-verify.c:684
@@ -1889,130 +1966,130 @@ msgstr ""
 msgid "<span %s>Aborted by user request!</span>"
 msgstr "<span %s>Zrušeno uživatelem!</span>"
 
-#: read-linear.c:288 read-linear.c:320 read-linear.c:656
+#: read-linear.c:289 read-linear.c:321 read-linear.c:664
 msgid "Reading CRC information from ecc file"
 msgstr "Načítání informací CRC ze souboru ecc"
 
-#: read-linear.c:377
+#: read-linear.c:385
 #, c-format
 msgid "<span %s>Reading aborted.</span> Please select a different image file."
 msgstr "<span %s>Čtení zrušeno.</span> Zvolte prosím jiný soubor obrazu."
 
-#: read-linear.c:396
+#: read-linear.c:404
 #, c-format
 msgid "Completing image %s. Continuing with sector %lld.\n"
 msgstr "Kompletace obrazu %s. Pokračuji se sektorem %lld.\n"
 
-#: read-linear.c:402
+#: read-linear.c:410
 #, c-format
 msgid "Completing image %s. Only missing sectors will be read.\n"
 msgstr "Kompletace obrazu %s. Budou se načítat pouze chybějící sektory.\n"
 
-#: read-linear.c:507 rs01-common.c:227 rs02-verify.c:736
+#: read-linear.c:515 rs01-common.c:227 rs02-verify.c:736
 #, c-format
 msgid "* CRC error, sector: %lld\n"
 msgstr "* Chyba CRC, sektor: %lld\n"
 
-#: read-linear.c:668
+#: read-linear.c:676
 msgid "done.\n"
 msgstr "hotovo.\n"
 
-#: read-linear.c:693 scsi-layer.c:1106
+#: read-linear.c:701 scsi-layer.c:1117
 #, c-format
 msgid "Waiting %d seconds for drive to spin up...\n"
 msgstr "Čekám %d sekund na roztočení disku...\n"
 
-#: read-linear.c:722 read-linear.c:821
+#: read-linear.c:730 read-linear.c:830
 #, c-format
 msgid "<span %s>Aborted by user request!</span> %lld sectors read, %lld sectors unreadable/skipped so far."
 msgstr "<span %s>Zrušeno uživatelem!</span> dosud načteno %lld sektorů, %lld sektorů nečitelných/přeskočeno."
 
-#: read-linear.c:766
+#: read-linear.c:774
 #, c-format
 msgid "unexpected read error in image for sector %lld"
 msgstr "neočekávaná chyba čtení obrazu v sektoru %lld"
 
-#: read-linear.c:910
+#: read-linear.c:919
 #, c-format
 msgid "Sector %lld: %s Skipping %d sectors.\n"
 msgstr "Sektor %lld: %s Přeskakuji %d sektorů.\n"
 
-#: read-linear.c:943 read-linear-window.c:83
+#: read-linear.c:952 read-linear-window.c:83
 #, c-format
 msgid "Unreadable / skipped sectors: %lld"
 msgstr "Nečitelných / přeskočených sektorů: %lld"
 
-#: read-linear.c:1010
+#: read-linear.c:1019
 #, c-format
 msgid "Sector %lld: Speed increased to %4.1fx\n"
 msgstr "Sektor %lld: Rychlost zvýšena na %4.1fx\n"
 
-#: read-linear.c:1012
+#: read-linear.c:1021
 #, c-format
 msgid "Sector %lld: Speed dropped to %4.1fx\n"
 msgstr "Sektor %lld: Rychlost snížena na %4.1fx\n"
 
-#: read-linear.c:1016
+#: read-linear.c:1025
 #, c-format
 msgid "Read position: %3d.%1d%% (%4.1fx)"
 msgstr "Pozice čtení: %3d.%1d%% (%4.1fx)"
 
-#: read-linear.c:1041
+#: read-linear.c:1050
 #, c-format
 msgid "Reading pass %d of %d: %lld sectors read; %lld CRC errors; %lld missing."
 msgstr ""
 
-#: read-linear.c:1061
+#: read-linear.c:1070
 #, c-format
 msgid "%lld sectors read.     "
 msgstr "%lld sektorů načteno.     "
 
-#: read-linear.c:1062
+#: read-linear.c:1071
 #, c-format
 msgid "%lld sectors read; %lld unreadable sectors."
 msgstr "%lld sektorů načteno; %lld nečitelných sektorů."
 
-#: read-linear.c:1070
+#: read-linear.c:1079
 #, c-format
 msgid "All sectors successfully read, but wrong image length (%lld sectors difference)"
 msgstr "Všechny sektory byly úspěšně načteny, ale nesouhlasí délka obrazu (%lld sectorů rozdíl)"
 
-#: read-linear.c:1073
+#: read-linear.c:1082
 msgid "All sectors successfully read, but wrong image checksum."
 msgstr "Všechny sektory byly úspěšně načteny, ale nesouhlasí kontrolní součet obrazu."
 
-#: read-linear.c:1074
+#: read-linear.c:1083
 msgid "All sectors successfully read. Checksums match."
 msgstr "Všechny sektory byly úspěšně načteny. Kontrolní součet souhlasí."
 
-#: read-linear.c:1076
+#: read-linear.c:1085
 msgid "All sectors successfully read."
 msgstr "Všechny sektory byly úspěšně načteny."
 
-#: read-linear.c:1080
+#: read-linear.c:1089
 #, c-format
 msgid "%lld unreadable sectors."
 msgstr "%lld nečitelných sektorů."
 
-#: read-linear.c:1082
+#: read-linear.c:1091
 #, c-format
 msgid "%lld CRC errors."
 msgstr "%lld chyb CRC."
 
-#: read-linear.c:1083
+#: read-linear.c:1092
 #, c-format
 msgid "%lld CRC errors, %lld unreadable sectors."
 msgstr "%lld chyb CRC, %lld nečitelných sektorů"
 
-#: read-linear.c:1089
+#: read-linear.c:1098
 msgid "Scanning finished: "
 msgstr "Skenování dokončeno: "
 
-#: read-linear.c:1091
+#: read-linear.c:1100
 msgid "Reading finished: "
 msgstr "Čtení dokončeno: "
 
-#: read-linear.c:1102
+#: read-linear.c:1111
 #, c-format
 msgid ""
 "%d sectors missing at the end of the disc.\n"
@@ -2023,7 +2100,7 @@ msgstr ""
 "To je v pořádku, pokud bylo CD zapsáno v režimu TAO (stopa najednou).\n"
 "Obraz bude podle toho zkrácen. Další podrobnosti najdete v příručce.\n"
 
-#: read-linear.c:1108
+#: read-linear.c:1117
 #, c-format
 msgid ""
 "%d sectors missing at the end of the disc.\n"
@@ -2070,13 +2147,7 @@ msgstr "Nečitelné / přeskočeno"
 msgid "Speed"
 msgstr "Rychlost"
 
-#: recover-cache.c:29 recover-cache.c:44 rs01-verify.c:537 scsi-freebsd.c:113
-#: scsi-linux.c:98
-#, c-format
-msgid "Could not open %s: %s"
-msgstr "Nelze otevřít %s: %s"
-
-#: recover-raw.c:63
+#: recover-raw.c:62
 #, c-format
 msgid "Sector %d dumped to %s\n"
 msgstr ""
@@ -2326,6 +2397,23 @@ msgid ""
 msgstr ""
 "Zdá se, že je soubor obrazu zkrácen.\n"
 "Uvažte jeho kompletaci dalším čtením, než budete pokračovat.\n"
+
+#: rs01-fix.c:296
+#, c-format
+msgid ""
+"Sector %d is missing. Can not compare image and ecc fingerprints.\n"
+"Double check that image and ecc file belong together.\n"
+msgstr ""
+"Sektor %d chybí. Nelze porovnat otisky obrazu a ecc.\n"
+"Důkladně zkontrolujte, že soubory obrazu a ecc patří k sobě.\n"
+
+#: rs01-fix.c:309
+msgid ""
+"Fingerprints of image and ecc file do not match.\n"
+"Image and ecc file do not belong together.\n"
+msgstr ""
+"Velikosti obrazu a souboru ecc si neodpovídají.\n"
+"Obraz a soubor ecc k sobě nepatří.\n"
 
 #: rs01-fix.c:423
 #, c-format
@@ -3446,7 +3534,7 @@ msgstr ""
 msgid "READ DVD STRUCTURE: implausible medium size, %lld-%lld=%lld sectors\n"
 msgstr ""
 
-#: scsi-layer.c:398
+#: scsi-layer.c:409
 #, c-format
 msgid ""
 "%s\n"
@@ -3455,12 +3543,12 @@ msgstr ""
 "%s\n"
 "Nelze zjistit délku TOC.\n"
 
-#: scsi-layer.c:408 scsi-layer.c:457
+#: scsi-layer.c:419 scsi-layer.c:468
 #, c-format
 msgid "TOC info too long (%d), probably multisession.\n"
 msgstr "TOC informace je příliš dlouhá (%d), pravděpodobně jde o multisession.\n"
 
-#: scsi-layer.c:421
+#: scsi-layer.c:432
 #, c-format
 msgid ""
 "%s\n"
@@ -3469,7 +3557,7 @@ msgstr ""
 "%s\n"
 "Nelze načíst TOC.\n"
 
-#: scsi-layer.c:443
+#: scsi-layer.c:454
 #, c-format
 msgid ""
 "%s\n"
@@ -3478,12 +3566,12 @@ msgstr ""
 "%s\n"
 "Nelze zjistit celou délku TOC.\n"
 
-#: scsi-layer.c:452
+#: scsi-layer.c:463
 #, c-format
 msgid "TOC info too short, length %d.\n"
 msgstr "TOC informace příliš krátká, délka %d.\n"
 
-#: scsi-layer.c:471
+#: scsi-layer.c:482
 #, c-format
 msgid ""
 "%s\n"
@@ -3492,7 +3580,7 @@ msgstr ""
 "%s\n"
 "Nelze načíst celou oblast TOC.\n"
 
-#: scsi-layer.c:478
+#: scsi-layer.c:489
 #, c-format
 msgid ""
 "\n"
@@ -3501,31 +3589,31 @@ msgstr ""
 "\n"
 "Neočekávaný formát TOC (délka %d):\n"
 
-#: scsi-layer.c:485
+#: scsi-layer.c:496
 msgid "Consider sending a bug report.\n"
 msgstr "Zvažte odeslání hlášení o chybě.\n"
 
-#: scsi-layer.c:493
+#: scsi-layer.c:504
 msgid "Data CD mode 1"
 msgstr "Datové CD režim 1"
 
-#: scsi-layer.c:494
+#: scsi-layer.c:505
 msgid "CD-I"
 msgstr "CD I"
 
-#: scsi-layer.c:495
+#: scsi-layer.c:506
 msgid "CD XA form 1"
 msgstr "CD XA formát 1"
 
-#: scsi-layer.c:496
+#: scsi-layer.c:507
 msgid "Unknown"
 msgstr "Neznámý"
 
-#: scsi-layer.c:499
+#: scsi-layer.c:510
 msgid "CD Audio"
 msgstr "CD Audio"
 
-#: scsi-layer.c:649
+#: scsi-layer.c:660
 #, c-format
 msgid ""
 "%s\n"
@@ -3534,12 +3622,12 @@ msgstr ""
 "%s\n"
 "Nelze se dotázat na délku dvd struktury pro kód formátu 1.\n"
 
-#: scsi-layer.c:659
+#: scsi-layer.c:670
 #, c-format
 msgid "Could not query dvd copyright info - implausible packet length %d\n"
 msgstr "Nelze se dotázat na dvd copyright info - nepřijatelná délka paketu %d\n"
 
-#: scsi-layer.c:674
+#: scsi-layer.c:685
 #, c-format
 msgid ""
 "%s\n"
@@ -3548,23 +3636,23 @@ msgstr ""
 "%s\n"
 "Nelze se dotázat na copyright info.\n"
 
-#: scsi-layer.c:734
+#: scsi-layer.c:745
 msgid "is undecideable because of read error"
 msgstr "není rozhodnuto kvůli chybě čtení"
 
-#: scsi-layer.c:740
+#: scsi-layer.c:751
 msgid "looks GOOD"
 msgstr "vypadá DOBŘE"
 
-#: scsi-layer.c:746
+#: scsi-layer.c:757
 msgid "gives unformatted size (UNUSABLE)"
 msgstr "dává neformátovanou velikost (NEPOUŽITELNÉ)"
 
-#: scsi-layer.c:751
+#: scsi-layer.c:762
 msgid "is UNUSABLE"
 msgstr "je POUŽITELNÉ"
 
-#: scsi-layer.c:773
+#: scsi-layer.c:784
 #, c-format
 msgid ""
 "%s\n"
@@ -3573,12 +3661,12 @@ msgstr ""
 "%s\n"
 "Nelze se dotázat na velikost média.\n"
 
-#: scsi-layer.c:793
+#: scsi-layer.c:804
 #, c-format
 msgid "READ CAPACITY: implausible medium size, %lld sectors\n"
 msgstr ""
 
-#: scsi-layer.c:864
+#: scsi-layer.c:875
 #, c-format
 msgid ""
 "Different media sizes depending on query method:\n"
@@ -3587,7 +3675,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: scsi-layer.c:869
+#: scsi-layer.c:880
 msgid ""
 "Evaluation of returned medium sizes:\n"
 "\n"
@@ -3595,15 +3683,15 @@ msgstr ""
 "Vyhodnocení vrácených velikostí médií:\n"
 "\n"
 
-#: scsi-layer.c:924
+#: scsi-layer.c:935
 msgid "Using value from READ CAPACITY"
 msgstr "Používám hodnotu z READ CAPACITY"
 
-#: scsi-layer.c:928
+#: scsi-layer.c:939
 msgid "Using value from READ DVD STRUCTURE"
 msgstr "Používám hodnotu z READ DVD STRUCTURE"
 
-#: scsi-layer.c:938
+#: scsi-layer.c:949
 #, c-format
 msgid ""
 "FAILED to determine image size.\n"
@@ -3614,7 +3702,7 @@ msgstr ""
 "Používám menší hodnotu, protože je to správně pro >90%% všech mechanik,\n"
 "ale POKRAČUJTE NA VLASTNÍ NEBEZPEČÍ (obraz může být neúplný/nepoužitelný)"
 
-#: scsi-layer.c:943
+#: scsi-layer.c:954
 #, c-format
 msgid ""
 "Final decision: %s\n"
@@ -3623,7 +3711,7 @@ msgstr ""
 "Konečné rozhodnutí: %s\n"
 "\n"
 
-#: scsi-layer.c:951
+#: scsi-layer.c:962
 msgid ""
 "Failed to determine image size.\n"
 "Try using a different drive."
@@ -3631,50 +3719,55 @@ msgstr ""
 "Selhalo určení velikosti obrazu.\n"
 "Zkuste použít jinou mechaniku."
 
-#: scsi-layer.c:1147 scsi-layer.c:1173
+#: scsi-layer.c:1158 scsi-layer.c:1184
 #, c-format
 msgid ""
 "%s\n"
 "Could not load/unload the medium.\n"
 msgstr ""
 
-#: scsi-layer.c:1163
+#: scsi-layer.c:1174
 #, c-format
 msgid ""
 "%s\n"
 "Could not unlock the medium.\n"
 msgstr ""
 
-#: scsi-layer.c:1216
+#: scsi-layer.c:1227
 #, c-format
 msgid "Waiting 10 seconds for drive: %d\n"
 msgstr ""
 
-#: scsi-layer.c:1267
+#: scsi-layer.c:1278
 msgid "Setting the drive speed failed:\n"
 msgstr "Nastavení rychlosti mechaniky se nepodařilo:\n"
 
-#: scsi-layer.c:1499
+#: scsi-layer.c:1510
 #, c-format
 msgid "Sectors %lld - %lld: %s\n"
 msgstr ""
 
-#: scsi-layer.c:1507
+#: scsi-layer.c:1524
+#, c-format
+msgid "Sector %lld, try %d: %s Sector returned: %d.\n"
+msgstr ""
+
+#: scsi-layer.c:1530
 #, c-format
 msgid "Sector %lld, try %d: %s\n"
 msgstr ""
 
-#: scsi-layer.c:1519
+#: scsi-layer.c:1542
 #, c-format
 msgid "Sector %lld, try %d: success\n"
 msgstr ""
 
-#: scsi-layer.c:1577
+#: scsi-layer.c:1607
 #, c-format
 msgid "Device %s: no medium present\n"
 msgstr ""
 
-#: scsi-layer.c:1578
+#: scsi-layer.c:1608
 #, c-format
 msgid ""
 "Device %s does not become ready:\n"
@@ -3682,7 +3775,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: scsi-layer.c:1583
+#: scsi-layer.c:1613
 #, c-format
 msgid ""
 "\n"
@@ -3691,7 +3784,7 @@ msgstr ""
 "\n"
 "Zařízení: %s, %s\n"
 
-#: scsi-layer.c:1587
+#: scsi-layer.c:1617
 #, c-format
 msgid ""
 "\n"
@@ -3700,48 +3793,48 @@ msgstr ""
 "\n"
 "Zařízení: %s (%s), %s\n"
 
-#: scsi-layer.c:1601 scsi-layer.c:1680
+#: scsi-layer.c:1631 scsi-layer.c:1712
 #, c-format
 msgid "This software does not support \"%s\" type media."
 msgstr ""
 
-#: scsi-layer.c:1609
+#: scsi-layer.c:1639
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr ""
 
-#: scsi-layer.c:1618
+#: scsi-layer.c:1648
 msgid "Using READ CD"
 msgstr ""
 
-#: scsi-layer.c:1626
+#: scsi-layer.c:1658
 msgid ", RAW reading"
 msgstr ""
 
-#: scsi-layer.c:1632
+#: scsi-layer.c:1664
 #, c-format
 msgid ", Mode page 1 ERP = %02xh"
 msgstr ""
 
-#: scsi-layer.c:1640
+#: scsi-layer.c:1672
 msgid "Using READ(10).\n"
 msgstr ""
 
-#: scsi-layer.c:1658
+#: scsi-layer.c:1690
 #, c-format
 msgid "Medium: %s, %lld sectors%s"
 msgstr "Médium: %s, %lld sektorů%s"
 
-#: scsi-layer.c:1662
+#: scsi-layer.c:1694
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s created %s"
 msgstr "Médium \"%s\": %s, %lld sektorů%s vytvořeno %s"
 
-#: scsi-layer.c:1668
+#: scsi-layer.c:1700
 msgid "Manuf.-ID:"
 msgstr ""
 
-#: scsi-layer.c:1687
+#: scsi-layer.c:1719
 msgid "This software does not support encrypted media.\n"
 msgstr ""
 
@@ -3855,19 +3948,19 @@ msgstr ""
 msgid "Please hang on until the browser comes up!"
 msgstr "Vydržte prosím, až se spustí prohlížeč!"
 
-#: udf.c:163
+#: udf.c:143
 msgid "Skip RS02 test"
 msgstr ""
 
-#: udf.c:164
+#: udf.c:144
 msgid "Continue searching"
 msgstr ""
 
-#: udf.c:169
+#: udf.c:149
 msgid "Disable RS02 initialization in the preferences"
 msgstr ""
 
-#: udf.c:260
+#: udf.c:240
 msgid ""
 "Faster medium initialization\n"
 "\n"
@@ -3876,7 +3969,7 @@ msgid ""
 "not augmented with RS02 error correction data."
 msgstr ""
 
-#: udf.c:269
+#: udf.c:249
 msgid ""
 "\n"
 "Searching rewriteable media for error correction data may take a long time.\n"
@@ -3885,7 +3978,7 @@ msgid ""
 "--query-size=udf\n"
 msgstr ""
 
-#: udf.c:541
+#: udf.c:521
 msgid "Unnamed"
 msgstr "Nepojmenovaný"
 
@@ -3922,6 +4015,13 @@ msgstr ""
 #: welcome-window.c:136
 msgid "<i>New in this Version:</i>"
 msgstr ""
+
+#~ msgid ""
+#~ "Sector %lld: %s\n"
+#~ "Can not recover from above error."
+#~ msgstr ""
+#~ "Sektor %lld: %s\n"
+#~ "Nelze se zotavit po uvedené chybě."
 
 #~ msgid "Medium \"%s\": %s, %lld sectors%s, created %s"
 #~ msgstr "Médium \"%s\": %s, %lld sektorů%s, vytvořeno %s"

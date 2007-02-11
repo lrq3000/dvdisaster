@@ -153,7 +153,9 @@ typedef struct _GlobalClosure
    int welcomeMessage;  /* just print dvdisaster logo if FALSE */
    int dotFileVersion;  /* version of dotfile */
    int simulateDefects; /* if >0, this is the percentage of simulated media defects */
-   char *defectiveDump; /* dump non-recoverable sectors into given path */
+   int defectiveDump;   /* dump non-recoverable sectors into given path */
+   char *dDumpDir;      /* directory for above */
+   char *dDumpPrefix;   /* file name prefix for above */
    int reverseCancelOK; /* if TRUE the button order is reversed */
    int eject;           /* eject medium on success */
    int readMedium;      /* try to read medium n times */
@@ -359,6 +361,12 @@ typedef struct _EccHeader
   /* Note: Bytes 2048 and up are currently used by the RS02 codec
            for a copy of the first ecc blocks CRC sums. */
 } EccHeader;
+
+/***
+ *** forward declarations
+ ***/
+
+struct _RawBuffer *rawbuffer_forward;
 
 /***
  *** dvdisaster.c
@@ -589,6 +597,16 @@ void AboutLink(GtkWidget*, char*, char*);
 void AboutTextWithLink(GtkWidget*, char*, char*);
 
 /***
+ *** heuristic-lec.c
+ ***/
+
+void CalculatePQLoad(struct _RawBuffer*);
+void UpdatePQParityList(struct _RawBuffer*, unsigned char*);
+
+int HeuristicLEC(unsigned char*, struct _RawBuffer*, unsigned char*);
+int SearchPlausibleSector(struct _RawBuffer*);
+
+/***
  *** icon-factory.c
  ***/
 
@@ -816,12 +834,13 @@ void UpdatePrefsQuerySize(void);
 void RegisterPreferencesHelpWindow(LabelWithOnlineHelp*);
 
 /***
- *** print_sense.c
+ *** print-sense.c
  ***/
 
 void RememberSense(int, int, int);
 char *GetSenseString(int, int, int, int);
 char* GetLastSenseString(int);
+void GetLastSense(int*, int*, int*);
 
 /***
  *** random.c
@@ -832,6 +851,26 @@ char* GetLastSenseString(int);
 gint32  Random(void);
 void    SRandom(gint32);
 guint32 Random32(void);
+
+/***
+ *** raw-sector-cache.c
+ ***/
+
+typedef struct _dsh
+{  unsigned char mediumFP[16];       /* Medium fingerprint */
+   gint64 lba;                       /* LBA of this sector */
+   gint32 sectorSize;                /* Sector size in bytes */
+   gint32 properties;                /* Flags for future use */
+   gint32 dshFormat;                 /* Format of this file */
+   gint32 nSectors;                  /* Number of sectors in this file */
+} DefectiveSectorHeader;
+
+enum                                 /* for ->properties above */
+{  DSH_HAS_FINGERPRINT = (1<<0)
+};
+
+void SaveDefectiveSector(struct _RawBuffer*);
+int TryDefectiveSectorCache(struct _RawBuffer*, unsigned char*);
 
 /*** 
  *** read-linear.c
@@ -876,22 +915,6 @@ void ChangeSpiralCursor(int);
 void RemoveFillMarkers();
 
 /***
- *** recover-cache.c
- ***/
-
-typedef struct _dsh
-{  unsigned char mediumFP[16];       /* Medium fingerprint */
-   gint64 lba;                       /* LBA of this sector */
-   gint32 sectorSize;                /* Sector size in bytes */
-   gint32 properties;                /* Flags for future use */
-   gint32 dshFormat;                 /* Format of this file */
-   gint32 nSectors;                  /* Number of sectors in this file */
-} DefectiveSectorHeader;
-
-struct _RawBuffer *rawbuffer_forward;
-void SaveDefectiveSector(struct _RawBuffer*);
-
-/***
  *** recover-raw.c
  ***/
 
@@ -902,6 +925,7 @@ typedef struct _RawBuffer
    unsigned char *zeroSector; /* a raw sector containing just zeros. */
    unsigned char **rawBuf;    /* buffer for raw read attempts */
    int samplesRead;           /* number of samples read */
+   int samplesMax;            /* maximum number of samples we can store */
    int sampleLength;          /* length of samples */
    int dataOffset;            /* offset to user data in frame */
    int xaMode;                /* frame is in XA21 mode */
@@ -909,7 +933,10 @@ typedef struct _RawBuffer
 
    unsigned char *recovered;  /* working buffer for cd frame recovery */
    unsigned char *byteState;  /* state of error correction */
-   int lba;                   /* sector number were currently working on */
+   gint64 lba;                /* sector number were currently working on */
+
+   guint8 mediumFP[16];       /* medium fingerprint for raw sector cache validation */
+   int validFP;               /* indicates valid fingerprint */
 
    unsigned char *pParity1[N_P_VECTORS];
    unsigned char *pParity2[N_P_VECTORS];
@@ -940,10 +967,16 @@ enum                          /* values for byteState */
 };
 
 RawBuffer* CreateRawBuffer(int);
+void ReallocRawBuffer(RawBuffer*, int);
 void ResetRawBuffer(RawBuffer*);
 void FreeRawBuffer(RawBuffer*);
 
 void DumpSector(RawBuffer*, char*);
+
+int MSFtoLBA(unsigned char, unsigned char, unsigned char);
+
+int CheckEDC(unsigned char*, int);
+void InitializeCDFrame(unsigned char*, int);
 
 int ValidateRawSector(RawBuffer*, unsigned char*);
 int TryCDFrameRecovery(RawBuffer*, unsigned char*);

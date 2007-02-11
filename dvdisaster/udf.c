@@ -28,26 +28,6 @@
  *** Look for ecc headers in RS02 style media
  ***/
 
-static int read_fingerprint(DeviceHandle *dh, unsigned char *fingerprint, gint64 sector)
-{  AlignedBuffer *ab = CreateAlignedBuffer(2048);
-   struct MD5Context md5ctxt;
-   int status;
-
-   status = ReadSectorsFast(dh, ab->buf, sector, 1);
-
-   if(status) 
-   {  FreeAlignedBuffer(ab);
-      return FALSE;
-   }
-
-   MD5Init(&md5ctxt);
-   MD5Update(&md5ctxt, ab->buf, 2048);
-   MD5Final(fingerprint, &md5ctxt);
-
-   FreeAlignedBuffer(ab);
-   return TRUE;
-}
-
 enum { HEADER_FOUND, TRY_NEXT_HEADER, TRY_NEXT_MODULO};
 
 static int try_sector(DeviceHandle *dh, gint64 pos, EccHeader **ehptr, unsigned char *secbuf)
@@ -114,14 +94,14 @@ static int try_sector(DeviceHandle *dh, gint64 pos, EccHeader **ehptr, unsigned 
    /* Compare medium fingerprint with that recorded in Ecc header */
 
    if(last_fp != eh->fpSector)  /* fingerprint in different sector as before? */
-   {  int status;
+   {  int fp_read;
 
       /* read new fingerprint */
 
-      status = read_fingerprint(dh, fingerprint, eh->fpSector);
+      fp_read = GetMediumFingerprint(dh, fingerprint, eh->fpSector);
       last_fp = eh->fpSector;
 		  
-      if(!status)  /* be optimistic if fingerprint sector is unreadable */
+      if(!fp_read)  /* be optimistic if fingerprint sector is unreadable */
       {  *ehptr = eh;
 	 Verbose("udf/try_sector: read error in fingerprint sector\n");
 	 return HEADER_FOUND;

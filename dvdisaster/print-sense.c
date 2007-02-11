@@ -631,3 +631,9 @@ char *GetSenseString(int sense_key, int asc, int ascq, int verbose)
 char* GetLastSenseString(int verbose)
 {  return GetSenseString(sense_key, asc, ascq, verbose);
 }
+
+void GetLastSense(int *key_out, int *asc_out, int *ascq_out)
+{  *key_out  = sense_key;
+   *asc_out  = asc;
+   *ascq_out = ascq;
+}

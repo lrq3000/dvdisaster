@@ -237,6 +237,10 @@ typedef struct _DeviceHandle
    int rewriteable;
    char *mediumDescr;         /* textual description of medium */
 
+   guint8 mediumFP[16];       /* Medium fingerprint */
+   gint64 fpSector;           /* Sector used for calculating the fingerprint */
+   int fpState;               /* 0=unknown; 1=unreadable; 2=present */
+
    /*
     * size alternatives from different sources 
     */
@@ -298,6 +302,7 @@ enum
 };
 
 DeviceHandle* OpenAndQueryDevice(char*);
+int  GetMediumFingerprint(DeviceHandle*, guint8*, gint64);
 void CloseDevice(DeviceHandle*);
 
 int InquireDevice(DeviceHandle*, int); 
