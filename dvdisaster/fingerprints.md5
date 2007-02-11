@@ -10,7 +10,7 @@ aeadd621d3e9155f1ed08027e6e86ac6 *bitmap.c
 9b876c035a8627362f6c205762af95db *crc32.c
 3e81f031e946016e02a88b7501667019 *curve.c
 866f7db2cea16b7b8df630bfb0187f7a *debug.c
-708d1dea0a79c1df7dd7ff6073567aea *dvdisaster.c
+6bfa933f923fa39488b979b8ebf25d2e *dvdisaster.c
 cafe59e6f3fbe7309803920cd9986e50 *ecc-rs01.c
 5c3bc01b33ee293bc746bd49f2ea0bed *ecc-rs02.c
 8e2a58bb4fd49bcf244ea0aab8b7eb1f *endian.c

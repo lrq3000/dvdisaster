@@ -495,7 +495,7 @@ int main(int argc, char *argv[])
 	    c = strrchr(Closure->dDumpDir, '/');
 	    if(c)
 	    {  *c = 0;
-	       g_free(Closure->dDumpDir);
+	       g_free(Closure->dDumpPrefix);
 	       Closure->dDumpPrefix = g_strdup(c+1);
 	    }
 	 }
