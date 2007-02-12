@@ -28,7 +28,7 @@ badac2a0386cbc55db3dacfdb9054454 *main-window.c
 f5594112248ab75be0bccd025b08537d *method.c
 eecfd7e236c89cc36e1de2062754ac2e *method-link.c
 9fc2ffac8fd2e168580644172980e05d *misc.c
-5ae82fcc6b6361bcab34ae3744823c0f *preferences.c
+214840ab6150c6ee1ab4c640aeb82f3a *preferences.c
 88f30be2486c7100a7c3124de3e7b37a *print-sense.c
 cdde449dd2a8f64b560ff18a36f86234 *random.c
 f2652bf55d70548ccacd88dd6a78e77b *raw-sector-cache.c

@@ -1879,12 +1879,19 @@ void CreatePreferencesWindow(void)
       }
 
       AddHelpParagraph(lwoh, 
-		       _("<b>Raw reading</b>\n\n"
-			 "Some CD/DVD drives may deliver unreliable results when their "
-			 "internal error correction approaches its maximum capacity.\n\n"
-			 "Activating this option makes dvdisaster read sectors in raw mode. "
-			 "The L-EC P/Q vectors, EDC checksum and MSF address contained in the "
-			 "raw data are checked to make sure that the sector was correctly read."
+		       _("<b>Raw sector caching</b>\n\n"
+			 "Some drives are capable of delivering partial data from defective "
+			 "sectors. While one partial sector is useless by itself, "
+			 "20 or more of them might combine into a complete sector.\n\n"
+			 "If you activate this button, dvdisaster will collect partial "
+			 "sectors in the selected directory. "
+			 "When enough parts have been gathered in subsequent reading passes, "
+			 "the respective sector is automatically recombined from the "
+			 "stored parts.\n\n"
+			 "Please note that not all drives and operating systems "
+			 "support reading partial data.\n"
+			 "dvdisaster will not remove any files from the given directory; "
+			 "you need to clean it up manually after a successful media recovery."
 			 ));
 
       /* Sector cache file prefix */
