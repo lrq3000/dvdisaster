@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-11 20:43+0100\n"
+"POT-Creation-Date: 2007-02-13 21:27+0100\n"
 "PO-Revision-Date: 2006-03-16 20:40+0100\n"
 "Last-Translator: Luboš Staněk <lubek@users.sourceforge.net>\n"
 "Language-Team: čeština <cs@li.org>\n"
@@ -1159,7 +1159,7 @@ msgstr ""
 msgid "Read and analyze raw sectors"
 msgstr ""
 
-#: preferences.c:1625 preferences.c:1882
+#: preferences.c:1625
 msgid ""
 "<b>Raw reading</b>\n"
 "\n"
@@ -1271,287 +1271,299 @@ msgstr ""
 msgid "Select"
 msgstr ""
 
-#: preferences.c:1892
+#: preferences.c:1882
+msgid ""
+"<b>Raw sector caching</b>\n"
+"\n"
+"Some drives are capable of delivering partial data from defective sectors. While one partial sector is useless by itself, 20 or more of them might combine into a complete sector.\n"
+"\n"
+"If you activate this button, dvdisaster will collect partial sectors in the selected directory. When enough parts have been gathered in subsequent reading passes, the respective sector is automatically recombined from the stored parts.\n"
+"\n"
+"Please note that not all drives and operating systems support reading partial data. It is not an error of the cache directory remains empty.\n"
+"dvdisaster will not remove any files from the given directory; you need to clean it up manually after a successful medium recovery."
+msgstr ""
+
+#: preferences.c:1900
 msgid "Raw sector file prefix"
 msgstr ""
 
-#: preferences.c:1893
-msgid "Sector file prefix: "
-msgstr ""
-
-#: preferences.c:1914
-msgid ""
-"<b>Raw sector file prefix</b>\n"
-"\n"
-"Use a different prefix for each disk you are trying to recover, e.g. \"disk1-\" and so on.\n"
+#: preferences.c:1901
+msgid "Raw sector file prefix: "
 msgstr ""
 
 #: preferences.c:1922
+msgid ""
+"<b>Raw sector file prefix</b>\n"
+"\n"
+"Use a different prefix for each disk you are trying to recover, e.g. \"disk1-\" and so on."
+msgstr ""
+
+#: preferences.c:1930
 msgid "Error correction"
 msgstr "Oprava chyb"
 
-#: preferences.c:1924
+#: preferences.c:1932
 msgid "Error correction method"
 msgstr ""
 
-#: preferences.c:1925
+#: preferences.c:1933
 msgid "Storage method:"
 msgstr ""
 
-#: preferences.c:1984
+#: preferences.c:1992
 msgid ""
 "<b>Error correction method</b>\n"
 "\n"
 "dvdisaster creates error correction data which is used to recover unreadable sectors if the disc becomes damaged later on. There are two different ways available for storing the error correction information:\n"
 msgstr ""
 
-#: preferences.c:1990
+#: preferences.c:1998
 msgid ""
 "Error correction files (RS01 method)\n"
 "Error correction files are the only way of protecting existing media as they can be stored somewhere else. They are kept on a separate medium which must also be protected by dvdisaster, as data loss in an error correction file will render it unusable.\n"
 msgstr ""
 
-#: preferences.c:1997
+#: preferences.c:2005
 msgid ""
 "Augmented images (RS02 method)\n"
 "The error correction data will be stored along with the user data on the same CD/DVD. This requires the creation of an image file prior to writing the medium. The error correction data will be appended to that image. Damaged sectors in the error correction information reduce the data recovery capacity, but do not make recovery impossible - a second medium for keeping or protecting the error correction information is not required."
 msgstr ""
 
-#: preferences.c:2037
+#: preferences.c:2045
 msgid "Files"
 msgstr ""
 
-#: preferences.c:2041
+#: preferences.c:2049
 msgid "Local files (on hard disc)"
 msgstr "Lokální soubory (na pevném disku)"
 
-#: preferences.c:2048
+#: preferences.c:2056
 msgid "Automatic file suffixes"
 msgstr ""
 
-#: preferences.c:2048
+#: preferences.c:2056
 msgid "Automatically add .iso and .ecc file suffixes"
 msgstr "Automaticky přidat souborové přípony .iso a .ecc"
 
-#: preferences.c:2072
+#: preferences.c:2080
 msgid ""
 "<b>Automatically add file suffixes</b>\n"
 "\n"
 "When this switch is set, files will be automatically appended with \".iso\" or \".ecc\" suffixes if no other file name extension is already present."
 msgstr ""
 
-#: preferences.c:2078
+#: preferences.c:2086
 msgid "File splitting"
 msgstr ""
 
-#: preferences.c:2078
+#: preferences.c:2086
 msgid "Split files into segments &lt;= 2GB"
 msgstr ""
 
-#: preferences.c:2101
+#: preferences.c:2109
 msgid ""
 "<b>File splitting</b>\n"
 "\n"
 "Allows working with file systems which are limited to 2GB per file, e.g. FAT from Windows. Created files are spread over upto 100 segments called \"medium00.iso\", \"medium01.iso\" etc. at the cost of a small performance hit."
 msgstr ""
 
-#: preferences.c:2110
+#: preferences.c:2118
 msgid "Automatic file creation and deletion"
 msgstr "Automatická tvorba a mazání souborů"
 
-#: preferences.c:2119
+#: preferences.c:2127
 msgid "Automatic .ecc file creation"
 msgstr ""
 
-#: preferences.c:2119
+#: preferences.c:2127
 msgid "Create error correction file after reading image"
 msgstr "Vytvořit soubor oprav chyb po načtení obrazu"
 
-#: preferences.c:2142
+#: preferences.c:2150
 msgid ""
 "<b>Automatic error correction file creation</b>\n"
 "\n"
 "Automatically creates an error correction file after reading an image. Together with the \"Remove image\" option this will speed up error correction file generation for a series of different media."
 msgstr ""
 
-#: preferences.c:2149
+#: preferences.c:2157
 msgid "Automatic image file removal"
 msgstr ""
 
-#: preferences.c:2149
+#: preferences.c:2157
 msgid "Remove image after error correction file creation"
 msgstr "Odstranit obraz po vytvoření souboru oprav chyb"
 
-#: preferences.c:2172
+#: preferences.c:2180
 msgid ""
 "<b>Automatic image file removal</b>\n"
 "\n"
 "If this switch is set the image file will be deleted following the successful generation of the respective error correction file."
 msgstr ""
 
-#: preferences.c:2178
+#: preferences.c:2186
 msgid "Appearance"
 msgstr ""
 
-#: preferences.c:2185
+#: preferences.c:2193
 msgid "Sector coloring"
 msgstr ""
 
-#: preferences.c:2195 rs01-verify.c:120 rs02-verify.c:115
+#: preferences.c:2203 rs01-verify.c:120 rs02-verify.c:115
 msgid "Good sectors"
 msgstr "Dobré sektory"
 
-#: preferences.c:2195
+#: preferences.c:2203
 msgid "Good sector"
 msgstr ""
 
-#: preferences.c:2219
+#: preferences.c:2227
 msgid ""
 "<b>Good sectors</b>\n"
 "\n"
 "This color indicates good sectors."
 msgstr ""
 
-#: preferences.c:2224
+#: preferences.c:2232
 msgid "Checksum errors"
 msgstr ""
 
-#: preferences.c:2224
+#: preferences.c:2232
 msgid "Checksum error"
 msgstr ""
 
-#: preferences.c:2248
+#: preferences.c:2256
 msgid ""
 "<b>Checksum errors</b>\n"
 "\n"
 "This color is used for displaying sectors with wrong check sums."
 msgstr ""
 
-#: preferences.c:2253
+#: preferences.c:2261
 msgid "Unreadable sectors"
 msgstr ""
 
-#: preferences.c:2253
+#: preferences.c:2261
 msgid "Unreadable"
 msgstr ""
 
-#: preferences.c:2277
+#: preferences.c:2285
 msgid ""
 "<b>Unreadable sectors</b>\n"
 "\n"
 "This color is used for marking unreadable sectors."
 msgstr ""
 
-#: preferences.c:2282
+#: preferences.c:2290
 msgid "Present sectors"
 msgstr ""
 
-#: preferences.c:2282
+#: preferences.c:2290
 msgid "Present sector"
 msgstr ""
 
-#: preferences.c:2306
+#: preferences.c:2314
 msgid ""
 "<b>Present sectors</b>\n"
 "\n"
 "Sectors which are already present are marked with this color."
 msgstr ""
 
-#: preferences.c:2311
+#: preferences.c:2319
 msgid "Ignored sectors"
 msgstr ""
 
-#: preferences.c:2311
+#: preferences.c:2319
 msgid "Ignored sector"
 msgstr ""
 
-#: preferences.c:2335
+#: preferences.c:2343
 msgid ""
 "<b>Ignored sectors</b>\n"
 "\n"
 "Sectors marked with this color will not be processed in the current run."
 msgstr ""
 
-#: preferences.c:2341
+#: preferences.c:2349
 msgid "Highlit sectors"
 msgstr ""
 
-#: preferences.c:2341
+#: preferences.c:2349
 msgid "Highlit sector"
 msgstr ""
 
-#: preferences.c:2365
+#: preferences.c:2373
 msgid ""
 "<b>Highlit sectors</b>\n"
 "\n"
 "This color is used for temporarily highlighting sectors during adaptive reading."
 msgstr ""
 
-#: preferences.c:2371
+#: preferences.c:2379
 msgid "Text colors"
 msgstr ""
 
-#: preferences.c:2381
+#: preferences.c:2389
 msgid "Positive text"
 msgstr ""
 
-#: preferences.c:2405
+#: preferences.c:2413
 msgid ""
 "<b>Positive text</b>\n"
 "\n"
 "Good news are printed in this color."
 msgstr ""
 
-#: preferences.c:2410
+#: preferences.c:2418
 msgid "Negative text"
 msgstr ""
 
-#: preferences.c:2434
+#: preferences.c:2442
 msgid ""
 "<b>Negative text</b>\n"
 "\n"
 "Bad news are printed in this color."
 msgstr ""
 
-#: preferences.c:2439
+#: preferences.c:2447
 msgid "Curve colors"
 msgstr ""
 
-#: preferences.c:2448
+#: preferences.c:2456
 msgid "Curve color"
 msgstr ""
 
-#: preferences.c:2472
+#: preferences.c:2480
 msgid ""
 "<b>Curve color and labels</b>\n"
 "\n"
 "The reading speed curve, its left side and top labels are printed in this color."
 msgstr ""
 
-#: preferences.c:2478
+#: preferences.c:2486
 msgid "Error correction load"
 msgstr ""
 
-#: preferences.c:2502
+#: preferences.c:2510
 msgid ""
 "<b>Error correction load</b>\n"
 "\n"
 "The bar graph showing the error correction load is rendered in this color during the \"Fix\" operation."
 msgstr ""
 
-#: preferences.c:2514
+#: preferences.c:2522
 msgid "Default color scheme"
 msgstr ""
 
-#: preferences.c:2522
+#: preferences.c:2530
 msgid "Dialog boxes"
 msgstr ""
 
-#: preferences.c:2525
+#: preferences.c:2533
 msgid "Reverse OK / Cancel buttons"
 msgstr ""
 
-#: preferences.c:2549
+#: preferences.c:2557
 msgid ""
 "<b>Reverse OK / Cancel buttons</b>\n"
 "\n"

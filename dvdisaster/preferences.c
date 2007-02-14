@@ -1889,15 +1889,16 @@ void CreatePreferencesWindow(void)
 			 "the respective sector is automatically recombined from the "
 			 "stored parts.\n\n"
 			 "Please note that not all drives and operating systems "
-			 "support reading partial data.\n"
+			 "support reading partial data. "
+			 "It is not an error of the cache directory remains empty.\n"
 			 "dvdisaster will not remove any files from the given directory; "
-			 "you need to clean it up manually after a successful media recovery."
+			 "you need to clean it up manually after a successful medium recovery."
 			 ));
 
       /* Sector cache file prefix */
 
       lwoh = CreateLabelWithOnlineHelp(_("Raw sector file prefix"), 
-				       _("Sector file prefix: "));
+				       _("Raw sector file prefix: "));
       RegisterPreferencesHelpWindow(lwoh);
 
       for(i=0; i<2; i++)
@@ -1920,7 +1921,7 @@ void CreatePreferencesWindow(void)
       AddHelpParagraph(lwoh, 
 		       _("<b>Raw sector file prefix</b>\n\n"
 			 "Use a different prefix for each disk you are trying "
-			 "to recover, e.g. \"disk1-\" and so on.\n"));
+			 "to recover, e.g. \"disk1-\" and so on."));
 
       /*** "Error correction" page */
 
