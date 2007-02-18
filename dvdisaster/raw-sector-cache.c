@@ -108,7 +108,9 @@ void SaveDefectiveSector(RawBuffer *rb)
    if(!rb->samplesRead) 
      return;  /* Nothing to be done */
 
-   filename = g_strdup_printf("%s/%s%lld.raw", Closure->dDumpDir, Closure->dDumpPrefix, rb->lba);
+   filename = g_strdup_printf("%s/%s%lld.raw", 
+			      Closure->dDumpDir, Closure->dDumpPrefix, 
+			      (long long)rb->lba);
 
    if(!LargeStat(filename, &length))
    {  PrintCLIorLabel(Closure->status,_(" [Creating new cache file %s]\n"), filename);
@@ -153,7 +155,9 @@ int TryDefectiveSectorCache(RawBuffer *rb, unsigned char *outbuf)
    int last_sector;
    int i;
 
-   path = g_strdup_printf("%s/%s%lld.raw", Closure->dDumpDir, Closure->dDumpPrefix, rb->lba);
+   path = g_strdup_printf("%s/%s%lld.raw", 
+			  Closure->dDumpDir, Closure->dDumpPrefix, 
+			  (long long)rb->lba);
    open_defective_sector_file(rb, path, &file, &dsh);
    g_free(path);
 
@@ -206,7 +210,8 @@ void ReadDefectiveSectorFile(RawBuffer *rb, char *path)
 
    for(i=0; i<dsh.nSectors; i++)
    {  int n=LargeRead(file, rb->rawBuf[rb->samplesRead], rb->sampleLength);
-      if(n != sizeof(DefectiveSectorHeader))
+
+      if(n != rb->sampleLength)
 	 Stop(_("Failed reading from defective sector file: %s"), strerror(errno));
 
       rb->samplesRead++;

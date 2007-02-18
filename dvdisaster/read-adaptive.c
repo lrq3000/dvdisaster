@@ -966,7 +966,7 @@ void fill_gap(read_closure *rc)
   clear_progress(rc);
   if(Closure->guiMode)
   {  SetAdaptiveReadSubtitle(t);
-     ChangeSpiralCursor(-1); 
+     ChangeSpiralCursor(Closure->readAdaptiveSpiral, -1); 
   }
   PrintCLI(t);
   g_free(t);
@@ -1236,7 +1236,7 @@ reopen_image:
 	 }
 
 	 if(Closure->guiMode)
-	   ChangeSpiralCursor(s / rc->sectorsPerSegment);
+	    ChangeSpiralCursor(Closure->readAdaptiveSpiral, s / rc->sectorsPerSegment);
 	    
 	 /* Determine number of sectors to read. Read the next 16 sectors
 	    unless we're at the end of the interval or at a position which is
@@ -1625,7 +1625,7 @@ finished:
    /* Force output of final results */
 
    if(Closure->guiMode)
-   {  ChangeSpiralCursor(-1);
+   {  ChangeSpiralCursor(Closure->readAdaptiveSpiral, -1);
       mark_sector(rc, 0, NULL);
    }
 

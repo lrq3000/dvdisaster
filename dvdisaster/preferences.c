@@ -454,7 +454,7 @@ static void spin_cb(GtkWidget *widget, gpointer data)
 	break;
 
       case SPIN_READ_MEDIUM:
-	Closure->readMedium = value;
+	Closure->readingPasses = value;
 	if(widget == pc->readMediumA)
 	{  if(pc->readMediumB)
 	     gtk_spin_button_set_value(GTK_SPIN_BUTTON(pc->readMediumB), value);
@@ -1799,7 +1799,7 @@ void CreatePreferencesWindow(void)
 	 spin = gtk_spin_button_new_with_range(1, 20, 1);
 	 gtk_entry_set_width_chars(GTK_ENTRY(spin), 3);
 	 gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin), 
-				   Closure->readMedium < 2 ? 1 : Closure->readMedium);
+				   Closure->readingPasses < 2 ? 1 : Closure->readingPasses);
 	 g_signal_connect(spin, "value-changed", G_CALLBACK(spin_cb), (gpointer)SPIN_READ_MEDIUM);
 	 gtk_box_pack_start(GTK_BOX(hbox), spin, FALSE, FALSE, 0);
 	 label = gtk_label_new(_utf(" times"));

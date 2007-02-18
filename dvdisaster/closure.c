@@ -457,7 +457,7 @@ void ReadDotfile()
       if(!strcmp(symbol, "min-read-attempts"))   { Closure->minReadAttempts = atoi(value); continue; }
       if(!strcmp(symbol, "query-size"))      { Closure->querySize  = atoi(value); continue; }
       if(!strcmp(symbol, "read-and-create")) { Closure->readAndCreate = atoi(value); continue; }
-      if(!strcmp(symbol, "read-medium"))     { Closure->readMedium = atoi(value); continue; }
+      if(!strcmp(symbol, "read-medium"))     { Closure->readingPasses = atoi(value); continue; }
       if(!strcmp(symbol, "read-raw"))        { Closure->readRaw = atoi(value); continue; }
       if(!strcmp(symbol, "redundancy"))      { if(Closure->redundancy) g_free(Closure->redundancy);
                                                Closure->redundancy  = g_strdup(value); continue; }
@@ -543,7 +543,7 @@ static void update_dotfile()
    g_fprintf(dotfile, "min-read-attempts: %d\n", Closure->minReadAttempts);
    g_fprintf(dotfile, "query-size:        %d\n", Closure->querySize);
    g_fprintf(dotfile, "read-and-create:   %d\n", Closure->readAndCreate);
-   g_fprintf(dotfile, "read-medium:       %d\n", Closure->readMedium);
+   g_fprintf(dotfile, "read-medium:       %d\n", Closure->readingPasses);
    g_fprintf(dotfile, "read-raw:          %d\n", Closure->readRaw);
    if(Closure->redundancy)
      g_fprintf(dotfile, "redundancy:        %s\n", Closure->redundancy);

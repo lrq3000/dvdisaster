@@ -99,6 +99,9 @@ static gboolean curve_idle_func(gpointer data)
 
    Closure->lastSegment = Closure->percent;
 
+   if(Closure->lastPlotted == -1)  /* 2nd or higher reading pass, don't touch the curve */
+      return FALSE;
+
    /*** Resize the Y axes if speed value exceeds current maximum */
 
    for(i=Closure->lastPlotted+1; i<=Closure->percent; i++)
@@ -157,10 +160,13 @@ void AddCurveValues(int percent, double speed, int color)
 
    /*** Mark unused speed values between lastPercent and Percent */
 
-   Closure->readLinearCurve->fvalue[percent] = speed;
+   if(speed>=0)
+   {  Closure->readLinearCurve->fvalue[percent] = speed;
 
-   for(i=Closure->lastPercent+1; i<Closure->percent; i++)
-      Closure->readLinearCurve->fvalue[i] = speed > 0.0 ? -1.0 : 0.0;
+      for(i=Closure->lastPercent+1; i<Closure->percent; i++)
+	 Closure->readLinearCurve->fvalue[i] = speed > 0.0 ? -1.0 : 0.0;
+   }
+   else Closure->lastPlotted = -1;
 
    /*** Mark the spiral segments between lastPercent and Percent*/
 

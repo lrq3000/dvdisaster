@@ -232,3 +232,33 @@ void MoveSpiralCursor(Spiral *spiral, int to_segment)
   spiral->colorUnderCursor = spiral->segmentColor[to_segment];
   DrawSpiralSegment(spiral, Closure->blueSector, to_segment);
 }
+
+/*
+ * Wrapper for moving the spiral cursor from non-GUI thread
+ */
+
+typedef struct _cursor_info
+{  Spiral *spiral;
+   int segment;
+} cursor_info;
+
+static gboolean cursor_idle_func(gpointer data)
+{  cursor_info *ci = (cursor_info*)data;
+
+   MoveSpiralCursor(ci->spiral, ci->segment);
+   g_free(ci);
+
+   return FALSE;
+}
+
+void ChangeSpiralCursor(Spiral *spiral, int segment)
+{  
+   if(segment != spiral->cursorPos)
+   {  cursor_info *ci = g_malloc(sizeof(cursor_info));
+
+      ci->spiral  = spiral;
+      ci->segment = segment;
+
+      g_idle_add(cursor_idle_func, ci);
+   }
+}

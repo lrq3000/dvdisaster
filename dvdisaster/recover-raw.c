@@ -33,7 +33,7 @@ void DumpSector(RawBuffer *rb, char *path)
    if(rb->samplesRead <= 0)
      return;
 
-   filename = g_strdup_printf("%s%lld.h", path, rb->lba);
+   filename = g_strdup_printf("%s%lld.h", path, (long long)rb->lba);
 
    file = fopen(filename, "w");
    
@@ -42,7 +42,8 @@ void DumpSector(RawBuffer *rb, char *path)
 	   "#define SAMPLE_LENGTH %d\n"
 	   "#define LBA %lld\n"
 	   "unsigned char cd_frame[][%d] = {\n",
-	   rb->samplesRead, rb->sampleLength, rb->lba, rb->sampleLength);
+	   rb->samplesRead, rb->sampleLength, 
+	   (long long)rb->lba, rb->sampleLength);
 
    for(i=0; i<rb->samplesRead; i++)
    {  int j;
@@ -248,7 +249,7 @@ static int int_to_bcd(int value)
  * Returns TRUE if the given lba matches the MSF field.
  */
 
-static int check_msf(unsigned char *frame, int lba)
+int CheckMSF(unsigned char *frame, int lba)
 {  unsigned char min,sec,frm;
 
    lba_to_msf(lba, &min, &sec, &frm);
@@ -508,7 +509,7 @@ int ValidateRawSector(RawBuffer *rb, unsigned char *frame)
 
   /* Test internal sector address */
 
-  if(!check_msf(frame, rb->lba))
+  if(!CheckMSF(frame, rb->lba))
   {  RememberSense(3, 255, 2);  /* Wrong MSF in RAW sector */
      return FALSE;
   }
@@ -738,7 +739,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
    /* Compare lba against MSF field. Some drives return sectors
       from wrong places in RAW mode. */
 
-   if(!check_msf(new_frame, rb->lba))
+   if(!CheckMSF(new_frame, rb->lba))
    {  RememberSense(3, 255, 2); /* Wrong MSF in raw sector */
       return -1;
    }
@@ -764,7 +765,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
    iterative_lec(rb);
 
    if(CheckEDC(rb->recovered, rb->xaMode)
-      && check_msf(rb->recovered, rb->lba))
+      && CheckMSF(rb->recovered, rb->lba))
    {
        PrintCLIorLabel(Closure->status, 
 		       "Sector %d: Recovered in raw reader by iterative L-EC.\n",
@@ -786,7 +787,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
    SearchPlausibleSector(rb);
 
    if(CheckEDC(rb->recovered, rb->xaMode)
-      && check_msf(rb->recovered, rb->lba))
+      && CheckMSF(rb->recovered, rb->lba))
    {  PrintCLIorLabel(Closure->status, 
 		      "Sector %d: Recovered in raw reader by plausible sector search.\n",
 		      rb->lba);
@@ -797,7 +798,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
    HeuristicLEC(rb->recovered, rb, outbuf);
 
    if(CheckEDC(rb->recovered, rb->xaMode)
-      && check_msf(rb->recovered, rb->lba))
+      && CheckMSF(rb->recovered, rb->lba))
    {  PrintCLIorLabel(Closure->status, 
 		      "Sector %d: Recovered in raw reader by heuristic L-EC.\n",
 		      rb->lba);

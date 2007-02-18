@@ -1467,8 +1467,8 @@ int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
    {  gint64 i,idx;
 
      for(idx=s,i=0; i<nsectors; idx++,i++)
-       if(GetBit(dh->defects, idx))
-	  //if(GetBit(dh->defects, idx) && (Random() & 1))
+	//       if(GetBit(dh->defects, idx))
+	if(GetBit(dh->defects, idx) && !((Random() & 15)))
        {  dh->sense.sense_key = 3;
 	  dh->sense.asc       = 255;
 	  dh->sense.ascq      = 255;
@@ -1519,7 +1519,7 @@ int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
 	    GetLastSense(&last_key, &last_asc, &last_ascq);
 
 	    if(last_key == 3 && last_asc == 255 && last_ascq == 2 && dh->rawBuffer)
-	    {  char *frame = dh->rawBuffer->workBuf->buf;
+	    {  unsigned char *frame = dh->rawBuffer->workBuf->buf;
 	       PrintCLIorLabel(Closure->status,
 			       _("Sector %lld, try %d: %s Sector returned: %d.\n"),
 			       s, retry, GetLastSenseString(FALSE),

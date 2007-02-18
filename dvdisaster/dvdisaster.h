@@ -158,7 +158,7 @@ typedef struct _GlobalClosure
    char *dDumpPrefix;   /* file name prefix for above */
    int reverseCancelOK; /* if TRUE the button order is reversed */
    int eject;           /* eject medium on success */
-   int readMedium;      /* try to read medium n times */
+   int readingPasses;   /* try to read medium n times */
    int pauseAfter;      /* pause after given amount of minutes */
    int pauseDuration;   /* duration of pause in minutes */
    int pauseEject;      /* Eject medium during pause */
@@ -911,7 +911,6 @@ void SetAdaptiveReadSubtitle(char*);
 void SetAdaptiveReadFootline(char*, GdkColor*);
 void UpdateAdaptiveResults(gint64, gint64, gint64, int);
 void ChangeSegmentColor(GdkColor*, int);
-void ChangeSpiralCursor(int);
 void RemoveFillMarkers();
 
 /***
@@ -933,6 +932,7 @@ typedef struct _RawBuffer
 
    unsigned char *recovered;  /* working buffer for cd frame recovery */
    unsigned char *byteState;  /* state of error correction */
+   unsigned char *reference;  /* NULL or the correct sector (for debugging purposes) */
    gint64 lba;                /* sector number were currently working on */
 
    guint8 mediumFP[16];       /* medium fingerprint for raw sector cache validation */
@@ -976,6 +976,7 @@ void DumpSector(RawBuffer*, char*);
 int MSFtoLBA(unsigned char, unsigned char, unsigned char);
 
 int CheckEDC(unsigned char*, int);
+int CheckMSF(unsigned char*, int);
 void InitializeCDFrame(unsigned char*, int);
 
 int ValidateRawSector(RawBuffer*, unsigned char*);
@@ -1013,6 +1014,12 @@ int SendReadCDB(char*, unsigned char*, unsigned char*, int, int);
 void ShowHTML(char*);
 
 /***
+ *** slow-lec.c
+ ***/
+
+int SlowLEC(RawBuffer*);
+
+/***
  *** spiral.c
  ***/
 
@@ -1038,6 +1045,8 @@ void FreeSpiral(Spiral*);
 void DrawSpiral(Spiral*);
 void DrawSpiralSegment(Spiral*, GdkColor*, int);
 void DrawSpiralLabel(Spiral*, PangoLayout*, char*, GdkColor*, int, int);
+
+void ChangeSpiralCursor(Spiral*, int);
 void MoveSpiralCursor(Spiral*, int);
 
 /***

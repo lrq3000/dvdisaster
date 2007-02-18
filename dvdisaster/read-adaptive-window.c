@@ -260,25 +260,6 @@ void RemoveFillMarkers()
    g_idle_add(remove_fill_idle_func, NULL);
 }
 
-
-/*
- * Move the spiral cursor
- */
-
-static gboolean cursor_idle_func(gpointer data)
-{  int segment = GPOINTER_TO_INT(data);
-
-   MoveSpiralCursor(Closure->readAdaptiveSpiral, segment);
-
-   return FALSE;
-}
-
-void ChangeSpiralCursor(int segment)
-{
-   if(segment != Closure->readAdaptiveSpiral->cursorPos)
-     g_idle_add(cursor_idle_func, GINT_TO_POINTER(segment));
-}
-
 /***
  *** Redraw the label in our window
  ***/

@@ -54,6 +54,10 @@ typedef struct
 
    gint64 sectors;                   /* medium capacity */
    gint64 firstSector, lastSector;   /* reading range */
+
+   gint64 readPos;                   /* current sector reading position */
+   Bitmap *readMap;                  /* map of already read sectors */
+
    gint64 readMarker;
    int rereading;                    /* TRUE if working on existing image */
    char *msg;
@@ -61,8 +65,14 @@ typedef struct
    int unreportedError;
    int earlyTermination;
    int scanMode;
-   gint64 readOK;
+   int lastPercent;
+   int firstSpeedValue;
+   double speed,lastSpeed;
+   gint64 readOK, lastReadOK;
+   int previousReadErrors;
+   int previousCRCErrors;
    gint64 deadWritten;
+   gint64 lastErrorsPrinted;
    int pass;
 } read_closure;
 
@@ -151,6 +161,7 @@ static void cleanup(gpointer data)
    if(rc->msg)     g_free(rc->msg);
    if(rc->speedTimer) g_timer_destroy(rc->speedTimer);
    if(rc->readTimer)  g_timer_destroy(rc->readTimer);
+   if(rc->readMap) FreeBitmap(rc->readMap);
    g_free(rc);
 
    if(Closure->readAndCreate && Closure->guiMode && !strncmp(Closure->methodName, "RS01", 4)
@@ -261,7 +272,7 @@ static void check_ecc_file(read_closure *rc)
 }
 
 /*
- * Find out current which mode we are operatin in:
+ * Find out current which mode we are operating in:
  * 1. Scanning
  * 2. Creating a new image
  * 3. Completing an existing image
@@ -396,11 +407,13 @@ reopen_image:
    }
 
    /*** If the image is not complete yet, first aim to read the
-	unvisited sectors before trying to re-read the missing ones. */
+	unvisited sectors before trying to re-read the missing ones.
+        Exception: We must start from the beginning if multiple reading passes are requested. */
       
    Closure->checkCrc = 0; /* makes only sense if image is completely read */
 
-   if(!Closure->readStart && !Closure->readEnd && rc->readMarker < rc->sectors-1)
+   if(!Closure->readStart && !Closure->readEnd 
+      && rc->readMarker < rc->sectors-1 && Closure->readingPasses == 1)
    {  PrintLog(_("Completing image %s. Continuing with sector %lld.\n"),
 	       Closure->imageName, rc->readMarker);
       rc->firstSector = rc->readMarker;
@@ -427,7 +440,6 @@ reopen_image:
 static void fill_gap(read_closure *rc)
 {  gint64 s;
 
-
    if(!rc->scanMode && rc->firstSector > rc->readMarker)
    {  s = rc->readMarker;
 
@@ -443,6 +455,193 @@ static void fill_gap(read_closure *rc)
       }
    }
 }
+
+/*
+ * Allocate memory for CRC32 sums and preload the cache.
+ */
+
+static void prepare_crc_cache(read_closure *rc)
+{
+   /*** Memory for the CRC32 sums is needed in two cases: */
+
+   /* a) A full image read is attempted. 
+         The image CRC32 and md5sum are calculated on the fly,
+         as they may be used for ecc creation later. */
+
+   if(   !rc->scanMode && !rc->rereading 
+      && rc->firstSector == 0 && rc->lastSector == rc->sectors-1)
+   {  Closure->crcCache = g_try_malloc(sizeof(guint32) * rc->sectors);
+
+      if(Closure->crcCache)
+	Closure->crcImageName = g_strdup(Closure->imageName);
+
+      MD5Init(&rc->md5ctxt);
+   }
+
+   /* b) We have suitable ecc data and want to compare CRC32sum against
+         it while reading. */
+
+   if(Closure->checkCrc)
+   {  gint64 crc_sectors = rc->ei->sectors;
+
+      if(rc->sectors > crc_sectors)  /* Allows completion of crc info */
+	crc_sectors = rc->sectors;   /* when image contains additional sectors */
+
+      Closure->crcCache = g_try_malloc(sizeof(guint32) * crc_sectors);
+
+      if(!Closure->crcCache)
+      {  Closure->checkCrc = FALSE;
+      }
+      else
+      {  guint32 *cache = Closure->crcCache;
+         int i=0;
+
+	 if(!LargeSeek(rc->ei->file, (gint64)sizeof(EccHeader)))
+	   Stop(_("Failed skipping the ecc header: %s"),strerror(errno));
+
+	 PrintCLI("%s ...",_("Reading CRC information from ecc file"));
+
+	 while(i<crc_sectors)
+	 {  int n = i+512<crc_sectors ? 512 : crc_sectors - i;
+
+	    if(LargeRead(rc->ei->file, cache, 4*n) != 4*n)
+	      Stop(_("Error reading CRC information: %s"), strerror(errno));
+
+	    cache += n;
+	    i+=n;
+	 }
+
+         PrintCLI(_("done.\n"));
+
+	 if(Closure->guiMode)
+	   SetLabelText(GTK_LABEL(Closure->readLinearHeadline),
+			"<big>%s</big>\n<i>%s</i>", rc->msg, rc->dh->mediumDescr);
+
+	 MD5Init(&rc->md5ctxt);
+      }
+   }
+}
+
+/*
+ * Wait for the drive to spin up and prepare the timer
+ */
+
+static void prepare_timer(read_closure *rc)
+{
+   if(Closure->guiMode && Closure->spinupDelay)
+     SwitchAndSetFootline(Closure->readLinearNotebook, 1, Closure->readLinearFootline,
+			  _("Waiting %d seconds for drive to spin up...\n"), Closure->spinupDelay);
+
+   SpinupDevice(rc->dh);
+
+   if(Closure->guiMode && Closure->spinupDelay)
+     SwitchAndSetFootline(Closure->readLinearNotebook, 0, Closure->readLinearFootline, "ignore");
+
+   if(Closure->spinupDelay)  /* eliminate initial seek time from timing */
+     ReadSectors(rc->dh, rc->alignedBuf[0]->buf, rc->firstSector, 1); 
+   g_timer_start(rc->speedTimer);
+   g_timer_start(rc->readTimer);
+}
+
+/*
+ * Update the various progress indicators
+ */
+
+static void show_progress(read_closure *rc)
+{  int percent;
+
+   if(Closure->guiMode && rc->lastErrorsPrinted != Closure->readErrors)
+   {  SetLabelText(GTK_LABEL(Closure->readLinearErrors), 
+		   _("Unreadable / skipped sectors: %lld"), Closure->readErrors);
+      rc->lastErrorsPrinted = Closure->readErrors;
+   }
+
+   if(rc->readPos>rc->readMarker) rc->readMarker=rc->readPos;
+   percent = (1000*rc->readPos)/rc->sectors;
+      
+   if(rc->lastPercent != percent) 
+   {  gulong ignore;
+      int color;
+
+      ChangeSpiralCursor(Closure->readLinearSpiral, percent);
+
+      if(rc->readOK <= rc->lastReadOK)  /* anything read since last sample? */
+      {  rc->speed = 0.0;               /* nothing read */
+	 if(Closure->readErrors - rc->previousReadErrors > 0)
+	    color = 2;
+	 else if(Closure->crcErrors - rc->previousCRCErrors > 0)
+	    color = 4;
+	 else color = rc->pass ? 1 : Closure->additionalSpiralColor;
+
+	 if(Closure->guiMode)
+	    AddCurveValues(percent, rc->pass ? -1.0 : rc->speed, color);
+	 rc->lastPercent    = percent;
+	 rc->lastSpeed      = rc->speed;
+	 rc->previousReadErrors = Closure->readErrors;
+	 rc->previousCRCErrors  = Closure->crcErrors;
+	 rc->lastReadOK     = rc->readOK;
+      }
+      else
+      {  double kb_read = (rc->readOK - rc->lastReadOK) * 2.0;
+	 double elapsed = g_timer_elapsed(rc->speedTimer, &ignore);
+	 double kb_sec  = kb_read / elapsed;
+	 
+	 if(Closure->readErrors - rc->previousReadErrors > 0)
+	    color = 2;
+	 else if(Closure->crcErrors - rc->previousCRCErrors > 0)
+	    color = 4;
+	 else color = 1;
+	 
+	 if(rc->firstSpeedValue)
+	 {   rc->speed = kb_sec / rc->dh->singleRate;
+		
+	     if(Closure->guiMode)
+	     {  AddCurveValues(rc->lastPercent, rc->pass ? -1.0 : rc->speed, color);
+		AddCurveValues(percent, rc->pass ? -1.0 : rc->speed, color);
+	     }
+	     
+	     rc->firstSpeedValue    = FALSE;
+	     rc->lastPercent        = percent;
+	     rc->lastSpeed          = rc->speed;
+	     rc->previousReadErrors = Closure->readErrors;
+	     rc->previousCRCErrors  = Closure->crcErrors;
+	     rc->lastReadOK         = rc->readOK;
+	 }
+	 else
+	 {  rc->speed = (rc->speed + kb_sec / rc->dh->singleRate) / 2.0;
+	    if(rc->speed>99.9) rc->speed=99.9;
+	    
+	    if(Closure->guiMode)
+	       AddCurveValues(percent, rc->pass ? -1.0 : rc->speed, color);
+
+	    if(Closure->speedWarning && rc->lastSpeed > 0.5)
+	    {  double delta = rc->speed - rc->lastSpeed;
+	       double abs_delta = fabs(delta);
+	       double sp = (100.0*abs_delta) / rc->lastSpeed; 
+
+	       if(sp >= Closure->speedWarning)
+	       {  if(delta > 0.0)
+		     PrintCLI(_("Sector %lld: Speed increased to %4.1fx\n"), 
+			      rc->readPos, fabs(rc->speed));
+		  else
+		     PrintCLI(_("Sector %lld: Speed dropped to %4.1fx\n"),
+			      rc->readPos, fabs(rc->speed));
+	       }
+	    }
+	    
+	    PrintProgress(_("Read position: %3d.%1d%% (%4.1fx)"),
+			  percent/10,percent%10,rc->speed);
+	    
+	    rc->lastPercent    = percent;
+	    rc->lastSpeed      = rc->speed;
+	    rc->previousReadErrors = Closure->readErrors;
+	    rc->previousCRCErrors  = Closure->crcErrors;
+	    rc->lastReadOK     = rc->readOK;
+	    g_timer_start(rc->speedTimer);
+	 }
+      }
+   }
+}   
 
 /***
  *** Try reading the medium and create the image and map.
@@ -558,16 +757,8 @@ void ReadMediumLinear(gpointer data)
 {  read_closure *rc = g_malloc0(sizeof(read_closure));
    GError *err = NULL;
    int nsectors; 
-   gint64 s;
-   int percent, last_percent;
-   double last_speed = -1.0;
-   int first_speed_value = TRUE;
-   gint previous_read_errors = 0;
-   gint previous_crc_errors = 0;
    char *t;
    int status,n;
-   gint64 last_read_ok,last_errors_printed;
-   double speed = 0.0;
    int tao_tail = 0;
    int i;
 
@@ -625,63 +816,14 @@ void ReadMediumLinear(gpointer data)
 
    fill_gap(rc);
 
-   /*** Memory for the CRC32 sums is needed in two cases: */
+   /*** Allocate and preload the CRC sum cache if necessary */
 
-   /* a) a full image read is attempted, and the image CRC32 
-         and md5sum are calculated on the fly. */
+   prepare_crc_cache(rc);
 
-   if(   !rc->scanMode && !rc->rereading 
-      && rc->firstSector == 0 && rc->lastSector == rc->sectors-1)
-   {  Closure->crcCache = g_try_malloc(sizeof(guint32) * rc->sectors);
+   /*** Allocate a bitmap of read sectors to speed up multiple reading passes */
 
-      if(Closure->crcCache)
-	Closure->crcImageName = g_strdup(Closure->imageName);
-
-      MD5Init(&rc->md5ctxt);
-   }
-
-   /* b) we have a suitable ecc file and compare CRC32sum against
-         it while reading */
-
-   if(Closure->checkCrc)
-   {  gint64 crc_sectors = rc->ei->sectors;
-
-      if(rc->sectors > crc_sectors)  /* Allows completion of crc info */
-	crc_sectors = rc->sectors;   /* when image contains additional sectors */
-
-      Closure->crcCache = g_try_malloc(sizeof(guint32) * crc_sectors);
-
-      if(!Closure->crcCache)
-      {  Closure->checkCrc = FALSE;
-      }
-      else
-      {  guint32 *cache = Closure->crcCache;
-         int i=0;
-
-	 if(!LargeSeek(rc->ei->file, (gint64)sizeof(EccHeader)))
-	   Stop(_("Failed skipping the ecc header: %s"),strerror(errno));
-
-	 PrintCLI("%s ...",_("Reading CRC information from ecc file"));
-
-	 while(i<crc_sectors)
-	 {  int n = i+512<crc_sectors ? 512 : crc_sectors - i;
-
-	    if(LargeRead(rc->ei->file, cache, 4*n) != 4*n)
-	      Stop(_("Error reading CRC information: %s"), strerror(errno));
-
-	    cache += n;
-	    i+=n;
-	 }
-
-         PrintCLI(_("done.\n"));
-
-	 if(Closure->guiMode)
-	   SetLabelText(GTK_LABEL(Closure->readLinearHeadline),
-			"<big>%s</big>\n<i>%s</i>", rc->msg, rc->dh->mediumDescr);
-
-	 MD5Init(&rc->md5ctxt);
-      }
-   }
+   if(Closure->readingPasses > 1)
+      rc->readMap = CreateBitmap0(rc->sectors);
 
    /*** Start the worker thread. We concentrate on reading from the drive here;
 	writing the image file and calculating the checksums is done in a
@@ -696,19 +838,7 @@ void ReadMediumLinear(gpointer data)
 
    /*** Prepare the speed timing */
 
-   if(Closure->guiMode && Closure->spinupDelay)
-     SwitchAndSetFootline(Closure->readLinearNotebook, 1, Closure->readLinearFootline,
-			  _("Waiting %d seconds for drive to spin up...\n"), Closure->spinupDelay);
-
-   SpinupDevice(rc->dh);
-
-   if(Closure->guiMode && Closure->spinupDelay)
-     SwitchAndSetFootline(Closure->readLinearNotebook, 0, Closure->readLinearFootline, "ignore");
-
-   if(Closure->spinupDelay)  /* eliminate initial seek time from timing */
-     ReadSectors(rc->dh, rc->alignedBuf[0]->buf, rc->firstSector, 1); 
-   g_timer_start(rc->speedTimer);
-   g_timer_start(rc->readTimer);
+   prepare_timer(rc);
 
    /*** Reset for the next reading pass */
 
@@ -719,11 +849,16 @@ next_reading_pass:
 
    /*** Read the medium image. */
 
-   s = rc->firstSector;
-   last_percent = (1000*s)/rc->sectors;
-   last_read_ok = last_errors_printed = 0;
+   rc->readPos = rc->firstSector;
+   rc->lastPercent = (1000*rc->readPos)/rc->sectors;
+   rc->lastReadOK = rc->lastErrorsPrinted = 0;
+   rc->previousReadErrors = rc->previousCRCErrors = 0;
+   rc->speed = 0;
+   rc->lastSpeed = -1.0;
+   rc->firstSpeedValue = TRUE;
+rc->deadWritten = 0;
 
-   while(s<=rc->lastSector)
+   while(rc->readPos<=rc->lastSector)
    {  if(Closure->stopActions)   /* somebody hit the Stop button */
       {
 	SwitchAndSetFootline(Closure->readLinearNotebook, 1, Closure->readLinearFootline, 
@@ -742,39 +877,53 @@ next_reading_pass:
            In order to treat the 2 read errors at the end of TAO discs correctly,
            we switch back to per sector reading at the end of the medium. */
 
-      if(s & 15 || s >= ((rc->sectors - 2) & ~15) ) /* - 16 removed */ 
+      if(rc->readPos & 15 || rc->readPos >= ((rc->sectors - 2) & ~15) ) /* - 16 removed */ 
             nsectors = 1;
       else  nsectors = 16;
 
-      if(s+nsectors > rc->lastSector)  /* don't read past the (CD) media end */
-	nsectors = rc->lastSector-s+1;
+      if(rc->readPos+nsectors > rc->lastSector)  /* don't read past the (CD) media end */
+	nsectors = rc->lastSector-rc->readPos+1;
 
-      /*** If s is lower than the read marker,
+      /*** If rc->readPos is lower than the read marker,
 	   check if the sector has already been read
 	   in a previous session. */
 
 reread:
-      if(!rc->scanMode && s < rc->readMarker)
+      if(!rc->scanMode && rc->readPos < rc->readMarker)
       {  int i,ok = 0;
 	 int num_compare = nsectors;
 
-	 if(!LargeSeek(rc->readerImage, (gint64)(2048*s)))
-	   Stop(_("Failed seeking to sector %lld in image [%s]: %s"),
-		s, "reread", strerror(errno));
+	 /* Get image state from bitmap (after first reading pass) */
 
-	 if(s+nsectors > rc->readMarker)
-	   num_compare = rc->readMarker-s;
+	 if(rc->pass && rc->readMap)
+	 {  for(i=0; i<num_compare; i++)
+	       if(GetBit(rc->readMap, rc->readPos+i))
+		  ok++;
+	 }
+	 
+	 /* else query dead sectors from image */
+	 
+	 else
+	 {  if(!LargeSeek(rc->readerImage, (gint64)(2048*rc->readPos)))
+	       Stop(_("Failed seeking to sector %lld in image [%s]: %s"),
+		    rc->readPos, "reread", strerror(errno));
 
-	 for(i=0; i<num_compare; i++)
-	 {  unsigned char sector_buf[2048];
+	    if(rc->readPos+nsectors > rc->readMarker)
+	       num_compare = rc->readMarker-rc->readPos;
 
-	    n = LargeRead(rc->readerImage, sector_buf, 2048);
+	    for(i=0; i<num_compare; i++)
+	    {  unsigned char sector_buf[2048];
 
-	    if(n != 2048)
-	      Stop(_("unexpected read error in image for sector %lld"),s);
+	       n = LargeRead(rc->readerImage, sector_buf, 2048);
+	       if(n != 2048)
+		  Stop(_("unexpected read error in image for sector %lld"),rc->readPos);
 
-	    if(memcmp(sector_buf, Closure->deadSector, n))
-	      ok++;
+	       if(memcmp(sector_buf, Closure->deadSector, n))
+	       {  ok++;
+		  if(rc->readMap)
+		     SetBit(rc->readMap, rc->readPos+i);
+	       }
+	    }
 	 }
 
 	 if(ok == nsectors)  /* All sectors already present. */
@@ -790,7 +939,7 @@ reread:
 	 }
       }
 
-     /*** Try reading the next <nsectors> sector(s). */
+      /*** Try reading the next <nsectors> sector(s). */
 
       g_mutex_lock(rc->mutex);
       if(rc->workerError)       /* something went wrong in the worker thread */
@@ -802,7 +951,7 @@ reread:
       }
       g_mutex_unlock(rc->mutex);
 
-      status = ReadSectors(rc->dh, rc->alignedBuf[rc->readPtr]->buf, s, nsectors);
+      status = ReadSectors(rc->dh, rc->alignedBuf[rc->readPtr]->buf, rc->readPos, nsectors);
 
       /*** Medium Error (3) and Illegal Request (5) may result from 
 	   a medium read problem, but other errors are regarded as fatal. */
@@ -814,13 +963,13 @@ reread:
 	 if(!Closure->guiMode)
 	    Stop(_("Sector %lld: %s\nCan not recover from above error.\n"
 		   "Use the --ignore-fatal-sense option to override."),
-		 s, GetLastSenseString(FALSE));
+		 rc->readPos, GetLastSenseString(FALSE));
 
 	 answer = ModalDialog(GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, insert_buttons,
 			      _("Sector %lld: %s\n\n"
 				"It may not be possible to recover from this error.\n"
 				"Should the reading continue and ignore this error?"),
-			      s, GetLastSenseString(FALSE));
+			      rc->readPos, GetLastSenseString(FALSE));
 
 	 if(answer == 2)
 	   Closure->ignoreFatalSense = 2;
@@ -837,17 +986,23 @@ reread:
       /*** Pass sector(s) to the worker thread (if reading succeeded) */
 
       if(!status)
-      { g_mutex_lock(rc->mutex);
-	rc->bufferedSector[rc->readPtr] = s;
-	rc->nSectors[rc->readPtr] = nsectors;
-	rc->bufState[rc->readPtr] = BUF_FULL;
-	rc->readPtr++;
-	if(rc->readPtr >= READ_BUFFERS)
-	  rc->readPtr = 0;
-	g_cond_signal(rc->canWrite);
-	g_mutex_unlock(rc->mutex);
+      {  gint64 sidx;
 
-	rc->readOK += nsectors;
+	 g_mutex_lock(rc->mutex);
+	 rc->bufferedSector[rc->readPtr] = rc->readPos;
+	 rc->nSectors[rc->readPtr] = nsectors;
+	 rc->bufState[rc->readPtr] = BUF_FULL;
+	 rc->readPtr++;
+	 if(rc->readPtr >= READ_BUFFERS)
+	    rc->readPtr = 0;
+	 g_cond_signal(rc->canWrite);
+	 g_mutex_unlock(rc->mutex);
+	 
+	 rc->readOK += nsectors;
+
+	 if(rc->readMap)
+	    for(sidx=rc->readPos, i=0; i<nsectors; sidx++,i++)
+	       SetBit(rc->readMap, sidx);
       }
 
       /*** Process the read error if reading failed. */
@@ -866,8 +1021,8 @@ reread:
 
 	 if(nsectors>=Closure->sectorSkip) nfill = nsectors;
 	 else
-	 {  if(s+Closure->sectorSkip > rc->lastSector) nfill = rc->lastSector-s+1;
-	    else nfill = Closure->sectorSkip - ((s + Closure->sectorSkip) & 15);
+	 {  if(rc->readPos+Closure->sectorSkip > rc->lastSector) nfill = rc->lastSector-rc->readPos+1;
+	    else nfill = Closure->sectorSkip - ((rc->readPos + Closure->sectorSkip) & 15);
 	 }
 
 	 /* If we are reading past the dead marker we must take care 
@@ -875,7 +1030,7 @@ reread:
 	    When sectorSkip is 0 and nsectors > 16, we will re-read all these sectors
 	    again one by one, so we catch this case in order not to write the markers twice.  */
 
-	 if(!rc->scanMode && s+nfill > rc->readMarker
+	 if(!rc->scanMode && rc->readPos+nfill > rc->readMarker
 	    && (Closure->sectorSkip || nsectors == 1))
 	 {  int i;
 
@@ -896,7 +1051,7 @@ reread:
 
 	       memcpy(rc->alignedBuf[rc->readPtr]->buf, Closure->deadSector, 2048);
 
-	       rc->bufferedSector[rc->readPtr] = s+i;
+	       rc->bufferedSector[rc->readPtr] = rc->readPos+i;
 	       rc->nSectors[rc->readPtr] = 1;
 	       rc->bufState[rc->readPtr] = BUF_DEAD;
 	       rc->readPtr++;
@@ -906,6 +1061,10 @@ reread:
 	       g_mutex_unlock(rc->mutex);
 	    }
 	 }
+
+if(!rc->scanMode && rc->readPos+nfill <= rc->readMarker
+   && (Closure->sectorSkip || nsectors == 1))
+   rc->deadWritten++; /* temp debugging */
 
 	 /* If sectorSkip is set, perform the skip.
 	    nfill has been calculated so that the skip lands
@@ -917,9 +1076,9 @@ reread:
 	 if(Closure->sectorSkip && nsectors > 1)
 	 {  PrintCLIorLabel(Closure->status,
 			    _("Sector %lld: %s Skipping %d sectors.\n"),
-			    s, GetLastSenseString(FALSE), nfill-1);  
+			    rc->readPos, GetLastSenseString(FALSE), nfill-1);  
 	    Closure->readErrors+=nfill; 
-	    s+=nfill-nsectors;   /* nsectors will be added again after the goto */
+	    rc->readPos+=nfill-nsectors;   /* nsectors will be added again after the goto */
 	    goto step_counter;
 	 }
 
@@ -937,8 +1096,8 @@ reread:
 	    else 
 	    {  PrintCLIorLabel(Closure->status,
 			       _("Sector %lld: %s\n"),
-			       s, GetLastSenseString(FALSE));  
-	       if(s >= rc->sectors - 2) tao_tail++;
+			       rc->readPos, GetLastSenseString(FALSE));  
+	       if(rc->readPos >= rc->sectors - 2) tao_tail++;
 	       Closure->readErrors++;
 	    }
 	 }
@@ -947,93 +1106,9 @@ reread:
       /*** Step the progress counter */
 
 step_counter:
-      if(Closure->guiMode && last_errors_printed != Closure->readErrors)
-      {  SetLabelText(GTK_LABEL(Closure->readLinearErrors), 
-		      _("Unreadable / skipped sectors: %lld"), Closure->readErrors);
-	 last_errors_printed = Closure->readErrors;
-      }
+      rc->readPos += nsectors;   /* advance the reading position */
 
-      s += nsectors;
-      if(s>rc->readMarker) rc->readMarker=s;
-      percent = (1000*s)/rc->sectors;
-
-      if(last_percent != percent) 
-      {  gulong ignore;
-	 int color;
-
-	 if(rc->readOK <= last_read_ok)  /* anything read since last sample? */
-	 {  speed = 0.0;                 /* nothing read */
-	    if(Closure->readErrors-previous_read_errors > 0)
-	         color = 2;
-	    else if(Closure->crcErrors-previous_crc_errors > 0)
-	         color = 4;
-	    else color = Closure->additionalSpiralColor;
-
-	    if(Closure->guiMode)
-	       AddCurveValues(percent, speed, color);
-	    last_percent    = percent;
-	    last_speed      = speed;
-	    previous_read_errors = Closure->readErrors;
-	    previous_crc_errors  = Closure->crcErrors;
-	    last_read_ok    = rc->readOK;
-	 }
-	 else
-	 {  double kb_read = (rc->readOK - last_read_ok) * 2.0;
-	    double elapsed = g_timer_elapsed(rc->speedTimer, &ignore);
-	    double kb_sec  = kb_read / elapsed;
-
-	    if(Closure->readErrors-previous_read_errors > 0)
-	         color = 2;
-	    else if(Closure->crcErrors-previous_crc_errors > 0)
-	         color = 4;
-	    else color = 1;
-
-	    if(first_speed_value)
-	    {   speed = kb_sec / rc->dh->singleRate;
-
-	        if(Closure->guiMode)
-		{  AddCurveValues(last_percent, speed, color);
-		   AddCurveValues(percent, speed, color);
-		}
-
-		first_speed_value = FALSE;
-		last_percent      = percent;
-		last_speed        = speed;
-		previous_read_errors = Closure->readErrors;
-		previous_crc_errors  = Closure->crcErrors;
-		last_read_ok      = rc->readOK;
-	    }
-	    else
-	    {  speed = (speed + kb_sec / rc->dh->singleRate) / 2.0;
-	       if(speed>99.9) speed=99.9;
-
-	       if(Closure->guiMode)
-		 AddCurveValues(percent, speed, color);
-	       if(Closure->speedWarning && last_speed > 0.5)
-	       {  double delta = speed - last_speed;
-		  double abs_delta = fabs(delta);
-		  double sp = (100.0*abs_delta) / last_speed; 
-
-		  if(sp >= Closure->speedWarning)
-		  {  if(delta > 0.0)
-		       PrintCLI(_("Sector %lld: Speed increased to %4.1fx\n"), s, fabs(speed));
-		     else
-		       PrintCLI(_("Sector %lld: Speed dropped to %4.1fx\n"), s, fabs(speed));
-		  }
-	       }
-
-	       PrintProgress(_("Read position: %3d.%1d%% (%4.1fx)"),
-			     percent/10,percent%10,speed);
-
-	       last_percent    = percent;
-	       last_speed      = speed;
-	       previous_read_errors = Closure->readErrors;
-	       previous_crc_errors = Closure->crcErrors;
-	       last_read_ok    = rc->readOK;
-	       g_timer_start(rc->speedTimer);
-	    }
-	 }
-      }
+      show_progress(rc);
    }
 
    /*** Consistency check */
@@ -1044,16 +1119,21 @@ step_counter:
 	     (long long int)rc->deadWritten);
 
    /*** If multiple reading passes are allowed, see if we need another pass */
-#if 0
+
+   ChangeSpiralCursor(Closure->readLinearSpiral, -1); /* switch cursor off */
+
    rc->pass++;
-   if((Closure->readErrors || Closure->crcErrors) && rc->pass < Closure->readMedium)
+   if(   !rc->scanMode
+      && (Closure->readErrors || Closure->crcErrors) && rc->pass < Closure->readingPasses)
    {  t = g_strdup_printf(_("Reading pass %d of %d: %lld sectors read; %lld CRC errors; %lld missing."),
-			  rc->pass, Closure->readMedium, 
+			  rc->pass, Closure->readingPasses, 
 			  rc->readOK, Closure->crcErrors, Closure->readErrors);
-      PrintLog("\n%s\n",t);
+      SetLabelText(GTK_LABEL(Closure->readLinearHeadline), 
+		   "<big>Trying to complete image, reading pass %d of %d.</big>\n%s",
+		   rc->pass+1, Closure->readingPasses, rc->dh->mediumDescr);
+
       goto next_reading_pass;
    }
-#endif
 
    /*** Signal EOF to writer thread; wait for it to finish */
 
@@ -1061,10 +1141,12 @@ step_counter:
    g_thread_join(rc->worker);
    rc->worker = NULL;
 
-   /*** Print summary */
+   /*** Finalize on-the-fly checksum calculation */
 
    if(Closure->crcCache)
      MD5Final(Closure->md5Cache, &rc->md5ctxt);
+
+   /*** Print summary */
 
    if(rc->rereading)
    {  if(!Closure->readErrors) t = g_strdup_printf(_("%lld sectors read.     "),rc->readOK);
@@ -1078,6 +1160,7 @@ step_counter:
 	    if(rc->dh->sectors != rc->ei->sectors)
 	      t = g_strdup_printf(_("All sectors successfully read, but wrong image length (%lld sectors difference)"), rc->dh->sectors - rc->ei->sectors);
 	    else if(   rc->readOK == rc->sectors  /* no user limited range */  
+		    && rc->pass == 1              /* md5sum invalid after first pass */
 		    && memcmp(rc->ei->eh->mediumSum, Closure->md5Cache, 16))
 	      t = g_strdup_printf(_("All sectors successfully read, but wrong image checksum."));
 	    else t = g_strdup_printf(_("All sectors successfully read. Checksums match."));

@@ -533,7 +533,7 @@ int main(int argc, char *argv[])
 	   }
 	   break;
          case MODIFIER_READ_MEDIUM:
-	   Closure->readMedium = atoi(optarg);
+	   Closure->readingPasses = atoi(optarg);
 	   break;
          case MODIFIER_READ_RAW:
 	   Closure->readRaw = TRUE;
