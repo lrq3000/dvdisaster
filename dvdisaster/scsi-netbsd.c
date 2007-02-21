@@ -104,7 +104,7 @@ DeviceHandle* OpenDevice(char *device)
 {  DeviceHandle *dh; 
 
    dh = g_malloc0(sizeof(DeviceHandle));
-   dh->fd = open(device, O_RDONLY | O_NONBLOCK);
+   dh->fd = open(device, O_RDWR | O_NONBLOCK);
 
    if(dh->fd < 0)
    {  g_free(dh);
