@@ -703,6 +703,9 @@ void AboutDialog()
 #ifdef SYS_DARWIN
    AboutText(vbox, _("\nDarwin port (Mac OS X): Julian Einwag &lt;julian@einwag.de&gt;")); 
 #endif
+#ifdef SYS_NETBSD
+   AboutText(vbox, _("\nNetBSD port: Sergey Svishchev &lt;svs@ropnet.ru&gt;")); 
+#endif
 #endif
    /* Show it */
 

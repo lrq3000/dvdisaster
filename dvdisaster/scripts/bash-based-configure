@@ -129,6 +129,15 @@ case "$cfg_uname" in
 	}
 	;;
 
+  NetBSD*) cfg_system=netbsd
+        CFG_SYS_OPTIONS="-DSYS_NETBSD"
+        CFG_EXE_SUFFIX=""
+	CFG_SYS_LDFLAGS="-lutil"
+	function add_linker_flags()
+	{  lflags_return="-L$1 $2"
+	}
+	;;
+
   *) cfg_system=unknown-system
         CFG_SYS_OPTIONS="-DSYS_UNKNOWN"
         CFG_EXE_SUFFIX=""

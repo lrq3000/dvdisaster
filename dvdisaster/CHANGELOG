@@ -1,9 +1,7 @@
-Warning: CD/DVD reading is currently being reworked. 
-	 DO NOT USE for production work; images might contain wrong data.
+Feature freeze for version 0.71/0.72 has been reached.
 
-Warning: 0.71 devel-9 upto devel-11 have a serious bug when completing
-	 already existing images. Do not trust or use images created
-	 with those versions; they are likely to contain garbled sectors.
+0.71 (devel-15) 21-02-2007
+	- added NetBSD port (thanks to Sergey Svishchev!)
 
 0.71 (devel-14) 18-02-2007
 	- added defective sector caching

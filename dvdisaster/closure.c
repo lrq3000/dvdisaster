@@ -188,11 +188,11 @@ static void get_base_dirs()
 #endif
 
    /*** Otherwise try the installation directory. 
-	On Linux this is a hardcoded directory.
+	On Unices this is a hardcoded directory.
 	Windows has binary distributions with no prior known installation place,
 	but luckily it provides a way for figuring out that location. */
 
-#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_DARWIN) || defined(SYS_UNKNOWN)
+#ifndef SYS_MINGW
    if(!stat(BINDIR, &mystat))
      Closure->binDir = g_strdup(BINDIR);
 
@@ -212,7 +212,7 @@ static void get_base_dirs()
    /*** The location of the dotfile depends on the operating system. 
 	Under Unix the users home directory is used. */
 
-#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_DARWIN) || defined(SYS_UNKNOWN)
+#ifndef SYS_MINGW
 find_dotfile:
 
    Closure->dotFile = g_strdup_printf("%s/.dvdisaster", g_getenv("HOME"));

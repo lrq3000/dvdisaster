@@ -3,10 +3,10 @@
 c27628ad149e3f8564b24a86642b54b6 *md5.h
 17b5c51de6be5c20d1f22d6bd0affbf8 *rs01-includes.h
 9d8c7940027d25558a267ddd91a65c8d *rs02-includes.h
-8207ca15d03d10e1c238e342ef61cc21 *scsi-layer.h
+01a4749a021fa2e8d2c171e1cfa700be *scsi-layer.h
 104098ed1ae2b91d5e8d4989ba89bcd8 *udf.h
 aeadd621d3e9155f1ed08027e6e86ac6 *bitmap.c
-459e858ade7efd1c5153daaafcd582a3 *closure.c
+8039381e4484b1c2cdf6759f2e185462 *closure.c
 9b876c035a8627362f6c205762af95db *crc32.c
 3e81f031e946016e02a88b7501667019 *curve.c
 866f7db2cea16b7b8df630bfb0187f7a *debug.c
@@ -16,7 +16,7 @@ cafe59e6f3fbe7309803920cd9986e50 *ecc-rs01.c
 8e2a58bb4fd49bcf244ea0aab8b7eb1f *endian.c
 3df35ce9f57afc4a070e7ef2a5705777 *file.c
 6a7dde7b17d658573ae62512f93dfa4b *galois.c
-5807f43c2a0381a2b48a85a9eec5fde8 *help-dialogs.c
+038227b5c3e39ea258307e54fbda0cb0 *help-dialogs.c
 f3b4b6b30b08fe80d11a1969048d3d48 *heuristic-lec.c
 02848c236dbaabd5b728c61ebbeaddde *icon-factory.c
 68bd7a108b99fec6de8f2871383d7585 *large-io.c
@@ -51,9 +51,10 @@ e45bedaa2391cf0c53b252f0e50930ea *rs02-verify.c
 1d5fcad1a7e394113a3405a4ee26771c *scsi-freebsd.c
 025e536cfb5c650c103fa3b53c8d60df *scsi-layer.c
 1a7a0e97f498a4f23c9fc9c1856a18ca *scsi-linux.c
+fde83d8c01e66cc969db9b60e76298ec *scsi-netbsd.c
 63d3058f15a127e6f2ec106443c0a8b5 *scsi-unknown.c
 80bce856ca562cdaf9c66b092b26f018 *scsi-win32.c
-ccaf776fdc9784a7da4c707aa67cedcc *show-manual.c
+ad7b69d8a49b135cfc38074486d4cda7 *show-manual.c
 69e1dc01d12ba71560f9e34dd042afbf *slow-lec.c
 18e276fc0af763d8c33b63d44f0e75a4 *spiral.c
 a169e7c701cdf09e8f194a0c3422bc50 *udf.c
