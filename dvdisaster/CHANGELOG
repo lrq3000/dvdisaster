@@ -2,6 +2,8 @@ Feature freeze for version 0.71/0.72 has been reached.
 
 0.71 (devel-15) 21-02-2007
 	- added NetBSD port (thanks to Sergey Svishchev!)
+	- added test for regular files on LargeOpen();
+	  thanks to Alex S. for noting this issue!
 
 0.71 (devel-14) 18-02-2007
 	- added defective sector caching

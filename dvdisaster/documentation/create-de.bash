@@ -145,7 +145,7 @@ Der Schutz vor Datenverlust geschieht durch das Anlegen von Fehlerkorrektur-Date
 Diese werden entweder dem Datenträger hinzugefügt oder
 in zusätzlichen Fehlerkorrektur-Dateien aufbewahrt. 
 dvdisaster arbeitet auf der <a href="background20.html">Abbild-Ebene</a> und ist dadurch
-vom Dateisystem und der Lage der Lesefehler unabhängig.
+vom Dateisystem des Datenträgers unabhängig.
 Die maximale Kapazität der Fehlerkorrektur ist einstellbar.<p>
 
 <b>Häufige Mißverständnisse über dvdisaster:</b>
@@ -156,7 +156,6 @@ Ohne Fehlerkorrektur-Daten kann ein beschädigter Datenträger <i>nicht</i>
 wiederhergestellt werden.<p></li> 
 <li><img src="images/exclude_from_search_terms.png" align="middle"><br>
 dvdisaster enthält keine derartigen Funktionen. Diskussionen darüber sind zwecklos.</li>
-</ul>
 </ul>
 
 <p>
@@ -1670,18 +1669,18 @@ der Quellkode-Version gibt es <a href="download20.html">Installationshinweise</a
 <b>Aktuelle Version</b><p> 
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.70</b></td><td align="right">10-Dez-2006</td></tr>
+<tr><td><b>dvdisaster-0.70</b></td><td align="right">20-Jan-2007</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Quellkode für alle Betriebssysteme:&nbsp;</td>
-        <td><a href="${tar_0_70}">dvdisaster-0.70.3.tar.bz2</a></td></tr>
+        <td><a href="${tar_0_70}">dvdisaster-0.70.4.tar.bz2</a></td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><a href="${tar_0_70_sig}">dvdisaster-0.70.3.tar.bz2.gpg</a></td></tr>
+        <td><a href="${tar_0_70_sig}">dvdisaster-0.70.4.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Binärversion für Windows:&nbsp;</td>
-        <td><a href="${setup_0_70}">dvdisaster-0.70.3-setup.exe</a></td></tr>
+        <td><a href="${setup_0_70}">dvdisaster-0.70.4-setup.exe</a></td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><a href="${setup_0_70_sig}">dvdisaster-0.70.3-setup.exe.gpg</a></td></tr>
+        <td><a href="${setup_0_70_sig}">dvdisaster-0.70.4-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
@@ -1698,6 +1697,10 @@ für <a href="download20.html#darwin">Mac OS X / Darwin</a> anzupassen.<p>
 Daniel Nylander hat die Bildschirmtexte ins Schwedische übersetzt.<p>
 
 <b>Patches</b> (kleine Änderungen nach Version 0.70; die obigen Dateien wurden erneuert):<br>
+
+<b>pl4</b> ist besser kompatibel zu zweischichtigen DVDs 
+(DVD-R DL und DVD+R DL).<br> 
+Einige kleinere Fehler wurden behoben. <i>(20-Jan-2007)</i>.<p>
 
 <b>pl3</b> behebt einen Fehler bei der Erkennung von nicht unterstützten CDs,
 der unter Umständen einen blauen Bildschirm unter Windows erzeugte.

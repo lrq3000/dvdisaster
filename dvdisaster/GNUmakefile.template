@@ -297,6 +297,7 @@ clean:
 	@rm -f wininst/installer.iss wininst/signature
 	@find . -name \*\~ -print | xargs rm -f;
 	@find . -name \*.mo -print | xargs rm -f;
+	@find . -name \#\*\# -print | xargs rm -f;
 	@rm -rf documentation/cs/*.html documentation/de/*.html documentation/en/*.html
 	@if test -e THESE_ARE_THE_DEVEL_SOURCES && ! test -e documentation/MAKE_SRCDIST; then rm -f documentation/images-*.pngpack; fi
 	@rm -f documentation/pngpack.log

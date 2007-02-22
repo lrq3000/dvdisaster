@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-21 21:08+0100\n"
+"POT-Creation-Date: 2007-02-22 21:13+0100\n"
 "PO-Revision-Date: 2006-03-16 20:40+0100\n"
 "Last-Translator: Luboš Staněk <lubek@users.sourceforge.net>\n"
 "Language-Team: čeština <cs@li.org>\n"
@@ -598,7 +598,7 @@ msgid ""
 "NetBSD port: Sergey Svishchev &lt;svs@ropnet.ru&gt;"
 msgstr ""
 
-#: large-io.c:402
+#: large-io.c:420
 #, c-format
 msgid ""
 "Error while writing the file:\n"
@@ -3862,7 +3862,7 @@ msgid ""
 "No drives will be pre-selected.\n"
 msgstr ""
 
-#: scsi-netbsd.c:156
+#: scsi-netbsd.c:159
 #, c-format
 msgid "illegal data_mode: %d"
 msgstr "neplatný data_mode: %d"

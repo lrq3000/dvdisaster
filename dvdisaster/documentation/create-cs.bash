@@ -2175,18 +2175,18 @@ U verze ve zdrojovém kódu si přečtěte <a href="download20.html">instalačn�
 
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.70</b></td><td align="right">10-Dec-2006</td></tr>
+<tr><td><b>dvdisaster-0.70</b></td><td align="right">20-Jan-2007</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
-        <td><a href="${tar_0_70}">dvdisaster-0.70.3.tar.bz2</a></td></tr>
+        <td><a href="${tar_0_70}">dvdisaster-0.70.4.tar.bz2</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="${tar_0_70_sig}">dvdisaster-0.70.3.tar.bz2.gpg</a></td></tr>
+        <td><a href="${tar_0_70_sig}">dvdisaster-0.70.4.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Binary for Windows:&nbsp;</td>
-        <td><a href="${setup_0_70}">dvdisaster-0.70.3-setup.exe</a></td></tr>
+        <td><a href="${setup_0_70}">dvdisaster-0.70.4-setup.exe</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="${setup_0_70_sig}">dvdisaster-0.70.3-setup.exe.gpg</a></td></tr>
+        <td><a href="${setup_0_70_sig}">dvdisaster-0.70.4-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
@@ -2197,11 +2197,15 @@ with RS02 can be used
 with the <a href="background50.html">adaptive reading strategy</a>.<p>
 
 Julian Einwag started porting dvdisaster 
-to <a href="../en/download20.html#darwin">Mac OS X / Darwin</a>.<p>
+to <a href="download20.html#darwin">Mac OS X / Darwin</a>.<p>
 
 Daniel Nylander provided Swedish translations of the screen texts.<p>
 
 <b>Patches</b> (small changes after version 0.70; files above have been updated):<br>
+
+<b>pl4</b> provides better compatibility with two layered DVDs 
+(DVD-R DL and DVD+R DL).<br> 
+Some minor bugs have been fixed. <i>(20-Jan-2007)</i>.<p>
 
 <b>pl3</b> fixes incorrect recognization of unsupported CD formats which
 produced a Windows blue screen under rare circumstances. Added cancel option

@@ -131,24 +131,32 @@ function index0en()
 {  cat >> $1 <<EOF
 <h3>The dvdisaster project:</h3>
 
-dvdisaster provides a margin of safety against <b>data loss</b> on 
-<a href="qa10.html#media">CD</a> and  <a href="qa10.html#media">DVD</a> media caused 
-by <b>aging</b> or <b>scratches</b>.  
+CD and DVD media keep their data only for a finite time (typically for many years).
+After that time, data loss develops slowly with read errors 
+growing from the outer media region towards the inside.<p>
+
+<b>Archival with data loss protection</b><p>
+
+dvdisaster stores data on CD/DVD (<a href="qa10.html#media">supported media</a>)
+in a way that it is fully recoverable even after some read errors have developed. 
+This enables you to rescue the complete data to a new medium.<p>
+
+Data loss is prevented by using error correcting codes.
+Error correction data is either added to the medium or kept in separate
+error correction files. dvdisaster works at 
+the <a href="background20.html">image level</a> so that the recovery 
+does not depend on the file system of the medium.
+The maximum error correction capacity is user-selectable.<p>
+
+<b>Common misunderstandings about dvdisaster:</b>
 
 <ul>
-<li>dvdisaster creates <b>error correction data</b> to compensate
-read errors which are not correctable in the CD/DVD drive.<p></li>
-<li>dvdisaster tries to read as much data as possible from defective media.
-Afterwards unreadable sectors are recovered using the previously created
-error correction data. The maximum error correction capacity is user-selectable.<p>
-</li>
-<li>dvdisaster operates at the <a href="background20.html">image level</a> 
-and does not depend on the file system.<p></li>
+<li>dvdisaster can not make defective media readable again.
+Contents of a defective medium can <i>not</i> be recovered without the
+error correction data.<p></li> 
+<li><img src="images/exclude_from_search_terms.png" align="middle"><br>
+dvdisaster does not contain such functions. It never will. End of discussion.</li>
 </ul>
-
-If you create the error correction data in time and keep it at a safe place,
-you have a good chance of recovering the medium contents from typical read errors
-and to transfer your complete data onto a new medium.
 
 <p>
 <a href="index10.html">Examples of the error correction...</a>
@@ -1614,18 +1622,18 @@ For the source code version see the <a href="download20.html">installation instr
 <b>Current version</b><p>
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.70</b></td><td align="right">10-Dec-2006</td></tr>
+<tr><td><b>dvdisaster-0.70</b></td><td align="right">20-Jan-2007</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
-        <td><a href="${tar_0_70}">dvdisaster-0.70.3.tar.bz2</a></td></tr>
+        <td><a href="${tar_0_70}">dvdisaster-0.70.4.tar.bz2</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="${tar_0_70_sig}">dvdisaster-0.70.3.tar.bz2.gpg</a></td></tr>
+        <td><a href="${tar_0_70_sig}">dvdisaster-0.70.4.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Binary for Windows:&nbsp;</td>
-        <td><a href="${setup_0_70}">dvdisaster-0.70.3-setup.exe</a></td></tr>
+        <td><a href="${setup_0_70}">dvdisaster-0.70.4-setup.exe</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="${setup_0_70_sig}">dvdisaster-0.70.3-setup.exe.gpg</a></td></tr>
+        <td><a href="${setup_0_70_sig}">dvdisaster-0.70.4-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
@@ -1641,6 +1649,10 @@ to <a href="download20.html#darwin">Mac OS X / Darwin</a>.<p>
 Daniel Nylander provided Swedish translations of the screen texts.<p>
 
 <b>Patches</b> (small changes after version 0.70; files above have been updated):<br>
+
+<b>pl4</b> provides better compatibility with two layered DVDs 
+(DVD-R DL and DVD+R DL).<br> 
+Some minor bugs have been fixed. <i>(20-Jan-2007)</i>.<p>
 
 <b>pl3</b> fixes incorrect recognization of unsupported CD formats which
 produced a Windows blue screen under rare circumstances. Added cancel option

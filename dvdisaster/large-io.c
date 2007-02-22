@@ -106,6 +106,9 @@ int LargeStat(char *path, gint64 *length_return)
    {  if(stat(path, &mystat) == -1)
 	 return FALSE;
 
+      if(!S_ISREG(mystat.st_mode))
+	 return FALSE;
+
       *length_return = mystat.st_size;
       return TRUE;
    }
@@ -126,6 +129,8 @@ int LargeStat(char *path, gint64 *length_return)
 
       if(stat(name, &mystat) == -1)
             return i != 0;
+      else if(!S_ISREG(mystat.st_mode))
+	    return FALSE;
       else  *length_return += mystat.st_size;
    }
 
@@ -138,6 +143,7 @@ int LargeStat(char *path, gint64 *length_return)
 
 LargeFile* LargeOpen(char *name, int flags, mode_t mode)
 {  LargeFile *lf = g_malloc0(sizeof(LargeFile));
+   struct stat mystat;
    char *c; 
 
 #ifdef HAVE_O_LARGEFILE
@@ -151,12 +157,19 @@ LargeFile* LargeOpen(char *name, int flags, mode_t mode)
 
    if(!Closure->splitFiles)
    {
+      /* Do not try to open directories etc. */
+
+      if(    (stat(name, &mystat) == 0)
+	  && !S_ISREG(mystat.st_mode))
+      {  g_free(lf); return NULL;
+      }
+
       lf->fileSegment[0] = open(name, flags, mode);
 
       if(lf->fileSegment[0] == -1)
       {  g_free(lf); return NULL;
       }
-
+      
       LargeStat(name, &lf->size);
 
       return lf;
@@ -180,6 +193,11 @@ LargeFile* LargeOpen(char *name, int flags, mode_t mode)
       *c = 0;
    }
 
+   if(    (stat(name, &mystat) == 0)
+       && !S_ISREG(mystat.st_mode))
+   {  g_free(lf); return NULL;
+   }
+   
    if(!open_segment(lf, 0))
    {  g_free(lf); return NULL;
    }
