@@ -60,7 +60,7 @@
 # WITH_OPTION name default  adds -DWITH_OPTION_VALUE for -with-option=value args
 #			    to CFG_WITH_OPTIONS,
 
-CONFIGURE_VERSION="0.51"
+CONFIGURE_VERSION="0.52"
 
 echo "Bash based configure V$CONFIGURE_VERSION"
 echo
@@ -133,6 +133,14 @@ case "$cfg_uname" in
         CFG_SYS_OPTIONS="-DSYS_NETBSD"
         CFG_EXE_SUFFIX=""
 	CFG_SYS_LDFLAGS="-lutil"
+	function add_linker_flags()
+	{  lflags_return="-L$1 $2"
+	}
+	;;
+
+  SunOS*) cfg_system=solaris
+        CFG_SYS_OPTIONS="-DSYS_SOLARIS"
+        CFG_EXE_SUFFIX=""
 	function add_linker_flags()
 	{  lflags_return="-L$1 $2"
 	}
@@ -1222,7 +1230,7 @@ function REQUIRE_OPENGL()
 
 #
 # Require the GLIB2 includes and libraries.
-# Unlike with the other packages, we don't have to fid out about the includes
+# Unlike with the other packages, we don't have to find out about the includes
 # and libraries by ourselves, but just query pkg-config about them.
 
 function REQUIRE_GLIB2()
@@ -1251,7 +1259,7 @@ Make sure you have the following packages installed:
 - pkg-config (sometimes, the obvious is overlooked ;-)
 - glib2
 
-Some Linux distributions (e.g. SuSE) distinguish between
+Some Linux distributions distinguish between
 end-user packages of the libraries (e.g. 'glib2') and
 versions suitable for building programs (e.g. 'glib2-devel').
 You might have to install the development versions explicitly
@@ -1323,8 +1331,19 @@ function REQUIRE_GTK2()
 
    echo -n " pkg-config... "
    if pkg-config --cflags gtk+-2.0 >>config.tmp 2>&1 && pkg-config $threads --libs gtk+-2.0 >>config.tmp 2>&1 ; then
-        echo "works"
-        rm config.tmp
+	if test $cfg_system == "solaris"; then
+	   CFG_GTK2_LIBS=`pkg-config $threads --libs gtk+-2.0`
+	   if (echo $CFG_GTK2_LIBS | grep "mt") > /dev/null 2>&1; then
+	     echo "broken, Solaris fix will be applied"
+	     broken_solaris="yes"
+	   else
+	     broken_solaris="no"
+             echo "works"
+	   fi
+	else
+          echo "works"
+	fi
+	rm config.tmp
    else 
 	echo "failed"
 	echo -e "\nError message(s) from pkg-config were:"
@@ -1350,11 +1369,15 @@ EOF
 	  exit 1
    fi
 
-
    # Do a test compile to make sure they did not return some junk
 
    CFG_GTK2_CFLAGS=`pkg-config --cflags gtk+-2.0`
    CFG_GTK2_LIBS=`pkg-config $threads --libs gtk+-2.0`
+
+   if test "$broken_solaris" == "yes"; then
+	CFG_GTK2_LIBS=`echo $CFG_GTK2_LIBS | sed -e 's/-mt//'`
+   fi
+
    CFG_GTK2_BINDIR=`which pkg-config`
    CFG_GTK2_BINDIR=`echo $CFG_GTK2_BINDIR | sed -e 's/\/pkg-config//'`
 

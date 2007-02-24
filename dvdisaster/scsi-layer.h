@@ -117,7 +117,7 @@ typedef struct request_sense {
 } Sense;
 #endif
 
-#if defined(SYS_UNKNOWN) || defined(SYS_NETBSD)
+#if defined(SYS_UNKNOWN) || defined(SYS_NETBSD) || defined(SYS_SOLARIS)
 #define MAX_CDB_SIZE 16   /* longest possible SCSI command */
 
 /* This is actually the little endian version of the
@@ -179,7 +179,7 @@ typedef struct _DeviceHandle
 {  /*
     * OS-specific data for device access
     */
-#if defined(SYS_LINUX) || defined(SYS_NETBSD)
+#if defined(SYS_LINUX) || defined(SYS_NETBSD) || defined(SYS_SOLARIS)
    int fd;                    /* device file descriptor */
 #endif
 #ifdef SYS_FREEBSD

@@ -247,7 +247,13 @@ if test -n "$BUILDROOT"; then
   echo
 fi
 
-if test `id -u` -eq 0; then
+if test $cfg_system == "solaris"; then
+  id_binary="/usr/xpg4/bin/id"
+else
+  id_binary="id"
+fi
+
+if test `$id_binary -u` -eq 0; then
   echo "* WARNING: Compiling the project as ROOT USER is not recommended"
   echo "*          and may cause unexpected problems. If compilation fails"
   echo "*          please delete the source archive, unpack it anew and"

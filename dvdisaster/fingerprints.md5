@@ -3,7 +3,7 @@
 c27628ad149e3f8564b24a86642b54b6 *md5.h
 17b5c51de6be5c20d1f22d6bd0affbf8 *rs01-includes.h
 9d8c7940027d25558a267ddd91a65c8d *rs02-includes.h
-01a4749a021fa2e8d2c171e1cfa700be *scsi-layer.h
+f99d51f9ae430f2ba0b683566d70f469 *scsi-layer.h
 104098ed1ae2b91d5e8d4989ba89bcd8 *udf.h
 aeadd621d3e9155f1ed08027e6e86ac6 *bitmap.c
 8039381e4484b1c2cdf6759f2e185462 *closure.c
@@ -52,9 +52,10 @@ e45bedaa2391cf0c53b252f0e50930ea *rs02-verify.c
 025e536cfb5c650c103fa3b53c8d60df *scsi-layer.c
 1a7a0e97f498a4f23c9fc9c1856a18ca *scsi-linux.c
 fc09e09e31e822fbbeb3c19238e60569 *scsi-netbsd.c
+4650549d2d41a8409e5cb182bbf0463a *scsi-solaris.c
 63d3058f15a127e6f2ec106443c0a8b5 *scsi-unknown.c
 80bce856ca562cdaf9c66b092b26f018 *scsi-win32.c
-ad7b69d8a49b135cfc38074486d4cda7 *show-manual.c
+56d756dd6574516e9a1a1b5a4bc680e4 *show-manual.c
 69e1dc01d12ba71560f9e34dd042afbf *slow-lec.c
 18e276fc0af763d8c33b63d44f0e75a4 *spiral.c
 a169e7c701cdf09e8f194a0c3422bc50 *udf.c

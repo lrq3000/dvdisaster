@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-22 21:13+0100\n"
+"POT-Creation-Date: 2007-02-24 20:03+0100\n"
 "PO-Revision-Date: 2006-06-14 23:48+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -1596,6 +1596,7 @@ msgstr "okänd asc/ascq-kod (0x%02x, 0x%02x)."
 
 #: raw-sector-cache.c:34 raw-sector-cache.c:122 raw-sector-cache.c:204
 #: rs01-verify.c:537 scsi-freebsd.c:113 scsi-linux.c:98 scsi-netbsd.c:111
+#: scsi-solaris.c:127
 #, c-format
 msgid "Could not open %s: %s"
 msgstr "Kunde inte öppna %s: %s"
@@ -3490,7 +3491,7 @@ msgstr ""
 msgid "No CD/DVD drives found."
 msgstr "Inga cd/dvd-enheter hittades."
 
-#: scsi-freebsd.c:42 scsi-linux.c:42
+#: scsi-freebsd.c:42 scsi-linux.c:42 scsi-solaris.c:61
 msgid ""
 "Can not access /dev for devices\n"
 "No drives will be pre-selected.\n"
@@ -3498,7 +3499,7 @@ msgstr ""
 "Kan inte komma åt /dev efter enheter\n"
 "Inga enheter kommer att vara förvalda.\n"
 
-#: scsi-freebsd.c:97 scsi-linux.c:83
+#: scsi-freebsd.c:97 scsi-linux.c:83 scsi-solaris.c:112
 msgid ""
 "No CD/DVD drives found in /dev.\n"
 "No drives will be pre-selected.\n"

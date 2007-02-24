@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-22 21:13+0100\n"
+"POT-Creation-Date: 2007-02-24 20:03+0100\n"
 "PO-Revision-Date: 2006-03-16 20:40+0100\n"
 "Last-Translator: Luboš Staněk <lubek@users.sourceforge.net>\n"
 "Language-Team: čeština <cs@li.org>\n"
@@ -1595,6 +1595,7 @@ msgstr "neznámý kód asc/ascq (0x%02x, 0x%02x)."
 
 #: raw-sector-cache.c:34 raw-sector-cache.c:122 raw-sector-cache.c:204
 #: rs01-verify.c:537 scsi-freebsd.c:113 scsi-linux.c:98 scsi-netbsd.c:111
+#: scsi-solaris.c:127
 #, c-format
 msgid "Could not open %s: %s"
 msgstr "Nelze otevřít %s: %s"
@@ -3476,7 +3477,7 @@ msgstr ""
 msgid "No CD/DVD drives found."
 msgstr ""
 
-#: scsi-freebsd.c:42 scsi-linux.c:42
+#: scsi-freebsd.c:42 scsi-linux.c:42 scsi-solaris.c:61
 msgid ""
 "Can not access /dev for devices\n"
 "No drives will be pre-selected.\n"
@@ -3484,7 +3485,7 @@ msgstr ""
 "Nelze získat přístup k /dev kvůli zařízením\n"
 "Nebudou předvybrány žádné mechaniky.\n"
 
-#: scsi-freebsd.c:97 scsi-linux.c:83
+#: scsi-freebsd.c:97 scsi-linux.c:83 scsi-solaris.c:112
 msgid ""
 "No CD/DVD drives found in /dev.\n"
 "No drives will be pre-selected.\n"
