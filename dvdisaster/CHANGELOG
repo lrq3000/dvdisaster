@@ -1,11 +1,17 @@
 Feature freeze for version 0.71/0.72 has been reached.
 
+0.71 (devel-16) 25-02-2007
+	- added Solaris port; this is for testing only and will not
+	  be officially supported.
+	- corrected output of --version
+	- added version information to the documentation headline
+	- fixed user break detection during sector re-reading
+	- improved resize behaviour of preferences online help
+
 0.71 (devel-15) 21-02-2007
 	- added NetBSD port (thanks to Sergey Svishchev!)
 	- added test for regular files on LargeOpen();
 	  thanks to Alex S. for noting this issue!
-	- added Solaris port; this is for testing only and will not
-	  be officially supported.
 
 0.71 (devel-14) 18-02-2007
 	- added defective sector caching

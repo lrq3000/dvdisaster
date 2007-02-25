@@ -106,7 +106,10 @@ LabelWithOnlineHelp* CreateLabelWithOnlineHelp(char *title, char *ascii_text)
    gtk_window_set_title(GTK_WINDOW(window), lwoh->windowTitle);
    gtk_window_set_icon(GTK_WINDOW(window), Closure->windowIcon);
    gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
-   gtk_container_set_border_width(GTK_CONTAINER(window), 12);
+
+   lwoh->outerPadding = 12;
+   gtk_container_set_border_width(GTK_CONTAINER(window), lwoh->outerPadding);
+   lwoh->outerPadding *= 2;
 
    /* Connect window with the close button from the window manager */
 
@@ -195,16 +198,13 @@ void FreeLabelWithOnlineHelp(LabelWithOnlineHelp *lwoh)
  */
 
 static gboolean wrapper_fix_cb(GtkWidget *widget, GdkEventExpose *event, gpointer data)
-{  LabelWithOnlineHelp *lwoh = (LabelWithOnlineHelp*)data;
-   GtkRequisition req;
-   int width,height;
+{  int label_width = widget->allocation.width;
 
-   gtk_widget_size_request(lwoh->vbox, &req);
-   gtk_widget_get_size_request(widget, &width, &height);
+   /* This is a hack. We feed the label its own allocation to make it redraw.
+      Note that we subtract 4 or else the window would never shrink again. */
 
-   //   if(req.width != width)  /* avoid infinite loop */
-   if(width < 0)  /* avoid infinite loop */
-     gtk_widget_set_size_request(widget, req.width, -1);
+   if(label_width<0 || label_width>200)
+      gtk_widget_set_size_request(widget, label_width-4, -1);
 
    return FALSE;
 }
@@ -224,8 +224,7 @@ void AddHelpParagraph(LabelWithOnlineHelp *lwoh, char *format, ...)
    g_free(text);
 
    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.0);
-   gtk_box_pack_start(GTK_BOX(lwoh->vbox), label, TRUE, TRUE, 0);
-
+   gtk_box_pack_start(GTK_BOX(lwoh->vbox), label, FALSE, FALSE, 0);
 
    /* Work around some bugs in the gtk line wrapper code.
       By default lines are wrapped at the length of 
@@ -248,7 +247,7 @@ void AddHelpListItem(LabelWithOnlineHelp *lwoh, char *format, ...)
    va_list argp;
    char *text,*utf;
 
-   gtk_box_pack_start(GTK_BOX(lwoh->vbox), hbox, TRUE, TRUE, 0);
+   gtk_box_pack_start(GTK_BOX(lwoh->vbox), hbox, FALSE, FALSE, 0);
 
    gtk_misc_set_alignment(GTK_MISC(bullet), 0.0, 0.0);
    gtk_box_pack_start(GTK_BOX(hbox), bullet, FALSE, FALSE, 0);
@@ -265,7 +264,6 @@ void AddHelpListItem(LabelWithOnlineHelp *lwoh, char *format, ...)
    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.0);
    gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
 
-
    /* Work around some bugs in the gtk line wrapper code.
       By default lines are wrapped at the length of 
       "This long string gives a good enough length for any line to have."
@@ -281,7 +279,7 @@ void AddHelpListItem(LabelWithOnlineHelp *lwoh, char *format, ...)
 
 void AddHelpWidget(LabelWithOnlineHelp *lwoh, GtkWidget *widget)
 {  
-   gtk_box_pack_start(GTK_BOX(lwoh->vbox), widget, TRUE, TRUE, 10);
+   gtk_box_pack_start(GTK_BOX(lwoh->vbox), widget, FALSE, FALSE, 10);
    gtk_box_pack_start(GTK_BOX(lwoh->vbox), gtk_hseparator_new(), FALSE, FALSE, 10);
 }
 

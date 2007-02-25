@@ -42,14 +42,14 @@ void DumpSector(RawBuffer *rb, char *path)
 	   "#define SAMPLE_LENGTH %d\n"
 	   "#define LBA %lld\n"
 	   "unsigned char cd_frame[][%d] = {\n",
-	   rb->samplesRead, rb->sampleLength, 
-	   (long long)rb->lba, rb->sampleLength);
+	   rb->samplesRead, rb->sampleSize, 
+	   (long long)rb->lba, rb->sampleSize);
 
    for(i=0; i<rb->samplesRead; i++)
    {  int j;
 
       fprintf(file, "{\n");
-      for(j=0; j<rb->sampleLength; j++)
+      for(j=0; j<rb->sampleSize; j++)
       {  fprintf(file, "%3d, ",rb->rawBuf[i][j]); 
 	 if(j%16 == 15) fprintf(file, "\n");
       }
@@ -134,7 +134,7 @@ void ReallocRawBuffer(RawBuffer *rb, int new_samples_max)
    rb->rawBuf = g_realloc(rb->rawBuf, new_samples_max * sizeof(unsigned char*));
 
    for(i=rb->samplesMax; i<new_samples_max; i++)
-   {  rb->rawBuf[i] = g_malloc(rb->sampleLength);
+   {  rb->rawBuf[i] = g_malloc(rb->sampleSize);
    }
 
    for(i=0; i<N_P_VECTORS; i++)
@@ -352,7 +352,7 @@ int CheckEDC(unsigned char *cd_frame, int xa_mode)
  */
 
 static int simple_lec(RawBuffer *rb, unsigned char *frame)
-{  unsigned char byte_state[rb->sampleLength];
+{  unsigned char byte_state[rb->sampleSize];
    unsigned char p_vector[P_VECTOR_SIZE];
    unsigned char q_vector[Q_VECTOR_SIZE];
    unsigned char p_state[P_VECTOR_SIZE];
@@ -363,7 +363,7 @@ static int simple_lec(RawBuffer *rb, unsigned char *frame)
 
    /* Setup */
 
-   memset(byte_state, 0, rb->sampleLength);
+   memset(byte_state, 0, rb->sampleSize);
 
    p_failures = q_failures = 0;
    p_corrected = q_corrected = 0;
@@ -749,7 +749,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
    if(rb->xaMode)
      memset(new_frame+12, 0, 4); 
 
-   memcpy(rb->rawBuf[rb->samplesRead], new_frame, rb->sampleLength);
+   memcpy(rb->rawBuf[rb->samplesRead], new_frame, rb->sampleSize);
    rb->samplesRead++;
 
    /*** Cheap shot: See if we can recover the sector itself
@@ -759,8 +759,8 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
         If e.g. some parity bytes remain uncorrected we don't care
         as long as the EDC tells us that the user data part is okay. */
 
-   memcpy(rb->recovered, new_frame, rb->sampleLength);
-   memset(rb->byteState, 0, rb->sampleLength);
+   memcpy(rb->recovered, new_frame, rb->sampleSize);
+   memset(rb->byteState, 0, rb->sampleSize);
 
    iterative_lec(rb);
 

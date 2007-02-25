@@ -118,7 +118,7 @@ simple-md5sum: md5.c
 
 documentation/de/index.html: documentation/create.bash documentation/create-cs.bash documentation/create-de.bash documentation/create-en.bash
 	@if test -e help-dialogs.h && grep UNMODIFIED help-dialogs.h >/dev/null; \
-	then cd documentation ; bash create.bash local-orig $(VERSION) $(PKGNAME); \
+	then cd documentation ; bash create.bash local-orig $(VERSION) $(PKGNAME) $(CFG_FULL_VERSION); \
 	else cd documentation ; bash create.bash local-mod $(VERSION) $(PKGNAME); \
 	fi
 

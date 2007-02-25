@@ -1299,7 +1299,7 @@ void CreatePreferencesWindow(void)
       }
 
       AddHelpParagraph(lwoh, 
-		       _("<b>Reading strategy</b>\n"
+		       _("<b>Reading strategy</b>\n\n"
 		         "The linear strategy is optimized for undamaged media "
 			 "while the adaptive strategy is better suited "
 			 "for media already containing read errors."));

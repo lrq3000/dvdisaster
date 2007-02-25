@@ -39,8 +39,8 @@ esac
 workdir=`pwd`
 project_title=dvdisaster
 project_version=$2
-cooked_version=`echo $2 | sed -e "s/pl[0-9]/ \(&\)/"`
 project_package=$3
+cooked_version="$4"
 
 # Change into the homepage directory
 

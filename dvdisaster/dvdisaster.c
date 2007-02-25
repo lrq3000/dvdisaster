@@ -559,7 +559,7 @@ int main(int argc, char *argv[])
 	   Closure->driveSpeed = -atoi(optarg);
 	   break;
          case MODIFIER_VERSION:
-	   PrintCLI(_("\ndvdisaster version %s\n\n"), VERSION);
+	   PrintCLI(_("\ndvdisaster version %s\n\n"), Closure->cookedVersion);
 	   FreeClosure();
 	   exit(EXIT_SUCCESS); 
 	   break;

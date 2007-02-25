@@ -1372,14 +1372,14 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
    {  case DATA1:          /* data mode 1 */ 
         cdb[1] = 2<<2; 
 	cdb[9] = 0xb8;    /* we want Sync + Header + User data + EDC/ECC */
-	rb->sampleLength=2352; 
+	rb->sampleSize=2352; 
 	offset=16;
 	break;  
 
       case XA21:           /* xa mode 2 form 1 */
 	cdb[1] = 4<<2; 
 	cdb[9] = 0xf8;
-	rb->sampleLength=2352; 
+	rb->sampleSize=2352; 
 	offset=24;
 	break;  
    }
@@ -1397,10 +1397,10 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
 
    /* initialize sectors with our marker */
 
-   for(i=0, s=0; i<nsectors; i++, s+=rb->sampleLength)
+   for(i=0, s=0; i<nsectors; i++, s+=rb->sampleSize)
      memcpy(rb->workBuf->buf+s, Closure->deadSector, 2048);
 
-   ret = SendPacket(dh, cdb, 12, rb->workBuf->buf, nsectors*rb->sampleLength, sense, DATA_READ);
+   ret = SendPacket(dh, cdb, 12, rb->workBuf->buf, nsectors*rb->sampleSize, sense, DATA_READ);
    RememberSense(sense->sense_key, sense->asc, sense->ascq);
 
    /* The drive screws up sometimes and returns a damaged sector as good. 
@@ -1428,7 +1428,7 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
 
    /* See if drive returned some data at all. */
 
-   for(i=0, s=0; i<nsectors; i++, s+=rb->sampleLength)
+   for(i=0, s=0; i<nsectors; i++, s+=rb->sampleSize)
      if(!memcmp(rb->workBuf->buf+s, Closure->deadSector, 2048))
      {  if(dh->canReadDefective)
  	  RememberSense(3, 255, 0); /* report that nothing came back */
@@ -1440,7 +1440,7 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
    ret = 0;
    rb->lba = lba;
 
-   for(i=0, s=0; i<nsectors; i++, s+=rb->sampleLength)
+   for(i=0, s=0; i<nsectors; i++, s+=rb->sampleSize)
    {  if(!ValidateRawSector(rb, rb->workBuf->buf+s))
         return -1;
 
@@ -1499,6 +1499,9 @@ int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
 
       if(status)  /* current try was unsucessful */
       {
+	 if(Closure->stopActions)  /* user break */
+	    return status;
+
 	 if(recommended_attempts > 1)
 	 {  int last_key, last_asc, last_ascq;
 

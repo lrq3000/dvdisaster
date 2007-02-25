@@ -155,7 +155,7 @@ The maximum error correction capacity is user-selectable.<p>
 Contents of a defective medium can <i>not</i> be recovered without the
 error correction data.<p></li> 
 <li><img src="images/exclude_from_search_terms.png" align="middle"><br>
-dvdisaster does not contain such functions. It never will. End of discussion.</li>
+Such functions are outside the scope of dvdisaster's internal design and goals.</li>
 </ul>
 
 <p>

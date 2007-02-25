@@ -35,7 +35,7 @@ static void init_defective_sector_file(char *path, RawBuffer *rb, LargeFile **fi
 
     memset(dsh, 0, sizeof(DefectiveSectorHeader));
     dsh->lba        = rb->lba;
-    dsh->sectorSize = rb->sampleLength;
+    dsh->sectorSize = rb->sampleSize;
 
     if(rb->validFP)
     {  memcpy(dsh->mediumFP, rb->mediumFP, 16);
@@ -125,14 +125,14 @@ void SaveDefectiveSector(RawBuffer *rb)
 		      rb->samplesRead, filename, dsh->lba, dsh->sectorSize, dsh->nSectors);
    }
 
-   offset = sizeof(DefectiveSectorHeader) + rb->sampleLength*dsh->nSectors;
+   offset = sizeof(DefectiveSectorHeader) + rb->sampleSize*dsh->nSectors;
    if(!LargeSeek(file, offset))
       Stop(_("Failed seeking in defective sector file: %s"), strerror(errno));
 
    for(i=0; i<rb->samplesRead; i++)
-   {  int n=LargeWrite(file, rb->rawBuf[i], rb->sampleLength);
+   {  int n=LargeWrite(file, rb->rawBuf[i], rb->sampleSize);
 
-      if(n != rb->sampleLength)
+      if(n != rb->sampleSize)
 	 Stop(_("Failed writing to defective sector file: %s"), strerror(errno));
    }
 
@@ -173,8 +173,8 @@ int TryDefectiveSectorCache(RawBuffer *rb, unsigned char *outbuf)
    for(i=0; i<last_sector; i++)
    {  int n;
   
-      n = LargeRead(file, rb->workBuf->buf, rb->sampleLength);
-      if(n != rb->sampleLength)
+      n = LargeRead(file, rb->workBuf->buf, rb->sampleSize);
+      if(n != rb->sampleSize)
 	 Stop(_("Failed reading from defective sector file: %s"), strerror(errno));
 
       status = TryCDFrameRecovery(rb, outbuf);
@@ -209,9 +209,9 @@ void ReadDefectiveSectorFile(RawBuffer *rb, char *path)
    ReallocRawBuffer(rb, dsh.nSectors);
 
    for(i=0; i<dsh.nSectors; i++)
-   {  int n=LargeRead(file, rb->rawBuf[rb->samplesRead], rb->sampleLength);
+   {  int n=LargeRead(file, rb->rawBuf[rb->samplesRead], rb->sampleSize);
 
-      if(n != rb->sampleLength)
+      if(n != rb->sampleSize)
 	 Stop(_("Failed reading from defective sector file: %s"), strerror(errno));
 
       rb->samplesRead++;

@@ -155,7 +155,7 @@ Die maximale Kapazität der Fehlerkorrektur ist einstellbar.<p>
 Ohne Fehlerkorrektur-Daten kann ein beschädigter Datenträger <i>nicht</i> 
 wiederhergestellt werden.<p></li> 
 <li><img src="images/exclude_from_search_terms.png" align="middle"><br>
-dvdisaster enthält keine derartigen Funktionen. Diskussionen darüber sind zwecklos.</li>
+Solche Funktionen sind mit den Zielen und dem inneren Aufbau von dvdisaster nicht vereinbar.</li>
 </ul>
 
 <p>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-24 20:03+0100\n"
+"POT-Creation-Date: 2007-02-25 17:40+0100\n"
 "PO-Revision-Date: 2004-11-30 19:48+0100\n"
 "Last-Translator: Carsten Gnörlich <carsten@dvdisaster.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -533,11 +533,11 @@ msgstr ""
 msgid "Image file %s not deleted: %s\n"
 msgstr "Abbild-Datei %s nicht gelöscht: %s\n"
 
-#: help-dialogs.c:331
+#: help-dialogs.c:329
 msgid "windowtitle|Log data"
 msgstr "Protokollfenster"
 
-#: help-dialogs.c:332
+#: help-dialogs.c:330
 msgid ""
 "<big>Log data</big>\n"
 "<i>Protocol of the current or previous action</i>"
@@ -545,11 +545,11 @@ msgstr ""
 "<big>Protokolldaten</big>\n"
 "<i>Protokoll des momentanen oder letzten Vorgangs.</i>"
 
-#: help-dialogs.c:348
+#: help-dialogs.c:346
 msgid "windowtitle|GNU General Public License"
 msgstr "GNU General Public License"
 
-#: help-dialogs.c:349
+#: help-dialogs.c:347
 msgid ""
 "<big>GNU General Public License</big>\n"
 "<i>The license terms of dvdisaster.</i>"
@@ -557,7 +557,7 @@ msgstr ""
 "<big>GNU General Public License</big>\n"
 "<i>Die Lizenzbedingungen von dvdisaster.</i>"
 
-#: help-dialogs.c:421
+#: help-dialogs.c:419
 #, c-format
 msgid ""
 "File\n"
@@ -568,11 +568,11 @@ msgstr ""
 "%s\n"
 "nicht vorhanden"
 
-#: help-dialogs.c:504
+#: help-dialogs.c:502
 msgid "windowtitle|Modifying dvdisaster"
 msgstr "dvdisaster verändern"
 
-#: help-dialogs.c:505
+#: help-dialogs.c:503
 msgid ""
 "<big>Modifying dvdisaster</big>\n"
 "<i>Your changes are not ours.</i>"
@@ -580,11 +580,11 @@ msgstr ""
 "<big>dvdisaster verändern</big>\n"
 "<i>Ihre Änderungen sind nicht unsere.</i>"
 
-#: help-dialogs.c:644
+#: help-dialogs.c:642
 msgid "windowtitle|About dvdisaster"
 msgstr "Kurzinformation"
 
-#: help-dialogs.c:664
+#: help-dialogs.c:662
 msgid ""
 "Modified version Copyright 2007 (please fill in - [directions])\n"
 "Copyright 2004-2007 Carsten Gnoerlich"
@@ -592,11 +592,11 @@ msgstr ""
 "Veränderte Version Copyright 2007 (bitte eintragen - [Hinweise])\n"
 "Original-Programm Copyright 2004-2007 Carsten Gnörlich"
 
-#: help-dialogs.c:668
+#: help-dialogs.c:666
 msgid "Copyright 2004-2007 Carsten Gnoerlich"
 msgstr "Copyright 2004-2007 Carsten Gnörlich"
 
-#: help-dialogs.c:675
+#: help-dialogs.c:673
 msgid ""
 "dvdisaster provides a margin of safety against data loss\n"
 "on CD and DVD media caused by aging or scratches.\n"
@@ -608,7 +608,7 @@ msgstr ""
 "Es erzeugt Fehlerkorrekturdaten, um bei nachfolgenden Datenträger-\n"
 "Problemen unlesbare Sektoren zu rekonstruieren.\n"
 
-#: help-dialogs.c:680
+#: help-dialogs.c:678
 msgid ""
 "This software comes with  <b>absolutely no warranty</b>.\n"
 "This is free software and you are welcome to redistribute it\n"
@@ -617,7 +617,7 @@ msgstr ""
 "dvdisaster ist <b>freie Software</b>; es gelten die Bedingungen\n"
 "der [GNU General Public License] .\n"
 
-#: help-dialogs.c:686
+#: help-dialogs.c:684
 msgid ""
 "\n"
 "This program is <b>not the original</b>. It is based on the\n"
@@ -633,7 +633,7 @@ msgstr ""
 "Bitte behelligen Sie die ursprünglichen Autoren von dvdisaster\n"
 "([www.dvdisaster.org]) nicht wegen Problemen mit dieser Version.\n"
 
-#: help-dialogs.c:701
+#: help-dialogs.c:699
 msgid ""
 "\n"
 "e-mail: carsten@dvdisaster.com   -or-   cgnoerlich@fsfe.org"
@@ -641,7 +641,7 @@ msgstr ""
 "\n"
 "e-mail: carsten@dvdisaster.de   -oder-   cgnoerlich@fsfe.org"
 
-#: help-dialogs.c:704
+#: help-dialogs.c:702
 msgid ""
 "\n"
 "Darwin port (Mac OS X): Julian Einwag &lt;julian@einwag.de&gt;"
@@ -649,7 +649,7 @@ msgstr ""
 "\n"
 "Anpassungen für Darwin (Mac OS X): Julian Einwag &lt;julian@einwag.de&gt;"
 
-#: help-dialogs.c:707
+#: help-dialogs.c:705
 msgid ""
 "\n"
 "NetBSD port: Sergey Svishchev &lt;svs@ropnet.ru&gt;"
@@ -1096,9 +1096,11 @@ msgstr "Angepaßt (an beschädigte Datenträger)"
 #: preferences.c:1302
 msgid ""
 "<b>Reading strategy</b>\n"
+"\n"
 "The linear strategy is optimized for undamaged media while the adaptive strategy is better suited for media already containing read errors."
 msgstr ""
 "<b>Lese-Verfahren</b>\n"
+"\n"
 "\n"
 "Das lineare Verfahren ist für unbeschädigte Datenträger vorgesehen; das angepaßte Verfahren eignet sich besser für Datenträger mit Lesefehlern."
 
@@ -4061,32 +4063,32 @@ msgstr "Warte 10 Sekunden auf das Laufwerk: %d\n"
 msgid "Setting the drive speed failed:\n"
 msgstr "Konnte Laufwerksgeschwindigkeit nicht verändern:\n"
 
-#: scsi-layer.c:1510
+#: scsi-layer.c:1513
 #, c-format
 msgid "Sectors %lld - %lld: %s\n"
 msgstr "Sektoren %lld - %lld: %s\n"
 
-#: scsi-layer.c:1524
+#: scsi-layer.c:1527
 #, c-format
 msgid "Sector %lld, try %d: %s Sector returned: %d.\n"
 msgstr "Sektor %lld, Versuch %d: %s Zurückgegebener Sektor: %d.\n"
 
-#: scsi-layer.c:1530
+#: scsi-layer.c:1533
 #, c-format
 msgid "Sector %lld, try %d: %s\n"
 msgstr "Sektor %lld, Versuch %d: %s\n"
 
-#: scsi-layer.c:1542
+#: scsi-layer.c:1545
 #, c-format
 msgid "Sector %lld, try %d: success\n"
 msgstr "Sektor %lld, Versuch %d: erfolgreich\n"
 
-#: scsi-layer.c:1607
+#: scsi-layer.c:1610
 #, c-format
 msgid "Device %s: no medium present\n"
 msgstr "Laufwerk %s: kein Datenträger eingelegt\n"
 
-#: scsi-layer.c:1608
+#: scsi-layer.c:1611
 #, c-format
 msgid ""
 "Device %s does not become ready:\n"
@@ -4097,7 +4099,7 @@ msgstr ""
 "%s\n"
 "\n"
 
-#: scsi-layer.c:1613
+#: scsi-layer.c:1616
 #, c-format
 msgid ""
 "\n"
@@ -4106,7 +4108,7 @@ msgstr ""
 "\n"
 "Laufwerk: %s, %s\n"
 
-#: scsi-layer.c:1617
+#: scsi-layer.c:1620
 #, c-format
 msgid ""
 "\n"
@@ -4115,50 +4117,50 @@ msgstr ""
 "\n"
 "Laufwerk: %s (%s), %s\n"
 
-#: scsi-layer.c:1631 scsi-layer.c:1712
+#: scsi-layer.c:1634 scsi-layer.c:1715
 #, c-format
 msgid "This software does not support \"%s\" type media."
 msgstr "Dieses Programm unterstützt keine Datenträger vom Typ \"%s\"."
 
-#: scsi-layer.c:1639
+#: scsi-layer.c:1642
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr ""
 "Dieses Programm unterstützt keine Mehrfach-Sitzungen (%d Sitzungen).\n"
 "(für Anglophile: Multisession-CDs sind gemeint ;-)"
 
-#: scsi-layer.c:1648
+#: scsi-layer.c:1651
 msgid "Using READ CD"
 msgstr "Verwende READ CD"
 
-#: scsi-layer.c:1658
+#: scsi-layer.c:1661
 msgid ", RAW reading"
 msgstr ", \"RAW\"-Lesen"
 
-#: scsi-layer.c:1664
+#: scsi-layer.c:1667
 #, c-format
 msgid ", Mode page 1 ERP = %02xh"
 msgstr ", Mode page 1 ERP = %02xh"
 
-#: scsi-layer.c:1672
+#: scsi-layer.c:1675
 msgid "Using READ(10).\n"
 msgstr "Verwende READ(10).\n"
 
-#: scsi-layer.c:1690
+#: scsi-layer.c:1693
 #, c-format
 msgid "Medium: %s, %lld sectors%s"
 msgstr "Datenträger: %s, %lld Sektoren%s"
 
-#: scsi-layer.c:1694
+#: scsi-layer.c:1697
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s created %s"
 msgstr "Datenträger \"%s\": %s, %lld Sektoren%s erzeugt %s"
 
-#: scsi-layer.c:1700
+#: scsi-layer.c:1703
 msgid "Manuf.-ID:"
 msgstr "Herst.-ID:"
 
-#: scsi-layer.c:1719
+#: scsi-layer.c:1722
 msgid "This software does not support encrypted media.\n"
 msgstr "Dieses Programm unterstützt keine verschlüsselten Datenträger.\n"
 

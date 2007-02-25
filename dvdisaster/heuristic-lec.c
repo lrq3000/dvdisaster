@@ -217,7 +217,7 @@ int HeuristicLEC(unsigned char *cd_frame, RawBuffer *rb, unsigned char *out)
    int max_q_errors = 0;
    int err;
 
-   memset(rb->byteState, FRAME_BYTE_UNKNOWN, rb->sampleLength);
+   memset(rb->byteState, FRAME_BYTE_UNKNOWN, rb->sampleSize);
    
    /* Count initial P failures */
 
@@ -647,7 +647,7 @@ static void initialize_frame(RawBuffer *rb)
      }
    }
    
-   memcpy(&(rb->recovered[16]), &(rb->rawBuf[best_sector][16]), rb->sampleLength - 16);
+   memcpy(&(rb->recovered[16]), &(rb->rawBuf[best_sector][16]), rb->sampleSize - 16);
 }
 
 //#define DEBUG_SEARCH_PLAUSIBLE

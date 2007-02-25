@@ -574,6 +574,7 @@ typedef struct _LabelWithOnlineHelp
    char *normalText;
    char *highlitText;
    int inside;
+   int outerPadding;   /* Padding between window and outer vbox */
 } LabelWithOnlineHelp;
 
 LabelWithOnlineHelp* CreateLabelWithOnlineHelp(char*, char*);
@@ -925,7 +926,7 @@ typedef struct _RawBuffer
    unsigned char **rawBuf;    /* buffer for raw read attempts */
    int samplesRead;           /* number of samples read */
    int samplesMax;            /* maximum number of samples we can store */
-   int sampleLength;          /* length of samples */
+   int sampleSize;            /* size of samples */
    int dataOffset;            /* offset to user data in frame */
    int xaMode;                /* frame is in XA21 mode */
    int recommendedAttempts;   /* number of retries recommended by reading heuristics */
