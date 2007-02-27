@@ -60,7 +60,7 @@ void DumpSector(RawBuffer *rb, char *path)
 
    fclose(file);
 
-   PrintCLI(_("Sector %d dumped to %s\n"), rb->lba, filename);
+   PrintCLI(_("Sector %lld dumped to %s\n"), rb->lba, filename);
 
    g_free(filename);
 }
@@ -335,7 +335,9 @@ int CheckEDC(unsigned char *cd_frame, int xa_mode)
                     | cd_frame[0x813];
    }
 
+#ifdef HAVE_LITTLE_ENDIAN
    expected_crc = SwapBytes32(expected_crc);  /* CRC on disc is big endian */
+#endif
 
    if(xa_mode) real_crc = EDCCrc32(cd_frame+16, 2056);
    else        real_crc = EDCCrc32(cd_frame, 2064);
@@ -437,7 +439,7 @@ static int simple_lec(RawBuffer *rb, unsigned char *frame)
    if(q_failures || p_failures || q_corrected || p_corrected)
    {
      PrintCLIorLabel(Closure->status, 
-		     "Sector %d  L-EC P/Q results: %d/%d failures, %d/%d corrected.\n",
+		     "Sector %lld  L-EC P/Q results: %d/%d failures, %d/%d corrected.\n",
 		     rb->lba, p_failures, q_failures, p_corrected, q_corrected);
      return 1;
    }
@@ -518,7 +520,7 @@ int ValidateRawSector(RawBuffer *rb, unsigned char *frame)
 
   if(lec_did_sth)
     PrintCLIorLabel(Closure->status, 
-		    "Sector %d: Recovered in raw reader by L-EC.\n",
+		    "Sector %lld: Recovered in raw reader by L-EC.\n",
 		    rb->lba);
 
    return TRUE;
@@ -768,7 +770,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
       && CheckMSF(rb->recovered, rb->lba))
    {
        PrintCLIorLabel(Closure->status, 
-		       "Sector %d: Recovered in raw reader by iterative L-EC.\n",
+		       "Sector %lld: Recovered in raw reader by iterative L-EC.\n",
 		       rb->lba);
 
        memcpy(outbuf, rb->recovered+rb->dataOffset, 2048);
@@ -789,7 +791,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
    if(CheckEDC(rb->recovered, rb->xaMode)
       && CheckMSF(rb->recovered, rb->lba))
    {  PrintCLIorLabel(Closure->status, 
-		      "Sector %d: Recovered in raw reader by plausible sector search.\n",
+		      "Sector %lld: Recovered in raw reader by plausible sector search.\n",
 		      rb->lba);
       memcpy(outbuf, rb->recovered+rb->dataOffset, 2048);
       return 0; 
@@ -800,7 +802,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
    if(CheckEDC(rb->recovered, rb->xaMode)
       && CheckMSF(rb->recovered, rb->lba))
    {  PrintCLIorLabel(Closure->status, 
-		      "Sector %d: Recovered in raw reader by heuristic L-EC.\n",
+		      "Sector %lld: Recovered in raw reader by heuristic L-EC.\n",
 		      rb->lba);
       memcpy(outbuf, rb->recovered+rb->dataOffset, 2048);
       return 0; 

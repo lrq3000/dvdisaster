@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-25 17:40+0100\n"
+"POT-Creation-Date: 2007-02-27 20:42+0100\n"
 "PO-Revision-Date: 2005-01-01 14:24+0100\n"
 "Last-Translator: Andrea Polverini <polve@polve.com>\n"
 "Language-Team: Italian <>\n"
@@ -57,9 +57,9 @@ msgid "Failed seeking to sector %lld in image: %s"
 msgstr ""
 
 #: debug.c:109 debug.c:194 debug.c:238 debug.c:363 debug.c:485 debug.c:530
-#: rs02-create.c:331 rs02-create.c:357 rs02-create.c:944 udf.c:1093 udf.c:1151
-#: udf.c:1208 udf.c:1221 udf.c:1226 udf.c:1229 udf.c:1232 udf.c:1235
-#: udf.c:1238 udf.c:1241
+#: rs02-create.c:331 rs02-create.c:357 rs02-create.c:944 udf.c:1105 udf.c:1163
+#: udf.c:1220 udf.c:1233 udf.c:1238 udf.c:1241 udf.c:1244 udf.c:1247
+#: udf.c:1250 udf.c:1253
 #, c-format
 msgid "Failed writing to sector %lld in image: %s"
 msgstr ""
@@ -137,7 +137,7 @@ msgstr ""
 msgid "Truncating image to %lld sectors.\n"
 msgstr ""
 
-#: debug.c:395 read-linear.c:1210 rs01-fix.c:197 rs01-fix.c:219 rs01-fix.c:235
+#: debug.c:395 read-linear.c:1212 rs01-fix.c:197 rs01-fix.c:219 rs01-fix.c:235
 #: rs01-fix.c:270 rs02-create.c:103 rs02-create.c:147 rs02-fix.c:236
 #: rs02-fix.c:257 rs02-fix.c:272
 #, c-format
@@ -1765,15 +1765,15 @@ msgstr "Analizzo il file immagine esistente: %lld leggibile, %lld correggibili, 
 msgid "Analysing existing image file: %lld readable, %lld still missing.\n"
 msgstr "Analizzo il file immagine esistente: %lld leggibile, %lld ancora mancanti.\n"
 
-#: read-adaptive.c:927 read-linear.c:751
+#: read-adaptive.c:927 read-linear.c:752
 msgid "Ignore once"
 msgstr "Ignora una volta"
 
-#: read-adaptive.c:928 read-linear.c:752
+#: read-adaptive.c:928 read-linear.c:753
 msgid "Ignore always"
 msgstr "Ignora sempre"
 
-#: read-adaptive.c:929 read-linear.c:753
+#: read-adaptive.c:929 read-linear.c:754
 msgid "Abort"
 msgstr "Ferma"
 
@@ -1783,7 +1783,7 @@ msgid "Filling image area [%lld..%lld]"
 msgstr "Riempio l'area immagine [%lld..%lld]"
 
 #: read-adaptive.c:977 read-adaptive.c:1042 read-adaptive.c:1316
-#: read-adaptive.c:1520 read-linear.c:447 read-linear.c:684 read-linear.c:908
+#: read-adaptive.c:1520 read-linear.c:447 read-linear.c:685 read-linear.c:909
 #: rs01-fix.c:444 rs01-fix.c:702 rs02-fix.c:741
 #, c-format
 msgid "Failed seeking to sector %lld in image [%s]: %s"
@@ -1791,7 +1791,7 @@ msgstr ""
 
 #: read-adaptive.c:989 read-adaptive.c:1047 read-adaptive.c:1359
 #: read-adaptive.c:1370 read-adaptive.c:1386 read-adaptive.c:1526
-#: read-linear.c:453 read-linear.c:691 rs01-fix.c:449
+#: read-linear.c:453 read-linear.c:692 rs01-fix.c:449
 #, c-format
 msgid "Failed writing to sector %lld in image [%s]: %s"
 msgstr ""
@@ -1829,7 +1829,7 @@ msgstr ""
 "\n"
 "Sono disponibili dati sufficienti per ricostruire l'immagine.\n"
 
-#: read-adaptive.c:1289 read-linear.c:964
+#: read-adaptive.c:1289 read-linear.c:965
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -1837,7 +1837,7 @@ msgid ""
 "Use the --ignore-fatal-sense option to override."
 msgstr ""
 
-#: read-adaptive.c:1294 read-linear.c:969
+#: read-adaptive.c:1294 read-linear.c:970
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -1865,7 +1865,7 @@ msgstr "Errore CRC nel settore %lld\n"
 msgid "Sectors %lld-%lld: %s\n"
 msgstr "Settori %lld-%lld: %s\n"
 
-#: read-adaptive.c:1512 read-linear.c:1098 scsi-layer.c:729
+#: read-adaptive.c:1512 read-linear.c:1099 scsi-layer.c:729
 #, c-format
 msgid "Sector %lld: %s\n"
 msgstr "Settore %lld: %s\n"
@@ -2013,97 +2013,97 @@ msgstr "Attendere %d secondi per far avviare il drive...\n"
 msgid "Unreadable / skipped sectors: %lld"
 msgstr "Settori illeggibili / saltati: %lld"
 
-#: read-linear.c:624
+#: read-linear.c:625
 #, c-format
 msgid "Sector %lld: Speed increased to %4.1fx\n"
 msgstr "Settore %lld: Velocità incrementata a %4.1fx\n"
 
-#: read-linear.c:627
+#: read-linear.c:628
 #, c-format
 msgid "Sector %lld: Speed dropped to %4.1fx\n"
 msgstr "Settore %lld: Velocità diminuita a %4.1fx\n"
 
-#: read-linear.c:632
+#: read-linear.c:633
 #, c-format
 msgid "Read position: %3d.%1d%% (%4.1fx)"
 msgstr "Settori processati: %3d.%1d%% (%4.1fx)"
 
-#: read-linear.c:714 rs01-common.c:227 rs02-verify.c:736
+#: read-linear.c:715 rs01-common.c:227 rs02-verify.c:736
 #, c-format
 msgid "* CRC error, sector: %lld\n"
 msgstr "* Errore CRC, Settore : %lld\n"
 
-#: read-linear.c:865 read-linear.c:979
+#: read-linear.c:866 read-linear.c:980
 #, c-format
 msgid "<span %s>Aborted by user request!</span> %lld sectors read, %lld sectors unreadable/skipped so far."
 msgstr "<span %s>Annullato dall'utente!</span> %lld settori letti, %lld settori illeggibili/saltati.."
 
-#: read-linear.c:919
+#: read-linear.c:920
 #, c-format
 msgid "unexpected read error in image for sector %lld"
 msgstr "Errore di lettura inatteso nell'immagine per il settore %lld"
 
-#: read-linear.c:1078
+#: read-linear.c:1079
 #, c-format
 msgid "Sector %lld: %s Skipping %d sectors.\n"
 msgstr "Settore %lld: %s Salto di %d settori.\n"
 
-#: read-linear.c:1128
+#: read-linear.c:1130
 #, c-format
 msgid "Reading pass %d of %d: %lld sectors read; %lld CRC errors; %lld missing."
 msgstr ""
 
-#: read-linear.c:1152
+#: read-linear.c:1154
 #, c-format
 msgid "%lld sectors read.     "
 msgstr "%lld settori letti.      "
 
-#: read-linear.c:1153
+#: read-linear.c:1155
 #, c-format
 msgid "%lld sectors read; %lld unreadable sectors."
 msgstr "%lld settori letti; %lld settori illeggibili."
 
-#: read-linear.c:1161
+#: read-linear.c:1163
 #, c-format
 msgid "All sectors successfully read, but wrong image length (%lld sectors difference)"
 msgstr ""
 
-#: read-linear.c:1165
+#: read-linear.c:1167
 msgid "All sectors successfully read, but wrong image checksum."
 msgstr ""
 
-#: read-linear.c:1166
+#: read-linear.c:1168
 msgid "All sectors successfully read. Checksums match."
 msgstr ""
 
-#: read-linear.c:1168
+#: read-linear.c:1170
 msgid "All sectors successfully read."
 msgstr "Tutti i settori sono stati letti correttamente."
 
-#: read-linear.c:1172
+#: read-linear.c:1174
 #, c-format
 msgid "%lld unreadable sectors."
 msgstr "%lld settori illeggibili."
 
-#: read-linear.c:1174
+#: read-linear.c:1176
 #, c-format
 msgid "%lld CRC errors."
 msgstr "%lld errori CRC."
 
-#: read-linear.c:1175
+#: read-linear.c:1177
 #, c-format
 msgid "%lld CRC errors, %lld unreadable sectors."
 msgstr "%lld errori CRC, %lld settori illeggibili."
 
-#: read-linear.c:1181
+#: read-linear.c:1183
 msgid "Scanning finished: "
 msgstr "Scansione terminata:"
 
-#: read-linear.c:1183
+#: read-linear.c:1185
 msgid "Reading finished: "
 msgstr "Lettura terminata:"
 
-#: read-linear.c:1194
+#: read-linear.c:1196
 #, c-format
 msgid ""
 "%d sectors missing at the end of the disc.\n"
@@ -2114,7 +2114,7 @@ msgstr ""
 "Questo è corretto se il disco è stato scritto in modalità TAO (track at once).\n"
 "L'imagine sarà aggiustata di conseguenza.Leggere il manuale per i dettagli.\n"
 
-#: read-linear.c:1200
+#: read-linear.c:1202
 #, c-format
 msgid ""
 "%d sectors missing at the end of the disc.\n"
@@ -2163,7 +2163,7 @@ msgstr "Velocità"
 
 #: recover-raw.c:63
 #, c-format
-msgid "Sector %d dumped to %s\n"
+msgid "Sector %lld dumped to %s\n"
 msgstr ""
 
 #: rs01-common.c:132 rs02-verify.c:767
@@ -4003,7 +4003,7 @@ msgid ""
 "--query-size=udf\n"
 msgstr ""
 
-#: udf.c:521
+#: udf.c:533
 msgid "Unnamed"
 msgstr "Non intestato"
 

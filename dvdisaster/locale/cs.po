@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-25 17:40+0100\n"
+"POT-Creation-Date: 2007-02-27 20:42+0100\n"
 "PO-Revision-Date: 2006-03-16 20:40+0100\n"
 "Last-Translator: Luboš Staněk <lubek@users.sourceforge.net>\n"
 "Language-Team: čeština <cs@li.org>\n"
@@ -60,9 +60,9 @@ msgid "Failed seeking to sector %lld in image: %s"
 msgstr "Selhalo vystavení na sektor %lld v obrazu: %s"
 
 #: debug.c:109 debug.c:194 debug.c:238 debug.c:363 debug.c:485 debug.c:530
-#: rs02-create.c:331 rs02-create.c:357 rs02-create.c:944 udf.c:1093 udf.c:1151
-#: udf.c:1208 udf.c:1221 udf.c:1226 udf.c:1229 udf.c:1232 udf.c:1235
-#: udf.c:1238 udf.c:1241
+#: rs02-create.c:331 rs02-create.c:357 rs02-create.c:944 udf.c:1105 udf.c:1163
+#: udf.c:1220 udf.c:1233 udf.c:1238 udf.c:1241 udf.c:1244 udf.c:1247
+#: udf.c:1250 udf.c:1253
 #, c-format
 msgid "Failed writing to sector %lld in image: %s"
 msgstr "Selhal zápis do sektoru %lld v obrazu: %s"
@@ -139,7 +139,7 @@ msgstr "Nová délka musí být v rozsahu [0..%lld].\n"
 msgid "Truncating image to %lld sectors.\n"
 msgstr "Zkrácení obrazu na %lld sektorů.\n"
 
-#: debug.c:395 read-linear.c:1210 rs01-fix.c:197 rs01-fix.c:219 rs01-fix.c:235
+#: debug.c:395 read-linear.c:1212 rs01-fix.c:197 rs01-fix.c:219 rs01-fix.c:235
 #: rs01-fix.c:270 rs02-create.c:103 rs02-create.c:147 rs02-fix.c:236
 #: rs02-fix.c:257 rs02-fix.c:272
 #, c-format
@@ -1771,15 +1771,15 @@ msgstr "Analyzování existujícího souboru obrazu: %lld čitelných, %lld opra
 msgid "Analysing existing image file: %lld readable, %lld still missing.\n"
 msgstr "Analyzování existujícího souboru obrazu: %lld čitelných, %lld stále chybějících.\n"
 
-#: read-adaptive.c:927 read-linear.c:751
+#: read-adaptive.c:927 read-linear.c:752
 msgid "Ignore once"
 msgstr "Ignorovat jednou"
 
-#: read-adaptive.c:928 read-linear.c:752
+#: read-adaptive.c:928 read-linear.c:753
 msgid "Ignore always"
 msgstr "Ignorovat vždy"
 
-#: read-adaptive.c:929 read-linear.c:753
+#: read-adaptive.c:929 read-linear.c:754
 msgid "Abort"
 msgstr "Přerušit"
 
@@ -1789,7 +1789,7 @@ msgid "Filling image area [%lld..%lld]"
 msgstr "Vyplňování oblasti obrazu [%lld..%lld]"
 
 #: read-adaptive.c:977 read-adaptive.c:1042 read-adaptive.c:1316
-#: read-adaptive.c:1520 read-linear.c:447 read-linear.c:684 read-linear.c:908
+#: read-adaptive.c:1520 read-linear.c:447 read-linear.c:685 read-linear.c:909
 #: rs01-fix.c:444 rs01-fix.c:702 rs02-fix.c:741
 #, c-format
 msgid "Failed seeking to sector %lld in image [%s]: %s"
@@ -1797,7 +1797,7 @@ msgstr "Selhalo vystavení na sektor %lld v obrazu [%s]: %s"
 
 #: read-adaptive.c:989 read-adaptive.c:1047 read-adaptive.c:1359
 #: read-adaptive.c:1370 read-adaptive.c:1386 read-adaptive.c:1526
-#: read-linear.c:453 read-linear.c:691 rs01-fix.c:449
+#: read-linear.c:453 read-linear.c:692 rs01-fix.c:449
 #, c-format
 msgid "Failed writing to sector %lld in image [%s]: %s"
 msgstr "Selhal zápis do sektoru %lld v obrazu [%s]: %s"
@@ -1835,7 +1835,7 @@ msgstr ""
 "\n"
 "Je k dispozici dostatek dat pro rekonstrukci obrazu.\n"
 
-#: read-adaptive.c:1289 read-linear.c:964
+#: read-adaptive.c:1289 read-linear.c:965
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -1843,7 +1843,7 @@ msgid ""
 "Use the --ignore-fatal-sense option to override."
 msgstr ""
 
-#: read-adaptive.c:1294 read-linear.c:969
+#: read-adaptive.c:1294 read-linear.c:970
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -1871,7 +1871,7 @@ msgstr "Chyba CRC v sektoru %lld\n"
 msgid "Sectors %lld-%lld: %s\n"
 msgstr "Sektory %lld-%lld: %s\n"
 
-#: read-adaptive.c:1512 read-linear.c:1098 scsi-layer.c:729
+#: read-adaptive.c:1512 read-linear.c:1099 scsi-layer.c:729
 #, c-format
 msgid "Sector %lld: %s\n"
 msgstr "Sektor %lld: %s\n"
@@ -2019,97 +2019,97 @@ msgstr "Čekám %d sekund na roztočení disku...\n"
 msgid "Unreadable / skipped sectors: %lld"
 msgstr "Nečitelných / přeskočených sektorů: %lld"
 
-#: read-linear.c:624
+#: read-linear.c:625
 #, c-format
 msgid "Sector %lld: Speed increased to %4.1fx\n"
 msgstr "Sektor %lld: Rychlost zvýšena na %4.1fx\n"
 
-#: read-linear.c:627
+#: read-linear.c:628
 #, c-format
 msgid "Sector %lld: Speed dropped to %4.1fx\n"
 msgstr "Sektor %lld: Rychlost snížena na %4.1fx\n"
 
-#: read-linear.c:632
+#: read-linear.c:633
 #, c-format
 msgid "Read position: %3d.%1d%% (%4.1fx)"
 msgstr "Pozice čtení: %3d.%1d%% (%4.1fx)"
 
-#: read-linear.c:714 rs01-common.c:227 rs02-verify.c:736
+#: read-linear.c:715 rs01-common.c:227 rs02-verify.c:736
 #, c-format
 msgid "* CRC error, sector: %lld\n"
 msgstr "* Chyba CRC, sektor: %lld\n"
 
-#: read-linear.c:865 read-linear.c:979
+#: read-linear.c:866 read-linear.c:980
 #, c-format
 msgid "<span %s>Aborted by user request!</span> %lld sectors read, %lld sectors unreadable/skipped so far."
 msgstr "<span %s>Zrušeno uživatelem!</span> dosud načteno %lld sektorů, %lld sektorů nečitelných/přeskočeno."
 
-#: read-linear.c:919
+#: read-linear.c:920
 #, c-format
 msgid "unexpected read error in image for sector %lld"
 msgstr "neočekávaná chyba čtení obrazu v sektoru %lld"
 
-#: read-linear.c:1078
+#: read-linear.c:1079
 #, c-format
 msgid "Sector %lld: %s Skipping %d sectors.\n"
 msgstr "Sektor %lld: %s Přeskakuji %d sektorů.\n"
 
-#: read-linear.c:1128
+#: read-linear.c:1130
 #, c-format
 msgid "Reading pass %d of %d: %lld sectors read; %lld CRC errors; %lld missing."
 msgstr ""
 
-#: read-linear.c:1152
+#: read-linear.c:1154
 #, c-format
 msgid "%lld sectors read.     "
 msgstr "%lld sektorů načteno.     "
 
-#: read-linear.c:1153
+#: read-linear.c:1155
 #, c-format
 msgid "%lld sectors read; %lld unreadable sectors."
 msgstr "%lld sektorů načteno; %lld nečitelných sektorů."
 
-#: read-linear.c:1161
+#: read-linear.c:1163
 #, c-format
 msgid "All sectors successfully read, but wrong image length (%lld sectors difference)"
 msgstr "Všechny sektory byly úspěšně načteny, ale nesouhlasí délka obrazu (%lld sectorů rozdíl)"
 
-#: read-linear.c:1165
+#: read-linear.c:1167
 msgid "All sectors successfully read, but wrong image checksum."
 msgstr "Všechny sektory byly úspěšně načteny, ale nesouhlasí kontrolní součet obrazu."
 
-#: read-linear.c:1166
+#: read-linear.c:1168
 msgid "All sectors successfully read. Checksums match."
 msgstr "Všechny sektory byly úspěšně načteny. Kontrolní součet souhlasí."
 
-#: read-linear.c:1168
+#: read-linear.c:1170
 msgid "All sectors successfully read."
 msgstr "Všechny sektory byly úspěšně načteny."
 
-#: read-linear.c:1172
+#: read-linear.c:1174
 #, c-format
 msgid "%lld unreadable sectors."
 msgstr "%lld nečitelných sektorů."
 
-#: read-linear.c:1174
+#: read-linear.c:1176
 #, c-format
 msgid "%lld CRC errors."
 msgstr "%lld chyb CRC."
 
-#: read-linear.c:1175
+#: read-linear.c:1177
 #, c-format
 msgid "%lld CRC errors, %lld unreadable sectors."
 msgstr "%lld chyb CRC, %lld nečitelných sektorů"
 
-#: read-linear.c:1181
+#: read-linear.c:1183
 msgid "Scanning finished: "
 msgstr "Skenování dokončeno: "
 
-#: read-linear.c:1183
+#: read-linear.c:1185
 msgid "Reading finished: "
 msgstr "Čtení dokončeno: "
 
-#: read-linear.c:1194
+#: read-linear.c:1196
 #, c-format
 msgid ""
 "%d sectors missing at the end of the disc.\n"
@@ -2120,7 +2120,7 @@ msgstr ""
 "To je v pořádku, pokud bylo CD zapsáno v režimu TAO (stopa najednou).\n"
 "Obraz bude podle toho zkrácen. Další podrobnosti najdete v příručce.\n"
 
-#: read-linear.c:1200
+#: read-linear.c:1202
 #, c-format
 msgid ""
 "%d sectors missing at the end of the disc.\n"
@@ -2169,7 +2169,7 @@ msgstr "Rychlost"
 
 #: recover-raw.c:63
 #, c-format
-msgid "Sector %d dumped to %s\n"
+msgid "Sector %lld dumped to %s\n"
 msgstr ""
 
 #: rs01-common.c:132 rs02-verify.c:767
@@ -4009,7 +4009,7 @@ msgid ""
 "--query-size=udf\n"
 msgstr ""
 
-#: udf.c:521
+#: udf.c:533
 msgid "Unnamed"
 msgstr "Nepojmenovaný"
 

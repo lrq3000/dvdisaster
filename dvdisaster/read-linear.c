@@ -563,7 +563,8 @@ static void show_progress(read_closure *rc)
    {  gulong ignore;
       int color;
 
-      ChangeSpiralCursor(Closure->readLinearSpiral, percent);
+      if(Closure->guiMode)
+	ChangeSpiralCursor(Closure->readLinearSpiral, percent);
 
       if(rc->readOK <= rc->lastReadOK)  /* anything read since last sample? */
       {  rc->speed = 0.0;               /* nothing read */
@@ -1120,7 +1121,8 @@ step_counter:
 
    /*** If multiple reading passes are allowed, see if we need another pass */
 
-   ChangeSpiralCursor(Closure->readLinearSpiral, -1); /* switch cursor off */
+   if(Closure->guiMode)
+     ChangeSpiralCursor(Closure->readLinearSpiral, -1); /* switch cursor off */
 
    rc->pass++;
    if(   !rc->scanMode

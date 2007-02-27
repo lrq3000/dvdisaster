@@ -34,9 +34,9 @@ cdde449dd2a8f64b560ff18a36f86234 *random.c
 79bedba70132d8475de4e135d93832d5 *raw-sector-cache.c
 ee31b2554cf58d6e3faf3cae399b7b3a *read-adaptive.c
 ed2f6ece44dce6f97302dbd45ad861d5 *read-adaptive-window.c
-50be3c05ce3bf41941ab466d9adc6850 *read-linear.c
+203e0ee7bb7e615aeb99f357666033f4 *read-linear.c
 68df3de7424e89e92952ccddbd520d17 *read-linear-window.c
-9e8bb92b53ab1203776edcf6d7962745 *recover-raw.c
+ff96ce440db3e8aa1144e312e8e479b8 *recover-raw.c
 bafff36d81d88ad9905fc6ad95af6200 *rs01-common.c
 621f011f33306d15930bb421b65c5ee0 *rs01-create.c
 295260e27642e3e71273da9cec570391 *rs01-fix.c
@@ -58,7 +58,7 @@ fc09e09e31e822fbbeb3c19238e60569 *scsi-netbsd.c
 56d756dd6574516e9a1a1b5a4bc680e4 *show-manual.c
 20a4570536a3e65b1151702b73d8a258 *slow-lec.c
 18e276fc0af763d8c33b63d44f0e75a4 *spiral.c
-a169e7c701cdf09e8f194a0c3422bc50 *udf.c
+92003d61a8d37712d38531259dbe6928 *udf.c
 739ee4b84df343a27d0e17b755d9cec7 *welcome-window.c
 78d2474ebca7b409eb98f3c04452dfd8 *documentation/create.bash
 da3acf3e78926ea112a57308d055d466 *documentation/create-cs.bash

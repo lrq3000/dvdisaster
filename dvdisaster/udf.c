@@ -327,7 +327,11 @@ gint64 MediumLengthFromRS02(DeviceHandle *dh, gint64 max_size)
  * 16bit both byte order
  */
 
-#define bp_get_short_bbo(buf, idx) (*((guint16*)(buf+idx-1)))
+#ifdef HAVE_BIG_ENDIAN
+  #define bp_get_short_bbo(buf, idx) (*((guint16*)(buf+idx+1)))
+#else
+  #define bp_get_short_bbo(buf, idx) (*((guint16*)(buf+idx-1)))
+#endif
 
 static void bp_set_short_bbo(unsigned char *buf, int idx, guint16 value)
 {  unsigned char wx = (value >> 8) & 0xff;
@@ -362,7 +366,11 @@ static void bp_set_short_msb(unsigned char *buf, int idx, guint16 value)
  * 32bit single byte order
  */
 
-#define bp_get_long_lsb(buf, idx) (*((guint32*)(buf+idx-1)))
+#ifdef HAVE_BIG_ENDIAN
+  #define bp_get_long_lsb(buf, idx) (((guint32)buf[(idx)+2])<<24|((guint32)buf[(idx)+1])<<16|((guint32)buf[(idx)])<<8|((guint32)buf[(idx)-1]))
+#else
+  #define bp_get_long_lsb(buf, idx) (*((guint32*)(buf+idx-1)))
+#endif
 #define bp_get_long_msb(buf, idx) (((guint32)buf[(idx)-1])<<24|((guint32)buf[idx])<<16|((guint32)buf[(idx)+1])<<8|((guint32)buf[(idx)+2]))
 
 static void bp_set_long_lsb(unsigned char *buf, int idx, guint32 value)
@@ -395,7 +403,11 @@ static void bp_set_long_msb(unsigned char *buf, int idx, guint32 value)
  * 32bit both byte order 
  */
 
-#define bp_get_long_bbo(buf, idx) (*((guint32*)(buf+idx-1)))
+#ifdef HAVE_BIG_ENDIAN
+  #define bp_get_long_bbo(buf, idx) (*((guint32*)(buf+idx+3)))
+#else
+  #define bp_get_long_bbo(buf, idx) (*((guint32*)(buf+idx-1)))
+#endif
 
 static void bp_set_long_bbo(unsigned char *buf, int idx, guint32 value)
 {  unsigned char st = (value >> 24) & 0xff;

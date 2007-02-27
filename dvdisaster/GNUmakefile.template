@@ -77,7 +77,7 @@ dvdisaster: inlined-icons.h $(OFILES)
 	     $(CC) $(LOPTS) $(OFILES) $(LIBS) -o dvdisaster; \
 	fi
 	@if test -e locale/de/LC_MESSAGES/dvdisaster.mo \
-	 || echo $(WITH_OPTIONS) | grep -q "NLS_NO"; \
+	 || echo $(WITH_OPTIONS) | grep "NLS_NO" >/dev/null; \
 	then echo "not touching locale"; \
 	else $(MAKE) --no-print-directory -C locale; \
 	fi
@@ -247,7 +247,7 @@ install: dvdisaster html images
 	  sed "s/%docdir%/$$ESCAPED_DOCSUBDIR\/en/" <dvdisaster.it.1 >dvdisaster.updated; \
 	  install -m 644 dvdisaster.updated $(BUILDROOT)$(MANDIR)/it/man1/dvdisaster.1; \
 	  rm dvdisaster.updated
-	if echo $(WITH_OPTIONS) | grep -q "NLS_YES"; then \
+	if echo $(WITH_OPTIONS) | grep "NLS_YES" >/dev/null; then \
 	  cd locale; \
 	  for i in ??; do\
 	    install -d $(BUILDROOT)$(LOCALEDIR)/$$i/LC_MESSAGES; \

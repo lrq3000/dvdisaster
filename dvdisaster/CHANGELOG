@@ -1,5 +1,9 @@
 Feature freeze for version 0.71/0.72 has been reached.
 
+0.71 (devel-17)
+	- fixed read linear reading crash in CLI mode
+	- fixed UDF parser, raw reading on big endian archs
+
 0.71 (devel-16) 25-02-2007
 	- added Solaris port; this is for testing only and will not
 	  be officially supported.

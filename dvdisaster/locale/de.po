@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-25 17:40+0100\n"
+"POT-Creation-Date: 2007-02-27 20:42+0100\n"
 "PO-Revision-Date: 2004-11-30 19:48+0100\n"
 "Last-Translator: Carsten Gnörlich <carsten@dvdisaster.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -59,9 +59,9 @@ msgid "Failed seeking to sector %lld in image: %s"
 msgstr "Ansteuern von Sektor %lld im Abbild fehlgeschlagen: %s"
 
 #: debug.c:109 debug.c:194 debug.c:238 debug.c:363 debug.c:485 debug.c:530
-#: rs02-create.c:331 rs02-create.c:357 rs02-create.c:944 udf.c:1093 udf.c:1151
-#: udf.c:1208 udf.c:1221 udf.c:1226 udf.c:1229 udf.c:1232 udf.c:1235
-#: udf.c:1238 udf.c:1241
+#: rs02-create.c:331 rs02-create.c:357 rs02-create.c:944 udf.c:1105 udf.c:1163
+#: udf.c:1220 udf.c:1233 udf.c:1238 udf.c:1241 udf.c:1244 udf.c:1247
+#: udf.c:1250 udf.c:1253
 #, c-format
 msgid "Failed writing to sector %lld in image: %s"
 msgstr "Schreiben von Sektor %lld im Abbild fehlgeschlagen: %s"
@@ -139,7 +139,7 @@ msgstr "Neue Länge muß im Bereich [0..%lld] liegen.\n"
 msgid "Truncating image to %lld sectors.\n"
 msgstr "Verkürze das Abbild auf %lld Sektoren.\n"
 
-#: debug.c:395 read-linear.c:1210 rs01-fix.c:197 rs01-fix.c:219 rs01-fix.c:235
+#: debug.c:395 read-linear.c:1212 rs01-fix.c:197 rs01-fix.c:219 rs01-fix.c:235
 #: rs01-fix.c:270 rs02-create.c:103 rs02-create.c:147 rs02-fix.c:236
 #: rs02-fix.c:257 rs02-fix.c:272
 #, c-format
@@ -1975,15 +1975,15 @@ msgstr "Untersuche vorhandenes Abbild: %lld lesbar, %lld korrigierbar, %lld noch
 msgid "Analysing existing image file: %lld readable, %lld still missing.\n"
 msgstr "Untersuche vorhandenes Abbild: %lld lesbar, %lld noch fehlend.\n"
 
-#: read-adaptive.c:927 read-linear.c:751
+#: read-adaptive.c:927 read-linear.c:752
 msgid "Ignore once"
 msgstr "Diesmal nicht beachten"
 
-#: read-adaptive.c:928 read-linear.c:752
+#: read-adaptive.c:928 read-linear.c:753
 msgid "Ignore always"
 msgstr "Immer nicht beachten"
 
-#: read-adaptive.c:929 read-linear.c:753
+#: read-adaptive.c:929 read-linear.c:754
 msgid "Abort"
 msgstr "Abbrechen"
 
@@ -1993,7 +1993,7 @@ msgid "Filling image area [%lld..%lld]"
 msgstr "Auffüllen des Abbild-Bereichs [%lld..%lld]"
 
 #: read-adaptive.c:977 read-adaptive.c:1042 read-adaptive.c:1316
-#: read-adaptive.c:1520 read-linear.c:447 read-linear.c:684 read-linear.c:908
+#: read-adaptive.c:1520 read-linear.c:447 read-linear.c:685 read-linear.c:909
 #: rs01-fix.c:444 rs01-fix.c:702 rs02-fix.c:741
 #, c-format
 msgid "Failed seeking to sector %lld in image [%s]: %s"
@@ -2001,7 +2001,7 @@ msgstr "Ansteuern von Sektor %lld im Abbild fehlgeschlagen [%s]: %s"
 
 #: read-adaptive.c:989 read-adaptive.c:1047 read-adaptive.c:1359
 #: read-adaptive.c:1370 read-adaptive.c:1386 read-adaptive.c:1526
-#: read-linear.c:453 read-linear.c:691 rs01-fix.c:449
+#: read-linear.c:453 read-linear.c:692 rs01-fix.c:449
 #, c-format
 msgid "Failed writing to sector %lld in image [%s]: %s"
 msgstr "Schreiben von Sektor %lld im Abbild fehlgeschlagen [%s]: %s"
@@ -2039,7 +2039,7 @@ msgstr ""
 "\n"
 "Genügend Daten zur Wiederherstellung des Abbildes vorhanden.\n"
 
-#: read-adaptive.c:1289 read-linear.c:964
+#: read-adaptive.c:1289 read-linear.c:965
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -2051,7 +2051,7 @@ msgstr ""
 "Verwenden Sie die --ignore-fatal-sense - Option um das\n"
 "Weitermachen zu erzwingen."
 
-#: read-adaptive.c:1294 read-linear.c:969
+#: read-adaptive.c:1294 read-linear.c:970
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -2079,7 +2079,7 @@ msgstr "Prüfsummen-Fehler in Sektor %lld\n"
 msgid "Sectors %lld-%lld: %s\n"
 msgstr "Sektoren %lld-%lld: %s\n"
 
-#: read-adaptive.c:1512 read-linear.c:1098 scsi-layer.c:729
+#: read-adaptive.c:1512 read-linear.c:1099 scsi-layer.c:729
 #, c-format
 msgid "Sector %lld: %s\n"
 msgstr "Sektor %lld: %s\n"
@@ -2227,97 +2227,97 @@ msgstr "Warte %d Sekunden auf das Hochdrehen des Laufwerks...\n"
 msgid "Unreadable / skipped sectors: %lld"
 msgstr "Unlesbare / Übersprungene Sektoren: %lld"
 
-#: read-linear.c:624
+#: read-linear.c:625
 #, c-format
 msgid "Sector %lld: Speed increased to %4.1fx\n"
 msgstr "Sektor %lld: Lesegeschwindigkeit steigt auf %4.1fx\n"
 
-#: read-linear.c:627
+#: read-linear.c:628
 #, c-format
 msgid "Sector %lld: Speed dropped to %4.1fx\n"
 msgstr "Sektor %lld: Lesegeschwindigkeit fällt auf %4.1fx\n"
 
-#: read-linear.c:632
+#: read-linear.c:633
 #, c-format
 msgid "Read position: %3d.%1d%% (%4.1fx)"
 msgstr "Leseposition: %3d.%1d%% (%4.1fx)"
 
-#: read-linear.c:714 rs01-common.c:227 rs02-verify.c:736
+#: read-linear.c:715 rs01-common.c:227 rs02-verify.c:736
 #, c-format
 msgid "* CRC error, sector: %lld\n"
 msgstr "* CRC-Fehler, Sektor : %lld\n"
 
-#: read-linear.c:865 read-linear.c:979
+#: read-linear.c:866 read-linear.c:980
 #, c-format
 msgid "<span %s>Aborted by user request!</span> %lld sectors read, %lld sectors unreadable/skipped so far."
 msgstr "<span %s>Abbruch auf Benutzeranforderung!</span> %lld Sektoren gelesen, %lld Sektoren unlesbar oder übersprungen."
 
-#: read-linear.c:919
+#: read-linear.c:920
 #, c-format
 msgid "unexpected read error in image for sector %lld"
 msgstr "Unerwarteter Lesefehler im Abbild bei Sektor %lld"
 
-#: read-linear.c:1078
+#: read-linear.c:1079
 #, c-format
 msgid "Sector %lld: %s Skipping %d sectors.\n"
 msgstr "Sektor %lld: %s Überspringe %d Sektoren.\n"
 
-#: read-linear.c:1128
+#: read-linear.c:1130
 #, c-format
 msgid "Reading pass %d of %d: %lld sectors read; %lld CRC errors; %lld missing."
 msgstr ""
 
-#: read-linear.c:1152
+#: read-linear.c:1154
 #, c-format
 msgid "%lld sectors read.     "
 msgstr "%lld Sektoren gelesen.     "
 
-#: read-linear.c:1153
+#: read-linear.c:1155
 #, c-format
 msgid "%lld sectors read; %lld unreadable sectors."
 msgstr "%lld Sektoren gelesen; %lld unlesbare Sektoren."
 
-#: read-linear.c:1161
+#: read-linear.c:1163
 #, c-format
 msgid "All sectors successfully read, but wrong image length (%lld sectors difference)"
 msgstr "Alle Sektoren erfolgreich eingelesen, aber falsche Abbildlänge (%lld Sektoren Unterschied)."
 
-#: read-linear.c:1165
+#: read-linear.c:1167
 msgid "All sectors successfully read, but wrong image checksum."
 msgstr "Alle Sektoren erfolgreich eingelesen, aber falsche Abbild-Prüfsumme."
 
-#: read-linear.c:1166
+#: read-linear.c:1168
 msgid "All sectors successfully read. Checksums match."
 msgstr "Alle Sektoren erfolgreich eingelesen. Prüfsummen stimmen."
 
-#: read-linear.c:1168
+#: read-linear.c:1170
 msgid "All sectors successfully read."
 msgstr "Alle Sektoren erfolgreich eingelesen."
 
-#: read-linear.c:1172
+#: read-linear.c:1174
 #, c-format
 msgid "%lld unreadable sectors."
 msgstr "%lld unlesbare Sektoren."
 
-#: read-linear.c:1174
+#: read-linear.c:1176
 #, c-format
 msgid "%lld CRC errors."
 msgstr "%lld Prüfsummen-Fehler."
 
-#: read-linear.c:1175
+#: read-linear.c:1177
 #, c-format
 msgid "%lld CRC errors, %lld unreadable sectors."
 msgstr "%lld Prüfsummen-Fehler, %lld unlesbare Sektoren."
 
-#: read-linear.c:1181
+#: read-linear.c:1183
 msgid "Scanning finished: "
 msgstr "Überprüfung beendet: "
 
-#: read-linear.c:1183
+#: read-linear.c:1185
 msgid "Reading finished: "
 msgstr "Einlesen beendet: "
 
-#: read-linear.c:1194
+#: read-linear.c:1196
 #, c-format
 msgid ""
 "%d sectors missing at the end of the disc.\n"
@@ -2328,7 +2328,7 @@ msgstr ""
 "wenn der Datenträger im TAO (track at once)-Modus geschrieben wurde.\n"
 "Das Abbild wird entsprechend verkürzt; mehr dazu steht im Benutzerhandbuch.\n"
 
-#: read-linear.c:1200
+#: read-linear.c:1202
 #, c-format
 msgid ""
 "%d sectors missing at the end of the disc.\n"
@@ -2377,8 +2377,8 @@ msgstr "Geschwindigkeit"
 
 #: recover-raw.c:63
 #, c-format
-msgid "Sector %d dumped to %s\n"
-msgstr "Sektor %d nach %s ausgegeben\n"
+msgid "Sector %lld dumped to %s\n"
+msgstr ""
 
 #: rs01-common.c:132 rs02-verify.c:767
 #, c-format
@@ -4329,7 +4329,7 @@ msgstr ""
 "sollten Sie diesen Aufruf abbrechen und das Programm erneut mit der Option\n"
 "--query-size=udf starten.\n"
 
-#: udf.c:521
+#: udf.c:533
 msgid "Unnamed"
 msgstr "Unbenannt"
 
@@ -4375,6 +4375,9 @@ msgstr ""
 #: welcome-window.c:136
 msgid "<i>New in this Version:</i>"
 msgstr "<i>Neu in dieser Version:</i>"
+
+#~ msgid "Sector %d dumped to %s\n"
+#~ msgstr "Sektor %d nach %s ausgegeben\n"
 
 #~ msgid "Medium \"%s\": %s, %lld sectors%s, created %s"
 #~ msgstr "Datenträger \"%s\": %s, %lld Sektoren%s, erzeugt %s"

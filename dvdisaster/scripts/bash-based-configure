@@ -439,13 +439,13 @@ function DEFINE_STRING()
 # Add CFG_$1 = $2 to makefile
 
 function DEFINE_VAR()
-{  echo "DEFINE_VAR"
+{  
    if test -z "$1" || test -z "$2"; then
      echo "DEFINE_VAR $1 $2:"
      echo "  needs two arguments"
      exit 1;
    fi
-   echo "CFG_$1 = $2"
+
    echo "CFG_$1 = $2" >> Makefile.config
 }
 
