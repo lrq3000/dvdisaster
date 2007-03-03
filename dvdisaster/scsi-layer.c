@@ -1229,7 +1229,7 @@ int TestUnitReady(DeviceHandle *dh)
 	 if(Closure->stopActions)
 	    return FALSE;
 
-	 usleep(G_USEC_PER_SEC);
+	 g_usleep(G_USEC_PER_SEC);
 	 continue;
       }
 

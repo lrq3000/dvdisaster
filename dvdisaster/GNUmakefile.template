@@ -343,6 +343,7 @@ prepare-dist:
 	@mkdir win-build-dir/documentation
 	@cp -r CHANGELOG COPYING CREDITS* README.MODIFYING TODO dvdisaster.exe dvdisaster-win.exe win-build-dir
 	@head --bytes=20 dvdisaster.exe >win-build-dir/signature
+	@cp wininst/*.bmp win-build-dir
 	@cp documentation/pubkey.asc win-build-dir/documentation
 	@for i in cs de en; do \
 	  mkdir win-build-dir/documentation/$$i; \

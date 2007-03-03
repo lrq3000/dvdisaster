@@ -19,7 +19,9 @@ OutputManifestFile=manifest.txt
 OutputBaseFilename=dvdisaster-%version%-setup
 PrivilegesRequired=poweruser
 AllowNoIcons=yes
-;SetupIconFile=setup.ico
+;SetupIconFile=install.ico
+WizardImageFile=installwiz.bmp
+WizardSmallImageFile=installwiz-small.bmp
 
 [Languages]
 Name: "en"; MessagesFile: "compiler:Default.isl"
