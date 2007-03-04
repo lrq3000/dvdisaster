@@ -180,7 +180,7 @@ static void print_ptrs(char *msg)
 
 void *malloc_ext(int size, char* file, int line)
 {  void *ptr;
-
+   printf("allocating %d bytes from file %s, line %d\n", size, file, line); 
    if(!(ptr = calloc(1,size)))
       Stop("out of memory while allocating %d bytes",size);
 

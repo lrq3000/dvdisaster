@@ -72,14 +72,14 @@ static void destroy(Method *method)
 
    if(wl)
    {  if(wl->fixCurve) FreeCurve(wl->fixCurve);
-      if(method->widgetList)
-       g_free(method->widgetList);
 
       if(wl->cmpSpiral)
 	FreeSpiral(wl->cmpSpiral);
 
       if(wl->cmpLayout)
 	g_object_unref(wl->cmpLayout);
+
+      g_free(wl);
    }
 }
 

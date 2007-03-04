@@ -458,8 +458,10 @@ void RedrawCurve(Curve*, int, int);
  ***/
 
 void HexDump(unsigned char*, int, int);
+void CopySector(char*);
 void Byteset(char*);
 void Erase(char*);
+void MergeImages(char*, int);
 void RandomError(char*, char*);
 void RandomImage(char*, char*, int);
 void RawSector(char*);

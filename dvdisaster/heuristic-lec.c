@@ -132,7 +132,7 @@ static int eval_q_candidate(RawBuffer *rb, unsigned char *q_vector, int q,
 {
    unsigned char     p_vector[P_VECTOR_SIZE];
    unsigned char old_q_vector[Q_VECTOR_SIZE];
-   int erasures[Q_VECTOR_SIZE];
+   int ignore[2];
    int p, p_errors = 0;
    int p_failures = 0;
    int err;
@@ -145,7 +145,7 @@ static int eval_q_candidate(RawBuffer *rb, unsigned char *q_vector, int q,
    for(p = 0; p < N_P_VECTORS; p++)
    {
       GetPVector(rb->recovered, p_vector, p);
-      err = DecodePQ(rb->rt, p_vector, P_PADDING, erasures, 0);
+      err = DecodePQ(rb->rt, p_vector, P_PADDING, ignore, 0);
       if(err <  0) p_failures++;
       else if(err == 1) p_errors++;
    }            
@@ -163,7 +163,7 @@ static void eval_p_candidate(RawBuffer *rb, unsigned char *p_vector, int p,
 {
    unsigned char     q_vector[Q_VECTOR_SIZE];
    unsigned char old_p_vector[P_VECTOR_SIZE];
-   int erasures[P_VECTOR_SIZE];
+   int ignore[2];
    int q, q_errors = 0;
    int q_failures = 0;
    int err;
@@ -176,7 +176,7 @@ static void eval_p_candidate(RawBuffer *rb, unsigned char *p_vector, int p,
    for(q = 0; q < N_Q_VECTORS; q++)
    {
       GetQVector(rb->recovered, q_vector, q);
-      err = DecodePQ(rb->rt, q_vector, Q_PADDING, erasures, 0);
+      err = DecodePQ(rb->rt, q_vector, Q_PADDING, ignore, 0);
       if(err <  0) q_failures++;
       else if(err == 1) q_errors++;
    }            
@@ -201,6 +201,7 @@ int HeuristicLEC(unsigned char *cd_frame, RawBuffer *rb, unsigned char *out)
    unsigned char p_state[P_VECTOR_SIZE];
    unsigned char q_state[Q_VECTOR_SIZE];
    int erasures[Q_VECTOR_SIZE], decimated_erasures[2], erasure_count;
+   int ignore[2];
    int p_failures, q_failures;
    int p_corrected, q_corrected;
    int i,p,q;
@@ -224,7 +225,7 @@ int HeuristicLEC(unsigned char *cd_frame, RawBuffer *rb, unsigned char *out)
    for(p = 0; p < N_P_VECTORS; p++)
    {
       GetPVector(rb->recovered, p_vector, p);
-      err = DecodePQ(rb->rt, p_vector, P_PADDING, erasures, 0);
+      err = DecodePQ(rb->rt, p_vector, P_PADDING, ignore, 0);
       if(err < 0) max_p_failures++;
       if(err == 1) max_p_errors++;
    }
@@ -234,7 +235,7 @@ int HeuristicLEC(unsigned char *cd_frame, RawBuffer *rb, unsigned char *out)
    for(q = 0; q < N_Q_VECTORS; q++)
    {
       GetQVector(rb->recovered, q_vector, q);
-      err = DecodePQ(rb->rt, q_vector, Q_PADDING, erasures, 0);
+      err = DecodePQ(rb->rt, q_vector, Q_PADDING, ignore, 0);
       if(err < 0) max_q_failures++;
       if(err == 1) max_q_errors++;
    }   
@@ -266,7 +267,7 @@ int HeuristicLEC(unsigned char *cd_frame, RawBuffer *rb, unsigned char *out)
          /* First try to see whether P is correctable without erasure markings. */
 
          GetPVector(rb->recovered, p_vector, p);
-         err = DecodePQ(rb->rt, p_vector, P_PADDING, erasures, 0);
+         err = DecodePQ(rb->rt, p_vector, P_PADDING, ignore, 0);
          
          if(err == 1) /* Store back corrected vector */ 
          {  
@@ -350,7 +351,7 @@ int HeuristicLEC(unsigned char *cd_frame, RawBuffer *rb, unsigned char *out)
          /* First try to see whether Q is correctable without erasure markings. */
 
          GetQVector(rb->recovered, q_vector, q);
-         err = DecodePQ(rb->rt, q_vector, Q_PADDING, erasures, 0);
+         err = DecodePQ(rb->rt, q_vector, Q_PADDING, ignore, 0);
 
          if(err == 1) /* Store back corrected vector */ 
          {  
@@ -574,7 +575,7 @@ static int check_p_plausibility(RawBuffer *rb, unsigned char *target_p_vector,
 static int find_better_p(RawBuffer *rb, int p, int refError)
 {  unsigned char p_vector[P_VECTOR_SIZE];
    int np1, np2;
-   int dummy[2];
+   int ignore[2];
    int err;
   
    /* Try all possible Ps and see whether we get a better load. */
@@ -587,7 +588,7 @@ static int find_better_p(RawBuffer *rb, int p, int refError)
        p_vector[24] = rb->pParity1[p][np1];
        p_vector[25] = rb->pParity2[p][np2];
 	  		
-       err = DecodePQ(rb->rt, p_vector, P_PADDING, dummy, 0);
+       err = DecodePQ(rb->rt, p_vector, P_PADDING, ignore, 0);
        if(err < refError && err >= 0)
        {
 	 SetPVector(rb->recovered, p_vector, p);			
@@ -602,7 +603,7 @@ static int find_better_p(RawBuffer *rb, int p, int refError)
 static int find_better_q(RawBuffer *rb, int q, int refError)
 {  unsigned char q_vector[Q_VECTOR_SIZE];
    int nq1, nq2;
-   int dummy[2];
+   int ignore[2];
    int err;
   
    /* Try all possible Qs and see whether we get a better load. */
@@ -615,7 +616,7 @@ static int find_better_q(RawBuffer *rb, int q, int refError)
        q_vector[43] = rb->qParity1[q][nq1];
        q_vector[44] = rb->qParity2[q][nq2];
 	  		
-       err = DecodePQ(rb->rt, q_vector, Q_PADDING, dummy, 0);
+       err = DecodePQ(rb->rt, q_vector, Q_PADDING, ignore, 0);
        if(err < refError && err >= 0)
        {
 	 SetQVector(rb->recovered, q_vector, q);			
@@ -657,6 +658,7 @@ int SearchPlausibleSector(RawBuffer *rb)
    unsigned char p_vector[26];
    unsigned char q_vector[45];
    int decimated_erasures[2];
+   int ignore[2];
    int p_failures, q_failures;
    int p_corrected, q_corrected;
    int p,q;
@@ -686,7 +688,7 @@ int SearchPlausibleSector(RawBuffer *rb)
       {  
       	/* Check whether Q is correct. */
       	GetQVector(rb->recovered, q_vector, q);
-	err = DecodePQ(rb->rt, q_vector, Q_PADDING, decimated_erasures, 0);
+	err = DecodePQ(rb->rt, q_vector, Q_PADDING, ignore, 0);
          
 	/* If it is not correct. */
 	if(err == 1 || err < 0)
@@ -764,7 +766,7 @@ int SearchPlausibleSector(RawBuffer *rb)
       {  
       	/* Check whether P is correct. */
       	GetPVector(rb->recovered, p_vector, p);
-	err = DecodePQ(rb->rt, p_vector, P_PADDING, decimated_erasures, 0);
+	err = DecodePQ(rb->rt, p_vector, P_PADDING, ignore, 0);
          
 	/* If it is not correct. */
 	if(err == 1 || err < 0)

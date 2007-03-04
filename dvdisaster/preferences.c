@@ -1640,8 +1640,8 @@ void CreatePreferencesWindow(void)
       pc->minAttemptsScaleLwoh = lwoh;
       pc->minAttemptsScaleInfoA = g_malloc0(sizeof(non_linear_info));
       pc->minAttemptsScaleInfoB = g_malloc0(sizeof(non_linear_info));
-      pc->minAttemptsScaleInfoA->format = g_strdup(_utf("Min. %d reading attempts per sector"));
-      pc->minAttemptsScaleInfoB->format = g_strdup(_utf("Min. %d reading attempts per sector"));
+      pc->minAttemptsScaleInfoA->format = g_strdup(_("Min. %d reading attempts per sector"));
+      pc->minAttemptsScaleInfoB->format = g_strdup(_("Min. %d reading attempts per sector"));
 
       pc->minAttemptsScaleInfoA->lwoh = lwoh;
 
@@ -1679,8 +1679,8 @@ void CreatePreferencesWindow(void)
       pc->maxAttemptsScaleLwoh = lwoh;
       pc->maxAttemptsScaleInfoA = g_malloc0(sizeof(non_linear_info));
       pc->maxAttemptsScaleInfoB = g_malloc0(sizeof(non_linear_info));
-      pc->maxAttemptsScaleInfoA->format = g_strdup(_utf("Max. %d reading attempts per sector"));
-      pc->maxAttemptsScaleInfoB->format = g_strdup(_utf("Max. %d reading attempts per sector"));
+      pc->maxAttemptsScaleInfoA->format = g_strdup(_("Max. %d reading attempts per sector"));
+      pc->maxAttemptsScaleInfoB->format = g_strdup(_("Max. %d reading attempts per sector"));
 
       pc->maxAttemptsScaleInfoA->lwoh = lwoh;
 
@@ -1728,8 +1728,8 @@ void CreatePreferencesWindow(void)
       }
 
       pc->jumpScaleLwoh = lwoh;
-      pc->formatLinear = g_strdup(_utf("Skip %d sectors after read error"));
-      pc->formatAdaptive  = g_strdup(_utf("Stop reading when unreadable intervals &lt; %d"));
+      pc->formatLinear = g_strdup(_("Skip %d sectors after read error"));
+      pc->formatAdaptive  = g_strdup(_("Stop reading when unreadable intervals &lt; %d"));
 
       pc->jumpScaleInfoA = g_malloc0(sizeof(non_linear_info));
       pc->jumpScaleInfoB = g_malloc0(sizeof(non_linear_info));

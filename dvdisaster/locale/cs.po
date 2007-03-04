@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-27 20:42+0100\n"
+"POT-Creation-Date: 2007-03-04 12:53+0100\n"
 "PO-Revision-Date: 2006-03-16 20:40+0100\n"
 "Last-Translator: Luboš Staněk <lubek@users.sourceforge.net>\n"
 "Language-Team: čeština <cs@li.org>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "# takže jej program dvdisaster při každém spuštění přepíše.\n"
 "\n"
 
-#: debug.c:52 debug.c:288
+#: debug.c:52 debug.c:288 debug.c:907 debug.c:984
 msgid "2nd argument is missing"
 msgstr "chybí druhý argument"
 
@@ -52,22 +52,22 @@ msgstr ""
 "\n"
 "Generuji náhodné opravitelné výmazy (pro %d kořenů, max. výmazů = %d).\n"
 
-#: debug.c:107 debug.c:192 debug.c:236 debug.c:525 debug.c:625
-#: rs01-common.c:54 rs02-common.c:62 rs02-create.c:308 rs02-create.c:941
-#: rs02-fix.c:382 rs02-verify.c:390
+#: debug.c:107 debug.c:192 debug.c:236 debug.c:525 debug.c:625 debug.c:948
+#: debug.c:956 debug.c:1063 rs01-common.c:54 rs02-common.c:62
+#: rs02-create.c:308 rs02-create.c:941 rs02-fix.c:382 rs02-verify.c:390
 #, c-format
 msgid "Failed seeking to sector %lld in image: %s"
 msgstr "Selhalo vystavení na sektor %lld v obrazu: %s"
 
 #: debug.c:109 debug.c:194 debug.c:238 debug.c:363 debug.c:485 debug.c:530
-#: rs02-create.c:331 rs02-create.c:357 rs02-create.c:944 udf.c:1105 udf.c:1163
-#: udf.c:1220 udf.c:1233 udf.c:1238 udf.c:1241 udf.c:1244 udf.c:1247
-#: udf.c:1250 udf.c:1253
+#: debug.c:960 debug.c:1067 debug.c:1107 rs02-create.c:331 rs02-create.c:357
+#: rs02-create.c:944 udf.c:1105 udf.c:1163 udf.c:1220 udf.c:1233 udf.c:1238
+#: udf.c:1241 udf.c:1244 udf.c:1247 udf.c:1250 udf.c:1253
 #, c-format
 msgid "Failed writing to sector %lld in image: %s"
 msgstr "Selhal zápis do sektoru %lld v obrazu: %s"
 
-#: debug.c:117 debug.c:244 debug.c:489 debug.c:537
+#: debug.c:117 debug.c:244 debug.c:489 debug.c:537 debug.c:1081
 #, c-format
 msgid "Progress: %3d%%"
 msgstr "Průběh: %3d%%"
@@ -88,7 +88,7 @@ msgstr ""
 msgid "Number of erasures must be > 0 and <= %d\n"
 msgstr "Počet výmazů musí být > 0 a <= %d\n"
 
-#: debug.c:295
+#: debug.c:295 debug.c:913
 msgid "3rd argument is missing"
 msgstr "chybí třetí argument"
 
@@ -146,9 +146,9 @@ msgstr "Zkrácení obrazu na %lld sektorů.\n"
 msgid "Could not truncate %s: %s\n"
 msgstr "Nelze zkrátit %s: %s\n"
 
-#: debug.c:421 file.c:59 file.c:125 file.c:145 read-adaptive.c:1140
-#: read-adaptive.c:1168 read-linear.c:323 read-linear.c:325 read-linear.c:356
-#: read-linear.c:358
+#: debug.c:421 debug.c:928 debug.c:936 debug.c:993 debug.c:998 file.c:59
+#: file.c:125 file.c:145 read-adaptive.c:1140 read-adaptive.c:1168
+#: read-linear.c:323 read-linear.c:325 read-linear.c:356 read-linear.c:358
 #, c-format
 msgid ""
 "Can't open %s:\n"
@@ -213,8 +213,8 @@ msgstr ""
 "Obsah sektoru %lld:\n"
 "\n"
 
-#: debug.c:629 rs01-common.c:70 rs02-common.c:67 rs02-create.c:191
-#: rs02-fix.c:385
+#: debug.c:629 debug.c:952 debug.c:1021 debug.c:1025 debug.c:1103
+#: rs01-common.c:70 rs02-common.c:67 rs02-create.c:191 rs02-fix.c:385
 #, c-format
 msgid "Failed reading sector %lld in image: %s"
 msgstr "Selhalo čtení sektoru %lld v obrazu: %s"
@@ -226,6 +226,25 @@ msgstr ""
 
 #: debug.c:715
 msgid "Raw reading only possible on CD media\n"
+msgstr ""
+
+#: debug.c:919
+msgid "4th argument is missing"
+msgstr ""
+
+#: debug.c:932
+#, c-format
+msgid "Source sector must be in range [0..%lld]\n"
+msgstr ""
+
+#: debug.c:940
+#, c-format
+msgid "Destination sector must be in range [0..%lld]\n"
+msgstr ""
+
+#: debug.c:944
+#, c-format
+msgid "Copying sector %lld from %s to sector %lld in %s.\n"
 msgstr ""
 
 #: dvdisaster.c:66 main-window.c:126
@@ -246,19 +265,19 @@ msgstr "Metoda RS01 není dostupná pro porovnání souborů."
 #. TRANSLATORS:
 #. This is a dummy entry which is supposed to translate into "ok".
 #. Please do not return anything else here.
-#: dvdisaster.c:268 dvdisaster.c:281 dvdisaster.c:293
+#: dvdisaster.c:271 dvdisaster.c:284 dvdisaster.c:296
 msgid "test phrase for verifying the locale installation"
 msgstr "ok"
 
-#: dvdisaster.c:461
+#: dvdisaster.c:467
 msgid "--cache-size must at least be 1MB; 16MB or higher is recommended."
 msgstr "--cache-size musí být alespoň 1MB; je doporučeno 16MB nebo větší."
 
-#: dvdisaster.c:463
+#: dvdisaster.c:469
 msgid "--cache-size maximum is 2048MB."
 msgstr "--cache-size maximum je 2048MB."
 
-#: dvdisaster.c:562
+#: dvdisaster.c:568
 #, c-format
 msgid ""
 "\n"
@@ -269,12 +288,12 @@ msgstr ""
 "dvdisaster, verze %s\n"
 "\n"
 
-#: dvdisaster.c:609
+#: dvdisaster.c:627
 #, c-format
 msgid "?? illegal getopt return value %d\n"
 msgstr "?? neplatná návratová hodnota getopt %d\n"
 
-#: dvdisaster.c:642
+#: dvdisaster.c:663
 #, c-format
 msgid ""
 "dvdisaster is not properly installed.\n"
@@ -283,7 +302,7 @@ msgstr ""
 
 #. TRANSLATORS: Program options like -r and --read are not to be translated
 #. to avoid confusion when discussing the program in international forums.
-#: dvdisaster.c:778
+#: dvdisaster.c:811
 msgid ""
 "\n"
 "Common usage examples:\n"
@@ -307,7 +326,7 @@ msgstr ""
 "  dvdisaster -u,--unlink # Smaže soubor .iso (když se dokončí další akce)\n"
 "\n"
 
-#: dvdisaster.c:787
+#: dvdisaster.c:820
 #, c-format
 msgid ""
 "Drive and file specification:\n"
@@ -322,7 +341,7 @@ msgstr ""
 "  -i,--image  imagefile  - název souboru obrazu     (výchozí: medium.iso)\n"
 "  -e,--ecc    eccfile    - název souboru ecc        (výchozí: medium.ecc)\n"
 
-#: dvdisaster.c:795
+#: dvdisaster.c:828
 msgid ""
 "  -l,--list              - list drives available under ASPI manager\n"
 "\n"
@@ -330,7 +349,7 @@ msgstr ""
 "  -l,--list              - vypíše seznam mechanik dostupných pod ASPI\n"
 "\n"
 
-#: dvdisaster.c:800
+#: dvdisaster.c:833
 #, c-format
 msgid ""
 "Tweaking options (see manual before using!)\n"
@@ -356,17 +375,20 @@ msgid ""
 "\n"
 msgstr ""
 
-#: dvdisaster.c:822
+#: dvdisaster.c:855
 #, c-format
 msgid ""
 "Debugging options (purposefully undocumented and possibly harmful)\n"
 "  --debug           - enables the following options\n"
 "  --byteset s,i,b   - set byte i in sector s to b\n"
 "  --cdump           - creates C #include file dumps instead of hexdumps\n"
+"  --compare-images a,b  - compare sectors in images a and b\n"
+"  --copy-sector a,n,b,m - copy sector n from image a to sector m in image b\n"
 "  --defective-dump p  creates C #include file dumps for unrecoverable sectors\n"
 "  --erase sector    - erase the given sector\n"
 "  --erase n-m       - erase sectors n - m, inclusively\n"
 "  --marked-image n  - create image with n marked random sectors\n"
+"  --merge-images a,b  merge image a with b (a receives sectors from b)\n"
 "  --random-errors r,e seed image with (correctable) random errors\n"
 "  --random-image n  - create image with n sectors of random numbers\n"
 "  --random-seed n   - random seed for built-in random number generator\n"
@@ -380,7 +402,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: dvdisaster.c:843
+#: dvdisaster.c:879
 msgid ""
 "NOTE: This is the Windows console version of dvdisaster.\n"
 "The version providing a graphical user interface is called\n"

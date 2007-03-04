@@ -184,7 +184,7 @@ void ResetRawBuffer(RawBuffer *rb)
 }
 
 void FreeRawBuffer(RawBuffer *rb)
-{  int i;
+{  int i,j;
 
    FreeGaloisTables(rb->gt);
    FreeReedSolomonTables(rb->rt);
@@ -204,6 +204,22 @@ void FreeRawBuffer(RawBuffer *rb)
 
    g_free(rb->pLoad);
    g_free(rb->qLoad);
+
+   for(i=0; i<N_P_VECTORS; i++)
+   {  for(j=0; j<Closure->maxReadAttempts; j++)
+	 g_free(rb->pList[i][j]);
+
+      g_free(rb->pCount[i]);
+      g_free(rb->pList[i]);
+   }
+
+   for(i=0; i<N_Q_VECTORS; i++)
+   {  for(j=0; j<Closure->maxReadAttempts; j++)
+	 g_free(rb->qList[i][j]);
+
+      g_free(rb->qCount[i]);
+      g_free(rb->qList[i]);
+   }
 
    FreeAlignedBuffer(rb->workBuf);
    g_free(rb->zeroSector);
@@ -359,6 +375,7 @@ static int simple_lec(RawBuffer *rb, unsigned char *frame)
    unsigned char q_vector[Q_VECTOR_SIZE];
    unsigned char p_state[P_VECTOR_SIZE];
    int erasures[Q_VECTOR_SIZE], erasure_count;
+   int ignore[2];
    int p_failures, q_failures;
    int p_corrected, q_corrected;
    int p,q;
@@ -378,7 +395,7 @@ static int simple_lec(RawBuffer *rb, unsigned char *frame)
       /* We have no erasure information for Q vectors */
 
      GetQVector(frame, q_vector, q);
-     err = DecodePQ(rb->rt, q_vector, Q_PADDING, erasures, 0);
+     err = DecodePQ(rb->rt, q_vector, Q_PADDING, ignore, 0);
 
      /* See what we've got */
 
@@ -402,7 +419,7 @@ static int simple_lec(RawBuffer *rb, unsigned char *frame)
       /* Try error correction without erasure information */
 
       GetPVector(frame, p_vector, p);
-      err = DecodePQ(rb->rt, p_vector, P_PADDING, erasures, 0);
+      err = DecodePQ(rb->rt, p_vector, P_PADDING, ignore, 0);
 
       /* If unsuccessful, try again using erasures.
 	 Erasure information is uncertain, so try this last. */
@@ -541,13 +558,14 @@ int ValidateRawSector(RawBuffer *rb, unsigned char *frame)
 
 static int p_decode(RawBuffer *rb, unsigned char *vector, unsigned char *state)
 { int erasures[P_VECTOR_SIZE];
+  int ignore[2];
   unsigned char working_vector[P_VECTOR_SIZE];
   int err, erasure_count;
 
   /* Try error correction without erasure information */
 
   memcpy(working_vector, vector, P_VECTOR_SIZE);
-  err = DecodePQ(rb->rt, working_vector, P_PADDING, erasures, 0);
+  err = DecodePQ(rb->rt, working_vector, P_PADDING, ignore, 0);
 
   /* If unsuccessful, try again using erasures. */
 
@@ -574,13 +592,14 @@ static int p_decode(RawBuffer *rb, unsigned char *vector, unsigned char *state)
 
 static int q_decode(RawBuffer *rb, unsigned char *vector, unsigned char *state)
 { int erasures[Q_VECTOR_SIZE];
+  int ignore[2];
   unsigned char working_vector[Q_VECTOR_SIZE];
   int err, erasure_count;
 
   /* Try error correction without erasure information */
 
   memcpy(working_vector, vector, Q_VECTOR_SIZE);
-  err = DecodePQ(rb->rt, working_vector, Q_PADDING, erasures, 0);
+  err = DecodePQ(rb->rt, working_vector, Q_PADDING, ignore, 0);
 
   /* If unsuccessful, try again using erasures. */
 

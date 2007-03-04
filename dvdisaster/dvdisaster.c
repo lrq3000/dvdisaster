@@ -122,9 +122,12 @@ typedef enum
    MODE_SEQUENCE, 
 
    MODE_BYTESET, 
+   MODE_COPY_SECTOR,
+   MODE_CMP_IMAGES,
    MODE_ERASE, 
    MODE_LIST_ASPI,
    MODE_MARKED_IMAGE,
+   MODE_MERGE_IMAGES,
    MODE_RANDOM_ERR, 
    MODE_RANDOM_IMAGE,
    MODE_RAW_SECTOR,
@@ -328,6 +331,8 @@ int main(int argc, char *argv[])
       { {"adaptive-read", 0, 0, MODIFIER_ADAPTIVE_READ},
 	{"auto-suffix", 0, 0,  MODIFIER_AUTO_SUFFIX},
 	{"byteset", 1, 0, MODE_BYTESET },
+	{"copy-sector", 1, 0, MODE_COPY_SECTOR },
+	{"compare-images", 1, 0, MODE_CMP_IMAGES },
 	{"cache-size", 1, 0, MODIFIER_CACHE_SIZE },
 	{"cav", 1, 0, MODIFIER_CAV_SPEED },
 	{"cdump", 0, 0, MODIFIER_CDUMP },
@@ -350,6 +355,7 @@ int main(int argc, char *argv[])
 	{"list", 0, 0, 'l' },
 #endif
 	{"marked-image", 1, 0, MODE_MARKED_IMAGE },
+	{"merge-images", 1, 0, MODE_MERGE_IMAGES },
 	{"method", 2, 0, 'm' },
         {"prefix", 1, 0, 'p'},
 	{"query-size", 1, 0, MODIFIER_QUERY_SIZE },
@@ -567,12 +573,24 @@ int main(int argc, char *argv[])
 	   mode = MODE_BYTESET;
 	   debug_arg = g_strdup(optarg);
 	   break;
+	 case MODE_CMP_IMAGES:
+	   mode = MODE_CMP_IMAGES;
+	   debug_arg = g_strdup(optarg);
+	   break;
+	 case MODE_COPY_SECTOR:
+	   mode = MODE_COPY_SECTOR;
+	   debug_arg = g_strdup(optarg);
+	   break;
          case MODE_ERASE: 
 	   mode = MODE_ERASE;
 	   debug_arg = g_strdup(optarg);
 	   break;
          case MODE_MARKED_IMAGE:
 	   mode = MODE_MARKED_IMAGE;
+	   debug_arg = g_strdup(optarg);
+	   break;
+         case MODE_MERGE_IMAGES:
+	   mode = MODE_MERGE_IMAGES;
 	   debug_arg = g_strdup(optarg);
 	   break;
          case MODE_RANDOM_ERR:
@@ -615,6 +633,8 @@ int main(int argc, char *argv[])
    if(!Closure->debugMode)
      switch(mode)
      {  case MODE_BYTESET:
+	case MODE_COPY_SECTOR:
+	case MODE_CMP_IMAGES:
         case MODE_ERASE:
         case MODE_RANDOM_ERR:
         case MODE_RANDOM_IMAGE:
@@ -623,6 +643,7 @@ int main(int argc, char *argv[])
         case MODE_SEND_CDB:
         case MODE_SHOW_SECTOR:
         case MODE_MARKED_IMAGE:
+        case MODE_MERGE_IMAGES:
         case MODE_SIGN:
         case MODE_TRUNCATE:
         case MODE_ZERO_UNREADABLE:
@@ -709,6 +730,14 @@ int main(int argc, char *argv[])
          Byteset(debug_arg);
 	 break;
 
+      case MODE_CMP_IMAGES:
+	 MergeImages(debug_arg, FALSE);
+	 break;
+
+      case MODE_COPY_SECTOR:
+	 CopySector(debug_arg);
+	 break;
+
       case MODE_ERASE:
          Erase(debug_arg);
 	 break;
@@ -735,6 +764,10 @@ int main(int argc, char *argv[])
 
       case MODE_MARKED_IMAGE:
 	 RandomImage(Closure->imageName, debug_arg, 1);
+	 break;
+
+      case MODE_MERGE_IMAGES:
+	 MergeImages(debug_arg, TRUE);
 	 break;
 
       case MODE_RANDOM_IMAGE:
@@ -823,10 +856,13 @@ int main(int argc, char *argv[])
 	     "  --debug           - enables the following options\n"
 	     "  --byteset s,i,b   - set byte i in sector s to b\n"
              "  --cdump           - creates C #include file dumps instead of hexdumps\n" 
+	     "  --compare-images a,b  - compare sectors in images a and b\n"
+	     "  --copy-sector a,n,b,m - copy sector n from image a to sector m in image b\n"
 	     "  --defective-dump p  creates C #include file dumps for unrecoverable sectors\n"
 	     "  --erase sector    - erase the given sector\n"
 	     "  --erase n-m       - erase sectors n - m, inclusively\n"
 	     "  --marked-image n  - create image with n marked random sectors\n"
+	     "  --merge-images a,b  merge image a with b (a receives sectors from b)\n"
 	     "  --random-errors r,e seed image with (correctable) random errors\n"
 	     "  --random-image n  - create image with n sectors of random numbers\n"
 	     "  --random-seed n   - random seed for built-in random number generator\n"

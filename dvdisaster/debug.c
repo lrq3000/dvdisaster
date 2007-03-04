@@ -889,3 +889,229 @@ Bitmap* SimulateDefects(gint64 size)
 
    return bm;
 }
+
+/***
+ *** Copy a sector between two image files.
+ ***/
+
+void CopySector(char *arg)
+{  LargeFile *from, *to;
+   char *from_path, *to_path;
+   gint64 from_sector, to_sector, sectors;
+   unsigned char buf[2048];
+   char *cpos = NULL;
+
+   /*** Evaluate arguments */
+
+   cpos = strchr(arg,',');
+   if(!cpos) Stop(_("2nd argument is missing"));
+   *cpos = 0;
+   from_path = arg;
+   arg = cpos+1;
+
+   cpos = strchr(arg,',');
+   if(!cpos) Stop(_("3rd argument is missing"));
+   *cpos = 0;
+   from_sector = atoll(arg);
+   arg = cpos+1;
+
+   cpos = strchr(arg,',');
+   if(!cpos) Stop(_("4th argument is missing"));
+   *cpos = 0;
+   to_path = arg;
+
+   to_sector = atoll(cpos+1);
+
+   /*** Check the given files */
+
+   if(!(from = LargeOpen(from_path, O_RDONLY, IMG_PERMS)))
+     Stop(_("Can't open %s:\n%s"), from_path, strerror(errno));
+
+   LargeStat(from_path, &sectors); sectors /= 2048;
+   if(from_sector<0 || from_sector>sectors-1)
+     Stop(_("Source sector must be in range [0..%lld]\n"), sectors-1);
+
+
+   if(!(to = LargeOpen(to_path, O_WRONLY, IMG_PERMS)))
+     Stop(_("Can't open %s:\n%s"), to_path, strerror(errno));
+
+   LargeStat(to_path, &sectors); sectors /= 2048;
+   if(to_sector<0 || to_sector>sectors-1)
+     Stop(_("Destination sector must be in range [0..%lld]\n"), sectors-1);
+
+   /*** Copy the sector */
+
+   PrintLog(_("Copying sector %lld from %s to sector %lld in %s.\n"), 
+	    from_sector, from_path, to_sector, to_path); 
+
+   if(!LargeSeek(from, (gint64)(2048*from_sector)))
+      Stop(_("Failed seeking to sector %lld in image: %s"),
+	   from_sector, strerror(errno));
+
+   if(LargeRead(from, buf, 2048) != 2048)
+      Stop(_("Failed reading sector %lld in image: %s"),
+	   from_sector, strerror(errno));
+
+   if(!LargeSeek(to, (gint64)(2048*to_sector)))
+      Stop(_("Failed seeking to sector %lld in image: %s"),
+	   to_sector, strerror(errno));
+
+   if(LargeWrite(to, buf, 2048) != 2048)
+      Stop(_("Failed writing to sector %lld in image: %s"),
+	   to_sector, strerror(errno));
+
+   /*** Clean up */
+
+   LargeClose(from);
+   LargeClose(to);
+}
+
+/***
+ *** Compare or merge images
+ ***/
+
+void MergeImages(char *arg, int mode)
+{  LargeFile *left, *right;
+   char *left_path, *right_path;
+   gint64 left_sectors, right_sectors,min_sectors,s;
+   int percent,last_percent = 0;
+   gint64 left_missing, right_missing, mismatch;
+   char *cpos = NULL;
+
+   /*** Evaluate arguments */
+
+   cpos = strchr(arg,',');
+   if(!cpos) Stop(_("2nd argument is missing"));
+   *cpos = 0;
+
+   left_path = arg;
+   right_path = cpos+1;
+
+   /*** Check the given files */
+
+   if(!(left = LargeOpen(left_path, mode ? O_RDWR : O_RDONLY, IMG_PERMS)))
+     Stop(_("Can't open %s:\n%s"), left_path, strerror(errno));
+
+   LargeStat(left_path, &left_sectors); left_sectors /= 2048;
+
+   if(!(right = LargeOpen(right_path, O_RDONLY, IMG_PERMS)))
+     Stop(_("Can't open %s:\n%s"), right_path, strerror(errno));
+
+   LargeStat(right_path, &right_sectors); right_sectors /= 2048;
+
+   /*** Compare/merge the images */
+
+   if(!mode) PrintLog("Comparing %s (%lld sectors) with %s (%lld sectors).\n", 
+		      left_path, left_sectors, right_path, right_sectors);
+   else      PrintLog("Merging %s (%lld sectors) with %s (%lld sectors).\n",
+		      left_path, left_sectors, right_path, right_sectors);
+
+   /*** Compare them */
+
+   left_missing = right_missing = mismatch = 0;
+   if(left_sectors < right_sectors) 
+        min_sectors = left_sectors;
+   else min_sectors = right_sectors;
+
+
+   for(s=0; s<min_sectors; s++)
+   {  unsigned char left_buf[2048], right_buf[2048];
+
+      if(LargeRead(left, left_buf, 2048) != 2048)
+	 Stop(_("Failed reading sector %lld in image: %s"),
+	      s, strerror(errno));
+
+      if(LargeRead(right, right_buf, 2048) != 2048)
+	 Stop(_("Failed reading sector %lld in image: %s"),
+	      s, strerror(errno));
+
+      if(memcmp(left_buf, right_buf, 2048))
+      {
+	 if(!memcmp(left_buf, Closure->deadSector, 2048))
+	 {  if(!mode) PrintLog("< Sector %lld missing\n", s);
+	    else
+	    {  PrintLog("< Sector %lld missing; copied from %s.\n", s, right_path);
+#if 0   /* Remove this */
+	       int dbl = FALSE;
+	       {  LargeFile *file;
+		  gint64 si;
+		  unsigned char buf[2048];
+
+		  file = LargeOpen(right_path, O_RDONLY, IMG_PERMS);
+		  for(si=0; si<right_sectors; si++)
+		  {  LargeRead(file, buf, 2048);
+		     if(s!=si && !memcmp(right_buf, buf, 2048))
+		     {  PrintLog("... double sector in %s at %lld\n", right_path, si);
+			dbl = TRUE;
+		     }
+		  }
+		  LargeClose(file);
+
+		  file = LargeOpen(left_path, O_RDONLY, IMG_PERMS);
+		  for(si=0; si<left_sectors; si++)
+		  {  LargeRead(file, buf, 2048);
+		     if(s!=si && !memcmp(right_buf, buf, 2048))
+		     {  PrintLog("... double sector in %s at %lld\n", left_path, si);
+			dbl = TRUE;
+		     }
+		  }
+		  LargeClose(file);
+	       }
+	       if(dbl) { PrintLog("NOT copying sector\n"); continue; }
+#endif
+	       if(!LargeSeek(left, (gint64)(2048*s)))
+		  Stop(_("Failed seeking to sector %lld in image: %s"),
+		       s, strerror(errno));
+
+	       if(LargeWrite(left, right_buf, 2048) != 2048)
+		  Stop(_("Failed writing to sector %lld in image: %s"),
+		       s, strerror(errno));
+	    }
+	 }
+	 else if(!memcmp(right_buf, Closure->deadSector, 2048))
+	 {  PrintLog("> Sector %lld missing\n", s);
+	 }
+	 else
+	 {  PrintLog("! Sector %lld differs in images\n", s);
+	 }
+      }
+
+      percent = (100*s)/left_sectors;
+      if(last_percent != percent) 
+      {  PrintProgress(_("Progress: %3d%%"),percent);
+	 last_percent = percent;
+      }
+   }
+
+   if(left_sectors > right_sectors)
+   {  PrintLog("%lld sectors missing at the end of %s\n", 
+		  left_sectors-right_sectors, right_path);
+   }
+
+   if(left_sectors < right_sectors)
+   {  if(!mode)
+	 PrintLog("%lld sectors missing at the end of %s\n", 
+		  right_sectors-left_sectors, left_path);
+      else
+      {  unsigned char buf[2048];
+
+	 PrintLog("Transferring %lld sectors from the end of %s to %s.\n", 
+		  right_sectors-left_sectors, right_path, left_path);
+	 
+	 for(s=left_sectors; s<right_sectors; s++)
+	 {  if(LargeRead(right, buf, 2048) != 2048)
+	       Stop(_("Failed reading sector %lld in image: %s"),
+		    s, strerror(errno));
+
+	    if(LargeWrite(left, buf, 2048) != 2048)
+	       Stop(_("Failed writing to sector %lld in image: %s"),
+		    s, strerror(errno));
+	 }
+      }
+   }
+
+   /*** Clean up */
+
+   LargeClose(left);
+   LargeClose(right);
+}

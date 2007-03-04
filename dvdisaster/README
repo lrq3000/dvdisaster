@@ -2,7 +2,9 @@ This directory tree contains dvdisaster,
 a tool providing additional ECC protection for optical media.
 
 This version of dvdisaster supports the following platforms:
-Linux, FreeBSD, Windows 98, ME, 2000, XP on x86 compatible hardware. 
+Linux, FreeBSD, NetBSD on x86, PowerPC, Sparc;
+Mac OSX on x86 and PowerPC;
+Windows 98, ME, 2000, 2003, XP on x86 compatible hardware. 
 
 
 Roadmap of contained files
@@ -14,6 +16,9 @@ INSTALL
 README.CVS
 	If you got this archive from CVS, make sure to read README.CVS also.
 
+README.MODIFYING
+	Please read these notes carefully if you plan to modify dvdisaster.
+
 COPYING
 	This software is distributed under the GNU General Public License,
 	which is contained in the file COPYING.
@@ -24,10 +29,6 @@ CHANGELOG
 CREDITS.*
 	Even a relatively small project like dvdisaster could not come to life
 	without the help of other people. See the files CREDITS.* for details.
-
-DRIVE-NOTES
-	The file DRIVE-NOTES contains hints about known incompatibilities 
-	with certain drives.
 
 TODO
 	Some open tasks and notes about future work are contained in TODO.
@@ -71,6 +72,7 @@ tools
 	Auxiliary programs for the build and packaging process reside
 	in "tools".
 
-
+wininst
+	Additional files needed for building the Windows distribution.
 
 
