@@ -458,6 +458,7 @@ void RedrawCurve(Curve*, int, int);
  ***/
 
 void HexDump(unsigned char*, int, int);
+void LogDump(unsigned char*, int, int);
 void CopySector(char*);
 void Byteset(char*);
 void Erase(char*);

@@ -1619,6 +1619,35 @@ For the source code version see the <a href="download20.html">installation instr
 <b>Stable versions</b> - recommended for getting started.<p>
 -->
 
+<b>Release candidates</b><p>
+
+<table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
+<tr><td><b>dvdisaster-0.70</b></td><td align="right">xx-xxx-2007</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+  <table>
+    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
+        <td><a href="${tar_0_70}">dvdisaster-0.72.rc1.tar.bz2</a></td></tr>
+    <tr><td align="right">Digital signature:&nbsp;</td>
+        <td><a href="${tar_0_70_sig}">dvdisaster-0.72.rc1.tar.bz2.gpg</a></td></tr>
+    <tr><td align="right">Binary for Windows:&nbsp;</td>
+        <td><a href="${setup_0_70}">dvdisaster-0.72.rc1-setup.exe</a></td></tr>
+    <tr><td align="right">Digital signature:&nbsp;</td>
+        <td><a href="${setup_0_70_sig}">dvdisaster-0.72.rc1-setup.exe.gpg</a></td></tr>
+  </table>
+</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+new stuff<p>
+
+Andrei Grecu provided an algorithm for recovering defective sectors
+from multiple incomplete RAW reading attempts.<p>
+
+Sergey Svishchev helped porting dvdisaster 
+to <a href="download20.html#netbsd">NetBSD</a>.<p>
+</td></tr></table><p>
+
+
 <b>Current version</b><p>
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">

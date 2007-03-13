@@ -137,6 +137,27 @@ void FreePreferences(void *context)
    if(pc->maxAttemptsScaleInfoA) g_free(pc->maxAttemptsScaleInfoA);
    if(pc->maxAttemptsScaleInfoB) g_free(pc->maxAttemptsScaleInfoB);
 
+   if(pc->redA) g_free(pc->redA);
+   if(pc->redB) g_free(pc->redB);
+   if(pc->yellowA) g_free(pc->yellowA);
+   if(pc->yellowB) g_free(pc->yellowB);
+   if(pc->greenA) g_free(pc->greenA);
+   if(pc->greenB) g_free(pc->greenB);
+   if(pc->blueA) g_free(pc->blueA);
+   if(pc->blueB) g_free(pc->blueB);
+   if(pc->whiteA) g_free(pc->whiteA);
+   if(pc->whiteB) g_free(pc->whiteB);
+   if(pc->darkA) g_free(pc->darkA);
+   if(pc->darkB) g_free(pc->darkB);
+   if(pc->redTextA) g_free(pc->redTextA);
+   if(pc->redTextB) g_free(pc->redTextB);
+   if(pc->greenTextA) g_free(pc->greenTextA);
+   if(pc->greenTextB) g_free(pc->greenTextB);
+   if(pc->barColorA) g_free(pc->barColorA);
+   if(pc->barColorB) g_free(pc->barColorB);
+   if(pc->curveColorA) g_free(pc->curveColorA);
+   if(pc->curveColorB) g_free(pc->curveColorB);
+
    g_free(pc);
 }
 
@@ -1796,7 +1817,7 @@ void CreatePreferencesWindow(void)
 	 GtkWidget *label;
 
       	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
-	 spin = gtk_spin_button_new_with_range(1, 20, 1);
+	 spin = gtk_spin_button_new_with_range(1, 200, 1);
 	 gtk_entry_set_width_chars(GTK_ENTRY(spin), 3);
 	 gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin), 
 				   Closure->readingPasses < 2 ? 1 : Closure->readingPasses);

@@ -266,7 +266,7 @@ typedef struct _DeviceHandle
  * so we make up our own enum here.
  */
 
-enum { DATA1, XA21, CD, DVD, UNSUPPORTED };
+enum { DATA1, XA21, CD, DVD, HDDVD, BD, UNSUPPORTED };
 
 #define DATA_WRITE 0
 #define DATA_READ  1

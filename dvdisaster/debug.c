@@ -572,6 +572,26 @@ void HexDump(unsigned char *buf, int len, int step)
    }
 }
 
+void LogDump(unsigned char *buf, int len, int step)
+{  int i,j;
+
+   for(i=0; i<len; i+=step)
+   {  PrintLog("%04x: ",i);
+      for(j=0; j<step; j++)
+	if(i+j >= len) PrintLog((j&0x07) == 0x07 ? "    " : "   ");
+	else           PrintLog("%02x%s", buf[i+j], (j&0x07) == 0x07 ? "  " : " ");
+
+      for(j=0; j<step; j++)
+      { if(i+j >= len) break;
+	if((j&0x07) == 0x07)
+	      PrintLog("%c ", isprint(buf[i+j]) ? buf[i+j] : '.');
+	else  PrintLog("%c", isprint(buf[i+j]) ? buf[i+j] : '.');
+      }
+    
+      PrintLog("\n");
+   }
+}
+
 /*
  * produce a C #include file
  */

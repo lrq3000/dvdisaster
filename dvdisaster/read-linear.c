@@ -184,7 +184,11 @@ static void cleanup(gpointer data)
    if(scan_mode)   /* we haven't created an image, so throw away the crc sums */
      ClearCrcCache();
 
-   g_thread_exit(0);
+   /* In GUI mode both the reader and worker are spawned sub threads;
+      however in CLI mode the reader is the main thread and must not be terminated. */
+
+   if(Closure->guiMode)
+      g_thread_exit(0);
 }
 
 /***
@@ -1127,10 +1131,7 @@ step_counter:
    rc->pass++;
    if(   !rc->scanMode
       && (Closure->readErrors || Closure->crcErrors) && rc->pass < Closure->readingPasses)
-   {  t = g_strdup_printf(_("Reading pass %d of %d: %lld sectors read; %lld CRC errors; %lld missing."),
-			  rc->pass, Closure->readingPasses, 
-			  rc->readOK, Closure->crcErrors, Closure->readErrors);
-      SetLabelText(GTK_LABEL(Closure->readLinearHeadline), 
+   {  SetLabelText(GTK_LABEL(Closure->readLinearHeadline), 
 		   "<big>Trying to complete image, reading pass %d of %d.</big>\n%s",
 		   rc->pass+1, Closure->readingPasses, rc->dh->mediumDescr);
 

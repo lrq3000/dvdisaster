@@ -80,8 +80,12 @@ static int peakAllocation;		/* maximum allocation */
 
 void remember(void *ptr, int size, char *file, int line)
 {  memchunk *mc;
-   int hash_idx = (((long)ptr)>>3)&63;
+   int hash_idx;
+   static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
+   g_static_mutex_lock(&mutex);
+
+   hash_idx = (((long)ptr)>>3)&63;
    if(phCnt[hash_idx] >= phMax[hash_idx])
    {  if(!phMax[hash_idx]) phMax[hash_idx] = 16;
       else                 phMax[hash_idx] *= 2;
@@ -102,6 +106,8 @@ void remember(void *ptr, int size, char *file, int line)
    currentAllocation += size;
    if(currentAllocation > peakAllocation)
       peakAllocation = currentAllocation;
+
+   g_static_mutex_unlock(&mutex);
 } 
 
 /*
@@ -109,10 +115,14 @@ void remember(void *ptr, int size, char *file, int line)
  */
 
 int forget(void *ptr)
-{  memchunk **ptrlist;
-   int hash_idx = (((long)ptr)>>3)&63;
+{  static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+   memchunk **ptrlist;
+   int hash_idx;
    int i;
 
+   g_static_mutex_lock(&mutex);
+
+   hash_idx = (((long)ptr)>>3)&63;
    ptrlist = ptrhash[hash_idx];
 
    for(i=0; i<phCnt[hash_idx]; i++)
@@ -123,9 +133,11 @@ int forget(void *ptr)
 	 if(phCnt[hash_idx] > 0)
 	    ptrlist[i] = ptrlist[phCnt[hash_idx]];
 
+	 g_static_mutex_unlock(&mutex);
          return 0;
       }
 
+   g_static_mutex_unlock(&mutex);
    return 1;
 }
 
@@ -180,7 +192,9 @@ static void print_ptrs(char *msg)
 
 void *malloc_ext(int size, char* file, int line)
 {  void *ptr;
+#if 0
    printf("allocating %d bytes from file %s, line %d\n", size, file, line); 
+#endif
    if(!(ptr = calloc(1,size)))
       Stop("out of memory while allocating %d bytes",size);
 

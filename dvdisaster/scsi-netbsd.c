@@ -119,6 +119,12 @@ DeviceHandle* OpenDevice(char *device)
 
 void CloseDevice(DeviceHandle *dh)
 {
+  if(dh->canReadDefective)
+    SetRawMode(dh, dh->previousReadMode, MODE_PAGE_SET);
+
+  if(dh->rawBuffer)
+     FreeRawBuffer(dh->rawBuffer);
+
   if(dh->fd)
     close(dh->fd);
   if(dh->device)

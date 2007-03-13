@@ -438,8 +438,10 @@ void ReadDotfile()
       if(!strcmp(symbol, "cd-size"))         { Closure->cdSize = Closure->savedCDSize = atoll(value); continue; }
       if(!strcmp(symbol, "dao"))             { Closure->noTruncate  = atoi(value); continue; }
       if(!strcmp(symbol, "defective-dump"))  { Closure->defectiveDump = atoi(value); continue; }
-      if(!strcmp(symbol, "defective-dir"))   { Closure->dDumpDir = g_strdup(value); continue; }
-      if(!strcmp(symbol, "defective-prefix")){ Closure->dDumpPrefix = g_strdup(value); continue; }
+      if(!strcmp(symbol, "defective-dir"))   { if(Closure->dDumpDir) g_free(Closure->dDumpDir);
+	                                       Closure->dDumpDir = g_strdup(value); continue; }
+      if(!strcmp(symbol, "defective-prefix")){ if(Closure->dDumpPrefix) g_free(Closure->dDumpPrefix); 
+	                                       Closure->dDumpPrefix = g_strdup(value); continue; }
       if(!strcmp(symbol, "dotfile-version")) { Closure->dotFileVersion = atoi(value); continue; }
       if(!strcmp(symbol, "dvd-size1"))       { Closure->dvdSize1 = Closure->savedDVDSize1 = atoll(value); continue; }
       if(!strcmp(symbol, "dvd-size2"))       { Closure->dvdSize2 = Closure->savedDVDSize2 = atoll(value); continue; }

@@ -258,7 +258,6 @@ void ChangeSpiralCursor(Spiral *spiral, int segment)
 
       ci->spiral  = spiral;
       ci->segment = segment;
-
       g_idle_add(cursor_idle_func, ci);
    }
 }

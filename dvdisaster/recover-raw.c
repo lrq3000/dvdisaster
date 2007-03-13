@@ -189,7 +189,7 @@ void FreeRawBuffer(RawBuffer *rb)
    FreeGaloisTables(rb->gt);
    FreeReedSolomonTables(rb->rt);
 
-   for(i=0; i<Closure->maxReadAttempts; i++)
+   for(i=0; i<rb->samplesMax; i++)
      g_free(rb->rawBuf[i]);
 
    for(i=0; i<N_P_VECTORS; i++)
@@ -206,7 +206,7 @@ void FreeRawBuffer(RawBuffer *rb)
    g_free(rb->qLoad);
 
    for(i=0; i<N_P_VECTORS; i++)
-   {  for(j=0; j<Closure->maxReadAttempts; j++)
+   {  for(j=0; j<rb->samplesMax; j++)
 	 g_free(rb->pList[i][j]);
 
       g_free(rb->pCount[i]);
@@ -214,7 +214,7 @@ void FreeRawBuffer(RawBuffer *rb)
    }
 
    for(i=0; i<N_Q_VECTORS; i++)
-   {  for(j=0; j<Closure->maxReadAttempts; j++)
+   {  for(j=0; j<rb->samplesMax; j++)
 	 g_free(rb->qList[i][j]);
 
       g_free(rb->qCount[i]);

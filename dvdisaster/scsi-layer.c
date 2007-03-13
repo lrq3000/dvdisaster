@@ -148,9 +148,96 @@ static int query_type(DeviceHandle *dh, int probe_only)
    int phy_info4, phy_info6;
    int is_dvd_plus = FALSE;
    int is_dvd_dash = FALSE;
+   int i;
+
+   /*** If the medium is a BD, the following will succeed. */
+
+   dh->mainType   = BD;
+   dh->read       = read_dvd_sector;
+   dh->singleRate = 1352.54;  /* fixme */
+   dh->maxRate    = 17;       /* fixme */
+
+   /* Query length of returned data */
+
+   memset(cmd, 0, MAX_CDB_SIZE);
+   cmd[0] = 0xad;     /* READ DVD STRUCTURE */
+   cmd[1] = 0x01;     /* subcommand for BD */
+   cmd[6] = 0;        /* First layer */
+   cmd[7] = 0;        /* We want DI (disc information) */
+   cmd[8] = 0;        /* Allocation length */
+   cmd[9] = 2;
+
+   /*** Only a BD should respond positively here */
+   
+   if(SendPacket(dh, cmd, 12, buf, 2, &sense, DATA_READ)<0)
+   {  
+      if(Closure->debugMode)
+	LogWarning(_("%s\nCould not query BD disc structure length.\n"), 
+	     GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
+   
+      goto try_dvd;
+   }
+
+   length = buf[0]<<8 | buf[1];
+   length += 2;
+
+   /*** Some DVD drives ignore the media type 0x01 and return the dvd structure.
+	Since the DVD structure is 2052 bytes while the BD DI is 4100 bytes,
+	we can tell from the size whether we have been fooled. */
+
+   PrintLog("BD: disc structure query succeeded, length %d bytes\n", length);
+
+   if(length != 4100) /* not a BD */
+      goto try_dvd;
+
+   /* Do the real query */
+
+   memset(cmd, 0, MAX_CDB_SIZE);
+   cmd[0] = 0xad;     /* READ DVD STRUCTURE */
+   cmd[1] = 0x01;     /* subcommand for BD */
+   cmd[6] = 0;        /* First layer */
+   cmd[7] = 0;        /* We want DI (disc information) */
+   cmd[8] = (length>>8) & 0xff;  /* Allocation length */
+   cmd[9] = length & 0xff;
+
+   if(SendPacket(dh, cmd, 12, buf, length, &sense, DATA_READ)<0)
+   {  FreeAlignedBuffer(ab);
+      Stop(_("%s\nCould not query BD disc structure.\n"),
+	   GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
+      return FALSE;
+   }
+
+   LogDump(buf, length, 16);
+
+   dh->layers = 0;        /* fixme */
+   dh->sessions = 1;
+   dh->userAreaSize = 0;  /* fixme */
+
+   for(i=0; i<6; i++)
+      dh->manuID[i] = isprint(buf[4+100+i]) ? buf[4+100+i] : ' ';
+   dh->manuID[6] = 0;
+
+   if(!strncmp(&buf[4+8], "BDO", 3))
+   {  dh->typedescr = "BD-ROM";
+      dh->subType = UNSUPPORTED;
+   }
+
+   if(!strncmp(&buf[4+8], "BDW", 3))
+   {  dh->typedescr = "BD-RE";
+      dh->subType = BD;
+   }
+
+   if(!strncmp(&buf[4+8], "BDR", 3))
+   {  dh->typedescr = "BD-R";
+      dh->subType = BD;
+   }
+   
+   FreeAlignedBuffer(ab);
+   return TRUE;
 
    /*** If the medium is a DVD, the following query will succeed. */
 
+try_dvd:
    dh->mainType   = DVD;  /* default assumption */
    dh->read       = read_dvd_sector;
    dh->singleRate = 1352.54;
@@ -852,6 +939,14 @@ static unsigned int query_size(DeviceHandle *dh)
       return read_capacity+1;  /* size is the number of the last sector, starting with 0 */
    }
 
+   /* BD drives have neither dh->userAreaSize nor will the following heuristics
+      works as unformatted sectors can be always read. Stick with READ CAPACITY. */
+
+   if(dh->mainType == BD)
+   {  Verbose("BD medium - using size from READ CAPACITY: %lld sectors\n", read_capacity+1);
+      return read_capacity+1;  /* size is the number of the last sector, starting with 0 */
+   }
+
    /* For DVD media, READ CAPACITY should give the real image size.
       READ DVD STRUCTURE may be same value or the unformatted size.
       But some drives appear to have both functions reversed,
@@ -1107,15 +1202,17 @@ gint64 CurrentImageCapacity()
  */
 
 void SpinupDevice(DeviceHandle *dh)
-{  AlignedBuffer *ab = CreateAlignedBuffer(32768);
+{  AlignedBuffer *ab;
    GTimer *timer;
    gint64 s;
 
    if(!Closure->spinupDelay)
-     return;
+      return;
 
    PrintCLI(_("Waiting %d seconds for drive to spin up...\n"), Closure->spinupDelay);
    
+   ab = CreateAlignedBuffer(32768);
+
    timer = g_timer_new();
    g_timer_start(timer);
 
@@ -1599,7 +1696,7 @@ int ReadSectorsFast(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors
 DeviceHandle* OpenAndQueryDevice(char *device)
 {  DeviceHandle *dh = NULL;
 
-   /* Open the device. This won't return if the device can't be opened. */
+   /* Open the device. */
 
    dh = OpenDevice(device);
    InquireDevice(dh, 0);
@@ -1685,6 +1782,8 @@ DeviceHandle* OpenAndQueryDevice(char *device)
 
    switch(dh->subType)
    {  
+      case BD:
+      case HDDVD:
       case DVD:
       case DATA1:
       case XA21:

@@ -136,9 +136,10 @@ DeviceHandle* OpenDevice(char *device)
 void CloseDevice(DeviceHandle *dh)
 { 
   if(dh->canReadDefective)
-  {  SetRawMode(dh, dh->previousReadMode, MODE_PAGE_SET);
+    SetRawMode(dh, dh->previousReadMode, MODE_PAGE_SET);
+
+  if(dh->rawBuffer)
      FreeRawBuffer(dh->rawBuffer);
-  }
 
   if(dh->fd)
     close(dh->fd);
@@ -172,7 +173,7 @@ int SendPacket(DeviceHandle *dh, unsigned char *cmd, int cdb_size, unsigned char
 	Stop("illegal data_mode: %d", data_mode);
    }
 
-   ucmd.uscsi_timeout = 5;   /* wait 5 secs for completion */
+   ucmd.uscsi_timeout = 30*60;   /* wait 30min for completion (timeout locks up the OS) */
    ucmd.uscsi_cdb     = cmd;
    ucmd.uscsi_cdblen  = cdb_size;
    ucmd.uscsi_bufaddr = buf;

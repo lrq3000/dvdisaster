@@ -105,10 +105,11 @@ char* DefaultDevice()
 
 void CloseDevice(DeviceHandle *dh)
 {
+  if(dh->canReadDefective)
+    SetRawMode(dh, dh->previousReadMode, MODE_PAGE_SET);
+
   if(dh->rawBuffer)
-  {  SetRawMode(dh, dh->previousReadMode, MODE_PAGE_SET);
      FreeRawBuffer(dh->rawBuffer);
-  }
 
   if(!dh->aspiUsed)             /* SPTI cleanup */
   {  CloseHandle(dh->fd);
