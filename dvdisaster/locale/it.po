@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-11 20:56+0100\n"
+"POT-Creation-Date: 2007-03-17 18:15+0100\n"
 "PO-Revision-Date: 2005-01-01 14:24+0100\n"
 "Last-Translator: Andrea Polverini <polve@polve.com>\n"
 "Language-Team: Italian <>\n"
@@ -137,7 +137,7 @@ msgstr ""
 msgid "Truncating image to %lld sectors.\n"
 msgstr ""
 
-#: debug.c:395 read-linear.c:1213 rs01-fix.c:197 rs01-fix.c:219 rs01-fix.c:235
+#: debug.c:395 read-linear.c:1167 rs01-fix.c:197 rs01-fix.c:219 rs01-fix.c:235
 #: rs01-fix.c:270 rs02-create.c:103 rs02-create.c:147 rs02-fix.c:236
 #: rs02-fix.c:257 rs02-fix.c:272
 #, c-format
@@ -146,7 +146,7 @@ msgstr "Non posso troncare %s: %s\n"
 
 #: debug.c:421 debug.c:948 debug.c:956 debug.c:1013 debug.c:1018 file.c:59
 #: file.c:125 file.c:145 read-adaptive.c:1140 read-adaptive.c:1168
-#: read-linear.c:327 read-linear.c:329 read-linear.c:360 read-linear.c:362
+#: read-linear.c:281 read-linear.c:283 read-linear.c:314 read-linear.c:316
 #, c-format
 msgid ""
 "Can't open %s:\n"
@@ -174,8 +174,8 @@ msgstr ""
 "dvdisaster --debug %s %lld --random-seed %d\n"
 "\n"
 
-#: debug.c:497 file.c:104 read-adaptive.c:147 read-linear.c:145
-#: read-linear.c:148
+#: debug.c:497 file.c:104 read-adaptive.c:147 read-linear.c:99
+#: read-linear.c:102
 #, c-format
 msgid ""
 "Error closing image file:\n"
@@ -243,7 +243,7 @@ msgstr ""
 msgid "Copying sector %lld from %s to sector %lld in %s.\n"
 msgstr ""
 
-#: dvdisaster.c:66 main-window.c:126
+#: dvdisaster.c:66 main-window.c:136
 #, c-format
 msgid ""
 "\n"
@@ -632,79 +632,79 @@ msgstr ""
 msgid "dvdisaster-%s log\n"
 msgstr "dvdisaster-%s protocollo\n"
 
-#: main-window.c:227
+#: main-window.c:237
 msgid "button|Read"
 msgstr "Leggi"
 
-#: main-window.c:230
+#: main-window.c:240
 msgid "tooltip|Read Image"
 msgstr "Leggi Immagine"
 
-#: main-window.c:230
+#: main-window.c:240
 msgid "Reads a CD/DVD image into a file (or tries to complete an existing image file)."
 msgstr "Legge un'immagine CD/DVD in un file (oppure prova a completare un file immagine esistente)"
 
-#: main-window.c:244
+#: main-window.c:254
 msgid "button|Create"
 msgstr "Crea"
 
-#: main-window.c:247
+#: main-window.c:257
 msgid "tooltip|Create error correction data"
 msgstr ""
 
-#: main-window.c:247
+#: main-window.c:257
 msgid "Creates error correction data. Requires an image file."
 msgstr ""
 
-#: main-window.c:251
+#: main-window.c:261
 msgid "button|Scan"
 msgstr "Scansiona"
 
-#: main-window.c:254
+#: main-window.c:264
 msgid "tooltip|Scan medium"
 msgstr "Scansiona Supporto"
 
-#: main-window.c:254
+#: main-window.c:264
 msgid "Scans medium for unreadable sectors."
 msgstr "Scansiona il supporto per i settori illeggibili."
 
-#: main-window.c:258
+#: main-window.c:268
 msgid "button|Fix"
 msgstr "Ripara"
 
-#: main-window.c:261
+#: main-window.c:271
 msgid "tooltip|Repair image"
 msgstr "Ripara Immagine"
 
-#: main-window.c:261
+#: main-window.c:271
 msgid "Repairs an image. Requires an image file and error correction data."
 msgstr ""
 
-#: main-window.c:265
+#: main-window.c:275
 msgid "button|Verify"
 msgstr ""
 
-#: main-window.c:268
+#: main-window.c:278
 msgid "tooltip|Consistency check"
 msgstr ""
 
-#: main-window.c:268
+#: main-window.c:278
 msgid "Tests consistency of error correction data and image file."
 msgstr ""
 
-#: main-window.c:272
+#: main-window.c:282
 msgid "button|Stop"
 msgstr "Ferma"
 
-#: main-window.c:275
+#: main-window.c:285
 msgid "tooltip|Abort action"
 msgstr "Ferma Operazione"
 
-#: main-window.c:275
+#: main-window.c:285
 msgid "Aborts an ongoing action."
 msgstr "Ferma una operazione in esecuzione"
 
-#: main-window.c:409
+#: main-window.c:419
 #, c-format
 msgid ""
 "<b>dvdisaster is not properly installed</b>\n"
@@ -712,15 +712,15 @@ msgid ""
 "Please execute the installer program (%s) again.\n"
 msgstr ""
 
-#: main-window.c:504
+#: main-window.c:514
 msgid "tooltip|Protocol for current action"
 msgstr "Protocollo dell'operazione corrente"
 
-#: main-window.c:505
+#: main-window.c:515
 msgid "Displays additional information created during the current or last action."
 msgstr "Visualizza informazioni addizionali create durante l'operazione corrente o precedente."
 
-#: main-window.c:514
+#: main-window.c:524
 msgid "View log"
 msgstr "Protocollo"
 
@@ -1722,11 +1722,11 @@ msgid ""
 "Medium and ecc file do not belong together.\n"
 msgstr ""
 
-#: read-adaptive.c:598 read-linear.c:391
+#: read-adaptive.c:598 read-linear.c:345
 msgid "Image file does not match the CD/DVD."
 msgstr "Il file immagine non corrisponde al CD/DVD."
 
-#: read-adaptive.c:601 read-linear.c:394
+#: read-adaptive.c:601 read-linear.c:348
 msgid ""
 "Image file already exists and does not match the CD/DVD.\n"
 "The existing image file will be deleted."
@@ -1747,7 +1747,7 @@ msgstr ""
 "Il file immagine è %lld settori più lungo del supporto inserito\n"
 "(File immagine: %lld sectors; supporto: %lld sectors).\n"
 
-#: read-adaptive.c:669 read-linear.c:504 rs01-common.c:119 rs01-create.c:241
+#: read-adaptive.c:669 read-linear.c:458 rs01-common.c:119 rs01-create.c:241
 #: rs01-verify.c:769
 #, c-format
 msgid "Failed skipping the ecc header: %s"
@@ -1762,7 +1762,7 @@ msgstr "Analizzo il file immagine esistente"
 msgid "premature end in image (only %d bytes): %s\n"
 msgstr "Fine prematura dell'immagine (solo %d Bytes): %s\n"
 
-#: read-adaptive.c:723 read-adaptive.c:1341 read-linear.c:512
+#: read-adaptive.c:723 read-adaptive.c:1341 read-linear.c:466
 #: rs01-common.c:221
 #, c-format
 msgid "Error reading CRC information: %s"
@@ -1787,15 +1787,15 @@ msgstr "Analizzo il file immagine esistente: %lld leggibile, %lld correggibili, 
 msgid "Analysing existing image file: %lld readable, %lld still missing.\n"
 msgstr "Analizzo il file immagine esistente: %lld leggibile, %lld ancora mancanti.\n"
 
-#: read-adaptive.c:927 read-linear.c:756
+#: read-adaptive.c:927 read-linear.c:710
 msgid "Ignore once"
 msgstr "Ignora una volta"
 
-#: read-adaptive.c:928 read-linear.c:757
+#: read-adaptive.c:928 read-linear.c:711
 msgid "Ignore always"
 msgstr "Ignora sempre"
 
-#: read-adaptive.c:929 read-linear.c:758
+#: read-adaptive.c:929 read-linear.c:712
 msgid "Abort"
 msgstr "Ferma"
 
@@ -1805,7 +1805,7 @@ msgid "Filling image area [%lld..%lld]"
 msgstr "Riempio l'area immagine [%lld..%lld]"
 
 #: read-adaptive.c:977 read-adaptive.c:1042 read-adaptive.c:1316
-#: read-adaptive.c:1520 read-linear.c:451 read-linear.c:689 read-linear.c:913
+#: read-adaptive.c:1520 read-linear.c:405 read-linear.c:643 read-linear.c:867
 #: rs01-fix.c:444 rs01-fix.c:702 rs02-fix.c:741
 #, c-format
 msgid "Failed seeking to sector %lld in image [%s]: %s"
@@ -1813,33 +1813,33 @@ msgstr ""
 
 #: read-adaptive.c:989 read-adaptive.c:1047 read-adaptive.c:1359
 #: read-adaptive.c:1370 read-adaptive.c:1386 read-adaptive.c:1526
-#: read-linear.c:457 read-linear.c:696 rs01-fix.c:449
+#: read-linear.c:411 read-linear.c:650 rs01-fix.c:449
 #, c-format
 msgid "Failed writing to sector %lld in image [%s]: %s"
 msgstr ""
 
-#: read-adaptive.c:1081 read-linear.c:213
+#: read-adaptive.c:1081 read-linear.c:167
 msgid "Reading aborted"
 msgstr "Lettura annullata"
 
-#: read-adaptive.c:1084 read-linear.c:217
+#: read-adaptive.c:1084 read-linear.c:171
 msgid "Preparing for reading the medium image."
 msgstr "Preparazione alla lettura dell'immagine del supporto"
 
-#: read-adaptive.c:1085 read-linear.c:210 read-linear.c:218
+#: read-adaptive.c:1085 read-linear.c:164 read-linear.c:172
 msgid "Medium: not yet determined"
 msgstr "Supporto: non ancora determinato"
 
-#: read-adaptive.c:1142 read-linear.c:331
+#: read-adaptive.c:1142 read-linear.c:285
 #, c-format
 msgid "Creating new %s image.\n"
 msgstr "Creo una nuova immagine %s.\n"
 
-#: read-adaptive.c:1146 read-linear.c:324
+#: read-adaptive.c:1146 read-linear.c:278
 msgid "Reading new medium image."
 msgstr "Lettura dell'immagine del supporto."
 
-#: read-adaptive.c:1162 read-linear.c:352
+#: read-adaptive.c:1162 read-linear.c:306
 msgid "Completing existing medium image."
 msgstr "Completamento dell'immagine esistente del supporto."
 
@@ -1851,7 +1851,7 @@ msgstr ""
 "\n"
 "Sono disponibili dati sufficienti per ricostruire l'immagine.\n"
 
-#: read-adaptive.c:1289 read-linear.c:969
+#: read-adaptive.c:1289 read-linear.c:923
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -1859,7 +1859,7 @@ msgid ""
 "Use the --ignore-fatal-sense option to override."
 msgstr ""
 
-#: read-adaptive.c:1294 read-linear.c:974
+#: read-adaptive.c:1294 read-linear.c:928
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -1887,7 +1887,7 @@ msgstr "Errore CRC nel settore %lld\n"
 msgid "Sectors %lld-%lld: %s\n"
 msgstr "Settori %lld-%lld: %s\n"
 
-#: read-adaptive.c:1512 read-linear.c:1103 scsi-layer.c:816
+#: read-adaptive.c:1512 read-linear.c:1057 scsi-layer.c:816
 #, c-format
 msgid "Sector %lld: %s\n"
 msgstr "Settore %lld: %s\n"
@@ -1962,12 +1962,12 @@ msgstr ""
 msgid "Total recoverable: %d.%d%%"
 msgstr "Totale recuperabile: %d.%d%%"
 
-#: read-linear.c:139
+#: read-linear.c:93
 #, c-format
 msgid "<span %s>Aborted by unrecoverable error.</span> %lld sectors read, %lld sectors unreadable/skipped so far."
 msgstr "<span %s>Interrotto da un errore irrecuperabile.</span> %lld settori letti, %lld settori illeggibili/saltati."
 
-#: read-linear.c:171
+#: read-linear.c:125
 msgid ""
 "Automatic error correction file creation\n"
 "is only possible after a full reading pass.\n"
@@ -1975,15 +1975,15 @@ msgstr ""
 "La creazione del file di correzione automatica\n"
 "è possibile soltanto dopo un passaggio completo in lettura.\n"
 
-#: read-linear.c:205
+#: read-linear.c:159
 msgid "Scanning aborted"
 msgstr "Scansione annullata"
 
-#: read-linear.c:209 read-linear.c:297
+#: read-linear.c:163 read-linear.c:251
 msgid "Scanning medium for read errors."
 msgstr "Scansione del supporto per gli errori di lettura."
 
-#: read-linear.c:235
+#: read-linear.c:189
 #, c-format
 msgid ""
 "Automatic error correction file creation is enabled,\n"
@@ -1994,7 +1994,7 @@ msgstr ""
 "e \"%s\" esiste già.\n"
 "Sovrascrivo?\n"
 
-#: read-linear.c:242 rs01-create.c:643 rs01-fix.c:187 rs01-fix.c:209
+#: read-linear.c:196 rs01-create.c:643 rs01-fix.c:187 rs01-fix.c:209
 #: rs01-fix.c:255 rs01-fix.c:285 rs01-fix.c:302 rs01-fix.c:355
 #: rs01-verify.c:429 rs01-verify.c:786 rs02-create.c:111 rs02-fix.c:227
 #: rs02-fix.c:248 rs02-fix.c:339 rs02-verify.c:684
@@ -2002,125 +2002,125 @@ msgstr ""
 msgid "<span %s>Aborted by user request!</span>"
 msgstr "<span %s>Annullato dall'utente!</span>"
 
-#: read-linear.c:304 read-linear.c:336 read-linear.c:506
+#: read-linear.c:258 read-linear.c:290 read-linear.c:460
 msgid "Reading CRC information from ecc file"
 msgstr ""
 
-#: read-linear.c:400
+#: read-linear.c:354
 #, c-format
 msgid "<span %s>Reading aborted.</span> Please select a different image file."
 msgstr "<span %s>Lettura annullata.</span> Prego selezionare un file immagine differente."
 
-#: read-linear.c:421
+#: read-linear.c:375
 #, c-format
 msgid "Completing image %s. Continuing with sector %lld.\n"
 msgstr "Completamento immagine %s. Continuo col settore %lld.\n"
 
-#: read-linear.c:427
+#: read-linear.c:381
 #, c-format
 msgid "Completing image %s. Only missing sectors will be read.\n"
 msgstr "Completamento immagine %s. Solo i settori mancanti saranno letti.\n"
 
-#: read-linear.c:518
+#: read-linear.c:472
 msgid "done.\n"
 msgstr "compiuto.\n"
 
-#: read-linear.c:537 scsi-layer.c:1212
+#: read-linear.c:491 scsi-layer.c:1212
 #, c-format
 msgid "Waiting %d seconds for drive to spin up...\n"
 msgstr "Attendere %d secondi per far avviare il drive...\n"
 
-#: read-linear.c:559 read-linear-window.c:83
+#: read-linear.c:513 read-linear-window.c:94
 #, c-format
 msgid "Unreadable / skipped sectors: %lld"
 msgstr "Settori illeggibili / saltati: %lld"
 
-#: read-linear.c:629
+#: read-linear.c:583
 #, c-format
 msgid "Sector %lld: Speed increased to %4.1fx\n"
 msgstr "Settore %lld: Velocità incrementata a %4.1fx\n"
 
-#: read-linear.c:632
+#: read-linear.c:586
 #, c-format
 msgid "Sector %lld: Speed dropped to %4.1fx\n"
 msgstr "Settore %lld: Velocità diminuita a %4.1fx\n"
 
-#: read-linear.c:637
+#: read-linear.c:591
 #, c-format
 msgid "Read position: %3d.%1d%% (%4.1fx)"
 msgstr "Settori processati: %3d.%1d%% (%4.1fx)"
 
-#: read-linear.c:719 rs01-common.c:227 rs02-verify.c:736
+#: read-linear.c:673 rs01-common.c:227 rs02-verify.c:736
 #, c-format
 msgid "* CRC error, sector: %lld\n"
 msgstr "* Errore CRC, Settore : %lld\n"
 
-#: read-linear.c:870 read-linear.c:984
+#: read-linear.c:824 read-linear.c:938
 #, c-format
 msgid "<span %s>Aborted by user request!</span> %lld sectors read, %lld sectors unreadable/skipped so far."
 msgstr "<span %s>Annullato dall'utente!</span> %lld settori letti, %lld settori illeggibili/saltati.."
 
-#: read-linear.c:924
+#: read-linear.c:878
 #, c-format
 msgid "unexpected read error in image for sector %lld"
 msgstr "Errore di lettura inatteso nell'immagine per il settore %lld"
 
-#: read-linear.c:1083
+#: read-linear.c:1037
 #, c-format
 msgid "Sector %lld: %s Skipping %d sectors.\n"
 msgstr "Settore %lld: %s Salto di %d settori.\n"
 
-#: read-linear.c:1155
+#: read-linear.c:1109
 #, c-format
 msgid "%lld sectors read.     "
 msgstr "%lld settori letti.      "
 
-#: read-linear.c:1156
+#: read-linear.c:1110
 #, c-format
 msgid "%lld sectors read; %lld unreadable sectors."
 msgstr "%lld settori letti; %lld settori illeggibili."
 
-#: read-linear.c:1164
+#: read-linear.c:1118
 #, c-format
 msgid "All sectors successfully read, but wrong image length (%lld sectors difference)"
 msgstr ""
 
-#: read-linear.c:1168
+#: read-linear.c:1122
 msgid "All sectors successfully read, but wrong image checksum."
 msgstr ""
 
-#: read-linear.c:1169
+#: read-linear.c:1123
 msgid "All sectors successfully read. Checksums match."
 msgstr ""
 
-#: read-linear.c:1171
+#: read-linear.c:1125
 msgid "All sectors successfully read."
 msgstr "Tutti i settori sono stati letti correttamente."
 
-#: read-linear.c:1175
+#: read-linear.c:1129
 #, c-format
 msgid "%lld unreadable sectors."
 msgstr "%lld settori illeggibili."
 
-#: read-linear.c:1177
+#: read-linear.c:1131
 #, c-format
 msgid "%lld CRC errors."
 msgstr "%lld errori CRC."
 
-#: read-linear.c:1178
+#: read-linear.c:1132
 #, c-format
 msgid "%lld CRC errors, %lld unreadable sectors."
 msgstr "%lld errori CRC, %lld settori illeggibili."
 
-#: read-linear.c:1184
+#: read-linear.c:1138
 msgid "Scanning finished: "
 msgstr "Scansione terminata:"
 
-#: read-linear.c:1186
+#: read-linear.c:1140
 msgid "Reading finished: "
 msgstr "Lettura terminata:"
 
-#: read-linear.c:1197
+#: read-linear.c:1151
 #, c-format
 msgid ""
 "%d sectors missing at the end of the disc.\n"
@@ -2131,7 +2131,7 @@ msgstr ""
 "Questo è corretto se il disco è stato scritto in modalità TAO (track at once).\n"
 "L'imagine sarà aggiustata di conseguenza.Leggere il manuale per i dettagli.\n"
 
-#: read-linear.c:1203
+#: read-linear.c:1157
 #, c-format
 msgid ""
 "%d sectors missing at the end of the disc.\n"
@@ -2144,37 +2144,37 @@ msgstr ""
 "L'imagine sarà aggiustata di conseguenza.Leggere il manuale per i dettagli.\n"
 "Usare l'opzione --dao per disabilitare l'aggiustamento dell'immagine.\n"
 
-#: read-linear-window.c:76
+#: read-linear-window.c:87
 #, c-format
 msgid "Current Speed: %d.%dx"
 msgstr "Velocità corrente: %d.%dx"
 
-#: read-linear-window.c:206 read-linear-window.c:248 rs01-verify.c:123
+#: read-linear-window.c:223 read-linear-window.c:265 rs01-verify.c:123
 #: rs02-verify.c:118
 msgid "Sectors with CRC errors"
 msgstr "Settori con errori CRC"
 
-#: read-linear-window.c:229
+#: read-linear-window.c:246
 msgid "Media state"
 msgstr "Stato del supporto"
 
-#: read-linear-window.c:237
+#: read-linear-window.c:254
 msgid "Not touched this time"
 msgstr "Non toccato questa volta"
 
-#: read-linear-window.c:241
+#: read-linear-window.c:258
 msgid "Already present"
 msgstr "Già presente"
 
-#: read-linear-window.c:244
+#: read-linear-window.c:261
 msgid "Successfully read"
 msgstr "letto con successo"
 
-#: read-linear-window.c:251
+#: read-linear-window.c:268
 msgid "Unreadable / skipped"
 msgstr "Illeggibili / Saltati"
 
-#: read-linear-window.c:337
+#: read-linear-window.c:349
 msgid "Speed"
 msgstr "Velocità"
 
@@ -3901,11 +3901,11 @@ msgid ""
 "* No drives can be used.\n"
 msgstr ""
 
-#: scsi-win32.c:409
+#: scsi-win32.c:413
 msgid "ASPI manager present, but no CD/DVD drives managed.\n"
 msgstr "ASPI-Manager presente, ma CD/DVD drive non gestibili.\n"
 
-#: scsi-win32.c:411
+#: scsi-win32.c:415
 #, c-format
 msgid ""
 "%d SPTI drives, but %d ASPI drives.\n"
@@ -3914,7 +3914,7 @@ msgstr ""
 "%d SPTI drive, ma %d ASPI drive.\n"
 "La lettera di mappatura per i drive ASPI probabilmente non è corretta.\n"
 
-#: scsi-win32.c:429
+#: scsi-win32.c:433
 msgid ""
 "\n"
 "List of ASPI CD/DVD drives:\n"
@@ -3922,7 +3922,7 @@ msgstr ""
 "\n"
 "Lista dei drive CD/DVD ASPI:\n"
 
-#: scsi-win32.c:434
+#: scsi-win32.c:438
 msgid ""
 "\n"
 "To force ASPI usage over SPTI, refer to the drive by the\n"
@@ -3932,11 +3932,11 @@ msgstr ""
 "Per forzare l'uso ASPI su SPTI, far riferimento al drive tramite i numeri\n"
 "(usare 1:, 2:,... invece di C:, D:,...)\n"
 
-#: scsi-win32.c:439
+#: scsi-win32.c:443
 msgid "ASPI manager not available or installed.\n"
 msgstr "ASPI-Manager non disponibile o non installato.\n"
 
-#: scsi-win32.c:563
+#: scsi-win32.c:567
 #, c-format
 msgid ""
 "\n"
@@ -3945,7 +3945,7 @@ msgstr ""
 "\n"
 "Nome della periferica illegale \"%s\" (usare periferiche \"C:\" ... \"Z:\")"
 
-#: scsi-win32.c:653
+#: scsi-win32.c:657
 #, c-format
 msgid ""
 "\n"

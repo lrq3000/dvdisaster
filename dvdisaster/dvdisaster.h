@@ -247,11 +247,6 @@ typedef struct _GlobalClosure
    GdkColor  *whiteSector;
    GdkColor  *darkSector;
    char      *invisibleDash;
-   gint      lastPercent;
-   gint      lastSegment;
-   gint      lastPlotted;
-   gint      lastPlottedY;
-   gint      percent; 
 
    /*** Widgets for the linear reading/scanning action */
 
@@ -889,8 +884,9 @@ void ReadMediumLinear(gpointer);
 void ResetLinearReadWindow();
 void CreateLinearReadWindow(GtkWidget*);
 
-void InitializeCurve(int, gint64, gint64, gint64);
-void AddCurveValues(int, double, int);
+void InitializeCurve(void*, int);
+void AddCurveValues(void*, int, int);
+void MarkExistingSectors(void);
 
 /*** 
  *** read-adaptive.c

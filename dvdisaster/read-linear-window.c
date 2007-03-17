@@ -21,6 +21,8 @@
 
 #include "dvdisaster.h"
 
+#include "read-linear.h"
+
 /***
  *** Forward declarations
  ***/
@@ -45,17 +47,19 @@ static gboolean max_speed_idle_func(gpointer data)
    return FALSE;
 }
 
-void InitializeCurve(int max_speed, gint64 start, gint64 end, gint64 medium_size)
-{  int i;
+void InitializeCurve(void *rc_ptr, int max_rate)
+{  read_closure *rc = (read_closure*)rc_ptr;
+   int i;
 
-   Closure->readLinearCurve->maxY = max_speed;
-   Closure->readLinearCurve->maxX = medium_size/512;
-   Closure->lastPercent = (1000*start)/medium_size;
-   Closure->lastPlotted = Closure->lastSegment = Closure->lastPercent;
-   Closure->lastPlottedY = 0;
+   Closure->readLinearCurve->maxY = max_rate;
+   Closure->readLinearCurve->maxX = rc->sectors/512;
+
+   rc->lastCopied = (1000*rc->firstSector)/rc->sectors;
+   rc->lastPlotted = rc->lastSegment = rc->lastCopied;
+   rc->lastPlottedY = 0;
 
    if(Closure->readLinearSpiral)
-     for(i=Closure->lastPercent-1; i>=0; i--)
+     for(i=rc->lastCopied-1; i>=0; i--)
        Closure->readLinearSpiral->segmentColor[i] = Closure->blueSector;
 
    g_idle_add(max_speed_idle_func, NULL);
@@ -65,8 +69,15 @@ void InitializeCurve(int max_speed, gint64 start, gint64 end, gint64 medium_size
  * Drawing the reading speed curve 
  */
 
+typedef struct
+{  read_closure *rc;
+   int percent;
+} curve_info;
+
 static gboolean curve_idle_func(gpointer data)
-{  gint x0,y0;
+{  curve_info *ci = (curve_info*)data;
+   read_closure *rc=ci->rc;
+   gint x0,y0;
    char *utf,buf[80];
    gint i;
    gint resize_curve = FALSE;
@@ -74,8 +85,8 @@ static gboolean curve_idle_func(gpointer data)
    /*** Update the textual output */
 
    g_snprintf(buf, 80, _("Current Speed: %d.%dx"), 
-	      (int)Closure->readLinearCurve->fvalue[Closure->percent],
-	      (int)(fmod(10*Closure->readLinearCurve->fvalue[Closure->percent],10)));
+	      (int)Closure->readLinearCurve->fvalue[ci->percent],
+	      (int)(fmod(10*Closure->readLinearCurve->fvalue[ci->percent],10)));
    utf = g_locale_to_utf8(buf, -1, NULL, NULL, NULL);
    gtk_label_set_text(GTK_LABEL(Closure->readLinearSpeed), utf);
    g_free(utf);
@@ -88,7 +99,7 @@ static gboolean curve_idle_func(gpointer data)
 
    /*** Draw the changed spiral segments */
 
-   for(i=Closure->lastSegment; i<Closure->percent; i++)
+   for(i=rc->lastSegment; i<ci->percent; i++)
      switch(Closure->readLinearCurve->ivalue[i])
      {  case 0: DrawSpiralSegment(Closure->readLinearSpiral, Closure->blueSector, i); break;
         case 1: DrawSpiralSegment(Closure->readLinearSpiral, Closure->greenSector, i); break;
@@ -97,37 +108,40 @@ static gboolean curve_idle_func(gpointer data)
         case 4: DrawSpiralSegment(Closure->readLinearSpiral, Closure->yellowSector, i); break;
      }
 
-   Closure->lastSegment = Closure->percent;
+   rc->lastSegment = ci->percent;
 
-   if(Closure->lastPlotted == -1)  /* 2nd or higher reading pass, don't touch the curve */
+   if(rc->pass)      /* 2nd or higher reading pass, don't touch the curve */
+   {  g_free(ci);
       return FALSE;
+   }
 
    /*** Resize the Y axes if speed value exceeds current maximum */
 
-   for(i=Closure->lastPlotted+1; i<=Closure->percent; i++)
+   for(i=rc->lastPlotted+1; i<=ci->percent; i++)
      if(Closure->readLinearCurve->fvalue[i] > Closure->readLinearCurve->maxY)
        resize_curve = TRUE;
 
    if(resize_curve)
-   {  Closure->readLinearCurve->maxY = Closure->readLinearCurve->fvalue[Closure->percent] + 1;
+   {  Closure->readLinearCurve->maxY = Closure->readLinearCurve->fvalue[ci->percent] + 1;
 
       update_geometry();
       gdk_window_clear(Closure->readLinearDrawingArea->window);
       redraw_curve();
-      Closure->lastPlotted  = Closure->percent;
-      Closure->lastPlottedY = CurveY(Closure->readLinearCurve, Closure->readLinearCurve->fvalue[Closure->percent]); 
+      rc->lastPlotted = ci->percent;
+      rc->lastPlottedY = CurveY(Closure->readLinearCurve, Closure->readLinearCurve->fvalue[ci->percent]); 
+      g_free(ci);
       return FALSE;
    }
 
    /*** Draw the changed curve part */
    
-   x0 = CurveX(Closure->readLinearCurve, Closure->lastPlotted);
-   y0 = CurveY(Closure->readLinearCurve, Closure->readLinearCurve->fvalue[Closure->lastPlotted]);
-   if(Closure->lastPlottedY) y0 = Closure->lastPlottedY;
+   x0 = CurveX(Closure->readLinearCurve, rc->lastPlotted);
+   y0 = CurveY(Closure->readLinearCurve, Closure->readLinearCurve->fvalue[rc->lastPlotted]);
+   if(rc->lastPlottedY) y0 = rc->lastPlottedY;
 
    gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->curveColor);
 
-   for(i=Closure->lastPlotted+1; i<=Closure->percent; i++)
+   for(i=rc->lastPlotted+1; i<=ci->percent; i++)
    {  gint x1 = CurveX(Closure->readLinearCurve, i);
       gint y1 = CurveY(Closure->readLinearCurve, Closure->readLinearCurve->fvalue[i]);
 
@@ -136,12 +150,13 @@ static gboolean curve_idle_func(gpointer data)
 		      Closure->drawGC,
 		      x0, y0, x1, y1);
 
-	Closure->lastPlotted = Closure->percent;
+	rc->lastPlotted = ci->percent;
 	x0 = x1;
-	Closure->lastPlottedY = y0 = y1;
+	rc->lastPlottedY = y0 = y1;
       }
    }
 
+   g_free(ci);
    return FALSE;
 }
 
@@ -149,36 +164,60 @@ static gboolean curve_idle_func(gpointer data)
  * Add one new data point
  */
 
-void AddCurveValues(int percent, double speed, int color)
-{  static int unique_addr;  /* create unique ptr for g_idle_remove... */
+void AddCurveValues(void *rc_ptr, int percent, int color)
+{  read_closure *rc = (read_closure*)rc_ptr;
+   curve_info *ci;
    int i;
 
    if(percent < 0 || percent > 1000)
      return;
 
-   Closure->percent = percent;
+   ci = g_malloc(sizeof(curve_info));
+   ci->rc = rc;
+   ci->percent = percent;
+   
+   /*** Mark unused speed values between lastCopied and Percent */
 
-   /*** Mark unused speed values between lastPercent and Percent */
+   if(!rc->pass)
+   {  Closure->readLinearCurve->fvalue[percent] = rc->speed;
 
-   if(speed>=0)
-   {  Closure->readLinearCurve->fvalue[percent] = speed;
-
-      for(i=Closure->lastPercent+1; i<Closure->percent; i++)
-	 Closure->readLinearCurve->fvalue[i] = speed > 0.0 ? -1.0 : 0.0;
+      for(i=rc->lastCopied+1; i<percent; i++)
+	 Closure->readLinearCurve->fvalue[i] = rc->speed > 0.0 ? -1.0 : 0.0;
    }
-   else Closure->lastPlotted = -1;
 
-   /*** Mark the spiral segments between lastPercent and Percent*/
+   /*** Mark the spiral segments between lastCopied and Percent*/
 
-   /* lastPercent+1 ? */
+   /* lastCopied+1 ? */
 
-   for(i=Closure->lastPercent; i<=Closure->percent; i++)
+   for(i=rc->lastCopied; i<=percent; i++)
      Closure->readLinearCurve->ivalue[i] = color;
 
-   Closure->lastPercent = Closure->percent;
+   rc->lastCopied = percent;
 
-   g_idle_remove_by_data(&unique_addr);      /* do not queue up redraws */
-   g_idle_add(curve_idle_func, &unique_addr);
+   g_idle_add(curve_idle_func, ci);
+}
+
+/*
+ * Mark existing sectors with the dark green color.
+ */
+
+static gboolean curve_mark_idle_func(gpointer data)
+{
+   DrawSpiral(Closure->readLinearSpiral);
+
+   return FALSE;
+}
+
+void MarkExistingSectors(void)
+{  int i;
+
+   for(i=0; i<1000; i++)
+      if(Closure->readLinearSpiral->segmentColor[i] == Closure->greenSector)
+      {  Closure->readLinearSpiral->segmentColor[i] = Closure->darkSector;
+	 Closure->readLinearCurve->ivalue[i] = 3;
+      }
+
+   g_idle_add(curve_mark_idle_func, NULL);
 }
 
 /*
@@ -255,7 +294,7 @@ static void redraw_curve(void)
    /* Redraw the curve */
 
    RedrawAxes(Closure->readLinearCurve);
-   RedrawCurve(Closure->readLinearCurve, Closure->percent, REDRAW_FCURVE);
+   RedrawCurve(Closure->readLinearCurve, 1000, REDRAW_FCURVE);
 }
 
 static gboolean expose_cb(GtkWidget *widget, GdkEventExpose *event, gpointer data)
@@ -282,11 +321,6 @@ void ResetLinearReadWindow()
    ZeroCurve(Closure->readLinearCurve);
    FillSpiral(Closure->readLinearSpiral, Closure->background);
    DrawSpiral(Closure->readLinearSpiral);
-
-   Closure->percent = 0;
-   Closure->lastPercent = 0;
-   Closure->lastSegment = 0;
-   Closure->lastPlotted = 0;
 }
 
 /***

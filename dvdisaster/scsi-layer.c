@@ -154,8 +154,8 @@ static int query_type(DeviceHandle *dh, int probe_only)
 
    dh->mainType   = BD;
    dh->read       = read_dvd_sector;
-   dh->singleRate = 1352.54;  /* fixme */
-   dh->maxRate    = 17;       /* fixme */
+   dh->singleRate = 36000.0/8.0;  /* 1x = 36 kbit */
+   dh->maxRate    = 8;
 
    /* Query length of returned data */
 
@@ -209,25 +209,25 @@ static int query_type(DeviceHandle *dh, int probe_only)
 
    LogDump(buf, length, 16);
 
-   dh->layers = 0;        /* fixme */
+   dh->layers = 0;        /* n.a. ? */
    dh->sessions = 1;
-   dh->userAreaSize = 0;  /* fixme */
+   dh->userAreaSize = 0;  /* n.a. ? */
 
    for(i=0; i<6; i++)
       dh->manuID[i] = isprint(buf[4+100+i]) ? buf[4+100+i] : ' ';
    dh->manuID[6] = 0;
 
-   if(!strncmp(&buf[4+8], "BDO", 3))
+   if(!strncmp((char*)&buf[4+8], "BDO", 3))
    {  dh->typedescr = "BD-ROM";
       dh->subType = UNSUPPORTED;
    }
 
-   if(!strncmp(&buf[4+8], "BDW", 3))
+   if(!strncmp((char*)&buf[4+8], "BDW", 3))
    {  dh->typedescr = "BD-RE";
       dh->subType = BD;
    }
 
-   if(!strncmp(&buf[4+8], "BDR", 3))
+   if(!strncmp((char*)&buf[4+8], "BDR", 3))
    {  dh->typedescr = "BD-R";
       dh->subType = BD;
    }

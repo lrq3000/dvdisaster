@@ -3,6 +3,9 @@ Feature freeze for version 0.71/0.72 has been reached.
 0.71 (devel-18)
 	- fixed read linear thread handling in CLI mode
 	- closed more memory leaks
+	- added selection for both SPTI and ASPI drives
+	  in the GUI under Windows	
+	- fixed color glitches in the spiral during linear reading
 
 0.71 (devel-17) 04-03-2007
 	- fixed read linear reading crash in CLI mode

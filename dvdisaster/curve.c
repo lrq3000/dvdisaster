@@ -74,7 +74,7 @@ void ZeroCurve(Curve *curve)
 
    if(curve)
      for(i=0; i<=curve->lastValueIdx; i++)
-     {  curve->fvalue[i] = 0.0;
+     {  curve->fvalue[i] = -1.0;
         curve->ivalue[i] = 0;
      }
 }

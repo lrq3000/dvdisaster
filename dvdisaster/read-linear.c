@@ -21,60 +21,14 @@
 
 #include "dvdisaster.h"
 
+#include "read-linear.h"
 #include "scsi-layer.h"
 
-/***
- *** Local data package used during reading 
- ***/
-
-#define READ_BUFFERS 128   /* equals 4MB of buffer space */
+/*
+ * IO buffer states
+ */
 
 enum { BUF_EMPTY, BUF_FULL, BUF_DEAD, BUF_EOF };
-
-typedef struct
-{  LargeFile *readerImage;  /* we need two file handles to prevent LargeSeek() */
-   LargeFile *writerImage;  /* race conditions between the reader and writer */
-   struct _DeviceHandle *dh;
-   EccInfo *ei;
-   GThread *worker;
-   struct MD5Context md5ctxt;
-
-   /* Data exchange between reader and worker */
-
-   AlignedBuffer *alignedBuf[READ_BUFFERS];
-   gint64 bufferedSector[READ_BUFFERS];
-   int nSectors[READ_BUFFERS];
-   int bufState[READ_BUFFERS];
-   GMutex *mutex;
-   GCond *canRead, *canWrite;
-   int readPtr,writePtr;
-   char *workerError;
-
-   /* for usage within the reader */
-
-   gint64 sectors;                   /* medium capacity */
-   gint64 firstSector, lastSector;   /* reading range */
-
-   gint64 readPos;                   /* current sector reading position */
-   Bitmap *readMap;                  /* map of already read sectors */
-
-   gint64 readMarker;
-   int rereading;                    /* TRUE if working on existing image */
-   char *msg;
-   GTimer *speedTimer,*readTimer;
-   int unreportedError;
-   int earlyTermination;
-   int scanMode;
-   int lastPercent;
-   int firstSpeedValue;
-   double speed,lastSpeed;
-   gint64 readOK, lastReadOK;
-   int previousReadErrors;
-   int previousCRCErrors;
-   gint64 deadWritten;
-   gint64 lastErrorsPrinted;
-   int pass;
-} read_closure;
 
 /*
  * Send EOF to the worker thread
@@ -311,7 +265,7 @@ static void determine_mode(read_closure *rc)
       rc->readMarker = 0;
 
       if(Closure->guiMode)
-	 InitializeCurve(rc->dh->maxRate, rc->firstSector, rc->lastSector, rc->sectors);
+	 InitializeCurve(rc, rc->dh->maxRate);
 
       return;
    } 
@@ -342,7 +296,7 @@ reopen_image:
       rc->readMarker = 0;
 
       if(Closure->guiMode)
-	 InitializeCurve(rc->dh->maxRate, rc->firstSector, rc->lastSector, rc->sectors);
+	 InitializeCurve(rc, rc->dh->maxRate);
 
       return;
    }
@@ -433,7 +387,7 @@ reopen_image:
 		   "<big>%s</big>\n<i>%s</i>",t,rc->dh->mediumDescr);
 
    if(Closure->guiMode)
-      InitializeCurve(rc->dh->maxRate, rc->firstSector, rc->lastSector, rc->sectors);
+      InitializeCurve(rc, rc->dh->maxRate);
 }
 
 /*
@@ -491,7 +445,8 @@ static void prepare_crc_cache(read_closure *rc)
       if(rc->sectors > crc_sectors)  /* Allows completion of crc info */
 	crc_sectors = rc->sectors;   /* when image contains additional sectors */
 
-      Closure->crcCache = g_try_malloc(sizeof(guint32) * crc_sectors);
+      if(!Closure->crcCache) /* may already be allocated from case a) */
+	 Closure->crcCache = g_try_malloc(sizeof(guint32) * crc_sectors);
 
       if(!Closure->crcCache)
       {  Closure->checkCrc = FALSE;
@@ -576,10 +531,10 @@ static void show_progress(read_closure *rc)
 	    color = 2;
 	 else if(Closure->crcErrors - rc->previousCRCErrors > 0)
 	    color = 4;
-	 else color = rc->pass ? 1 : Closure->additionalSpiralColor;
+	 else color = Closure->additionalSpiralColor;
 
 	 if(Closure->guiMode)
-	    AddCurveValues(percent, rc->pass ? -1.0 : rc->speed, color);
+	    AddCurveValues(rc, percent, color);
 	 rc->lastPercent    = percent;
 	 rc->lastSpeed      = rc->speed;
 	 rc->previousReadErrors = Closure->readErrors;
@@ -601,8 +556,8 @@ static void show_progress(read_closure *rc)
 	 {   rc->speed = kb_sec / rc->dh->singleRate;
 		
 	     if(Closure->guiMode)
-	     {  AddCurveValues(rc->lastPercent, rc->pass ? -1.0 : rc->speed, color);
-		AddCurveValues(percent, rc->pass ? -1.0 : rc->speed, color);
+	     {  AddCurveValues(rc, rc->lastPercent, color);
+		AddCurveValues(rc, percent, color);
 	     }
 	     
 	     rc->firstSpeedValue    = FALSE;
@@ -617,7 +572,7 @@ static void show_progress(read_closure *rc)
 	    if(rc->speed>99.9) rc->speed=99.9;
 	    
 	    if(Closure->guiMode)
-	       AddCurveValues(percent, rc->pass ? -1.0 : rc->speed, color);
+	       AddCurveValues(rc, percent, color);
 
 	    if(Closure->speedWarning && rc->lastSpeed > 0.5)
 	    {  double delta = rc->speed - rc->lastSpeed;
@@ -767,8 +722,6 @@ void ReadMediumLinear(gpointer data)
    int tao_tail = 0;
    int i;
 
-   Closure->additionalSpiralColor = -1;
-
    /*** Register the cleanup procedure so that Stop() can abort us properly. */
 
    rc->unreportedError  = TRUE;
@@ -847,16 +800,19 @@ void ReadMediumLinear(gpointer data)
 
    /*** Reset for the next reading pass */
 
+   rc->lastReadOK = 0;  /* keep between passes */
+   rc->lastPercent = (1000*rc->readPos)/rc->sectors;
+
 next_reading_pass:
    if(rc->pass > 0)
    {  Closure->readErrors = Closure->crcErrors = 0;
+      MarkExistingSectors();
    }
 
    /*** Read the medium image. */
 
    rc->readPos = rc->firstSector;
-   rc->lastPercent = (1000*rc->readPos)/rc->sectors;
-   rc->lastReadOK = rc->lastErrorsPrinted = 0;
+   rc->lastErrorsPrinted = 0;
    rc->previousReadErrors = rc->previousCRCErrors = 0;
    rc->speed = 0;
    rc->lastSpeed = -1.0;
@@ -898,7 +854,7 @@ reread:
       {  int i,ok = 0;
 	 int num_compare = nsectors;
 
-	 /* Get image state from bitmap (after first reading pass) */
+	 /* Get image state from bitmap created at earlie reading pass */
 
 	 if(rc->pass && rc->readMap)
 	 {  for(i=0; i<num_compare; i++)
