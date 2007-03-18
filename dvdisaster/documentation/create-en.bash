@@ -1590,6 +1590,7 @@ function download_contents_en()
    title)   title="Download" ;;
 
    link)    link_title="Download" ;;
+   link30)   link_title="Developer releases" ;;
    link10)   link_title="System requirements" ;;
    link20)   link_title="Installation" ;;
 
@@ -1616,39 +1617,17 @@ For the source code version see the <a href="download20.html">installation instr
 
 <!---
 <b>Developer versions</b> - new and experimental for experienced users!<p>
-<b>Stable versions</b> - recommended for getting started.<p>
+<b>Current version</b><p>
 -->
 
-<b>Release candidates</b><p>
+<b>Developer versions</b> - new and experimental for experienced users!<p>
 
-<table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.70</b></td><td align="right">xx-xxx-2007</td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
-<tr><td colspan="2">
-  <table>
-    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
-        <td><a href="${tar_0_70}">dvdisaster-0.72.rc1.tar.bz2</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="${tar_0_70_sig}">dvdisaster-0.72.rc1.tar.bz2.gpg</a></td></tr>
-    <tr><td align="right">Binary for Windows:&nbsp;</td>
-        <td><a href="${setup_0_70}">dvdisaster-0.72.rc1-setup.exe</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="${setup_0_70_sig}">dvdisaster-0.72.rc1-setup.exe.gpg</a></td></tr>
-  </table>
-</td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
-<tr><td colspan="2">
-new stuff<p>
+Testers are welcome for the upcoming dvdisaster release.<br>
+The current experimental release is 
+<a href="download30.html">0.71 (devel19)</a>.
+<pre> </pre>
 
-Andrei Grecu provided an algorithm for recovering defective sectors
-from multiple incomplete RAW reading attempts.<p>
-
-Sergey Svishchev helped porting dvdisaster 
-to <a href="download20.html#netbsd">NetBSD</a>.<p>
-</td></tr></table><p>
-
-
-<b>Current version</b><p>
+<b>Stable versions</b> - recommended for getting started.<p>
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.70</b></td><td align="right">20-Jan-2007</td></tr>
@@ -1878,6 +1857,64 @@ footer of my emails. Feel free to send me an email with the subject
 EOF
 }
 
+
+function download30en()
+{  cat >> $1 <<EOF
+<h3>Developer versions</h3>
+
+The upcoming release of dvdisaster contains improved reading functions.
+As pre-tests have shown these come at the cost of higher incompatibilty
+with certain drive hardware and operating systems.<p>
+
+<b>Help us testing!</b> Before making the next official release we would like to see the developer
+versions being tested on more systems. You are invited to try them out and
+report the results (both positive and negative) so that we can get a better
+picture of how the new functions are working.<p>
+
+<b>Be warned though:</b> The developer versions might lock up the drive and/or the
+operating system and require you to reboot. They might contain other bugs
+and should not be used to prepare error correction data for 
+media containing important data.
+
+If in doubt, please continue using the <a href="download.html">stable version 0.70</a>
+or wait for the release of version 0.72.
+
+<h4>Overview of new features</h4>
+
+<ul>
+<li>NetBSD, new preferences dialog, bug fix for adaptive reading</li>
+<li>Simple raw reading</li>
+<li>Partial raw reading</li>
+<li>Support for BD and HDDVD drives</li>
+</ul>
+
+<table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
+<tr><td><b>dvdisaster-0.70</b></td><td align="right">xx-xxx-2007</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+  <table>
+    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
+        <td><a href="${tar_0_70}">dvdisaster-0.72.rc1.tar.bz2</a></td></tr>
+    <tr><td align="right">Digital signature:&nbsp;</td>
+        <td><a href="${tar_0_70_sig}">dvdisaster-0.72.rc1.tar.bz2.gpg</a></td></tr>
+    <tr><td align="right">Binary for Windows:&nbsp;</td>
+        <td><a href="${setup_0_70}">dvdisaster-0.72.rc1-setup.exe</a></td></tr>
+    <tr><td align="right">Digital signature:&nbsp;</td>
+        <td><a href="${setup_0_70_sig}">dvdisaster-0.72.rc1-setup.exe.gpg</a></td></tr>
+  </table>
+</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+new stuff<p>
+
+Andrei Grecu provided an algorithm for recovering defective sectors
+from multiple incomplete RAW reading attempts.<p>
+
+Sergey Svishchev helped porting dvdisaster 
+to <a href="download20.html#netbsd">NetBSD</a>.<p>
+</td></tr></table><p>
+EOF
+}
 
 function download10en()
 {  cat >> $1 <<EOF

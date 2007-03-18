@@ -411,6 +411,28 @@ guint32 Crc32(unsigned char*, int);
 guint32 EDCCrc32(unsigned char*, int);
 
 /***
+ *** crcbuf.c
+ ***/
+
+typedef struct _CrcBuf
+{  guint32 *crcbuf;
+   gint64 size;
+   Bitmap *valid;
+} CrcBuf;
+
+enum
+{  CRC_UNKNOWN,
+   CRC_BAD,
+   CRC_GOOD
+};
+
+CrcBuf *GetCRCFromRS01(EccInfo*);
+CrcBuf *GetCRCFromRS02(void*, void*, LargeFile*);
+void FreeCrcBuf(CrcBuf*);
+
+int CheckAgainstCrcBuffer(CrcBuf*, gint64, unsigned char*);
+
+/***
  *** curve.c
  ***/
 

@@ -48,7 +48,7 @@ typedef struct
    AlignedBuffer *ab;           /* buffer suitable for reading from the drive */
    unsigned char *buf;          /* buffer component from above */
    Bitmap *map;                 /* bitmap for keeping track of read sectors */
-   guint32 *crcbuf;             /* crc sum buffer space */
+   CrcBuf *crcBuf;              /* preloaded CRC info from ecc data */
 
    gint64 readable;             /* current outcome of reading process */
    gint64 unreadable;
@@ -155,7 +155,7 @@ bail_out:
    if(rc->ab) FreeAlignedBuffer(rc->ab);
    
    if(rc->intervals) g_free(rc->intervals);
-   if(rc->crcbuf) g_free(rc->crcbuf);
+   if(rc->crcBuf) FreeCrcBuf(rc->crcBuf);
 
    if(rc->map)
      FreeBitmap(rc->map);
@@ -645,30 +645,39 @@ void check_image_size(read_closure *rc, gint64 image_file_sectors)
 }
 
 /***
+ *** Load the crc buf from RS01/RS02 error correction data.
+ ***/
+
+static void load_crc_buf(read_closure *rc)
+{
+   switch(rc->readMode)
+   {  case ECC_IN_FILE:
+	 SetAdaptiveReadSubtitle(_utf("Loading CRC data."));
+	 rc->crcBuf = GetCRCFromRS01(rc->ei);
+	 break;
+      case ECC_IN_IMAGE:
+	 SetAdaptiveReadSubtitle(_utf("Loading CRC data."));
+	 rc->crcBuf = GetCRCFromRS02(rc->lay, rc->dh, rc->image);
+	 break;
+      default:
+	 rc->crcBuf = NULL;
+	 break;
+   }
+}
+
+/***
  *** Examine existing image file.
  ***
  * Build an initial interval list from it.
  */
 
-#define CRCBUFSIZE (1024*256)
-
-void build_interval_from_image(read_closure *rc)
+static void build_interval_from_image(read_closure *rc)
 {  gint64 s;
    gint64 first_missing, last_missing, current_missing;
    int tail_included = FALSE;
-   guint32 crc;
-   int crcidx = CRCBUFSIZE;
    int last_percent = 0;
+   int crc_result;
 
-   /*** If we have a separate ecc file we can compare against the
-        CRC sum it contains. Position ecc file behind the ecc header. */
-  
-   if(rc->readMode == ECC_IN_FILE)
-   {
-     if(!LargeSeek(rc->ei->file, (gint64)sizeof(EccHeader)))
-       Stop(_("Failed skipping the ecc header: %s"),strerror(errno));
-   }
-  
    /*** Rewind image file */
 
    LargeSeek(rc->image, 0);
@@ -707,31 +716,22 @@ void build_interval_from_image(read_closure *rc)
 
       /* Compare checksums if available */
 
-      if(rc->readMode == ECC_IN_FILE)
-      {
-	/* If the CRC buf is exhausted, refill it. */
+      if(rc->crcBuf)
+	   crc_result = CheckAgainstCrcBuffer(rc->crcBuf, s, rc->buf);
+      else crc_result = CRC_UNKNOWN;
 
-	 if(crcidx >= CRCBUFSIZE)
-	 {  int remain = rc->highestWrittenSector-s+1;
-	    int size;
-
-	    if(remain < CRCBUFSIZE)
-	         size = remain*sizeof(guint32);
-	    else size = CRCBUFSIZE*sizeof(guint32);
-
-	    if(LargeRead(rc->ei->file, rc->crcbuf, size) != size)
-	      Stop(_("Error reading CRC information: %s"),strerror(errno));
-
-	    crcidx = 0;
-	 }
-
-	 /* compare the checksums */
-
-	 crc = Crc32(rc->buf, 2048); 
-	 if(crc != rc->crcbuf[crcidx++] && !current_missing)
-	 {  current_missing = 1;
-	    mark_sector(rc, s, Closure->yellowSector);
-	 }
+      switch(crc_result)
+      {  case CRC_GOOD:
+	    break;
+	 case CRC_UNKNOWN:
+	    break;
+	 case CRC_BAD:
+	    /* If its not already missing because of a read error,
+	       make it missing due to the CRC failure. */
+	    if(!current_missing)
+	    {  current_missing = 1;
+	       mark_sector(rc, s, Closure->yellowSector);
+	    }
       }
 
       /* Remember sector state */
@@ -1057,10 +1057,8 @@ void fill_correctable_gap(read_closure *rc, gint64 correctable)
 
 void ReadMediumAdaptive(gpointer data)
 {  read_closure *rc;
-   int crcidx = 0;
    gint64 s;
    gint64 image_file_size;
-   guint32 *crcbuf;
    int status,i,n;
 
    /*** Initialize the read closure. */
@@ -1069,7 +1067,6 @@ void ReadMediumAdaptive(gpointer data)
 
    rc->ab = CreateAlignedBuffer(32768);
    rc->buf = rc->ab->buf;
-   crcbuf = rc->crcbuf = g_malloc(sizeof(guint32)*CRCBUFSIZE);
 
    memset(rc->progressBs, '\b', 256);
    memset(rc->progressSp, ' ', 256);
@@ -1146,9 +1143,13 @@ reopen_image:
 		     _("Reading new medium image."),
 		     rc->dh->mediumDescr);
 
-   /* Mark RS02 header sectors as correctable. */
+      /* Mark RS02 header sectors as correctable. */
 
       mark_rs02_headers(rc);
+
+      /* Preload the CRC buffer */
+
+      load_crc_buf(rc);
    }
 
    /*** else examine the existing image file ***/
@@ -1176,6 +1177,10 @@ reopen_image:
       /* Compare length of image and medium. */
 
       check_image_size(rc, image_file_size / 2048);
+
+      /* Preload the CRC buffer */
+
+      load_crc_buf(rc);
 
       /* Build the interval list */
 
@@ -1222,7 +1227,6 @@ reopen_image:
       /*** Try reading the next interval */
 
       print_progress(rc, TRUE);
-      crcidx = CRCBUFSIZE;
 
       for(s=rc->intervalStart; s<=rc->intervalEnd; ) /* s is incremented elsewhere */
       {  int nsectors,cnt;
@@ -1267,7 +1271,6 @@ reopen_image:
 
 	       if(GetBit(rc->map, s))
 	       {  s++;
-		  crcidx++;
 		  continue;  /* restart reading loop with next sector */
 	       }
 	    }
@@ -1320,80 +1323,48 @@ reopen_image:
 	       otherwise treat them as unprocessed. */
 
 	    for(i=0, b=s; i<nsectors; i++,b++)
-	    {  guint32 crc;
+	    {  int result;
 
-	       if(rc->readMode == ECC_IN_FILE) /* we have crc information */
-	       { 
-		 /* If the CRC buf is exhausted, refill it. */
+	       /* Calculate and compare CRC sums.
+		  Sectors with bad CRC sums are marked unvisited,
+		  but do not terminate the current interval. */
 
-		 if(crcidx >= CRCBUFSIZE)  
-		 {  int remain = rc->sectors-b;
-		    int size;
+	       if(rc->crcBuf) /* we have crc information */
+		    result = CheckAgainstCrcBuffer(rc->crcBuf, b, rc->buf+i*2048);
+	       else result = CRC_UNKNOWN;
 
-		    if(remain < CRCBUFSIZE)
-		         size = remain*sizeof(guint32);
-	            else size = CRCBUFSIZE*sizeof(guint32);
+	       switch(result)
+	       {  case CRC_BAD:
+		     PrintCLI("\n");
+		     PrintCLI(_("CRC error in sector %lld\n"),b);
+		     print_progress(rc, TRUE);
 
-		    if(!LargeSeek(rc->ei->file, (gint64)sizeof(EccHeader)+b*4))
-		      Stop(_("Failed seeking in crc area: %s"),strerror(errno));
+		     n = LargeWrite(rc->image, Closure->deadSector, 2048);
+		     if(n != 2048)
+			Stop(_("Failed writing to sector %lld in image [%s]: %s"),
+			     b, "unv", strerror(errno));
 
-		    if(LargeRead(rc->ei->file, crcbuf, size) != size)
-		      Stop(_("Error reading CRC information: %s"),strerror(errno));
+		     mark_sector(rc, b, Closure->yellowSector);
+		     
+		     if(rc->highestWrittenSector < b)
+			rc->highestWrittenSector = b;
+		     break;
 
-		    crcidx = 0;
-		 }
+		  case CRC_UNKNOWN:
+		  case CRC_GOOD:
+		     n = LargeWrite(rc->image, rc->buf+i*2048, 2048);
+		     if(n != 2048)
+			Stop(_("Failed writing to sector %lld in image [%s]: %s"),
+			     b, "store", strerror(errno));
 
-		 /* Calculate and compare CRC sums.
-		    Sectors with bad CRC sums are marked unvisited,
-		    but do not terminate the current interval. */
+		     SetBit(rc->map, b);
+		     rc->readable++;
 
-		 crc = Crc32(rc->buf+i*2048, 2048); 
-
-		 if(crc != crcbuf[crcidx++])  /* failed CRC test */
-		 {  PrintCLI("\n");
-		    PrintCLI(_("CRC error in sector %lld\n"),b);
-		    print_progress(rc, TRUE);
-
-		    n = LargeWrite(rc->image, Closure->deadSector, 2048);
-		    if(n != 2048)
-		      Stop(_("Failed writing to sector %lld in image [%s]: %s"),
-			   b, "unv", strerror(errno));
-
-		    mark_sector(rc, b, Closure->yellowSector);
-
-		    if(rc->highestWrittenSector < b)
-		      rc->highestWrittenSector = b;
-		 }
-		 else /* good sector */
-		 {  n = LargeWrite(rc->image, rc->buf+i*2048, 2048);
-		    if(n != 2048)
-		      Stop(_("Failed writing to sector %lld in image [%s]: %s"),
-			   b, "store", strerror(errno));
-
-		    SetBit(rc->map, b);
-		    rc->readable++;
-
-		    mark_sector(rc, b, Closure->greenSector);
+		     mark_sector(rc, b, Closure->greenSector);
 		    
-		    if(rc->highestWrittenSector < b)
-		      rc->highestWrittenSector = b;
-		 }
-	       }
-
-	       else /* no crc information available */
-	       {  n = LargeWrite(rc->image, rc->buf+i*2048, 2048);
-		  if(n != 2048)
-		    Stop(_("Failed writing to sector %lld in image [%s]: %s"),
-			 b, "store", strerror(errno));
-
-		  if(rc->map)
-		    SetBit(rc->map, b);
-		  rc->readable++;
-
-		  mark_sector(rc, b, Closure->greenSector);
-
-		  if(rc->highestWrittenSector < b)
-		    rc->highestWrittenSector = b;
+		     if(rc->highestWrittenSector < b)
+			rc->highestWrittenSector = b;
+		     break;
 	       }
 	    }
 

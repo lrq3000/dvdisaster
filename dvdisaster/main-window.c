@@ -151,6 +151,7 @@ static void action_cb(GtkWidget *widget, gpointer data)
       case ACTION_SCAN:
 	ClearCrcCache();
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(Closure->notebook), 1);
+	Closure->additionalSpiralColor = -1;
 	ResetLinearReadWindow();
 	AllowActions(FALSE);
 	CreateGThread((GThreadFunc)ReadMediumLinear, (gpointer)1);

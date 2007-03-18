@@ -33,7 +33,7 @@
  * Otoh, ASPI run without special priviledges and even on the older
  * Windows 9x versions. 
  * The ASPI wrapper has only been tested against the WNASPI32.DLL
- * made by Adaptec and Nero.
+ * made by Adaptec.
  *
  * SPTI is tried first and then we fall back to ASPI.
  */
@@ -91,7 +91,7 @@ char* DefaultDevice()
    {  int none_picked = !Closure->deviceNodes->len;
       DeviceHandle *dh = open_aspi_device("A:", 2);
       if(dh) CloseDevice(dh);
-      printf("ASPI %d\n", Closure->deviceNodes->len);
+
       if(none_picked 
 	 && Closure->deviceNodes->len) /* pick first aspi drive */
 	*picked = ((char*)g_ptr_array_index(Closure->deviceNodes,0))[0];

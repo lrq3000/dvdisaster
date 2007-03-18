@@ -1500,6 +1500,11 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
    ret = SendPacket(dh, cdb, 12, rb->workBuf->buf, nsectors*rb->sampleSize, sense, DATA_READ);
    RememberSense(sense->sense_key, sense->asc, sense->ascq);
 
+#if 0
+   if(lba==160)  /* fixme */
+   rb->workBuf->buf[230]^=255;
+#endif
+
    /* The drive screws up sometimes and returns a damaged sector as good. 
       When nsectors==1, this sectors is still interesting for data recovery.
       We flag it as bad so that the next if() will pick it up correctly. */
@@ -1590,6 +1595,11 @@ int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
       if(Closure->readRaw && dh->readRaw)
 	   status = dh->readRaw(dh, buf, s, nsectors);
       else status = dh->read(dh, buf, s, nsectors);
+
+#if 0
+   if(s==160 || s>=144624)  /* fixme */
+      buf[230]^=255;
+#endif
 
       if(Closure->readRaw && dh->rawBuffer)
 	recommended_attempts = dh->rawBuffer->recommendedAttempts;
