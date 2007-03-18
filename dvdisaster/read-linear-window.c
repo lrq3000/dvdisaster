@@ -210,6 +210,11 @@ static gboolean curve_mark_idle_func(gpointer data)
 
 void MarkExistingSectors(void)
 {  int i;
+   int x = Closure->readLinearCurve->rightX + 20;
+
+   Closure->additionalSpiralColor = 3;
+   DrawSpiralLabel(Closure->readLinearSpiral, Closure->readLinearCurve->layout,
+		   _("Already present"), Closure->darkSector, x, -1);
 
    for(i=0; i<1000; i++)
       if(Closure->readLinearSpiral->segmentColor[i] == Closure->greenSector)

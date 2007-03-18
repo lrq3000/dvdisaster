@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-17 18:15+0100\n"
+"POT-Creation-Date: 2007-03-18 13:39+0100\n"
 "PO-Revision-Date: 2006-06-14 23:48+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -137,7 +137,7 @@ msgstr "Ny längd måste vara inom intervallet [0..%lld].\n"
 msgid "Truncating image to %lld sectors.\n"
 msgstr "Kapar avbild till %lld sektorer.\n"
 
-#: debug.c:395 read-linear.c:1167 rs01-fix.c:197 rs01-fix.c:219 rs01-fix.c:235
+#: debug.c:395 read-linear.c:1194 rs01-fix.c:197 rs01-fix.c:219 rs01-fix.c:235
 #: rs01-fix.c:270 rs02-create.c:103 rs02-create.c:147 rs02-fix.c:236
 #: rs02-fix.c:257 rs02-fix.c:272
 #, c-format
@@ -146,7 +146,7 @@ msgstr "Kunde inte kapa %s: %s\n"
 
 #: debug.c:421 debug.c:948 debug.c:956 debug.c:1013 debug.c:1018 file.c:59
 #: file.c:125 file.c:145 read-adaptive.c:1140 read-adaptive.c:1168
-#: read-linear.c:281 read-linear.c:283 read-linear.c:314 read-linear.c:316
+#: read-linear.c:286 read-linear.c:288 read-linear.c:319 read-linear.c:321
 #, c-format
 msgid ""
 "Can't open %s:\n"
@@ -174,8 +174,8 @@ msgstr ""
 "dvdisaster --debug %s %lld --random-seed %d\n"
 "\n"
 
-#: debug.c:497 file.c:104 read-adaptive.c:147 read-linear.c:99
-#: read-linear.c:102
+#: debug.c:497 file.c:104 read-adaptive.c:147 read-linear.c:104
+#: read-linear.c:107
 #, c-format
 msgid ""
 "Error closing image file:\n"
@@ -245,7 +245,7 @@ msgstr ""
 msgid "Copying sector %lld from %s to sector %lld in %s.\n"
 msgstr ""
 
-#: dvdisaster.c:66 main-window.c:136
+#: dvdisaster.c:66 main-window.c:128
 #, c-format
 msgid ""
 "\n"
@@ -640,79 +640,79 @@ msgstr ""
 msgid "dvdisaster-%s log\n"
 msgstr "dvdisaster-%s logg\n"
 
-#: main-window.c:237
+#: main-window.c:229
 msgid "button|Read"
 msgstr "Läs"
 
-#: main-window.c:240
+#: main-window.c:232
 msgid "tooltip|Read Image"
 msgstr "Läs avbild"
 
-#: main-window.c:240
+#: main-window.c:232
 msgid "Reads a CD/DVD image into a file (or tries to complete an existing image file)."
 msgstr "Läser en cd/dvd-avbild till en fil (eller försöker att färdigställa en existerande avbildsfil)."
 
-#: main-window.c:254
+#: main-window.c:246
 msgid "button|Create"
 msgstr "Skapa"
 
-#: main-window.c:257
+#: main-window.c:249
 msgid "tooltip|Create error correction data"
 msgstr ""
 
-#: main-window.c:257
+#: main-window.c:249
 msgid "Creates error correction data. Requires an image file."
 msgstr ""
 
-#: main-window.c:261
+#: main-window.c:253
 msgid "button|Scan"
 msgstr "Sök av"
 
-#: main-window.c:264
+#: main-window.c:256
 msgid "tooltip|Scan medium"
 msgstr "Sök av medium"
 
-#: main-window.c:264
+#: main-window.c:256
 msgid "Scans medium for unreadable sectors."
 msgstr "Söker av medium för oläsbara sektorer."
 
-#: main-window.c:268
+#: main-window.c:260
 msgid "button|Fix"
 msgstr "Rätta till"
 
-#: main-window.c:271
+#: main-window.c:263
 msgid "tooltip|Repair image"
 msgstr "Reparera avbild"
 
-#: main-window.c:271
+#: main-window.c:263
 msgid "Repairs an image. Requires an image file and error correction data."
 msgstr "Reparerar en avbild. Kräver en avbildsfil och felkorrigeringsdata."
 
-#: main-window.c:275
+#: main-window.c:267
 msgid "button|Verify"
 msgstr "Validera"
 
-#: main-window.c:278
+#: main-window.c:270
 msgid "tooltip|Consistency check"
 msgstr ""
 
-#: main-window.c:278
+#: main-window.c:270
 msgid "Tests consistency of error correction data and image file."
 msgstr "Testar konsistensen på felkorrigeringsdata och avbildsfil."
 
-#: main-window.c:282
+#: main-window.c:274
 msgid "button|Stop"
 msgstr "Stopp"
 
-#: main-window.c:285
+#: main-window.c:277
 msgid "tooltip|Abort action"
 msgstr "Avbryt operation"
 
-#: main-window.c:285
+#: main-window.c:277
 msgid "Aborts an ongoing action."
 msgstr "Avbryter en pågående operation."
 
-#: main-window.c:419
+#: main-window.c:411
 #, c-format
 msgid ""
 "<b>dvdisaster is not properly installed</b>\n"
@@ -720,15 +720,15 @@ msgid ""
 "Please execute the installer program (%s) again.\n"
 msgstr ""
 
-#: main-window.c:514
+#: main-window.c:506
 msgid "tooltip|Protocol for current action"
 msgstr "Protokoll för aktuell operation"
 
-#: main-window.c:515
+#: main-window.c:507
 msgid "Displays additional information created during the current or last action."
 msgstr "Visar ytterligare information skapad under aktuella eller senaste operationen."
 
-#: main-window.c:524
+#: main-window.c:516
 msgid "View log"
 msgstr "Visa logg"
 
@@ -1729,11 +1729,11 @@ msgid ""
 "Medium and ecc file do not belong together.\n"
 msgstr ""
 
-#: read-adaptive.c:598 read-linear.c:345
+#: read-adaptive.c:598 read-linear.c:350
 msgid "Image file does not match the CD/DVD."
 msgstr "Avbildsfil stämmer inte med cd/dvd."
 
-#: read-adaptive.c:601 read-linear.c:348
+#: read-adaptive.c:601 read-linear.c:353
 msgid ""
 "Image file already exists and does not match the CD/DVD.\n"
 "The existing image file will be deleted."
@@ -1754,7 +1754,7 @@ msgstr ""
 "Avbildsfil är %lld sektorer längre än inmatat medium\n"
 "(Avbildsfil: %lld sektorer; medium: %lld sektorer).\n"
 
-#: read-adaptive.c:669 read-linear.c:458 rs01-common.c:119 rs01-create.c:241
+#: read-adaptive.c:669 read-linear.c:464 rs01-common.c:119 rs01-create.c:241
 #: rs01-verify.c:769
 #, c-format
 msgid "Failed skipping the ecc header: %s"
@@ -1769,7 +1769,7 @@ msgstr "Analyserar existerande avbildsfil"
 msgid "premature end in image (only %d bytes): %s\n"
 msgstr "för tidigt slut på avbild (endast %d byte): %s\n"
 
-#: read-adaptive.c:723 read-adaptive.c:1341 read-linear.c:466
+#: read-adaptive.c:723 read-adaptive.c:1341 read-linear.c:472
 #: rs01-common.c:221
 #, c-format
 msgid "Error reading CRC information: %s"
@@ -1794,15 +1794,15 @@ msgstr "Analyserar existerande avbildsfil: %lld läsbara, %lld korrigerbara, %ll
 msgid "Analysing existing image file: %lld readable, %lld still missing.\n"
 msgstr "Analyserar existerande avbildsfil: %lld läsbara, %lld saknas fortfarande.\n"
 
-#: read-adaptive.c:927 read-linear.c:710
+#: read-adaptive.c:927 read-linear.c:716
 msgid "Ignore once"
 msgstr "Ignorera en gång"
 
-#: read-adaptive.c:928 read-linear.c:711
+#: read-adaptive.c:928 read-linear.c:717
 msgid "Ignore always"
 msgstr "Ignorera alltid"
 
-#: read-adaptive.c:929 read-linear.c:712
+#: read-adaptive.c:929 read-linear.c:718
 msgid "Abort"
 msgstr "Avbryt"
 
@@ -1812,7 +1812,7 @@ msgid "Filling image area [%lld..%lld]"
 msgstr "Fyller avbildsområde [%lld..%lld]"
 
 #: read-adaptive.c:977 read-adaptive.c:1042 read-adaptive.c:1316
-#: read-adaptive.c:1520 read-linear.c:405 read-linear.c:643 read-linear.c:867
+#: read-adaptive.c:1520 read-linear.c:410 read-linear.c:649 read-linear.c:894
 #: rs01-fix.c:444 rs01-fix.c:702 rs02-fix.c:741
 #, c-format
 msgid "Failed seeking to sector %lld in image [%s]: %s"
@@ -1820,33 +1820,33 @@ msgstr "Misslyckades med att söka fram till sektor %lld i avbild [%s]: %s"
 
 #: read-adaptive.c:989 read-adaptive.c:1047 read-adaptive.c:1359
 #: read-adaptive.c:1370 read-adaptive.c:1386 read-adaptive.c:1526
-#: read-linear.c:411 read-linear.c:650 rs01-fix.c:449
+#: read-linear.c:416 read-linear.c:656 rs01-fix.c:449
 #, c-format
 msgid "Failed writing to sector %lld in image [%s]: %s"
 msgstr "Misslyckades med att skriva till sektor %lld i avbild [%s]: %s"
 
-#: read-adaptive.c:1081 read-linear.c:167
+#: read-adaptive.c:1081 read-linear.c:172
 msgid "Reading aborted"
 msgstr "Läsning avbruten"
 
-#: read-adaptive.c:1084 read-linear.c:171
+#: read-adaptive.c:1084 read-linear.c:176
 msgid "Preparing for reading the medium image."
 msgstr "Förbereder för läsning av mediumavbild."
 
-#: read-adaptive.c:1085 read-linear.c:164 read-linear.c:172
+#: read-adaptive.c:1085 read-linear.c:169 read-linear.c:177
 msgid "Medium: not yet determined"
 msgstr "Medium: ännu inte fastställt"
 
-#: read-adaptive.c:1142 read-linear.c:285
+#: read-adaptive.c:1142 read-linear.c:290
 #, c-format
 msgid "Creating new %s image.\n"
 msgstr "Skapar ny avbild %s.\n"
 
-#: read-adaptive.c:1146 read-linear.c:278
+#: read-adaptive.c:1146 read-linear.c:283
 msgid "Reading new medium image."
 msgstr "Läser ny mediumavbild."
 
-#: read-adaptive.c:1162 read-linear.c:306
+#: read-adaptive.c:1162 read-linear.c:311
 msgid "Completing existing medium image."
 msgstr "Färdigställer existerande mediumavbild."
 
@@ -1858,7 +1858,7 @@ msgstr ""
 "\n"
 "Tillräcklig data för att återskapa avbilden finns tillgänglig.\n"
 
-#: read-adaptive.c:1289 read-linear.c:923
+#: read-adaptive.c:1289 read-linear.c:950
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -1866,7 +1866,7 @@ msgid ""
 "Use the --ignore-fatal-sense option to override."
 msgstr ""
 
-#: read-adaptive.c:1294 read-linear.c:928
+#: read-adaptive.c:1294 read-linear.c:955
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -1894,7 +1894,7 @@ msgstr "CRC-fel i sektor %lld\n"
 msgid "Sectors %lld-%lld: %s\n"
 msgstr "Sektorer %lld-%lld: %s\n"
 
-#: read-adaptive.c:1512 read-linear.c:1057 scsi-layer.c:816
+#: read-adaptive.c:1512 read-linear.c:1084 scsi-layer.c:816
 #, c-format
 msgid "Sector %lld: %s\n"
 msgstr "Sektor %lld: %s\n"
@@ -1969,12 +1969,12 @@ msgstr ""
 msgid "Total recoverable: %d.%d%%"
 msgstr "Totalt återhämtningsbara: %d.%d%%"
 
-#: read-linear.c:93
+#: read-linear.c:98
 #, c-format
 msgid "<span %s>Aborted by unrecoverable error.</span> %lld sectors read, %lld sectors unreadable/skipped so far."
 msgstr "<span %s>Avbruten av ej återhämtningsbart fel.</span> %lld sektorer lästa, %lld sektorer oläsbara/överhoppade än så länge."
 
-#: read-linear.c:125
+#: read-linear.c:130
 msgid ""
 "Automatic error correction file creation\n"
 "is only possible after a full reading pass.\n"
@@ -1982,15 +1982,15 @@ msgstr ""
 "Skapande av automatisk felkorrigeringsfil\n"
 "är endast möjlig efter en fullständig läsning.\n"
 
-#: read-linear.c:159
+#: read-linear.c:164
 msgid "Scanning aborted"
 msgstr "Avsökning avbruten"
 
-#: read-linear.c:163 read-linear.c:251
+#: read-linear.c:168 read-linear.c:256
 msgid "Scanning medium for read errors."
 msgstr "Söker av medium efter läsfel."
 
-#: read-linear.c:189
+#: read-linear.c:194
 #, c-format
 msgid ""
 "Automatic error correction file creation is enabled,\n"
@@ -2001,7 +2001,7 @@ msgstr ""
 "aktiverat, och \"%s\" existerar redan.\n"
 "Skriva över den?\n"
 
-#: read-linear.c:196 rs01-create.c:643 rs01-fix.c:187 rs01-fix.c:209
+#: read-linear.c:201 rs01-create.c:643 rs01-fix.c:187 rs01-fix.c:209
 #: rs01-fix.c:255 rs01-fix.c:285 rs01-fix.c:302 rs01-fix.c:355
 #: rs01-verify.c:429 rs01-verify.c:786 rs02-create.c:111 rs02-fix.c:227
 #: rs02-fix.c:248 rs02-fix.c:339 rs02-verify.c:684
@@ -2009,125 +2009,125 @@ msgstr ""
 msgid "<span %s>Aborted by user request!</span>"
 msgstr "<span %s>Avbruten av användaren!</span>"
 
-#: read-linear.c:258 read-linear.c:290 read-linear.c:460
+#: read-linear.c:263 read-linear.c:295 read-linear.c:466
 msgid "Reading CRC information from ecc file"
 msgstr "Läser CRC-information från ecc-fil"
 
-#: read-linear.c:354
+#: read-linear.c:359
 #, c-format
 msgid "<span %s>Reading aborted.</span> Please select a different image file."
 msgstr "<span %s>Läsning avbruten.</span> Välj en annan avbildsfil."
 
-#: read-linear.c:375
+#: read-linear.c:380
 #, c-format
 msgid "Completing image %s. Continuing with sector %lld.\n"
 msgstr "Färdigställer avbild %s. Fortsätter med sektor %lld.\n"
 
-#: read-linear.c:381
+#: read-linear.c:386
 #, c-format
 msgid "Completing image %s. Only missing sectors will be read.\n"
 msgstr "Färdigställer avbild %s. Endast saknade sektorer kommer att läsas.\n"
 
-#: read-linear.c:472
+#: read-linear.c:478
 msgid "done.\n"
 msgstr "klar.\n"
 
-#: read-linear.c:491 scsi-layer.c:1212
+#: read-linear.c:497 scsi-layer.c:1212
 #, c-format
 msgid "Waiting %d seconds for drive to spin up...\n"
 msgstr "Väntar %d sekunder på att enheten ska varva upp...\n"
 
-#: read-linear.c:513 read-linear-window.c:94
+#: read-linear.c:519 read-linear-window.c:94
 #, c-format
 msgid "Unreadable / skipped sectors: %lld"
 msgstr "Oläsbara / överhoppade sektorer: %lld"
 
-#: read-linear.c:583
+#: read-linear.c:589
 #, c-format
 msgid "Sector %lld: Speed increased to %4.1fx\n"
 msgstr "Sektor %lld: Hastighet ökad till %4.1fx\n"
 
-#: read-linear.c:586
+#: read-linear.c:592
 #, c-format
 msgid "Sector %lld: Speed dropped to %4.1fx\n"
 msgstr "Sektor %lld: Hastighet minskad till %4.1fx\n"
 
-#: read-linear.c:591
+#: read-linear.c:597
 #, c-format
 msgid "Read position: %3d.%1d%% (%4.1fx)"
 msgstr "Läsposition: %3d.%1d%% (%4.1fx)"
 
-#: read-linear.c:673 rs01-common.c:227 rs02-verify.c:736
+#: read-linear.c:679 rs01-common.c:227 rs02-verify.c:736
 #, c-format
 msgid "* CRC error, sector: %lld\n"
 msgstr "* CRC-fel, sektor: %lld\n"
 
-#: read-linear.c:824 read-linear.c:938
+#: read-linear.c:851 read-linear.c:965
 #, c-format
 msgid "<span %s>Aborted by user request!</span> %lld sectors read, %lld sectors unreadable/skipped so far."
 msgstr "<span %s>Avbröts på användarens begäran!</span> %lld sektorer lästa, %lld sektorer oläsbara/överhoppade än så länge."
 
-#: read-linear.c:878
+#: read-linear.c:905
 #, c-format
 msgid "unexpected read error in image for sector %lld"
 msgstr "oväntat läsfel i avbild för sektor %lld"
 
-#: read-linear.c:1037
+#: read-linear.c:1064
 #, c-format
 msgid "Sector %lld: %s Skipping %d sectors.\n"
 msgstr "Sektor %lld: %s Hoppar över %d sektorer.\n"
 
-#: read-linear.c:1109
+#: read-linear.c:1136
 #, c-format
 msgid "%lld sectors read.     "
 msgstr "%lld sektorer lästa.     "
 
-#: read-linear.c:1110
+#: read-linear.c:1137
 #, c-format
 msgid "%lld sectors read; %lld unreadable sectors."
 msgstr "%lld sektorer lästa; %lld oläsbara sektorer."
 
-#: read-linear.c:1118
+#: read-linear.c:1145
 #, c-format
 msgid "All sectors successfully read, but wrong image length (%lld sectors difference)"
 msgstr "Alla sektorer lästa men felaktig avbildslängd (skiljer %lld sektorer)"
 
-#: read-linear.c:1122
+#: read-linear.c:1149
 msgid "All sectors successfully read, but wrong image checksum."
 msgstr "Alla sektorer lästa men felaktig kontrollsumma på avbild."
 
-#: read-linear.c:1123
+#: read-linear.c:1150
 msgid "All sectors successfully read. Checksums match."
 msgstr "Alla sektorer lästa. Kontrollsummor stämmer."
 
-#: read-linear.c:1125
+#: read-linear.c:1152
 msgid "All sectors successfully read."
 msgstr "Alla sektorer lästa."
 
-#: read-linear.c:1129
+#: read-linear.c:1156
 #, c-format
 msgid "%lld unreadable sectors."
 msgstr "%lld oläsbara sektorer."
 
-#: read-linear.c:1131
+#: read-linear.c:1158
 #, c-format
 msgid "%lld CRC errors."
 msgstr "%lld CRC-fel."
 
-#: read-linear.c:1132
+#: read-linear.c:1159
 #, c-format
 msgid "%lld CRC errors, %lld unreadable sectors."
 msgstr "%lld CRC-fel, %lld oläsbara sektorer."
 
-#: read-linear.c:1138
+#: read-linear.c:1165
 msgid "Scanning finished: "
 msgstr "Avsökning färdig: "
 
-#: read-linear.c:1140
+#: read-linear.c:1167
 msgid "Reading finished: "
 msgstr "Läsning färdig: "
 
-#: read-linear.c:1151
+#: read-linear.c:1178
 #, c-format
 msgid ""
 "%d sectors missing at the end of the disc.\n"
@@ -2138,7 +2138,7 @@ msgstr ""
 "Detta är okej om cd-skivan skrevs i TAO-läget (track at once).\n"
 "Avbilden kommer att kapas enligt det. Se manualen för detaljer.\n"
 
-#: read-linear.c:1157
+#: read-linear.c:1184
 #, c-format
 msgid ""
 "%d sectors missing at the end of the disc.\n"
@@ -2156,32 +2156,32 @@ msgstr ""
 msgid "Current Speed: %d.%dx"
 msgstr "Aktuell hastighet: %d.%dx"
 
-#: read-linear-window.c:223 read-linear-window.c:265 rs01-verify.c:123
+#: read-linear-window.c:217 read-linear-window.c:285
+msgid "Already present"
+msgstr "Finns redan"
+
+#: read-linear-window.c:250 read-linear-window.c:292 rs01-verify.c:123
 #: rs02-verify.c:118
 msgid "Sectors with CRC errors"
 msgstr "Sektorer med CRC-fel"
 
-#: read-linear-window.c:246
+#: read-linear-window.c:273
 msgid "Media state"
 msgstr "Mediastatus"
 
-#: read-linear-window.c:254
+#: read-linear-window.c:281
 msgid "Not touched this time"
 msgstr "Rörs inte denna gång"
 
-#: read-linear-window.c:258
-msgid "Already present"
-msgstr "Finns redan"
-
-#: read-linear-window.c:261
+#: read-linear-window.c:288
 msgid "Successfully read"
 msgstr "Läsning lyckades"
 
-#: read-linear-window.c:268
+#: read-linear-window.c:295
 msgid "Unreadable / skipped"
 msgstr "Oläsbar / överhoppad"
 
-#: read-linear-window.c:349
+#: read-linear-window.c:376
 msgid "Speed"
 msgstr "Hastighet"
 

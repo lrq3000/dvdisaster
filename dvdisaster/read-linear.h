@@ -35,6 +35,7 @@ typedef struct
    EccInfo *ei;
    GThread *worker;
    struct MD5Context md5ctxt;
+   int savedSectorSkip;
 
    /* Data exchange between reader and worker */
 

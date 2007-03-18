@@ -60,6 +60,11 @@ static void cleanup(gpointer data)
    int scan_mode = rc->scanMode;
    int i;
 
+   /* In reading passes > 1, Closure->sectorSkip is forced to be one.
+      Restore the old value now. */
+
+   Closure->sectorSkip = rc->savedSectorSkip;
+
    /* Reset temporary ignoring of fatal errors.
       User has to set this in the preferences to make it permanent. */
 
@@ -722,6 +727,10 @@ void ReadMediumLinear(gpointer data)
    int tao_tail = 0;
    int i;
 
+   /*** This value might be temporarily changed later. */
+
+   rc->savedSectorSkip = Closure->sectorSkip;
+
    /*** Register the cleanup procedure so that Stop() can abort us properly. */
 
    rc->unreportedError  = TRUE;
@@ -806,6 +815,21 @@ void ReadMediumLinear(gpointer data)
 next_reading_pass:
    if(rc->pass > 0)
    {  Closure->readErrors = Closure->crcErrors = 0;
+      switch(rc->dh->mainType)
+      {  case BD:
+	 case HDDVD:
+	    if(Closure->sectorSkip > 32)
+	       Closure->sectorSkip = 32;
+	    break;
+	 case DVD:
+	    if(Closure->sectorSkip > 16)
+	       Closure->sectorSkip = 16;
+	    break;
+	 default:
+	    Closure->sectorSkip = 0;
+	    break;
+      }
+      Closure->sectorSkip = 0;
       MarkExistingSectors();
    }
 

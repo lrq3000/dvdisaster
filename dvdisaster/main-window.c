@@ -115,15 +115,7 @@ static void action_cb(GtkWidget *widget, gpointer data)
 	else 
 	{    gtk_notebook_set_current_page(GTK_NOTEBOOK(Closure->notebook), 1);
 
-	     /*** Add spiral label for previously read sectors
-		  if multiple reading passes are requested. */
-
-	     if(Closure->readingPasses > 1)
-		  Closure->additionalSpiralColor = 3;
-	     else Closure->additionalSpiralColor = 1;
-
-	     /*** Reset and redraw the window */
-
+	     Closure->additionalSpiralColor = 1;
 	     ResetLinearReadWindow();
 	     CreateGThread((GThreadFunc)ReadMediumLinear, (gpointer)0);
 	}
