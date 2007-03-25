@@ -1,4 +1,4 @@
-.TH DVDISASTER 1 "2006-07-06" "0.70" "protection for CD/DVD media"
+.TH DVDISASTER 1 "2007-03-19" "0.72" "protection for CD/DVD media"
 
 .SH NAME
 DVDISASTER \- data loss/scratch/aging protection for CD/DVD media
@@ -27,10 +27,17 @@ DVDISASTER \- data loss/scratch/aging protection for CD/DVD media
 .RB [\| \-\-cache-size
 .IR n \|]
 .RB [\| \-\-dao \|]
+.RB [\| \-\-eject \|]
 .RB [\| \-\-fill-unreadable
 .IR n \|]
+.RB [\| \-\-ignore-fatal-sense \|]
 .RB [\| \-\-query-size
 .IR n \|]
+.RB [\| \-\-read-attempts
+.IR n-m \|]
+.RB [\| \-\-read-medium
+.IR n \|]
+.RB [\| \-\-read-raw \|]
 .RB [\| \-\-speed-warning
 .IR n \|]
 .RB [\| \-\-spinup\-delay
@@ -51,6 +58,16 @@ Scans the medium in drive \fI/dev/hdc\fP for errors.
 .TP
 \fBdvdisaster\fP \fB-d\fP \fI/dev/hdc\fP \fB-i\fP \fImedium.iso\fP \fB-r\fP
 Reads an image from drive \fI/dev/hdc\fP into the file \fImedium.iso\fP.
+.TP
+\fBdvdisaster\fP \fB-d\fP \fI/dev/hdc\fP \fB-i\fP \fImedium.iso\fP \fB--read-raw\fP \fB-r\fP
+Creates an image as described above. Each sector's integrity is verified
+by using its EDC and L-EC raw data. Only possible for CD media; otherwise
+the \fB--read-raw\fP option is silently ignored.
+.TP
+\fBdvdisaster\fP \fB-d\fP \fI/dev/hdc\fP \fB-i\fP \fImedium.iso\fP \fB--read-attempts\fP \fIn-m\fP \fB-r\fP
+Creates an image as described above. Defective sectors are retried at least \fIn\fP
+times and at most \fIm\fP times. Recovery of defective CD media may improve when
+combined with \fB--read-raw\fI. 
 .TP
 \fBdvdisaster\fP \fB-d\fP \fI/dev/hdc\fP \fB-i\fP \fImedium.iso\fP \fB-e\fP \fIcorr.ecc\fP \fB-r\fP \fB--adaptive-read\fP
 Uses the adaptive reading strategy to read an image from 
@@ -147,14 +164,29 @@ image cache size in MB during -c mode (default: 32MB).
 .B \-\-dao
 assume DAO disc; do not trim image end.
 .TP
+.B \-\-eject
+eject medium after successful read.
+.TP
 .B \-\-fill-unreadable n
 fill unreadable sectors with byte n
+.TP
+.B \-\-ignore-fatal-sense
+continue reading after potentially fatal error condition.
 .TP
 .B \-\-query-size n
 queries drive or filesystem on medium for image size (default: ecc)
 .RS
 Possible values are: drive udf ecc 
 .RE
+.TP
+.B \-\-read-attempts n-m
+attempts n upto m reads of a defective sector.
+.TP
+.B \-\-read-medium n
+read the whole medium up to n times.
+.TP
+.B \-\-read-raw
+performs read in raw mode if possible.
 .TP
 .B \-\-speed-warning n
 print warning if speed changes by more than n percent.
@@ -176,4 +208,4 @@ DVDISASTER was written by Carsten Gnoerlich <carsten@dvdisaster.com>.
 .PP
 This manual page was written by Daniel Baumann
 <daniel.baumann@panthera-systems.net>, for the Debian project (but may be used
-by others). It was enhanced for V0.70 by Carsten Gnoerlich.
+by others). It was enhanced for V0.70/0.72 by Carsten Gnoerlich.

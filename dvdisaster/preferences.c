@@ -93,6 +93,10 @@ typedef struct _prefs_context
    GtkWidget *methodChooserA,*methodChooserB;
    GtkWidget *methodNotebook;
    GtkWidget *cancelOKA, *cancelOKB;
+   GtkWidget *verboseA, *verboseB;
+   GtkWidget *logFileA, *logFileB;
+   GtkWidget *logFilePathA, *logFilePathB;
+   GtkWidget *logFileChooser;
 
    color_button_info *redA, *redB;
    color_button_info *yellowA, *yellowB;
@@ -301,6 +305,8 @@ enum
    TOGGLE_CANCEL_OK,
    TOGGLE_FATAL_SENSE,
    TOGGLE_EJECT,
+   TOGGLE_VERBOSE,
+   TOGGLE_LOGFILE,
 
    SPIN_DELAY,
    SPIN_READ_MEDIUM,
@@ -385,6 +391,12 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->cacheDefectiveB), state);
 	break;
 
+      case TOGGLE_LOGFILE:
+	Closure->logFileEnabled = state;
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->logFileA), state);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->logFileB), state);
+	break;
+
       case TOGGLE_CANCEL_OK:
 	Closure->reverseCancelOK = state;
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->cancelOKA), state);
@@ -419,6 +431,12 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 	Closure->eject = state;
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->ejectA), state);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->ejectB), state);
+	break;
+
+      case TOGGLE_VERBOSE:
+	Closure->verbose = state;
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->verboseA), state);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->verboseB), state);
 	break;
 
       case TOGGLE_RANGE:
@@ -1022,8 +1040,9 @@ static void cache_defective_select_cb(GtkWidget *widget, gpointer data)
 	 break;
 
       case 1: /* OK */
+	 if(Closure->dDumpDir)
+	    g_free(Closure->dDumpDir);
 	 Closure->dDumpDir = g_strdup(gtk_file_selection_get_filename(GTK_FILE_SELECTION(pc->cacheDefectiveChooser)));
-	 printf("%s\n", Closure->dDumpDir);
 	 if(pc->cacheDefectiveDirA)
 	    gtk_label_set_text(GTK_LABEL(pc->cacheDefectiveDirA), Closure->dDumpDir);
 	 if(pc->cacheDefectiveDirB)
@@ -1073,6 +1092,61 @@ static void cache_defective_dir_cb(GtkWidget *widget, gpointer data)
    gtk_widget_show(pc->cacheDefectiveChooser);
 }
 
+
+/*
+ * Run the file chooser for the log file
+ */
+
+static void logfile_select_cb(GtkWidget *widget, gpointer data)
+{  prefs_context *pc = (prefs_context*)Closure->prefsContext;
+   int action = GPOINTER_TO_INT(data);
+
+   switch(action)
+   {  case 0:  /* destroy */
+	 pc->logFileChooser = NULL;
+	 break;
+
+      case 1: /* OK */
+	 g_free(Closure->logFile);
+	 Closure->logFile = g_strdup(gtk_file_selection_get_filename(GTK_FILE_SELECTION(pc->logFileChooser)));
+	 InitLogFile();
+	 if(pc->logFilePathA)
+	    gtk_label_set_text(GTK_LABEL(pc->logFilePathA), Closure->logFile);
+	 if(pc->logFilePathB)
+	    gtk_label_set_text(GTK_LABEL(pc->logFilePathB), Closure->logFile);
+	 gtk_widget_hide(pc->logFileChooser);
+	 break;
+
+      case 2: /* Cancel */
+	 gtk_widget_hide(pc->logFileChooser);
+	 break;
+   }
+}
+
+static void logfile_cb(GtkWidget *widget, gpointer data)
+{  prefs_context *pc = (prefs_context*)data;
+
+   if(!pc->logFileChooser)
+   {  char filename[strlen(Closure->logFile)+10];
+
+      pc->logFileChooser = gtk_file_selection_new(_utf("Log file"));
+      ReverseCancelOK(GTK_DIALOG(pc->logFileChooser));
+
+      g_signal_connect(G_OBJECT(pc->logFileChooser), "destroy",
+		       G_CALLBACK(logfile_select_cb), 
+		       GINT_TO_POINTER(0));
+      g_signal_connect(G_OBJECT(GTK_FILE_SELECTION(pc->logFileChooser)->ok_button),
+		       "clicked", G_CALLBACK(logfile_select_cb), GINT_TO_POINTER(1));
+      g_signal_connect(G_OBJECT(GTK_FILE_SELECTION(pc->logFileChooser)->cancel_button),
+		       "clicked", G_CALLBACK(logfile_select_cb), GINT_TO_POINTER(2));
+
+      sprintf(filename, "%s/", Closure->logFile);
+      gtk_file_selection_set_filename(GTK_FILE_SELECTION(pc->logFileChooser),
+				      filename);
+   }
+
+   gtk_widget_show(pc->logFileChooser);
+}
 
 /***
  *** Error correction method selection
@@ -1870,6 +1944,7 @@ void CreatePreferencesWindow(void)
 	 gtk_table_attach(GTK_TABLE(table), i ? lwoh->normalLabel : lwoh->linkBox,
 			  1, 2, 0, 1, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
 	 gtk_misc_set_alignment(GTK_MISC(lwoh->linkLabel), 0.0, 0.0);
+	 gtk_misc_set_alignment(GTK_MISC(lwoh->normalLabel), 0.0, 0.0);
 
 	 hbox = gtk_hbox_new(FALSE, 0);
 	 gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
@@ -1877,7 +1952,7 @@ void CreatePreferencesWindow(void)
 			  1, 2, 1, 2, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
 
 	 gtk_table_attach(GTK_TABLE(table), select, 
-			  2, 3, 0, 2, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
+			  2, 3, 0, 2, GTK_SHRINK, GTK_SHRINK, 0, 0);
 	 g_signal_connect(G_OBJECT(select), "clicked", G_CALLBACK(cache_defective_dir_cb), pc);
 
 
@@ -2579,6 +2654,113 @@ void CreatePreferencesWindow(void)
 			 "This switch reverses the order of dialog buttons "
 			 "(e.g. OK, Cancel).\n\n"
 			 "Changes will become active after restarting dvdisaster."));
+
+      /*** "Misc" page */
+
+      vbox = create_page(notebook, _utf("Misc"));
+
+      /** Logging **/
+
+      frame = gtk_frame_new(_utf("Logging"));
+      gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
+
+      vbox2 = gtk_vbox_new(FALSE, 15);
+      gtk_container_set_border_width(GTK_CONTAINER(vbox2), 10);
+      gtk_container_add(GTK_CONTAINER(frame), vbox2);
+
+      lwoh = CreateLabelWithOnlineHelp(_("Verbose logging"), _("Verbose logging"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
+	 GtkWidget *button = gtk_check_button_new();
+
+	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
+	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
+
+	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->verbose);
+	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_VERBOSE));
+
+	 if(!i)
+	 {  pc->verboseA = button;
+	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	 }
+	 else
+	 {  pc->verboseB = button;
+	    AddHelpWidget(lwoh, hbox);
+	 }
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Verbose logging</b>\n\n"
+			 "More information will be supplied in the Log window "
+			 "and/or log file. Useful for debugging, but may lead "
+			 "to slower performance."));
+
+      /** Log file */
+
+#if 0      
+      frame = gtk_frame_new(_utf("Raw sector caching"));
+      gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
+
+      vbox2 = gtk_vbox_new(FALSE, 20);
+      gtk_container_set_border_width(GTK_CONTAINER(vbox2), 10);
+      gtk_container_add(GTK_CONTAINER(frame), vbox2);
+#endif
+      /* Toggle button */
+
+      lwoh = CreateLabelWithOnlineHelp(_("Logfile:"), 
+				       _("Copy log to file:"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *table = gtk_table_new(3,2,FALSE);
+	 GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
+	 GtkWidget *label = gtk_label_new(Closure->logFile);
+	 GtkWidget *select = gtk_button_new_with_label(_utf("Select"));
+
+	 button = gtk_check_button_new();
+	 gtk_table_attach(GTK_TABLE(table), button, 
+			  0, 1, 0, 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
+	 gtk_table_attach(GTK_TABLE(table), i ? lwoh->normalLabel : lwoh->linkBox,
+			  1, 2, 0, 1, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
+	 gtk_misc_set_alignment(GTK_MISC(lwoh->linkLabel), 0.0, 0.0);
+	 gtk_misc_set_alignment(GTK_MISC(lwoh->normalLabel), 0.0, 0.0);
+
+	 hbox = gtk_hbox_new(FALSE, 0);
+	 gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+	 gtk_table_attach(GTK_TABLE(table), hbox, 
+			  1, 2, 1, 2, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
+
+	 gtk_table_attach(GTK_TABLE(table), select, 
+			  2, 3, 0, 2, GTK_SHRINK, GTK_SHRINK, 0, 0);
+	 g_signal_connect(G_OBJECT(select), "clicked", G_CALLBACK(logfile_cb), pc);
+
+
+ 	 if(!i) 
+	 {    pc->logFileA = button;
+	      pc->logFilePathA = label;
+	 }
+	 else
+	 {    pc->logFileB = button;
+	      pc->logFilePathB = label;
+	 }
+
+	 if(Closure->verbose && Closure->logFileEnabled)
+	      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
+	 else gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), FALSE);
+         g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_LOGFILE));
+
+	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), table, FALSE, FALSE, 0);
+	 else   AddHelpWidget(lwoh, table);
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Logfile</b>\n\n"
+			 "A copy of the logging information from the log window "
+			 "is written to the specified log file. This is useful to "
+			 "collect information on program crashes, but affects "
+			 "performance negatively."));
    }
 
    /* Show the created / reused window */

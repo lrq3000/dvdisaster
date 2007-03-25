@@ -21,10 +21,6 @@
 
 #include "dvdisaster.h"
 
-#ifdef WITH_LOGFILE_YES
- #include <time.h>
-#endif
-
 #ifdef SYS_MINGW
  #include <windows.h>
  #include <tlhelp32.h>
@@ -167,9 +163,7 @@ int VerifySignature()
 
 static void get_base_dirs()
 {  struct stat mystat;
-#ifdef WITH_LOGFILE_YES
-   time_t now;
-#endif
+
 #ifdef SYS_MINGW
    char *appdata;
 #endif
@@ -214,9 +208,7 @@ static void get_base_dirs()
 
 #ifndef SYS_MINGW
 find_dotfile:
-
    Closure->dotFile = g_strdup_printf("%s/.dvdisaster", g_getenv("HOME"));
-   Closure->logFile = g_strdup_printf("%s/.dvdisaster.log", g_getenv("HOME"));
 #endif
 
 #ifdef SYS_MINGW
@@ -230,26 +222,31 @@ find_dotfile:
 	   appdata ? appdata : "NULL");
 
    if(appdata)
-   {  char *our_dir = g_strdup_printf("%s\\dvdisaster", appdata);
+   {  Closure->appData = g_strdup_printf("%s\\dvdisaster", appdata);
 
       if(!stat(appdata, &mystat)) /* CSIDL_APPDATA present? */
       { 
 	 Verbose("- dotfile path : %s\n", our_dir);
 
-	 if(!stat(our_dir, &mystat))
+	 if(!stat(Closure->appData, &mystat))
 	 {  Closure->dotFile = g_strdup_printf("%s\\.dvdisaster", our_dir);
-	    Closure->logFile = g_strdup_printf("%s\\logfile.txt", our_dir);
 	    Verbose("- dotfile path : present\n");
 	 }
-	 else if(!mkdir(our_dir)) /* Note: Windows! */
+	 else if(!mkdir(Closure->appData)) /* Note: Windows! */
 	 {  Closure->dotFile = g_strdup_printf("%s\\.dvdisaster", our_dir);
-	    Closure->logFile = g_strdup_printf("%s\\logfile.txt", our_dir);
 	    Verbose("- dotfile path : - created -\n");
 	 }
+	 else 
+	 {  g_free(Closure->appData);
+	    Closure->appData = NULL;
+	 }
       }
-      else Verbose("- dotfile path : *can not be used*\n");
+      else 
+      {	 Verbose("- dotfile path : *can not be used*\n");
+	 g_free(Closure->appData);
+	 Closure->appData = NULL;
+      }
 
-      g_free(our_dir);
       g_free(appdata);
    }
 
@@ -257,29 +254,17 @@ find_dotfile:
 
    if(!Closure->dotFile)
       Closure->dotFile = g_strdup_printf("%s\\.dvdisaster", Closure->binDir);
-
-   if(!Closure->logFile)
-      Closure->logFile = g_strdup_printf("%s\\logfile.txt", Closure->binDir);
 #endif
 
    Verbose("\nUsing file locations:\n"
 	   "- Bin dir: %s\n"
 	   "- Doc dir: %s\n"
-	   "- dotfile: %s\n"
-	   "- logfile: %s\n\n",
+	   "- AppData: %s\n"
+	   "- dotfile: %s\n\n",
 	   Closure->binDir,
 	   Closure->docDir,
-	   Closure->dotFile,
-	   Closure->logFile);   
-
-#ifdef WITH_LOGFILE_YES
-   if(!stat(Closure->logFile, &mystat))
-     unlink(Closure->logFile);
-
-   time(&now);
-   PrintLogFile("dvdisaster-%s logging started at %s\n",
-		Closure->cookedVersion, ctime(&now));
-#endif
+	   Closure->appData,
+	   Closure->dotFile);   
 }
 
 /***
@@ -452,6 +437,9 @@ void ReadDotfile()
                                              }
       if(!strcmp(symbol, "ignore-fatal-sense")) { Closure->ignoreFatalSense  = atoi(value); continue; }
       if(!strcmp(symbol, "jump"))            { Closure->sectorSkip  = atoi(value); continue; }
+      if(!strcmp(symbol, "log-file-enabled")){ Closure->logFileEnabled = atoi(value); continue; }
+      if(!strcmp(symbol, "log-file"))        { if(Closure->logFile) g_free(Closure->logFile);
+	                                       Closure->logFile  = g_strdup(value); continue; }
       if(!strcmp(symbol, "medium-size"))     { Closure->mediumSize  = atoll(value); continue; }
       if(!strcmp(symbol, "method-name"))     { if(Closure->methodName) g_free(Closure->methodName);
 	                                       Closure->methodName = g_strdup(value); continue; }
@@ -467,6 +455,7 @@ void ReadDotfile()
       if(!strcmp(symbol, "spinup-delay"))    { Closure->spinupDelay = atoi(value); continue; }
       if(!strcmp(symbol, "split-files"))     { Closure->splitFiles  = atoi(value); continue; }
       if(!strcmp(symbol, "unlink"))          { Closure->unlinkImage = atoi(value); continue; }
+      if(!strcmp(symbol, "verbose"))         { Closure->verbose = atoi(value); continue; }
       if(!strcmp(symbol, "welcome-msg"))     { Closure->welcomeMessage = atoi(value); continue; }
 
       if(!strcmp(symbol, "positive-text"))   { get_color(Closure->greenText, value); 
@@ -539,6 +528,8 @@ static void update_dotfile()
    g_fprintf(dotfile, "fill-unreadable:   %d\n", Closure->fillUnreadable);
    g_fprintf(dotfile, "ignore-fatal-sense: %d\n", Closure->ignoreFatalSense);
    g_fprintf(dotfile, "jump:              %d\n", Closure->sectorSkip);
+   g_fprintf(dotfile, "log-file-enabled:  %d\n", Closure->logFileEnabled);
+   g_fprintf(dotfile, "log-file:          %s\n", Closure->logFile);
    g_fprintf(dotfile, "medium-size:       %lld\n", (long long int)Closure->mediumSize);
    g_fprintf(dotfile, "method-name:       %s\n", Closure->methodName);
    g_fprintf(dotfile, "max-read-attempts: %d\n", Closure->maxReadAttempts);
@@ -553,6 +544,7 @@ static void update_dotfile()
    g_fprintf(dotfile, "spinup-delay:      %d\n", Closure->spinupDelay);
    g_fprintf(dotfile, "split-files:       %d\n", Closure->splitFiles);
    g_fprintf(dotfile, "unlink:            %d\n", Closure->unlinkImage);
+   g_fprintf(dotfile, "verbose:           %d\n", Closure->verbose);
    g_fprintf(dotfile, "welcome-msg:       %d\n\n", Closure->welcomeMessage);
 
    save_colors(dotfile, "positive-text",      Closure->greenText);
@@ -667,6 +659,7 @@ void InitClosure()
    Closure->darkSector  = g_malloc0(sizeof(GdkColor));
 
    DefaultColors();
+   DefaultLogFile();
 
    memset(Closure->bs, '\b', 255);
 
@@ -735,6 +728,7 @@ void FreeClosure()
    cond_free(Closure->logFile);
    cond_free(Closure->binDir);
    cond_free(Closure->docDir);
+   cond_free(Closure->appData);
    cond_free(Closure->browser);
    cond_free(Closure->deadSector);
    cond_free(Closure->errorTitle);

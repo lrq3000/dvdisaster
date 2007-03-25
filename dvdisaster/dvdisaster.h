@@ -167,8 +167,10 @@ typedef struct _GlobalClosure
    char *deadSector;    /* Copy of our "dead sector" marker. */
    char *dotFile;       /* path to .dvdisaster file */
    char *logFile;       /* path to logfile */
+   int  logFileEnabled; /* logfile enabled */
    char *binDir;        /* place where the binary resides */
    char *docDir;        /* place where our documentation resides */
+   char *appData;       /* Windows specific */
    char *browser;       /* Name of preferred WEB browser */
 
    char bs[256];        /* A string of 255 backspace characters */
@@ -475,7 +477,6 @@ void RedrawCurve(Curve*, int, int);
  ***/
 
 void HexDump(unsigned char*, int, int);
-void LogDump(unsigned char*, int, int);
 void CopySector(char*);
 void Byteset(char*);
 void Erase(char*);
@@ -682,6 +683,15 @@ void OrQVector(unsigned char*, unsigned char, int);
 int DecodePQ(ReedSolomonTables*, unsigned char*, int, int*, int);
 
 /***
+ *** logfile.c
+ ***/
+
+void DefaultLogFile();
+void InitLogFile();
+void VPrintLogFile(char*, va_list);
+void PrintLogFile(char*, ...);
+
+/***
  *** main-window.c
  ***/
 
@@ -810,7 +820,6 @@ void CalcSectors(gint64, gint64*, int*);
 
 void PrintCLI(char*, ...);
 void PrintLog(char*, ...);
-void PrintLogFile(char*, ...);
 void Verbose(char*, ...);
 void PrintTimeToLog(GTimer*, char*, ...);
 void PrintProgress(char*, ...);

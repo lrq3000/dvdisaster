@@ -134,6 +134,57 @@ void CalcSectors(gint64 size, gint64 *sectors, int *in_last)
  ***/
 
 /*
+ * Append message to the log window.
+ */
+
+#define MAX_LOG_WIN_SIZE 10240
+
+static void clamp_gstring(GString *string)
+{  gchar *ptr;
+   int cut;
+
+
+   if(string->len < MAX_LOG_WIN_SIZE)
+      return;
+
+   /* Remove head of the string so that is get smaller than
+      the maximum size, and cut off until the next newline */
+
+   ptr = string->str;
+   ptr += string->len - MAX_LOG_WIN_SIZE;
+   while(*ptr && *ptr != '\n')
+      ptr++;
+
+   cut = ptr - string->str + 1;
+   g_string_erase(string, 0, cut);
+}
+
+static void log_window_vprintf(char *format, va_list argp)
+{  char *tmp,*utf_tmp;
+
+   tmp = g_strdup_vprintf(format, argp);
+   utf_tmp = g_locale_to_utf8(tmp, -1, NULL, NULL, NULL);
+   g_string_append(Closure->logString, utf_tmp);
+   clamp_gstring(Closure->logString);
+
+   UpdateLog();
+   
+   g_free(tmp);
+   g_free(utf_tmp);
+}
+
+static void log_window_append(char *text)
+{  char *utf_tmp = g_locale_to_utf8(text, -1, NULL, NULL, NULL);
+
+   g_string_append(Closure->logString, utf_tmp);
+   clamp_gstring(Closure->logString);
+
+   UpdateLog();
+   
+   g_free(utf_tmp);
+}
+
+/*
  * Output of the greetings is delayed until the first message is printed.
  */
 
@@ -156,14 +207,27 @@ static void print_greetings(FILE *where)
 }
 
 /*
- * Print to stdout if run from the command line; do nothing in GUI mode.
+ * Print to stdout if run from the command line;
+ * do nothing in GUI mode unless Closure->verbose is set.
  */
 
 void PrintCLI(char *format, ...)
 {  va_list argp;
 
+   if(Closure->logFileEnabled)
+   {  va_start(argp, format);
+      VPrintLogFile(format, argp);
+      va_end(argp);
+   }
+
    if(Closure->guiMode)
-     return;
+   {  if(Closure->verbose)
+      {  va_start(argp, format);
+	 log_window_vprintf(format, argp);
+	 va_end(argp);
+      }
+      return;
+   }
 
    va_start(argp, format);
    g_vfprintf(stdout, format, argp);
@@ -221,20 +285,16 @@ void PrintProgress(char *format, ...)
 void PrintLog(char *format, ...)
 {  va_list argp;
 
+   if(Closure->logFileEnabled)
+   {  va_start(argp, format);
+      VPrintLogFile(format, argp);
+      va_end(argp);
+   }
+
    va_start(argp, format);
 
    if(Closure->guiMode)
-   {  char *tmp,*utf_tmp;
-
-      tmp = g_strdup_vprintf(format, argp);
-      utf_tmp = g_locale_to_utf8(tmp, -1, NULL, NULL, NULL);
-      g_string_append(Closure->logString, utf_tmp);
-
-      UpdateLog();
-   
-      g_free(tmp);
-      g_free(utf_tmp);
-   }
+      log_window_vprintf(format, argp);
    else 
    {
       print_greetings(stderr);
@@ -253,23 +313,19 @@ void PrintLog(char *format, ...)
 void Verbose(char *format, ...)
 {  va_list argp;
 
+   if(Closure->logFileEnabled)
+   {  va_start(argp, format);
+      VPrintLogFile(format, argp);
+      va_end(argp);
+   }
+
    if(!Closure->verbose)
     return;
 
    va_start(argp, format);
 
    if(Closure->guiMode)
-   {  char *tmp,*utf_tmp;
-
-      tmp = g_strdup_vprintf(format, argp);
-      utf_tmp = g_locale_to_utf8(tmp, -1, NULL, NULL, NULL);
-      g_string_append(Closure->logString, utf_tmp);
-
-      UpdateLog();
-   
-      g_free(tmp);
-      g_free(utf_tmp);
-   }
+      log_window_vprintf(format, argp);
    else 
    {
       print_greetings(stderr);
@@ -282,32 +338,6 @@ void Verbose(char *format, ...)
 }
 
 /*
- * Print a message to the log file.
- * Tries hard to make the log messages survive a system crash.
- */
-
-#ifdef WITH_LOGFILE_YES
-void PrintLogFile(char *format, ...)
-{  FILE *file;
-   va_list argp;
-
-   va_start(argp, format);
-
-   file = fopen(Closure->logFile, "a");
-   if(!file)
-     return;
-
-   g_vfprintf(file, format, argp);
-   fflush(file);
-   fclose(file);
-
-   va_end(argp);
-}
-#else
-void PrintLogFile(char *format, ...) { }
-#endif
-
-/*
  * Print timing results to console and log window 
  */
 
@@ -318,7 +348,7 @@ void PrintTimeToLog(GTimer *timer, char *format, ...)
    double seconds = fmod(elapsed,60.0);
    int minutes = (int)fmod(elapsed / 60.0, 60.0);
    int hours = (int)(elapsed / 3600.0);
-   char *tmp1,*tmp2,*utf_tmp;
+   char *tmp1,*tmp2;
 
    if(!Closure->verbose)
      return;
@@ -330,12 +360,7 @@ void PrintTimeToLog(GTimer *timer, char *format, ...)
 
    if(Closure->guiMode)
    { 
-      utf_tmp = g_locale_to_utf8(tmp2, -1, NULL, NULL, NULL);
-      g_string_append(Closure->logString, utf_tmp);
-
-      UpdateLog();
-   
-      g_free(utf_tmp);
+      log_window_append(tmp2);
    }
    else
    {  g_fprintf(stderr, tmp2);
@@ -355,12 +380,21 @@ void PrintTimeToLog(GTimer *timer, char *format, ...)
 void PrintCLIorLabel(GtkLabel *label, char *format, ...)
 {  va_list argp;
 
+   if(Closure->logFileEnabled)
+   {  va_start(argp, format);
+      VPrintLogFile(format, argp);
+      va_end(argp);
+   }
+
    va_start(argp, format);
       
    if(Closure->guiMode)
    {  char *c,*tmp;
 	
       tmp = g_strdup_vprintf(format, argp);
+
+      if(Closure->verbose)
+	 log_window_append(tmp);
 
       c   = tmp + strlen(tmp) - 1; 
       while(*c == '\n')          /* Remove trailing newlines */
@@ -388,7 +422,7 @@ static void vlog_warning(char *format, va_list argp)
    int len = strlen(warn)+4;
    char prefix[len+1]; 
    char *c,*line;
-   char *body,*utf_msg;
+   char *body;
    GString *str;
 
    body = g_strdup_vprintf(format, argp);
@@ -412,12 +446,11 @@ static void vlog_warning(char *format, va_list argp)
       if(c) line = c+1;
    } while(c && *line);
 
-   if(Closure->guiMode)
-   {  utf_msg = g_locale_to_utf8(str->str, -1, NULL, NULL, NULL);
-      g_string_append(Closure->logString, utf_msg);
-      g_free(utf_msg);
+   if(Closure->logFileEnabled)
+      PrintLogFile("%s", str->str);
 
-      UpdateLog();
+   if(Closure->guiMode)
+   {  log_window_append(str->str);
    }
    else
    {  print_greetings(stderr);
@@ -445,6 +478,13 @@ void Stop(char *format, ...)
 {  va_list argp;
 
    /*** Show message depending on commandline / GUI mode  */ 
+
+   if(Closure->logFileEnabled)
+   {  va_start(argp, format);
+      PrintLogFile(_("\n*\n* dvdisaster - can not continue:\n*\n"));
+      VPrintLogFile(format, argp);
+      va_end(argp);
+   }
 
    if(!Closure->guiMode) 
    {  g_fprintf(stderr, _("\n*\n* dvdisaster - can not continue:\n*\n"));

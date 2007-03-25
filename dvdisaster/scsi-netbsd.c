@@ -162,7 +162,7 @@ int SendPacket(DeviceHandle *dh, unsigned char *cmd, int cdb_size, unsigned char
         sc.flags = SCCMD_WRITE;
 	break;
       default:
-	Stop(_("illegal data_mode: %d"),data_mode);
+	Stop("illegal data_mode: %d", data_mode);
    }
 
    /* Send the request and save the sense data. */

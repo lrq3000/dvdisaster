@@ -293,18 +293,24 @@ static void log_destroy_cb(GtkWidget *widget, gpointer data)
    Closure->logBuffer = NULL;
 }
 
-static gboolean log_idle_func(gpointer data)
+static gboolean log_jump_func(gpointer data)
 {  GtkAdjustment *a;
    GtkTextIter end;
 
-   gtk_text_buffer_set_text(Closure->logBuffer, Closure->logString->str, Closure->logString->len);
    gtk_text_buffer_get_end_iter(Closure->logBuffer, &end);
    gtk_text_buffer_place_cursor(Closure->logBuffer, &end);
 
    a = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(Closure->logScroll));
-   gtk_adjustment_set_value(a, a->upper);
+   gtk_adjustment_set_value(a, a->upper - a->page_size);
    gtk_scrolled_window_set_vadjustment(GTK_SCROLLED_WINDOW(Closure->logScroll), a);
 
+   return FALSE;
+}
+
+static gboolean log_idle_func(gpointer data)
+{  
+   gtk_text_buffer_set_text(Closure->logBuffer, Closure->logString->str, Closure->logString->len);
+   g_idle_add(log_jump_func, NULL);
    return FALSE;
 }
 

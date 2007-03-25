@@ -207,7 +207,7 @@ static int query_type(DeviceHandle *dh, int probe_only)
       return FALSE;
    }
 
-   LogDump(buf, length, 16);
+   HexDump(buf, length, 16);
 
    dh->layers = 0;        /* n.a. ? */
    dh->sessions = 1;

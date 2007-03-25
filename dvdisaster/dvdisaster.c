@@ -893,6 +893,7 @@ int main(int argc, char *argv[])
    {  
       Closure->guiMode = TRUE;
       ReadDotfile();
+      InitLogFile();
       CreateMainWindow(&argc, &argv);
    }
 

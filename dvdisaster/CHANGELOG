@@ -1,8 +1,10 @@
 Feature freeze for version 0.71/0.72 has been reached.
 
-0.71 (devel-19)
+0.71 (devel-19) 25-03-2007
 	- fixed missing CRC sum test in adaptive reading for RS02
 	  (thanks to Marcus J. for pointing this out!)
+	- updated english and german manualpages
+	- added verbose logging and log file saving in the GUI
 
 0.71 (devel-18) 18-03-2007
 	- fixed read linear thread handling in CLI mode
