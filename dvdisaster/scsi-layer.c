@@ -148,14 +148,20 @@ static int query_type(DeviceHandle *dh, int probe_only)
    int phy_info4, phy_info6;
    int is_dvd_plus = FALSE;
    int is_dvd_dash = FALSE;
+   int is_hd_dvd   = FALSE;
+   int book_type   = 0;
    int i;
+
+   Verbose("# *** query_type(%s, %d) ***\n", dh->devinfo, probe_only);
+   Verbose("#BD: starting media probe\n");
 
    /*** If the medium is a BD, the following will succeed. */
 
-   dh->mainType   = BD;
-   dh->read       = read_dvd_sector;
-   dh->singleRate = 36000.0/8.0;  /* 1x = 36 kbit */
-   dh->maxRate    = 8;
+   dh->mainType    = BD;
+   dh->read        = read_dvd_sector;
+   dh->singleRate  = 36000.0/8.0;  /* 1x = 36 kbit */
+   dh->maxRate     = 8;
+   dh->clusterSize = 32;
 
    /* Query length of returned data */
 
@@ -169,10 +175,10 @@ static int query_type(DeviceHandle *dh, int probe_only)
 
    /*** Only a BD should respond positively here */
    
+   Verbose("#BD: trying READ DVD with BD subcommand for size\n");
    if(SendPacket(dh, cmd, 12, buf, 2, &sense, DATA_READ)<0)
    {  
-      if(Closure->debugMode)
-	LogWarning(_("%s\nCould not query BD disc structure length.\n"), 
+	Verbose(_("%s\nCould not query BD disc structure length.\n"), 
 	     GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
    
       goto try_dvd;
@@ -180,12 +186,11 @@ static int query_type(DeviceHandle *dh, int probe_only)
 
    length = buf[0]<<8 | buf[1];
    length += 2;
+   Verbose("#BD: disc structure query succeeded, length %d bytes\n", length);
 
    /*** Some DVD drives ignore the media type 0x01 and return the dvd structure.
 	Since the DVD structure is 2052 bytes while the BD DI is 4100 bytes,
 	we can tell from the size whether we have been fooled. */
-
-   PrintLog("BD: disc structure query succeeded, length %d bytes\n", length);
 
    if(length != 4100) /* not a BD */
       goto try_dvd;
@@ -200,6 +205,7 @@ static int query_type(DeviceHandle *dh, int probe_only)
    cmd[8] = (length>>8) & 0xff;  /* Allocation length */
    cmd[9] = length & 0xff;
 
+   Verbose("#BD: trying READ DVD with BD subcommand for real query\n");
    if(SendPacket(dh, cmd, 12, buf, length, &sense, DATA_READ)<0)
    {  FreeAlignedBuffer(ab);
       Stop(_("%s\nCould not query BD disc structure.\n"),
@@ -207,7 +213,8 @@ static int query_type(DeviceHandle *dh, int probe_only)
       return FALSE;
    }
 
-   HexDump(buf, length, 16);
+   if(Closure->verbose)
+      HexDump(buf, length, 16);
 
    dh->layers = 0;        /* n.a. ? */
    dh->sessions = 1;
@@ -231,18 +238,21 @@ static int query_type(DeviceHandle *dh, int probe_only)
    {  dh->typedescr = "BD-R";
       dh->subType = BD;
    }
-   
+
+   Verbose("#BD: BD medium detected, type %s\n", dh->typedescr);
    FreeAlignedBuffer(ab);
    return TRUE;
 
    /*** If the medium is a DVD, the following query will succeed. */
 
 try_dvd:
-   dh->mainType   = DVD;  /* default assumption */
-   dh->read       = read_dvd_sector;
-   dh->singleRate = 1352.54;
-   dh->maxRate    = 17;
- 
+   Verbose("#DVD: starting media probe\n");
+   dh->mainType    = DVD;  /* default assumption */
+   dh->read        = read_dvd_sector;
+   dh->singleRate  = 1352.54;
+   dh->maxRate     = 17;
+   dh->clusterSize = 16;
+
    /* Query length of returned data */
 
    memset(cmd, 0, MAX_CDB_SIZE);
@@ -258,10 +268,11 @@ try_dvd:
       So we do not look for specific error and regard any failure as a sign
       that the medium is not a DVD. */
 
+   Verbose("#DVD: trying READ DVD for size of PHYSICAL info\n");
    if(SendPacket(dh, cmd, 12, buf, 2, &sense, DATA_READ)<0)
    {  
-      if(Closure->debugMode)
-	LogWarning(_("%s\nCould not query dvd structure length.\n"), 
+      if(Closure->verbose)
+	Verbose(_("%s\nCould not query dvd structure length.\n"), 
 	     GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
    
       goto assume_cd;
@@ -275,6 +286,7 @@ try_dvd:
       Stop(_("Could not query dvd physical structure - implausible packet length %d\n"),length);
       return FALSE;
    }
+   Verbose("#DVD: size returned is %d\n", length);
 
    /* Do the real query */
 
@@ -285,17 +297,34 @@ try_dvd:
    cmd[8] = (length>>8) & 0xff;  /* Allocation length */
    cmd[9] = length & 0xff;
 
+   Verbose("#DVD: trying READ DVD for real PHYSICAL info\n");
    if(SendPacket(dh, cmd, 12, buf, length, &sense, DATA_READ)<0)
    {  FreeAlignedBuffer(ab);
       Stop(_("%s\nCould not query physical dvd structure.\n"),
 	   GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
       return FALSE;
    }
+   if(Closure->verbose)
+      HexDump(buf, length, 16);
+
+   /* Determine whether we have DVD or HD DVD */
+
+   book_type = (buf[4]>>4) & 0x0f;
+   is_hd_dvd = (book_type >= 4 && book_type <= 6);
+   Verbose("#DVD: book type %d; is HD DVD: %d\n", book_type, is_hd_dvd);
+
+   if(is_hd_dvd)
+   {  dh->mainType    = HDDVD;
+      dh->singleRate  = 36550.0/8.0;  /* 1x = 36.5 kbit */
+      dh->maxRate     = 8;
+      dh->clusterSize = 32;
+   }
 
    /* Determine number of layers */
 
    dh->layers = 1 + ((buf[6] & 0x60) >> 5);
    dh->sessions = 1;
+   Verbose("#DVD: %d layers\n", dh->layers);
 
    /* While we're at it, extract the user area size.
       For +RW media, this is better than the value provided by READ CAPACITY. */
@@ -303,127 +332,181 @@ try_dvd:
    ua_start = /*buf[ 8]<<24 |*/ buf[ 9]<<16 | buf[10]<<8 | buf[11]; 
    ua_end   = /*buf[12]<<24 |*/ buf[13]<<16 | buf[14]<<8 | buf[15];
    ua_end0  = /*buf[16]<<24 |*/ buf[17]<<16 | buf[18]<<8 | buf[19];
+   Verbose("#DVD: ua_start/_end/_end0: %d %d %d\n", ua_start, ua_end, ua_end0);
 
    if(dh->layers == 1)
-   {  dh->userAreaSize = (gint64)(ua_end-ua_start);
+   {  gint64 max_size = is_hd_dvd ? MAX_HD_DVD_SL_SIZE : MAX_DVD_SL_SIZE;
+      dh->userAreaSize = (gint64)(ua_end-ua_start);
 
-      if(dh->userAreaSize < 0 || dh->userAreaSize > MAX_DVD_SL_SIZE)
+      if(dh->userAreaSize < 0 || dh->userAreaSize > max_size)
       {  LogWarning(_("READ DVD STRUCTURE: implausible medium size, %lld-%lld=%lld sectors\n"),
 		    (gint64)ua_end, (gint64)ua_start, (gint64)dh->userAreaSize);
 	 dh->userAreaSize = 0;
       }
    }
    else 
-   {  dh->userAreaSize = (gint64)(ua_end0-ua_start)*2;
+   {  gint64 max_size = is_hd_dvd ? MAX_HD_DVD_DL_SIZE : MAX_DVD_DL_SIZE;
+      dh->userAreaSize = (gint64)(ua_end0-ua_start)*2;
 
-      if(dh->userAreaSize < 0 || dh->userAreaSize > MAX_DVD_DL_SIZE)
+      if(dh->userAreaSize < 0 || dh->userAreaSize > max_size)
       {  LogWarning(_("READ DVD STRUCTURE: implausible medium size, %lld-%lld=%lld sectors\n"),
 		    (gint64)ua_end0, (gint64)ua_start, (gint64)dh->userAreaSize);
 	 dh->userAreaSize = 0;
       }
    }
 
-   /*** Find out medium type.*/
+   /*** Some drives report lead in information along with physical info. 
+        This allows us to collect some info on DVD-ROM drives which 
+        can not do READ DVD STRUCTURE with subtype 0x0e. */
+
+   dh->manuID[0] = 0;
+
+   /* Check if some nonzero bytes have been returned */
+
+   for(i=0x200; i<length; i++)
+      if(buf[i])
+      {  int j;
+
+	 Verbose("#DVD: physical info contains lead-in data\n");
+	 for(j=0; j<6; j++)
+	    dh->manuID[j] = isprint(buf[0x225+j]) ? buf[0x225+j] : ' ';
+	 dh->manuID[6] = ' ';
+
+	 for(j=0; j<6; j++)
+	    dh->manuID[j+7] = isprint(buf[0x22d+j]) ? buf[0x22d+j] : ' ';
+	 dh->manuID[13] = 0;
+
+	 for(j=11; j>=0; j--)
+	    if(dh->manuID[j] == ' ') dh->manuID[j] = 0;
+	    else break;
+
+	 Verbose("#DVD: manufacturer id %s\n", dh->manuID);
+	 break;
+      }
+
+   /*** Find out medium type */
 
    phy_info4 = buf[4];
    phy_info6 = buf[6];
-   dh->manuID[0] = 0;
+   Verbose("#DVD: phy_info4/6: 0x%x 0x%x\n", phy_info4, phy_info6);
 
    /* Try getting ADIP information. 
       This is more reliable than the physical info. */
 
-   memset(cmd, 0, MAX_CDB_SIZE);
-   cmd[0] = 0xad;     /* READ DVD STRUCTURE */
-   cmd[6] = 0;        /* First layer */
-   cmd[7] = 0x11;     /* We want the ADIP */
-   cmd[8] = 0;        /* Allocation length */
-   cmd[9] = 2;
+   if(!is_hd_dvd)
+   {  memset(cmd, 0, MAX_CDB_SIZE);
+      cmd[0] = 0xad;     /* READ DVD STRUCTURE */
+      cmd[6] = 0;        /* First layer */
+      cmd[7] = 0x11;     /* We want the ADIP */
+      cmd[8] = 0;        /* Allocation length */
+      cmd[9] = 2;
 
-   if(SendPacket(dh, cmd, 12, buf, 2, &sense, DATA_READ) == 0)
-   {  length = buf[0]<<8 | buf[1];
-      length += 2;
+      Verbose("#DVD: trying READ DVD for size of ADIP\n");
+      if(SendPacket(dh, cmd, 12, buf, 2, &sense, DATA_READ) == 0)
+      {  length = buf[0]<<8 | buf[1];
+	 length += 2;
 
-      if(length < 4096)
-      {  memset(cmd, 0, MAX_CDB_SIZE);
-	 cmd[0] = 0xad;     /* READ DVD STRUCTURE */
-	 cmd[6] = 0;        /* First layer */
-	 cmd[7] = 0x11;     /* We want the ADIP */
-	 cmd[8] = (length>>8) & 0xff;  /* Allocation length */
-	 cmd[9] = length & 0xff;
+	 Verbose("#DVD: size returned is %d\n", length);
 
-	 if(SendPacket(dh, cmd, 12, buf, length, &sense, DATA_READ) == 0)
-	 {  int i;
+	 if(length < 4096)
+	 {  memset(cmd, 0, MAX_CDB_SIZE);
+	    cmd[0] = 0xad;     /* READ DVD STRUCTURE */
+	    cmd[6] = 0;        /* First layer */
+	    cmd[7] = 0x11;     /* We want the ADIP */
+	    cmd[8] = (length>>8) & 0xff;  /* Allocation length */
+	    cmd[9] = length & 0xff;
+	    
+	    Verbose("#DVD: trying READ DVD for real ADIP\n");
+	    if(SendPacket(dh, cmd, 12, buf, length, &sense, DATA_READ) == 0)
+	    {  int i;
 
-	    is_dvd_plus = TRUE;
-	    phy_info4 = buf[4];
-	    phy_info6 = buf[6];
+	       if(Closure->verbose)
+		  HexDump(buf, length, 16);
 
-	    for(i=0; i<11; i++)
-	       dh->manuID[i] = isprint(buf[23+i]) ? buf[23+i] : ' ';
-	    dh->manuID[11] = 0;
+	       is_dvd_plus = TRUE;
+	       phy_info4 = buf[4];
+	       phy_info6 = buf[6];
+	       Verbose("#DVD: assuming DVD plus; phy_info4/6 now 0x%x 0x%x\n", phy_info4, phy_info6);
 
-	    for(i=10; i>=0; i--)
-	       if(dh->manuID[i] == ' ') dh->manuID[i] = 0;
-	       else break;
+	       for(i=0; i<11; i++)
+		  dh->manuID[i] = isprint(buf[23+i]) ? buf[23+i] : ' ';
+	       dh->manuID[11] = 0;
+
+	       for(i=10; i>=0; i--)
+		  if(dh->manuID[i] == ' ') dh->manuID[i] = 0;
+		  else break;
+	    }
 	 }
       }
+      else Verbose("#DVD: no ADIP\n");
    }
 
    /* Get pre-recorded info from lead-in (only on -R/-RW media).
       Only used for getting the manufacturer ID. */
    
-   memset(cmd, 0, MAX_CDB_SIZE);
-   cmd[0] = 0xad;     /* READ DVD STRUCTURE */
-   cmd[6] = 0;        /* First layer */
-   cmd[7] = 0x0E;     /* We want the lead-in info */
-   cmd[8] = 0;        /* Allocation length */
-   cmd[9] = 2;
+   if(!is_hd_dvd)
+   {  memset(cmd, 0, MAX_CDB_SIZE);
+      cmd[0] = 0xad;     /* READ DVD STRUCTURE */
+      cmd[6] = 0;        /* First layer */
+      cmd[7] = 0x0E;     /* We want the lead-in info */
+      cmd[8] = 0;        /* Allocation length */
+      cmd[9] = 2;
 
-   if(SendPacket(dh, cmd, 12, buf, 2, &sense, DATA_READ) == 0)
-   {  length = buf[0]<<8 | buf[1];
-      length += 2;
+      Verbose("#DVD: trying READ DVD for size of lead-in\n");
+      if(SendPacket(dh, cmd, 12, buf, 2, &sense, DATA_READ) == 0)
+      {  length = buf[0]<<8 | buf[1];
+	 length += 2;
 
-      if(length < 4096)
-      {  memset(cmd, 0, MAX_CDB_SIZE);
-	 cmd[0] = 0xad;     /* READ DVD STRUCTURE */
-	 cmd[6] = 0;        /* First layer */
-	 cmd[7] = 0x0E;     /* We want the lead-in info */
-	 cmd[8] = (length>>8) & 0xff;  /* Allocation length */
-	 cmd[9] = length & 0xff;
+	 Verbose("#DVD: size returned is %d\n", length);
+	 if(length < 4096)
+	 {  memset(cmd, 0, MAX_CDB_SIZE);
+	    cmd[0] = 0xad;     /* READ DVD STRUCTURE */
+	    cmd[6] = 0;        /* First layer */
+	    cmd[7] = 0x0E;     /* We want the lead-in info */
+	    cmd[8] = (length>>8) & 0xff;  /* Allocation length */
+	    cmd[9] = length & 0xff;
 
-	 if(SendPacket(dh, cmd, 12, buf, length, &sense, DATA_READ) == 0)
-	 {  int i;
+	    Verbose("#DVD: trying READ DVD for real lead-in\n");
+	    if(SendPacket(dh, cmd, 12, buf, length, &sense, DATA_READ) == 0)
+	    {  int i;
 
-	    is_dvd_dash = TRUE;
+	       is_dvd_dash = TRUE;
+	       Verbose("#DVD: assuming DVD dash\n");
 
-	    for(i=0; i<6; i++)
-	       dh->manuID[i] = isprint(buf[21+i]) ? buf[21+i] : ' ';
-	    dh->manuID[6] = ' ';
+	       for(i=0; i<6; i++)
+		  dh->manuID[i] = isprint(buf[21+i]) ? buf[21+i] : ' ';
+	       dh->manuID[6] = ' ';
 
-	    for(i=0; i<6; i++)
-	       dh->manuID[i+7] = isprint(buf[29+i]) ? buf[29+i] : ' ';
-	    dh->manuID[13] = 0;
+	       for(i=0; i<6; i++)
+		  dh->manuID[i+7] = isprint(buf[29+i]) ? buf[29+i] : ' ';
+	       dh->manuID[13] = 0;
 
-	    for(i=11; i>=0; i--)
-	       if(dh->manuID[i] == ' ') dh->manuID[i] = 0;
-	       else break;
+	       for(i=11; i>=0; i--)
+		  if(dh->manuID[i] == ' ') dh->manuID[i] = 0;
+		  else break;
+	    }
 	 }
-      }
+      } else Verbose("#DVD: lead-in could not be queried\n");
    }
 
-#if 0
+   /*** Layer type info (may be faked) */
+
+   if(Closure->verbose)
    {  int layer_type = phy_info6 & 0x0f;
-      printf("Layer type(s): ");
-      if(layer_type & 0x01) printf("embossed ");
-      if(layer_type & 0x02) printf("recordable ");
-      if(layer_type & 0x04) printf("rewriteable ");
-      printf("\n");
-      fflush(stdout);
+      Verbose("#DVD: Layer type(s): ");
+      if(layer_type & 0x01) Verbose("embossed ");
+      if(layer_type & 0x02) Verbose("recordable ");
+      if(layer_type & 0x04) Verbose("rewriteable ");
+      Verbose("\n");
    }
-#endif
+
+   /*** Evaluate book type */
+
    dh->subType = DVD;
 
-   switch((phy_info4>>4) & 0x0f)   /* evaluate the book type */
+   book_type = (phy_info4>>4) & 0x0f;
+   Verbose("#DVD: book type (%d) evaluation...\n", book_type);
+   switch(book_type)   /* evaluate the book type */
    {  case  1: dh->typedescr = "DVD-RAM"; 
                dh->rewriteable = TRUE;
                break;
@@ -432,17 +515,32 @@ try_dvd:
       case  3: dh->typedescr = "DVD-RW"; 
                dh->rewriteable = TRUE;
 	       break;
+      case  4: dh->typedescr = "HD DVD-ROM";
+	       dh->subType = UNSUPPORTED;
+	       break;
+      case  5: dh->typedescr = "HD DVD-RAM";
+	       dh->subType = HDDVD;
+               dh->rewriteable = TRUE;
+	       break;
+      case  6: dh->typedescr = "HD DVD-R";
+	       dh->subType = HDDVD;
+	       break;
       case  9: dh->typedescr = "DVD+RW"; 
                dh->rewriteable = TRUE;
 	       break;
       case 10: dh->typedescr = "DVD+R"; 
+	       break;
+      case 13: dh->typedescr = "DVD+RW DL"; 
+               dh->rewriteable = TRUE;
 	       break;
       case 14: dh->typedescr = "DVD+R DL"; 
 	       break;
 
       case  0: /* tricky case: real or faked DVD-ROM? */
       {  int layer_type = phy_info6 & 0x0f;
-
+	 
+	 Verbose("#DVD: fake DVD-ROM detection (%d %d 0x%x)\n", 
+		 is_dvd_dash, is_dvd_plus, layer_type); 
 	 if(is_dvd_dash)
 	 {  dh->typedescr = dh->layers == 1 ? "DVD-R/-RW" : "DVD-R DL"; 
 	    break;
@@ -470,16 +568,19 @@ try_dvd:
    }
 
    FreeAlignedBuffer(ab);
+   Verbose("#DVD: DVD medium detected, type %s\n", dh->typedescr);
    return TRUE;
 
    /*** If we reach this, the medium is assumed to be one of the CD varities.*/
 
 assume_cd:
-   dh->mainType   = CD;
-   dh->read       = read_cd_sector;
-   dh->readRaw    = read_raw_cd_sector;
-   dh->singleRate = 150.0;
-   dh->maxRate    = 52;
+   Verbose("#CD: starting media probe\n");
+   dh->mainType    = CD;
+   dh->read        = read_cd_sector;
+   dh->readRaw     = read_raw_cd_sector;
+   dh->singleRate  = 150.0;
+   dh->maxRate     = 52;
+   dh->clusterSize = 16;  /* really 1, but this is faster */ 
 
    /*** First, do a READ TOC with format 0 to fetch the CONTROL field. */
    
@@ -490,6 +591,7 @@ assume_cd:
    cmd[7] = 0;     /* allocation length */
    cmd[8] = 2;
 
+   Verbose("#CD: querying size of READ TOC/PMA/ATIP (for TOC)\n");
    if(SendPacket(dh, cmd, 10, buf, 2, &sense, DATA_READ)<0)
    {  if(!probe_only)
       {  FreeAlignedBuffer(ab);
@@ -501,6 +603,8 @@ assume_cd:
 
    length = buf[0]<<8 | buf[1];
    length += 2  ;  /* MMC3: "Disc information length excludes itself" */
+   Verbose("#CD: size returned is %d\n", length);
+
    if(length>1024) /* don't let the drive hack us using a buffer overflow ;-) */
    {  FreeAlignedBuffer(ab);
       Stop(_("TOC info too long (%d), probably multisession.\n"),length);
@@ -514,15 +618,19 @@ assume_cd:
    cmd[7] = (length>>8) & 0xff; /* allocation length */
    cmd[8] = length & 0xff;
 
+   Verbose("#CD: querying real READ TOC/PMA/ATIP (for TOC)\n");
    if(SendPacket(dh, cmd, 10, buf, length, &sense, DATA_READ)<0)
    {  FreeAlignedBuffer(ab);
       Stop(_("%s\nCould not read TOC.\n"),
 	   GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
       return FALSE;
    }
+   if(Closure->verbose)
+      HexDump(buf, length, 16);
 
    control = buf[5];
-
+   Verbose("#CD: control is 0x%x\n", control);
+   
    /*** Do the READ TOC again with format 2 to fetch the full toc
         as we want the disc type info also. 
 	We do not use the CONTROL data included here as it turned
@@ -536,6 +644,7 @@ assume_cd:
    cmd[7] = 0;     /* allocation length */
    cmd[8] = 2;
 
+   Verbose("#CD: querying size of READ TOC/PMA/ATIP (for full TOC)\n");
    if(SendPacket(dh, cmd, 10, buf, 2, &sense, DATA_READ)<0)
    {  FreeAlignedBuffer(ab);
       Stop(_("%s\nCould not query full TOC length.\n"),
@@ -545,6 +654,8 @@ assume_cd:
 
    length = buf[0]<<8 | buf[1];
    length += 2;    /* MMC3: "Disc information length excludes itself" */
+   Verbose("#CD: size returned is %d\n", length);
+
    if(length < 15)
    {  FreeAlignedBuffer(ab);
       Stop(_("TOC info too short, length %d.\n"),length);
@@ -564,12 +675,15 @@ assume_cd:
    cmd[7] = (length>>8) & 0xff; /* allocation length */
    cmd[8] = length & 0xff;
 
+   Verbose("#CD: querying real READ TOC/PMA/ATIP (for full TOC)\n");
    if(SendPacket(dh, cmd, 10, buf, length, &sense, DATA_READ)<0)
    {  FreeAlignedBuffer(ab);
       Stop(_("%s\nCould not read full TOC.\n"),
 	   GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
       return FALSE;
    }
+   if(Closure->verbose)
+      HexDump(buf, length, 16);
 
    if(buf[7] != 0xa0)
    {  int i;
@@ -585,6 +699,7 @@ assume_cd:
    }
 
    dh->sessions = buf[3];
+   Verbose("#CD: %d sessions\n", dh->sessions);
 
    if(control & 4)
      switch(buf[13])
@@ -599,6 +714,7 @@ assume_cd:
    }
 
    FreeAlignedBuffer(ab);
+   Verbose("#CD: CD medium detected, type: %s\n", dh->typedescr);
    return TRUE;
 }
 
@@ -774,7 +890,7 @@ static int query_copyright(DeviceHandle *dh)
       return TRUE;
    }
 
-   result = buf[4] & 1;
+   result = buf[4] & 0x11;
    FreeAlignedBuffer(ab);
    
    return result;
@@ -1708,8 +1824,10 @@ DeviceHandle* OpenAndQueryDevice(char *device)
 
    /* Open the device. */
 
+   Verbose("# *** OpenAndQueryDevice(%s) ***\n", device);
    dh = OpenDevice(device);
    InquireDevice(dh, 0);
+   Verbose("# InquireDevice returned: %s\n", dh->devinfo);
 
    if(!TestUnitReady(dh))
    {  if(   dh->sense.sense_key == 2  /* Not Ready */
@@ -1732,7 +1850,8 @@ DeviceHandle* OpenAndQueryDevice(char *device)
       so that the later tests are not derailed by the wrong medium type */
 
    query_type(dh, 0);
-
+   Verbose("# query_type() returned.\n");
+   
    if(dh->subType == UNSUPPORTED)
    {  char *td = alloca(strlen(dh->typedescr)+1);
 
@@ -1753,6 +1872,7 @@ DeviceHandle* OpenAndQueryDevice(char *device)
    /* Activate raw reading features if possible,
       output used reading mode */
 
+   Verbose("# deciding reading strategy...\n");
    switch(dh->mainType)
    {  case CD:
         PrintLog(_("Using READ CD"));
@@ -1788,11 +1908,12 @@ DeviceHandle* OpenAndQueryDevice(char *device)
    if(Closure->querySize >= 1)  /* parseUDF or better requested */
      ExamineUDF(dh);
 
+   Verbose("# Calling query_size()\n");
    dh->sectors = query_size(dh);
+   Verbose("# returned: %lld sectors\n", dh->sectors); 
 
    switch(dh->subType)
-   {  
-      case BD:
+   {  case BD:
       case HDDVD:
       case DVD:
       case DATA1:
@@ -1826,7 +1947,7 @@ DeviceHandle* OpenAndQueryDevice(char *device)
       }
    }
 
-   if(dh->mainType == DVD && query_copyright(dh))
+   if(dh->mainType != CD && query_copyright(dh))
    {  CloseDevice(dh);
       Stop(_("This software does not support encrypted media.\n"));
    }

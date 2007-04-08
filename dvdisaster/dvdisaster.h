@@ -97,12 +97,17 @@
 #define CDR_SIZE         (351*1024)
 #define DVD_SL_SIZE      2295104  /* DVD+R/RW size used at least common denominator */
 #define DVD_DL_SIZE 	 4171712  /* also seen: 4148992 4173824  */
+#define HD_DVD_SIZE      7361595  /* HD DVD-R */
+#define HD_DVD_RAM_SIZE  9848064  /* HD DVD-RAM */
+#define HD_DVD_DL_SIZE  16305407  /* HD DVD-R DL */
 
-/* Maximum accepted media sizes */
+/* Maximum accepted media sizes (in 2K sectors) */
 
-#define MAX_CDR_SIZE     (100*60*75)  /* CDs can't have >100min w/o severe hacks  */
-#define MAX_DVD_SL_SIZE  2500000      /* I have to guess here */
-#define MAX_DVD_DL_SIZE  4600000      /* I have to guess here */
+#define MAX_CDR_SIZE     (100*60*75)     /* CDs can't have >100min w/o severe hacks  */
+#define MAX_DVD_SL_SIZE  2500000         /* I have to guess here */
+#define MAX_DVD_DL_SIZE  4600000         /* I have to guess here */
+#define MAX_HD_DVD_SL_SIZE (20*1024*512) /* 20 GB (covers -R and -RAM) */
+#define MAX_HD_DVD_DL_SIZE (32*1024*512) /* 32 GB */
 
 /***
  *** Our global closure (encapsulation of global variables)

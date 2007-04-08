@@ -1,4 +1,9 @@
-Feature freeze for version 0.71/0.72 has been reached.
+
+0.71 (devel-20) 08-04-2007
+	- started HD DVD and BD support
+	- fixed scale steps for HD DVD and BD (thanks to Andrei for 
+	  noting this :-)
+	- completing the alpha testing documentation
 
 0.71 (devel-19) 25-03-2007
 	- fixed missing CRC sum test in adaptive reading for RS02

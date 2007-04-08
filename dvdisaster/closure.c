@@ -226,14 +226,14 @@ find_dotfile:
 
       if(!stat(appdata, &mystat)) /* CSIDL_APPDATA present? */
       { 
-	 Verbose("- dotfile path : %s\n", our_dir);
+	 Verbose("- dotfile path : %s\n", Closure->appDate);
 
 	 if(!stat(Closure->appData, &mystat))
-	 {  Closure->dotFile = g_strdup_printf("%s\\.dvdisaster", our_dir);
+	 {  Closure->dotFile = g_strdup_printf("%s\\.dvdisaster", Closure->appData);
 	    Verbose("- dotfile path : present\n");
 	 }
 	 else if(!mkdir(Closure->appData)) /* Note: Windows! */
-	 {  Closure->dotFile = g_strdup_printf("%s\\.dvdisaster", our_dir);
+	 {  Closure->dotFile = g_strdup_printf("%s\\.dvdisaster", Closure->appData);
 	    Verbose("- dotfile path : - created -\n");
 	 }
 	 else 
@@ -659,11 +659,11 @@ void InitClosure()
    Closure->darkSector  = g_malloc0(sizeof(GdkColor));
 
    DefaultColors();
-   DefaultLogFile();
 
    memset(Closure->bs, '\b', 255);
 
    get_base_dirs();
+   DefaultLogFile();
 
 #ifdef SYS_MINGW
    OpenAspi();

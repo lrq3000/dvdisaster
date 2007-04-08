@@ -96,7 +96,7 @@ achieve an equal distribution of
 medium read errors over all error correction blocks.<p>
 
 Upto 32 read errors can be compensated per error correction block (green line)
-when the <a href="example83.html#redundancy">standard settings</a> are used.
+when the standard settings are used.
 Exceeding this line means that the medium contents can not be fully recovered.
 
 </td></tr>
@@ -182,7 +182,7 @@ a bit exaggerated due to reflections from the photoflash.<p>
 A surface scan of the medium yields about 135.000 unreadable sectors
 (of 2.200.000 total, giving about 6% defective sectors).
 During the <a href="example40.html">recovery</a> of the medium image
-(using <a href="example83.html#redundancy">standard settings</a>)
+(using standard settings)
 a maximum of 22 errors per <a href="background10.html">ECC block</a> is counted
 which equals to a 69% load of the error correction under the applied settings.<p>
 
@@ -250,7 +250,7 @@ only when they are really defective.</li>
 preferably at the same time the medium is written.<p></li>
 <li>Error correction data requires <b>additional storage space</b> either on the protected 
 medium or by using additional media. 
-Using the <a href="example83.html#redundancy">standard settings</a> the additional
+Using the standard settings the additional
 storage space amounts to 15% of the original data size
 (approx. 700MB for a full 4.7GB DVD).<p></li>
 <li><a href="background10.html">no guaranteed protection</a> against data loss.</li>
@@ -505,19 +505,19 @@ Scanning requires the following parameters (defaults are given in parenthesis):
 
 <table>
 <tr>
-<td><a href="example90.html#scan">-s / --scan</a></td>
+<td>-s / --scan</td>
 <td>Scan</td>
 </tr>
 <tr>
-<td><a href="example90.html#device">-d / --device</a>&nbsp;</td>
+<td>-d / --device&nbsp;</td>
 <td>Drive selection (/dev/cdrom)</td>
 </tr>
 <tr>
-<td><a href="example90.html#ecc">-e / --ecc</a></td>
+<td>-e / --ecc</td>
 <td>only for <a href="background30.html">RS01</a>: Error correction file (medium.ecc)</td>
 </tr>
 <tr>
-<td><a href="example90.html#jump">-j / --jump</a></td>
+<td>-j / --jump</td>
 <td>Skip sectors after a read error (16)</td>
 </tr>
 </table><p>
@@ -619,7 +619,7 @@ function example3en()
 <tr><td>
 The progress will be shown using a percentage reading. 
 Processing a single layered DVD image with the 
-default <a href="example83.html#redundancy">redundancy</a>
+default redundancy
 takes about 10 minutes on an average 2Ghz system.<p>
 
 <b>Please note</b>:
@@ -694,7 +694,7 @@ function example21en()
 <td>Select the image file name.
 
 Make sure to have enough free disk space for the image. Activate the
-<a href="example81.html#localfiles">split file option</a> if your file system 
+split file option if your file system 
 does not support files larger than 2GB.<p>
 </td>
 <td><img src="../images/btn-image.png" alt="image file selection"><p>
@@ -777,15 +777,15 @@ You will need the following parameters for reading the image
 
 <table>
 <tr>
-<td><a href="example90.html#read">-r/ --read</a></td>
+<td>-r/ --read</td>
 <td>Read</td>
 </tr>
 <tr>
-<td><a href="example90.html#device">-d / --device</a>&nbsp;</td>
+<td>-d / --device&nbsp;</td>
 <td>Drive selection (/dev/cdrom)</td>
 </tr>
 <tr>
-<td><a href="example90.html#image">-i / --image</a></td>
+<td>-i / --image</td>
 <td>Image file (medium.iso)</td>
 </tr>
 </table><p>
@@ -813,19 +813,19 @@ create the error correction file:<p>
 
 <table>
 <tr>
-<td><a href="example90.html#create">-c/ --create</a></td>
+<td>-c/ --create</td>
 <td>Create the error correction file</td>
 </tr>
 <tr>
-<td><a href="example90.html#image">-i / --image</a></td>
+<td>-i / --image</td>
 <td>Image file (medium.iso)</td>
 </tr>
 <tr>
-<td><a href="example90.html#ecc">-e / --ecc</a></td>
+<td>-e / --ecc</td>
 <td>Error correction file (medium.ecc)</td>
 </tr>
 <tr>
-<td><a href="example90.html#redundancy">-n / --redundancy</a>&nbsp;</td>
+<td>-n / --redundancy&nbsp;</td>
 <td>Choose redundancy (32 roots = 14.3%)</td>
 </tr>
 </table><p>
@@ -1005,15 +1005,15 @@ This requires the following parameters (defaults are given in parenthesis):
 
 <table>
 <tr>
-<td><a href="example90.html#create">-c/ --create</a></td>
+<td>-c/ --create</td>
 <td>Create the error correction data</td>
 </tr>
 <tr>
-<td><a href="example90.html#method">-m / --method</a>&nbsp;</td>
+<td>-m / --method&nbsp;</td>
 <td>Select the error correction method</td>
 </tr>
 <tr>
-<td><a href="example90.html#redundancy">-n / --redundancy</a></td>
+<td>-n / --redundancy</td>
 <td>maximum medium size in sectors (size of smallest possible medium)</td>
 </tr>
 </table><p>
@@ -1049,15 +1049,15 @@ Re-read the image with dvdisaster after burning the medium:<p>
 
 <table>
 <tr>
-<td><a href="example90.html#read">-r/ --read</a></td>
+<td>-r/ --read</td>
 <td>Read</td>
 </tr>
 <tr>
-<td><a href="example90.html#device">-d / --device</a>&nbsp;</td>
+<td>-d / --device&nbsp;</td>
 <td>Drive selection (/dev/cdrom)</td>
 </tr>
 <tr>
-<td><a href="example90.html#image">-i / --image</a></td>
+<td>-i / --image</td>
 <td>Image file (medium.iso)</td>
 </tr>
 </table><p>
@@ -1081,11 +1081,11 @@ Check the image:<p>
 
 <table>
 <tr>
-<td><a href="example90.html#test">-t/ --test</a></td>
+<td>-t/ --test</td>
 <td>Check the image</td>
 </tr>
 <tr>
-<td><a href="example90.html#image">-i / --image</a></td>
+<td>-i / --image</td>
 <td>Image file (medium.iso)</td>
 </tr>
 </table><p>
@@ -1222,23 +1222,23 @@ This requires the following parameters (defaults are given in parenthesis):
 
 <table>
 <tr>
-<td><a href="example90.html#read">-r/ --read</a></td>
+<td>-r/ --read</td>
 <td>Read</td>
 </tr>
 <tr>
-<td><a href="example90.html#adaptiveread">--adaptive-read</a></td>
+<td>--adaptive-read</td>
 <td>Use reading strategy for damaged media</td>
 </tr>
 <tr>
-<td><a href="example90.html#device">-d / --device</a>&nbsp;</td>
+<td>-d / --device&nbsp;</td>
 <td>Drive selection (/dev/cdrom)</td>
 </tr>
 <tr>
-<td><a href="example90.html#image">-i / --image</a></td>
+<td>-i / --image</td>
 <td>Image file (medium.iso)</td>
 </tr>
 <tr>
-<td><a href="example90.html#ecc">-e / --ecc</a></td>
+<td>-e / --ecc</td>
 <td>only for <a href="background30.html">RS01</a>: Error correction file (medium.ecc)</td>
 </tr>
 </table><p>
@@ -1387,15 +1387,15 @@ Recovering requires the following parameters (defaults are given in parenthesis)
 
 <table>
 <tr>
-<td><a href="example90.html#fix">-f/ --fix</a></td>
+<td>-f/ --fix</td>
 <td>Recover</td>
 </tr>
 <tr>
-<td><a href="example90.html#image">-i / --image</a></td>
+<td>-i / --image</td>
 <td>Image file (medium.iso)</td>
 </tr>
 <tr>
-<td><a href="example90.html#ecc">-e / --ecc</a></td>
+<td>-e / --ecc</td>
 <td>only for <a href="background30.html">RS01</a>: Error correction file (medium.ecc)</td>
 </tr>
 </table><p>
@@ -1522,15 +1522,15 @@ You will need the following parameters (defaults are given in parenthesis):
 
 <table>
 <tr>
-<td><a href="example90.html#test">-t/ --test</a></td>
+<td>-t/ --test</td>
 <td>Verify</td>
 </tr>
 <tr>
-<td><a href="example90.html#image">-i / --image</a></td>
+<td>-i / --image</td>
 <td>Image file (medium.iso)</td>
 </tr>
 <tr>
-<td><a href="example90.html#ecc">-e / --ecc</a></td>
+<td>-e / --ecc</td>
 <td>only for <a href="background30.html">RS01</a>: Error correction file (medium.ecc)</td>
 </tr>
 </table><p>
@@ -1604,7 +1604,7 @@ function download0en()
 <h3>Download dvdisaster</h3>
 
 dvdisaster is available for <a href="download10.html">recent versions</a>
-of the FreeBSD, Linux and Windows operating systems.<p>
+of the Darwin/Mac OS X, FreeBSD, Linux, NetBSD and Windows operating systems.<p>
 
 Please download either the source code or a binary version from the list below.
 A <a href="#signature">digital signature</a> is provided for verification that the
@@ -1620,11 +1620,11 @@ For the source code version see the <a href="download20.html">installation instr
 <b>Current version</b><p>
 -->
 
-<b>Developer versions</b> - new and experimental for experienced users!<p>
+<b>Alpha (development) versions</b> - new and experimental for experienced users!<p>
 
 Testers are welcome for the upcoming dvdisaster release.<br>
 The current experimental release is 
-<a href="download30.html">0.71 (devel19)</a>.
+<a href="download30.html">${cooked_version}</a>.
 <pre> </pre>
 
 <b>Stable versions</b> - recommended for getting started.<p>
@@ -1778,11 +1778,11 @@ if creation is invoked immediately after the image read.</li>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
 This version is capable of determining the
-<a href="example81.html#imagesize">image size from the UDF/ISO file system</a>
+image size from the UDF/ISO file system
 to improve the
 <a href="qa20.html#rw">image size recognition for -RW/+RW/-RAM media</a>.
 Reading images and creating the respective error correction file can now be invoked together
-with a <a href="example81.html#auto">single mouse click</a>.
+with a single mouse click.
 A couple of small improvements have been made
 to support more CD/DVD drives, polish existing functionality, and to weed out some
 minor bugs ;-)<p>
@@ -1812,7 +1812,7 @@ Unix conventions under Linux.
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
 Contains an <a href="example30.html">improved strategy</a> for
-<a href="example80.html#adaptiveread">reading defective media</a> 
+reading defective media 
 which has been motivated by an article in issue 16/2005 of the german
 periodical c't.
 </td></tr></table><p>
@@ -1860,59 +1860,451 @@ EOF
 
 function download30en()
 {  cat >> $1 <<EOF
-<h3>Developer versions</h3>
+<h3>Alpha (developer) versions</h3>
 
-The upcoming release of dvdisaster contains improved reading functions.
-As pre-tests have shown these come at the cost of higher incompatibilty
-with certain drive hardware and operating systems.<p>
-
-<b>Help us testing!</b> Before making the next official release we would like to see the developer
-versions being tested on more systems. You are invited to try them out and
-report the results (both positive and negative) so that we can get a better
-picture of how the new functions are working.<p>
-
-<b>Be warned though:</b> The developer versions might lock up the drive and/or the
-operating system and require you to reboot. They might contain other bugs
-and should not be used to prepare error correction data for 
-media containing important data.
-
-If in doubt, please continue using the <a href="download.html">stable version 0.70</a>
-or wait for the release of version 0.72.
-
-<h4>Overview of new features</h4>
+<b>Help us testing!</b> We have some new functions under development and
+would like them to be tested by more people before making the next official release:
 
 <ul>
-<li>NetBSD, new preferences dialog, bug fix for adaptive reading</li>
-<li>Simple raw reading</li>
-<li>Partial raw reading</li>
-<li>Support for BD and HDDVD drives</li>
+<li><b>Support for BD und HD DVD drives.</b><br>
+Help us verifying that 
+<a href="#new_drives">your BD/HD DVD drive works with dvdisaster.</a>
+<p></li>
+<li><b>Raw sector verification</b><br>
+dvdisaster can test the integrity of CD media by 
+<a href="#raw1">evaluating the RAW L-EC and EDC sector data.</a>
+<p></li>
+<li><b>Reading of defective sectors</b><br>
+dvdisaster may recombine a defective CD sector from multiple read attempts
+if  <a href="#raw2">the drive supports a special read mode</a>.<p></li>
 </ul>
 
+You are invited to test these features as described below. Please 
+<a href="#error_reports">report both
+positive and negative results</a> so that we can get a better
+picture of how the new functions are working. Thanks in advance!<p>
+
+<b>A word of caution:</b> The alpha versions might lock up the drive and/or the
+operating system and require you to reboot. They might contain other bugs
+and should not be used to process media containing important data.<p>
+
+If in doubt, please continue using the <a href="download.html">stable version 0.70</a>
+and wait for the release of version 0.72.
+
+<hr>
+
+<h3>Downloads</h4>
+
+The alpha versions use the same package format as the regular releases.<p>
+
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.70</b></td><td align="right">xx-xxx-2007</td></tr>
+<tr><td><b>dvdisaster-0.71 (devel20)</b></td><td align="right">xx-xxx-2007</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
-        <td><a href="${tar_0_70}">dvdisaster-0.72.rc1.tar.bz2</a></td></tr>
+        <td><a href="${tar_0_71}">dvdisaster-0.71.devel20.tar.bz2</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="${tar_0_70_sig}">dvdisaster-0.72.rc1.tar.bz2.gpg</a></td></tr>
+        <td><a href="${tar_0_71_sig}">dvdisaster-0.71.devel20.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Binary for Windows:&nbsp;</td>
-        <td><a href="${setup_0_70}">dvdisaster-0.72.rc1-setup.exe</a></td></tr>
+        <td><a href="${setup_0_71}">dvdisaster-0.71.devel20-setup.exe</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="${setup_0_70_sig}">dvdisaster-0.72.rc1-setup.exe.gpg</a></td></tr>
+        <td><a href="${setup_0_71_sig}">dvdisaster-0.71.devel20-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
-new stuff<p>
+Andrei Grecu provided an algorithm for recovering defective CD sectors
+from multiple incomplete RAW reading attempts.
+Sergey Svishchev helped porting dvdisaster to NetBSD.<p>
 
-Andrei Grecu provided an algorithm for recovering defective sectors
-from multiple incomplete RAW reading attempts.<p>
-
-Sergey Svishchev helped porting dvdisaster 
-to <a href="download20.html#netbsd">NetBSD</a>.<p>
+Other features include: a selectable number of reading attempts, verification
+of CD sectors using the raw L-EC and EDC data, and a redesigned preferences dialog.
+RS02 checksum handling has been improved in the adaptive reading strategy. 
 </td></tr></table><p>
+
+<hr>
+
+<a name="error_reports"></a>
+<h3>How to report your results</h3>
+
+Please report your results by sending an email to 
+<img src="../testing/email.png" align="middle">.<p>
+
+<table><tr>
+<td><a href="../testing/bd-log.png"><img src="../testing/bd-image.png" width="100px"></a></td>
+<td>
+Your report should contain a simple description of your results in textual form.
+If you are experiencing difficulties with your BD/HD DVD drive, please activate
+the log file feature in the preferences dialog (cf. the screen shot), perform a
+scanning or reading action and include the log file in your mail. 
+In case of inconsistent output, a screen shot might also be useful. 
+Do not forget to include information about your
+operating system version and your drive model.<p>
+</td></tr></table><p>
+
+Please note that dvdisaster will only work with the (re-)writeable varieties
+of media, so seeing it reject DVD-ROM, BD-ROM and HD DVD-ROM is <b>not</b> an
+error.
+
+<hr>
+
+<a name="new_drives"></a>
+<h3>Testing topic: BD/HD DVD media compatibility</h3>
+
+dvdisaster contains support for BD and HD DVD drives based on the MMC5 specs.
+Since both formats are very new and evolving, there might be issues with
+certain drives and operating systems. Please try the following for testing
+the drive compatibility:<p>
+
+<ol>
+<li> Create a <a href="#bdref">reference error correction file</a>.</li>
+<li> <a href="#bdread">Read the image with dvdisaster.</li>
+<li> <a href="#bdverify">Verify the image using the reference error correction file</a>.</li>
+</ol>
+
+<b>1. Creating the reference error correction file</b><p>
+
+Please follow the instructions <a href="#reference">at the end of this page</a>.<p>
+
+<a name="bdread"></a>
+<b>2. Reading BD/HD DVD images</b><p>
+
+Make sure that you have deleted the reference image and that you are using the
+following settings. Note that the preferences dialog changed between previous versions
+and dvdisaster ${cooked_version}:<p>
+
+<table><tr>
+<td><a href="../testing/bd-image.png"><img src="../testing/bd-image.png" width="100px"></a></td>
+<td>
+In the "Image" preferences tab, only "ISO/UDF" and the linear reading strategy
+should be selected.
+No other features should be marked here.</td></tr></table>
+
+
+<table><tr>
+<td><a href="../testing/bd-drive.png"><img src="../testing/bd-drive.png" width="100px"></a></td>
+<td><a href="../testing/bd-read.png"><img src="../testing/bd-read.png" width="100px"></a></td>
+<td><a href="../testing/bd-files.png"><img src="../testing/bd-files.png" width="100px"></a></td>
+
+<td>
+The settings in the "Drive", "Read attempts" and "Files" tabs should be left off
+or at their defaults as shown in the screen shots.</td></tr></table><p>
+
+<table><tr>
+<td><a href="../testing/read-bd.png"><img src="../testing/read-bd.png" width="100px"></a></td>
+<td>
+Click on the "Read" button to create the BD/HD DVD image.
+Please watch the marked areas in the dvdisaster 
+window (the example to the left is for a DVD+RW)
+for plausible values:
+</td></tr></table>
+
+<ol>
+<li>The medium label should be printed correctly.</li>
+<li>The medium type must be properly recognized. 
+BD media should come out as either BD-R or BD-RE; possible values for
+HD DVD are HD DVD-R and HD DVD-RAM.</li>
+<li>The number of sectors must be correct. If you are not sure how to verify the number
+of sectors, this can also be done later in the verification step.</li>
+<li>The manufacturer ID should have a meaningful reading, although some media seem
+not to have one.</li>
+<li>The reading speed curve should match the drive specs.</li>
+</ol>
+<p>
+
+<a name="bdverify"></a>
+<b>3. Verifying BD/HD DVD images against the reference error correction file</b><p>
+
+<table><tr>
+<td><a href="../testing/verify-bd.png"><img src="../testing/verify-bd.png" width="100px"></a></td>
+<td>
+When the image has been read, 
+select the reference error correction file (cf. [1] in the screen shot)
+and press the "Verify" button.
+</td></tr></table>
+
+This will check the image for completeness (e.g. that the correct number of sectors
+has been read) and that its contents are intact. If everything goes well,
+you will see the messages "Good image" and "Good error correction file" as shown in
+the screen shot above. All output lines should be printed in black (the actual values
+shown will differ from the screen shot). Red values indicate problems with the image.<p>
+
+<hr>
+
+<h3>Testing topic: CD/DVD media on BD/HD DVD drives</h3>
+
+Some BD/HD DVD drives might be downward compatible with CD and DVD media.
+It is interesting to see if they behave like normal CD/DVD drives, 
+so it would be nice to have the above tests repeated for such media. <p>
+
+Please note that no manufacturer identification will be shown for CD media,
+and that there are many different DVD types: DVD-R, DVD+R, DVD-RW, DVD+RW, DVD-RAM,
+and their two-layer versions. Do not assume that a drive working with one type will
+also handle the others well ;-)<p>
+
+<hr>
+
+<a name="raw1"></a>
+<h3>Testing topic: Raw sector reading and verification on CD media</h3>
+
+dvdisaster can verify the integrity of CD sectors by reading them in raw mode
+and evaluating the MSF (sector number), EDC checksum, and L-EC error correction 
+vectors contained in the raw data.<p>
+
+This feature helps to work around drives which become unreliable when pushed to the
+limits of their built-in error correction. It should be supported on all drives
+and operating systems,
+but in order to make sure please perform the following tests:<p>
+
+<ol>
+<li> Create a <a href="#bdref">reference error correction file</a> from a CD.</li>
+<li> <a href="#cdread">Read the CD image with dvdisaster in raw mode.</li>
+<li> <a href="#cdverify">Verify the image using the reference error correction file</a>.</li>
+</ol><p>
+
+<b>1. Creating the reference error correction file for a CD.</b><p>
+
+Please follow the instructions <a href="#reference">at the end of this page</a>.<p>
+
+<a name="cdread"></a>
+<b>2. Reading CD images in raw mode.</b><p>
+
+Make sure that you have deleted the reference image and that you are using the
+following settings.:<p>
+
+<table><tr>
+<td><a href="../testing/bd-image.png"><img src="../testing/bd-image.png" width="100px"></a></td>
+<td><a href="../testing/bd-drive.png"><img src="../testing/bd-drive.png" width="100px"></a></td>
+<td><a href="../testing/bd-files.png"><img src="../testing/bd-files.png" width="100px"></a></td>
+<td>
+In the "Image" preferences tab, only "ISO/UDF" and the linear reading strategy
+should be selected.
+No other features should be marked here
+and the settings in the "Drive" and "Files" tabs should be
+left at their defaults.</td></tr></table>
+
+<table><tr>
+<td><a href="../testing/cd-read.png"><img src="../testing/cd-read.png" width="100px"></a></td>
+<td>
+Activate raw reading in the "Read attempts" preferences tab by checking the respective box.
+Leave the other values at their defaults as shown in the screen shot.
+</td></tr></table>
+
+Click on the "Read" button to read the CD image in raw mode.<p>
+
+<a name="cdverify"></a>
+<b>3. Verifying the CD image against the reference error correction file.</b><p>
+
+<table><tr>
+<td><a href="../testing/verify-bd.png"><img src="../testing/verify-bd.png" width="100px"></a></td>
+<td>
+When the image has been read, 
+select the reference error correction file (cf. [1] in the screen shot)
+and press the "Verify" button.
+</td></tr></table>
+
+This will verify that raw reading created the same image as normal reading.
+If everything went well, you will see the messages "Good image" 
+and "Good error correction file" as shown in
+the screen shot above. All output lines should be printed in black (the actual values
+shown will differ from the screen shot). Red values indicate problems with the image.<p>
+
+<hr>
+
+<a name="raw2"></a>
+<h3>Testing topic: Reading of defective sectors from CD media</h3>
+Andrei Grecu provided an algorithm for recovering defective CD sectors 
+from multiple incomplete RAW reading attempts. 
+This algorithm needs a CD/DVD drive which can return partial and/or uncorrected
+data from bad sectors. Since multiple reading attempts may yield different parts
+of a defective sector, retrying hard enough may eventually give enough information
+to reconstruct the original sector.<p>
+
+However only a minority of drives do actually support the required reading mode. 
+Even worse, requesting the transfer of defective data after a read error seems
+to catch some firmware and operating system programmers at a surprise.
+If they did not provide for this case,
+your drive and/or operating system <b>may crash and require you to reboot</b>. 
+So be careful trying these tests:
+
+<ol>
+<li> <a href="#checkraw">Checking whether your drive can transfer data from defective sectors.</a></li>
+<li> <a href="#defrecov">Trying to actually recover defective sectors.</a></li>
+</ol><p>
+
+<a name="checkraw"></a>
+<b>1. Checking whether your drive can transfer data from defective sectors.</b><p>
+
+<table><tr>
+<td><a href="../testing/bd-image.png"><img src="../testing/bd-image.png" 
+width="100px"></a></td>
+<td><a href="../testing/bd-drive.png"><img src="../testing/bd-drive.png" width="100px"></a></td>
+<td><a href="../testing/bd-files.png"><img src="../testing/bd-files.png" width="100px"></a></td>
+<td>
+Make sure that only "ISO/UDF" and the linear reading strategy
+are selected in the "Image" tab. The "Drive" and "Files" tabs should have 
+default settings as shown in the screen shot.</td></tr></table><p>
+
+<table><tr>
+<td><a href="../testing/cd-read2.png"><img src="../testing/bd-image.png" width="100px"></a></td>
+<td>
+Use these settings in the "Read attempts" tab.
+</td></tr></table><p>
+
+Insert a good CD medium into your drive and perform a scan or read operation.
+You can abort the operation after a few sectors have been read. Then click on
+"View log" to the lower right of the dvdisaster window. <p>
+
+<table><tr>
+<td><a href="../testing/log-drive.png"><img src="../testing/bd-image.png" 
+width="100px"></a></td>
+<td>Locate the line beginning with "Using READ CD" in the log window (see the red/green
+markings in the screen shot). 
+</td></tr></table><p>
+
+If this line says only "Using READ CD, RAW reading" then this particular drive does not
+transfer data from defective sectors. For this drive, the following test can be skipped
+(Note for Linux users: Newer kernels require you to be root for this test to succeed).<p>
+
+However if you get a message like "Using READ CD, RAW reading, <i>Mode page 1 ERP = 20h</i>",
+your drive claims to be able to transfer raw data from damaged sectors (some drives
+report a value different from 20h; this is okay). Try the following to see 
+if we can really get more data  from the drive:<p>
+
+
+<a name="defrecov"></a>
+<b>2. Trying to actually recover defective sectors.</b><p>
+
+Now comes the tricky part; you need a CD medium which contains some real defective
+sectors. Good testing candidates are media with discolored outer areas, or worn out
+CD-RW media which contain read errors right after being rewritten. Media containing
+read errors from scratches should be avoided as these are typically not recoverable
+by the raw reader.<p>
+
+<table><tr>
+<td><a href="../testing/bd-log.png"><img src="../testing/bd-image.png" 
+width="100px"></a></td>
+<td>Activate logging and log file creation as shown in the preferences window to the left. 
+</td></tr></table><p>
+
+Keep the "View log" window open and start a scanning or reading operation.
+When the drive approaches an unreadable area, keep a close look at the logged output.<p>
+
+<table><tr>
+<td><a href="../testing/log-recover.png"><img src="../testing/log-recover.png" 
+width="100px"></a></td>
+<td>This is a log file excerpt from reading a damaged medium. Watch for messages similar
+to the highlighted ones. 
+</td></tr></table><p>
+
+If you see one or more of the following messages, your drive and operating system
+are capable of transferring data from defective sectors:
+
+<ul>
+<li> "Raw Reader: Sector accumulated for analysis."</li>
+<li> "Recovered in raw reader by iterative L-EC."</li>
+<li> "Recovered in raw reader by plausible sector search."</li>
+<li> "Recovered in raw reader by heuristic L-EC."</li>
+</ul>
+
+Otherwise, there might be several reasons why raw data can not be read:
+
+<ul>
+<li> The medium might be damaged beyond the drive's reading capabilities.<br>
+Try another defective medium.</li>
+<li> The drive simply lied about its capabilities.<br>
+Try another drive.</li>
+<li> Your operating system may have a faulty CD-ROM driver / SCSI layer.<br>
+Try the same drive under a different operating system. Under Linux, try another
+kernel. The early 2.6.x kernels seem to work better than the current ones.</li>
+</li>
+</ul>
+
+If raw sector recovery works for you, you will typically be able to recover about
+10% to 20% of defective sectors that would otherwise be unreadable. It is however
+unlikely that you will be able to recover a damaged medium by using raw sector
+recovery alone, so you are strongly advised to continue protecting
+your media by using error correction data.<p>
+
+<hr>
+
+<a name="reference"></a>
+<h3>Creation of reference data</h3>
+
+The above tests require you to create a reference error correction file.
+This is done in two steps:
+
+<ul>
+<li>Create the reference image from 
+<a href="#ref_cd">CD/DVD (step 1a)</a> or from <a href="#bd">BD/HD DVD (step 1b)</a>.</li>
+<li>Produce the <a href="#ref_ecc">error correction file (step 2)</a>.</li>
+</ul>
+<pre> </pre>
+
+<a name="ref_cd"></a>
+<h4>Step 1a) Create a reference image from CD and DVD media</h4>
+
+To create reference images from CD or DVD media, please use
+
+<ul>
+<li>a known good version of dvdisaster, e.g. <a href="download.html">Version 0.70.4</a>,</li>
+<li>a known good CD or DVD drive, <b>NOT</b> a BD or HD DVD drive,</li>
+<li>media which are free from any defects and do not contain RS02 error correction data.</li>
+</ul>
+
+Please make sure that the following settings are made in the preferences dialogue 
+(for dvdisaster 0.70.4):<p>
+
+<table><tr>
+<td><a href="../testing/general-ref.png"><img src="../testing/general-ref.png" width="100px"></a></td>
+<td>
+ISO/UDF must be selected for image size determination.<br>
+No other features should be marked in this preferences tab.</td></tr></table>
+
+<table><tr>
+<td><a href="../testing/read-ref.png"><img src="../testing/read-ref.png" width="100px"></a></td>
+<td>The linear reading strategy must be selected.<br>
+No other features should be marked in this preferences tab.</td></tr></table><p>
+
+Read the image using these settings and proceed with <a href="#ref_ecc">step 2</a>.<p>
+<pre> </pre>
+
+<a name="ref_bd"></a>
+<h4>Step 1b) Create a reference image from BD or HD DVD media</h4>
+
+Please use the recording software which came bundled with the drive to
+create an .iso image from the BD or HD DVD medium. The medium must
+
+<ul>
+<li>be one of the writeable varieties (e.g. -R/-RW);<br>
+BD-ROM or HD DVD-ROM wlll not work;</li>
+<li>be free of defects and not contain RS02 error correction data.</li>
+</ul>
+
+Make sure to create an .iso image; proprietary formats like .nrg will not work.
+Also remember that creating BD/HD DVD images need a lot of hard disk space,
+so store them on a suitable partition ;-) <p>
+<pre> </pre>
+
+<a name="ref_ecc"></a>
+<h4>Step 2) Create the reference ecc file from the image</h4>
+
+Now create a RS01 error correction file from the reference image with the following
+settings:<p>
+
+<table><tr>
+<td><a href="../testing/ecc-ref.png"><img src="../testing/ecc-ref.png" width="100px"></a></td>
+<td>
+We use the smallest possible redundancy since the tests depend only on
+the checksum capability of the error correction file.
+</td></tr></table><p>
+
+Please give the error correction file a 
+distinctive name (e.g. <i>cd.ecc</i>, <i>dvd-r.ecc</i>, etc.)
+and keep it for the tests described above.
+The reference image can be deleted now.
+
 EOF
 }
 
@@ -1922,10 +2314,10 @@ function download10en()
 
 <ul>
  <li><b>x86 compatible</b> hardware in <b>32bit</b> mode 
-     (see operating systems for 64bit support);
-     PowerPC support is experimental,<p></li>
+     (see operating systems for 64bit support);<br>
+     PowerPC and Sparc since version 0.72,<p></li>
  <li>an up-to-date CD or DVD drive with ATAPI or SCSI interface,<p></li>
- <li>at least a P4 at 2Ghz or comparable processor<p>
+ <li>at least a P4 at 2Ghz or comparable processor.<p>
 </ul>
 
 <h3>Operating systems</h3>
@@ -1938,8 +2330,10 @@ function download10en()
  </li>
  <li><b>Mac OS X</b> version 10.4 (Tiger) or later,<br> 
       on x86 and PowerPC hardware.<p>
+ <li><b>NetBSD</b> version 3.1 or later.<p></li> 
  <li><b>Windows</b> <b>2000</b> or <b>XP</b><br>
-     (Windows 98 and ME are possible, but are not recommended for handling DVD)
+     Windows 98 and ME are possible, but are not recommended for handling DVD.<br>
+     Running under Windows Vista (R) is possible, but mostly untested.
  </li>
 </ul>
 EOF
@@ -2208,7 +2602,7 @@ Typically this is only the case for drives which can also write two layered medi
 
 <ul>
 <li>Some drives report wrong <a href="qa20.html#rw">image sizes</a>.<br>
-Remedy: Determine the <a href="example81.html#imagesize">image size from the ISO/UDF or ECC/RS02 file system</a>.
+Remedy: Determine the image size from the ISO/UDF or ECC/RS02 file system.
 </li></ul>
 
 <b>DVD-RAM</b><p>
@@ -2269,7 +2663,7 @@ In order to provide a unified access to SPTI and ASPI,
 dvdisaster tries to guess the mapping of ASPI drives to drive letters.
 However this does not work under all configurations.<p>
 
-The <a href="example90.html#list">--list</a> function prints out
+The --list function prints out
 the current mapping of drive letters.<p>
 
 <i>&gt;&nbsp; How to select between SPTI and ASPI?</i><p>
@@ -2277,7 +2671,7 @@ the current mapping of drive letters.<p>
 dvdisaster will automatically choose between SPTI and ASPI, 
 deciding in favor of SPTI if both are available. 
 Usage of ASPI can be forced; see the description of the
-<a href="example90.html#list">--list</a> function for details.
+--list function for details.
 
 <div align=right><a href="#top">&uarr;</a></div><p>
 
@@ -2309,8 +2703,8 @@ Since the writing mode can not be determined from the medium, dvdisaster assumes
 a "TAO" CD if exactly the last two sectors are unreadable, and trims the image
 accordingly. It is up to you to decide whether this is okay. You can
 advise dvdisaster to treat these sectors as real read errors by using the
-<a href="example90.html#dao">--dao</a> option or 
-the <a href="example82.html#image">preferences tab for reading/scanning</a>.<p>
+--dao option or 
+the preferences tab for reading/scanning.<p>
 
 To avoid these problems, consider using the "DAO / Disc at once" (sometimes
 also called "SAO / Session at once") mode for writing single session media. 
@@ -2379,7 +2773,7 @@ Possible remedy:<p>
 
 <table width=100%><tr><td bgcolor=#000000 width=2><img width=1 height=1 alt=""></td><td>
 Activate the option for determining the
-<a href="example81.html#imagesize">image size from the ISO/UDF or ECC/RS02 file systems</a>.
+image size from the ISO/UDF or ECC/RS02 file systems.
 </td></tr></table><p>
 
 If the required ISO/UDF sectors are unreadable and you are using error correction files
@@ -2388,8 +2782,8 @@ to recover damaged media there are two possible workarounds:
 <ul>
 <li>Execute the <a href="example50.html">"Verify"</a> function with only
 the error correction file being selected/given. Note down the correct image size 
-from the output and <a href="example82.html#read">restrict the
-reading range</a> accordingly.
+from the output and restrict the
+reading range accordingly.
 </li>
 <li>Simply read in the image with the incorrect (larger) size.
 When invoking the <a href="example40.html#repair">"Fix"</a> function,
@@ -2507,7 +2901,7 @@ The implementation draws a lot of inspiration and program code from the excellen
 
 <p>
 
-Using the <a href="example83.html#redundancy">standard settings</a>
+Using the standard settings
 223 medium sectors are combined into one error correction code ("ECC") block.
 Medium read errors are regarded as "erasures"; therefore a maximum 
 of 32 bad medium sectors<sup><a href="#footnote1">*)</a></sup>
@@ -2552,7 +2946,7 @@ the capabilities of the error correction code. <p>
 <font size="-1">
 <a name="footnote1"><sup>*)</sup></a> 
 The given threshold of 32 correctable errors per ECC block is the standard setting.
-It is possible to <a href="example83.html#redundancy">select other values</a>
+It is possible to select other values
 for higher or lower error correction capabilities.
 </font>
 <p>
@@ -2780,7 +3174,7 @@ function background40en()
 <h3>The linear reading strategy</h3>
 
 dvdisaster contains two different
-<a href="example82.html#read">reading strategies</a>.<p>
+reading strategies.<p>
 
 <b>The linear reading strategy is recommended for:</b><p>
 <ul>
@@ -2818,7 +3212,7 @@ partial screen shot: linear reading strategy</center>
 Reading attempts for defective sectors are slow and may wear out the drive mechanics
 under unfavourable conditions. A series of read errors, spread over a continous sector
 range, is more common than single spot defects. Therefore a 
-<a href="example82.html#read"> configuration option</a> exists so that a certain number
+ configuration option exists so that a certain number
 of sectors will be skipped after the occurance of a read error. The skipped sectors are
 assumed to be defective without further reading attempts. 
 Some guide lines for selecting the number of skipped sectors are:<p>
@@ -2839,7 +3233,7 @@ reasons. Therefore a sector skip less than 16 is not recommended for DVD media.
 <a name="range"></a>
 <b>Limiting the reading range.</b>
 Reading can be
-<a href="example82.html#read">limited to a given range of sectors</a>. This comes in handy
+limited to a given range of sectors. This comes in handy
 during multiple read attempts of damaged media.
 
 <pre> </pre>
@@ -2887,7 +3281,7 @@ function background50en()
 <h3>The adaptive reading strategy</h3>
 
 dvdisaster contains two different
-<a href="example82.html#read">reading strategies</a>.<p>
+reading strategies.<p>
 
 <b>The adaptive reading strategy is recommended for:</b><p>
 <ul>
@@ -2954,7 +3348,7 @@ during adaptive reading,
 <a href="example30.html">enter its name</a> before starting the reading process.<p>
 
 <b>Limiting the adaptive reading range.</b> Reading can be 
-<a href="example82.html#read">limited</a> to a part of the medium.
+limited to a part of the medium.
 
 This is not recommended when an error correction file is used since the limit
 might prevent sectors from being read which are required for a succesful error correction. 
@@ -2963,8 +3357,7 @@ during multiple reading attempts.<p>
 
 <b>Early reading termination.</b>
 If no error correction file is available, adaptive reading will stop when no unread
-intervals
-<a href="example82.html#read">larger than a selectable size</a> remain.<p>
+intervals larger than a selectable size remain.<p>
 
 The termination value should not be smaller than 128.
 Otherwise the laser head will have to carry out lots of repositioning moves during the

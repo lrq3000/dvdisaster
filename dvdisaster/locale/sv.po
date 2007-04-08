@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-24 18:14+0100\n"
+"POT-Creation-Date: 2007-04-08 20:20+0200\n"
 "PO-Revision-Date: 2006-06-14 23:48+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -1925,12 +1925,12 @@ msgstr ""
 msgid "CRC error in sector %lld\n"
 msgstr "CRC-fel i sektor %lld\n"
 
-#: read-adaptive.c:1480 scsi-layer.c:817
+#: read-adaptive.c:1480 scsi-layer.c:933
 #, c-format
 msgid "Sectors %lld-%lld: %s\n"
 msgstr "Sektorer %lld-%lld: %s\n"
 
-#: read-adaptive.c:1483 read-linear.c:1083 scsi-layer.c:816
+#: read-adaptive.c:1483 read-linear.c:1083 scsi-layer.c:932
 #, c-format
 msgid "Sector %lld: %s\n"
 msgstr "Sektor %lld: %s\n"
@@ -1983,7 +1983,7 @@ msgstr "Adaptiv läsning:"
 msgid "Sectors processed"
 msgstr "Sektorer behandlade"
 
-#: read-adaptive-window.c:110 scsi-layer.c:798
+#: read-adaptive-window.c:110 scsi-layer.c:914
 msgid "readable"
 msgstr "läsbar"
 
@@ -2068,7 +2068,7 @@ msgstr "Färdigställer avbild %s. Endast saknade sektorer kommer att läsas.\n"
 msgid "done.\n"
 msgstr "klar.\n"
 
-#: read-linear.c:497 scsi-layer.c:1212
+#: read-linear.c:497 scsi-layer.c:1328
 #, c-format
 msgid "Waiting %d seconds for drive to spin up...\n"
 msgstr "Väntar %d sekunder på att enheten ska varva upp...\n"
@@ -3598,21 +3598,21 @@ msgstr "Enhet %s (%s) är inte en cd-rom-enhet."
 msgid "Device %s (%s) is a hard disk."
 msgstr "Enhet %s (%s) är en hårddisk."
 
-#: scsi-layer.c:175
+#: scsi-layer.c:181
 #, c-format
 msgid ""
 "%s\n"
 "Could not query BD disc structure length.\n"
 msgstr ""
 
-#: scsi-layer.c:205
+#: scsi-layer.c:211
 #, c-format
 msgid ""
 "%s\n"
 "Could not query BD disc structure.\n"
 msgstr ""
 
-#: scsi-layer.c:264
+#: scsi-layer.c:275
 #, c-format
 msgid ""
 "%s\n"
@@ -3621,12 +3621,12 @@ msgstr ""
 "%s\n"
 "Kunde inte fråga efter dvdstrukturlängd.\n"
 
-#: scsi-layer.c:275
+#: scsi-layer.c:286
 #, c-format
 msgid "Could not query dvd physical structure - implausible packet length %d\n"
 msgstr "Kunde inte fråga efter dvd:ns fysiska struktur - osannolik paketlängd %d\n"
 
-#: scsi-layer.c:290
+#: scsi-layer.c:303
 #, c-format
 msgid ""
 "%s\n"
@@ -3635,12 +3635,12 @@ msgstr ""
 "%s\n"
 "Kunde inte fråga efter fysiska dvdstruktur.\n"
 
-#: scsi-layer.c:311 scsi-layer.c:320
+#: scsi-layer.c:342 scsi-layer.c:352
 #, c-format
 msgid "READ DVD STRUCTURE: implausible medium size, %lld-%lld=%lld sectors\n"
 msgstr ""
 
-#: scsi-layer.c:496
+#: scsi-layer.c:598
 #, c-format
 msgid ""
 "%s\n"
@@ -3649,12 +3649,12 @@ msgstr ""
 "%s\n"
 "Kunde inte fråga efter längd på innehållsförteckning.\n"
 
-#: scsi-layer.c:506 scsi-layer.c:555
+#: scsi-layer.c:610 scsi-layer.c:666
 #, c-format
 msgid "TOC info too long (%d), probably multisession.\n"
 msgstr "Innehållsförteckning för lång (%d), antagligen multisession.\n"
 
-#: scsi-layer.c:519
+#: scsi-layer.c:624
 #, c-format
 msgid ""
 "%s\n"
@@ -3663,7 +3663,7 @@ msgstr ""
 "%s\n"
 "Kunde inte läsa innehållsförteckning (TOC).\n"
 
-#: scsi-layer.c:541
+#: scsi-layer.c:650
 #, c-format
 msgid ""
 "%s\n"
@@ -3672,12 +3672,12 @@ msgstr ""
 "%s\n"
 "Kunde inte fråga efter fullständig innehållsförteckning (TOC).\n"
 
-#: scsi-layer.c:550
+#: scsi-layer.c:661
 #, c-format
 msgid "TOC info too short, length %d.\n"
 msgstr "Innehållsförteckning för kort, längd %d.\n"
 
-#: scsi-layer.c:569
+#: scsi-layer.c:681
 #, c-format
 msgid ""
 "%s\n"
@@ -3686,7 +3686,7 @@ msgstr ""
 "%s\n"
 "Kunde inte läsa fullständig innehållsförteckning (TOC).\n"
 
-#: scsi-layer.c:576
+#: scsi-layer.c:690
 #, c-format
 msgid ""
 "\n"
@@ -3695,31 +3695,31 @@ msgstr ""
 "\n"
 "Oväntat format på innehållsförteckning (längd %d):\n"
 
-#: scsi-layer.c:583
+#: scsi-layer.c:697
 msgid "Consider sending a bug report.\n"
 msgstr "Överväg att skicka in en felrapport.\n"
 
-#: scsi-layer.c:591
+#: scsi-layer.c:706
 msgid "Data CD mode 1"
 msgstr "Data CD-läge 1"
 
-#: scsi-layer.c:592
+#: scsi-layer.c:707
 msgid "CD-I"
 msgstr "CD-I"
 
-#: scsi-layer.c:593
+#: scsi-layer.c:708
 msgid "CD XA form 1"
 msgstr "CD XA form 1"
 
-#: scsi-layer.c:594
+#: scsi-layer.c:709
 msgid "Unknown"
 msgstr "Okänd"
 
-#: scsi-layer.c:597
+#: scsi-layer.c:712
 msgid "CD Audio"
 msgstr "Cd-ljud"
 
-#: scsi-layer.c:747
+#: scsi-layer.c:863
 #, c-format
 msgid ""
 "%s\n"
@@ -3728,12 +3728,12 @@ msgstr ""
 "%s\n"
 "Kunde inte fråga efter dvdstrukturlängd för formatkod 1.\n"
 
-#: scsi-layer.c:757
+#: scsi-layer.c:873
 #, c-format
 msgid "Could not query dvd copyright info - implausible packet length %d\n"
 msgstr "Kunde inte fråga efter dvd:ns copyrightinformation - osannolik paketlängd %d\n"
 
-#: scsi-layer.c:772
+#: scsi-layer.c:888
 #, c-format
 msgid ""
 "%s\n"
@@ -3742,23 +3742,23 @@ msgstr ""
 "%s\n"
 "Kunde inte fråga efter copyrightinformation.\n"
 
-#: scsi-layer.c:832
+#: scsi-layer.c:948
 msgid "is undecideable because of read error"
 msgstr "är inte bestämt på grund av läsfel"
 
-#: scsi-layer.c:838
+#: scsi-layer.c:954
 msgid "looks GOOD"
 msgstr "ser BRA UT"
 
-#: scsi-layer.c:844
+#: scsi-layer.c:960
 msgid "gives unformatted size (UNUSABLE)"
 msgstr "ger oformaterad storlek (EJ ANVÄNDBAR)"
 
-#: scsi-layer.c:849
+#: scsi-layer.c:965
 msgid "is UNUSABLE"
 msgstr "är OANVÄNDBAR"
 
-#: scsi-layer.c:871
+#: scsi-layer.c:987
 #, c-format
 msgid ""
 "%s\n"
@@ -3767,12 +3767,12 @@ msgstr ""
 "%s\n"
 "Kunde inte fråga efter mediumstorlek.\n"
 
-#: scsi-layer.c:891
+#: scsi-layer.c:1007
 #, c-format
 msgid "READ CAPACITY: implausible medium size, %lld sectors\n"
 msgstr ""
 
-#: scsi-layer.c:970
+#: scsi-layer.c:1086
 #, c-format
 msgid ""
 "Different media sizes depending on query method:\n"
@@ -3781,7 +3781,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: scsi-layer.c:975
+#: scsi-layer.c:1091
 msgid ""
 "Evaluation of returned medium sizes:\n"
 "\n"
@@ -3789,15 +3789,15 @@ msgstr ""
 "Evaluering av returnerade mediumstorlekar:\n"
 "\n"
 
-#: scsi-layer.c:1030
+#: scsi-layer.c:1146
 msgid "Using value from READ CAPACITY"
 msgstr "Använder värde från LÄSKAPACITET"
 
-#: scsi-layer.c:1034
+#: scsi-layer.c:1150
 msgid "Using value from READ DVD STRUCTURE"
 msgstr "Använder värde från LÄS DVDSTRUKTUR"
 
-#: scsi-layer.c:1044
+#: scsi-layer.c:1160
 #, c-format
 msgid ""
 "FAILED to determine image size.\n"
@@ -3808,7 +3808,7 @@ msgstr ""
 "Använder ett mindre värde eftersom det passar för >90%% av alla enheter,\n"
 "men FORTSÄTT PÅ EGEN RISK (avbilden kan bli felaktig/oanvändbar)"
 
-#: scsi-layer.c:1049
+#: scsi-layer.c:1165
 #, c-format
 msgid ""
 "Final decision: %s\n"
@@ -3817,7 +3817,7 @@ msgstr ""
 "Slutligt beslut: %s\n"
 "\n"
 
-#: scsi-layer.c:1057
+#: scsi-layer.c:1173
 msgid ""
 "Failed to determine image size.\n"
 "Try using a different drive."
@@ -3825,55 +3825,55 @@ msgstr ""
 "Misslyckades med att fastställa avbildsstorlek.\n"
 "Försök använda en annan enhet."
 
-#: scsi-layer.c:1255 scsi-layer.c:1281
+#: scsi-layer.c:1371 scsi-layer.c:1397
 #, c-format
 msgid ""
 "%s\n"
 "Could not load/unload the medium.\n"
 msgstr ""
 
-#: scsi-layer.c:1271
+#: scsi-layer.c:1387
 #, c-format
 msgid ""
 "%s\n"
 "Could not unlock the medium.\n"
 msgstr ""
 
-#: scsi-layer.c:1324
+#: scsi-layer.c:1440
 #, c-format
 msgid "Waiting 10 seconds for drive: %d\n"
 msgstr ""
 
-#: scsi-layer.c:1375
+#: scsi-layer.c:1491
 msgid "Setting the drive speed failed:\n"
 msgstr "Misslyckades med att ställa in enhetens hastighet:\n"
 
-#: scsi-layer.c:1620
+#: scsi-layer.c:1736
 #, c-format
 msgid "Sectors %lld - %lld: %s\n"
 msgstr ""
 
-#: scsi-layer.c:1634
+#: scsi-layer.c:1750
 #, c-format
 msgid "Sector %lld, try %d: %s Sector returned: %d.\n"
 msgstr ""
 
-#: scsi-layer.c:1640
+#: scsi-layer.c:1756
 #, c-format
 msgid "Sector %lld, try %d: %s\n"
 msgstr ""
 
-#: scsi-layer.c:1652
+#: scsi-layer.c:1768
 #, c-format
 msgid "Sector %lld, try %d: success\n"
 msgstr ""
 
-#: scsi-layer.c:1717
+#: scsi-layer.c:1835
 #, c-format
 msgid "Device %s: no medium present\n"
 msgstr ""
 
-#: scsi-layer.c:1718
+#: scsi-layer.c:1836
 #, c-format
 msgid ""
 "Device %s does not become ready:\n"
@@ -3881,7 +3881,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: scsi-layer.c:1723
+#: scsi-layer.c:1841
 #, c-format
 msgid ""
 "\n"
@@ -3890,7 +3890,7 @@ msgstr ""
 "\n"
 "Enhet: %s, %s\n"
 
-#: scsi-layer.c:1727
+#: scsi-layer.c:1845
 #, c-format
 msgid ""
 "\n"
@@ -3899,48 +3899,48 @@ msgstr ""
 "\n"
 "Enhet: %s (%s), %s\n"
 
-#: scsi-layer.c:1741 scsi-layer.c:1824
+#: scsi-layer.c:1860 scsi-layer.c:1945
 #, c-format
 msgid "This software does not support \"%s\" type media."
 msgstr ""
 
-#: scsi-layer.c:1749
+#: scsi-layer.c:1868
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr ""
 
-#: scsi-layer.c:1758
+#: scsi-layer.c:1878
 msgid "Using READ CD"
 msgstr ""
 
-#: scsi-layer.c:1768
+#: scsi-layer.c:1888
 msgid ", RAW reading"
 msgstr ""
 
-#: scsi-layer.c:1774
+#: scsi-layer.c:1894
 #, c-format
 msgid ", Mode page 1 ERP = %02xh"
 msgstr ""
 
-#: scsi-layer.c:1782
+#: scsi-layer.c:1902
 msgid "Using READ(10).\n"
 msgstr ""
 
-#: scsi-layer.c:1802
+#: scsi-layer.c:1923
 #, c-format
 msgid "Medium: %s, %lld sectors%s"
 msgstr "Medium: %s, %lld sektorer%s"
 
-#: scsi-layer.c:1806
+#: scsi-layer.c:1927
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s created %s"
 msgstr "Medium \"%s\": %s, %lld sektorer%s skapade %s"
 
-#: scsi-layer.c:1812
+#: scsi-layer.c:1933
 msgid "Manuf.-ID:"
 msgstr ""
 
-#: scsi-layer.c:1831
+#: scsi-layer.c:1952
 msgid "This software does not support encrypted media.\n"
 msgstr ""
 
@@ -4076,7 +4076,7 @@ msgstr ""
 msgid ""
 "Faster medium initialization\n"
 "\n"
-"Searching rewriteable media for error correction data may take a long time.\n"
+"Searching this medium for error correction data may take a long time.\n"
 "Press \"Skip RS02 test\" if you are certain that this medium was\n"
 "not augmented with RS02 error correction data."
 msgstr ""
@@ -4084,7 +4084,7 @@ msgstr ""
 #: udf.c:249
 msgid ""
 "\n"
-"Searching rewriteable media for error correction data may take a long time.\n"
+"Searching this medium for error correction data may take a long time.\n"
 "If you are certain that this medium was not augmented with RS02 error correction\n"
 "data, you might wish to abort this command and re-run with the option\n"
 "--query-size=udf\n"

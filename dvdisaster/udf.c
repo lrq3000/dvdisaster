@@ -238,7 +238,7 @@ EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
 	       {  if(Closure->guiMode)
 		  {  int answer = ModalDialog(GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, insert_buttons,
 					      _("Faster medium initialization\n\n"
-						"Searching rewriteable media for error correction data may take a long time.\n"
+						"Searching this medium for error correction data may take a long time.\n"
 						"Press \"Skip RS02 test\" if you are certain that this medium was\n"
 						"not augmented with RS02 error correction data."));
 		 
@@ -246,7 +246,7 @@ EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
 		    answered_continue = TRUE;
 		  }
 		  if(!Closure->guiMode && !warning_shown)
-		  {  PrintCLI(_("\nSearching rewriteable media for error correction data may take a long time.\n"
+		  {  PrintCLI(_("\nSearching this medium for error correction data may take a long time.\n"
 				"If you are certain that this medium was not augmented with RS02 error correction\n"
 				"data, you might wish to abort this command and re-run with the option\n"
 				"--query-size=udf\n"));

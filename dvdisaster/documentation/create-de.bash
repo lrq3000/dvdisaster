@@ -93,8 +93,7 @@ auf dem Datenträger, denn das Verfahren basiert gerade darauf,
 die Lesefehler gleichmäßig über alle Fehlerkorrekturbereiche zu verteilen.<p>
 
 Pro Fehlerkorrekturbereich können bei Verwendung der
-<a href="example83.html#redundancy">Grundeinstellungen</a>
-maximal 32 Lesefehler repariert werden (grüne Linie).
+Grundeinstellungen maximal 32 Lesefehler repariert werden (grüne Linie).
 Wenn diese Linie überschritten wird, ist der Inhalt des Datenträgers 
 nicht mehr vollständig wiederherstellbar.
 
@@ -182,7 +181,7 @@ des Blitzlichtes etwas überzeichnet.<p>
 Eine Oberflächenanalyse des Datenträgers ergibt rund 135.000 unlesbare
 Sektoren (von insgesamt ca. 2.200.000, also 6% defekte Sektoren).
 Bei der <a href="example40.html">Wiederherstellung</a> des Datenträger-Abbildes
-(mit <a href="example83.html#redundancy">Grundeinstellungen</a>)
+(mit Grundeinstellungen)
 treten im schlechtesten <a href="background10.html">ECC-Bereich</a> 22 Fehler auf.
 Dies entspricht einer maximal 69%-igen Auslastung der Fehlerkorrektur
 unter den gewählten Einstellungen.<p>
@@ -253,7 +252,7 @@ Datenträger kaputt geht (am besten gleich beim Brennen des Datenträgers).<p></li
 <li>Die Fehlerkorrektur-Daten benötigen <b>zusätzlichen Speicherplatz</b>;
 entweder direkt auf dem zu schützenden Datenträger oder auf zusätzlichen
 Datenträgern.
-In der <a href="example83.html#redundancy">Grundeinstellung</a> beträgt der
+In der Grundeinstellung beträgt der
 Speicherplatzbedarf 15% der Originaldaten (ca. 700MB für eine volle einschichtige DVD).<p></li>
 <li><a href="background10.html">kein garantierter Schutz</a> vor Datenverlust.</li>
 </ul>
@@ -513,19 +512,19 @@ In der Kommandozeilen-Betriebsart benötigen Sie die folgenden Parameter
 
 <table>
 <tr>
-<td><a href="example90.html#scan">-s / --scan</a></td>
+<td>-s / --scan</td>
 <td>Überprüfen</td>
 </tr>
 <tr>
-<td><a href="example90.html#device">-d / --device</a>&nbsp;</td>
+<td>-d / --device&nbsp;</td>
 <td>Laufwerk auswählen (/dev/cdrom)</td>
 </tr>
 <tr>
-<td><a href="example90.html#ecc">-e / --ecc</a></td>
+<td>-e / --ecc</td>
 <td>nur für <a href="background30.html">RS01</a>: Fehlerkorrektur-Datei auswählen (medium.ecc)</td>
 </tr>
 <tr>
-<td><a href="example90.html#jump">-j / --jump</a></td>
+<td>-j / --jump</td>
 <td>Überspringe Sektoren nach einem Lesefehler (16)</td>
 </tr>
 </table><p>
@@ -598,8 +597,7 @@ function example3de()
 <tr><td>
 Die Prozentwerte zeigen den Fortschritt des Vorgangs.
 Auf einem durchschnittlichen 2Ghz-Rechner werden mit der 
-voreingestellten <a href="example83.html#redundancy">Redundanz</a>
-etwa 10min für eine volle einschichtige DVD benötigt.<p>
+voreingestellten Redundanz etwa 10min für eine volle einschichtige DVD benötigt.<p>
 
 <b>Weitere Hinweise</b>:
 
@@ -787,15 +785,15 @@ Zum Einlesen des Abbildes benötigen Sie die folgenden Parameter
 
 <table>
 <tr>
-<td><a href="example90.html#read">-r/ --read</a></td>
+<td>-r/ --read</td>
 <td>Einlesen</td>
 </tr>
 <tr>
-<td><a href="example90.html#device">-d / --device</a>&nbsp;</td>
+<td>-d / --device&nbsp;</td>
 <td>Laufwerk auswählen (/dev/cdrom)</td>
 </tr>
 <tr>
-<td><a href="example90.html#image">-i / --image</a></td>
+<td>-i / --image</td>
 <td>Abbild-Datei auswählen (medium.iso)</td>
 </tr>
 </table><p>
@@ -821,19 +819,19 @@ Fehlerkorrektur-Datei mit folgendem Aufruf:<p>
 
 <table>
 <tr>
-<td><a href="example90.html#create">-c/ --create</a></td>
+<td>-c/ --create</td>
 <td>Fehlerkorrektur-Datei erzeugen</td>
 </tr>
 <tr>
-<td><a href="example90.html#image">-i / --image</a></td>
+<td>-i / --image</td>
 <td>Abbild-Datei auswählen (medium.iso)</td>
 </tr>
 <tr>
-<td><a href="example90.html#ecc">-e / --ecc</a></td>
+<td>-e / --ecc</td>
 <td>Fehlerkorrektur-Datei auswählen (medium.ecc)</td>
 </tr>
 <tr>
-<td><a href="example90.html#redundancy">-n / --redundancy</a>&nbsp;</td>
+<td>-n / --redundancy&nbsp;</td>
 <td>Redundanz auswählen (32 Nullstellen = 14.3%)</td>
 </tr>
 </table><p>
@@ -1021,15 +1019,15 @@ Dazu benötigen Sie die folgenden Parameter
 
 <table>
 <tr>
-<td><a href="example90.html#create">-c/ --create</a></td>
+<td>-c/ --create</td>
 <td>Fehlerkorrektur-Informationen hinzufügen</td>
 </tr>
 <tr>
-<td><a href="example90.html#method">-m / --method</a>&nbsp;</td>
+<td>-m / --method&nbsp;</td>
 <td>Fehlerkorrektur-Verfahren auswählen</td>
 </tr>
 <tr>
-<td><a href="example90.html#redundancy">-n / --redundancy</a></td>
+<td>-n / --redundancy</td>
 <td>maximale Datenträger-Größe in Sektoren (Größe des kleinstmögl. Datenträgers)</td>
 </tr>
 </table><p>
@@ -1067,15 +1065,15 @@ Lesen Sie das Abbild nach dem Brennen mit dvdisaster wieder ein:<p>
 
 <table>
 <tr>
-<td><a href="example90.html#read">-r/ --read</a></td>
+<td>-r/ --read</td>
 <td>Einlesen</td>
 </tr>
 <tr>
-<td><a href="example90.html#device">-d / --device</a>&nbsp;</td>
+<td>-d / --device&nbsp;</td>
 <td>Laufwerk auswählen (/dev/cdrom)</td>
 </tr>
 <tr>
-<td><a href="example90.html#image">-i / --image</a></td>
+<td>-i / --image</td>
 <td>Abbild-Datei auswählen (medium.iso)</td>
 </tr>
 </table><p>
@@ -1100,11 +1098,11 @@ Alle Sektoren erfolgreich eingelesen.
 
 <table>
 <tr>
-<td><a href="example90.html#test">-t/ --test</a></td>
+<td>-t/ --test</td>
 <td>Abbild überprüfen</td>
 </tr>
 <tr>
-<td><a href="example90.html#image">-i / --image</a></td>
+<td>-i / --image</td>
 <td>Abbild-Datei auswählen (medium.iso)</td>
 </tr>
 </table><p>
@@ -1248,23 +1246,23 @@ Zum Einlesen des beschädigten Datenträgers benötigen Sie die folgenden Parameter
 
 <table>
 <tr>
-<td><a href="example90.html#read">-r/ --read</a></td>
+<td>-r/ --read</td>
 <td>Einlesen</td>
 </tr>
 <tr>
-<td><a href="example90.html#adaptiveread">--adaptive-read</a></td>
+<td>--adaptive-read</td>
 <td>Leseverfahren für beschädigte Datenträger verwenden</td>
 </tr>
 <tr>
-<td><a href="example90.html#device">-d / --device</a>&nbsp;</td>
+<td>-d / --device&nbsp;</td>
 <td>Laufwerk auswählen (/dev/cdrom)</td>
 </tr>
 <tr>
-<td><a href="example90.html#image">-i / --image</a></td>
+<td>-i / --image</td>
 <td>Abbild-Datei auswählen (medium.iso)</td>
 </tr>
 <tr>
-<td><a href="example90.html#ecc">-e / --ecc</a></td>
+<td>-e / --ecc</td>
 <td>nur für <a href="background30.html">RS01</a>: Fehlerkorrektur-Datei auswählen (medium.ecc)</td>
 </tr>
 </table><p>
@@ -1424,15 +1422,15 @@ Zur Wiederherstellung des Abbildes benötigen Sie die folgenden Parameter
 
 <table>
 <tr>
-<td><a href="example90.html#fix">-f/ --fix</a></td>
+<td>-f/ --fix</td>
 <td>Wiederherstellen</td>
 </tr>
 <tr>
-<td><a href="example90.html#image">-i / --image</a></td>
+<td>-i / --image</td>
 <td>Abbild-Datei auswählen (medium.iso)</td>
 </tr>
 <tr>
-<td><a href="example90.html#ecc">-e / --ecc</a></td>
+<td>-e / --ecc</td>
 <td>nur für <a href="background30.html">RS01</a>: Fehlerkorrektur-Datei auswählen (medium.ecc)</td>
 </tr>
 </table><p>
@@ -1565,15 +1563,15 @@ Für den Vergleich benötigen Sie die folgenden Parameter
 
 <table>
 <tr>
-<td><a href="example90.html#test">-t/ --test</a></td>
+<td>-t/ --test</td>
 <td>Vergleichen</td>
 </tr>
 <tr>
-<td><a href="example90.html#image">-i / --image</a></td>
+<td>-i / --image</td>
 <td>Abbild-Datei auswählen (medium.iso)</td>
 </tr>
 <tr>
-<td><a href="example90.html#ecc">-e / --ecc</a></td>
+<td>-e / --ecc</td>
 <td>nur für <a href="background30.html">RS01</a>: Fehlerkorrektur-Datei auswählen (medium.ecc)</td>
 </tr>
 </table><p>
@@ -1647,7 +1645,7 @@ function download0de()
 {  cat >> $1 <<EOF
 <h3>dvdisaster herunterladen</h3>
 
-dvdisaster unterstützt die Betriebssysteme FreeBSD, Linux und Windows
+dvdisaster unterstützt die Betriebssysteme Darwin/Mac OS X, FreeBSD, Linux, NetBSD und Windows
 in den <a href="download10.html">aktuellen Versionen</a>.<p>
 
 Laden Sie sich bitte entweder den Quellkode oder eine Binärversion 
@@ -1666,7 +1664,14 @@ der Quellkode-Version gibt es <a href="download20.html">Installationshinweise</a
 <b>Stabile Versionen</b> - zum Einstieg empfohlen<p> 
 --->
 
-<b>Aktuelle Version</b><p> 
+<b>Alpha-/Entwickler-Versionen</b> - neu und experimentell für erfahrene Benutzer!<p> 
+
+Wir suchen Tester für die nächste dvdisaster-Version.<br>
+Die neueste experimentelle Version 
+ist <a href="../en/download30.html">${cooked_version}</a>;<br> 
+eine Beschreibung gibt es zur Zeit nur in englischer Sprache. <p>
+
+<b>Stabile Versionen</b> - zum Einstieg empfohlen<p> 
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.70</b></td><td align="right">20-Jan-2007</td></tr>
@@ -1817,12 +1822,11 @@ wenn das Abbild unmittelbar vorher eingelesen wurde.</li>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
-Diese Version kann die <a href="example81.html#imagesize">Abbild-Größe aus dem
-UDF/ISO-Dateisystem</a> bestimmen, um 
+Diese Version kann die Abbild-Größe aus dem
+UDF/ISO-Dateisystem bestimmen, um 
 die <a href="qa20.html#plusrw">Größenerkennung von -RW/+RW-Medien</a> zu verbessern.
 Das Einlesen von Abbildern und das Erzeugen der zugehörigen Fehlerkorrektur-Datei
-kann jetzt zusammen
-<a href="example81.html#auto">mit einem Mausklick</a> durchgeführt werden.
+kann jetzt zusammen mit einem Mausklick durchgeführt werden.
 Außerdem gibt es eine Reihe von kleinen Verbesserungen in den Bereichen
 Laufwerksunterstützung, Abrundung der Funktionalität 
 sowie einige kleinere Bugs weniger ;-)<p>
@@ -1852,7 +1856,7 @@ paßt Dateinamen-Berechtigungen unter Linux an Unix-Konventionen an.
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
 Enthält ein <a href="example40.html">verbessertes Verfahren</a> zum
-<a href="example90.html#adaptiveread">Lesen defekter Datenträger</a>, 
+Lesen defekter Datenträger, 
 das durch einen Artikel im c't-Magazin 16/2005 motiviert wurde.
 </td></tr></table><p>
 
@@ -1904,9 +1908,9 @@ function download10de()
 <ul>
  <li><b>x86-kompatible</b> Hardware in der <b>32bit</b>-Betriebsart
   (64-bit Unterstützung siehe Betriebssysteme);
-  PowerPC-Unterstützung ist experimentell,<p></li>
+  PowerPC und Sparc ab Version 0.72,<p></li>
  <li>ein aktuelles CD- oder DVD-Laufwerk mit ATAPI- oder SCSI-Schnittstelle,<p></li>
- <li>mindestens P4 mit 2Ghz oder vergleichbare Rechenleistung<p>
+ <li>mindestens P4 mit 2Ghz oder vergleichbare Rechenleistung.<p>
 </ul>
 
 <h3>Betriebssysteme</h3>
@@ -1921,8 +1925,11 @@ function download10de()
  <li><b>Mac OS X</b> ab Version 10.4 (Tiger),<br> 
       auf x86 und PowerPC-Hardware.<p>
  </li>
+ <li><b>NetBSD</b> ab Version 3.1.<p></li>
+
  <li><b>Windows</b> <b>2000</b> oder <b>XP</b><br>
-     (Windows 98 und ME sind möglich, aber für die Bearbeitung von DVD nicht empfohlen)
+     Windows 98 und ME sind möglich, aber für die Bearbeitung von DVD nicht empfohlen.<br>
+     Die Benutzung unter Windows Vista (R) ist möglich, aber weitgehend ungetestet.
  </li>
 </ul>
 
@@ -2206,7 +2213,7 @@ Laufwerke, die auch zweischichtige Medien beschreiben können.
 
 <ul>
 <li>Einige Laufwerke liefern eine <a href="qa20.html#plusrw">falsche Abbild-Größe</a>.<br>
-Abhilfe: Abbildgröße aus dem <a href="example81.html#imagesize">ISO/UDF- oder ECC/RS02-Dateisystem</a> ermitteln.
+Abhilfe: Abbildgröße aus dem ISO/UDF- oder ECC/RS02-Dateisystem ermitteln.
 </li>
 </ul>
 
@@ -2270,7 +2277,7 @@ Um eine einheitliche Benutzerschnittstelle für SPTI und ASPI zu bieten,
 versucht dvdisaster zu erraten, wie die Laufwerke unter ASPI zugeordnet sind.
 Diese Zuordnung gelingt nicht in allen Konfigurationen.<p>
 
-Mit Hilfe der <a href="example90.html#list">--list</a> -Funktion kann man 
+Mit Hilfe der --list -Funktion kann man 
 die aktuelle Zuordnung von Laufwerksbuchstaben herausfinden.<p>
 
 <i>&gt;&nbsp; Wie kann man zwischen SPTI und ASPI auswählen?</i><p>
@@ -2279,7 +2286,7 @@ In der Grundeinstellung wählt dvdisaster automatisch zwischen SPTI und
 ASPI aus, wobei SPTI bevorzugt wird.
 Die Benutzung von ASPI kann allerdings erzwungen werden; 
 näheres dazu steht in der Beschreibung
-der <a href="example90.html#list">--list</a> -Funktion.
+der --list -Funktion.
 
 <div align=right><a href="#top">&uarr;</a></div><p>
 
@@ -2311,8 +2318,8 @@ Da man dem Datenträger nicht ansehen kann, in welcher Betriebsart er gebrannt wu
 geht dvdisaster davon aus, daß eine "TAO"-CD vorliegt, wenn nur die letzten beiden
 Sektoren unlesbar sind, und das Abbild wird um diese beiden Sektoren verkürzt.
 Ob dies zutreffend ist, müssen Sie von Fall zu Fall selbst entscheiden
-und gegebenenfalls mit der <a href="example90.html#dao">--dao</a>-Option 
-oder dem <a href="example82.html#image">Dialog zum Lesen und Prüfen</a> einen 
+und gegebenenfalls mit der --dao -Option 
+oder dem Dialog zum Lesen und Prüfen einen 
 Hinweis geben, um diese Sektoren als echte Lesefehler zu betrachten.<p>
 
 Wenn Sie Datenträger mit nur einer Sitzung erzeugen, sollten Sie daher immer
@@ -2383,7 +2390,8 @@ die Dateien auf dem Datenträger sind aber alle vollständig.
 Mögliche Abhilfe: <p>
 
 <table width=100%><tr><td bgcolor=#000000 width=2><img width=1 height=1 alt=""></td><td>
-Verwenden Sie die Option zum <a href="example81.html#imagesize">Bestimmen der Abbildgröße aus dem ISO/UDF- bzw. ECC/RS02 Dateisystem</a>.
+Verwenden Sie die Option zum Bestimmen der Abbildgröße 
+aus dem ISO/UDF- bzw. ECC/RS02 Dateisystem.
 </td></tr></table><p>
 
 Falls bei einem beschädigten Datenträgers die benötigten ISO/UDF-Sektoren 
@@ -2393,7 +2401,7 @@ haben Sie zwei Möglichkeiten:
 <ul>
 <li>Führen Sie die <a href="example50.html">"Vergleichen"</a>-Funktion nur mit der 
 Fehlerkorrektur-Datei aus. Entnehmen Sie die korrekte Abbild-Größe der Ausgabe und 
-<a href="example82.html#read">schränken Sie den Lesebereich</a> entsprechend ein.
+schränken Sie den Lesebereich entsprechend ein.
 </li>
 <li>Lesen Sie einfach das Abbild mit der zu großen Länge ein. Wenn Sie nach dem Aufruf
 der <a href="example40.html#repair">"Reparieren"</a>-Funktion gefragt werden, ob das Abbild
@@ -2513,7 +2521,7 @@ von <a href="http://www.ka9q.net/">Phil Karn</a>.
 
 <p>
 
-In der <a href="example83.html#redundancy">Grundeinstellung</a> bilden
+In der Grundeinstellung bilden
 jeweils 223 Datenträger-Sektoren einen Fehlerkorrektur ("ECC") - Bereich.
 Auf dem Datenträger auftretende Lesefehler werden als Auslöschungen betrachtet,
 so daß pro ECC-Bereich bis zu 
@@ -2554,7 +2562,7 @@ Fehlerkorrekturkodes überschritten wird.
 <font size="-1">
 <a name="footnote1"><sup>*)</sup></a> Die angegebene Grenze 
 von 32 korrigierbaren Defekten pro ECC-Bereich ist die Grundeinstellung.
-Sie können hier andere Werte <a href="example83.html#redundancy">einstellen</a>
+Sie können hier andere Werte einstellen
 und so die Leistungfähigkeit der Fehlerkorrektur anpassen.
 </font>
 <p>
@@ -2795,8 +2803,7 @@ function background40de()
 <h3><b>Das lineare Lese-Verfahren</b></h3>
 <p>
 
-In dvdisaster sind zwei verschiedene
-<a href="example82.html#read"> Leseverfahren</a> enthalten.<p>
+In dvdisaster sind zwei verschiedene Leseverfahren enthalten.<p>
 
 <b>Anwendungen für das lineare Leseverfahren:</b><p>
 <ul>
@@ -2836,7 +2843,7 @@ Bildschirmausschnitt: lineares Leseverfahren</center>
 Leseversuche von defekten Sektoren kosten viel Zeit und bewirken in ungünstigen Fällen
 einen erhöhten Verschleiß des Laufwerks. Lesefehler treten aber typischerweise nicht einzeln,
 sondern über längere Bereiche auf. Daher gibt es eine 
-<a href="example82.html#read"> Einstellmöglichkeit</a> nach einem Lesefehler
+Einstellmöglichkeit nach einem Lesefehler
 eine Anzahl nachfolgender Sektoren zu überspringen. Diese Sektoren werden ohne weitere Leseversuche 
 als defekt angenommen. Dies hat die folgenden Auswirkungen:<p>
 
@@ -2857,7 +2864,7 @@ einen Wert kleiner als 16 einzustellen.
 <a name="range"></a>
 <b>Einschränkung des Lesebereiches.</b>
 Der Einlesevorgang kann 
-<a href="example82.html#read"> auf einen Teil des Datenträgers eingeschränkt</a> werden.
+auf einen Teil des Datenträgers eingeschränkt werden.
 Dies ist bei mehrfachen Einlese-Versuchen von beschädigten Datenträgern hilfreich.
 
 <pre> </pre>
@@ -2906,8 +2913,7 @@ function background50de()
 <h3>Das angepaßte Lese-Verfahren</h3>
 <p>
 
-dvdisaster enthält zwei verschiedene 
-<a href="example82.html#read">Leseverfahren</a>.<p>
+dvdisaster enthält zwei verschiedene Leseverfahren.<p>
 
 <b>Anwendungen für das angepaßte Leseverfahren:</b><p>
 <ul>
@@ -2976,7 +2982,7 @@ Um die Fehlerkorrektur-Datei zu nutzen, muß sie vor Beginn des Lesens
 <a href="example30.html">ausgewählt</a> werden.<p>
 
 <b>Einschränkung des adaptiven Lesebereiches.</b> Der Einlesevorgang 
-kann auf einen Teil des Datenträgers <a href="example82.html#read">eingeschränkt</a> werden. 
+kann auf einen Teil des Datenträgers eingeschränkt werden. 
 
 Bei der Verwendung einer Fehlerkorrektur-Datei ist das Einschränken 
 des Lesebereichs nicht sinnvoll, da es gegebenenfalls das Einlesen von Sektoren
@@ -2986,7 +2992,7 @@ von beschädigten Datenträgern hilfreich sein.<p>
 
 <b>Lesen vorzeitig beenden.</b>Wenn keine Fehlerkorrektur-Datei vorhanden ist, wird der Lesevorgang beendet, sobald keine
 unlesbaren Bereiche oberhalb 
-<a href="example82.html#read">einer bestimmten Größe</a> mehr vorhanden sind.<p>
+einer bestimmten Größe mehr vorhanden sind.<p>
 
 Der Wert zum Beenden sollte nicht kleiner als 128 eingestellt werden.
 Anderenfalls werden in der Schlußphase des Einlesens sehr viele Neupositionierungen des

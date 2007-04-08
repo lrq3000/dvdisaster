@@ -196,9 +196,12 @@ void RedrawAxes(Curve *curve)
    gdk_draw_line(d, Closure->drawGC,
 		 curve->leftX, curve->bottomY, curve->rightX, curve->bottomY);
 
-   if(curve->maxX <= 100) step = 20;
-   else if(curve->maxX < 1000) step = 100;
-   else step = 1024;
+   if(curve->maxX <= 100) step = 20;           /* <100M */
+   else if(curve->maxX < 1000)  step = 100;    /* 100M ... 1000M */
+   else if(curve->maxX < 8000)  step = 1024;   /* 1G .. 8G */
+   else if(curve->maxX < 15000) step = 2560;   /* 8G .. 15G */
+   else if(curve->maxX < 25000) step = 5120;   /* 15G .. 25G */
+   else step = 10240;
 
    for(i=0; i<=curve->maxX; i+=step)
    {  char buf[10];
