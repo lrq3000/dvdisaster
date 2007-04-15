@@ -13,6 +13,7 @@ documentation/de/images/CVS
 documentation/de/images/*.png
 documentation/en/images/CVS
 documentation/en/images/*.png
+documentation/testing/*.png
 documentation/pngpack.log
 documentation/screenshots
 icons/CVS
@@ -20,4 +21,6 @@ locale/CVS
 scripts/CVS
 scripts/check.bash
 stk
+test-cases
 tools/CVS
+slow-lec.c

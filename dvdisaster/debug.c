@@ -799,7 +799,7 @@ void RawSector(char *arg)
 enum {  SHIFT0, SHIFT4, ALLOC };
 
 void SendCDB(char *cdb_raw)
-{  AlignedBuffer *ab = CreateAlignedBuffer(32768);
+{  AlignedBuffer *ab = CreateAlignedBuffer(MAX_CLUSTER_SIZE);
    int cdb_len = 0;
    int alloc_len = 0;
    unsigned char cdb[16];

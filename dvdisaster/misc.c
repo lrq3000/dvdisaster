@@ -147,15 +147,18 @@ static void clamp_gstring(GString *string)
    if(string->len < MAX_LOG_WIN_SIZE)
       return;
 
-   /* Remove head of the string so that is get smaller than
+   /* Remove head of the string so that it gets smaller than
       the maximum size, and cut off until the next newline */
 
    ptr = string->str;
-   ptr += string->len - MAX_LOG_WIN_SIZE;
-   while(*ptr && *ptr != '\n')
-      ptr++;
+   cut = string->len - MAX_LOG_WIN_SIZE;
+   ptr += cut;
 
-   cut = ptr - string->str + 1;
+   while(*ptr && *ptr != '\n')
+   {  ptr++;
+      cut++;
+   }
+
    g_string_erase(string, 0, cut);
 }
 

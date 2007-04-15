@@ -341,7 +341,7 @@ DeviceHandle* open_aspi_device(char *device, int list_mode)
      /* Some ASPI drivers return 0 or -1 for actually working drives,
 	so this information is also useless. */
 
-     if(ha_inq.HA_MaxTransferLength < 32768)
+     if(ha_inq.HA_MaxTransferLength < MAX_CLUSTER_SIZE)
      {  Stop("ASPI max xfer length = %d; can't handle that.\n",
 	     ha_inq.HA_MaxTransferLength);
         g_free(dh);

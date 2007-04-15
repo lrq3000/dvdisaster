@@ -827,7 +827,7 @@ static void build_interval_from_image(read_closure *rc)
 	       {  SetBit(rc->map, layer_idx);
 		  rc->correctable++;
 #ifdef CHECK_VISITED
-		  count[layer_idx]++;
+		  rc->count[layer_idx]++;
 #endif
 		  mark_sector(rc, layer_idx, Closure->greenSector);
 	       }
@@ -1003,8 +1003,11 @@ void fill_gap(read_closure *rc)
 
      if(j++ % 2000)
      {  int seq = (j/2000)%10;
-       
-        PrintCLI(anim[seq]);
+
+	if(!Closure->guiMode)
+        {  g_printf(anim[seq]);
+	   fflush(stdout);   /* at least needed for Windows */
+	}
      }
 	
      /* Show progress in the spiral */
@@ -1065,7 +1068,7 @@ void ReadMediumAdaptive(gpointer data)
 
    rc = g_malloc0(sizeof(read_closure));
 
-   rc->ab = CreateAlignedBuffer(32768);
+   rc->ab = CreateAlignedBuffer(MAX_CLUSTER_SIZE);
    rc->buf = rc->ab->buf;
 
    memset(rc->progressBs, '\b', 256);
@@ -1217,7 +1220,8 @@ reopen_image:
      SetAdaptiveReadSubtitle(rc->subtitle);
 
    for(;;)
-   {  
+   {  int cluster_mask = rc->dh->clusterSize-1;
+
       /* If we jumped beyond the highest writtensector, 
 	 fill the gap with dead sector markers. */
 
@@ -1242,13 +1246,13 @@ reopen_image:
 	 if(Closure->guiMode)
 	    ChangeSpiralCursor(Closure->readAdaptiveSpiral, s / rc->sectorsPerSegment);
 	    
-	 /* Determine number of sectors to read. Read the next 16 sectors
+	 /* Determine number of sectors to read. Read the next dh->clusterSize sectors
 	    unless we're at the end of the interval or at a position which is
-	    not divideable by 16. */
+	    not divideable by the cluster size. */
 
-	 if(s & 15)
+	 if(s & cluster_mask)
                nsectors = 1;
-	 else  nsectors = 16;
+	 else  nsectors = rc->dh->clusterSize;
 
 	 if(s+nsectors > rc->intervalEnd) nsectors = rc->intervalEnd-s+1;
 
@@ -1376,7 +1380,7 @@ reopen_image:
 		  gint64 layer_idx;
 
 #ifdef CHECK_VISITED
-		  count[b]++;
+		  rc->count[b]++;
 #endif
 		  /* Count available sectors. */
 
@@ -1402,7 +1406,7 @@ reopen_image:
 			   mark_sector(rc, layer_idx, Closure->greenSector);
 
 #ifdef CHECK_VISITED
-			   count[layer_idx]++;
+			   rc->count[layer_idx]++;
 #endif
 
 			   /* If the correctable sector lies beyond the highest written sector,
@@ -1517,7 +1521,7 @@ reopen_image:
 		       rc->intervalSize, rc->intervalStart, rc->intervalStart+rc->intervalSize-1);
 
 	       add_interval(rc, rc->intervalStart, rc->intervalSize);
-	       if(Closure->verbose) print_intervals(rc);
+	       //print_intervals(rc);
 	    }
 	    break; /* fall out of reading loop */
 	 }
@@ -1562,7 +1566,7 @@ reopen_image:
 	 Verbose("*** Popped [%lld]\n",rc->intervalStart);
       }
 
-      if(Closure->verbose) print_intervals(rc);
+      //print_intervals(rc);
 
       rc->intervalSize  = rc->intervalEnd-rc->intervalStart+1;
 
@@ -1578,18 +1582,16 @@ finished:
 #ifdef CHECK_VISITED
    {  int i,cnt=0;
       for(i=0; i<(int)rc->sectors; i++)
-      {  cnt+=count[i];
-         if(count[i] != 1)
-           printf("Sector %d: %d\n",i,count[i]);
+      {  cnt+=rc->count[i];
+         if(rc->count[i] != 1)
+           printf("Sector %d: %d\n",i,rc->count[i]);
       }
 
       printf("\nTotal visited %d (%d)\n",cnt,i);
 
       for(i=(int)rc->sectors; i<(int)rc->sectors+160; i++)
-        if(count[i] != 0)
-          printf("SECTOR %d: %d\n",i,count[i]);
-
-      g_free(count);
+        if(rc->count[i] != 0)
+          printf("SECTOR %d: %d\n",i,rc->count[i]);
    }
 #endif
 

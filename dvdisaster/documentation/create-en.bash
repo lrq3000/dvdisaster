@@ -1623,7 +1623,7 @@ For the source code version see the <a href="download20.html">installation instr
 <b>Alpha (development) versions</b> - new and experimental for experienced users!<p>
 
 Testers are welcome for the upcoming dvdisaster release.<br>
-The current experimental release is 
+The current <a href="download30.html">experimental release</a> is 
 <a href="download30.html">${cooked_version}</a>.
 <pre> </pre>
 
@@ -1898,18 +1898,18 @@ and wait for the release of version 0.72.
 The alpha versions use the same package format as the regular releases.<p>
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.71 (devel20)</b></td><td align="right">xx-xxx-2007</td></tr>
+<tr><td><b>dvdisaster-0.71 (devel21)</b></td><td align="right">15-Apr-2007</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
-        <td><a href="${tar_0_71}">dvdisaster-0.71.devel20.tar.bz2</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel21.tar.bz2?download">dvdisaster-0.71.devel21.tar.bz2</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="${tar_0_71_sig}">dvdisaster-0.71.devel20.tar.bz2.gpg</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel21.tar.bz2.gpg?download">dvdisaster-0.71.devel21.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Binary for Windows:&nbsp;</td>
-        <td><a href="${setup_0_71}">dvdisaster-0.71.devel20-setup.exe</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel21-setup.exe?download">dvdisaster-0.71.devel21-setup.exe</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="${setup_0_71_sig}">dvdisaster-0.71.devel20-setup.exe.gpg</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel21-setup.exe.gpg?download">dvdisaster-0.71.devel21-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
@@ -2519,7 +2519,7 @@ which can report how frequently both error correction layers are utilized
 when reading from the DVD. There are lots of interesting internet forums containing 
 links to such tools. Many well informed articles on interpreting PI/PO values 
 with respect to the media quality are also available.
-<div align=right><a href="#top">&uarr;</a></div><p>
+<div align=right><a href="#top">&uarr;</a></div>
 
 <b><a name="compat">1.3 Is dvdisaster compatible with future releases?</a></b><p>
 Yes, dvdisaster files are intended for an archival time of many years.

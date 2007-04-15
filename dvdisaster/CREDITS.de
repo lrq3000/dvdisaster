@@ -10,6 +10,10 @@ Harald Bögeholz (hwb@heise.de)
 Julian Einwag (julian@einwag.de).
    erstellt und pflegt die Mac OS X / Darwin - spezifischen Anpassungen.
 
+Andrei Grecu (andrei.grecu@aon.at)
+   hat den Algorithmus zum Wiederherstellen von defekten CD-Sektoren
+   aus mehreren Leseversuchen entwickelt.
+
 Phil Karn
    hat eine hervorragende Bibliothek zum Erzeugen und Dekodieren
    von Reed-Solomon-Kodes geschrieben. Dieses Projekt verdankt seiner
@@ -28,6 +32,9 @@ Andrea Polverini (polve@polve.com)
 
 Luboš Staněk (lubek@users.sourceforge.net)
    erstellt und pflegt die tschechische Übersetzung.
+
+Sergey Svishchev (svs@ropnet.ru)
+   hat die NetBSD-spezifischen Anpassungen vorgenommen.
 
 Viele andere Personen haben weitere Anregungen und Fehlerberichte
 geliefert; schauen Sie auch in den Änderungsbericht für weitere

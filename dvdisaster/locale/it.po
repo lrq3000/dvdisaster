@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-04-08 20:20+0200\n"
+"POT-Creation-Date: 2007-04-15 16:09+0200\n"
 "PO-Revision-Date: 2005-01-01 14:24+0100\n"
 "Last-Translator: Andrea Polverini <polve@polve.com>\n"
 "Language-Team: Italian <>\n"
@@ -148,7 +148,7 @@ msgstr ""
 msgid "Truncating image to %lld sectors.\n"
 msgstr ""
 
-#: debug.c:395 read-linear.c:1193 rs01-fix.c:197 rs01-fix.c:219 rs01-fix.c:235
+#: debug.c:395 read-linear.c:1197 rs01-fix.c:197 rs01-fix.c:219 rs01-fix.c:235
 #: rs01-fix.c:270 rs02-create.c:103 rs02-create.c:147 rs02-fix.c:236
 #: rs02-fix.c:257 rs02-fix.c:272
 #, c-format
@@ -156,7 +156,7 @@ msgid "Could not truncate %s: %s\n"
 msgstr "Non posso troncare %s: %s\n"
 
 #: debug.c:421 debug.c:928 debug.c:936 debug.c:993 debug.c:998 file.c:59
-#: file.c:125 file.c:145 read-adaptive.c:1137 read-adaptive.c:1169
+#: file.c:125 file.c:145 read-adaptive.c:1140 read-adaptive.c:1172
 #: read-linear.c:286 read-linear.c:288 read-linear.c:319 read-linear.c:321
 #, c-format
 msgid ""
@@ -515,11 +515,11 @@ msgstr ""
 msgid "Image file %s not deleted: %s\n"
 msgstr "Il file immagine %s non è stato rimosso: %s\n"
 
-#: help-dialogs.c:335
+#: help-dialogs.c:337
 msgid "windowtitle|Log data"
 msgstr "Protocollo"
 
-#: help-dialogs.c:336
+#: help-dialogs.c:338
 msgid ""
 "<big>Log data</big>\n"
 "<i>Protocol of the current or previous action</i>"
@@ -527,11 +527,11 @@ msgstr ""
 "<big>Protocollo</big>\n"
 "<i>Protocollo dell'operazione corrente o precedente</i>"
 
-#: help-dialogs.c:352
+#: help-dialogs.c:354
 msgid "windowtitle|GNU General Public License"
 msgstr "Licenza pubblica GNU"
 
-#: help-dialogs.c:353
+#: help-dialogs.c:355
 msgid ""
 "<big>GNU General Public License</big>\n"
 "<i>The license terms of dvdisaster.</i>"
@@ -539,7 +539,7 @@ msgstr ""
 "<big>Licenza pubblica GNU</big>\n"
 "<i>Termini di Licenza di dvdisaster.</i>"
 
-#: help-dialogs.c:425
+#: help-dialogs.c:427
 #, c-format
 msgid ""
 "File\n"
@@ -550,31 +550,31 @@ msgstr ""
 "%s\n"
 "non presente"
 
-#: help-dialogs.c:508
+#: help-dialogs.c:510
 msgid "windowtitle|Modifying dvdisaster"
 msgstr ""
 
-#: help-dialogs.c:509
+#: help-dialogs.c:511
 msgid ""
 "<big>Modifying dvdisaster</big>\n"
 "<i>Your changes are not ours.</i>"
 msgstr ""
 
-#: help-dialogs.c:648
+#: help-dialogs.c:650
 msgid "windowtitle|About dvdisaster"
 msgstr "Info su dvdisaster"
 
-#: help-dialogs.c:668
+#: help-dialogs.c:670
 msgid ""
 "Modified version Copyright 2007 (please fill in - [directions])\n"
 "Copyright 2004-2007 Carsten Gnoerlich"
 msgstr ""
 
-#: help-dialogs.c:672
+#: help-dialogs.c:674
 msgid "Copyright 2004-2007 Carsten Gnoerlich"
 msgstr "Copyright 2004-2007 Carsten Gnörlich"
 
-#: help-dialogs.c:679
+#: help-dialogs.c:681
 msgid ""
 "dvdisaster provides a margin of safety against data loss\n"
 "on CD and DVD media caused by aging or scratches.\n"
@@ -586,7 +586,7 @@ msgstr ""
 "Crea dei dati di correzione degli errori che saranno poi utilizzati per recuperare\n"
 "i settori illeggibili se il supporto dovesse danneggiarsi col tempo.\n"
 
-#: help-dialogs.c:684
+#: help-dialogs.c:686
 msgid ""
 "This software comes with  <b>absolutely no warranty</b>.\n"
 "This is free software and you are welcome to redistribute it\n"
@@ -598,7 +598,7 @@ msgstr ""
 "\n"
 "Traduzione italiana di Andrea Polverini (info@polve.com).\n"
 
-#: help-dialogs.c:690
+#: help-dialogs.c:692
 msgid ""
 "\n"
 "This program is <b>not the original</b>. It is based on the\n"
@@ -608,7 +608,7 @@ msgid ""
 "([www.dvdisaster.org]) about issues with this version.\n"
 msgstr ""
 
-#: help-dialogs.c:705
+#: help-dialogs.c:707
 msgid ""
 "\n"
 "e-mail: carsten@dvdisaster.com   -or-   cgnoerlich@fsfe.org"
@@ -616,13 +616,13 @@ msgstr ""
 "\n"
 "e-mail: carsten@dvdisaster.com    o   cgnoerlich@fsfe.org"
 
-#: help-dialogs.c:708
+#: help-dialogs.c:710
 msgid ""
 "\n"
 "Darwin port (Mac OS X): Julian Einwag &lt;julian@einwag.de&gt;"
 msgstr ""
 
-#: help-dialogs.c:711
+#: help-dialogs.c:713
 msgid ""
 "\n"
 "NetBSD port: Sergey Svishchev &lt;svs@ropnet.ru&gt;"
@@ -927,7 +927,7 @@ msgstr ""
 "\n"
 "Non riesco a trovare nè il file ecc nè i dati ecc nell'immagine.\n"
 
-#: misc.c:197
+#: misc.c:200
 #, c-format
 msgid "dvdisaster-%s%sCopyright 2004-2007 Carsten Gnoerlich.\n"
 msgstr "dvdisaster-%s%sCopyright 2004-2007 Carsten Gnörlich.\n"
@@ -936,7 +936,7 @@ msgstr "dvdisaster-%s%sCopyright 2004-2007 Carsten Gnörlich.\n"
 #. legislature. If in doubt, just translate the following like "This is free
 #. software; please refer to the conditions of the GNU GENERAL PUBLIC LICENSE
 #. in the source code." Avoid making any legal statements by your own.
-#: misc.c:203
+#: misc.c:206
 msgid ""
 "This software comes with  ABSOLUTELY NO WARRANTY.  This\n"
 "is free software and you are welcome to redistribute it\n"
@@ -948,11 +948,11 @@ msgstr ""
 "Per informazioni, leggete il file \"COPYING\".\n"
 "Traduzione italiana di Andrea Polverini (info@polve.com).\n"
 
-#: misc.c:421
+#: misc.c:424
 msgid "Warning"
 msgstr "Attenzione"
 
-#: misc.c:484 misc.c:490
+#: misc.c:487 misc.c:493
 msgid ""
 "\n"
 "*\n"
@@ -1697,7 +1697,7 @@ msgstr ""
 msgid " [Appending %d sectors to cache file %s; LBA=%lld, ssize=%d, %d sectors]\n"
 msgstr ""
 
-#: read-adaptive.c:140 read-adaptive.c:1306
+#: read-adaptive.c:140 read-adaptive.c:1310
 msgid "Aborted by unrecoverable error."
 msgstr "Interrotto da un errore irrecuperabile."
 
@@ -1739,7 +1739,7 @@ msgstr ""
 
 #: read-adaptive.c:469 read-adaptive.c:485 read-adaptive.c:549
 #: read-adaptive.c:637 read-adaptive.c:699 read-adaptive.c:996
-#: read-adaptive.c:1236
+#: read-adaptive.c:1240
 msgid "Aborted by user request!"
 msgstr "Annullato dall'utente!"
 
@@ -1845,46 +1845,46 @@ msgstr "Ferma"
 msgid "Filling image area [%lld..%lld]"
 msgstr "Riempio l'area immagine [%lld..%lld]"
 
-#: read-adaptive.c:977 read-adaptive.c:1042 read-adaptive.c:1319
-#: read-adaptive.c:1491 read-linear.c:410 read-linear.c:649 read-linear.c:893
+#: read-adaptive.c:977 read-adaptive.c:1045 read-adaptive.c:1323
+#: read-adaptive.c:1495 read-linear.c:410 read-linear.c:649 read-linear.c:896
 #: rs01-fix.c:444 rs01-fix.c:702 rs02-fix.c:741
 #, c-format
 msgid "Failed seeking to sector %lld in image [%s]: %s"
 msgstr ""
 
-#: read-adaptive.c:989 read-adaptive.c:1047 read-adaptive.c:1344
-#: read-adaptive.c:1357 read-adaptive.c:1497 read-linear.c:416
+#: read-adaptive.c:989 read-adaptive.c:1050 read-adaptive.c:1348
+#: read-adaptive.c:1361 read-adaptive.c:1501 read-linear.c:416
 #: read-linear.c:656 rs01-fix.c:449
 #, c-format
 msgid "Failed writing to sector %lld in image [%s]: %s"
 msgstr ""
 
-#: read-adaptive.c:1078 read-linear.c:172
+#: read-adaptive.c:1081 read-linear.c:172
 msgid "Reading aborted"
 msgstr "Lettura annullata"
 
-#: read-adaptive.c:1081 read-linear.c:176
+#: read-adaptive.c:1084 read-linear.c:176
 msgid "Preparing for reading the medium image."
 msgstr "Preparazione alla lettura dell'immagine del supporto"
 
-#: read-adaptive.c:1082 read-linear.c:169 read-linear.c:177
+#: read-adaptive.c:1085 read-linear.c:169 read-linear.c:177
 msgid "Medium: not yet determined"
 msgstr "Supporto: non ancora determinato"
 
-#: read-adaptive.c:1139 read-linear.c:290
+#: read-adaptive.c:1142 read-linear.c:290
 #, c-format
 msgid "Creating new %s image.\n"
 msgstr "Creo una nuova immagine %s.\n"
 
-#: read-adaptive.c:1143 read-linear.c:283
+#: read-adaptive.c:1146 read-linear.c:283
 msgid "Reading new medium image."
 msgstr "Lettura dell'immagine del supporto."
 
-#: read-adaptive.c:1163 read-linear.c:311
+#: read-adaptive.c:1166 read-linear.c:311
 msgid "Completing existing medium image."
 msgstr "Completamento dell'immagine esistente del supporto."
 
-#: read-adaptive.c:1196 read-adaptive.c:1465
+#: read-adaptive.c:1199 read-adaptive.c:1469
 msgid ""
 "\n"
 "Sufficient data for reconstructing the image is available.\n"
@@ -1892,7 +1892,7 @@ msgstr ""
 "\n"
 "Sono disponibili dati sufficienti per ricostruire l'immagine.\n"
 
-#: read-adaptive.c:1292 read-linear.c:949
+#: read-adaptive.c:1296 read-linear.c:952
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -1900,7 +1900,7 @@ msgid ""
 "Use the --ignore-fatal-sense option to override."
 msgstr ""
 
-#: read-adaptive.c:1297 read-linear.c:954
+#: read-adaptive.c:1301 read-linear.c:957
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -1913,27 +1913,27 @@ msgstr ""
 "Potrebbe non essere possibile recuperare questo errore.\n"
 "La lettura deve procedere ignorando questo errore?"
 
-#: read-adaptive.c:1339 rs01-fix.c:398 rs02-fix.c:430
+#: read-adaptive.c:1343 rs01-fix.c:398 rs02-fix.c:430
 #, c-format
 msgid "CRC error in sector %lld\n"
 msgstr "Errore CRC nel settore %lld\n"
 
-#: read-adaptive.c:1480 scsi-layer.c:933
+#: read-adaptive.c:1484 scsi-layer.c:933
 #, c-format
 msgid "Sectors %lld-%lld: %s\n"
 msgstr "Settori %lld-%lld: %s\n"
 
-#: read-adaptive.c:1483 read-linear.c:1083 scsi-layer.c:932
+#: read-adaptive.c:1487 read-linear.c:1087 scsi-layer.c:932
 #, c-format
 msgid "Sector %lld: %s\n"
 msgstr "Settore %lld: %s\n"
 
-#: read-adaptive.c:1611
+#: read-adaptive.c:1613
 #, c-format
 msgid "Only %2d.%1d%% of the image are readable or correctable"
 msgstr "Solo %2d.%1d%% dell'immagine è leggibile o correggibile"
 
-#: read-adaptive.c:1614
+#: read-adaptive.c:1616
 #, c-format
 msgid ""
 "\n"
@@ -1944,7 +1944,7 @@ msgstr ""
 "%s\n"
 "(%lld leggibile, %lld correggibili, %lld ancora mancanti).\n"
 
-#: read-adaptive.c:1628
+#: read-adaptive.c:1630
 msgid ""
 "\n"
 "Good! All sectors have been read.\n"
@@ -1952,12 +1952,12 @@ msgstr ""
 "\n"
 "Fatto! Tutti i settori sono stati letti.\n"
 
-#: read-adaptive.c:1637
+#: read-adaptive.c:1639
 #, c-format
 msgid "No unreadable intervals with >= %d sectors left."
 msgstr "Nessun intervallo illeggibile con >= %d settori rimasti."
 
-#: read-adaptive.c:1640
+#: read-adaptive.c:1642
 #, c-format
 msgid ""
 "\n"
@@ -2091,72 +2091,72 @@ msgstr "Settori processati: %3d.%1d%% (%4.1fx)"
 msgid "* CRC error, sector: %lld\n"
 msgstr "* Errore CRC, Settore : %lld\n"
 
-#: read-linear.c:850 read-linear.c:964
+#: read-linear.c:852 read-linear.c:967
 #, c-format
 msgid "<span %s>Aborted by user request!</span> %lld sectors read, %lld sectors unreadable/skipped so far."
 msgstr "<span %s>Annullato dall'utente!</span> %lld settori letti, %lld settori illeggibili/saltati.."
 
-#: read-linear.c:904
+#: read-linear.c:907
 #, c-format
 msgid "unexpected read error in image for sector %lld"
 msgstr "Errore di lettura inatteso nell'immagine per il settore %lld"
 
-#: read-linear.c:1063
+#: read-linear.c:1067
 #, c-format
 msgid "Sector %lld: %s Skipping %d sectors.\n"
 msgstr "Settore %lld: %s Salto di %d settori.\n"
 
-#: read-linear.c:1135
+#: read-linear.c:1139
 #, c-format
 msgid "%lld sectors read.     "
 msgstr "%lld settori letti.      "
 
-#: read-linear.c:1136
+#: read-linear.c:1140
 #, c-format
 msgid "%lld sectors read; %lld unreadable sectors."
 msgstr "%lld settori letti; %lld settori illeggibili."
 
-#: read-linear.c:1144
+#: read-linear.c:1148
 #, c-format
 msgid "All sectors successfully read, but wrong image length (%lld sectors difference)"
 msgstr ""
 
-#: read-linear.c:1148
+#: read-linear.c:1152
 msgid "All sectors successfully read, but wrong image checksum."
 msgstr ""
 
-#: read-linear.c:1149
+#: read-linear.c:1153
 msgid "All sectors successfully read. Checksums match."
 msgstr ""
 
-#: read-linear.c:1151
+#: read-linear.c:1155
 msgid "All sectors successfully read."
 msgstr "Tutti i settori sono stati letti correttamente."
 
-#: read-linear.c:1155
+#: read-linear.c:1159
 #, c-format
 msgid "%lld unreadable sectors."
 msgstr "%lld settori illeggibili."
 
-#: read-linear.c:1157
+#: read-linear.c:1161
 #, c-format
 msgid "%lld CRC errors."
 msgstr "%lld errori CRC."
 
-#: read-linear.c:1158
+#: read-linear.c:1162
 #, c-format
 msgid "%lld CRC errors, %lld unreadable sectors."
 msgstr "%lld errori CRC, %lld settori illeggibili."
 
-#: read-linear.c:1164
+#: read-linear.c:1168
 msgid "Scanning finished: "
 msgstr "Scansione terminata:"
 
-#: read-linear.c:1166
+#: read-linear.c:1170
 msgid "Reading finished: "
 msgstr "Lettura terminata:"
 
-#: read-linear.c:1177
+#: read-linear.c:1181
 #, c-format
 msgid ""
 "%d sectors missing at the end of the disc.\n"
@@ -2167,7 +2167,7 @@ msgstr ""
 "Questo è corretto se il disco è stato scritto in modalità TAO (track at once).\n"
 "L'imagine sarà aggiustata di conseguenza.Leggere il manuale per i dettagli.\n"
 
-#: read-linear.c:1183
+#: read-linear.c:1187
 #, c-format
 msgid ""
 "%d sectors missing at the end of the disc.\n"

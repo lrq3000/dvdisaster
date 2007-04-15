@@ -901,7 +901,7 @@ static int query_copyright(DeviceHandle *dh)
  */
 
 static int check_sector(DeviceHandle *dh, GString *msg_out, guint64 sector, int n_sectors)
-{  AlignedBuffer *scratch = CreateAlignedBuffer(32768);
+{  AlignedBuffer *scratch = CreateAlignedBuffer(MAX_CLUSTER_SIZE);
    int status,result;
    char *msg;
 
@@ -1327,19 +1327,19 @@ void SpinupDevice(DeviceHandle *dh)
 
    PrintCLI(_("Waiting %d seconds for drive to spin up...\n"), Closure->spinupDelay);
    
-   ab = CreateAlignedBuffer(32768);
+   ab = CreateAlignedBuffer(MAX_CLUSTER_SIZE);
 
    timer = g_timer_new();
    g_timer_start(timer);
 
-   for(s=0; ;s+=16)
+   for(s=0; ;s+=dh->clusterSize)
    {  int status;
       double elapsed;
       gulong ignore;
 
       if(s>=dh->sectors) return;
  
-      status = ReadSectorsFast(dh, ab->buf, s, 16);
+      status = ReadSectorsFast(dh, ab->buf, s, dh->clusterSize);
       if(status) return;
 
       elapsed = g_timer_elapsed(timer, &ignore);
@@ -1569,8 +1569,8 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
       return -1;
    }
 
-   if(nsectors > 16)
-   {  RememberSense(3, 255, 3); /* RAW reading > 16 sectors not supported */
+   if(nsectors > dh->clusterSize)
+   {  RememberSense(3, 255, 3); /* RAW reading > cluster size not supported */
       return -1;
    }
 

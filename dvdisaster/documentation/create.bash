@@ -61,10 +61,10 @@ tar_0_66_sig="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.66.tar.
 setup_0_66="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.66.3-setup.exe?download"
 setup_0_66_sig="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.66.3-setup.exe.gpg?download"
 
-tar_0_70="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.3.tar.bz2?download"
-tar_0_70_sig="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.3.tar.bz2.gpg?download"
-setup_0_70="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.3-setup.exe?download"
-setup_0_70_sig="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.3-setup.exe.gpg?download"
+tar_0_70="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.4.tar.bz2?download"
+tar_0_70_sig="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.4.tar.bz2.gpg?download"
+setup_0_70="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.4-setup.exe?download"
+setup_0_70_sig="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.4-setup.exe.gpg?download"
 
 case $major_mode in
   local) echo "Creating local documentation for $project_title $cooked_version" ;;

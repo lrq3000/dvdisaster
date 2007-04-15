@@ -2173,6 +2173,13 @@ U verze ve zdrojovém kódu si přečtěte <a href="download20.html">instalačn�
 
 <b>Vývojové verze</b> - nové a experimentální pro zkušené uživatele!<p>
 
+Testers are welcome for the upcoming dvdisaster release.<br>
+The current <a href="../en/download30.html">experimental release</a> is 
+<a href="../en/download30.html">${cooked_version}</a>. <br>
+Documentation of alpha releases is only available in english.
+<pre> </pre>
+
+<b>Stabilní verze</b> - doporučeno pro začátek.<p>
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.70</b></td><td align="right">20-Jan-2007</td></tr>

@@ -1667,7 +1667,7 @@ der Quellkode-Version gibt es <a href="download20.html">Installationshinweise</a
 <b>Alpha-/Entwickler-Versionen</b> - neu und experimentell für erfahrene Benutzer!<p> 
 
 Wir suchen Tester für die nächste dvdisaster-Version.<br>
-Die neueste experimentelle Version 
+Die neueste <a href="../en/download30.html">experimentelle Version</a> 
 ist <a href="../en/download30.html">${cooked_version}</a>;<br> 
 eine Beschreibung gibt es zur Zeit nur in englischer Sprache. <p>
 

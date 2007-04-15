@@ -308,8 +308,9 @@ static gboolean log_jump_func(gpointer data)
 }
 
 static gboolean log_idle_func(gpointer data)
-{  
+{
    gtk_text_buffer_set_text(Closure->logBuffer, Closure->logString->str, Closure->logString->len);
+
    g_idle_add(log_jump_func, NULL);
    return FALSE;
 }

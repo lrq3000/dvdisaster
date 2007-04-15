@@ -1025,6 +1025,11 @@ int TryCDFrameRecovery(RawBuffer*, unsigned char*);
  * scsi wrapper dependent declarations.
  */
 
+/* Maximum number of sectors per request */
+
+#define MAX_CLUSTER_SIZE (32*2048)
+#define MAX_CLUSTER_SECTORS 32
+
 typedef struct _AlignedBuffer
 {  unsigned char *base;
    unsigned char *buf;

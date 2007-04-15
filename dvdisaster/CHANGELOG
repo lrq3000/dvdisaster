@@ -1,4 +1,7 @@
 
+0.71 (devel-21) 09-04-2007
+	- added larger cluster size for BD and HD DVD
+
 0.71 (devel-20) 08-04-2007
 	- started HD DVD and BD support
 	- fixed scale steps for HD DVD and BD (thanks to Andrei for 

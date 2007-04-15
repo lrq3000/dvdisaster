@@ -81,7 +81,7 @@ RawBuffer *CreateRawBuffer(int sample_length)
 
    rb->dataOffset = 16;  /* default for mode1 data sectors */
 
-   rb->workBuf   = CreateAlignedBuffer(sample_length*16);  /* max lba...lba+15 are read at once */
+   rb->workBuf   = CreateAlignedBuffer(sample_length*MAX_CLUSTER_SECTORS);
    rb->zeroSector= g_malloc0(sample_length);
    rb->rawBuf    = g_malloc(Closure->maxReadAttempts * sizeof(unsigned char*));
    rb->recovered = g_malloc(sample_length);

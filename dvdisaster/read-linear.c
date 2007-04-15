@@ -754,7 +754,7 @@ void ReadMediumLinear(gpointer data)
    /*** Create the aligned buffers. */
 
    for(i=0; i<READ_BUFFERS; i++)
-     rc->alignedBuf[i] = CreateAlignedBuffer(32768);
+     rc->alignedBuf[i] = CreateAlignedBuffer(MAX_CLUSTER_SIZE);
 
    /*** Open Device and query medium properties */
 
@@ -844,7 +844,9 @@ next_reading_pass:
 rc->deadWritten = 0;
 
    while(rc->readPos<=rc->lastSector)
-   {  if(Closure->stopActions)   /* somebody hit the Stop button */
+   {  int cluster_mask = rc->dh->clusterSize-1;
+
+      if(Closure->stopActions)   /* somebody hit the Stop button */
       {
 	SwitchAndSetFootline(Closure->readLinearNotebook, 1, Closure->readLinearFootline, 
 			     _("<span %s>Aborted by user request!</span> %lld sectors read, %lld sectors unreadable/skipped so far."),
@@ -853,18 +855,19 @@ rc->deadWritten = 0;
         goto terminate;
       }
 
-      /*** Decide between reading in fast mode (16 sectors at once)
+      /*** Decide between reading in fast mode (dh->clusterSize sectors at once)
 	   or reading one sector at a time.
 	   Fast mode gains some reading speed due to transfering fewer
 	   but larger data blocks from the device.
-	   Switching to fast mode is done only on 32K boundaries
-	   -- this matches the internal DVD structure better. 
+	   Switching to fast mode is done only on cluster boundaries
+	   -- this matches the internal structure of DVD and later media better. 
            In order to treat the 2 read errors at the end of TAO discs correctly,
            we switch back to per sector reading at the end of the medium. */
 
-      if(rc->readPos & 15 || rc->readPos >= ((rc->sectors - 2) & ~15) ) /* - 16 removed */ 
+      if(   rc->readPos & cluster_mask 
+	 || rc->readPos >= ((rc->sectors - 2) & ~cluster_mask) )
             nsectors = 1;
-      else  nsectors = 16;
+      else  nsectors = rc->dh->clusterSize;
 
       if(rc->readPos+nsectors > rc->lastSector)  /* don't read past the (CD) media end */
 	nsectors = rc->lastSector-rc->readPos+1;
@@ -1002,17 +1005,18 @@ reread:
 
 	 /* Determine number of sectors to skip forward. 
 	    Make sure not to skip past the media end
-	    and to land at a multiple of 16. */
+	    and to land at a multiple of dh->clusterSize. */
 
 	 if(nsectors>=Closure->sectorSkip) nfill = nsectors;
 	 else
-	 {  if(rc->readPos+Closure->sectorSkip > rc->lastSector) nfill = rc->lastSector-rc->readPos+1;
-	    else nfill = Closure->sectorSkip - ((rc->readPos + Closure->sectorSkip) & 15);
+	 {  int skip = rc->dh->clusterSize > Closure->sectorSkip ? rc->dh->clusterSize : Closure->sectorSkip;
+	    if(rc->readPos+skip > rc->lastSector) nfill = rc->lastSector-rc->readPos+1;
+	    else nfill = skip - ((rc->readPos + skip) & cluster_mask);
 	 }
 
 	 /* If we are reading past the dead marker we must take care 
             to fill up any holes with dead sector markers before skipping forward. 
-	    When sectorSkip is 0 and nsectors > 16, we will re-read all these sectors
+	    When sectorSkip is 0 and nsectors > 1, we will re-read all these sectors
 	    again one by one, so we catch this case in order not to write the markers twice.  */
 
 	 if(!rc->scanMode && rc->readPos+nfill > rc->readMarker
@@ -1053,9 +1057,9 @@ if(!rc->scanMode && rc->readPos+nfill <= rc->readMarker
 
 	 /* If sectorSkip is set, perform the skip.
 	    nfill has been calculated so that the skip lands
-	    at a multiple of 16. Therefore nsectors can remain
+	    at a multiple of dh->clusterSize. Therefore nsectors can remain
 	    at its former value as skipping forward will not 
-	    destroy 16 sector aligned reads. 
+	    destroy cluster size aligned reads. 
 	    The nsectors>1 case can only happen when processing the tao_tail. */
 
 	 if(Closure->sectorSkip && nsectors > 1)
