@@ -3576,7 +3576,7 @@ function imprint0cs()
 
    <pre> </pre>
 
-   Odpovědný za obsah webových stránek podle § 10 MDStV: <p>
+   Odpovědný za obsah webových stránek: <p>
    Carsten Gnörlich (viz výše uvedená adresa).
 
    <pre> </pre>

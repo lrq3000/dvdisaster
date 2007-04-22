@@ -150,11 +150,13 @@ typedef enum
    MODIFIER_EJECT,
    MODIFIER_FILL_UNREADABLE,
    MODIFIER_IGNORE_FATAL_SENSE,
+   MODIFIER_INTERNAL_REREADS,
    MODIFIER_QUERY_SIZE,
    MODIFIER_RANDOM_SEED,
    MODIFIER_READ_ATTEMPTS,
    MODIFIER_READ_MEDIUM,
    MODIFIER_READ_RAW,
+   MODIFIER_RAW_MODE,
    MODIFIER_SIMULATE_DEFECTS,
    MODIFIER_SPEED_WARNING, 
    MODIFIER_SPINUP_DELAY, 
@@ -240,6 +242,15 @@ int main(int argc, char *argv[])
 	     g_setenv("OUTPUT_CHARSET", "CP850", 1);
 #else
 	     g_setenv("OUTPUT_CHARSET", "CP1252", 1);
+#endif
+	     break;
+
+          case LANG_RUSSIAN:
+	     g_setenv("LANG", "ru_RU", 1);
+#ifdef WIN_CONSOLE
+	     g_setenv("OUTPUT_CHARSET", "CP855", 1);
+#else
+	     g_setenv("OUTPUT_CHARSET", "CP1251", 1);
 #endif
 	     break;
 
@@ -349,6 +360,7 @@ int main(int argc, char *argv[])
 	{"fix", 0, 0, 'f'},
 	{"help", 0, 0, 'h'},
 	{"ignore-fatal-sense", 0, 0, MODIFIER_IGNORE_FATAL_SENSE },
+	{"internal-rereads", 1, 0, MODIFIER_INTERNAL_REREADS },
         {"image", 1, 0, 'i'},
 	{"jump", 1, 0, 'j'},
 #ifdef SYS_MINGW
@@ -362,6 +374,7 @@ int main(int argc, char *argv[])
 	{"random-errors", 1, 0, MODE_RANDOM_ERR },
 	{"random-image", 1, 0, MODE_RANDOM_IMAGE },
 	{"random-seed", 1, 0, MODIFIER_RANDOM_SEED },
+	{"raw-mode", 1, 0, MODIFIER_RAW_MODE },
 	{"raw-sector", 1, 0, MODE_RAW_SECTOR},
 	{"read", 2, 0,'r'},
 	{"read-attempts", 1, 0, MODIFIER_READ_ATTEMPTS },
@@ -483,6 +496,14 @@ int main(int argc, char *argv[])
          case MODIFIER_IGNORE_FATAL_SENSE:
 	   Closure->ignoreFatalSense = TRUE;
 	   break;
+	 case MODIFIER_INTERNAL_REREADS:
+	    if(optarg)
+	       Closure->internalAttempts = atoi(optarg);
+	    if(Closure->internalAttempts < 0) 
+	       Closure->internalAttempts = -1;
+	    if(Closure->internalAttempts > 10) 
+	       Closure->internalAttempts = 10;
+	    break;
          case MODIFIER_TRUNCATE: 
 	   if(optarg)                  /* debugging truncate mode */
 	   {  mode = MODE_TRUNCATE;
@@ -514,6 +535,9 @@ int main(int argc, char *argv[])
 	   break;
          case MODIFIER_RANDOM_SEED:
 	   if(optarg) Closure->randomSeed = atoi(optarg);
+	   break;
+         case MODIFIER_RAW_MODE:
+	    if(optarg) Closure->rawMode = strtol(optarg,NULL,16);
 	   break;
          case MODIFIER_READ_ATTEMPTS:
 	   if(optarg) 
@@ -843,7 +867,9 @@ int main(int argc, char *argv[])
 	     "  --eject                - eject medium after successful read\n"
 	     "  --fill-unreadable n    - fill unreadable sectors with byte n\n"
 	     "  --ignore-fatal-sense   - continue reading after potentially fatal error conditon\n"
+	     "  --internal-rereads n   - drive may attempt n rereads before reporting an error\n"
       	     "  --query-size n         - query drive/udf/ecc for image size (default: ecc)\n"   
+	     "  --raw-mode n           - mode for raw reading CD media (20 or 21)\n"
 	     "  --read-attempts n-m    - attempts n upto m reads of a defective sector\n"
 	     "  --read-medium n        - read the whole medium up to n times\n"
 	     "  --read-raw             - performs read in raw mode if possible\n"

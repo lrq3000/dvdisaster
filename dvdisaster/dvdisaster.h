@@ -137,8 +137,10 @@ typedef struct _GlobalClosure
    int sectorSkip;      /* Number of sectors to skip after read error occurs */
    char *redundancy;    /* Error correction code redundancy */
    int readRaw;         /* Read CD sectors raw + verify them */
+   int rawMode;         /* mode for mode page */
    int minReadAttempts; /* minimum reading attempts */
    int maxReadAttempts; /* maximal reading attempts */
+   int internalAttempts;/* read attempts by the drive itself */
    int adaptiveRead;    /* Use optimized strategy for reading defective images */
    int speedWarning;    /* Print warning if speed changes by more than given percentage */
    int fillUnreadable;  /* Byte value for filling unreadable sectors or -1 */
@@ -904,7 +906,7 @@ enum                                 /* for ->properties above */
 {  DSH_HAS_FINGERPRINT = (1<<0)
 };
 
-void SaveDefectiveSector(struct _RawBuffer*);
+int SaveDefectiveSector(struct _RawBuffer*);
 int TryDefectiveSectorCache(struct _RawBuffer*, unsigned char*);
 
 /*** 
@@ -1015,7 +1017,7 @@ int CheckEDC(unsigned char*, int);
 int CheckMSF(unsigned char*, int);
 void InitializeCDFrame(unsigned char*, int);
 
-int ValidateRawSector(RawBuffer*, unsigned char*);
+int ValidateRawSector(RawBuffer*, unsigned char*, char*);
 int TryCDFrameRecovery(RawBuffer*, unsigned char*);
 
 /*** 

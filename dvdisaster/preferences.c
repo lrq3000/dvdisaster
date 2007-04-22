@@ -85,6 +85,9 @@ typedef struct _prefs_context
    GtkWidget *byteEntryA, *byteEntryB;
    GtkWidget *byteCheckA, *byteCheckB;
    GtkWidget *spinUpA, *spinUpB;
+   GtkWidget *internalAttemptsA, *internalAttemptsB;
+   GtkWidget *radioRawMode20A, *radioRawMode20B;
+   GtkWidget *radioRawMode21A, *radioRawMode21B;
    GtkWidget *fatalSenseA, *fatalSenseB;
    GtkWidget *ejectA, *ejectB;
    GtkWidget *readAndCreateButtonA, *readAndCreateButtonB;
@@ -301,6 +304,8 @@ enum
    TOGGLE_2GB,
    TOGGLE_RANGE,
    TOGGLE_RAW,
+   TOGGLE_RAW20,
+   TOGGLE_RAW21,
    TOGGLE_CACHE_DEFECTIVE,
    TOGGLE_CANCEL_OK,
    TOGGLE_FATAL_SENSE,
@@ -309,6 +314,7 @@ enum
    TOGGLE_LOGFILE,
 
    SPIN_DELAY,
+   SPIN_INTERNAL_ATTEMPTS,
    SPIN_READ_MEDIUM,
 
    SLIDER_JUMP,
@@ -433,6 +439,22 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->ejectB), state);
 	break;
 
+      case TOGGLE_RAW20:
+	if(state)
+	{  Closure->rawMode = 0x20;
+	   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioRawMode20A), state);
+	   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioRawMode20B), state);
+	}
+	break;
+
+      case TOGGLE_RAW21:
+	if(state)
+	{  Closure->rawMode = 0x21;
+	   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioRawMode21A), state);
+	   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioRawMode21B), state);
+	}
+	break;
+
       case TOGGLE_VERBOSE:
 	Closure->verbose = state;
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->verboseA), state);
@@ -489,6 +511,18 @@ static void spin_cb(GtkWidget *widget, gpointer data)
 	if(widget == pc->spinUpB)
 	{  if(pc->spinUpA)
 	     gtk_spin_button_set_value(GTK_SPIN_BUTTON(pc->spinUpA), value);
+	}
+	break;
+
+      case SPIN_INTERNAL_ATTEMPTS:
+	Closure->internalAttempts = value;
+	if(widget == pc->internalAttemptsA)
+	{  if(pc->internalAttemptsB)
+	     gtk_spin_button_set_value(GTK_SPIN_BUTTON(pc->internalAttemptsB), value);
+	}
+	if(widget == pc->internalAttemptsB)
+	{  if(pc->internalAttemptsA)
+	     gtk_spin_button_set_value(GTK_SPIN_BUTTON(pc->internalAttemptsA), value);
 	}
 	break;
 
@@ -1084,6 +1118,7 @@ static void cache_defective_dir_cb(GtkWidget *widget, gpointer data)
       file_list = GTK_FILE_SELECTION(pc->cacheDefectiveChooser)->file_list;
       gtk_widget_set_sensitive(file_list, FALSE);
       gtk_widget_hide(GTK_FILE_SELECTION(pc->cacheDefectiveChooser)->selection_entry);
+      gtk_entry_set_text(GTK_ENTRY(GTK_FILE_SELECTION(pc->cacheDefectiveChooser)->selection_entry), "");
 #if 0
       gtk_widget_hide(file_list->parent);
 #endif
@@ -1600,6 +1635,117 @@ void CreatePreferencesWindow(void)
 		       _("<b>Drive initialisation</b>\n\n"
 			 "Waits the specified amount of seconds for letting the drive spin up. "
 			 "This avoids speed jumps at the beginning of the reading curve."));
+
+      /** Drive raw reading parameters */
+
+      frame = gtk_frame_new(_utf("Raw reading parameters"));
+      gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
+
+      vbox2 = gtk_vbox_new(FALSE, 15);
+      gtk_container_set_border_width(GTK_CONTAINER(vbox2), 10);
+      gtk_container_add(GTK_CONTAINER(frame), vbox2);
+
+      /* Raw reading mode */
+
+      lwoh = CreateLabelWithOnlineHelp(_("Raw reading mode"), _("Raw reading mode: "));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 4);
+	 GtkWidget *lab, *radio1, *radio2;
+
+	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
+
+	 radio1 = gtk_radio_button_new(NULL);
+	 if(!i) pc->radioRawMode20A = radio1;
+	 else   pc->radioRawMode20B = radio1;
+	 g_signal_connect(G_OBJECT(radio1), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_RAW20));
+	 gtk_box_pack_start(GTK_BOX(hbox), radio1, FALSE, FALSE, 0);
+	 lab = gtk_label_new("20h");
+	 gtk_container_add(GTK_CONTAINER(radio1), lab);
+
+	 radio2 = gtk_radio_button_new_from_widget(GTK_RADIO_BUTTON(radio1));
+	 if(!i) pc->radioRawMode21A = radio2;
+	 else   pc->radioRawMode21B = radio2;
+ 	 g_signal_connect(G_OBJECT(radio2), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_RAW21));
+	 gtk_box_pack_start(GTK_BOX(hbox), radio2, FALSE, FALSE, 0);
+	 lab = gtk_label_new("21h");
+	 gtk_container_add(GTK_CONTAINER(radio2), lab);
+
+	 if(Closure->rawMode == 0x21)
+	      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio2), TRUE);
+         else gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio1), TRUE);
+
+	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	 else   AddHelpWidget(lwoh, hbox);
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Raw reading mode</b>\n\n"
+			 "There are several ways to put the drive into a mode "
+			 "which transfers partially read data from defective sectors:\n\n"
+			 "<b>20h</b> This is the <i>recommended</i> mode. "
+			 "The drive tries to apply "
+			 "the built-in error correction to the best possible extent "
+			 "before transfering a defective sector.\n\n"
+			 "<b>21h</b> In this mode the drive skips the last stage "
+			 "of its internal error correction and returns the "
+			 "uncorrected sector instead. This may result in sectors "
+			 "being tagged and processed as defective which would come "
+			 "out good in other reading modes, causing unnecessary "
+			 "work or even uncorrectable sectors.\n" 
+			 "However some drives appear to be unable to transfer data "
+			 "in mode 20h, but can do so in mode 21h, so this is your "
+			 "last resort then. Also, if sectors are not recoverable "
+			 "after reading and caching sectors in mode 20h, then adding "
+			 "some mode 21h reads to the cache might deliver additional information."));
+
+      /* Firmware rereads */
+
+      lwoh = CreateLabelWithOnlineHelp(_("Internal read attempts"), 
+				       _("Reread defective sectors"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      lwoh_clone = CloneLabelWithOnlineHelp(lwoh, _("times"));
+      RegisterPreferencesHelpWindow(lwoh_clone);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 4);
+	 GtkWidget *spin;
+
+	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
+
+	 spin = gtk_spin_button_new_with_range(-1, 10, 1);
+	 gtk_entry_set_width_chars(GTK_ENTRY(spin), 3);
+	 gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin), Closure->internalAttempts);
+	 g_signal_connect(spin, "value-changed", G_CALLBACK(spin_cb), (gpointer)SPIN_INTERNAL_ATTEMPTS);
+	 gtk_box_pack_start(GTK_BOX(hbox), spin, FALSE, FALSE, 0);
+
+	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh_clone->normalLabel : lwoh_clone->linkBox, FALSE, FALSE, 0);
+	 //	 gtk_container_set_border_width(GTK_CONTAINER(hbox), 10);
+
+	 if(!i)
+	 {  pc->internalAttemptsA = spin;
+	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	    //	    gtk_container_add(GTK_CONTAINER(frame), hbox);
+	 }
+	 else
+	 {  pc->internalAttemptsB = spin;
+	    AddHelpWidget(lwoh, hbox);
+	 }
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Internal read attempts</b>\n\n"
+			 "The drive firmware usually retries unreadable sectors "
+			 "a few times before giving up and returning a read error.\n"
+			 "But it is usually more efficient to manage the reading "
+			 "attempts from the client software, e.g. through the "
+			 "settings in the \"Read attempts\" preferences tab.\n"
+			 "Lowering this value to 0 or 1 can speed up processing "
+			 "of damaged media and reduce the drive wear; however "
+			 "most drives will simply ignore what you enter here.\n"
+			 "Use the value -1 to leave the drive at its default setting."));
 
       /* Fatal error handling */
 

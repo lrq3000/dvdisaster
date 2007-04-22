@@ -13,6 +13,7 @@ Czech		- Luboš Staněk (lubek@users.sourceforge.net)
 English 	- Carsten Gnörlich (program author)
 German 		- Carsten Gnörlich (program author)
 Italian		- Andrea Polverini (polve@polve.com)
+Russian		- Igor Gorbounov (igorbounov@topazelectro.ru)
 Swedish		- Daniel Nylander (info@danielnylander.se)
 
 2) Requirements for translating dvdisaster
@@ -129,7 +130,7 @@ This should be fully automated, but alas, it isn't.
 
 - Add translator to General information section in this file
 - Add translator to CREDITS* files
-- Edit GNUMakefile.template
+- Edit GNUmakefile.template (PO_LOCALES)
 - Double check that the translator gets credits in the about dialog
   text for his language
 - Add localization information in the HTML documentation
@@ -137,5 +138,4 @@ This should be fully automated, but alas, it isn't.
 - Add Windows codepage to dvdisaster.c
 - Edit installer.template
 
-- Edit wininst contents
 

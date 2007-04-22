@@ -369,7 +369,7 @@ int CheckEDC(unsigned char *cd_frame, int xa_mode)
  * same stuff the drive is supposed to do in the final L-EC stage.
  */
 
-static int simple_lec(RawBuffer *rb, unsigned char *frame)
+static int simple_lec(RawBuffer *rb, unsigned char *frame, char *msg)
 {  unsigned char byte_state[rb->sampleSize];
    unsigned char p_vector[P_VECTOR_SIZE];
    unsigned char q_vector[Q_VECTOR_SIZE];
@@ -456,8 +456,8 @@ static int simple_lec(RawBuffer *rb, unsigned char *frame)
    if(q_failures || p_failures || q_corrected || p_corrected)
    {
      PrintCLIorLabel(Closure->status, 
-		     "Sector %lld  L-EC P/Q results: %d/%d failures, %d/%d corrected.\n",
-		     rb->lba, p_failures, q_failures, p_corrected, q_corrected);
+		     "Sector %lld  L-EC P/Q results: %d/%d failures, %d/%d corrected (%s).\n",
+		     rb->lba, p_failures, q_failures, p_corrected, q_corrected, msg);
      return 1;
    }
 
@@ -469,7 +469,7 @@ static int simple_lec(RawBuffer *rb, unsigned char *frame)
  *** Validate CD raw sector
  ***/
 
-int ValidateRawSector(RawBuffer *rb, unsigned char *frame)
+int ValidateRawSector(RawBuffer *rb, unsigned char *frame, char *msg)
 {  int lec_did_sth = FALSE;
    unsigned char saved_msf[4];
 
@@ -513,7 +513,7 @@ int ValidateRawSector(RawBuffer *rb, unsigned char *frame)
      L-EC is expensive, we skip our L-EC as well when the EDC is fine. */
 
   if(!CheckEDC(frame, rb->xaMode))
-    lec_did_sth = simple_lec(rb, frame);
+     lec_did_sth = simple_lec(rb, frame, msg);
 
 
   if(rb->xaMode)

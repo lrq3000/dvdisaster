@@ -436,6 +436,7 @@ void ReadDotfile()
 	                                       continue; 
                                              }
       if(!strcmp(symbol, "ignore-fatal-sense")) { Closure->ignoreFatalSense  = atoi(value); continue; }
+      if(!strcmp(symbol, "internal-attempts"))  { Closure->internalAttempts = atoi(value); continue; }
       if(!strcmp(symbol, "jump"))            { Closure->sectorSkip  = atoi(value); continue; }
       if(!strcmp(symbol, "log-file-enabled")){ Closure->logFileEnabled = atoi(value); continue; }
       if(!strcmp(symbol, "log-file"))        { if(Closure->logFile) g_free(Closure->logFile);
@@ -446,6 +447,7 @@ void ReadDotfile()
       if(!strcmp(symbol, "max-read-attempts"))   { Closure->maxReadAttempts = atoi(value); continue; }
       if(!strcmp(symbol, "min-read-attempts"))   { Closure->minReadAttempts = atoi(value); continue; }
       if(!strcmp(symbol, "query-size"))      { Closure->querySize  = atoi(value); continue; }
+      if(!strcmp(symbol, "raw-mode"))        { Closure->rawMode = atoi(value); continue; }
       if(!strcmp(symbol, "read-and-create")) { Closure->readAndCreate = atoi(value); continue; }
       if(!strcmp(symbol, "read-medium"))     { Closure->readingPasses = atoi(value); continue; }
       if(!strcmp(symbol, "read-raw"))        { Closure->readRaw = atoi(value); continue; }
@@ -527,6 +529,7 @@ static void update_dotfile()
    g_fprintf(dotfile, "eject:             %d\n", Closure->eject);
    g_fprintf(dotfile, "fill-unreadable:   %d\n", Closure->fillUnreadable);
    g_fprintf(dotfile, "ignore-fatal-sense: %d\n", Closure->ignoreFatalSense);
+   g_fprintf(dotfile, "internal-attempts: %d\n", Closure->internalAttempts);
    g_fprintf(dotfile, "jump:              %d\n", Closure->sectorSkip);
    g_fprintf(dotfile, "log-file-enabled:  %d\n", Closure->logFileEnabled);
    g_fprintf(dotfile, "log-file:          %s\n", Closure->logFile);
@@ -535,6 +538,7 @@ static void update_dotfile()
    g_fprintf(dotfile, "max-read-attempts: %d\n", Closure->maxReadAttempts);
    g_fprintf(dotfile, "min-read-attempts: %d\n", Closure->minReadAttempts);
    g_fprintf(dotfile, "query-size:        %d\n", Closure->querySize);
+   g_fprintf(dotfile, "raw-mode:          %d\n", Closure->rawMode);
    g_fprintf(dotfile, "read-and-create:   %d\n", Closure->readAndCreate);
    g_fprintf(dotfile, "read-medium:       %d\n", Closure->readingPasses);
    g_fprintf(dotfile, "read-raw:          %d\n", Closure->readRaw);
@@ -629,6 +633,8 @@ void InitClosure()
    Closure->cacheMB     = 32;
    Closure->minReadAttempts = 1;
    Closure->maxReadAttempts = 1;
+   Closure->rawMode     = 0x20;
+   Closure->internalAttempts = -1;
    Closure->sectorSkip  = 16;
    Closure->spinupDelay = 5;
    Closure->querySize   = 2;

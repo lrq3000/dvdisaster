@@ -10,6 +10,9 @@ Harald Bögeholz (hwb@heise.de)
 Julian Einwag (julian@einwag.de).
    provides and maintains the Mac OS X / Darwin port.
 
+Igor Gorbounov (igorbounov@topazelectro.ru)
+   provides and maintains the Russian translation.
+
 Andrei Grecu (andrei.grecu@aon.at)
    provided an algorithm for recovering defective CD sectors
    from multiple incomplete RAW reading attempts.

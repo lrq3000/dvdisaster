@@ -606,7 +606,10 @@ assume_cd:
    Verbose("#CD: size returned is %d\n", length);
 
    if(length>1024) /* don't let the drive hack us using a buffer overflow ;-) */
-   {  FreeAlignedBuffer(ab);
+   {  if(Closure->verbose)
+	 HexDump(buf, 1024, 16);
+
+      FreeAlignedBuffer(ab);
       Stop(_("TOC info too long (%d), probably multisession.\n"),length);
       return FALSE;
    }
@@ -725,14 +728,12 @@ assume_cd:
  * or written over existing flags (override = TRUE). 
  */
 
-//#define RAW_DEBUG
-
-int SetRawMode(DeviceHandle *dh, int mode, int operator)
+int SetRawMode(DeviceHandle *dh, int operator)
 {  AlignedBuffer *ab = CreateAlignedBuffer(2048);
    unsigned char *buf = ab->buf;
    Sense sense;
    unsigned char cdb[16];
-   unsigned wanted_mode;
+   unsigned char wanted_mode;
    int pll, ret;
 
    /*** Read mode page 1 */
@@ -745,28 +746,22 @@ int SetRawMode(DeviceHandle *dh, int mode, int operator)
 
    if(ret<0) 
    {  FreeAlignedBuffer(ab);
-#ifdef RAW_DEBUG
-      Verbose("MODE SENSE: %s\n", 
+      Verbose("\nRead mode page 01h failed: %s\n", 
 	      GetSenseString(sense.sense_key, sense.asc, sense.ascq, 0));
-#endif
       return FALSE;
    }
 
-#ifdef RAW_DEBUG
-   Verbose("MODE PAGE 01h:\n");
+   Verbose("\nMode page 01h:\n");
    Verbose("  mode data length = %d\n", buf[0]<<8 | buf[1]);
    Verbose("  block descriptor length = %d\n", buf[6]<<8 | buf[7]);
    Verbose("  page byte 0 = %2x\n", buf[8]);
    Verbose("  page byte 1 = %2x\n", buf[9]);
    Verbose("  page byte 2 = %2x\n", buf[10]);
    Verbose("  page byte 3 = %2x\n", buf[11]);
-#endif
 
    pll = buf[1] + 2;  /* mode data length + 2 */
 
-#ifdef RAW_DEBUG
    Verbose("  using mode data length %d\n", pll);
-#endif
 
    /*** Set new raw reading mode */
 
@@ -775,21 +770,20 @@ int SetRawMode(DeviceHandle *dh, int mode, int operator)
    cdb[1] = 0x10;         /* set page format (PF) bit */
    cdb[7] = 0;
    cdb[8] = pll;          /* parameter list length */
-
-   dh->previousReadMode = buf[10];
-
+   printf("RAW: using %xh %d\n", Closure->rawMode, Closure->internalAttempts);
    switch(operator)       /* set new read mode */
    {  case MODE_PAGE_SET:
-        buf[10] = mode;       
-	break;
+	 dh->previousReadMode = buf[10];
+	 dh->previousRetries  = buf[11];
+	 buf[10] |= Closure->rawMode;
+	 if(Closure->internalAttempts >= 0)
+	    buf[11] = Closure->internalAttempts;
+	 break;
 
-      case MODE_PAGE_OR:
-	buf[10] |= mode;
-	break;
-
-      case MODE_PAGE_AND:
-	buf[10] &= mode;
-	break;
+      case MODE_PAGE_UNSET:
+	 buf[10] = dh->previousReadMode;
+	 buf[11] = dh->previousRetries;
+	 break;
    }
 
    wanted_mode = buf[10];
@@ -798,10 +792,8 @@ int SetRawMode(DeviceHandle *dh, int mode, int operator)
 
    if(ret<0) 
    {  FreeAlignedBuffer(ab);
-#ifdef RAW_DEBUG
-      Verbose("MODE SELECT: %s\n", 
+      Verbose("Setting mode page 01h failed: %s\n", 
 	      GetSenseString(sense.sense_key, sense.asc, sense.ascq, 0));
-#endif
       return FALSE;
    }
 
@@ -817,18 +809,14 @@ int SetRawMode(DeviceHandle *dh, int mode, int operator)
 
    if(ret<0) 
    {  FreeAlignedBuffer(ab);
-#ifdef RAW_DEBUG
-      Verbose("MODE SENSE: %s\n", 
+      Verbose("Reading back mode page 1 failed: %s\n", 
 	      GetSenseString(sense.sense_key, sense.asc, sense.ascq, 0));
-#endif
       return FALSE;
    }
 
    if(buf[10] != wanted_mode)
    {  FreeAlignedBuffer(ab);
-#ifdef RAW_DEBUG
       Verbose("Setting raw mode failed: %2x instead of %2x\n", buf[10], wanted_mode);
-#endif
       return FALSE;
    }
 
@@ -1622,10 +1610,10 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
 #endif
 
    /* The drive screws up sometimes and returns a damaged sector as good. 
-      When nsectors==1, this sectors is still interesting for data recovery.
+      When nsectors==1, this sector is still interesting for data recovery.
       We flag it as bad so that the next if() will pick it up correctly. */
 
-   if(!ret && nsectors == 1 && !ValidateRawSector(rb, rb->workBuf->buf))
+   if(!ret && nsectors == 1 && !ValidateRawSector(rb, rb->workBuf->buf, "verify incoming"))
    {  ret = -1;
    }
 
@@ -1659,7 +1647,7 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
    rb->lba = lba;
 
    for(i=0, s=0; i<nsectors; i++, s+=rb->sampleSize)
-   {  if(!ValidateRawSector(rb, rb->workBuf->buf+s))
+   {  if(!ValidateRawSector(rb, rb->workBuf->buf+s, "verify outgoing"))
         return -1;
 
       memcpy(outbuf, rb->workBuf->buf+s+offset, 2048);
@@ -1721,48 +1709,45 @@ int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
 	recommended_attempts = dh->rawBuffer->recommendedAttempts;
 
       if(status)  /* current try was unsucessful */
-      {
+      {  int last_key, last_asc, last_ascq;
+
 	 if(Closure->stopActions)  /* user break */
 	    return status;
 
-	 if(recommended_attempts > 1)
-	 {  int last_key, last_asc, last_ascq;
+	 /* Do not attempt multiple re-reads if nsectors > 1 and sectorSkip == 0
+	    as these will be re-read with nsectors==1 anyways. */
 
-	    /* Do not attempt multiple re-reads if nsectors > 1 and sectorSkip == 0
-	       as these will be re-read with nsectors==1 anyways. */
-
-	    if(dh->canReadDefective && nsectors > 1 && Closure->sectorSkip == 0)
-	    {  PrintCLIorLabel(Closure->status,
-			       _("Sectors %lld - %lld: %s\n"),
-			       s, s+nsectors-1, GetLastSenseString(FALSE));
-	       return status;
-	    }
-
-	    /* Print results of current attempt.
-	       If the error was a wrong MSF in the sector, 
-	       print info about the sector which was returned. */
-
-	    GetLastSense(&last_key, &last_asc, &last_ascq);
-
-	    if(last_key == 3 && last_asc == 255 && last_ascq == 2 && dh->rawBuffer)
-	    {  unsigned char *frame = dh->rawBuffer->workBuf->buf;
-	       PrintCLIorLabel(Closure->status,
-			       _("Sector %lld, try %d: %s Sector returned: %d.\n"),
-			       s, retry, GetLastSenseString(FALSE),
-			       MSFtoLBA(frame[12], frame[13], frame[14]));
-	    }
-	    else
-	       PrintCLIorLabel(Closure->status,
-			       _("Sector %lld, try %d: %s\n"),
-			       s, retry, GetLastSenseString(FALSE));
-
-	   /* Last attempt; create failure notice */
-
-	   if(dh->canReadDefective && retry >= recommended_attempts)
-	     RememberSense(3, 255, 7);  /* Recovery failed */
+	 if(dh->canReadDefective && nsectors > 1 && Closure->sectorSkip == 0)
+	 {  PrintCLIorLabel(Closure->status,
+			    _("Sectors %lld - %lld: %s\n"),
+			    s, s+nsectors-1, GetLastSenseString(FALSE));
+	    return status;
 	 }
+
+	 /* Print results of current attempt.
+	    If the error was a wrong MSF in the sector, 
+	    print info about the sector which was returned. */
+
+	 GetLastSense(&last_key, &last_asc, &last_ascq);
+
+	 if(last_key == 3 && last_asc == 255 && last_ascq == 2 && dh->rawBuffer)
+	 {  unsigned char *frame = dh->rawBuffer->workBuf->buf;
+	    PrintCLIorLabel(Closure->status,
+			    _("Sector %lld, try %d: %s Sector returned: %d.\n"),
+			    s, retry, GetLastSenseString(FALSE),
+			    MSFtoLBA(frame[12], frame[13], frame[14]));
+	 }
+	 else
+	    PrintCLIorLabel(Closure->status,
+			    _("Sector %lld, try %d: %s\n"),
+			    s, retry, GetLastSenseString(FALSE));
+
+	 /* Last attempt; create failure notice */
+
+	 if(dh->canReadDefective && retry >= recommended_attempts)
+	    RememberSense(3, 255, 7);  /* Recovery failed */
       }
-      else 
+      else /* good return status */
       {  if(recommended_attempts > 1 && retry > 1)
 	  PrintCLIorLabel(Closure->status,
 			  _("Sector %lld, try %d: success\n"), s, retry);
@@ -1775,12 +1760,12 @@ int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
 
    if(dh->canReadDefective && status && Closure->defectiveDump)
    {   
-       SaveDefectiveSector(dh->rawBuffer);
-       status = TryDefectiveSectorCache(dh->rawBuffer, buf);
-       if(status)
-	  RememberSense(3, 255, 7);  /* Recovery failed */
+      if(SaveDefectiveSector(dh->rawBuffer))  /* any new sectors? */
+      {  status = TryDefectiveSectorCache(dh->rawBuffer, buf);
+	 if(status)
+	    RememberSense(3, 255, 7);  /* Recovery failed */
+      }
    }
-
    return status;
 }
 
@@ -1870,7 +1855,7 @@ DeviceHandle* OpenAndQueryDevice(char *device)
    }
 
    /* Activate raw reading features if possible,
-      output used reading mode */
+      output selected reading mode */
 
    Verbose("# deciding reading strategy...\n");
    switch(dh->mainType)
@@ -1887,13 +1872,10 @@ DeviceHandle* OpenAndQueryDevice(char *device)
 	   }
 	   PrintLog(_(", RAW reading"));
 
-	   if(Closure->maxReadAttempts > 1)
-	   {  dh->canReadDefective = SetRawMode(dh, 0x20, MODE_PAGE_OR);
+	   dh->canReadDefective = SetRawMode(dh, MODE_PAGE_SET);
 
-	      if(dh->canReadDefective)
-	         PrintLog(_(", Mode page 1 ERP = %02xh"), dh->currentReadMode);
-	   } 
-	   else SetRawMode(dh, ~0x20, MODE_PAGE_AND);
+	   if(dh->canReadDefective)
+	      PrintLog(_(", Mode page 1 ERP = %02xh"), dh->currentReadMode);
 	}
 	PrintLog(".\n");
         break;

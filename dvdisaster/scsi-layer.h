@@ -219,6 +219,7 @@ typedef struct _DeviceHandle
 
    int canReadDefective;      /* TRUE if drive claims to raw read uncorrectable sectors */
    int previousReadMode;      /* read mode prior to switching to raw reads */
+   int previousRetries;       /* retries prior to switching */
    int currentReadMode;       /* current raw read mode */
    RawBuffer *rawBuffer;      /* for performing raw read analysis */
    int (*read)(struct _DeviceHandle*, unsigned char*, int, int);
@@ -297,8 +298,7 @@ int SendPacket(DeviceHandle*, unsigned char*, int, unsigned char*, int, Sense*, 
  */
 
 enum 
-{  MODE_PAGE_OR, 
-   MODE_PAGE_AND,
+{  MODE_PAGE_UNSET, 
    MODE_PAGE_SET
 };
 
@@ -307,7 +307,7 @@ int  GetMediumFingerprint(DeviceHandle*, guint8*, gint64);
 void CloseDevice(DeviceHandle*);
 
 int InquireDevice(DeviceHandle*, int); 
-int SetRawMode(DeviceHandle*, int, int);
+int SetRawMode(DeviceHandle*, int);
 
 void SpinupDevice(DeviceHandle*);
 void LoadMedium(struct _DeviceHandle*, int);

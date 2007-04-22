@@ -1898,6 +1898,28 @@ and wait for the release of version 0.72.
 The alpha versions use the same package format as the regular releases.<p>
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
+<tr><td><b>dvdisaster-0.71 (devel22)</b></td><td align="right">22-Apr-2007</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+  <table>
+    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel22.tar.bz2?download">dvdisaster-0.71.devel22.tar.bz2</a></td></tr>
+    <tr><td align="right">Digital signature:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel22.tar.bz2.gpg?download">dvdisaster-0.71.devel22.tar.bz2.gpg</a></td></tr>
+    <tr><td align="right">Binary for Windows:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel22-setup.exe?download">dvdisaster-0.71.devel22-setup.exe</a></td></tr>
+    <tr><td align="right">Digital signature:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel22-setup.exe.gpg?download">dvdisaster-0.71.devel22-setup.exe.gpg</a></td></tr>
+  </table>
+</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+Igor Gorbounov started the Russian translation of on-screen texts.<p>
+Added selection of 20h/21h raw reading modes to enable defective sector 
+reading on more drives. Fixed some inefficiencies during raw sector recovery.
+</td></tr></table><p>
+
+<table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.71 (devel21)</b></td><td align="right">15-Apr-2007</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
@@ -2139,12 +2161,19 @@ So be careful trying these tests:
 <table><tr>
 <td><a href="../testing/bd-image.png"><img src="../testing/bd-image.png" 
 width="100px"></a></td>
-<td><a href="../testing/bd-drive.png"><img src="../testing/bd-drive.png" width="100px"></a></td>
 <td><a href="../testing/bd-files.png"><img src="../testing/bd-files.png" width="100px"></a></td>
 <td>
 Make sure that only "ISO/UDF" and the linear reading strategy
-are selected in the "Image" tab. The "Drive" and "Files" tabs should have 
+are selected in the "Image" tab. The "Files" tab should have 
 default settings as shown in the screen shot.</td></tr></table><p>
+
+<table><tr>
+<td><a href="../testing/cd-drive1.png"><img src="../testing/cd-drive1.png" width="100px"></a></td>
+<td>
+In the "Drive" tab, set the "Raw reading mode" to <i>20h</i>. 
+Setting "Reread defective sectors" to <i>1 times</i> is recommended 
+as it might speed up reading on some drives.
+</td></tr></table><p>
 
 <table><tr>
 <td><a href="../testing/cd-read2.png"><img src="../testing/bd-image.png" width="100px"></a></td>
@@ -2206,9 +2235,19 @@ are capable of transferring data from defective sectors:
 <li> "Recovered in raw reader by iterative L-EC."</li>
 <li> "Recovered in raw reader by plausible sector search."</li>
 <li> "Recovered in raw reader by heuristic L-EC."</li>
-</ul>
+</ul><p>
 
-Otherwise, there might be several reasons why raw data can not be read:
+<b>What to do if raw reading seems not to work:</b><p>
+
+<table><tr>
+<td><a href="../testing/cd-drive2.png"><img src="../testing/cd-drive2.png" width="100px"></a></td>
+<td>
+Return to the preferences "Drive" tab and set the "Raw reading mode" to <i>21h</i>. 
+Some drives appear to need this mode for raw reading. Repeat step 2.
+</td></tr></table><p>
+
+If neither 20h nor 21h work, 
+there might be several reasons why raw data can not be read:
 
 <ul>
 <li> The medium might be damaged beyond the drive's reading capabilities.<br>
@@ -2552,6 +2591,7 @@ The current version of dvdisaster contains screen texts in the following languag
 <tr><td></td><td>English</td><td>--</td><td>complete</td></tr>
 <tr><td>&nbsp;&nbsp;&nbsp;</td><td>German</td><td>--</td><td>complete</td></tr>
 <tr><td>&nbsp;&nbsp;&nbsp;</td><td>Italian</td><td>--</td><td>upto version 0.65</td></tr>
+<tr><td>&nbsp;&nbsp;&nbsp;</td><td>Russian</td><td>--</td><td>complete</td></tr>
 <tr><td>&nbsp;&nbsp;&nbsp;</td><td>Swedish</td><td>--</td><td>complete</td></tr>
 </table><p>
 
@@ -3532,7 +3572,7 @@ function imprint0en()
 
    <pre> </pre>
 
-   Responsible for the website content under § 10 MDStV: <p>
+   Responsible for the website content: <p>
    Carsten Gnörlich (see above for address).
 
    <pre> </pre>

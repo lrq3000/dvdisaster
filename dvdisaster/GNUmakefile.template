@@ -2,7 +2,7 @@
 # Begin of dvdisaster makefile template
 ######################################################################
 
-PO_LOCALES = cs de it sv
+PO_LOCALES = cs de it ru sv
 MAN_LOCALES = cs de it
 
 ######################################################################
@@ -119,7 +119,7 @@ simple-md5sum: md5.c
 documentation/de/index.html: documentation/create.bash documentation/create-cs.bash documentation/create-de.bash documentation/create-en.bash
 	@if test -e help-dialogs.h && grep UNMODIFIED help-dialogs.h >/dev/null; \
 	then cd documentation ; bash create.bash local-orig $(VERSION) $(PKGNAME) $(CFG_FULL_VERSION); \
-	else cd documentation ; bash create.bash local-mod $(VERSION) $(PKGNAME); \
+	else cd documentation ; bash create.bash local-mod $(VERSION) $(PKGNAME) $(CFG_FULL_VERSION); \
 	fi
 
 html: documentation/de/index.html
@@ -321,19 +321,19 @@ www:
 	@echo "make sf         # create WWW pages for hosting at SourceForge"
 
 sf:
-	@cd documentation ; ./create.bash sf $(VERSION) ; \
+	@cd documentation ; ./create.bash sf $(VERSION) $(PKGNAME) $(CFG_FULL_VERSION); \
 	tar cjf ../../sf.tar.bz2 pubkey.asc cs/*.html de/*.html en/*.html
 
 sf-images:
-	@cd documentation ; ./create.bash sf $(VERSION) ; \
-	tar cjf ../../sf.tar.bz2 cs/*.html de/*.html en/*.html images/*.jpg images/*.png cs/images/*.png de/images/*.png en/images/*.png
+	@cd documentation ; ./create.bash sf $(VERSION) $(PKGNAME) $(CFG_FULL_VERSION); \
+	tar cjf ../../sf.tar.bz2 cs/*.html de/*.html en/*.html images/*.jpg images/*.png cs/images/*.png de/images/*.png en/images/*.png testing/*.png
 
 berlios:
-	@cd documentation ; ./create.bash berlios $(VERSION) ; \
+	@cd documentation ; ./create.bash berlios $(VERSION) $(PKGNAME) $(CFG_FULL_VERSION); \
 	tar cjf ../../berlios.tar.bz2 pubkey.asc cs/*.html de/*.html en/*.html
 
 berlios-images:
-	@cd documentation ; ./create.bash berlios $(VERSION) ; \
+	@cd documentation ; ./create.bash berlios $(VERSION) $(PKGNAME) $(CFG_FULL_VERSION); \
 	tar cjf ../../berlios.tar.bz2 cs/*.html de/*.html en/*.html images/*.jpg images/*.png cs/images/*.png de/images/*.png en/images/*.png
 
 srcdist: pack-images lock-images clean distclean 

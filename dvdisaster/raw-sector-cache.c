@@ -98,15 +98,19 @@ static void open_defective_sector_file(RawBuffer *rb, char *path, LargeFile **fi
  * Append RawBuffer contents to defective sector dump
  */
 
-void SaveDefectiveSector(RawBuffer *rb)
+int SaveDefectiveSector(RawBuffer *rb)
 {  LargeFile *file;
    DefectiveSectorHeader *dsh = alloca(sizeof(DefectiveSectorHeader));
+   unsigned char *cache_sectors = NULL;
    char *filename;
    gint64 length,offset;
-   int i;
+   int count=0;
+   int i,j,idx;
 
    if(!rb->samplesRead) 
-     return;  /* Nothing to be done */
+     return 0;  /* Nothing to be done */
+
+   /* Open cache file */
 
    filename = g_strdup_printf("%s/%s%lld.raw", 
 			      Closure->dDumpDir, Closure->dDumpPrefix, 
@@ -120,25 +124,69 @@ void SaveDefectiveSector(RawBuffer *rb)
    {  open_defective_sector_file(rb, filename, &file, dsh);
       if(!file)
 	 Stop(_("Could not open %s: %s"), filename, strerror(errno));
-      PrintCLIorLabel(Closure->status,
-		      _(" [Appending %d sectors to cache file %s; LBA=%lld, ssize=%d, %d sectors]\n"), 
-		      rb->samplesRead, filename, dsh->lba, dsh->sectorSize, dsh->nSectors);
    }
 
+   /* Read already cached sectors */
+
+   if(dsh->nSectors > 0)
+   {  if(!LargeSeek(file, sizeof(DefectiveSectorHeader)))
+	 Stop(_("Failed seeking in defective sector file: %s"), strerror(errno));
+
+      cache_sectors = g_malloc(dsh->sectorSize*dsh->nSectors);
+      for(i=0, idx=0; i<dsh->nSectors; i++, idx+=dsh->sectorSize)
+      {  int n=LargeRead(file, cache_sectors+idx, dsh->sectorSize);
+	 
+	 if(n != dsh->sectorSize)
+	    Stop(_("Failed reading from defective sector file: %s"), strerror(errno));
+      }
+   }
+
+   /* Store sectors which are not already cached */
+   
    offset = sizeof(DefectiveSectorHeader) + rb->sampleSize*dsh->nSectors;
    if(!LargeSeek(file, offset))
       Stop(_("Failed seeking in defective sector file: %s"), strerror(errno));
 
    for(i=0; i<rb->samplesRead; i++)
-   {  int n=LargeWrite(file, rb->rawBuf[i], rb->sampleSize);
+   {  int new_sector = TRUE;
 
-      if(n != rb->sampleSize)
-	 Stop(_("Failed writing to defective sector file: %s"), strerror(errno));
+      if(cache_sectors)  /* Sector already in cache? */
+      {  
+	 for(j=0, idx=0; j<dsh->nSectors; j++, idx+=dsh->sectorSize) 
+	 {  if(!memcmp(rb->rawBuf[i], cache_sectors+idx, rb->sampleSize))
+	    {  new_sector = FALSE;
+	       break;
+	    }
+	 }
+      }
+
+      for(j=0; j<i; j++) /* Some drives return cached data after first read */
+      {  if(!memcmp(rb->rawBuf[i], rb->rawBuf[j], rb->sampleSize))
+	 {  new_sector = FALSE;
+	    break;
+	 }
+      }
+
+      if(new_sector)   /* same sector already in cache */
+      {  int n=LargeWrite(file, rb->rawBuf[i], rb->sampleSize);
+	 
+	 if(n != rb->sampleSize)
+	    Stop(_("Failed writing to defective sector file: %s"), strerror(errno));
+	 count++;
+      }
    }
 
    LargeClose(file);
 
+   PrintCLIorLabel(Closure->status,
+		   _(" [Appended %d/%d sectors to cache file %s; LBA=%lld, ssize=%d, %d sectors]\n"), 
+		   count, rb->samplesRead, filename, dsh->lba, dsh->sectorSize, dsh->nSectors);
+
    g_free(filename);
+   if(cache_sectors)
+      g_free(cache_sectors);
+
+   return count;
 }
 
 /*

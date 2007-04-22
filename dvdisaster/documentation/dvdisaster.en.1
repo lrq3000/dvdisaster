@@ -173,10 +173,29 @@ fill unreadable sectors with byte n
 .B \-\-ignore-fatal-sense
 continue reading after potentially fatal error condition.
 .TP
+.B \-\-internal-rereads n
+internal read attempts for defective CD media sectors (default: -1)
+.RS
+The drive firmware usually retries unreadable sectors a few times before
+giving up and returning a read error. It is more efficient to set this to 0 or 1
+and manage read attempts through the --read-attempts parameter. Most drives ignore
+this setting anyways. Use -1 to leave the drive at its default setting.
+.RE
+.TP
 .B \-\-query-size n
 queries drive or filesystem on medium for image size (default: ecc)
 .RS
 Possible values are: drive udf ecc 
+.RE
+.TP
+.B \-\-raw-mode n
+selects raw reading mode for CD media (default: 20)
+.RS
+The recommended mode is 20, which makes the drive apply its built-in error 
+correction to the best possible extent before transfering a defective sector.
+However some drives can only read defective sectors using mode 21, skipping
+the last stage of the internal error correction and returning 
+the uncorrected sector instead.
 .RE
 .TP
 .B \-\-read-attempts n-m

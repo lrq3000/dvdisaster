@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-04-15 16:09+0200\n"
+"POT-Creation-Date: 2007-04-22 19:43+0200\n"
 "PO-Revision-Date: 2004-11-30 19:48+0100\n"
 "Last-Translator: Carsten Gnörlich <carsten@dvdisaster.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: closure.c:506
+#: closure.c:508
 #, c-format
 msgid ""
 "# dvdisaster-%s configuration file\n"
@@ -276,19 +276,19 @@ msgstr "RS01-Methode zum Überprüfen der Dateien nicht verfügbar."
 #. TRANSLATORS:
 #. This is a dummy entry which is supposed to translate into "ok".
 #. Please do not return anything else here.
-#: dvdisaster.c:271 dvdisaster.c:284 dvdisaster.c:296
+#: dvdisaster.c:282 dvdisaster.c:295 dvdisaster.c:307
 msgid "test phrase for verifying the locale installation"
 msgstr "ok"
 
-#: dvdisaster.c:467
+#: dvdisaster.c:480
 msgid "--cache-size must at least be 1MB; 16MB or higher is recommended."
 msgstr "--cache-size muß mindestens 1MB sein; 16MB oder mehr werden empfohlen."
 
-#: dvdisaster.c:469
+#: dvdisaster.c:482
 msgid "--cache-size maximum is 2048MB."
 msgstr "Die Maximalgröße von --cache-size ist 2048MB."
 
-#: dvdisaster.c:568
+#: dvdisaster.c:592
 #, c-format
 msgid ""
 "\n"
@@ -299,12 +299,12 @@ msgstr ""
 "dvdisaster Version %s\n"
 "\n"
 
-#: dvdisaster.c:627
+#: dvdisaster.c:651
 #, c-format
 msgid "?? illegal getopt return value %d\n"
 msgstr "?? ungültiger Rückgabewert von getopt: %d\n"
 
-#: dvdisaster.c:663
+#: dvdisaster.c:687
 #, c-format
 msgid ""
 "dvdisaster is not properly installed.\n"
@@ -316,7 +316,7 @@ msgstr ""
 
 #. TRANSLATORS: Program options like -r and --read are not to be translated
 #. to avoid confusion when discussing the program in international forums.
-#: dvdisaster.c:811
+#: dvdisaster.c:835
 msgid ""
 "\n"
 "Common usage examples:\n"
@@ -340,7 +340,7 @@ msgstr ""
 "  dvdisaster -u,--unlink # Löscht .iso - Dateien nach Beenden der vorherigen Aktionen.\n"
 "\n"
 
-#: dvdisaster.c:820
+#: dvdisaster.c:844
 #, c-format
 msgid ""
 "Drive and file specification:\n"
@@ -355,7 +355,7 @@ msgstr ""
 "  -i,--image  Name       - Name der Abbild - Datei        (Standard: medium.iso)\n"
 "  -e,--ecc    Name       - Name der Fehlerkorrektur-Datei (Standard: medium.ecc)\n"
 
-#: dvdisaster.c:828
+#: dvdisaster.c:852
 msgid ""
 "  -l,--list              - list drives available under ASPI manager\n"
 "\n"
@@ -363,7 +363,7 @@ msgstr ""
 "  -l,--list              - zeigt unter ASPI verfügbare Laufwerke\n"
 "\n"
 
-#: dvdisaster.c:833
+#: dvdisaster.c:857
 #, c-format
 msgid ""
 "Tweaking options (see manual before using!)\n"
@@ -379,7 +379,9 @@ msgid ""
 "  --eject                - eject medium after successful read\n"
 "  --fill-unreadable n    - fill unreadable sectors with byte n\n"
 "  --ignore-fatal-sense   - continue reading after potentially fatal error conditon\n"
+"  --internal-rereads n   - drive may attempt n rereads before reporting an error\n"
 "  --query-size n         - query drive/udf/ecc for image size (default: ecc)\n"
+"  --raw-mode n           - mode for raw reading CD media (20 or 21)\n"
 "  --read-attempts n-m    - attempts n upto m reads of a defective sector\n"
 "  --read-medium n        - read the whole medium up to n times\n"
 "  --read-raw             - performs read in raw mode if possible\n"
@@ -401,7 +403,9 @@ msgstr ""
 "  --eject                - Datenträger nach erfolgreichem Lesen auswerfen\n"
 "  --fill-unreadable n    - fülle unlesbare Sektoren mit Byte n\n"
 "  --ignore-fatal-sense   - Lesen nach möglicherweise schwerwiegenden Fehlern fortsetzen\n"
+"  --internal-rereads n   - Laufwerk unternimmt n Leseversuche bevor es einen Fehler zurückmeldet\n"
 "  --query-size n         - Abbildgröße ermitteln durch: drive/udf/ecc (Standard: ecc)\n"
+"  --raw-mode n           - \"raw-modus\" zum Lesen von CD (20 or 21)\n"
 "  --read-attempts n-m    - versucht beschädigten Sektor n bis m-mal zu lesen\n"
 "  --read-medium n        - liest den gesamten Datenträger bis zu n-mal\n"
 "  --read-raw             - liest in der \"raw\"-Betriebsart sofern möglich\n"
@@ -410,7 +414,7 @@ msgstr ""
 "  --split-files          - Abbild in mehrere Dateien <= 2GB aufteilen\n"
 "\n"
 
-#: dvdisaster.c:855
+#: dvdisaster.c:881
 #, c-format
 msgid ""
 "Debugging options (purposefully undocumented and possibly harmful)\n"
@@ -459,7 +463,7 @@ msgstr ""
 "  --zero-unreadable - Ersetzt die \"unlesbare Sektoren\"-Markierungen durch Nullen\n"
 "\n"
 
-#: dvdisaster.c:879
+#: dvdisaster.c:905
 msgid ""
 "NOTE: This is the Windows console version of dvdisaster.\n"
 "The version providing a graphical user interface is called\n"
@@ -569,11 +573,11 @@ msgstr ""
 msgid "Image file %s not deleted: %s\n"
 msgstr "Abbild-Datei %s nicht gelöscht: %s\n"
 
-#: help-dialogs.c:337
+#: help-dialogs.c:336
 msgid "windowtitle|Log data"
 msgstr "Protokollfenster"
 
-#: help-dialogs.c:338
+#: help-dialogs.c:337
 msgid ""
 "<big>Log data</big>\n"
 "<i>Protocol of the current or previous action</i>"
@@ -581,11 +585,11 @@ msgstr ""
 "<big>Protokolldaten</big>\n"
 "<i>Protokoll des momentanen oder letzten Vorgangs.</i>"
 
-#: help-dialogs.c:354
+#: help-dialogs.c:353
 msgid "windowtitle|GNU General Public License"
 msgstr "GNU General Public License"
 
-#: help-dialogs.c:355
+#: help-dialogs.c:354
 msgid ""
 "<big>GNU General Public License</big>\n"
 "<i>The license terms of dvdisaster.</i>"
@@ -593,7 +597,7 @@ msgstr ""
 "<big>GNU General Public License</big>\n"
 "<i>Die Lizenzbedingungen von dvdisaster.</i>"
 
-#: help-dialogs.c:427
+#: help-dialogs.c:426
 #, c-format
 msgid ""
 "File\n"
@@ -604,11 +608,11 @@ msgstr ""
 "%s\n"
 "nicht vorhanden"
 
-#: help-dialogs.c:510
+#: help-dialogs.c:509
 msgid "windowtitle|Modifying dvdisaster"
 msgstr "dvdisaster verändern"
 
-#: help-dialogs.c:511
+#: help-dialogs.c:510
 msgid ""
 "<big>Modifying dvdisaster</big>\n"
 "<i>Your changes are not ours.</i>"
@@ -616,11 +620,11 @@ msgstr ""
 "<big>dvdisaster verändern</big>\n"
 "<i>Ihre Änderungen sind nicht unsere.</i>"
 
-#: help-dialogs.c:650
+#: help-dialogs.c:649
 msgid "windowtitle|About dvdisaster"
 msgstr "Kurzinformation"
 
-#: help-dialogs.c:670
+#: help-dialogs.c:669
 msgid ""
 "Modified version Copyright 2007 (please fill in - [directions])\n"
 "Copyright 2004-2007 Carsten Gnoerlich"
@@ -628,11 +632,11 @@ msgstr ""
 "Veränderte Version Copyright 2007 (bitte eintragen - [Hinweise])\n"
 "Original-Programm Copyright 2004-2007 Carsten Gnörlich"
 
-#: help-dialogs.c:674
+#: help-dialogs.c:673
 msgid "Copyright 2004-2007 Carsten Gnoerlich"
 msgstr "Copyright 2004-2007 Carsten Gnörlich"
 
-#: help-dialogs.c:681
+#: help-dialogs.c:680
 msgid ""
 "dvdisaster provides a margin of safety against data loss\n"
 "on CD and DVD media caused by aging or scratches.\n"
@@ -644,7 +648,7 @@ msgstr ""
 "Es erzeugt Fehlerkorrekturdaten, um bei nachfolgenden Datenträger-\n"
 "Problemen unlesbare Sektoren zu rekonstruieren.\n"
 
-#: help-dialogs.c:686
+#: help-dialogs.c:685
 msgid ""
 "This software comes with  <b>absolutely no warranty</b>.\n"
 "This is free software and you are welcome to redistribute it\n"
@@ -653,7 +657,7 @@ msgstr ""
 "dvdisaster ist <b>freie Software</b>; es gelten die Bedingungen\n"
 "der [GNU General Public License] .\n"
 
-#: help-dialogs.c:692
+#: help-dialogs.c:691
 msgid ""
 "\n"
 "This program is <b>not the original</b>. It is based on the\n"
@@ -669,7 +673,7 @@ msgstr ""
 "Bitte behelligen Sie die ursprünglichen Autoren von dvdisaster\n"
 "([www.dvdisaster.org]) nicht wegen Problemen mit dieser Version.\n"
 
-#: help-dialogs.c:707
+#: help-dialogs.c:706
 msgid ""
 "\n"
 "e-mail: carsten@dvdisaster.com   -or-   cgnoerlich@fsfe.org"
@@ -677,7 +681,7 @@ msgstr ""
 "\n"
 "e-mail: carsten@dvdisaster.de   -oder-   cgnoerlich@fsfe.org"
 
-#: help-dialogs.c:710
+#: help-dialogs.c:709
 msgid ""
 "\n"
 "Darwin port (Mac OS X): Julian Einwag &lt;julian@einwag.de&gt;"
@@ -685,7 +689,7 @@ msgstr ""
 "\n"
 "Anpassungen für Darwin (Mac OS X): Julian Einwag &lt;julian@einwag.de&gt;"
 
-#: help-dialogs.c:713
+#: help-dialogs.c:712
 msgid ""
 "\n"
 "NetBSD port: Sergey Svishchev &lt;svs@ropnet.ru&gt;"
@@ -1037,61 +1041,61 @@ msgstr ""
 "* dvdisaster - kann Ausführung nicht fortsetzen:\n"
 "*\n"
 
-#: preferences.c:370
+#: preferences.c:376
 msgid "Switched to the linear reading strategy."
 msgstr "Lineares Leseverfahren wurde ausgewählt."
 
-#: preferences.c:677
+#: preferences.c:711
 msgid "Color selection"
 msgstr "Farbe auswählen"
 
-#: preferences.c:933
+#: preferences.c:967
 msgid "Disabled automatic error correction file generation."
 msgstr ""
 "Automatisches Erzeugen der Fehlerkorrektur-Datei\n"
 "wurde abgeschaltet."
 
-#: preferences.c:1066 preferences.c:1922 preferences.c:1931 preferences.c:2703
+#: preferences.c:1100 preferences.c:2068 preferences.c:2077 preferences.c:2849
 msgid "Raw sector caching"
 msgstr "Roh-Sektoren aufbewahren"
 
-#: preferences.c:1132
+#: preferences.c:1167
 msgid "Log file"
 msgstr "Protokoll-Datei"
 
-#: preferences.c:1246
+#: preferences.c:1281
 msgid "Preferences"
 msgstr "Einstellungen"
 
-#: preferences.c:1276
+#: preferences.c:1311
 msgid "Image"
 msgstr "Abbild"
 
-#: preferences.c:1280
+#: preferences.c:1315
 msgid "Image size"
 msgstr "Abbild-Größe"
 
-#: preferences.c:1287
+#: preferences.c:1322
 msgid "Image size determination"
 msgstr "Ermittlung der Abbild-Größe"
 
-#: preferences.c:1287
+#: preferences.c:1322
 msgid "Get Image size from: "
 msgstr "Abbild-Größe ermitteln durch:"
 
-#: preferences.c:1299 preferences.c:1560
+#: preferences.c:1334 preferences.c:1595
 msgid "Drive"
 msgstr "Laufwerk"
 
-#: preferences.c:1305
+#: preferences.c:1340
 msgid "ISO/UDF"
 msgstr "ISO/UDF"
 
-#: preferences.c:1311
+#: preferences.c:1346
 msgid "ECC/RS02"
 msgstr "ECC/RS02"
 
-#: preferences.c:1335
+#: preferences.c:1370
 msgid ""
 "<b>Image size determination</b>\n"
 "\n"
@@ -1115,27 +1119,27 @@ msgstr ""
 "\n"
 "<b>Laufwerk:</b> Die vom Laufwerk zurückgelieferte Abbild-Größe wird verwendet. Dieser Wert ist bei DVD-RW/+RW/-RAM typischerweise falsch. Diese Wahlmöglichkeit gibt es nur noch zur Kompatibilität mit älteren dvdisaster-Versionen."
 
-#: preferences.c:1354
+#: preferences.c:1389
 msgid "Image creation"
 msgstr "Abbild-Erzeugung"
 
-#: preferences.c:1363
+#: preferences.c:1398
 msgid "Reading strategy"
 msgstr "Lese-Verfahren"
 
-#: preferences.c:1363
+#: preferences.c:1398
 msgid "Reading strategy: "
 msgstr "Lese-Verfahren: "
 
-#: preferences.c:1377
+#: preferences.c:1412
 msgid "Linear"
 msgstr "Linear"
 
-#: preferences.c:1385
+#: preferences.c:1420
 msgid "Adaptive (for defective media)"
 msgstr "Angepaßt (an beschädigte Datenträger)"
 
-#: preferences.c:1397
+#: preferences.c:1432
 msgid ""
 "<b>Reading strategy</b>\n"
 "\n"
@@ -1146,19 +1150,19 @@ msgstr ""
 "\n"
 "Das lineare Verfahren ist für unbeschädigte Datenträger vorgesehen; das angepaßte Verfahren eignet sich besser für Datenträger mit Lesefehlern."
 
-#: preferences.c:1404
+#: preferences.c:1439
 msgid "Reading range"
 msgstr "Lese-Bereich"
 
-#: preferences.c:1404
+#: preferences.c:1439
 msgid "Read/Scan from sector"
 msgstr "Lesen/Prüfen von Sektor"
 
-#: preferences.c:1429
+#: preferences.c:1464
 msgid "to sector"
 msgstr "bis Sektor"
 
-#: preferences.c:1447
+#: preferences.c:1482
 msgid ""
 "<b>Reading range</b>\n"
 "\n"
@@ -1176,19 +1180,19 @@ msgstr ""
 "\n"
 "Diese Einstellungen gelten nur für die aktuelle Sitzung und werden nicht gespeichert."
 
-#: preferences.c:1457
+#: preferences.c:1492
 msgid "Image properties"
 msgstr "Abbild-Eigenschaften"
 
-#: preferences.c:1466
+#: preferences.c:1501
 msgid "DAO mode"
 msgstr "DAO-Abbild"
 
-#: preferences.c:1466
+#: preferences.c:1501
 msgid "Assume image to be written in DAO mode (don't truncate)"
 msgstr "Unterstelle DAO-Abbild (nicht am Ende kürzen)"
 
-#: preferences.c:1486
+#: preferences.c:1521
 msgid ""
 "<b>Assume DAO mode</b>\n"
 "\n"
@@ -1207,15 +1211,15 @@ msgstr ""
 "\n"
 "<b>Tip:</b> Brennen Sie CDs im Modus \"DAO / Disc at once\" (manchmal auch \"SAO / Session at once\" genannt), um diese Probleme zu vermeiden."
 
-#: preferences.c:1501
+#: preferences.c:1536
 msgid "Filling of unreadable sectors"
 msgstr "Auffüllen von unlesbaren Sektoren"
 
-#: preferences.c:1502
+#: preferences.c:1537
 msgid "Fill unreadable sectors with byte:"
 msgstr "Unlesbare Sektoren auffüllen mit Byte:"
 
-#: preferences.c:1541
+#: preferences.c:1576
 msgid ""
 "<b>Filling of unreadable sectors</b>\n"
 "\n"
@@ -1226,27 +1230,27 @@ msgstr ""
 "\n"
 "dvdisaster kennzeichnet unlesbare Sektoren mit einem Füllmuster, dessen Vorkommen auf einem unbeschädigten Datenträger sehr unwahrscheinlich ist. Einige andere Datenrettungsprogramme erwarten aber, daß unlesbare Sektoren mit einem bestimmten Byte aufgefüllt sind. Um den Austausch von Abbildern mit diesen Programmen zu ermöglichen, müssen Sie das \"richtige\" Byte angeben:\n"
 
-#: preferences.c:1550
+#: preferences.c:1585
 msgid "0xb0 (176 decimal): for compatibility with h2cdimage published by \"c't\", a German periodical.\n"
 msgstr "0xb0 (dezimal 176): bewirkt Kompatibilität mit dem Programm h2cdimage des c't-Magazins.\n"
 
-#: preferences.c:1554
+#: preferences.c:1589
 msgid "<b>Note:</b> Using zero filling (0x00, decimal 0) is highly discouraged. Most media contain regular zero filled sectors which can not be told apart from unreadable sectors if zero filling is used."
 msgstr "<b>Hinweis:</b> Das Auffüllen mit Nullen (0x00, dezimal 0) ist nicht empfehlenswert. Die meisten Datenträger enthalten auch im unbeschädigten Zustand Sektoren, die mit Null aufgefüllt sind. Diese Sektoren können später nicht von unlesbaren Sektoren unterschieden werden, wenn Nullen zur Markierung verwendet werden."
 
-#: preferences.c:1564 preferences.c:1567
+#: preferences.c:1599 preferences.c:1602
 msgid "Drive initialisation"
 msgstr "Laufwerk vorbereiten"
 
-#: preferences.c:1568
+#: preferences.c:1603
 msgid "Wait"
 msgstr "Warte"
 
-#: preferences.c:1571
+#: preferences.c:1606
 msgid "seconds for drive to spin up"
 msgstr "Sekunden auf das Hochdrehen des Laufwerks"
 
-#: preferences.c:1600
+#: preferences.c:1635
 msgid ""
 "<b>Drive initialisation</b>\n"
 "\n"
@@ -1256,15 +1260,75 @@ msgstr ""
 "\n"
 "Gibt dem Laufwerk die angegebene Anzahl Sekunden Zeit zum Hochdrehen. Dadurch erscheinen keine abrupten Geschwindigkeitsänderungen am Anfang der Lesekurve."
 
-#: preferences.c:1606 preferences.c:1609
+#: preferences.c:1641
+msgid "Raw reading parameters"
+msgstr "Lesen von \"raw\"-Sektoren"
+
+#: preferences.c:1650
+msgid "Raw reading mode"
+msgstr "\"Raw\"-Lese-Verfahren"
+
+#: preferences.c:1650
+msgid "Raw reading mode: "
+msgstr "\"Raw\"-Lese-Verfahren:"
+
+#: preferences.c:1684
+msgid ""
+"<b>Raw reading mode</b>\n"
+"\n"
+"There are several ways to put the drive into a mode which transfers partially read data from defective sectors:\n"
+"\n"
+"<b>20h</b> This is the <i>recommended</i> mode. The drive tries to apply the built-in error correction to the best possible extent before transfering a defective sector.\n"
+"\n"
+"<b>21h</b> In this mode the drive skips the last stage of its internal error correction and returns the uncorrected sector instead. This may result in sectors being tagged and processed as defective which would come out good in other reading modes, causing unnecessary work or even uncorrectable sectors.\n"
+"However some drives appear to be unable to transfer data in mode 20h, but can do so in mode 21h, so this is your last resort then. Also, if sectors are not recoverable after reading and caching sectors in mode 20h, then adding some mode 21h reads to the cache might deliver additional information."
+msgstr ""
+"<b>\"Raw\"-Lese-Verfahren</b>\n"
+"\n"
+"CD-Laufwerke bieten verschiedene Verfahren an, um unvollständige Daten aus beschädigten Sektoren zu übertragen:\n"
+"\n"
+"<b>20h</b> Dies ist das <i>empfohlene</i> Verfahren. Das Laufwerk versucht die eingebaute Fehlerkorrektur so gut wie möglich anzuwenden bevor es einen beschädigten Sektor zurückgibt.\n"
+"\n"
+"<b>21h</b> Bei diesem Verfahren überspringt das Laufwerk die letzte Stufe der internen Fehlerkorrektur und es gibt den unkorrigierten Sektor zurück. Dies kann dazu führen, daß Sektoren als beschädigt erscheinen, die bei anderen Leseeinstellungen als lesbar behandelt werden. Es erzeugt zuätzliche Fehlerkorrektur-Arbeit in dvdisaster und gegebenenfalls sogar unkorrigierbare Sektoren.\n"
+"Einige Laufwerke können allerdings nur in dieser Betriebsart beschädigte Sektoren lesen. Wenn Sie viele Sektoren mit der Einstellung 20h gelesen und als Roh-Sektoren aufbewahrt haben, können einige Leseversuche mit 21h möglicherweise die benötigten Zusatzinformationen liefern, um eine Wiederherstellung zu ermöglichen."
+
+#: preferences.c:1705
+msgid "Internal read attempts"
+msgstr "Leseversuche innerhalb des Laufwerks"
+
+#: preferences.c:1706
+msgid "Reread defective sectors"
+msgstr "Beschädigte Sektoren"
+
+#: preferences.c:1709
+msgid "times"
+msgstr "mal lesen"
+
+#: preferences.c:1739
+msgid ""
+"<b>Internal read attempts</b>\n"
+"\n"
+"The drive firmware usually retries unreadable sectors a few times before giving up and returning a read error.\n"
+"But it is usually more efficient to manage the reading attempts from the client software, e.g. through the settings in the \"Read attempts\" preferences tab.\n"
+"Lowering this value to 0 or 1 can speed up processing of damaged media and reduce the drive wear; however most drives will simply ignore what you enter here.\n"
+"Use the value -1 to leave the drive at its default setting."
+msgstr ""
+"<b>Leseversuche innerhalb des Laufwerks</b>\n"
+"\n"
+"Das Laufwerk unternimmt typischerweise selbst mehrere Versuche um einen beschädigten Sektor zu lesen.\n"
+"Normalerweise ist es aber besser, die Anzahl der Leseversuche aus der Anwendersoftware zu steuern, also hier über die Einstellungen in der \"Leseversuche\"-Karte.\n"
+"Ein Wert von 0 oder 1 verkürzt die Bearbeitungszeit und die Belastung des Laufwerks; allerdings ignorieren viele Laufwerke diese Einstellungen.\n"
+"Benutzen Sie den Wert -1 um die Standardeinstellungen des Laufwerks zu verwenden."
+
+#: preferences.c:1752 preferences.c:1755
 msgid "Fatal error handling"
 msgstr "Behandlung schwerwiegender Fehler"
 
-#: preferences.c:1610
+#: preferences.c:1756
 msgid "Ignore fatal errors"
 msgstr "Schwerwiegende Fehler nicht beachten"
 
-#: preferences.c:1636
+#: preferences.c:1782
 msgid ""
 "<b>Fatal error handling</b>\n"
 "\n"
@@ -1276,15 +1340,15 @@ msgstr ""
 "Normalerweise beendet dvdisaster seinen Lesevorgang, wenn das Laufwerk einen schwerwiegenden Fehler meldet. Dies verhindert weitere fruchtlose Leseversuche und eine mögliche Beschädigung des Laufwerks.\n"
 "Einige Laufwerke melden allerdings grundlos schwerwiegende Fehler. Für diese Laufwerke mag es nötig sein, diese Fehler nicht zu beachten, um beschädigte Datenträger unterbrechungsfrei einlesen zu können."
 
-#: preferences.c:1646
+#: preferences.c:1792
 msgid "Media ejection"
 msgstr "Datenträger auswerfen"
 
-#: preferences.c:1649 preferences.c:1650
+#: preferences.c:1795 preferences.c:1796
 msgid "Eject medium after sucessful read"
 msgstr "Datenträger nach erfolgreichem Lesen auswerfen"
 
-#: preferences.c:1676
+#: preferences.c:1822
 msgid ""
 "<b>Medium ejection</b>\n"
 "\n"
@@ -1298,23 +1362,23 @@ msgstr ""
 "\n"
 "Bitte beachten Sie daß dies möglicherweise vom Betriebssystem nicht zugelassen wird. Verwenden Sie in diesem Fall die Benutzeroberfläche Ihrer Arbeitsumgebung zum Auswerfen des Datenträgers."
 
-#: preferences.c:1686
+#: preferences.c:1832
 msgid "Read attempts"
 msgstr "Leseversuche"
 
-#: preferences.c:1690
+#: preferences.c:1836
 msgid "Sector read errors"
 msgstr "Lesefehler in Sektoren"
 
-#: preferences.c:1699
+#: preferences.c:1845
 msgid "Raw reading"
 msgstr "\"Raw\"-Lesen"
 
-#: preferences.c:1699
+#: preferences.c:1845
 msgid "Read and analyze raw sectors"
 msgstr "Sektoren \"raw\" lesen und untersuchen"
 
-#: preferences.c:1720
+#: preferences.c:1866
 msgid ""
 "<b>Raw reading</b>\n"
 "\n"
@@ -1328,16 +1392,16 @@ msgstr ""
 "\n"
 "Diese Option läßt dvdisaster Sektoren in der \"Raw\"-Betriebsart lesen. Es rechnet die L-EC P/Q Vektoren, EDC-Prüfsummen sowie das MSF-Adreßfeld aus den Rohdaten nach um sicherzustellen daß der Sektor korrekt gelesen wurde."
 
-#: preferences.c:1730
+#: preferences.c:1876
 msgid "Minimum number of reading attempts"
 msgstr "Mindestens durchgeführte Anzahl von Leseversuchen"
 
-#: preferences.c:1732 preferences.c:1733 preferences.c:1738 preferences.c:1739
+#: preferences.c:1878 preferences.c:1879 preferences.c:1884 preferences.c:1885
 #, c-format
 msgid "Min. %d reading attempts per sector"
 msgstr "Mindestens %d Leseversuche pro Sektor"
 
-#: preferences.c:1760
+#: preferences.c:1906
 msgid ""
 "<b>Minimum number of reading attempts</b>\n"
 "\n"
@@ -1351,16 +1415,16 @@ msgstr ""
 "\n"
 "Mehr Leseversuche können die Ausbeute an lesbaren Sektoren bei Datenträgern erhöhen, die sich an der Grenze zur Unlesbarkeit befinden. Es erhöht aber auch die Bearbeitungszeit und den Verschleiß des Laufwerks."
 
-#: preferences.c:1769
+#: preferences.c:1915
 msgid "Maximum number of reading attempts"
 msgstr "Höchstens durchgeführte Anzahl von Leseversuchen"
 
-#: preferences.c:1771 preferences.c:1772 preferences.c:1777 preferences.c:1778
+#: preferences.c:1917 preferences.c:1918 preferences.c:1923 preferences.c:1924
 #, c-format
 msgid "Max. %d reading attempts per sector"
 msgstr "Höchstens %d Leseversuche pro Sektor"
 
-#: preferences.c:1799
+#: preferences.c:1945
 msgid ""
 "<b>Maximum number of reading attempts</b>\n"
 "\n"
@@ -1374,21 +1438,21 @@ msgstr ""
 "\n"
 "Die Entscheidung für weitere Leseversuche wird anhand der Qualität der bisher gesammelten Daten getroffen; dies wiederum wird von den Fähigkeiten des CD/DVD-Laufwerks und des Betriebssystems beeinflußt. Ob dvdisaster den Höchstwert wirklich ausnutzt hängt daher von Ihrer System-Konfiguration ab."
 
-#: preferences.c:1813
+#: preferences.c:1959
 msgid "Treatment of unreadable areas"
 msgstr "Behandlung von unlesbaren Bereichen"
 
-#: preferences.c:1815 preferences.c:1817 preferences.c:1818 preferences.c:1826
+#: preferences.c:1961 preferences.c:1963 preferences.c:1964 preferences.c:1972
 #, c-format
 msgid "Skip %d sectors after read error"
 msgstr "Überspringe %d Sektoren nach einem Lesefehler"
 
-#: preferences.c:1816 preferences.c:1821 preferences.c:1822 preferences.c:1827
+#: preferences.c:1962 preferences.c:1967 preferences.c:1968 preferences.c:1973
 #, c-format
 msgid "Stop reading when unreadable intervals &lt; %d"
 msgstr "Lesen beenden wenn unlesbare Bereiche &lt; %d"
 
-#: preferences.c:1853
+#: preferences.c:1999
 msgid ""
 "<b>Treatment of unreadable areas</b>\n"
 "\n"
@@ -1402,15 +1466,15 @@ msgstr ""
 "\n"
 "Auswirkungen auf das <b>lineare Leseverfahren</b>:"
 
-#: preferences.c:1860
+#: preferences.c:2006
 msgid "Skipping a large number of sectors (e.g. 1024) gives a quick overview of damaged areas, but will usually not collect enough data for repairing the image."
 msgstr "Das Überspringen einer großen Anzahl von Sektoren (z.B 1024) ergibt eine schnelle Übersicht über die Beschädigung des Datenträgers. Es liefert aber in der Regel nicht genügend Daten für eine erfolgreiche Fehlerkorrektur."
 
-#: preferences.c:1864
+#: preferences.c:2010
 msgid "Smaller values like 16, 32 or 64 are a good trade-off: The processing time will beconsiderably shortened, but still enough data for repairing the image is collected.\n"
 msgstr "Kleinere Werte von 16, 32 oder 64 sind ein guter Kompromiß zwischen verringerter Bearbeitungszeit und Wiederherstellbarkeit des Datenträger-Abbildes.\n"
 
-#: preferences.c:1868
+#: preferences.c:2014
 msgid ""
 "The <b>adaptive reading strategy</b> uses this setting only if no error correction data is available. In that case the reading process will stop when no unread areas larger than the selected size remain. Values smaller than 128 <i>are not recommended</i> as they cause the drive to carry out lots of laser head repositioning during the final phase of the reading process. If adaptive reading with a setting of 128 is not sufficient, try reading the remaining sectors with an additional linear reading pass.\n"
 "\n"
@@ -1420,19 +1484,19 @@ msgstr ""
 "\n"
 "Auf DVD-Datenträgern erstrecken sich Lesefehler aus technischen Gründen über mindestens 16 Sektoren. Daher sind Werte kleiner als 16 für DVD nicht sinnvoll."
 
-#: preferences.c:1881 preferences.c:1884
+#: preferences.c:2027 preferences.c:2030
 msgid "Media read attempts"
 msgstr "Leseversuche für den gesamten Datenträger"
 
-#: preferences.c:1885
+#: preferences.c:2031
 msgid "Read the whole medium "
 msgstr "Gesamten Datenträger bis zu "
 
-#: preferences.c:1900
+#: preferences.c:2046
 msgid " times"
 msgstr " mal lesen"
 
-#: preferences.c:1915
+#: preferences.c:2061
 msgid ""
 "<b>Media read attempts</b> for the linear reading strategy\n"
 "\n"
@@ -1447,15 +1511,15 @@ msgstr ""
 "\n"
 "Nur die fehlenden Sektoren werden in den zusätzlichen Durchläufen erneut versucht zu lesen."
 
-#: preferences.c:1932
+#: preferences.c:2078
 msgid "Keep uncorrectable raw sectors in the following directory:"
 msgstr "Unvollständige Roh-Sektoren in diesem Verzeichnis aufbewahren:"
 
-#: preferences.c:1939 preferences.c:2720
+#: preferences.c:2085 preferences.c:2866
 msgid "Select"
 msgstr "Auswählen"
 
-#: preferences.c:1978
+#: preferences.c:2124
 msgid ""
 "<b>Raw sector caching</b>\n"
 "\n"
@@ -1475,15 +1539,15 @@ msgstr ""
 "Bitte beachten Sie, daß nicht alle Laufwerke und Betriebssystem das teilweise Lesen von beschädigten Sektoren unterstützen. Es ist kein Fehler wenn das angegebene Verzeichnis leer bleibt.\n"
 "dvdisaster entfernt keine Dateien aus dem Verzeichnis; Sie müssen es selbst leeren wenn die Datenrekonstruktion erfolgreich war."
 
-#: preferences.c:1996
+#: preferences.c:2142
 msgid "Raw sector file prefix"
 msgstr "Anfang für Roh-Sektor-Dateinamen"
 
-#: preferences.c:1997
+#: preferences.c:2143
 msgid "Raw sector file prefix: "
 msgstr "Anfang für Roh-Sektor-Dateinamen: "
 
-#: preferences.c:2018
+#: preferences.c:2164
 msgid ""
 "<b>Raw sector file prefix</b>\n"
 "\n"
@@ -1493,26 +1557,26 @@ msgstr ""
 "\n"
 "Verwenden Sie einen eindeutigen Anfang für jeden Datenträger, den Sie wiederherstellen möchten, zum Beispiel \"disk1-\" und so weiter."
 
-#: preferences.c:2026
+#: preferences.c:2172
 msgid "Error correction"
 msgstr "Fehlerkorrektur"
 
-#: preferences.c:2028
+#: preferences.c:2174
 msgid "Error correction method"
 msgstr "Fehlerkorrektur-Verfahren"
 
-#: preferences.c:2029
+#: preferences.c:2175
 msgid "Storage method:"
 msgstr "Abspeichern in:"
 
-#: preferences.c:2088
+#: preferences.c:2234
 msgid ""
 "<b>Error correction method</b>\n"
 "\n"
 "dvdisaster creates error correction data which is used to recover unreadable sectors if the disc becomes damaged later on. There are two different ways available for storing the error correction information:\n"
 msgstr "dvdisaster erzeugt Fehlerkorrektur-Daten um Sektoren wiederzuherstellen, die bei einer späteren Beschädigung des Datenträgers unlesbar werden. Es gibt zwei verschiedene Möglichkeiten zum Speichern der Fehlerkorrektur-Daten:\n"
 
-#: preferences.c:2094
+#: preferences.c:2240
 msgid ""
 "Error correction files (RS01 method)\n"
 "Error correction files are the only way of protecting existing media as they can be stored somewhere else. They are kept on a separate medium which must also be protected by dvdisaster, as data loss in an error correction file will render it unusable.\n"
@@ -1520,7 +1584,7 @@ msgstr ""
 "Fehlerkorrektur-Dateien (RS01-Verfahren)\n"
 "Fehlerkorrektur-Dateien sind die einzige Möglichkeit um bereits bestehende Datenträger zu schützen, da sie an einer beliebigen anderen Stelle gespeichert werden können. Die Dateien  müssen allerdings auf einem Datenträger gespeichert werden, der ebenfalls durch dvdisaster geschützt ist, da eine beschädigte Fehlerkorrektur-Datei nutzlos ist.\n"
 
-#: preferences.c:2101
+#: preferences.c:2247
 msgid ""
 "Augmented images (RS02 method)\n"
 "The error correction data will be stored along with the user data on the same CD/DVD. This requires the creation of an image file prior to writing the medium. The error correction data will be appended to that image. Damaged sectors in the error correction information reduce the data recovery capacity, but do not make recovery impossible - a second medium for keeping or protecting the error correction information is not required."
@@ -1528,23 +1592,23 @@ msgstr ""
 "Erweiterte Abbilder (RS02-Verfahren)\n"
 "Die Fehlerkorrektur-Daten werden zusammen mit den Nutzdaten auf der gleichen CD/DVD untergebracht. Dazu muß vor dem Schreiben des Datenträgers eine Abbild-Datei auf der Festplatte angelegt werden, die von dvdisaster um Fehlerkorrektur-Daten erweitert wird. Beschädigte Sektoren in den Fehlerkorrektur-Daten verringern die Fehlerkorrektur-Leistung, machen eine Korrektur aber nicht unmöglich - ein zusätzlicher Datenträger zum Aufbewahren oder Schützen der Fehlerkorrektur-Daten wird also nicht benötigt."
 
-#: preferences.c:2141
+#: preferences.c:2287
 msgid "Files"
 msgstr "Dateien"
 
-#: preferences.c:2145
+#: preferences.c:2291
 msgid "Local files (on hard disc)"
 msgstr "Lokale Dateien (auf Festplatte)"
 
-#: preferences.c:2152
+#: preferences.c:2298
 msgid "Automatic file suffixes"
 msgstr "Automatisches Anfügen von Dateiendungen"
 
-#: preferences.c:2152
+#: preferences.c:2298
 msgid "Automatically add .iso and .ecc file suffixes"
 msgstr "Automatisches Anfügen der .iso- und .ecc-Dateiendungen"
 
-#: preferences.c:2176
+#: preferences.c:2322
 msgid ""
 "<b>Automatically add file suffixes</b>\n"
 "\n"
@@ -1554,15 +1618,15 @@ msgstr ""
 "\n"
 "Dieser Schalter bewirkt, daß Dateien automatisch mit den Endungen \".iso\" oder \".ecc\" versehen werden, sofern nicht bereits eine andere Endung angegeben wurde."
 
-#: preferences.c:2182
+#: preferences.c:2328
 msgid "File splitting"
 msgstr "Dateien aufteilen"
 
-#: preferences.c:2182
+#: preferences.c:2328
 msgid "Split files into segments &lt;= 2GB"
 msgstr "Dateien in Segmente von &lt;= 2GB aufteilen"
 
-#: preferences.c:2205
+#: preferences.c:2351
 msgid ""
 "<b>File splitting</b>\n"
 "\n"
@@ -1572,19 +1636,19 @@ msgstr ""
 "\n"
 "Ermöglicht das Arbeiten mit Dateisystemen, bei denen die Dateigröße auf 2GB begrenzt ist (z.B. FAT unter Windows). Anstelle einer einzigen Datei \"abbild.iso\" werden bis zu 100 Segmente \"abbild00.iso\", \"abbild01.iso\" usw. verwendet; dies kostet etwas Geschwindigkeit."
 
-#: preferences.c:2214
+#: preferences.c:2360
 msgid "Automatic file creation and deletion"
 msgstr "Automatisches Erzeugen und Löschen von Dateien"
 
-#: preferences.c:2223
+#: preferences.c:2369
 msgid "Automatic .ecc file creation"
 msgstr "Fehlerkorrektur-Datei automatisch erzeugen"
 
-#: preferences.c:2223
+#: preferences.c:2369
 msgid "Create error correction file after reading image"
 msgstr "Fehlerkorrektur-Datei erzeugen, nachdem Abbild eingelesen wurde"
 
-#: preferences.c:2246
+#: preferences.c:2392
 msgid ""
 "<b>Automatic error correction file creation</b>\n"
 "\n"
@@ -1594,15 +1658,15 @@ msgstr ""
 "\n"
 "Nach dem erfolgreichen Einlesen eines Abbilds wird automatisch eine Fehlerkorrektur-Datei erzeugt. Zusammen mit der \"Abbild löschen\"- Funktion beschleunigt dies das Erstellen von Fehlerkorrektur-Dateien für mehrere Datenträger."
 
-#: preferences.c:2253
+#: preferences.c:2399
 msgid "Automatic image file removal"
 msgstr "Abbild-Datei automatisch löschen"
 
-#: preferences.c:2253
+#: preferences.c:2399
 msgid "Remove image after error correction file creation"
 msgstr "Abbild löschen, wenn Fehlerkorrekturdatei erfolgreich erstellt wurde"
 
-#: preferences.c:2276
+#: preferences.c:2422
 msgid ""
 "<b>Automatic image file removal</b>\n"
 "\n"
@@ -1612,23 +1676,23 @@ msgstr ""
 "\n"
 "Nach dem erfolgreichen Erstellen einer Fehlerkorrektur-Datei wird die zugehörige Abbild-Datei gelöscht, wenn dieser Schalter aktiviert ist."
 
-#: preferences.c:2282
+#: preferences.c:2428
 msgid "Appearance"
 msgstr "Darstellung"
 
-#: preferences.c:2289
+#: preferences.c:2435
 msgid "Sector coloring"
 msgstr "Sektor-Farben"
 
-#: preferences.c:2299 rs01-verify.c:120 rs02-verify.c:115
+#: preferences.c:2445 rs01-verify.c:120 rs02-verify.c:115
 msgid "Good sectors"
 msgstr "Gute Sektoren"
 
-#: preferences.c:2299
+#: preferences.c:2445
 msgid "Good sector"
 msgstr "Guter Sektor"
 
-#: preferences.c:2323
+#: preferences.c:2469
 msgid ""
 "<b>Good sectors</b>\n"
 "\n"
@@ -1638,15 +1702,15 @@ msgstr ""
 "\n"
 "Diese Farbe kennzeichnet gute Sektoren."
 
-#: preferences.c:2328
+#: preferences.c:2474
 msgid "Checksum errors"
 msgstr "Prüfsummen-Fehler"
 
-#: preferences.c:2328
+#: preferences.c:2474
 msgid "Checksum error"
 msgstr "Prüfsummen-Fehler"
 
-#: preferences.c:2352
+#: preferences.c:2498
 msgid ""
 "<b>Checksum errors</b>\n"
 "\n"
@@ -1656,15 +1720,15 @@ msgstr ""
 "\n"
 "Diese Farbe markiert Sektoren mit fehlerhaften Prüfsummen."
 
-#: preferences.c:2357
+#: preferences.c:2503
 msgid "Unreadable sectors"
 msgstr "Unlesbare Sektoren"
 
-#: preferences.c:2357
+#: preferences.c:2503
 msgid "Unreadable"
 msgstr "Unlesbar"
 
-#: preferences.c:2381
+#: preferences.c:2527
 msgid ""
 "<b>Unreadable sectors</b>\n"
 "\n"
@@ -1674,15 +1738,15 @@ msgstr ""
 "\n"
 "Diese Farbe wird für unlesbare Sektoren verwendet."
 
-#: preferences.c:2386
+#: preferences.c:2532
 msgid "Present sectors"
 msgstr "Vorhandene Sektoren"
 
-#: preferences.c:2386
+#: preferences.c:2532
 msgid "Present sector"
 msgstr "Vorhandener Sektor"
 
-#: preferences.c:2410
+#: preferences.c:2556
 msgid ""
 "<b>Present sectors</b>\n"
 "\n"
@@ -1692,15 +1756,15 @@ msgstr ""
 "\n"
 "Bereits vorhandene Sektoren werden mit dieser Farbe angezeigt."
 
-#: preferences.c:2415
+#: preferences.c:2561
 msgid "Ignored sectors"
 msgstr "Unberücksichtigt"
 
-#: preferences.c:2415
+#: preferences.c:2561
 msgid "Ignored sector"
 msgstr "Unberücksichtigt"
 
-#: preferences.c:2439
+#: preferences.c:2585
 msgid ""
 "<b>Ignored sectors</b>\n"
 "\n"
@@ -1710,15 +1774,15 @@ msgstr ""
 "\n"
 "Mit dieser Farbe markierte Sektoren werden während des momentanen Programmlaufs nicht berücksichtigt."
 
-#: preferences.c:2445
+#: preferences.c:2591
 msgid "Highlit sectors"
 msgstr "Hervorgehoben"
 
-#: preferences.c:2445
+#: preferences.c:2591
 msgid "Highlit sector"
 msgstr "Hervorgehoben"
 
-#: preferences.c:2469
+#: preferences.c:2615
 msgid ""
 "<b>Highlit sectors</b>\n"
 "\n"
@@ -1728,15 +1792,15 @@ msgstr ""
 "\n"
 "Diese Farbe wird beim angepaßten Lesen verwendet, um Sektoren kurzzeitig hervorzuheben."
 
-#: preferences.c:2475
+#: preferences.c:2621
 msgid "Text colors"
 msgstr "Text-Farben"
 
-#: preferences.c:2485
+#: preferences.c:2631
 msgid "Positive text"
 msgstr "Positiver Text"
 
-#: preferences.c:2509
+#: preferences.c:2655
 msgid ""
 "<b>Positive text</b>\n"
 "\n"
@@ -1746,11 +1810,11 @@ msgstr ""
 "\n"
 "Gute Nachrichten werden in dieser Farbe ausgegeben."
 
-#: preferences.c:2514
+#: preferences.c:2660
 msgid "Negative text"
 msgstr "Negativer Text"
 
-#: preferences.c:2538
+#: preferences.c:2684
 msgid ""
 "<b>Negative text</b>\n"
 "\n"
@@ -1760,15 +1824,15 @@ msgstr ""
 "\n"
 "Schlechte Nachrichten erscheinen in dieser Farbe."
 
-#: preferences.c:2543
+#: preferences.c:2689
 msgid "Curve colors"
 msgstr "Lesekurve und Fehlerkorrektur"
 
-#: preferences.c:2552
+#: preferences.c:2698
 msgid "Curve color"
 msgstr "Lesekurve"
 
-#: preferences.c:2576
+#: preferences.c:2722
 msgid ""
 "<b>Curve color and labels</b>\n"
 "\n"
@@ -1778,11 +1842,11 @@ msgstr ""
 "\n"
 "Die Kurve der Lesegeschwindigkeit sowie ihre Beschriftungen erscheinen in dieser Farbe."
 
-#: preferences.c:2582
+#: preferences.c:2728
 msgid "Error correction load"
 msgstr "Fehlerkorrektur"
 
-#: preferences.c:2606
+#: preferences.c:2752
 msgid ""
 "<b>Error correction load</b>\n"
 "\n"
@@ -1792,19 +1856,19 @@ msgstr ""
 "\n"
 "Die Balkengraphik zur Auslastung der Fehlerkorrektur wird in dieser Farbe ausgegeben (während der \"Reparieren\"-Aktion)."
 
-#: preferences.c:2618
+#: preferences.c:2764
 msgid "Default color scheme"
 msgstr "Standard-Farbschema"
 
-#: preferences.c:2626
+#: preferences.c:2772
 msgid "Dialog boxes"
 msgstr "Dialog-Fenster"
 
-#: preferences.c:2629
+#: preferences.c:2775
 msgid "Reverse OK / Cancel buttons"
 msgstr "OK / Abbrechen - Knöpfe vertauschen"
 
-#: preferences.c:2653
+#: preferences.c:2799
 msgid ""
 "<b>Reverse OK / Cancel buttons</b>\n"
 "\n"
@@ -1818,19 +1882,19 @@ msgstr ""
 "\n"
 "Die Änderungen werden erst nach einem Neustart von dvdisaster wirksam."
 
-#: preferences.c:2660
+#: preferences.c:2806
 msgid "Misc"
 msgstr "Sonstiges"
 
-#: preferences.c:2664
+#: preferences.c:2810
 msgid "Logging"
 msgstr "Protokollierung"
 
-#: preferences.c:2671
+#: preferences.c:2817
 msgid "Verbose logging"
 msgstr "Ausführliche Protokollierung"
 
-#: preferences.c:2695
+#: preferences.c:2841
 msgid ""
 "<b>Verbose logging</b>\n"
 "\n"
@@ -1840,15 +1904,15 @@ msgstr ""
 "\n"
 "Im Protokoll-Fenster bzw. der Protokoll-Datei werden ausführlichere Informationen abgelegt. Dies ist hilfreich bei der Fehlersuche, kann aber die Ausführungsgeschwindigkeit beeinträchtigen."
 
-#: preferences.c:2712
+#: preferences.c:2858
 msgid "Logfile:"
 msgstr "Protokoll-Datei:"
 
-#: preferences.c:2713
+#: preferences.c:2859
 msgid "Copy log to file:"
 msgstr "Kopiere Protokoll in Datei:"
 
-#: preferences.c:2759
+#: preferences.c:2905
 msgid ""
 "<b>Logfile</b>\n"
 "\n"
@@ -1873,19 +1937,20 @@ msgstr "Laufwerk meldet Fehler: %s%c "
 msgid "unknown asc/ascq code (0x%02x, 0x%02x)."
 msgstr "unbekannter asc/ascq-Kode (0x%02x, 0x%02x)."
 
-#: raw-sector-cache.c:34 raw-sector-cache.c:122 raw-sector-cache.c:204
+#: raw-sector-cache.c:34 raw-sector-cache.c:126 raw-sector-cache.c:252
 #: rs01-verify.c:537 scsi-freebsd.c:113 scsi-linux.c:98 scsi-netbsd.c:111
 #: scsi-solaris.c:127
 #, c-format
 msgid "Could not open %s: %s"
 msgstr "Konnte %s nicht öffnen: %s"
 
-#: raw-sector-cache.c:48 raw-sector-cache.c:86 raw-sector-cache.c:136
+#: raw-sector-cache.c:48 raw-sector-cache.c:86 raw-sector-cache.c:174
 #, c-format
 msgid "Failed writing to defective sector file: %s"
 msgstr "Schreiben der Defekte-Sektoren-Datei fehlgeschlagen: %s"
 
-#: raw-sector-cache.c:68 raw-sector-cache.c:178 raw-sector-cache.c:215
+#: raw-sector-cache.c:68 raw-sector-cache.c:140 raw-sector-cache.c:226
+#: raw-sector-cache.c:263
 #, c-format
 msgid "Failed reading from defective sector file: %s"
 msgstr "Lesen der Defekte-Sektoren-Datei fehlgeschlagen: %s"
@@ -1894,7 +1959,7 @@ msgstr "Lesen der Defekte-Sektoren-Datei fehlgeschlagen: %s"
 msgid "Defective sector file is truncated"
 msgstr "Defekte-Sektoren-Datei ist unvollständig"
 
-#: raw-sector-cache.c:81 raw-sector-cache.c:130
+#: raw-sector-cache.c:81 raw-sector-cache.c:133 raw-sector-cache.c:148
 #, c-format
 msgid "Failed seeking in defective sector file: %s"
 msgstr "Ansteuern der Defekte-Sektoren-Datei fehlgeschlagen: %s"
@@ -1905,15 +1970,15 @@ msgstr ""
 "Fingerabdrücke vom Abbild und der Defekte-Sektoren-Datei\n"
 "stimmen nicht überein!"
 
-#: raw-sector-cache.c:116
+#: raw-sector-cache.c:120
 #, c-format
 msgid " [Creating new cache file %s]\n"
 msgstr " [Erzeuge neue Datei %s]\n"
 
-#: raw-sector-cache.c:124
+#: raw-sector-cache.c:182
 #, c-format
-msgid " [Appending %d sectors to cache file %s; LBA=%lld, ssize=%d, %d sectors]\n"
-msgstr " [Füge %d Sektoren der Datei %s hinzu; LBA=%lld, S.-Größe=%d, %d Sektoren]\n"
+msgid " [Appended %d/%d sectors to cache file %s; LBA=%lld, ssize=%d, %d sectors]\n"
+msgstr " [%d/%d Sektoren der Datei %s hinzugefügt; LBA=%lld, S.-Größe=%d, %d Sektoren]\n"
 
 #: read-adaptive.c:140 read-adaptive.c:1310
 msgid "Aborted by unrecoverable error."
@@ -2143,12 +2208,12 @@ msgstr ""
 msgid "CRC error in sector %lld\n"
 msgstr "Prüfsummen-Fehler in Sektor %lld\n"
 
-#: read-adaptive.c:1484 scsi-layer.c:933
+#: read-adaptive.c:1484 scsi-layer.c:921
 #, c-format
 msgid "Sectors %lld-%lld: %s\n"
 msgstr "Sektoren %lld-%lld: %s\n"
 
-#: read-adaptive.c:1487 read-linear.c:1087 scsi-layer.c:932
+#: read-adaptive.c:1487 read-linear.c:1087 scsi-layer.c:920
 #, c-format
 msgid "Sector %lld: %s\n"
 msgstr "Sektor %lld: %s\n"
@@ -2201,7 +2266,7 @@ msgstr "Angepaßtes Leseverfahren:"
 msgid "Sectors processed"
 msgstr "Bearbeitete Sektoren"
 
-#: read-adaptive-window.c:110 scsi-layer.c:914
+#: read-adaptive-window.c:110 scsi-layer.c:902
 msgid "readable"
 msgstr "lesbar"
 
@@ -2286,7 +2351,7 @@ msgstr "Vervollständige Abbild %s. Nur die fehlenden Sektoren werden gelesen.\n
 msgid "done.\n"
 msgstr "fertig.\n"
 
-#: read-linear.c:497 scsi-layer.c:1328
+#: read-linear.c:497 scsi-layer.c:1316
 #, c-format
 msgid "Waiting %d seconds for drive to spin up...\n"
 msgstr "Warte %d Sekunden auf das Hochdrehen des Laufwerks...\n"
@@ -3940,12 +4005,12 @@ msgstr ""
 "%s\n"
 "Konnte Länge des Inhaltsverzeichnisses nicht ermitteln.\n"
 
-#: scsi-layer.c:610 scsi-layer.c:666
+#: scsi-layer.c:613 scsi-layer.c:669
 #, c-format
 msgid "TOC info too long (%d), probably multisession.\n"
 msgstr "Inhaltsverzeichnis zu lang (%d), wahrscheinlich Mehrfach-Sitzung.\n"
 
-#: scsi-layer.c:624
+#: scsi-layer.c:627
 #, c-format
 msgid ""
 "%s\n"
@@ -3954,7 +4019,7 @@ msgstr ""
 "%s\n"
 "Konnte Inhaltsverzeichnis nicht lesen.\n"
 
-#: scsi-layer.c:650
+#: scsi-layer.c:653
 #, c-format
 msgid ""
 "%s\n"
@@ -3963,12 +4028,12 @@ msgstr ""
 "%s\n"
 "Konnte Länge des erweiterten Inhaltsverzeichnisses nicht ermitteln.\n"
 
-#: scsi-layer.c:661
+#: scsi-layer.c:664
 #, c-format
 msgid "TOC info too short, length %d.\n"
 msgstr "Inhaltsverzeichnis zu kurz, Länge %d.\n"
 
-#: scsi-layer.c:681
+#: scsi-layer.c:684
 #, c-format
 msgid ""
 "%s\n"
@@ -3977,7 +4042,7 @@ msgstr ""
 "%s\n"
 "Konnte erweitertes Inhaltsverzeichnis nicht lesen.\n"
 
-#: scsi-layer.c:690
+#: scsi-layer.c:693
 #, c-format
 msgid ""
 "\n"
@@ -3986,31 +4051,31 @@ msgstr ""
 "\n"
 "Unerwartetes Inhaltsverzeichnis-Format (Länge %d):\n"
 
-#: scsi-layer.c:697
+#: scsi-layer.c:700
 msgid "Consider sending a bug report.\n"
 msgstr "Erwägen Sie eine Fehlerbeschreibung einzusenden.\n"
 
-#: scsi-layer.c:706
+#: scsi-layer.c:709
 msgid "Data CD mode 1"
 msgstr "Daten-CD Mode 1"
 
-#: scsi-layer.c:707
+#: scsi-layer.c:710
 msgid "CD-I"
 msgstr "CD-I"
 
-#: scsi-layer.c:708
+#: scsi-layer.c:711
 msgid "CD XA form 1"
 msgstr "CD XA Form 1"
 
-#: scsi-layer.c:709
+#: scsi-layer.c:712
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: scsi-layer.c:712
+#: scsi-layer.c:715
 msgid "CD Audio"
 msgstr "Audio-CD"
 
-#: scsi-layer.c:863
+#: scsi-layer.c:851
 #, c-format
 msgid ""
 "%s\n"
@@ -4020,14 +4085,14 @@ msgstr ""
 "Konnte Länge der DVD-Strukturbeschreibung f�r Formatkode 1\n"
 "nicht ermitteln.\n"
 
-#: scsi-layer.c:873
+#: scsi-layer.c:861
 #, c-format
 msgid "Could not query dvd copyright info - implausible packet length %d\n"
 msgstr ""
 "Konnte DVD-Copyright-Information nicht ermitteln\n"
 "- ungültige Datenpaket-Größe %d\n"
 
-#: scsi-layer.c:888
+#: scsi-layer.c:876
 #, c-format
 msgid ""
 "%s\n"
@@ -4036,23 +4101,23 @@ msgstr ""
 "%s\n"
 "Konnte DVD-Copyright-Information nicht ermitteln.\n"
 
-#: scsi-layer.c:948
+#: scsi-layer.c:936
 msgid "is undecideable because of read error"
 msgstr "ist aufgrund von Lesefehlern unbestimmbar"
 
-#: scsi-layer.c:954
+#: scsi-layer.c:942
 msgid "looks GOOD"
 msgstr "erscheint KORREKT"
 
-#: scsi-layer.c:960
+#: scsi-layer.c:948
 msgid "gives unformatted size (UNUSABLE)"
 msgstr "ist die unformatierte Größe (UNBRAUCHBAR)"
 
-#: scsi-layer.c:965
+#: scsi-layer.c:953
 msgid "is UNUSABLE"
 msgstr "ist UNBRAUCHBAR"
 
-#: scsi-layer.c:987
+#: scsi-layer.c:975
 #, c-format
 msgid ""
 "%s\n"
@@ -4061,12 +4126,12 @@ msgstr ""
 "%s\n"
 "Konnte Datenträger-Größe nicht ermitteln.\n"
 
-#: scsi-layer.c:1007
+#: scsi-layer.c:995
 #, c-format
 msgid "READ CAPACITY: implausible medium size, %lld sectors\n"
 msgstr "READ CAPACITY: ungültige Datenträger-Größe, %lld Sektoren\n"
 
-#: scsi-layer.c:1086
+#: scsi-layer.c:1074
 #, c-format
 msgid ""
 "Different media sizes depending on query method:\n"
@@ -4079,7 +4144,7 @@ msgstr ""
 "READ DVD STRUCTURE: %lld Sektoren\n"
 "\n"
 
-#: scsi-layer.c:1091
+#: scsi-layer.c:1079
 msgid ""
 "Evaluation of returned medium sizes:\n"
 "\n"
@@ -4087,15 +4152,15 @@ msgstr ""
 "Untersuchung der beiden Angaben:\n"
 "\n"
 
-#: scsi-layer.c:1146
+#: scsi-layer.c:1134
 msgid "Using value from READ CAPACITY"
 msgstr "Verwende den Wert von READ CAPACITY."
 
-#: scsi-layer.c:1150
+#: scsi-layer.c:1138
 msgid "Using value from READ DVD STRUCTURE"
 msgstr "Verwende den Wert von READ DVD STRUCTURE."
 
-#: scsi-layer.c:1160
+#: scsi-layer.c:1148
 #, c-format
 msgid ""
 "FAILED to determine image size.\n"
@@ -4106,7 +4171,7 @@ msgstr ""
 "Verwende den kleineren Wert (funktioniert bei 90%% aller Laufwerke).\n"
 "Weitermachen auf EIGENE GEFAHR: das Abbild kann unvollständig/unbrauchbar sein."
 
-#: scsi-layer.c:1165
+#: scsi-layer.c:1153
 #, c-format
 msgid ""
 "Final decision: %s\n"
@@ -4115,7 +4180,7 @@ msgstr ""
 "Abschließende Entscheidung: %s\n"
 "\n"
 
-#: scsi-layer.c:1173
+#: scsi-layer.c:1161
 msgid ""
 "Failed to determine image size.\n"
 "Try using a different drive."
@@ -4123,7 +4188,7 @@ msgstr ""
 "Größe des Datenträger-Inhaltes ist unbestimmbar.\n"
 "Probieren Sie ein anderes Laufwerk."
 
-#: scsi-layer.c:1371 scsi-layer.c:1397
+#: scsi-layer.c:1359 scsi-layer.c:1385
 #, c-format
 msgid ""
 "%s\n"
@@ -4132,7 +4197,7 @@ msgstr ""
 "%s\n"
 "Der Datenträger konnte nicht geladen/ausgeworfen werden.\n"
 
-#: scsi-layer.c:1387
+#: scsi-layer.c:1375
 #, c-format
 msgid ""
 "%s\n"
@@ -4141,41 +4206,41 @@ msgstr ""
 "%s\n"
 "Der Datenträger konnte nicht freigegeben werden.\n"
 
-#: scsi-layer.c:1440
+#: scsi-layer.c:1428
 #, c-format
 msgid "Waiting 10 seconds for drive: %d\n"
 msgstr "Warte 10 Sekunden auf das Laufwerk: %d\n"
 
-#: scsi-layer.c:1491
+#: scsi-layer.c:1479
 msgid "Setting the drive speed failed:\n"
 msgstr "Konnte Laufwerksgeschwindigkeit nicht verändern:\n"
 
-#: scsi-layer.c:1736
+#: scsi-layer.c:1722
 #, c-format
 msgid "Sectors %lld - %lld: %s\n"
 msgstr "Sektoren %lld - %lld: %s\n"
 
-#: scsi-layer.c:1750
+#: scsi-layer.c:1736
 #, c-format
 msgid "Sector %lld, try %d: %s Sector returned: %d.\n"
 msgstr "Sektor %lld, Versuch %d: %s Zurückgegebener Sektor: %d.\n"
 
-#: scsi-layer.c:1756
+#: scsi-layer.c:1742
 #, c-format
 msgid "Sector %lld, try %d: %s\n"
 msgstr "Sektor %lld, Versuch %d: %s\n"
 
-#: scsi-layer.c:1768
+#: scsi-layer.c:1753
 #, c-format
 msgid "Sector %lld, try %d: success\n"
 msgstr "Sektor %lld, Versuch %d: erfolgreich\n"
 
-#: scsi-layer.c:1835
+#: scsi-layer.c:1820
 #, c-format
 msgid "Device %s: no medium present\n"
 msgstr "Laufwerk %s: kein Datenträger eingelegt\n"
 
-#: scsi-layer.c:1836
+#: scsi-layer.c:1821
 #, c-format
 msgid ""
 "Device %s does not become ready:\n"
@@ -4186,7 +4251,7 @@ msgstr ""
 "%s\n"
 "\n"
 
-#: scsi-layer.c:1841
+#: scsi-layer.c:1826
 #, c-format
 msgid ""
 "\n"
@@ -4195,7 +4260,7 @@ msgstr ""
 "\n"
 "Laufwerk: %s, %s\n"
 
-#: scsi-layer.c:1845
+#: scsi-layer.c:1830
 #, c-format
 msgid ""
 "\n"
@@ -4204,50 +4269,50 @@ msgstr ""
 "\n"
 "Laufwerk: %s (%s), %s\n"
 
-#: scsi-layer.c:1860 scsi-layer.c:1945
+#: scsi-layer.c:1845 scsi-layer.c:1927
 #, c-format
 msgid "This software does not support \"%s\" type media."
 msgstr "Dieses Programm unterstützt keine Datenträger vom Typ \"%s\"."
 
-#: scsi-layer.c:1868
+#: scsi-layer.c:1853
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr ""
 "Dieses Programm unterstützt keine Mehrfach-Sitzungen (%d Sitzungen).\n"
 "(für Anglophile: Multisession-CDs sind gemeint ;-)"
 
-#: scsi-layer.c:1878
+#: scsi-layer.c:1863
 msgid "Using READ CD"
 msgstr "Verwende READ CD"
 
-#: scsi-layer.c:1888
+#: scsi-layer.c:1873
 msgid ", RAW reading"
 msgstr ", \"RAW\"-Lesen"
 
-#: scsi-layer.c:1894
+#: scsi-layer.c:1878
 #, c-format
 msgid ", Mode page 1 ERP = %02xh"
 msgstr ", Mode page 1 ERP = %02xh"
 
-#: scsi-layer.c:1902
+#: scsi-layer.c:1884
 msgid "Using READ(10).\n"
 msgstr "Verwende READ(10).\n"
 
-#: scsi-layer.c:1923
+#: scsi-layer.c:1905
 #, c-format
 msgid "Medium: %s, %lld sectors%s"
 msgstr "Datenträger: %s, %lld Sektoren%s"
 
-#: scsi-layer.c:1927
+#: scsi-layer.c:1909
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s created %s"
 msgstr "Datenträger \"%s\": %s, %lld Sektoren%s erzeugt %s"
 
-#: scsi-layer.c:1933
+#: scsi-layer.c:1915
 msgid "Manuf.-ID:"
 msgstr "Herst.-ID:"
 
-#: scsi-layer.c:1952
+#: scsi-layer.c:1934
 msgid "This software does not support encrypted media.\n"
 msgstr "Dieses Programm unterstützt keine verschlüsselten Datenträger.\n"
 
@@ -4458,9 +4523,3 @@ msgstr ""
 #: welcome-window.c:136
 msgid "<i>New in this Version:</i>"
 msgstr "<i>Neu in dieser Version:</i>"
-
-#~ msgid "Medium \"%s\": %s, %lld sectors%s, created %s"
-#~ msgstr "Datenträger \"%s\": %s, %lld Sektoren%s, erzeugt %s"
-
-#~ msgid "Unreadable / skipped sectors: %lld, CRC errors: %lld"
-#~ msgstr "Unlesbare / Übersprungene Sektoren: %lld, Prüfsummen-Fehler: %lld"

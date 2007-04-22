@@ -63,7 +63,7 @@ Erstellt ein Abbild vom Datentr\[:a]ger in Laufwerk \fI/dev/hdc\fP als Datei \fI
 .TP
 \fBdvdisaster\fP \fB-d\fP \fI/dev/hdc\fP \fB-i\fP \fImedium.iso\fP \fB--read-raw\fP \fB-r\fP
 Erstellt ein Abbild wie oben beschrieben. Die Sektoren werden anhand ihrer
-EDC- und L-EC-Rohdaten auf Unversehrtheit überpr\[:u]ft. Dies ist nur für 
+EDC- und L-EC-Rohdaten auf Unversehrtheit \[:u]berpr\[:u]ft. Dies ist nur f\[:u]r 
 CD-Datentr\[:a]ger m\[:o]glich; anderenfalls hat die \fB--read-raw\fP-Option
 keine Wirkung.
 .TP
@@ -181,6 +181,16 @@ f\[:u]lle unlesbare Sektoren mit Byte n.
 .B \-\-ignore-fatal-sense
 Lesen nach m\[:o]glicherweise schwerwiegenden Fehlern fortsetzen.
 .TP
+.B \-\-internal-rereads n
+Leseversuche innerhalb des Laufwerks f\[:u]r besch\[:a]digte CD-Sektoren (Standard: -1)
+.RS
+Laufwerke unternehmen normalerweise mehrere Versuche um einen besch\[:a]digten Sektor 
+zu lesen. Es ist typischerweise g\[:u]nstiger diesen Wert auf 0 oder 1 zu setzen
+und die Anzahl der Leseversuche \[:u]ber den Parameter --read-attempts zu steuern.
+Viele Laufwerke ignorieren diese Einstellung ohnehin. Benutzen Sie den Wert -1 um 
+die Standardeinstellungen des Laufwerks zu verwenden.
+.RE
+.TP
 .B \-\-query-size n
 Ermittelt die Abbildgr\[:o]sse durch das Laufwerk oder das Dateisystem auf dem Datentr\[:a]ger
 (Standard: ecc)
@@ -188,14 +198,25 @@ Ermittelt die Abbildgr\[:o]sse durch das Laufwerk oder das Dateisystem auf dem D
 M\[:o]gliche Werte: drive udf ecc 
 .RE
 .TP
+.B \-\-raw-mode n
+"Raw"-Lese-Verfahren f\[:u]r besch\[:a]digte CD-Sektoren (default: 20)
+.RS
+Das empfohlene Verfahren ist 20, bei dem das Laufwerk die eingebaute Fehlerkorrektur
+so weit wie m\[:o]glich anwendet, bevor es einen besch\[:a]digten Sektor 
+zur\[:u]ckgibt. Einige Laufwerke k\[:o]nnen besch\[:a]digte Sektoren allerdings
+nur in der Betriebsart 21 lesen. Dabei wird die letzte Stufe der eingebauten
+Fehlerkorrektur nicht ausgef\[:u]hrt und der Sektor wird unkorrigiert
+zur\[:u]ckgegeben.
+.RE
+.TP
 .B \-\-read-attempts n-m
-versucht einen beschädigten Sektor n bis m-mal zu lesen.
+versucht einen besch\[:a]digten Sektor n bis m-mal zu lesen.
 .TP
 .B \-\-read-medium n
-liest den gesamten Datenträger bis zu n-mal.
+liest den gesamten Datentr\[:a]ger bis zu n-mal.
 .TP
 .B \-\-read-raw
-liest in der "raw"-Betriebsart sofern möglich.
+liest in der "raw"-Betriebsart sofern m\[:o]glich.
 .TP
 .B \-\-speed-warning n
 warnt bei Geschwindigkeits\[:a]nderung um mehr als n Prozent.

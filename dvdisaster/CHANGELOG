@@ -1,4 +1,13 @@
 
+0.71 (devel-22) 22-04-2007
+	- added Russian translation from Igor Gorbounov
+	- added more mode page / raw reading selections:
+	  20h and 21h and internal drive retries are selectable
+	- fixed raw sector caching when read attempts = 1
+	- fixed unnecessary ecc attempts when no new raw sectors were read
+	- suppressed addition of sectors with same contents to raw sector cache
+	- fixed non-working raw sector cache dir selection under Windows
+
 0.71 (devel-21) 09-04-2007
 	- added larger cluster size for BD and HD DVD
 
