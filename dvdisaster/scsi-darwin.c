@@ -31,6 +31,39 @@
 
 #ifdef SYS_DARWIN
 #include <IOKit/storage/IOStorageDeviceCharacteristics.h>
+#include <IOKit/IOBSD.h>
+
+#include <stdlib.h>
+
+/*
+ * Unmount media before trying to access them.
+ * Added by Bernd Heller, <bdheller@users.sourceforge.net>
+ */
+
+static void unmountDVD(io_object_t scsiDevice)
+{
+   CFStringRef bsdName = NULL;
+	
+   bsdName = (CFStringRef) IORegistryEntrySearchCFProperty(scsiDevice,
+							   kIOServicePlane,
+							   CFSTR(kIOBSDNameKey),
+							   kCFAllocatorDefault,
+							   kIORegistryIterateRecursively);
+   if (bsdName != NULL) {
+      // unmount all partitions
+      char cmd[4096];
+      char bsdNameStr[100];
+      CFStringGetCString(bsdName, bsdNameStr, sizeof(bsdNameStr), kCFStringEncodingUTF8);
+		
+      sprintf(cmd, "/usr/sbin/diskutil unmountDisk /dev/%s", bsdNameStr);
+      system(cmd);
+		
+      CFRelease(bsdName);
+   } else {
+      // no media to unmount
+      return;
+   }
+}
 
 char *getProductName(io_object_t device)
 {
@@ -158,6 +191,8 @@ DeviceHandle* OpenDevice(char *device)
       break;
     }
   }
+
+  unmountDVD(scsiDevice);
 
   dh->plugInInterface = getPlugInInterface(scsiDevice);
   if (dh->plugInInterface == NULL) {

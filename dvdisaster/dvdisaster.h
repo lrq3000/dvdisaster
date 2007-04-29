@@ -248,6 +248,7 @@ typedef struct _GlobalClosure
    GdkColor  *greenText;
    char      *greenMarkup;
    GdkColor  *barColor;
+   GdkColor  *logColor;
    GdkColor  *curveColor;
    GdkColor  *redSector;
    GdkColor  *yellowSector;
@@ -454,19 +455,24 @@ typedef struct _Curve
 {  GtkWidget *widget;   /* drawing area which is hosting us */
    PangoLayout *layout;
    gdouble *fvalue;     /* floating point curve values */
-   gint    *ivalue;     /* integer curve values */
+   gint    *ivalue;     /* integer bar curve values */
+   gint    *lvalue;     /* logarithmic integer curve */
+   gint    enable;      /* which of the above should be drawn */
    gint lastValueIdx;   /* end of value array */
    gint leftX,rightX;   /* Position of left and right y axis */
-   gint topY,bottomY;   /* Top and bottom end of y axes */
+   gint topY,bottomY;   /* Top and bottom end of i/f y axes */
+   gint topLY,bottomLY; /* Top and bottom end of l y axes */
    char *leftLabel;     /* Label of left coordinate axis */
+   char *leftLogLabel;  /* Label of left log coordinate axis */
    char *leftFormat;    /* Format of left coordinate axis numbering */
    int bottomFormat;    /* what kind of data are we displaying? */
    int margin;
-   int maxX,maxY;       /* current max value at y axis */
+   int maxX,maxY,logMaxY; /* current max value at y axis */
 } Curve;
 
-#define REDRAW_ICURVE (1<<0)
-#define REDRAW_FCURVE (1<<1)
+#define DRAW_ICURVE (1<<0)
+#define DRAW_FCURVE (1<<1)
+#define DRAW_LCURVE (1<<2)
 
 Curve* CreateCurve(GtkWidget*, char*, char*, int, int);
 void ZeroCurve(Curve*);
@@ -476,8 +482,9 @@ void UpdateCurveGeometry(Curve*, char*, int);
 
 int  CurveX(Curve*, gdouble);
 int  CurveY(Curve*, gdouble);
+int  CurveLogY(Curve*, gdouble);
 void RedrawAxes(Curve*);
-void RedrawCurve(Curve*, int, int);
+void RedrawCurve(Curve*, int);
 
 /***
  *** debug.c
@@ -629,11 +636,14 @@ void AboutTextWithLink(GtkWidget*, char*, char*);
  *** heuristic-lec.c
  ***/
 
+void UpdateByteCounts(struct _RawBuffer*);
 void CalculatePQLoad(struct _RawBuffer*);
 void UpdatePQParityList(struct _RawBuffer*, unsigned char*);
 
 int HeuristicLEC(unsigned char*, struct _RawBuffer*, unsigned char*);
-int SearchPlausibleSector(struct _RawBuffer*);
+int SearchPlausibleSector(struct _RawBuffer*, int);
+int BruteForceSearchPlausibleSector(struct _RawBuffer*);
+int AckHeuristic(struct _RawBuffer*);
 
 /***
  *** icon-factory.c
@@ -688,6 +698,8 @@ void AndQVector(unsigned char*, unsigned char, int);
 void OrQVector(unsigned char*, unsigned char, int);
 
 int DecodePQ(ReedSolomonTables*, unsigned char*, int, int*, int);
+
+int CountC2Errors(unsigned char*);
 
 /***
  *** logfile.c
@@ -906,7 +918,7 @@ enum                                 /* for ->properties above */
 {  DSH_HAS_FINGERPRINT = (1<<0)
 };
 
-int SaveDefectiveSector(struct _RawBuffer*);
+int SaveDefectiveSector(struct _RawBuffer*, int);
 int TryDefectiveSectorCache(struct _RawBuffer*, unsigned char*);
 
 /*** 
@@ -922,8 +934,8 @@ void ReadMediumLinear(gpointer);
 void ResetLinearReadWindow();
 void CreateLinearReadWindow(GtkWidget*);
 
-void InitializeCurve(void*, int);
-void AddCurveValues(void*, int, int);
+void InitializeCurve(void*, int, int);
+void AddCurveValues(void*, int, int, int);
 void MarkExistingSectors(void);
 
 /*** 
@@ -955,6 +967,11 @@ void RemoveFillMarkers();
  *** recover-raw.c
  ***/
 
+#define MAX_RAW_TRANSFER_SIZE (2352+296)  /* main channel plus C2 vector and mask */
+#define CD_RAW_DUMP_SIZE MAX_RAW_TRANSFER_SIZE
+#define CD_RAW_SECTOR_SIZE 2352  
+#define CD_RAW_C2_SECTOR_SIZE (2352+294)  /* main channel plus C2 vector */
+
 typedef struct _RawBuffer
 {  GaloisTables *gt;          /* for L-EC Reed-Solomon */
    ReedSolomonTables *rt;
@@ -971,6 +988,7 @@ typedef struct _RawBuffer
    unsigned char *recovered;  /* working buffer for cd frame recovery */
    unsigned char *byteState;  /* state of error correction */
    unsigned char *reference;  /* NULL or the correct sector (for debugging purposes) */
+   unsigned char *byteCount;  /* stores how many different bytes were read for each position in a sector */   
    gint64 lba;                /* sector number were currently working on */
 
    guint8 mediumFP[16];       /* medium fingerprint for raw sector cache validation */
@@ -995,7 +1013,6 @@ typedef struct _RawBuffer
    unsigned char **qList[N_Q_VECTORS];
    int *qCount[N_Q_VECTORS];
    int qn[N_Q_VECTORS];
-   
 } RawBuffer;
 
 enum                          /* values for byteState */
@@ -1015,7 +1032,7 @@ int MSFtoLBA(unsigned char, unsigned char, unsigned char);
 
 int CheckEDC(unsigned char*, int);
 int CheckMSF(unsigned char*, int);
-void InitializeCDFrame(unsigned char*, int);
+void InitializeCDFrame(unsigned char*, int, int, int);
 
 int ValidateRawSector(RawBuffer*, unsigned char*, char*);
 int TryCDFrameRecovery(RawBuffer*, unsigned char*);

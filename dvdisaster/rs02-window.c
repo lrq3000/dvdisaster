@@ -239,7 +239,7 @@ static void redraw_curve(RS02Widgets *wl)
    /* Redraw the curve */
 
    RedrawAxes(wl->fixCurve);
-   RedrawCurve(wl->fixCurve, wl->percent, REDRAW_ICURVE);
+   RedrawCurve(wl->fixCurve, wl->percent);
 
    /* Ecc capacity threshold line */
 
@@ -342,6 +342,7 @@ void CreateRS02FixWindow(Method *method, GtkWidget *parent)
    gtk_notebook_append_page(GTK_NOTEBOOK(notebook), wl->fixFootline, ignore);
 
    wl->fixCurve  = CreateCurve(d_area, _("Errors/Ecc block"), "%d", 1000, CURVE_PERCENT);
+   wl->fixCurve->enable = DRAW_ICURVE;
 }
 
 /***

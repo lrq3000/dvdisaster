@@ -40,10 +40,12 @@ Curve* CreateCurve(GtkWidget *widget, char *left_label, char *left_format, int n
 
    curve->fvalue       = g_malloc0(sizeof(gdouble)*(n_values+1));
    curve->ivalue       = g_malloc0(sizeof(gint)*(n_values+1));
+   curve->lvalue       = g_malloc0(sizeof(gint)*(n_values+1));
    curve->lastValueIdx = n_values;
 
    curve->maxX      = 1;
    curve->maxY      = 1;
+   curve->logMaxY   = 1;
 
    if(bottom_format != CURVE_PERCENT)
      curve->margin = 2;
@@ -59,9 +61,12 @@ void FreeCurve(Curve *curve)
 {
    g_object_unref(curve->layout);
    g_free(curve->leftLabel);
+   if(curve->leftLogLabel)
+      g_free(curve->leftLogLabel);
    g_free(curve->leftFormat);
    g_free(curve->fvalue);
    g_free(curve->ivalue);
+   g_free(curve->lvalue);
    g_free(curve);
 }
 
@@ -76,6 +81,7 @@ void ZeroCurve(Curve *curve)
      for(i=0; i<=curve->lastValueIdx; i++)
      {  curve->fvalue[i] = -1.0;
         curve->ivalue[i] = 0;
+        curve->lvalue[i] = 0;
      }
 }
 
@@ -108,6 +114,16 @@ int CurveY(Curve *curve, gdouble y)
    return curve->bottomY - y * hfact;
 }
 
+int CurveLogY(Curve *curve, gdouble y) /* not really a log */
+{  gdouble hfact;
+
+   if(y<1) return curve->bottomLY;
+
+   hfact = (gdouble)(curve->bottomLY - curve->topLY);
+ 
+   if(y==1) return curve->bottomLY - ((log(2)/log(curve->logMaxY)) * hfact)/2;
+            return curve->bottomLY - (log(y)/log(curve->logMaxY)) * hfact;
+}
 
 /***
  *** Calculate the curve geometry
@@ -130,6 +146,16 @@ void UpdateCurveGeometry(Curve *curve, char *largest_left_label, int right_paddi
    SetText(curve->layout, largest_left_label, &w, &h);
    curve->leftX   = 5 + 6 + 3 + w;
    curve->rightX  = a->width - right_padding;
+
+   /* Add space for the lograithmic curve */
+
+   if(curve->enable & DRAW_LCURVE)
+   {  int height = curve->bottomY - curve->topY;
+
+      curve->bottomLY = curve->bottomY;
+      curve->bottomY -= height/4;
+      curve->topLY = curve->bottomY + h + 15; 
+   }
 }
 
 /***
@@ -141,6 +167,7 @@ void RedrawAxes(Curve *curve)
    int i,w,h,x,y; 
    int yg=0;
    int step;
+   int bottom_y;
 
    /* Draw and label the left coordinate axis */
 
@@ -149,12 +176,60 @@ void RedrawAxes(Curve *curve)
    gdk_draw_line(d, Closure->drawGC,
 		 curve->leftX, curve->topY, curve->leftX, curve->bottomY);
 
+   if(curve->enable & DRAW_LCURVE)
+   {  gdk_draw_line(d, Closure->drawGC,
+		    curve->leftX, curve->topLY, curve->leftX, curve->bottomLY);
+   }
+
    gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->curveColor);
    SetText(curve->layout, curve->leftLabel, &w, &h);
    x = curve->leftX - w/2;
    if(x < 5) x = 5;
    gdk_draw_layout(d, Closure->drawGC, 
 		   x, curve->topY - h - 5, curve->layout);
+
+
+   /* Draw and label the grid lines for the log curve */
+
+   if(curve->enable & DRAW_LCURVE)
+   {  int val;
+      char buf[16];
+
+      gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->logColor);
+      SetText(curve->layout, curve->leftLogLabel, &w, &h);
+
+      x = curve->leftX - w/2;
+      if(x < 5) x = 5;
+      gdk_draw_layout(d, Closure->drawGC, 
+		      x, curve->topLY - h - 5, curve->layout);
+
+      
+      for(val=400; val>3; val/=2)
+      {  y = CurveLogY(curve, val);
+	 sprintf(buf,"%d",val);
+	 SetText(curve->layout, buf, &w, &h);
+	 gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->logColor);
+	 gdk_draw_layout(d, Closure->drawGC, curve->leftX-9-w, y-h/2, curve->layout);
+	 gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->foreground);
+	 gdk_draw_line(d, Closure->drawGC, curve->leftX-6, y, curve->leftX, y);
+	 gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->grid);
+	 gdk_draw_line(d, Closure->drawGC, curve->leftX, y, curve->rightX, y);
+
+	 val /=2;
+	 y = CurveLogY(curve, val);
+	 gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->foreground);
+	 gdk_draw_line(d, Closure->drawGC, curve->leftX-3, y, curve->leftX, y);
+
+	 if(curve->bottomLY-curve->topLY > 8*h)
+	 {  sprintf(buf,"%d",val);
+	    SetText(curve->layout, buf, &w, &h);
+	    gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->logColor);
+	    gdk_draw_layout(d, Closure->drawGC, curve->leftX-9-w, y-h/2, curve->layout);
+	 }
+      }
+   }
+
+   /* Draw and label the grid lines for the normal curve */
 
    if(curve->maxY < 20) step = 4;
    else step = 10;
@@ -188,6 +263,9 @@ void RedrawAxes(Curve *curve)
    gdk_draw_line(d, Closure->drawGC,
 		 curve->rightX, curve->topY, curve->rightX, curve->bottomY);
 
+   if(curve->enable & DRAW_LCURVE)
+      gdk_draw_line(d, Closure->drawGC,
+		    curve->rightX, curve->topLY, curve->rightX, curve->bottomLY);
 
    /* Draw and label the bottom coordinate axis */
 
@@ -195,6 +273,13 @@ void RedrawAxes(Curve *curve)
 
    gdk_draw_line(d, Closure->drawGC,
 		 curve->leftX, curve->bottomY, curve->rightX, curve->bottomY);
+
+   if(curve->enable & DRAW_LCURVE)
+   {  gdk_draw_line(d, Closure->drawGC,
+		    curve->leftX, curve->bottomLY, curve->rightX, curve->bottomLY);
+      bottom_y = curve->bottomLY;
+   }
+   else bottom_y = curve->bottomY;
 
    if(curve->maxX <= 100) step = 20;           /* <100M */
    else if(curve->maxX < 1000)  step = 100;    /* 100M ... 1000M */
@@ -220,18 +305,21 @@ void RedrawAxes(Curve *curve)
       SetText(curve->layout, buf, &w, &h);
 
       x = CurveLX(curve,i)-1;
-      gdk_draw_line(d, Closure->drawGC, x, curve->bottomY+6, x, curve->bottomY);
-      gdk_draw_layout(d, Closure->drawGC, x-w/2, curve->bottomY+8, curve->layout);
+      gdk_draw_line(d, Closure->drawGC, x, bottom_y+6, x, bottom_y);
+      gdk_draw_layout(d, Closure->drawGC, x-w/2, bottom_y+8, curve->layout);
 
       if(i && x < curve->rightX)
       {  gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->grid);
          gdk_draw_line(d, Closure->drawGC, x, curve->bottomY-1, x, yg);
+
+	 if(curve->enable & DRAW_LCURVE)
+	    gdk_draw_line(d, Closure->drawGC, x, curve->bottomLY-1, x, curve->topLY);
       }
 
       gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->foreground);
       x = CurveLX(curve,i+step/2)-1;
       if(x < curve->rightX)
-        gdk_draw_line(d, Closure->drawGC, x, curve->bottomY+3, x, curve->bottomY);
+        gdk_draw_line(d, Closure->drawGC, x, bottom_y+3, x, bottom_y);
    }
 }
 
@@ -239,8 +327,8 @@ void RedrawAxes(Curve *curve)
  * Redraw the curve
  */
 
-void RedrawCurve(Curve *curve, int last, int which)
-{  int i,x0,x1,fy0,fy1,iy;
+void RedrawCurve(Curve *curve, int last)
+{  int i,x0,x1,fy0,fy1;
 
    x0  = CurveX(curve, 0);
    fy0 = CurveY(curve, curve->fvalue[0]);
@@ -251,26 +339,39 @@ void RedrawCurve(Curve *curve, int last, int which)
 
    for(i=1; i<=last; i++)
    {  x1  = CurveX(curve, i);
-      fy1 = CurveY(curve, curve->fvalue[i]);
-      iy  = CurveY(curve, curve->ivalue[i]);
 
-      if(which & REDRAW_FCURVE && curve->fvalue[i] >= 0)
-      {  if(x0 < x1)
-	 {  gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->curveColor);
-	    gdk_draw_line(curve->widget->window, Closure->drawGC, x0, fy0, x1, fy1);
-	    fy0 = fy1;
-	 }
-         x0  =  x1;
-      }
+      if(curve->enable & DRAW_ICURVE)
+      {  int iy  = CurveY(curve, curve->ivalue[i]);
 
-      if(which & REDRAW_ICURVE)
-      {  if(curve->ivalue[i] > 0)
+	 if(curve->ivalue[i] > 0)
 	 {  gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->barColor);
 	    gdk_draw_rectangle(curve->widget->window,
 			       Closure->drawGC, TRUE,
 			       x0, iy, x0==x1 ? 1 : x1-x0, curve->bottomY-iy);
 	 }
-	 x0 = x1;
       }
+
+      if(curve->enable & DRAW_LCURVE)
+      {  int iy  = CurveLogY(curve, curve->lvalue[i]);
+
+	 if(curve->lvalue[i] > 0)
+	 {  gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->logColor);
+	    gdk_draw_rectangle(curve->widget->window,
+			       Closure->drawGC, TRUE,
+			       x0, iy, x0==x1 ? 1 : x1-x0, curve->bottomLY-iy);
+	 }
+      }
+
+      if(curve->enable & DRAW_FCURVE && curve->fvalue[i] >= 0)
+      {  fy1 = CurveY(curve, curve->fvalue[i]);
+
+	 if(x0 < x1)
+	 {  gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->curveColor);
+	    gdk_draw_line(curve->widget->window, Closure->drawGC, x0, fy0, x1, fy1);
+	    fy0 = fy1;
+	 }
+      }
+
+      x0 = x1;
    }
 }

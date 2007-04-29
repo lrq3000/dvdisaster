@@ -59,6 +59,7 @@ static gboolean expose_cb(GtkWidget *widget, GdkEventExpose *event, gpointer dat
       gdk_colormap_alloc_color(cmap, Closure->redText, FALSE, TRUE);
       gdk_colormap_alloc_color(cmap, Closure->greenText, FALSE, TRUE);
       gdk_colormap_alloc_color(cmap, Closure->barColor, FALSE, TRUE);
+      gdk_colormap_alloc_color(cmap, Closure->logColor, FALSE, TRUE);
       gdk_colormap_alloc_color(cmap, Closure->curveColor, FALSE, TRUE);
       gdk_colormap_alloc_color(cmap, Closure->redSector, FALSE, TRUE);
       gdk_colormap_alloc_color(cmap, Closure->yellowSector, FALSE, TRUE);

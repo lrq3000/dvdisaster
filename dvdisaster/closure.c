@@ -304,6 +304,10 @@ void DefaultColors()
    Closure->barColor->green     = 0;
    Closure->barColor->blue      = 0;
 
+   Closure->logColor->red       = 0xffff;
+   Closure->logColor->green     = 0;
+   Closure->logColor->blue      = 0xffff;
+
    Closure->curveColor->red     = 0;
    Closure->curveColor->green   = 0;
    Closure->curveColor->blue    = 0xffff;
@@ -469,6 +473,7 @@ void ReadDotfile()
 					       continue; 
                                              }
       if(!strcmp(symbol, "bar-color"))       { get_color(Closure->barColor, value); continue; }
+      if(!strcmp(symbol, "log-color"))       { get_color(Closure->logColor, value); continue; }
       if(!strcmp(symbol, "curve-color"))     { get_color(Closure->curveColor, value); continue; }
       if(!strcmp(symbol, "defective-sector")){ get_color(Closure->redSector, value); continue; }
       if(!strcmp(symbol, "bad-checksum-sector")){ get_color(Closure->yellowSector, value); continue; }
@@ -554,6 +559,7 @@ static void update_dotfile()
    save_colors(dotfile, "positive-text",      Closure->greenText);
    save_colors(dotfile, "negative-text",      Closure->redText);
    save_colors(dotfile, "bar-color",          Closure->barColor);
+   save_colors(dotfile, "log-color",          Closure->logColor);
    save_colors(dotfile, "curve-color",        Closure->curveColor);
    save_colors(dotfile, "defective-sector",   Closure->redSector);
    save_colors(dotfile, "bad-checksum-sector",Closure->yellowSector);
@@ -656,6 +662,7 @@ void InitClosure()
    Closure->redText     = g_malloc0(sizeof(GdkColor));
    Closure->greenText   = g_malloc0(sizeof(GdkColor));
    Closure->barColor    = g_malloc0(sizeof(GdkColor));
+   Closure->logColor    = g_malloc0(sizeof(GdkColor));
    Closure->curveColor  = g_malloc0(sizeof(GdkColor));
    Closure->redSector   = g_malloc0(sizeof(GdkColor));
    Closure->yellowSector= g_malloc0(sizeof(GdkColor));
@@ -756,6 +763,7 @@ void FreeClosure()
    cond_free(Closure->redText);
    cond_free(Closure->greenText);
    cond_free(Closure->barColor);
+   cond_free(Closure->logColor);
    cond_free(Closure->curveColor);
    cond_free(Closure->redSector);
    cond_free(Closure->yellowSector);

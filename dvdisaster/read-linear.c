@@ -270,7 +270,7 @@ static void determine_mode(read_closure *rc)
       rc->readMarker = 0;
 
       if(Closure->guiMode)
-	 InitializeCurve(rc, rc->dh->maxRate);
+	 InitializeCurve(rc, rc->dh->maxRate, rc->dh->canC2Scan);
 
       return;
    } 
@@ -301,7 +301,7 @@ reopen_image:
       rc->readMarker = 0;
 
       if(Closure->guiMode)
-	 InitializeCurve(rc, rc->dh->maxRate);
+	 InitializeCurve(rc, rc->dh->maxRate, rc->dh->canC2Scan);
 
       return;
    }
@@ -392,7 +392,7 @@ reopen_image:
 		   "<big>%s</big>\n<i>%s</i>",t,rc->dh->mediumDescr);
 
    if(Closure->guiMode)
-      InitializeCurve(rc, rc->dh->maxRate);
+      InitializeCurve(rc, rc->dh->maxRate, rc->dh->canC2Scan);
 }
 
 /*
@@ -539,7 +539,7 @@ static void show_progress(read_closure *rc)
 	 else color = Closure->additionalSpiralColor;
 
 	 if(Closure->guiMode)
-	    AddCurveValues(rc, percent, color);
+	    AddCurveValues(rc, percent, color, rc->maxC2);
 	 rc->lastPercent    = percent;
 	 rc->lastSpeed      = rc->speed;
 	 rc->previousReadErrors = Closure->readErrors;
@@ -561,8 +561,8 @@ static void show_progress(read_closure *rc)
 	 {   rc->speed = kb_sec / rc->dh->singleRate;
 		
 	     if(Closure->guiMode)
-	     {  AddCurveValues(rc, rc->lastPercent, color);
-		AddCurveValues(rc, percent, color);
+	     {  AddCurveValues(rc, rc->lastPercent, color, rc->maxC2);
+		AddCurveValues(rc, percent, color, rc->maxC2);
 	     }
 	     
 	     rc->firstSpeedValue    = FALSE;
@@ -577,7 +577,7 @@ static void show_progress(read_closure *rc)
 	    if(rc->speed>99.9) rc->speed=99.9;
 	    
 	    if(Closure->guiMode)
-	       AddCurveValues(rc, percent, color);
+	       AddCurveValues(rc, percent, color, rc->maxC2);
 
 	    if(Closure->speedWarning && rc->lastSpeed > 0.5)
 	    {  double delta = rc->speed - rc->lastSpeed;
@@ -605,6 +605,7 @@ static void show_progress(read_closure *rc)
 	    g_timer_start(rc->speedTimer);
 	 }
       }
+      rc->maxC2 = 0;
    }
 }   
 
@@ -968,6 +969,23 @@ reread:
 				 Closure->redMarkup, rc->readOK,Closure->readErrors); 
 	    rc->unreportedError = FALSE;  /* suppress respective error message */
 	    goto terminate;
+	 }
+      }
+
+      /*** Evaluate C2 scan results */
+
+      if(rc->dh->canC2Scan)
+      {  int i;
+	 
+	 for(i=0; i<nsectors; i++)
+	 {  if(rc->dh->c2[i])
+	    {  if(!status)  /* Do not print C2 and error messages together */
+		  PrintCLI(_("Sector %lld: %3d C2 errors.%s\n"), 
+			   rc->readPos+i, rc->dh->c2[i], "              ");
+
+	       if(rc->dh->c2[i] > rc->maxC2)  /* remember highest value */
+		  rc->maxC2 = rc->dh->c2[i];
+	    }
 	 }
       }
 

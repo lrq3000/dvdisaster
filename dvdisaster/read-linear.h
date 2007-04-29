@@ -72,6 +72,7 @@ typedef struct
    gint64 deadWritten;
    gint64 lastErrorsPrinted;
    int pass;
+   int maxC2;                       /* max C2 error since last output */
 
    /* for drawing the curve and spiral */
 

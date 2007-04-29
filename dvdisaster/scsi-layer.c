@@ -770,7 +770,7 @@ int SetRawMode(DeviceHandle *dh, int operator)
    cdb[1] = 0x10;         /* set page format (PF) bit */
    cdb[7] = 0;
    cdb[8] = pll;          /* parameter list length */
-   printf("RAW: using %xh %d\n", Closure->rawMode, Closure->internalAttempts);
+
    switch(operator)       /* set new read mode */
    {  case MODE_PAGE_SET:
 	 dh->previousReadMode = buf[10];
@@ -823,6 +823,63 @@ int SetRawMode(DeviceHandle *dh, int operator)
    dh->currentReadMode = buf[10];
    FreeAlignedBuffer(ab);
    return TRUE;
+}
+
+/*
+ * Find out whether the drive can do C2 scans.
+ * Done by empirically trying a READ CD; maybe we should examine the drive
+ * feature codes instead. 
+ */
+
+int TestC2Scan(DeviceHandle *dh)
+{  Sense *sense = &dh->sense;
+   unsigned char cdb[MAX_CDB_SIZE];
+   RawBuffer *rb;
+   int lba = 0;
+   int ret;
+   
+   if(!(rb=dh->rawBuffer))  /* sanity check: No C2 scans without RAW reading */
+      return FALSE;
+   
+   memset(cdb, 0, MAX_CDB_SIZE);
+   cdb[0]  = 0xbe;         /* READ CD */
+
+   switch(dh->subType)     /* Expected sector type */
+   {  case DATA1:          /* data mode 1 */ 
+        cdb[1] = 2<<2; 
+	cdb[9] = 0xba;    /* we want Sync + Header + User data + EDC/ECC + C2 */
+	break;  
+
+      case XA21:           /* xa mode 2 form 1 */
+	cdb[1] = 4<<2; 
+	cdb[9] = 0xfc;
+	break;  
+   }
+
+   cdb[2]  = (lba >> 24) & 0xff;
+   cdb[3]  = (lba >> 16) & 0xff;
+   cdb[4]  = (lba >>  8) & 0xff;
+   cdb[5]  = lba & 0xff;
+   cdb[6]  = 0;        /* number of sectors to read (3 bytes) */
+   cdb[7]  = 0;  
+   cdb[8]  = 1;        /* read 1 sector */
+
+   cdb[10] = 0;        /* reserved stuff */
+   cdb[11] = 0;        /* no special wishes for the control byte */
+
+   ret = SendPacket(dh, cdb, 12, rb->workBuf->buf, CD_RAW_C2_SECTOR_SIZE, sense, DATA_READ);
+
+   Verbose("C2 scan probing: %s\n", 
+	   GetSenseString(sense->sense_key, sense->asc, sense->ascq, 0));
+
+   if(!ret || sense->sense_key != 5)  /* good status or error != illegal request means C2 works */
+   {  rb->sampleSize = CD_RAW_C2_SECTOR_SIZE;
+      return TRUE;
+   }
+   else 
+   {  rb->sampleSize = CD_RAW_SECTOR_SIZE; 
+      return FALSE;
+   }
 }
 
 /*
@@ -1545,6 +1602,7 @@ static int read_cd_sector(DeviceHandle *dh, unsigned char *buf, int lba, int nse
 static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, int nsectors)
 {  Sense *sense = &dh->sense;
    unsigned char cdb[MAX_CDB_SIZE];
+   unsigned char c2bit;
    RawBuffer *rb;
    int ret = -1;
    int i,s;
@@ -1567,20 +1625,20 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
 
    /*** Perform the raw read */
 
+   c2bit = dh->canC2Scan ? 0x02 : 0;
+
    memset(cdb, 0, MAX_CDB_SIZE);
    cdb[0]  = 0xbe;         /* READ CD */
    switch(dh->subType)     /* Expected sector type */
    {  case DATA1:          /* data mode 1 */ 
         cdb[1] = 2<<2; 
-	cdb[9] = 0xb8;    /* we want Sync + Header + User data + EDC/ECC */
-	rb->sampleSize=2352; 
+	cdb[9] = 0xb8 | c2bit; /* we want Sync + Header + User data + EDC/ECC + C2 */
 	offset=16;
 	break;  
 
       case XA21:           /* xa mode 2 form 1 */
 	cdb[1] = 4<<2; 
-	cdb[9] = 0xf8;
-	rb->sampleSize=2352; 
+	cdb[9] = 0xf8 | c2bit;
 	offset=24;
 	break;  
    }
@@ -1608,6 +1666,13 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
    if(lba==160)  /* fixme */
    rb->workBuf->buf[230]^=255;
 #endif
+
+   /* count c2 error bits */
+
+   if(dh->canC2Scan)
+   {  for(i=0, s=0; i<nsectors; i++, s+=rb->sampleSize)
+	 dh->c2[i] = CountC2Errors(rb->workBuf->buf+s);
+   }
 
    /* The drive screws up sometimes and returns a damaged sector as good. 
       When nsectors==1, this sector is still interesting for data recovery.
@@ -1760,7 +1825,7 @@ int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
 
    if(dh->canReadDefective && status && Closure->defectiveDump)
    {   
-      if(SaveDefectiveSector(dh->rawBuffer))  /* any new sectors? */
+      if(SaveDefectiveSector(dh->rawBuffer,dh->canC2Scan))  /* any new sectors? */
       {  status = TryDefectiveSectorCache(dh->rawBuffer, buf);
 	 if(status)
 	    RememberSense(3, 255, 7);  /* Recovery failed */
@@ -1862,7 +1927,7 @@ DeviceHandle* OpenAndQueryDevice(char *device)
    {  case CD:
         PrintLog(_("Using READ CD"));
 	if(Closure->readRaw)
-	{  dh->rawBuffer = CreateRawBuffer(2352);
+	{  dh->rawBuffer = CreateRawBuffer(MAX_RAW_TRANSFER_SIZE);
 
 	   dh->rawBuffer->validFP = GetMediumFingerprint(dh, dh->rawBuffer->mediumFP, FINGERPRINT_SECTOR);
 	 
@@ -1876,6 +1941,10 @@ DeviceHandle* OpenAndQueryDevice(char *device)
 
 	   if(dh->canReadDefective)
 	      PrintLog(_(", Mode page 1 ERP = %02xh"), dh->currentReadMode);
+
+	   dh->canC2Scan = TestC2Scan(dh);
+	   if(dh->canC2Scan)
+	      PrintLog(_(", C2 scanning"));
 	}
 	PrintLog(".\n");
         break;

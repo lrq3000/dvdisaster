@@ -202,6 +202,28 @@ void AndQVector(unsigned char *frame, unsigned char data, int n)
 }
 
 /***
+ *** C2 error counting
+ ***/
+
+int CountC2Errors(unsigned char *frame)
+{  int i,count = 0;
+   frame += 2352;
+
+   for(i=0; i<294; i++, frame++)
+   {  if(*frame & 0x01) count++;
+      if(*frame & 0x02) count++;
+      if(*frame & 0x04) count++;
+      if(*frame & 0x08) count++;
+      if(*frame & 0x10) count++;
+      if(*frame & 0x20) count++;
+      if(*frame & 0x40) count++;
+      if(*frame & 0x80) count++;
+   }
+
+   return count;
+}
+
+/***
  *** L-EC error correction for CD raw data sectors
  ***/
 

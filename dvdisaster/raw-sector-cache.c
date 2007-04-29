@@ -35,7 +35,7 @@ static void init_defective_sector_file(char *path, RawBuffer *rb, LargeFile **fi
 
     memset(dsh, 0, sizeof(DefectiveSectorHeader));
     dsh->lba        = rb->lba;
-    dsh->sectorSize = rb->sampleSize;
+    dsh->sectorSize = CD_RAW_DUMP_SIZE;
 
     if(rb->validFP)
     {  memcpy(dsh->mediumFP, rb->mediumFP, 16);
@@ -71,6 +71,52 @@ static void open_defective_sector_file(RawBuffer *rb, char *path, LargeFile **fi
     if(dsh->nSectors*dsh->sectorSize+sizeof(DefectiveSectorHeader) != length)
        Stop(_("Defective sector file is truncated"));
 
+    /* Expand the old non-C2 raw dumps to new size */
+
+    if(dsh->sectorSize == 2352) /* old non C2-style raw dump? */
+    {  unsigned char *buf,*ptr;
+       unsigned char zero[296];
+       int i,n;
+
+       PrintCLI(" * Expanding raw dump for sector %lld from 2352 to %d bytes *\n",
+		(long long)dsh->lba,  MAX_RAW_TRANSFER_SIZE);
+
+       buf = g_malloc(dsh->sectorSize*dsh->nSectors);
+       for(i=0, ptr=buf; i<dsh->nSectors; i++, ptr+=2352)
+       {  int n=LargeRead(*file, ptr, dsh->sectorSize);
+	 
+	  if(n != dsh->sectorSize)
+	     Stop(_("Failed reading from defective sector file: %s"), strerror(errno));
+       }
+
+       memset(zero, 0, 296);
+       dsh->sectorSize = MAX_RAW_TRANSFER_SIZE;
+
+       if(!LargeSeek(*file, 0))
+	  Stop(_("Failed seeking in defective sector file: %s"), strerror(errno));
+
+       n = LargeWrite(*file, dsh, sizeof(DefectiveSectorHeader));
+       
+       if(n != sizeof(DefectiveSectorHeader))
+	  Stop(_("Failed writing to defective sector file: %s"), strerror(errno));
+
+       for(i=0, ptr=buf; i<dsh->nSectors; i++, ptr+=2352)
+       {  n=LargeWrite(*file, ptr, 2352);
+	 
+	  if(n != 2352)
+	     Stop(_("Failed writing to defective sector file: %s"), strerror(errno));
+
+	  n=LargeWrite(*file, zero, 296);
+	  if(n != 296)
+	     Stop(_("Failed writing to defective sector file: %s"), strerror(errno));
+       }
+
+       if(!LargeSeek(*file, sizeof(DefectiveSectorHeader)))
+	  Stop(_("Failed seeking in defective sector file: %s"), strerror(errno));
+       
+       g_free(buf);
+    }
+
     /* If the cache file has no fingerprint, add it now */
 
     if(!(dsh->properties & DSH_HAS_FINGERPRINT) && rb->validFP)
@@ -98,7 +144,7 @@ static void open_defective_sector_file(RawBuffer *rb, char *path, LargeFile **fi
  * Append RawBuffer contents to defective sector dump
  */
 
-int SaveDefectiveSector(RawBuffer *rb)
+int SaveDefectiveSector(RawBuffer *rb, int can_c2_scan)
 {  LargeFile *file;
    DefectiveSectorHeader *dsh = alloca(sizeof(DefectiveSectorHeader));
    unsigned char *cache_sectors = NULL;
@@ -143,7 +189,7 @@ int SaveDefectiveSector(RawBuffer *rb)
 
    /* Store sectors which are not already cached */
    
-   offset = sizeof(DefectiveSectorHeader) + rb->sampleSize*dsh->nSectors;
+   offset = sizeof(DefectiveSectorHeader) + dsh->sectorSize*dsh->nSectors;
    if(!LargeSeek(file, offset))
       Stop(_("Failed seeking in defective sector file: %s"), strerror(errno));
 
@@ -168,9 +214,14 @@ int SaveDefectiveSector(RawBuffer *rb)
       }
 
       if(new_sector)   /* same sector already in cache */
-      {  int n=LargeWrite(file, rb->rawBuf[i], rb->sampleSize);
+      {  int n;
+
+	 if(can_c2_scan)
+	    rb->rawBuf[i][CD_RAW_DUMP_SIZE-1] = 1;
+
+	 n=LargeWrite(file, rb->rawBuf[i], dsh->sectorSize);
 	 
-	 if(n != rb->sampleSize)
+	 if(n != dsh->sectorSize)
 	    Stop(_("Failed writing to defective sector file: %s"), strerror(errno));
 	 count++;
       }
@@ -221,8 +272,8 @@ int TryDefectiveSectorCache(RawBuffer *rb, unsigned char *outbuf)
    for(i=0; i<last_sector; i++)
    {  int n;
   
-      n = LargeRead(file, rb->workBuf->buf, rb->sampleSize);
-      if(n != rb->sampleSize)
+      n = LargeRead(file, rb->workBuf->buf, dsh.sectorSize);
+      if(n != dsh.sectorSize)
 	 Stop(_("Failed reading from defective sector file: %s"), strerror(errno));
 
       status = TryCDFrameRecovery(rb, outbuf);
@@ -257,9 +308,9 @@ void ReadDefectiveSectorFile(RawBuffer *rb, char *path)
    ReallocRawBuffer(rb, dsh.nSectors);
 
    for(i=0; i<dsh.nSectors; i++)
-   {  int n=LargeRead(file, rb->rawBuf[rb->samplesRead], rb->sampleSize);
+   {  int n=LargeRead(file, rb->rawBuf[rb->samplesRead], dsh.sectorSize);
 
-      if(n != rb->sampleSize)
+      if(n != dsh.sectorSize)
 	 Stop(_("Failed reading from defective sector file: %s"), strerror(errno));
 
       rb->samplesRead++;

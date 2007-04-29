@@ -1,4 +1,9 @@
 
+0.71 (devel-23)
+	- added Bernd Hellers umount patch for MacOS
+	- started C2 scanning support for CD media
+	- Andrei did it again and provided improved RAW recovery heuristics :-)
+
 0.71 (devel-22) 22-04-2007
 	- added Russian translation from Igor Gorbounov
 	- added more mode page / raw reading selections:

@@ -23,6 +23,8 @@
 
 #include "read-linear.h"
 
+#define C2_CLAMP_VALUE 2352
+
 /***
  *** Forward declarations
  ***/
@@ -47,12 +49,16 @@ static gboolean max_speed_idle_func(gpointer data)
    return FALSE;
 }
 
-void InitializeCurve(void *rc_ptr, int max_rate)
+void InitializeCurve(void *rc_ptr, int max_rate, int can_c2)
 {  read_closure *rc = (read_closure*)rc_ptr;
    int i;
 
    Closure->readLinearCurve->maxY = max_rate;
    Closure->readLinearCurve->maxX = rc->sectors/512;
+   Closure->readLinearCurve->logMaxY = C2_CLAMP_VALUE;
+
+   if(can_c2) Closure->readLinearCurve->enable = DRAW_FCURVE | DRAW_LCURVE;
+   else       Closure->readLinearCurve->enable = DRAW_FCURVE;
 
    rc->lastCopied = (1000*rc->firstSector)/rc->sectors;
    rc->lastPlotted = rc->lastSegment = rc->lastCopied;
@@ -139,20 +145,28 @@ static gboolean curve_idle_func(gpointer data)
    y0 = CurveY(Closure->readLinearCurve, Closure->readLinearCurve->fvalue[rc->lastPlotted]);
    if(rc->lastPlottedY) y0 = rc->lastPlottedY;
 
-   gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->curveColor);
-
    for(i=rc->lastPlotted+1; i<=ci->percent; i++)
    {  gint x1 = CurveX(Closure->readLinearCurve, i);
       gint y1 = CurveY(Closure->readLinearCurve, Closure->readLinearCurve->fvalue[i]);
+      gint l1 = CurveLogY(Closure->readLinearCurve, Closure->readLinearCurve->lvalue[i]);
 
+      if(Closure->readLinearCurve->lvalue[i])
+      {  gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->logColor);
+      
+	 gdk_draw_rectangle(Closure->readLinearDrawingArea->window,
+			    Closure->drawGC, TRUE,
+			    x0, l1,
+			    x0==x1 ? 1 : x1-x0, Closure->readLinearCurve->bottomLY-l1);
+      }
       if(x0<x1)
-      { gdk_draw_line(Closure->readLinearDrawingArea->window,
+      {  gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->curveColor);
+	 gdk_draw_line(Closure->readLinearDrawingArea->window,
 		      Closure->drawGC,
 		      x0, y0, x1, y1);
 
-	rc->lastPlotted = ci->percent;
-	x0 = x1;
-	rc->lastPlottedY = y0 = y1;
+	 rc->lastPlotted = ci->percent;
+	 x0 = x1;
+	 rc->lastPlottedY = y0 = y1;
       }
    }
 
@@ -164,7 +178,7 @@ static gboolean curve_idle_func(gpointer data)
  * Add one new data point
  */
 
-void AddCurveValues(void *rc_ptr, int percent, int color)
+void AddCurveValues(void *rc_ptr, int percent, int color, int c2)
 {  read_closure *rc = (read_closure*)rc_ptr;
    curve_info *ci;
    int i;
@@ -179,10 +193,15 @@ void AddCurveValues(void *rc_ptr, int percent, int color)
    /*** Mark unused speed values between lastCopied and Percent */
 
    if(!rc->pass)
-   {  Closure->readLinearCurve->fvalue[percent] = rc->speed;
+   {  int c2_clamped = c2 < C2_CLAMP_VALUE ? c2 : C2_CLAMP_VALUE;
+
+      Closure->readLinearCurve->fvalue[percent] = rc->speed;
+      Closure->readLinearCurve->lvalue[percent] = c2_clamped;
 
       for(i=rc->lastCopied+1; i<percent; i++)
-	 Closure->readLinearCurve->fvalue[i] = rc->speed > 0.0 ? -1.0 : 0.0;
+      {	 Closure->readLinearCurve->fvalue[i] = rc->speed > 0.0 ? -1.0 : 0.0;
+	 Closure->readLinearCurve->lvalue[i] = c2_clamped;
+      }
    }
 
    /*** Mark the spiral segments between lastCopied and Percent*/
@@ -237,7 +256,8 @@ static void update_geometry(void)
 
    /* Curve geometry */ 
 
-   UpdateCurveGeometry(Closure->readLinearCurve, "99x", Closure->readLinearSpiral->diameter + 30);
+   UpdateCurveGeometry(Closure->readLinearCurve, "99x", 
+		       Closure->readLinearSpiral->diameter + 30);
 
    /* Spiral center */
 
@@ -299,7 +319,7 @@ static void redraw_curve(void)
    /* Redraw the curve */
 
    RedrawAxes(Closure->readLinearCurve);
-   RedrawCurve(Closure->readLinearCurve, 1000, REDRAW_FCURVE);
+   RedrawCurve(Closure->readLinearCurve, 1000);
 }
 
 static gboolean expose_cb(GtkWidget *widget, GdkEventExpose *event, gpointer data)
@@ -374,5 +394,6 @@ void CreateLinearReadWindow(GtkWidget *parent)
    gtk_notebook_append_page(GTK_NOTEBOOK(notebook), Closure->readLinearFootline, ignore);
 
    Closure->readLinearCurve  = CreateCurve(d_area, _("Speed"), "%dx", 1000, CURVE_MEGABYTES);
+   Closure->readLinearCurve->leftLogLabel = g_strdup(_("C2 errors"));
    Closure->readLinearSpiral = CreateSpiral(Closure->grid, Closure->background, 10, 5, 1000);
 }

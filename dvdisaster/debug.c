@@ -693,8 +693,8 @@ void ReadSector(char *arg)
  *** Read a raw CD sector
  ***/
 
-void RawSector(char *arg)
-{  AlignedBuffer *ab = CreateAlignedBuffer(2048);
+void RawSector0(char *arg)
+{  AlignedBuffer *ab = CreateAlignedBuffer(4096);
    Sense *sense;
    unsigned char cdb[MAX_CDB_SIZE];
    DeviceHandle *dh;
@@ -735,14 +735,14 @@ void RawSector(char *arg)
    {  case DATA1:          /* data mode 1 */ 
         cdb[1] = 2<<2; 
 	cdb[9] = 0xb8;    /* we want Sync + Header + User data + EDC/ECC */
-	length=2352; 
+	length=MAX_RAW_TRANSFER_SIZE; 
 	offset=16;
 	break;  
 
       case XA21:           /* xa mode 2 form 1 */
 	cdb[1] = 4<<2; 
 	cdb[9] = 0xf8;
-	length=2352; 
+	length=MAX_RAW_TRANSFER_SIZE; 
 	offset=24;
 	break;  
    }
@@ -779,6 +779,92 @@ void RawSector(char *arg)
    FreeAlignedBuffer(ab);
 }
 
+void RawSector(char *arg)
+{  AlignedBuffer *ab = CreateAlignedBuffer(4096);
+   Sense *sense;
+   unsigned char cdb[MAX_CDB_SIZE];
+   DeviceHandle *dh;
+   gint64 lba;
+   int length=0,status;
+   int offset=16;
+
+   /*** Open the device */
+
+   dh = OpenAndQueryDevice(Closure->device);
+   sense = &dh->sense;
+
+   /*** Only CD can be read in raw mode */
+
+   if(dh->mainType != CD)
+   {  CloseDevice(dh);
+      FreeAlignedBuffer(ab);
+      Stop(_("Raw reading only possible on CD media\n"));
+   }
+
+   /*** Determine sector to show */
+
+   lba =  atoi(arg);
+
+   if(lba < 0 || lba >= dh->sectors)
+   {  CloseDevice(dh);
+      FreeAlignedBuffer(ab);
+      Stop(_("Sector must be in range [0..%lld]\n"),dh->sectors-1);
+   }
+
+   PrintLog(_("Contents of sector %lld:\n\n"),lba);
+
+   /*** Try the raw read */
+
+   memset(cdb, 0, MAX_CDB_SIZE);
+   cdb[0]  = 0xbe;         /* READ CD */
+   switch(dh->subType)     /* Expected sector type */
+   {  case DATA1:          /* data mode 1 */ 
+        cdb[1] = 2<<2; 
+	cdb[9] = 0xba;    /* we want Sync + Header + User data + EDC/ECC + C2 */
+	length=2646; 
+	offset=16;
+	break;  
+
+      case XA21:           /* xa mode 2 form 1 */
+	cdb[1] = 4<<2; 
+	cdb[9] = 0xf8;
+	length=MAX_RAW_TRANSFER_SIZE; 
+	offset=24;
+	break;  
+   }
+
+   cdb[2]  = (lba >> 24) & 0xff;
+   cdb[3]  = (lba >> 16) & 0xff;
+   cdb[4]  = (lba >>  8) & 0xff;
+   cdb[5]  = lba & 0xff;
+   cdb[6]  = 0;        /* number of sectors to read (3 bytes) */
+   cdb[7]  = 0;  
+   cdb[8]  = 1;        /* read nsectors */
+
+   cdb[10] = 0;        /* reserved stuff */
+   cdb[11] = 0;        /* no special wishes for the control byte */
+
+   memcpy(ab->buf, Closure->deadSector, 2048);
+   status = SendPacket(dh, cdb, 12, ab->buf, length, sense, DATA_READ);
+#if 0
+   if(status<0)  /* Read failed */
+   {  RememberSense(sense->sense_key, sense->asc, sense->ascq);
+      CloseDevice(dh);
+      FreeAlignedBuffer(ab);
+      Stop("Sector read failed: %s\n", GetLastSenseString(FALSE));
+   }
+   else  
+#endif
+   {  if(Closure->debugCDump)
+         CDump(ab->buf, lba, length, 16);
+     else 
+     {   HexDump(ab->buf, length, 32);
+         g_printf("CRC32 = %04x\n", Crc32(ab->buf+offset, 2048));
+     }
+   }
+
+   FreeAlignedBuffer(ab);
+}
 
 /***
  *** Send a CDB to the drive and report what happens

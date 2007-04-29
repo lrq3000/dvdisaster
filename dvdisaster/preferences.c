@@ -110,6 +110,7 @@ typedef struct _prefs_context
    color_button_info *redTextA, *redTextB;
    color_button_info *greenTextA, *greenTextB;
    color_button_info *barColorA, *barColorB;
+   color_button_info *logColorA, *logColorB;
    color_button_info *curveColorA, *curveColorB;
 
    non_linear_info *jumpScaleInfoA, *jumpScaleInfoB;
@@ -162,6 +163,8 @@ void FreePreferences(void *context)
    if(pc->greenTextB) g_free(pc->greenTextB);
    if(pc->barColorA) g_free(pc->barColorA);
    if(pc->barColorB) g_free(pc->barColorB);
+   if(pc->logColorA) g_free(pc->logColorA);
+   if(pc->logColorB) g_free(pc->logColorB);
    if(pc->curveColorA) g_free(pc->curveColorA);
    if(pc->curveColorB) g_free(pc->curveColorB);
 
@@ -330,6 +333,7 @@ enum
    COLOR_RED_TEXT,
    COLOR_GREEN_TEXT,
    COLOR_BAR,
+   COLOR_LOG,
    COLOR_CURVE
 };
 
@@ -689,6 +693,10 @@ static void color_ok_cb(GtkWidget *widget, gpointer data)
 	 update_color_buttons(pc->barColorA, pc->barColorB, TRUE);
 	 break;
 
+      case COLOR_LOG:
+	 update_color_buttons(pc->logColorA, pc->logColorB, TRUE);
+	 break;
+
       case COLOR_CURVE:
 	 update_color_buttons(pc->curveColorA, pc->curveColorB, TRUE);
 	 break;
@@ -736,6 +744,7 @@ static void default_color_cb(GtkWidget *widget, gpointer data)
    update_color_buttons(pc->redTextA, pc->redTextB, FALSE);
    update_color_buttons(pc->greenTextA, pc->greenTextB, FALSE);
    update_color_buttons(pc->barColorA, pc->barColorB, FALSE);
+   update_color_buttons(pc->logColorA, pc->logColorB, FALSE);
    update_color_buttons(pc->curveColorA, pc->curveColorB, TRUE);
 }
 
@@ -1264,7 +1273,7 @@ void CreatePreferencesWindow(void)
 {  
    if(!Closure->prefsWindow)  /* No window to reuse? */
    {  GtkWidget *window, *outer_box, *notebook, *space;
-      GtkWidget *hbox, *vbox, *vbox2, *button, *frame, *table;
+      GtkWidget *hbox, *vbox, *vbox2, *vbox3, *button, *frame, *table;
       GtkWidget *lab;
 #if GTK_MINOR_VERSION < 4
       GtkWidget *option_menu_strip;
@@ -2427,19 +2436,25 @@ void CreatePreferencesWindow(void)
 
       vbox = create_page(notebook, _utf("Appearance"));
 
-      /** Color scheme */
+      /** Color scheme
+          Using a table gives better control over spacing between the frames. */
 
-      table = gtk_table_new(2,4, FALSE);
+      table = gtk_table_new(2, 4, FALSE);
       gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 0);
 
+      vbox3 = gtk_vbox_new(FALSE, 0);
+      gtk_table_attach(GTK_TABLE(table), vbox3, 
+		       0, 1, 0, 3, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 5, 5);
+
       frame = gtk_frame_new(_utf("Sector coloring"));
-      gtk_table_attach(GTK_TABLE(table), frame, 
-		       0, 1, 0, 4, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 5, 5);
+      gtk_box_pack_start(GTK_BOX(vbox3), frame, FALSE, FALSE, 0);
+
+      gtk_box_pack_start(GTK_BOX(vbox3), gtk_label_new(NULL), TRUE, TRUE, 0);
 
       vbox2 = gtk_vbox_new(FALSE, 20);
       gtk_container_set_border_width(GTK_CONTAINER(vbox2), 10);
       gtk_container_add(GTK_CONTAINER(frame), vbox2);
-
+ 
       /* Green color */
 
       lwoh = CreateLabelWithOnlineHelp(_("Good sectors"), _("Good sector"));
@@ -2723,6 +2738,37 @@ void CreatePreferencesWindow(void)
 		         "The reading speed curve, its left side and top labels "
 			 "are printed in this color."));
 
+      /* Logarithmic scale (C2 errors) */
+
+      lwoh = CreateLabelWithOnlineHelp(_("C2 errors"), _("C2 errors"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox  = gtk_hbox_new(FALSE, 4);
+	 color_button_info *cbi;
+
+	 cbi = create_color_button(Closure->logColor, COLOR_LOG);
+	 gtk_box_pack_start(GTK_BOX(hbox), cbi->button, FALSE, FALSE, 0);
+
+	 if(!i)
+	 {  gtk_box_pack_start(GTK_BOX(hbox), lwoh->linkBox, FALSE, FALSE, 0);
+	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	    pc->logColorA = cbi;
+	 }
+	 else
+	 {  
+	    gtk_box_pack_start(GTK_BOX(hbox), lwoh->normalLabel, FALSE, FALSE, 0);
+	    AddHelpWidget(lwoh, hbox);
+	    pc->logColorB = cbi;
+	 }
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>C2 error color</b>\n\n"
+		         "The logarithmic bar graph showing the C2 errors "
+			 "is rendered in this color during the \"read\" "
+			 "and \"scan\" operations."));
+
       /* Error correction load */
 
       lwoh = CreateLabelWithOnlineHelp(_("Error correction load"), _("Error correction load"));
@@ -2754,16 +2800,16 @@ void CreatePreferencesWindow(void)
 			 "is rendered in this color during the \"Fix\" operation."));
 
       /* Padding space */
-
+#if 0
       lab = gtk_label_new("");
       gtk_table_attach(GTK_TABLE(table), lab, 
 		       1, 2, 2, 3, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 5, 5);
-
+#endif
       /* Default color scheme */
 
       button = gtk_button_new_with_label(_utf("Default color scheme"));
       gtk_table_attach(GTK_TABLE(table), button, 
-		       1, 2, 3, 4, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 5, 5);
+		       1, 2, 2, 3, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 5, 5);
 
       g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(default_color_cb), NULL);
 

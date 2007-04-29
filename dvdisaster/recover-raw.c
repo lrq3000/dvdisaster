@@ -86,6 +86,8 @@ RawBuffer *CreateRawBuffer(int sample_length)
    rb->rawBuf    = g_malloc(Closure->maxReadAttempts * sizeof(unsigned char*));
    rb->recovered = g_malloc(sample_length);
    rb->byteState = g_malloc(sample_length);
+   rb->byteCount = g_malloc(sample_length);
+   rb->reference = g_malloc(sample_length);
 
    for(i=0; i<Closure->maxReadAttempts; i++)
    {  rb->rawBuf[i] = g_malloc(sample_length);
@@ -226,6 +228,8 @@ void FreeRawBuffer(RawBuffer *rb)
    g_free(rb->rawBuf);
    g_free(rb->recovered);
    g_free(rb->byteState);
+   g_free(rb->byteCount);
+   g_free(rb->reference);
    g_free(rb);
 }
 
@@ -288,10 +292,12 @@ int CheckMSF(unsigned char *frame, int lba)
 static unsigned char sync_pattern[12] = 
 { 0, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 0 };
 
-void InitializeCDFrame(unsigned char *cd_frame, int sector)
+void InitializeCDFrame(unsigned char *cd_frame, int sector, 
+		       int xa_mode, int reinitialize)
 {  unsigned char minute, second, frame;
 
-   memset(cd_frame, 0, 2352);  /* defensive programming */
+   if(!reinitialize)
+      memset(cd_frame, 0, MAX_RAW_TRANSFER_SIZE);  /* defensive programming */
 
    /* 12 sync bytes 0x00, 0xff, 0xff, ..., 0xff, 0xff, 0x00 */
 
@@ -307,6 +313,9 @@ void InitializeCDFrame(unsigned char *cd_frame, int sector)
    /* Data mode */
    
    cd_frame[15] = 0x01;
+
+   if(!xa_mode)
+      memset(&(cd_frame[2068]), 0, 8); /* data tracks have always 8 zero bytes here */
 }
 
 /*
@@ -464,7 +473,6 @@ static int simple_lec(RawBuffer *rb, unsigned char *frame, char *msg)
    return 0;
 }
 
-
 /***
  *** Validate CD raw sector
  ***/
@@ -486,7 +494,7 @@ int ValidateRawSector(RawBuffer *rb, unsigned char *frame, char *msg)
       e.g. that it does not pass through data when the drive 
       signalled an error. */
 
-   if(!memcmp(frame, rb->zeroSector, 2352))
+   if(!memcmp(frame, rb->zeroSector, rb->sampleSize))
    {  RememberSense(3, 255, 5); /* zero sector */
       return FALSE;
    }
@@ -744,7 +752,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
       e.g. that it does not pass through data when the drive 
       signalled an error. */
 
-   if(!memcmp(new_frame, rb->zeroSector, 2352))
+   if(!memcmp(new_frame, rb->zeroSector, rb->sampleSize))
    {  RememberSense(3, 255, 5); /* zero sector */
       return -1;
    }
@@ -800,17 +808,40 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
 
    /* Incremental update of our data */
 
+   UpdateByteCounts(rb);
    CalculatePQLoad(rb);
    UpdatePQParityList(rb, new_frame);
 
    /* The actual heuristics */
 
-   SearchPlausibleSector(rb);
+   SearchPlausibleSector(rb, 0);
 
    if(CheckEDC(rb->recovered, rb->xaMode)
       && CheckMSF(rb->recovered, rb->lba))
    {  PrintCLIorLabel(Closure->status, 
-		      "Sector %lld: Recovered in raw reader by plausible sector search.\n",
+		      "Sector %lld: Recovered in raw reader by plausible sector search (0).\n",
+		      rb->lba);
+      memcpy(outbuf, rb->recovered+rb->dataOffset, 2048);
+      return 0; 
+   }
+
+   BruteForceSearchPlausibleSector(rb);
+
+   if(CheckEDC(rb->recovered, rb->xaMode)
+      && CheckMSF(rb->recovered, rb->lba))
+   {  PrintCLIorLabel(Closure->status, 
+		      "Sector %lld: Recovered in raw reader by brute force plausible sector search (0).\n",
+		      rb->lba);
+      memcpy(outbuf, rb->recovered+rb->dataOffset, 2048);
+      return 0; 
+   }
+
+   AckHeuristic(rb);
+
+   if(CheckEDC(rb->recovered, rb->xaMode)
+      && CheckMSF(rb->recovered, rb->lba))
+   {  PrintCLIorLabel(Closure->status, 
+		      "Sector %lld: Recovered in raw reader by mutual ack heuristic (0).\n",
 		      rb->lba);
       memcpy(outbuf, rb->recovered+rb->dataOffset, 2048);
       return 0; 
@@ -821,7 +852,51 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
    if(CheckEDC(rb->recovered, rb->xaMode)
       && CheckMSF(rb->recovered, rb->lba))
    {  PrintCLIorLabel(Closure->status, 
-		      "Sector %lld: Recovered in raw reader by heuristic L-EC.\n",
+		      "Sector %lld: Recovered in raw reader by heuristic L-EC (0).\n",
+		      rb->lba);
+      memcpy(outbuf, rb->recovered+rb->dataOffset, 2048);
+      return 0; 
+   }
+
+   SearchPlausibleSector(rb, 1);
+
+   if(CheckEDC(rb->recovered, rb->xaMode)
+      && CheckMSF(rb->recovered, rb->lba))
+   {  PrintCLIorLabel(Closure->status, 
+		      "Sector %lld: Recovered in raw reader by plausible sector search (1).\n",
+		      rb->lba);
+      memcpy(outbuf, rb->recovered+rb->dataOffset, 2048);
+      return 0; 
+   }
+
+   BruteForceSearchPlausibleSector(rb);
+
+   if(CheckEDC(rb->recovered, rb->xaMode)
+      && CheckMSF(rb->recovered, rb->lba))
+   {  PrintCLIorLabel(Closure->status, 
+		      "Sector %lld: Recovered in raw reader by brute force plausible sector search (1).\n",
+		      rb->lba);
+      memcpy(outbuf, rb->recovered+rb->dataOffset, 2048);
+      return 0; 
+   }
+
+   AckHeuristic(rb);
+
+   if(CheckEDC(rb->recovered, rb->xaMode)
+      && CheckMSF(rb->recovered, rb->lba))
+   {  PrintCLIorLabel(Closure->status, 
+		      "Sector %lld: Recovered in raw reader by mutual ack heuristic (1).\n",
+		      rb->lba);
+      memcpy(outbuf, rb->recovered+rb->dataOffset, 2048);
+      return 0; 
+   }
+
+   HeuristicLEC(rb->recovered, rb, outbuf);
+
+   if(CheckEDC(rb->recovered, rb->xaMode)
+      && CheckMSF(rb->recovered, rb->lba))
+   {  PrintCLIorLabel(Closure->status, 
+		      "Sector %lld: Recovered in raw reader by heuristic L-EC (1).\n",
 		      rb->lba);
       memcpy(outbuf, rb->recovered+rb->dataOffset, 2048);
       return 0; 
