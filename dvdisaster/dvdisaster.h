@@ -604,6 +604,7 @@ typedef struct _LabelWithOnlineHelp
    GtkWidget *linkBox;
    GtkWidget *linkLabel;
    GtkWidget *vbox;
+   GPtrArray *lastSizes;  /* for breaking expose loops between the help windows */
   
    char *windowTitle;
    char *normalText;

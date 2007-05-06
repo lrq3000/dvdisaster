@@ -22,6 +22,31 @@
 #include "dvdisaster.h"
 
 /***
+ *** debugging workaround
+ ***/
+
+#if 0
+#define gtk_widget_set_sensitive(widget, state) {  printf("%s, line %d - gtk_widget_set_sensitive()\n", __FILE__, __LINE__); gtk_widget_set_sensitive(widget, state); }
+#endif
+
+/***
+ *** Protected widget mutators
+ ***
+ * We might habe some race conditions where a callback tries to change
+ * a not yet initialized widget.
+ */
+
+static void activate_toggle_button(GtkToggleButton *toggle, int state)
+{  if(toggle)
+      gtk_toggle_button_set_active(toggle, state);
+}
+
+static void set_widget_sensitive(GtkWidget *widget, int state)
+{  if(widget)
+      gtk_widget_set_sensitive(widget, state);
+}
+
+/***
  *** Local data structs
  ***/
 
@@ -88,6 +113,8 @@ typedef struct _prefs_context
    GtkWidget *internalAttemptsA, *internalAttemptsB;
    GtkWidget *radioRawMode20A, *radioRawMode20B;
    GtkWidget *radioRawMode21A, *radioRawMode21B;
+   GtkWidget *radioRawModeOtherA, *radioRawModeOtherB;
+   GtkWidget *rawModeValueA, *rawModeValueB;
    GtkWidget *fatalSenseA, *fatalSenseB;
    GtkWidget *ejectA, *ejectB;
    GtkWidget *readAndCreateButtonA, *readAndCreateButtonB;
@@ -130,6 +157,7 @@ void FreePreferences(void *context)
 
       FreeLabelWithOnlineHelp(lwoh);
    }
+   g_ptr_array_free(pc->helpPages, FALSE);
 
    if(pc->formatLinear) g_free(pc->formatLinear);
    if(pc->formatAdaptive) g_free(pc->formatAdaptive);
@@ -225,6 +253,33 @@ void HidePreferences(void)
    }
    PrepareDeadSector();
 
+   /* Get raw reading mode */
+
+   if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pc->radioRawModeOtherA)))   
+   {  const char *value1 = gtk_entry_get_text(GTK_ENTRY(pc->rawModeValueA));
+      const char *value2 = gtk_entry_get_text(GTK_ENTRY(pc->rawModeValueB));
+      int v1 = strtol(value1, NULL, 0);
+      int v2 = strtol(value2, NULL, 0);
+
+      /* both fields may contain different values */
+
+      if(Closure->rawMode != v2)
+      {  Closure->rawMode = v2;
+ 	 gtk_entry_set_text(GTK_ENTRY(pc->rawModeValueA), value2);
+      }
+      else
+	if(Closure->rawMode != v1)
+	{  Closure->rawMode = v1;
+	   gtk_entry_set_text(GTK_ENTRY(pc->rawModeValueB), value1);
+	}
+
+      if(Closure->rawMode < 0)
+	Closure->rawMode = 0;
+
+      if(Closure->rawMode > 255)
+	Closure->rawMode = 255;
+   }
+
    /* Get defective sector cache prefix.
       Both entries might contain different input. */
 
@@ -273,14 +328,14 @@ void UpdatePrefsQuerySize(void)
 
    if(Closure->prefsContext)
      switch(Closure->querySize)
-     {  case 0: gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioDriveA), TRUE); 
-	        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioDriveB), TRUE); 
+     {  case 0: activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioDriveA), TRUE); 
+	        activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioDriveB), TRUE); 
 	        break;
-        case 1: gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioISOA), TRUE);
-	        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioISOB), TRUE);
+        case 1: activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioISOA), TRUE);
+	        activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioISOB), TRUE);
 	        break;
-        case 2: gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioECCA), TRUE);
-	        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioECCB), TRUE);
+        case 2: activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioECCA), TRUE);
+	        activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioECCB), TRUE);
 	        break;
      }
 }
@@ -307,8 +362,9 @@ enum
    TOGGLE_2GB,
    TOGGLE_RANGE,
    TOGGLE_RAW,
-   TOGGLE_RAW20,
-   TOGGLE_RAW21,
+   TOGGLE_RAW_20H,
+   TOGGLE_RAW_21H,
+   TOGGLE_RAW_OTHER,
    TOGGLE_CACHE_DEFECTIVE,
    TOGGLE_CANCEL_OK,
    TOGGLE_FATAL_SENSE,
@@ -365,16 +421,16 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
    switch(action)
    {  case TOGGLE_READ_CREATE:
 	Closure->readAndCreate = state;
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->readAndCreateButtonA), state);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->readAndCreateButtonB), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->readAndCreateButtonA), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->readAndCreateButtonB), state);
 	if(state && Closure->adaptiveRead)  /* set reading strategy to linear */
 	{  prefs_context *pc = Closure->prefsContext;
 
 	   Closure->adaptiveRead = FALSE;
 	   pc->jumpScaleInfoA->format = pc->formatLinear;
 	   pc->jumpScaleInfoB->format = pc->formatLinear;
-	   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioLinearA), TRUE);
-	   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioLinearB), TRUE);
+	   activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioLinearA), TRUE);
+	   activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioLinearB), TRUE);
 
 	   ShowMessage(Closure->prefsWindow,
 		       _("Switched to the linear reading strategy."), 
@@ -385,93 +441,110 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 
       case TOGGLE_UNLINK:
 	Closure->unlinkImage = state;
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->unlinkImageButtonA), state);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->unlinkImageButtonB), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->unlinkImageButtonA), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->unlinkImageButtonB), state);
 	break;
 
       case TOGGLE_SUFFIX:
 	Closure->autoSuffix = state;
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->suffixA), state);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->suffixB), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->suffixA), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->suffixB), state);
 	break;
 
       case TOGGLE_CACHE_DEFECTIVE:
 	Closure->defectiveDump = state;
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->cacheDefectiveA), state);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->cacheDefectiveB), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->cacheDefectiveA), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->cacheDefectiveB), state);
 	break;
 
       case TOGGLE_LOGFILE:
 	Closure->logFileEnabled = state;
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->logFileA), state);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->logFileB), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->logFileA), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->logFileB), state);
 	break;
 
       case TOGGLE_CANCEL_OK:
 	Closure->reverseCancelOK = state;
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->cancelOKA), state);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->cancelOKB), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->cancelOKA), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->cancelOKB), state);
 	break;
 
       case TOGGLE_DAO:
 	Closure->noTruncate = state;
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->daoButtonA), state);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->daoButtonB), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->daoButtonA), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->daoButtonB), state);
 	break;
 
       case TOGGLE_2GB:
 	Closure->splitFiles = state;
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->splitA), state);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->splitB), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->splitA), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->splitB), state);
 	break;
 
       case TOGGLE_RAW:
 	Closure->readRaw = state;
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->rawButtonA), state);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->rawButtonB), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->rawButtonA), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->rawButtonB), state);
 	break;
 
       case TOGGLE_FATAL_SENSE:
 	Closure->ignoreFatalSense = state;
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->fatalSenseA), state);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->fatalSenseB), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->fatalSenseA), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->fatalSenseB), state);
 	break;
 
       case TOGGLE_EJECT:
 	Closure->eject = state;
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->ejectA), state);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->ejectB), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->ejectA), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->ejectB), state);
 	break;
 
-      case TOGGLE_RAW20:
+      case TOGGLE_RAW_20H:
 	if(state)
 	{  Closure->rawMode = 0x20;
-	   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioRawMode20A), state);
-	   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioRawMode20B), state);
+	   activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioRawMode20A), state);
+	   activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioRawMode20B), state);
+	   set_widget_sensitive(pc->rawModeValueA, FALSE);
+      	   set_widget_sensitive(pc->rawModeValueB, FALSE);
+	   gtk_entry_set_text(GTK_ENTRY(pc->rawModeValueA), "0x20");
+	   gtk_entry_set_text(GTK_ENTRY(pc->rawModeValueB), "0x20");
 	}
 	break;
 
-      case TOGGLE_RAW21:
+      case TOGGLE_RAW_21H:
 	if(state)
 	{  Closure->rawMode = 0x21;
-	   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioRawMode21A), state);
-	   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioRawMode21B), state);
+	   activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioRawMode21A), state);
+	   activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioRawMode21B), state);
+	   set_widget_sensitive(pc->rawModeValueA, FALSE);
+	   set_widget_sensitive(pc->rawModeValueB, FALSE);
+	   gtk_entry_set_text(GTK_ENTRY(pc->rawModeValueA), "0x21");
+	   gtk_entry_set_text(GTK_ENTRY(pc->rawModeValueB), "0x21");
+	}
+	break;
+
+      case TOGGLE_RAW_OTHER:
+	if(state)
+	{  activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioRawModeOtherA), state);
+	   activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioRawModeOtherB), state);
+	   set_widget_sensitive(pc->rawModeValueA, TRUE);
+      	   set_widget_sensitive(pc->rawModeValueB, TRUE);
 	}
 	break;
 
       case TOGGLE_VERBOSE:
 	Closure->verbose = state;
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->verboseA), state);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->verboseB), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->verboseA), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->verboseB), state);
 	break;
 
       case TOGGLE_RANGE:
       {  int image_size = CurrentImageSize() - 1;
 
-	 gtk_widget_set_sensitive(pc->rangeSpin1A, state);
-	 gtk_widget_set_sensitive(pc->rangeSpin1B, state);
-	 gtk_widget_set_sensitive(pc->rangeSpin2A, state);
-	 gtk_widget_set_sensitive(pc->rangeSpin2B, state);
+	 set_widget_sensitive(pc->rangeSpin1A, state);
+	 set_widget_sensitive(pc->rangeSpin1B, state);
+	 set_widget_sensitive(pc->rangeSpin2A, state);
+	 set_widget_sensitive(pc->rangeSpin2B, state);
 
 	 gtk_spin_button_set_value(GTK_SPIN_BUTTON(pc->rangeSpin1A), 0.0);
 	 gtk_spin_button_set_value(GTK_SPIN_BUTTON(pc->rangeSpin1B), 0.0);
@@ -489,8 +562,8 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 	    gtk_spin_button_set_value(GTK_SPIN_BUTTON(pc->rangeSpin2B), 0.1);
 	 }
 
-	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->rangeToggleA), state);
-	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->rangeToggleB), state);
+	 activate_toggle_button(GTK_TOGGLE_BUTTON(pc->rangeToggleA), state);
+	 activate_toggle_button(GTK_TOGGLE_BUTTON(pc->rangeToggleB), state);
       }
 	break;
    }
@@ -920,23 +993,23 @@ static void imgsize_cb(GtkWidget *widget, gpointer data)
    switch(selection)
    {  case 0:
         if(pc->radioDriveA)
-          gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioDriveA), TRUE); 
+          activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioDriveA), TRUE); 
         if(pc->radioDriveB)
-          gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioDriveB), TRUE); 
+          activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioDriveB), TRUE); 
 	break;
 
       case 1:
         if(pc->radioISOA)
-          gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioISOA), TRUE); 
+          activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioISOA), TRUE); 
         if(pc->radioISOB)
-          gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioISOB), TRUE); 
+          activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioISOB), TRUE); 
         break;
 
       case 2:
         if(pc->radioECCA)
-          gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioECCA), TRUE); 
+          activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioECCA), TRUE); 
         if(pc->radioECCB)
-          gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioECCB), TRUE); 
+          activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioECCB), TRUE); 
         break;
    }
 }
@@ -956,22 +1029,22 @@ static void strategy_cb(GtkWidget *widget, gpointer data)
       {  Closure->adaptiveRead = FALSE;
          pc->jumpScaleInfoA->format = pc->formatLinear;
          pc->jumpScaleInfoB->format = pc->formatLinear;
-	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioLinearA), TRUE);
-	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioLinearB), TRUE);
+	 activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioLinearA), TRUE);
+	 activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioLinearB), TRUE);
       }
 
       if(pc->radioAdaptiveA == widget || pc->radioAdaptiveB == widget)
       {  Closure->adaptiveRead = TRUE;
          pc->jumpScaleInfoA->format = pc->formatAdaptive;
          pc->jumpScaleInfoB->format = pc->formatAdaptive;
-	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioAdaptiveA), TRUE);
-	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->radioAdaptiveB), TRUE);
+	 activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioAdaptiveA), TRUE);
+	 activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioAdaptiveB), TRUE);
 
 	 if(Closure->readAndCreate)
 	 {  Closure->readAndCreate = FALSE;
 
-	    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->readAndCreateButtonA), FALSE);
-	    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->readAndCreateButtonB), FALSE);
+	    activate_toggle_button(GTK_TOGGLE_BUTTON(pc->readAndCreateButtonA), FALSE);
+	    activate_toggle_button(GTK_TOGGLE_BUTTON(pc->readAndCreateButtonB), FALSE);
 	    ShowMessage(Closure->prefsWindow,
 			_("Disabled automatic error correction file generation."), 
 			GTK_MESSAGE_INFO);
@@ -986,6 +1059,33 @@ static void strategy_cb(GtkWidget *widget, gpointer data)
       gtk_range_set_value(GTK_RANGE(pc->jumpScaleB), tmp+1.0);
       gtk_range_set_value(GTK_RANGE(pc->jumpScaleB), tmp);
    }
+}
+
+/*
+ * Select the mode page value for raw reading
+ */
+
+static void rawvalue_cb(GtkWidget *widget, gpointer data)
+{  prefs_context *pc = (prefs_context*)data;
+   const char *value = gtk_entry_get_text(GTK_ENTRY(widget));
+   char new_value[11];
+
+   Closure->rawMode = strtol(value, NULL, 0);
+
+   if(Closure->rawMode < 0)
+   {  Closure->rawMode = 0;
+      if(pc->rawModeValueA) gtk_entry_set_text(GTK_ENTRY(pc->rawModeValueA), "0");
+      if(pc->rawModeValueB) gtk_entry_set_text(GTK_ENTRY(pc->rawModeValueB), "0");
+      return;
+   }
+
+   if(Closure->rawMode > 255)
+   {  Closure->rawMode = 255;
+   }
+
+   g_snprintf(new_value, 10, "0x%02x", Closure->rawMode);
+   if(pc->rawModeValueA) gtk_entry_set_text(GTK_ENTRY(pc->rawModeValueA), new_value);
+   if(pc->rawModeValueB) gtk_entry_set_text(GTK_ENTRY(pc->rawModeValueB), new_value);
 }
 
 /*
@@ -1011,7 +1111,6 @@ static void bytefill_cb(GtkWidget *widget, gpointer data)
    }
 
    g_snprintf(byte, 10, "0x%02x", Closure->fillUnreadable);
-
    if(pc->byteEntryA) gtk_entry_set_text(GTK_ENTRY(pc->byteEntryA), byte);
    if(pc->byteEntryB) gtk_entry_set_text(GTK_ENTRY(pc->byteEntryB), byte);
 }
@@ -1022,15 +1121,15 @@ static void bytefill_check_cb(GtkWidget *widget, gpointer data)
    int state  = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
    if(pc->byteCheckA)
-     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->byteCheckA), state);
+     activate_toggle_button(GTK_TOGGLE_BUTTON(pc->byteCheckA), state);
    if(pc->byteCheckB)
-     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pc->byteCheckB), state);
+     activate_toggle_button(GTK_TOGGLE_BUTTON(pc->byteCheckB), state);
 
    if(state)
    {  char byte[11];
 
-      if(pc->byteEntryA) gtk_widget_set_sensitive(pc->byteEntryA, TRUE);
-      if(pc->byteEntryB) gtk_widget_set_sensitive(pc->byteEntryB, TRUE);
+      if(pc->byteEntryA) set_widget_sensitive(pc->byteEntryA, TRUE);
+      if(pc->byteEntryB) set_widget_sensitive(pc->byteEntryB, TRUE);
 
       if(Closure->fillUnreadable < 0 || Closure->fillUnreadable > 255)
 	 Closure->fillUnreadable = 0xb0;
@@ -1042,8 +1141,8 @@ static void bytefill_check_cb(GtkWidget *widget, gpointer data)
    }
    else
    {  Closure->fillUnreadable = -1;
-      if(pc->byteEntryA) gtk_widget_set_sensitive(pc->byteEntryA, FALSE);
-      if(pc->byteEntryB) gtk_widget_set_sensitive(pc->byteEntryB, FALSE);
+      if(pc->byteEntryA) set_widget_sensitive(pc->byteEntryA, FALSE);
+      if(pc->byteEntryB) set_widget_sensitive(pc->byteEntryB, FALSE);
    }
 }
 
@@ -1125,7 +1224,7 @@ static void cache_defective_dir_cb(GtkWidget *widget, gpointer data)
       /* Hide the file selection parts */
 
       file_list = GTK_FILE_SELECTION(pc->cacheDefectiveChooser)->file_list;
-      gtk_widget_set_sensitive(file_list, FALSE);
+      set_widget_sensitive(file_list, FALSE);
       gtk_widget_hide(GTK_FILE_SELECTION(pc->cacheDefectiveChooser)->selection_entry);
       gtk_entry_set_text(GTK_ENTRY(GTK_FILE_SELECTION(pc->cacheDefectiveChooser)->selection_entry), "");
 #if 0
@@ -1356,9 +1455,9 @@ void CreatePreferencesWindow(void)
 	 gtk_container_add(GTK_CONTAINER(radio3), lab);
 
 	 switch(Closure->querySize)
-	 {  case 0: gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio1), TRUE); break;
-            case 1: gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio2), TRUE); break;
-            case 2: gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio3), TRUE); break;
+	 {  case 0: activate_toggle_button(GTK_TOGGLE_BUTTON(radio1), TRUE); break;
+            case 1: activate_toggle_button(GTK_TOGGLE_BUTTON(radio2), TRUE); break;
+            case 2: activate_toggle_button(GTK_TOGGLE_BUTTON(radio3), TRUE); break;
 	 }
 
 	 if(!i)
@@ -1430,8 +1529,8 @@ void CreatePreferencesWindow(void)
 	 gtk_container_add(GTK_CONTAINER(radio2), lab);
 
 	 if(Closure->adaptiveRead)
-	      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio2), TRUE);
-         else gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio1), TRUE);
+	      activate_toggle_button(GTK_TOGGLE_BUTTON(radio2), TRUE);
+         else activate_toggle_button(GTK_TOGGLE_BUTTON(radio1), TRUE);
 
 	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
 	 else   AddHelpWidget(lwoh, hbox);
@@ -1466,7 +1565,7 @@ void CreatePreferencesWindow(void)
 	 if(!i) pc->rangeSpin1A = spin1;	 
 	 else   pc->rangeSpin1B = spin1;
 	 gtk_entry_set_width_chars(GTK_ENTRY(spin1), 9);
-	 gtk_widget_set_sensitive(spin1, FALSE);
+	 set_widget_sensitive(spin1, FALSE);
 	 g_signal_connect(spin1, "value-changed", G_CALLBACK(read_range_cb), pc);
 	 gtk_box_pack_start(GTK_BOX(hbox), spin1, FALSE, FALSE, 0);
 
@@ -1477,14 +1576,14 @@ void CreatePreferencesWindow(void)
 	 if(!i) pc->rangeSpin2A = spin2;	 
 	 else   pc->rangeSpin2B = spin2;
 	 gtk_entry_set_width_chars(GTK_ENTRY(spin2), 9);
-	 gtk_widget_set_sensitive(spin2, FALSE);
+	 set_widget_sensitive(spin2, FALSE);
 	 g_signal_connect(spin2, "value-changed", G_CALLBACK(read_range_cb), pc);
 	 gtk_box_pack_start(GTK_BOX(hbox), spin2, FALSE, FALSE, 0);
 
 	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
 	 else   AddHelpWidget(lwoh, hbox);
 
-	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(toggle), FALSE);
+	 activate_toggle_button(GTK_TOGGLE_BUTTON(toggle), FALSE);
       }
 
       AddHelpParagraph(lwoh, 
@@ -1520,7 +1619,7 @@ void CreatePreferencesWindow(void)
 	 if(!i) pc->daoButtonA = button;
 	 else   pc->daoButtonB = button;
 
-	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->noTruncate);
+	 activate_toggle_button(GTK_TOGGLE_BUTTON(button), Closure->noTruncate);
 	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_DAO));
 	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
 	 else   AddHelpWidget(lwoh, hbox);
@@ -1576,9 +1675,9 @@ void CreatePreferencesWindow(void)
 	
 	    g_snprintf(value, 10, "0x%02x", Closure->fillUnreadable);
 	    gtk_entry_set_text(GTK_ENTRY(entry), value);
-	    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), TRUE);
+	    activate_toggle_button(GTK_TOGGLE_BUTTON(check), TRUE);
 	 }
-	 else gtk_widget_set_sensitive(entry, FALSE);
+	 else set_widget_sensitive(entry, FALSE);
       }
 
       AddHelpParagraph(lwoh, 
@@ -1661,29 +1760,60 @@ void CreatePreferencesWindow(void)
 
       for(i=0; i<2; i++)
       {  GtkWidget *hbox = gtk_hbox_new(FALSE, 4);
-	 GtkWidget *lab, *radio1, *radio2;
+	 GtkWidget *lab, *radio1, *radio2, *radio3, *entry;
+	 char value[11];
 
 	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
 
 	 radio1 = gtk_radio_button_new(NULL);
 	 if(!i) pc->radioRawMode20A = radio1;
 	 else   pc->radioRawMode20B = radio1;
-	 g_signal_connect(G_OBJECT(radio1), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_RAW20));
+	 g_signal_connect(G_OBJECT(radio1), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_RAW_20H));
 	 gtk_box_pack_start(GTK_BOX(hbox), radio1, FALSE, FALSE, 0);
-	 lab = gtk_label_new("20h");
+	 lab = gtk_label_new("0x20");
 	 gtk_container_add(GTK_CONTAINER(radio1), lab);
 
 	 radio2 = gtk_radio_button_new_from_widget(GTK_RADIO_BUTTON(radio1));
 	 if(!i) pc->radioRawMode21A = radio2;
 	 else   pc->radioRawMode21B = radio2;
- 	 g_signal_connect(G_OBJECT(radio2), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_RAW21));
+	 g_signal_connect(G_OBJECT(radio2), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_RAW_21H));
 	 gtk_box_pack_start(GTK_BOX(hbox), radio2, FALSE, FALSE, 0);
-	 lab = gtk_label_new("21h");
+	 lab = gtk_label_new("0x21");
 	 gtk_container_add(GTK_CONTAINER(radio2), lab);
 
-	 if(Closure->rawMode == 0x21)
-	      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio2), TRUE);
-         else gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio1), TRUE);
+	 radio3 = gtk_radio_button_new_from_widget(GTK_RADIO_BUTTON(radio2));
+	 if(!i) pc->radioRawModeOtherA = radio3;
+	 else   pc->radioRawModeOtherB = radio3;
+ 	 g_signal_connect(G_OBJECT(radio3), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_RAW_OTHER));
+	 gtk_box_pack_start(GTK_BOX(hbox), radio3, FALSE, FALSE, 0);
+	 lab = gtk_label_new(_("other:"));
+	 gtk_container_add(GTK_CONTAINER(radio3), lab);
+
+	 entry = gtk_entry_new();
+	 g_signal_connect(entry, "activate", G_CALLBACK(rawvalue_cb), pc);
+	 gtk_entry_set_width_chars(GTK_ENTRY(entry), 5);
+	 gtk_box_pack_start(GTK_BOX(hbox), entry, FALSE, FALSE, 0);
+	 if(!i) pc->rawModeValueA = entry;
+	 else   pc->rawModeValueB = entry;
+	
+	 g_snprintf(value, 10, "0x%02x", Closure->rawMode);
+	 gtk_entry_set_text(GTK_ENTRY(entry), value);
+
+	 switch(Closure->rawMode)
+	 {  case 0x20:
+	       activate_toggle_button(GTK_TOGGLE_BUTTON(radio1), TRUE);
+	       set_widget_sensitive(entry, FALSE);
+	       break;
+
+	    case 0x21:
+	       activate_toggle_button(GTK_TOGGLE_BUTTON(radio2), TRUE);
+	       set_widget_sensitive(entry, FALSE);
+	       break;
+
+	    default:
+	       activate_toggle_button(GTK_TOGGLE_BUTTON(radio3), TRUE);
+	       break;
+	 }
 
 	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
 	 else   AddHelpWidget(lwoh, hbox);
@@ -1693,21 +1823,26 @@ void CreatePreferencesWindow(void)
 		       _("<b>Raw reading mode</b>\n\n"
 			 "There are several ways to put the drive into a mode "
 			 "which transfers partially read data from defective sectors:\n\n"
-			 "<b>20h</b> This is the <i>recommended</i> mode. "
+			 "<b>0x20</b> This is the <i>recommended</i> mode. "
 			 "The drive tries to apply "
 			 "the built-in error correction to the best possible extent "
 			 "before transfering a defective sector.\n\n"
-			 "<b>21h</b> In this mode the drive skips the last stage "
+			 "<b>0x21</b> In this mode the drive skips the last stage "
 			 "of its internal error correction and returns the "
 			 "uncorrected sector instead. This may result in sectors "
 			 "being tagged and processed as defective which would come "
 			 "out good in other reading modes, causing unnecessary "
 			 "work or even uncorrectable sectors.\n" 
 			 "However some drives appear to be unable to transfer data "
-			 "in mode 20h, but can do so in mode 21h, so this is your "
+			 "in mode 0x20, but can do so in mode 0x21, so this is your "
 			 "last resort then. Also, if sectors are not recoverable "
-			 "after reading and caching sectors in mode 20h, then adding "
-			 "some mode 21h reads to the cache might deliver additional information."));
+			 "after reading and caching sectors in mode 0x20, then adding "
+			 "some mode 0x21 reads to the cache might deliver additional information.\n\n"
+			 "<b>0x01</b> Some drives do the right thing when given this value, "
+			 "although this makes no sense according to the SCSI specs. Try entering "
+			 "this value in the \"other\" field if the other choices do not work. "
+			 "See the mode page 01h documentation in chapter 6 of MMC3 or later "
+			 "for additional information."));
 
       /* Firmware rereads */
 
@@ -1770,7 +1905,7 @@ void CreatePreferencesWindow(void)
 	 GtkWidget *toggle;
 
 	 toggle = gtk_check_button_new();
-	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(toggle), Closure->ignoreFatalSense);
+	 activate_toggle_button(GTK_TOGGLE_BUTTON(toggle), Closure->ignoreFatalSense);
        	 g_signal_connect(G_OBJECT(toggle), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_FATAL_SENSE));
 	 gtk_box_pack_start(GTK_BOX(hbox), toggle, FALSE, FALSE, 0);
 
@@ -1810,7 +1945,7 @@ void CreatePreferencesWindow(void)
 	 GtkWidget *toggle;
 
 	 toggle = gtk_check_button_new();
-	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(toggle), Closure->eject);
+	 activate_toggle_button(GTK_TOGGLE_BUTTON(toggle), Closure->eject);
        	 g_signal_connect(G_OBJECT(toggle), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_EJECT));
 	 gtk_box_pack_start(GTK_BOX(hbox), toggle, FALSE, FALSE, 0);
 
@@ -1864,7 +1999,7 @@ void CreatePreferencesWindow(void)
  	 if(!i) pc->rawButtonA = button;
 	 else   pc->rawButtonB = button;
 
-         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->readRaw);
+         activate_toggle_button(GTK_TOGGLE_BUTTON(button), Closure->readRaw);
          g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_RAW));
 
 	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
@@ -2121,8 +2256,8 @@ void CreatePreferencesWindow(void)
 	 }
 
 	 if(Closure->readRaw && Closure->defectiveDump)
-	      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
-	 else gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), FALSE);
+	      activate_toggle_button(GTK_TOGGLE_BUTTON(button), TRUE);
+	 else activate_toggle_button(GTK_TOGGLE_BUTTON(button), FALSE);
          g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_CACHE_DEFECTIVE));
 
 	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), table, FALSE, FALSE, 0);
@@ -2314,7 +2449,7 @@ void CreatePreferencesWindow(void)
 	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
 	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
 
-	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->autoSuffix);
+	 activate_toggle_button(GTK_TOGGLE_BUTTON(button), Closure->autoSuffix);
 	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_SUFFIX));
 
 	 if(!i)
@@ -2343,7 +2478,7 @@ void CreatePreferencesWindow(void)
 
 	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
 	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
-	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->splitFiles);
+	 activate_toggle_button(GTK_TOGGLE_BUTTON(button), Closure->splitFiles);
 	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_2GB));
 
 	 if(!i)
@@ -2384,7 +2519,7 @@ void CreatePreferencesWindow(void)
 
 	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
       	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
-	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->readAndCreate);
+	 activate_toggle_button(GTK_TOGGLE_BUTTON(button), Closure->readAndCreate);
 	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_READ_CREATE));
 
 	 if(!i)
@@ -2414,7 +2549,7 @@ void CreatePreferencesWindow(void)
 
 	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
       	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
-	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->unlinkImage);
+	 activate_toggle_button(GTK_TOGGLE_BUTTON(button), Closure->unlinkImage);
 	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_UNLINK));
 
 	 if(!i)
@@ -2828,7 +2963,7 @@ void CreatePreferencesWindow(void)
 	 gtk_container_set_border_width(GTK_CONTAINER(hbox), 10);
 	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
       	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
-	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->reverseCancelOK);
+	 activate_toggle_button(GTK_TOGGLE_BUTTON(button), Closure->reverseCancelOK);
 	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_CANCEL_OK));
 
 	 if(!i)
@@ -2870,7 +3005,7 @@ void CreatePreferencesWindow(void)
 	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
 	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
 
-	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), Closure->verbose);
+	 activate_toggle_button(GTK_TOGGLE_BUTTON(button), Closure->verbose);
 	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_VERBOSE));
 
 	 if(!i)
@@ -2939,8 +3074,8 @@ void CreatePreferencesWindow(void)
 	 }
 
 	 if(Closure->verbose && Closure->logFileEnabled)
-	      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
-	 else gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), FALSE);
+	      activate_toggle_button(GTK_TOGGLE_BUTTON(button), TRUE);
+	 else activate_toggle_button(GTK_TOGGLE_BUTTON(button), FALSE);
          g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_LOGFILE));
 
 	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), table, FALSE, FALSE, 0);

@@ -50,6 +50,21 @@ static gboolean delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
 }
 
 /*
+ * Get a new integer variable from the lastSizes array 
+ */
+
+static int* get_new_int(LabelWithOnlineHelp* lwoh)
+{  int *var = g_malloc0(sizeof(int));
+
+   if(!lwoh->lastSizes)
+      lwoh->lastSizes = g_ptr_array_new();
+
+   g_ptr_array_add(lwoh->lastSizes, var);
+
+   return var;
+}
+
+/*
  * Callback for the help link
  */
 
@@ -186,11 +201,22 @@ void SetOnlineHelpLinkText(LabelWithOnlineHelp *lwoh, char *ascii_text)
 }
 
 void FreeLabelWithOnlineHelp(LabelWithOnlineHelp *lwoh)
-{
-  g_free(lwoh->windowTitle);
-  g_free(lwoh->normalText);
-  g_free(lwoh->highlitText);
-  g_free(lwoh);
+{  
+   if(lwoh->lastSizes)
+   {  int i;
+
+      for(i=0; i<lwoh->lastSizes->len; i++)
+      {  int *var = g_ptr_array_index(lwoh->lastSizes, i);
+
+	 g_free(var);
+      }
+      g_ptr_array_free(lwoh->lastSizes, FALSE);
+   }
+
+   g_free(lwoh->windowTitle);
+   g_free(lwoh->normalText);
+   g_free(lwoh->highlitText);
+   g_free(lwoh);
 }
 
 /*
@@ -198,7 +224,13 @@ void FreeLabelWithOnlineHelp(LabelWithOnlineHelp *lwoh)
  */
 
 static gboolean wrapper_fix_cb(GtkWidget *widget, GdkEventExpose *event, gpointer data)
-{  int label_width = widget->allocation.width;
+{  int *last_width = (int*)data;
+   int label_width = widget->allocation.width;
+   
+   if(*last_width == label_width)  /* short circuit expose events */ 
+      return FALSE;                /* without size changes */
+
+   *last_width = label_width;
 
    /* This is a hack. We feed the label its own allocation to make it redraw.
       Note that we subtract 4 or else the window would never shrink again. */
@@ -232,7 +264,7 @@ void AddHelpParagraph(LabelWithOnlineHelp *lwoh, char *format, ...)
       which is, well, stupid. */ 
 
    gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
-   g_signal_connect(label, "expose_event", G_CALLBACK(wrapper_fix_cb), lwoh);
+   g_signal_connect(label, "expose_event", G_CALLBACK(wrapper_fix_cb), get_new_int(lwoh));
 }
 
 /*
@@ -270,7 +302,7 @@ void AddHelpListItem(LabelWithOnlineHelp *lwoh, char *format, ...)
       which is, well, stupid. */ 
 
    gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
-   g_signal_connect(label, "expose_event", G_CALLBACK(wrapper_fix_cb), lwoh);
+   g_signal_connect(label, "expose_event", G_CALLBACK(wrapper_fix_cb), get_new_int(lwoh));
 }
 
 /*

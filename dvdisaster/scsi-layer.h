@@ -220,9 +220,9 @@ typedef struct _DeviceHandle
    int canReadDefective;      /* TRUE if drive claims to raw read uncorrectable sectors */
    int canC2Scan;             /* TRUE if drive supports C2 error scanning */
    int c2[MAX_CLUSTER_SIZE];  /* C2 errors per sector */
-   int previousReadMode;      /* read mode prior to switching to raw reads */
-   int previousRetries;       /* retries prior to switching */
-   int currentReadMode;       /* current raw read mode */
+   unsigned char previousReadMode;/* read mode prior to switching to raw reads */
+   unsigned char previousRetries; /* retries prior to switching */
+   unsigned char currentReadMode; /* current raw read mode */
    RawBuffer *rawBuffer;      /* for performing raw read analysis */
    int (*read)(struct _DeviceHandle*, unsigned char*, int, int);
    int (*readRaw)(struct _DeviceHandle*, unsigned char*, int, int);
@@ -309,7 +309,7 @@ int  GetMediumFingerprint(DeviceHandle*, guint8*, gint64);
 void CloseDevice(DeviceHandle*);
 
 int InquireDevice(DeviceHandle*, int); 
-int SetRawMode(DeviceHandle*, int);
+void SetRawMode(DeviceHandle*, int);
 
 void SpinupDevice(DeviceHandle*);
 void LoadMedium(struct _DeviceHandle*, int);

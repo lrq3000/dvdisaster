@@ -721,125 +721,24 @@ assume_cd:
    return TRUE;
 }
 
-/*
- * Find out whether the drive can return raw sectors with
- * uncorrected read errors. Depending on override,
- * mode is or'ed with existing flags (override = FALSE),
- * or written over existing flags (override = TRUE). 
- */
-
-int SetRawMode(DeviceHandle *dh, int operator)
-{  AlignedBuffer *ab = CreateAlignedBuffer(2048);
-   unsigned char *buf = ab->buf;
-   Sense sense;
-   unsigned char cdb[16];
-   unsigned char wanted_mode;
-   int pll, ret;
-
-   /*** Read mode page 1 */
-
-   memset(cdb, 0, MAX_CDB_SIZE);
-   cdb[0] = 0x5a;         /* MODE SENSE(10) */
-   cdb[2] = 1;            /* Page code */
-   cdb[8] = 255;          /* Allocation length */
-   ret  = SendPacket(dh, cdb, 10, buf, 255, &sense, DATA_READ);
-
-   if(ret<0) 
-   {  FreeAlignedBuffer(ab);
-      Verbose("\nRead mode page 01h failed: %s\n", 
-	      GetSenseString(sense.sense_key, sense.asc, sense.ascq, 0));
-      return FALSE;
-   }
-
-   Verbose("\nMode page 01h:\n");
-   Verbose("  mode data length = %d\n", buf[0]<<8 | buf[1]);
-   Verbose("  block descriptor length = %d\n", buf[6]<<8 | buf[7]);
-   Verbose("  page byte 0 = %2x\n", buf[8]);
-   Verbose("  page byte 1 = %2x\n", buf[9]);
-   Verbose("  page byte 2 = %2x\n", buf[10]);
-   Verbose("  page byte 3 = %2x\n", buf[11]);
-
-   pll = buf[1] + 2;  /* mode data length + 2 */
-
-   Verbose("  using mode data length %d\n", pll);
-
-   /*** Set new raw reading mode */
-
-   memset(cdb, 0, MAX_CDB_SIZE);
-   cdb[0] = 0x55;         /* MODE SELECT(10) */
-   cdb[1] = 0x10;         /* set page format (PF) bit */
-   cdb[7] = 0;
-   cdb[8] = pll;          /* parameter list length */
-
-   switch(operator)       /* set new read mode */
-   {  case MODE_PAGE_SET:
-	 dh->previousReadMode = buf[10];
-	 dh->previousRetries  = buf[11];
-	 buf[10] |= Closure->rawMode;
-	 if(Closure->internalAttempts >= 0)
-	    buf[11] = Closure->internalAttempts;
-	 break;
-
-      case MODE_PAGE_UNSET:
-	 buf[10] = dh->previousReadMode;
-	 buf[11] = dh->previousRetries;
-	 break;
-   }
-
-   wanted_mode = buf[10];
-
-   ret  = SendPacket(dh, cdb, 10, buf, pll, &sense, DATA_WRITE);
-
-   if(ret<0) 
-   {  FreeAlignedBuffer(ab);
-      Verbose("Setting mode page 01h failed: %s\n", 
-	      GetSenseString(sense.sense_key, sense.asc, sense.ascq, 0));
-      return FALSE;
-   }
-
-   /*** Read mode page 1 back again to make sure it worked */
-       
-   memset(cdb, 0, MAX_CDB_SIZE);
-   memset(buf, 0, pll);
-   cdb[0] = 0x5a;         /* MODE SENSE(10) */
-   cdb[2] = 1;            /* Page code */
-   cdb[8] = pll;          /* Allocation length */
-
-   ret  = SendPacket(dh, cdb, 10, buf, 255, &sense, DATA_READ);
-
-   if(ret<0) 
-   {  FreeAlignedBuffer(ab);
-      Verbose("Reading back mode page 1 failed: %s\n", 
-	      GetSenseString(sense.sense_key, sense.asc, sense.ascq, 0));
-      return FALSE;
-   }
-
-   if(buf[10] != wanted_mode)
-   {  FreeAlignedBuffer(ab);
-      Verbose("Setting raw mode failed: %2x instead of %2x\n", buf[10], wanted_mode);
-      return FALSE;
-   }
-
-   dh->currentReadMode = buf[10];
-   FreeAlignedBuffer(ab);
-   return TRUE;
-}
 
 /*
  * Find out whether the drive can do C2 scans.
- * Done by empirically trying a READ CD; maybe we should examine the drive
- * feature codes instead. 
+ * Done by empirically trying a READ CD; 
+ * maybe we should examine the drive feature codes instead. 
  */
 
-int TestC2Scan(DeviceHandle *dh)
+static void try_c2_scan(DeviceHandle *dh)
 {  Sense *sense = &dh->sense;
    unsigned char cdb[MAX_CDB_SIZE];
    RawBuffer *rb;
    int lba = 0;
    int ret;
-   
+ 
+   dh->canC2Scan = FALSE;
+  
    if(!(rb=dh->rawBuffer))  /* sanity check: No C2 scans without RAW reading */
-      return FALSE;
+      return;
    
    memset(cdb, 0, MAX_CDB_SIZE);
    cdb[0]  = 0xbe;         /* READ CD */
@@ -874,12 +773,167 @@ int TestC2Scan(DeviceHandle *dh)
 
    if(!ret || sense->sense_key != 5)  /* good status or error != illegal request means C2 works */
    {  rb->sampleSize = CD_RAW_C2_SECTOR_SIZE;
-      return TRUE;
+      dh->canC2Scan = TRUE;
+      return;
    }
    else 
    {  rb->sampleSize = CD_RAW_SECTOR_SIZE; 
+      dh->canC2Scan = FALSE;
+      return;
+   }
+}
+
+/*
+ * Find out whether the drive can return raw sectors with
+ * uncorrected read errors. Depending on override,
+ * mode is or'ed with existing flags (override = FALSE),
+ * or written over existing flags (override = TRUE). 
+ */
+
+/*
+ * Read mode page 1 
+ */
+
+static int read_mode_page(DeviceHandle *dh, AlignedBuffer *ab, int *parameter_list_length, 
+			  unsigned char *read_mode, unsigned char *read_retries)
+{  Sense sense;
+   unsigned char cdb[16];
+   unsigned char *buf = ab->buf;
+   int ret;
+
+   memset(cdb, 0, MAX_CDB_SIZE);
+   cdb[0] = 0x5a;         /* MODE SENSE(10) */
+   cdb[2] = 1;            /* Page code */
+   cdb[8] = 255;          /* Allocation length */
+   ret  = SendPacket(dh, cdb, 10, buf, 255, &sense, DATA_READ);
+
+   if(ret<0) 
+   {  FreeAlignedBuffer(ab);
+      Verbose("\nRead mode page 01h failed: %s\n", 
+	      GetSenseString(sense.sense_key, sense.asc, sense.ascq, 0));
       return FALSE;
    }
+
+   Verbose("\nMode page 01h:\n");
+   Verbose("  mode data length = %d\n", buf[0]<<8 | buf[1]);
+   Verbose("  block descriptor length = %d\n", buf[6]<<8 | buf[7]);
+   Verbose("  page byte 0 = %2x\n", buf[8]);
+   Verbose("  page byte 1 = %2x\n", buf[9]);
+   Verbose("  page byte 2 = %2x\n", buf[10]);
+   Verbose("  page byte 3 = %2x\n", buf[11]);
+
+   *parameter_list_length = buf[1] + 2;  /* mode data length + 2 */
+   *read_mode    = buf[10];
+   *read_retries = buf[11];
+
+   Verbose("  using mode data length %d\n", *parameter_list_length);
+   return TRUE;
+}
+
+static int set_mode_page(DeviceHandle *dh, AlignedBuffer *ab, int parameter_list_length, 
+			 unsigned char read_mode, unsigned char read_retries)
+{  Sense sense;
+   unsigned char cdb[16];
+   int ret;
+
+   memset(cdb, 0, MAX_CDB_SIZE);
+   cdb[0]  = 0x55;         /* MODE SELECT(10) */
+   cdb[1]  = 0x10;         /* set page format (PF) bit */
+   cdb[7]  = 0;
+   cdb[8]  = parameter_list_length;
+
+   ab->buf[10] = read_mode;
+   ab->buf[11] = read_retries;
+
+   ret  = SendPacket(dh, cdb, 10, ab->buf, parameter_list_length, &sense, DATA_WRITE);
+
+   if(ret<0) 
+   {  Verbose("Setting mode page 01h to 0x%2x failed: %s\n", read_mode, 
+	      GetSenseString(sense.sense_key, sense.asc, sense.ascq, 0));
+      return FALSE;
+   }
+
+   return TRUE;
+}
+
+void SetRawMode(DeviceHandle *dh, int action)
+{  AlignedBuffer *ab = CreateAlignedBuffer(2048);
+   unsigned char new_read_mode, new_read_retries;
+   unsigned char drive_read_mode, ignore;
+   int pll;
+
+   dh->canReadDefective = FALSE;
+
+   /*** If MODE_PAGE_UNSET, apply the old settings */
+
+   if(action == MODE_PAGE_UNSET)
+   {  unsigned char ignore;
+
+      if(!read_mode_page(dh, ab, &pll, &ignore, &ignore))
+      {  FreeAlignedBuffer(ab);
+	 return;
+      }
+
+      if(!set_mode_page(dh, ab, pll, dh->previousReadMode, dh->previousRetries))
+      {  FreeAlignedBuffer(ab);
+	 return;
+      }
+
+      if(!read_mode_page(dh, ab, &pll, &dh->currentReadMode, &ignore))
+      {  FreeAlignedBuffer(ab);
+	 return;
+      }
+
+      FreeAlignedBuffer(ab);
+      return;
+   }
+
+   /*** Otherwise we have MODE_PAGE_SET. Set new raw reading mode */
+
+   /* Remember current settings */
+
+   if(!read_mode_page(dh, ab, &pll, &dh->previousReadMode, &dh->previousRetries))
+   {  FreeAlignedBuffer(ab);
+      return;
+   }
+
+   /* Try to set the mode page */
+
+   new_read_mode = dh->previousReadMode | Closure->rawMode;
+      
+   if(Closure->internalAttempts >= 0)
+        new_read_retries = Closure->internalAttempts;
+   else new_read_retries = dh->previousRetries;
+
+   Verbose("Trying read mode 0x%02x, %d read attempts.\n",
+	   new_read_mode, new_read_retries);
+
+   if(!set_mode_page(dh, ab, pll, new_read_mode, new_read_retries))
+      goto reset_mode_page;
+	 
+   /* Check if drive accepted the change */
+
+   if(!read_mode_page(dh, ab, &pll, &drive_read_mode, &ignore))
+      goto reset_mode_page;
+
+   if(drive_read_mode != new_read_mode)
+   {  Verbose("Setting raw mode failed: %2x instead of %2x\n", 
+		 drive_read_mode, new_read_mode);
+      goto reset_mode_page;
+   }
+
+   dh->rawBuffer->sampleSize = CD_RAW_SECTOR_SIZE;
+   dh->currentReadMode       = drive_read_mode;
+   dh->canReadDefective      = TRUE;
+   FreeAlignedBuffer(ab);
+   return;
+
+reset_mode_page:
+   Verbose("Resetting mode page 01h.\n");
+   //   set_mode_page(dh, ab, pll, dh->previousReadMode, dh->previousRetries);
+   /* Using the new read retries wont hurt */
+   set_mode_page(dh, ab, pll, dh->previousReadMode, new_read_retries);
+   FreeAlignedBuffer(ab);
 }
 
 /*
@@ -1925,7 +1979,6 @@ DeviceHandle* OpenAndQueryDevice(char *device)
    Verbose("# deciding reading strategy...\n");
    switch(dh->mainType)
    {  case CD:
-        PrintLog(_("Using READ CD"));
 	if(Closure->readRaw)
 	{  dh->rawBuffer = CreateRawBuffer(MAX_RAW_TRANSFER_SIZE);
 
@@ -1935,17 +1988,20 @@ DeviceHandle* OpenAndQueryDevice(char *device)
 	   {  dh->rawBuffer->dataOffset = 24;
 	      dh->rawBuffer->xaMode = TRUE;
 	   }
-	   PrintLog(_(", RAW reading"));
 
-	   dh->canReadDefective = SetRawMode(dh, MODE_PAGE_SET);
+	   SetRawMode(dh, MODE_PAGE_SET);
+	   try_c2_scan(dh);
+
+	   PrintLog(_("Using READ CD"));
+	   PrintLog(_(", RAW reading"));
 
 	   if(dh->canReadDefective)
 	      PrintLog(_(", Mode page 1 ERP = %02xh"), dh->currentReadMode);
 
-	   dh->canC2Scan = TestC2Scan(dh);
 	   if(dh->canC2Scan)
 	      PrintLog(_(", C2 scanning"));
-	}
+
+	} else PrintLog(_("Using READ CD"));
 	PrintLog(".\n");
         break;
 

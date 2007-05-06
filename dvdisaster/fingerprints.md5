@@ -1,10 +1,10 @@
-0ed88b39187219cfe20e29ae0d6810db *dvdisaster.h
+9928b1387c158931cd0b47ae692a7fad *dvdisaster.h
 6dacf6d47cf1338e81391ad12114ecf7 *galois-inlines.h
 c27628ad149e3f8564b24a86642b54b6 *md5.h
 45b9801e2fed70519f003ac787e92cf6 *read-linear.h
 17b5c51de6be5c20d1f22d6bd0affbf8 *rs01-includes.h
 9d8c7940027d25558a267ddd91a65c8d *rs02-includes.h
-b05f4891f93f60b068839d9dd77ad402 *scsi-layer.h
+9a5df50c9fae9f89fd3e1db8182c52d9 *scsi-layer.h
 104098ed1ae2b91d5e8d4989ba89bcd8 *udf.h
 aeadd621d3e9155f1ed08027e6e86ac6 *bitmap.c
 34811eaaff63fdc757087ff59730813c *closure.c
@@ -18,7 +18,7 @@ aeadd621d3e9155f1ed08027e6e86ac6 *bitmap.c
 8e2a58bb4fd49bcf244ea0aab8b7eb1f *endian.c
 3df35ce9f57afc4a070e7ef2a5705777 *file.c
 6a7dde7b17d658573ae62512f93dfa4b *galois.c
-313cf2c09d6b44328544cf2509ae4e41 *help-dialogs.c
+53eca2a39b1f2dce11f15b1fee9b4f08 *help-dialogs.c
 5aa6d387da5c66b4ca9b946bd1152f1a *heuristic-lec.c
 02848c236dbaabd5b728c61ebbeaddde *icon-factory.c
 eb1d678545aefdf81faf9d80407a4111 *large-io.c
@@ -31,7 +31,7 @@ a6bd4bc8e83a3ea62059f06cdccf50d4 *logfile.c
 f5594112248ab75be0bccd025b08537d *method.c
 eecfd7e236c89cc36e1de2062754ac2e *method-link.c
 6dbb83e0092e6a33d7525cbb742872f1 *misc.c
-f7ed602e2afec2c9790a0386337787a9 *preferences.c
+d8a2c1f787e4b84b9c844cd77dfaaec2 *preferences.c
 88f30be2486c7100a7c3124de3e7b37a *print-sense.c
 cdde449dd2a8f64b560ff18a36f86234 *random.c
 65a7dbd0527f9bde919e440c1929ab67 *raw-sector-cache.c
@@ -52,7 +52,7 @@ e45bedaa2391cf0c53b252f0e50930ea *rs02-verify.c
 7620f88d667ddb9367a9e6d02bd6a3fe *rs02-window.c
 602d7000576b5f268cb8a1f5dc840cfa *scsi-darwin.c
 7bf6272f2ab6806afc17819b565b22dd *scsi-freebsd.c
-f49bfda86a2cbe05993d45b1f8e915ae *scsi-layer.c
+c08f9ab27630f5d1cdd9316cff47d0f9 *scsi-layer.c
 88820284732f0b7206d8c18813f7041f *scsi-linux.c
 3da13d70262d4823ac85f549b8b9575d *scsi-netbsd.c
 3620918c8a3ef19fdf3ff6a8e0ff0314 *scsi-solaris.c
@@ -64,5 +64,5 @@ b13d943bd7c73d01fe6e11f322265bd6 *scsi-win32.c
 169bb0bf06d58bda1241eba74d3ad8b8 *welcome-window.c
 627acedc2b070fc96081b12780f316ae *documentation/create.bash
 f7e75ca262533e10822bf26d8029a8ed *documentation/create-cs.bash
-4cf3cc228f3e751268931db535daafaf *documentation/create-de.bash
-66256277502c0d0118d0e8248981b55a *documentation/create-en.bash
+8af06dbf728083b2655da788ae161a01 *documentation/create-de.bash
+1c0db48bbecb256fedee638b5d4dfadc *documentation/create-en.bash

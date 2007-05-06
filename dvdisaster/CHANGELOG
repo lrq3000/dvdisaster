@@ -1,8 +1,10 @@
 
-0.71 (devel-23)
-	- added Bernd Hellers umount patch for MacOS
+0.71 (devel-23) 06-05-2007
 	- started C2 scanning support for CD media
+	- added Bernd Hellers umount patch for MacOS
 	- Andrei did it again and provided improved RAW recovery heuristics :-)
+	- fixed expose event loop within preferences
+	- fixed widget mutator race conditions within preferences
 
 0.71 (devel-22) 22-04-2007
 	- added Russian translation from Igor Gorbounov

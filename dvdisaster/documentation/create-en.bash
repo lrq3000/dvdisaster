@@ -1898,6 +1898,27 @@ and wait for the release of version 0.72.
 The alpha versions use the same package format as the regular releases.<p>
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
+<tr><td><b>dvdisaster-0.71 (devel23)</b></td><td align="right">06-May-2007</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+  <table>
+    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel23.tar.bz2?download">dvdisaster-0.71.devel23.tar.bz2</a></td></tr>
+    <tr><td align="right">Digital signature:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel23.tar.bz2.gpg?download">dvdisaster-0.71.devel23.tar.bz2.gpg</a></td></tr>
+    <tr><td align="right">Binary for Windows:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel23-setup.exe?download">dvdisaster-0.71.devel23-setup.exe</a></td></tr>
+    <tr><td align="right">Digital signature:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel23-setup.exe.gpg?download">dvdisaster-0.71.devel23-setup.exe.gpg</a></td></tr>
+  </table>
+</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+Added support for C2 scanning of CD media.<br>
+Andrei Grecu submitted improved versions of the RAW recovery heuristics.
+</td></tr></table><p>
+
+<table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.71 (devel22)</b></td><td align="right">22-Apr-2007</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
@@ -3581,8 +3602,7 @@ function imprint0en()
    <a href="http://www.dvdisaster.com">www.dvdisaster.com</a>, &nbsp;
    <a href="http://www.dvdisaster.de">www.dvdisaster.de</a>, &nbsp;
    <a href="http://www.dvdisaster.org">www.dvdisaster.org</a><br>
-   and under the subdomains
-   <a href="http://dvdisaster.berlios.de">dvdisaster.berlios.de</a> and
+   and under the subdomain
    <a href="http://dvdisaster.sourceforge.net">dvdisaster.sourceforge.net</a>.
 
 EOF
