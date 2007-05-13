@@ -53,7 +53,7 @@ e45bedaa2391cf0c53b252f0e50930ea *rs02-verify.c
 7620f88d667ddb9367a9e6d02bd6a3fe *rs02-window.c
 602d7000576b5f268cb8a1f5dc840cfa *scsi-darwin.c
 7bf6272f2ab6806afc17819b565b22dd *scsi-freebsd.c
-4f2e55201d59bb00d77f53782e9c0410 *scsi-layer.c
+8a425260b432de8d149b1457a240e2e0 *scsi-layer.c
 88820284732f0b7206d8c18813f7041f *scsi-linux.c
 3da13d70262d4823ac85f549b8b9575d *scsi-netbsd.c
 3620918c8a3ef19fdf3ff6a8e0ff0314 *scsi-solaris.c

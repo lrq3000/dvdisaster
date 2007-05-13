@@ -66,7 +66,7 @@ void FreeAlignedBuffer(AlignedBuffer *ab)
 int InquireDevice(DeviceHandle *dh, int probe_only)
 {  AlignedBuffer *ab = CreateAlignedBuffer(2048);
    Sense sense;
-   unsigned char *ibuf,*vbuf;
+   char *ibuf,*vbuf;
    unsigned char cmd[MAX_CDB_SIZE];
    unsigned char device_type;
 
@@ -104,11 +104,11 @@ int InquireDevice(DeviceHandle *dh, int probe_only)
       for(i=0,j=8; j<36; j++)   
       {  if(j==32) 
 	 {  vidx = i;
-	    if(i>0 && !isspace(ibuf[i-1])) /* separate the version string */
+	    if(i>0 && !isspace((int)ibuf[i-1])) /* separate the version string */
 	      ibuf[i++] = ' ';
 	 }
          if(   isprint(ab->buf[j])         /* eliminate multiple spaces and unprintables */
-            && (!isspace(ab->buf[j]) || (i>0 && !isspace(ibuf[i-1]))))
+	       && (!isspace(ab->buf[j]) || (i>0 && !isspace((int)ibuf[i-1]))))
 	 {    vbuf[i] = ab->buf[j];
 	      ibuf[i++] = ab->buf[j];
 	 }

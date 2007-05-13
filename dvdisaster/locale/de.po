@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-13 18:02+0200\n"
+"POT-Creation-Date: 2007-05-13 18:33+0200\n"
 "PO-Revision-Date: 2004-11-30 19:48+0100\n"
 "Last-Translator: Carsten Gnörlich <carsten@dvdisaster.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1966,6 +1966,10 @@ msgstr "Laufwerk meldet Fehler: %s%c "
 #, c-format
 msgid "unknown asc/ascq code (0x%02x, 0x%02x)."
 msgstr "unbekannter asc/ascq-Kode (0x%02x, 0x%02x)."
+
+#: raw-editor.c:177
+msgid "Raw sector editor"
+msgstr ""
 
 #: raw-sector-cache.c:34 raw-sector-cache.c:172 raw-sector-cache.c:303
 #: rs01-verify.c:537 scsi-freebsd.c:113 scsi-linux.c:98 scsi-netbsd.c:111
