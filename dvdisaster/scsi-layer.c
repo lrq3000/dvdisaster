@@ -66,7 +66,7 @@ void FreeAlignedBuffer(AlignedBuffer *ab)
 int InquireDevice(DeviceHandle *dh, int probe_only)
 {  AlignedBuffer *ab = CreateAlignedBuffer(2048);
    Sense sense;
-   char *ibuf,*vbuf;
+   unsigned char *ibuf,*vbuf;
    unsigned char cmd[MAX_CDB_SIZE];
    unsigned char device_type;
 

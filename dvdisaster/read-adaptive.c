@@ -1361,7 +1361,8 @@ reopen_image:
 			Stop(_("Failed writing to sector %lld in image [%s]: %s"),
 			     b, "store", strerror(errno));
 
-		     SetBit(rc->map, b);
+		     if(rc->map)
+			SetBit(rc->map, b);
 		     rc->readable++;
 
 		     mark_sector(rc, b, Closure->greenSector);

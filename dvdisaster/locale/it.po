@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-06 16:42+0200\n"
+"POT-Creation-Date: 2007-05-13 18:02+0200\n"
 "PO-Revision-Date: 2005-01-01 14:24+0100\n"
 "Last-Translator: Andrea Polverini <polve@polve.com>\n"
 "Language-Team: Italian <>\n"
@@ -148,7 +148,7 @@ msgstr ""
 msgid "Truncating image to %lld sectors.\n"
 msgstr ""
 
-#: debug.c:395 read-linear.c:1215 rs01-fix.c:197 rs01-fix.c:219 rs01-fix.c:235
+#: debug.c:395 read-linear.c:1214 rs01-fix.c:197 rs01-fix.c:219 rs01-fix.c:235
 #: rs01-fix.c:270 rs02-create.c:103 rs02-create.c:147 rs02-fix.c:236
 #: rs02-fix.c:257 rs02-fix.c:272
 #, c-format
@@ -737,11 +737,11 @@ msgstr "Visualizza informazioni addizionali create durante l'operazione corrente
 msgid "View log"
 msgstr "Protocollo"
 
-#: menubar.c:105
+#: menubar.c:114
 msgid "windowtitle|Change log"
 msgstr "Change log"
 
-#: menubar.c:106
+#: menubar.c:115
 msgid ""
 "<big>Change log</big>\n"
 "<i>Major differences from earlier program versions.</i>"
@@ -749,11 +749,11 @@ msgstr ""
 "<big>Change log</big>\n"
 "<i>Maggiori differenze dalle versioni più recenti.</i>"
 
-#: menubar.c:112
+#: menubar.c:121
 msgid "windowtitle|Credits"
 msgstr "Ringraziamenti"
 
-#: menubar.c:113
+#: menubar.c:122
 msgid ""
 "<big>Credits</big>\n"
 "<i>Thanks go out to...</i>"
@@ -761,11 +761,11 @@ msgstr ""
 "<big>Ringraziamenti</big>\n"
 "<i>I nostri ringraziamenti a...</i>"
 
-#: menubar.c:119
+#: menubar.c:128
 msgid "windowtitle|To do list"
 msgstr "Da fare"
 
-#: menubar.c:120
+#: menubar.c:129
 msgid ""
 "<big>To do list</big>\n"
 "<i>A sneak preview of coming features ... perhaps ;-)</i>"
@@ -773,127 +773,135 @@ msgstr ""
 "<big>Da fare</big>\n"
 "<i>Un'anticipazione sulle nuove funzioni... magari ;-)</i>"
 
-#: menubar.c:185
+#: menubar.c:194
 msgid "menu|Select Image"
 msgstr "Seleziona Immagine"
 
-#: menubar.c:186
+#: menubar.c:195
 msgid "menu|Select Parity File"
 msgstr "Seleziona File di Parità"
 
-#: menubar.c:187
+#: menubar.c:196
 msgid "menu|Quit"
 msgstr "Esci"
 
-#: menubar.c:189
+#: menubar.c:198
 msgid "menu|File"
 msgstr "File"
 
-#: menubar.c:197
+#: menubar.c:206
+msgid "menu|Raw sector editor"
+msgstr ""
+
+#: menubar.c:208
+msgid "menu|Tools"
+msgstr ""
+
+#: menubar.c:216
 msgid "menu|About"
 msgstr "Info"
 
-#: menubar.c:198
+#: menubar.c:217
 msgid "menu|User manual"
 msgstr "Manuale utente"
 
-#: menubar.c:202
+#: menubar.c:221
 msgid "menu|Credits"
 msgstr "Ringraziamenti"
 
-#: menubar.c:203
+#: menubar.c:222
 msgid "menu|Licence (GPL)"
 msgstr "Licenza (GPL)"
 
-#: menubar.c:207
+#: menubar.c:226
 msgid "menu|Change log"
 msgstr "Change Log"
 
-#: menubar.c:208
+#: menubar.c:227
 msgid "menu|To do list"
 msgstr "Da fare"
 
-#: menubar.c:210
+#: menubar.c:229
 msgid "menu|Help"
 msgstr "Aiuto"
 
-#: menubar.c:295
+#: menubar.c:314
 msgid "windowtitle|Image file selection"
 msgstr "Selezione dei file immagine"
 
-#: menubar.c:332
+#: menubar.c:351
 msgid "windowtitle|Error correction file selection"
 msgstr "Selezione del file di correzione degli errori"
 
-#: menubar.c:443 menubar.c:468 menubar.c:494
+#: menubar.c:462 menubar.c:487 menubar.c:513
 msgid "tooltip|Drive selection"
 msgstr "Seleziona Drive"
 
-#: menubar.c:443
+#: menubar.c:462
 msgid "Use the nearby drop-down list to select the input drive."
 msgstr "Usa il menu a tendina qui vicino per selezionare il drive di input."
 
-#: menubar.c:462 menubar.c:486
+#: menubar.c:481 menubar.c:505
 msgid "No drives found"
 msgstr "Nessun drive trovato"
 
-#: menubar.c:468 menubar.c:494
+#: menubar.c:487 menubar.c:513
 msgid "Selects the input drive for reading images."
 msgstr "Seleziona il drive di input per leggere le immagini."
 
-#: menubar.c:525
+#: menubar.c:544
 msgid "tooltip|Image file selection"
 msgstr "Selezione dei file immagine"
 
-#: menubar.c:525
+#: menubar.c:544
 msgid "Selects a new image file."
 msgstr "Seleziona un nuovo file immagine."
 
-#: menubar.c:526
+#: menubar.c:545
 msgid "tooltip|Current image file"
 msgstr "File immagine corrente"
 
-#: menubar.c:526
+#: menubar.c:545
 msgid "Shows the name of the current image file."
 msgstr "Mostra il nome del file immagine corrente."
 
-#: menubar.c:550
+#: menubar.c:569
 msgid "tooltip|Error correction file selection"
 msgstr "Selezione del file di correzione degli errori"
 
-#: menubar.c:550
+#: menubar.c:569
 msgid "Selects a new error correction file."
 msgstr "Seleziona un nuovo file di correzione errori."
 
-#: menubar.c:551
+#: menubar.c:570
 msgid "tooltip|Current error correction file"
 msgstr "File di correzione errori corrente"
 
-#: menubar.c:551
+#: menubar.c:570
 msgid "Shows the name of the current error correction file."
 msgstr "Mostra il nome del file di correzione errori corrente."
 
-#: menubar.c:562
+#: menubar.c:581
 msgid "tooltip|Preferences"
 msgstr "Preferenze"
 
-#: menubar.c:562
+#: menubar.c:581
 msgid "Customize settings for creating images, error correction files and other stuff."
 msgstr "Personalizza i settaggi della creazione di immagini, file di correzione degli errori ad altra roba."
 
-#: menubar.c:572
+#: menubar.c:591
 msgid "tooltip|User manual"
 msgstr "Manuale utente"
 
-#: menubar.c:572
+#: menubar.c:591
 msgid "Displays the user manual (external HTML browser required)."
 msgstr "Mostra il manuale utente (è richiesto un Browser HTML esterno)"
 
-#: menubar.c:582
+#: menubar.c:601
 msgid "tooltip|Quit"
 msgstr "Esci"
 
-#: menubar.c:582
+#: menubar.c:601
 msgid "Quit dvdisaster"
 msgstr "Chiudi dvdisaster"
 
@@ -1914,14 +1922,14 @@ msgid "Filling image area [%lld..%lld]"
 msgstr "Riempio l'area immagine [%lld..%lld]"
 
 #: read-adaptive.c:977 read-adaptive.c:1045 read-adaptive.c:1323
-#: read-adaptive.c:1495 read-linear.c:410 read-linear.c:650 read-linear.c:897
+#: read-adaptive.c:1496 read-linear.c:410 read-linear.c:650 read-linear.c:897
 #: rs01-fix.c:444 rs01-fix.c:702 rs02-fix.c:741
 #, c-format
 msgid "Failed seeking to sector %lld in image [%s]: %s"
 msgstr ""
 
 #: read-adaptive.c:989 read-adaptive.c:1050 read-adaptive.c:1348
-#: read-adaptive.c:1361 read-adaptive.c:1501 read-linear.c:416
+#: read-adaptive.c:1361 read-adaptive.c:1502 read-linear.c:416
 #: read-linear.c:657 rs01-fix.c:449
 #, c-format
 msgid "Failed writing to sector %lld in image [%s]: %s"
@@ -1952,7 +1960,7 @@ msgstr "Lettura dell'immagine del supporto."
 msgid "Completing existing medium image."
 msgstr "Completamento dell'immagine esistente del supporto."
 
-#: read-adaptive.c:1199 read-adaptive.c:1469
+#: read-adaptive.c:1199 read-adaptive.c:1470
 msgid ""
 "\n"
 "Sufficient data for reconstructing the image is available.\n"
@@ -1960,7 +1968,7 @@ msgstr ""
 "\n"
 "Sono disponibili dati sufficienti per ricostruire l'immagine.\n"
 
-#: read-adaptive.c:1296 read-linear.c:953
+#: read-adaptive.c:1296 read-linear.c:952
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -1968,7 +1976,7 @@ msgid ""
 "Use the --ignore-fatal-sense option to override."
 msgstr ""
 
-#: read-adaptive.c:1301 read-linear.c:958
+#: read-adaptive.c:1301 read-linear.c:957
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -1986,22 +1994,22 @@ msgstr ""
 msgid "CRC error in sector %lld\n"
 msgstr "Errore CRC nel settore %lld\n"
 
-#: read-adaptive.c:1484 scsi-layer.c:1032
+#: read-adaptive.c:1485 scsi-layer.c:1032
 #, c-format
 msgid "Sectors %lld-%lld: %s\n"
 msgstr "Settori %lld-%lld: %s\n"
 
-#: read-adaptive.c:1487 read-linear.c:1105 scsi-layer.c:1031
+#: read-adaptive.c:1488 read-linear.c:1104 scsi-layer.c:1031
 #, c-format
 msgid "Sector %lld: %s\n"
 msgstr "Settore %lld: %s\n"
 
-#: read-adaptive.c:1613
+#: read-adaptive.c:1614
 #, c-format
 msgid "Only %2d.%1d%% of the image are readable or correctable"
 msgstr "Solo %2d.%1d%% dell'immagine è leggibile o correggibile"
 
-#: read-adaptive.c:1616
+#: read-adaptive.c:1617
 #, c-format
 msgid ""
 "\n"
@@ -2012,7 +2020,7 @@ msgstr ""
 "%s\n"
 "(%lld leggibile, %lld correggibili, %lld ancora mancanti).\n"
 
-#: read-adaptive.c:1630
+#: read-adaptive.c:1631
 msgid ""
 "\n"
 "Good! All sectors have been read.\n"
@@ -2020,12 +2028,12 @@ msgstr ""
 "\n"
 "Fatto! Tutti i settori sono stati letti.\n"
 
-#: read-adaptive.c:1639
+#: read-adaptive.c:1640
 #, c-format
 msgid "No unreadable intervals with >= %d sectors left."
 msgstr "Nessun intervallo illeggibile con >= %d settori rimasti."
 
-#: read-adaptive.c:1642
+#: read-adaptive.c:1643
 #, c-format
 msgid ""
 "\n"
@@ -2159,7 +2167,7 @@ msgstr "Settori processati: %3d.%1d%% (%4.1fx)"
 msgid "* CRC error, sector: %lld\n"
 msgstr "* Errore CRC, Settore : %lld\n"
 
-#: read-linear.c:853 read-linear.c:968
+#: read-linear.c:853 read-linear.c:967
 #, c-format
 msgid "<span %s>Aborted by user request!</span> %lld sectors read, %lld sectors unreadable/skipped so far."
 msgstr "<span %s>Annullato dall'utente!</span> %lld settori letti, %lld settori illeggibili/saltati.."
@@ -2169,67 +2177,67 @@ msgstr "<span %s>Annullato dall'utente!</span> %lld settori letti, %lld settori 
 msgid "unexpected read error in image for sector %lld"
 msgstr "Errore di lettura inatteso nell'immagine per il settore %lld"
 
-#: read-linear.c:983
+#: read-linear.c:982
 #, c-format
 msgid "Sector %lld: %3d C2 errors.%s\n"
 msgstr ""
 
-#: read-linear.c:1085
+#: read-linear.c:1084
 #, c-format
 msgid "Sector %lld: %s Skipping %d sectors.\n"
 msgstr "Settore %lld: %s Salto di %d settori.\n"
 
-#: read-linear.c:1157
+#: read-linear.c:1156
 #, c-format
 msgid "%lld sectors read.     "
 msgstr "%lld settori letti.      "
 
-#: read-linear.c:1158
+#: read-linear.c:1157
 #, c-format
 msgid "%lld sectors read; %lld unreadable sectors."
 msgstr "%lld settori letti; %lld settori illeggibili."
 
-#: read-linear.c:1166
+#: read-linear.c:1165
 #, c-format
 msgid "All sectors successfully read, but wrong image length (%lld sectors difference)"
 msgstr ""
 
-#: read-linear.c:1170
+#: read-linear.c:1169
 msgid "All sectors successfully read, but wrong image checksum."
 msgstr ""
 
-#: read-linear.c:1171
+#: read-linear.c:1170
 msgid "All sectors successfully read. Checksums match."
 msgstr ""
 
-#: read-linear.c:1173
+#: read-linear.c:1172
 msgid "All sectors successfully read."
 msgstr "Tutti i settori sono stati letti correttamente."
 
-#: read-linear.c:1177
+#: read-linear.c:1176
 #, c-format
 msgid "%lld unreadable sectors."
 msgstr "%lld settori illeggibili."
 
-#: read-linear.c:1179
+#: read-linear.c:1178
 #, c-format
 msgid "%lld CRC errors."
 msgstr "%lld errori CRC."
 
-#: read-linear.c:1180
+#: read-linear.c:1179
 #, c-format
 msgid "%lld CRC errors, %lld unreadable sectors."
 msgstr "%lld errori CRC, %lld settori illeggibili."
 
-#: read-linear.c:1186
+#: read-linear.c:1185
 msgid "Scanning finished: "
 msgstr "Scansione terminata:"
 
-#: read-linear.c:1188
+#: read-linear.c:1187
 msgid "Reading finished: "
 msgstr "Lettura terminata:"
 
-#: read-linear.c:1199
+#: read-linear.c:1198
 #, c-format
 msgid ""
 "%d sectors missing at the end of the disc.\n"
@@ -2240,7 +2248,7 @@ msgstr ""
 "Questo è corretto se il disco è stato scritto in modalità TAO (track at once).\n"
 "L'imagine sarà aggiustata di conseguenza.Leggere il manuale per i dettagli.\n"
 
-#: read-linear.c:1205
+#: read-linear.c:1204
 #, c-format
 msgid ""
 "%d sectors missing at the end of the disc.\n"

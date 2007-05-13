@@ -906,7 +906,6 @@ reread:
 	       n = LargeRead(rc->readerImage, sector_buf, 2048);
 	       if(n != 2048)
 		  Stop(_("unexpected read error in image for sector %lld"),rc->readPos);
-
 	       if(memcmp(sector_buf, Closure->deadSector, n))
 	       {  ok++;
 		  if(rc->readMap)

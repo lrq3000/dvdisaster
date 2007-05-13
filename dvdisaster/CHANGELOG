@@ -1,4 +1,8 @@
 
+0.71 (devel-24)
+	- fixed adaptive reading crash when invoked with partial image
+	  and no ecc data (thanks to Jörg for noting this!)
+
 0.71 (devel-23) 06-05-2007
 	- started C2 scanning support for CD media
 	- added Bernd Hellers umount patch for MacOS

@@ -526,7 +526,7 @@ static void beautify_dchar(char *dchar)
 
   while(idx>0)
   {  if(dchar[idx-1] != ' ')
-       dchar[idx] = tolower(dchar[idx]);
+	dchar[idx] = tolower((int)dchar[idx]);
      idx--;
   }
 
