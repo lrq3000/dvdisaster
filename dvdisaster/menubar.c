@@ -23,8 +23,6 @@
 
 #include <limits.h>
 
-//#define RAW_EDITOR 1  // not ready for publishing yet
-
 /***
  *** Forward declarations
  ***/
@@ -88,11 +86,10 @@ static void menu_cb(GtkWidget *widget, gpointer data)
 
         gtk_main_quit();
         break;
-#ifdef RAW_EDITOR
+
       case MENU_TOOLS_RAW_EDITOR:
 	 CreateRawEditor();
 	 break;
-#endif
 
       case MENU_PREFERENCES:
 	CreatePreferencesWindow();
@@ -200,7 +197,7 @@ GtkWidget *CreateMenuBar(GtkWidget *parent)
    gtk_menu_bar_append(GTK_MENU_BAR(menu_bar), menu_anchor);
 
    /* The tools menu */
-#ifdef RAW_EDITOR   
+
    menu_strip = gtk_menu_new();
 
    add_menu_button(menu_strip, _("menu|Raw sector editor"), MENU_TOOLS_RAW_EDITOR);
@@ -208,7 +205,7 @@ GtkWidget *CreateMenuBar(GtkWidget *parent)
    menu_anchor = gtk_menu_item_new_with_label(_utf("menu|Tools"));
    gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_anchor), menu_strip);
    gtk_menu_bar_append(GTK_MENU_BAR(menu_bar), menu_anchor);
-#endif
+
    /* The help menu */
 
    menu_strip = gtk_menu_new();
@@ -382,7 +379,6 @@ static void file_select_cb(GtkWidget *widget, gpointer data)
 	 break;
    }
 }
-
 
 /*
  * Set file path for a text entry.

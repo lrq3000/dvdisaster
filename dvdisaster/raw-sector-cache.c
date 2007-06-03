@@ -31,11 +31,14 @@ static void init_defective_sector_file(char *path, RawBuffer *rb, LargeFile **fi
     *file = LargeOpen(path, O_RDWR | O_CREAT, IMG_PERMS);
 
     if(!*file)
-      Stop(_("Could not open %s: %s"), path, strerror(errno));
+       Stop(_("Could not open %s: %s"), path, strerror(errno));
 
     memset(dsh, 0, sizeof(DefectiveSectorHeader));
     dsh->lba        = rb->lba;
     dsh->sectorSize = CD_RAW_DUMP_SIZE;
+
+    if(rb->xaMode)
+       dsh->properties |= DSH_XA_MODE;
 
     if(rb->validFP)
     {  memcpy(dsh->mediumFP, rb->mediumFP, 16);
@@ -293,27 +296,30 @@ int TryDefectiveSectorCache(RawBuffer *rb, unsigned char *outbuf)
  * Read sectors from the defective sector dump
  */
 
-void ReadDefectiveSectorFile(RawBuffer *rb, char *path)
-{  DefectiveSectorHeader dsh;
-   LargeFile *file;
-   int i;
+void ReadDefectiveSectorFile(DefectiveSectorHeader *dsh, RawBuffer *rb, char *path)
+{  LargeFile *file;
 
-   open_defective_sector_file(rb, path, &file, &dsh);
+   open_defective_sector_file(rb, path, &file, dsh);
    if(!file)
-      Stop(_("Could not open %s: %s"), path, strerror(errno));
+   {  Stop(_("Could not open %s: %s"), path, strerror(errno));
+      return;
+   }
 
-   if(rb->lba < 0)   /* can only happen in external test cases */
-      rb->lba = dsh.lba;
+   rb->lba = dsh->lba;
 
-   ReallocRawBuffer(rb, dsh.nSectors);
+   if(dsh->properties & DSH_XA_MODE)
+        rb->dataOffset = 24;
+   else rb->dataOffset = 16;
 
-   for(i=0; i<dsh.nSectors; i++)
-   {  int n=LargeRead(file, rb->rawBuf[rb->samplesRead], dsh.sectorSize);
+   ReallocRawBuffer(rb, dsh->nSectors);
 
-      if(n != dsh.sectorSize)
-	 Stop(_("Failed reading from defective sector file: %s"), strerror(errno));
+   for(rb->samplesRead=0; rb->samplesRead<dsh->nSectors; rb->samplesRead++)
+   {  int n=LargeRead(file, rb->rawBuf[rb->samplesRead], dsh->sectorSize);
 
-      rb->samplesRead++;
+      if(n != dsh->sectorSize)
+      {  Stop(_("Failed reading from defective sector file: %s"), strerror(errno));
+	 return;
+      }
    }
 
    LargeClose(file);

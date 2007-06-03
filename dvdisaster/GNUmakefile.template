@@ -114,15 +114,28 @@ locale:
 simple-md5sum: md5.c
 	@$(CC) $(COPTS) -DSIMPLE_MD5SUM md5.c -o simple-md5sum
 
+# temporary: switch between old and new documentation
+
+docswitch:
+	@if test -e new-documentation; then \
+	  mv documentation old-documentation; \
+	  mv new-documentation documentation; \
+	  echo "Switched to new documentation"; \
+	else \
+	  mv documentation new-documentation; \
+	  mv old-documentation documentation; \
+	  echo "Switched to old documentation"; \
+	fi
+
 # Stuff needed to generate or prepare the documentation
 
-documentation/de/index.html: documentation/create.bash documentation/create-cs.bash documentation/create-de.bash documentation/create-en.bash
+documentation/en/index.html: documentation/create.bash documentation/create-cs.bash documentation/create-de.bash documentation/create-en.bash
 	@if test -e help-dialogs.h && grep UNMODIFIED help-dialogs.h >/dev/null; \
 	then cd documentation ; bash create.bash local-orig $(VERSION) $(PKGNAME) $(CFG_FULL_VERSION); \
 	else cd documentation ; bash create.bash local-mod $(VERSION) $(PKGNAME) $(CFG_FULL_VERSION); \
 	fi
 
-html: documentation/de/index.html
+html: documentation/en/index.html
 
 documentation/images/open-img.png:
 	@if test -e THESE_ARE_THE_DEVEL_SOURCES; then \

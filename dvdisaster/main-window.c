@@ -62,11 +62,12 @@ static void action_cb(GtkWidget *widget, gpointer data)
 
    if(action != ACTION_STOP)
    {  
-      /* Clear the log buffer */
+      /* Clear the log buffer, request new log file time stamp */
       
       if(action != ACTION_CREATE_CONT)
       {  g_string_truncate(Closure->logString, 0);
          g_string_printf(Closure->logString, _("dvdisaster-%s log\n"),VERSION);
+	 Closure->logFileStamped = FALSE;
       }
 
       /* Make sure we're using the current file selections */
@@ -354,13 +355,9 @@ void CreateMainWindow(int *argc, char ***argv)
 
     /*** Open the main window */
 
-    g_snprintf(title, 80, "dvdisaster-%s", Closure->cookedVersion);
-
-#if 0
-    if(strlen(RELEASE_STATUS) > 1)
-         g_snprintf(title, 80, "dvdisaster-%s %s", VERSION, RELEASE_STATUS);
-    else g_snprintf(title, 80, "dvdisaster-%s", Closure->cookedVersion); 
-#endif
+    if(Closure->screenShotMode) 
+         g_snprintf(title, 80, "dvdisaster-%s", VERSION);
+    else g_snprintf(title, 80, "dvdisaster-%s", Closure->cookedVersion);
 
 #ifdef SYS_MINGW
     sig_okay = VerifySignature();

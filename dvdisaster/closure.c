@@ -168,9 +168,12 @@ static void get_base_dirs()
    char *appdata;
 #endif
 
-   /*** The source directory is supposed to hold the most recent files,
+   /*** Unless completely disabled through a configure option, the
+	source directory is supposed to hold the most recent files,
 	so try this first. Not necessary under Windows as it will always
 	use the directory the binary has been called from. */
+
+#ifdef WITH_EMBEDDED_SRC_PATH_YES
 
 #ifndef SYS_MINGW
    if(!stat(SRCDIR, &mystat))
@@ -180,6 +183,8 @@ static void get_base_dirs()
       goto find_dotfile;
    } 
 #endif
+
+#endif /* WITH_EMBEDDED_SRC_PATH_YES */
 
    /*** Otherwise try the installation directory. 
 	On Unices this is a hardcoded directory.
@@ -207,7 +212,10 @@ static void get_base_dirs()
 	Under Unix the users home directory is used. */
 
 #ifndef SYS_MINGW
+ #ifdef WITH_EMBEDDED_SRC_PATH_YES
 find_dotfile:
+ #endif /* WITH_EMBEDDED_SRC_PATH_YES */
+
    Closure->dotFile = g_strdup_printf("%s/.dvdisaster", g_getenv("HOME"));
 #endif
 
@@ -750,6 +758,9 @@ void FreeClosure()
 
    if(Closure->prefsContext)
      FreePreferences(Closure->prefsContext);
+
+   if(Closure->rawEditorContext)
+      FreeRawEditorContext(Closure->rawEditorContext);
 
    if(Closure->logString)
      g_string_free(Closure->logString, TRUE);

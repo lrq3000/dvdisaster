@@ -617,8 +617,11 @@ static IsoInfo* examine_primary_vd(unsigned char *buf)
 
    ii->volumeSize = vss;
 
-   strcpy(ii->volumeLabel, (char*)vlabel);
-   beautify_dchar(ii->volumeLabel);
+   if(!Closure->screenShotMode)
+   {  strcpy(ii->volumeLabel, (char*)vlabel);
+      beautify_dchar(ii->volumeLabel);
+   }
+   else strcpy(ii->volumeLabel, _("Example disc"));
    strcpy(ii->creationDate, (char*)date);
    ii->creationDate[10] = 0;
    return ii;

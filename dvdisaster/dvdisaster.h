@@ -152,6 +152,7 @@ typedef struct _GlobalClosure
    int debugMode;       /* may activate additional features */
    int debugCDump;      /* dump as #include file instead of hexdump */
    int verbose;         /* may activate additional messages */
+   int screenShotMode;  /* screen shot mode */
    int splitFiles;      /* limit image files to 2GB */
    int autoSuffix;      /* automatically extend files with suffices .iso/.ecc */
    int querySize;       /* what sources are used for image size queries */
@@ -175,6 +176,7 @@ typedef struct _GlobalClosure
    char *dotFile;       /* path to .dvdisaster file */
    char *logFile;       /* path to logfile */
    int  logFileEnabled; /* logfile enabled */
+   int  logFileStamped; /* time stamp written to log file */
    char *binDir;        /* place where the binary resides */
    char *docDir;        /* place where our documentation resides */
    char *appData;       /* Windows specific */
@@ -238,6 +240,10 @@ typedef struct _GlobalClosure
 
    GtkWindow *prefsWindow;
    void *prefsContext;       /* local data for the preferences window */
+
+   /*** The raw editor window */
+
+   void *rawEditorContext;
 
    /*** Common stuff for drawing curves and spirals */
 
@@ -707,7 +713,6 @@ int CountC2Errors(unsigned char*);
  ***/
 
 void DefaultLogFile();
-void InitLogFile();
 void VPrintLogFile(char*, va_list);
 void PrintLogFile(char*, ...);
 
@@ -903,6 +908,14 @@ void    SRandom(gint32);
 guint32 Random32(void);
 
 /***
+ *** raw-editor.c
+ ***/
+
+void CreateRawEditor(void);
+void FreeRawEditorContext(void*);
+
+
+/***
  *** raw-sector-cache.c
  ***/
 
@@ -916,11 +929,13 @@ typedef struct _dsh
 } DefectiveSectorHeader;
 
 enum                                 /* for ->properties above */
-{  DSH_HAS_FINGERPRINT = (1<<0)
+{  DSH_HAS_FINGERPRINT = (1<<0),
+   DSH_XA_MODE         = (1<<1)
 };
 
 int SaveDefectiveSector(struct _RawBuffer*, int);
 int TryDefectiveSectorCache(struct _RawBuffer*, unsigned char*);
+void ReadDefectiveSectorFile(DefectiveSectorHeader *, struct _RawBuffer*, char*);
 
 /*** 
  *** read-linear.c

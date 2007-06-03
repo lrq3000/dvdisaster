@@ -39,20 +39,20 @@ void DefaultLogFile()
 }
 
 /*
- * Initialize the log file
+ * Print time stamp to log file 
  */
 
-void InitLogFile()
+void LogTimeStamp()
 {  time_t now;
-   struct stat mystat;
 
-   if(!stat(Closure->logFile, &mystat))
-     unlink(Closure->logFile);
+   if(!Closure->logFileEnabled)
+      return;
 
    time(&now);
-   PrintLogFile("dvdisaster-%s logging started at %s\n",
+   PrintLogFile("*\n* dvdisaster-%s logging started at %s*\n",
 		Closure->cookedVersion, ctime(&now));
 }
+
 
 /* 
  * Print a message to the log file.
@@ -61,6 +61,11 @@ void InitLogFile()
 
 void VPrintLogFile(char *format, va_list argp)
 {  FILE *file;
+
+   if(!Closure->logFileStamped)
+   {  Closure->logFileStamped = TRUE;
+      LogTimeStamp();
+   }
 
    file = fopen(Closure->logFile, "a");
    if(!file)

@@ -157,6 +157,7 @@ typedef enum
    MODIFIER_READ_MEDIUM,
    MODIFIER_READ_RAW,
    MODIFIER_RAW_MODE,
+   MODIFIER_SCREEN_SHOT,
    MODIFIER_SIMULATE_DEFECTS,
    MODIFIER_SPEED_WARNING, 
    MODIFIER_SPINUP_DELAY, 
@@ -173,9 +174,12 @@ int main(int argc, char *argv[])
    char *read_range = NULL;
 #ifdef WITH_NLS_YES
    char *locale_test;
- #ifndef SYS_MINGW
+ #ifdef WITH_EMBEDDED_SRC_PATH_YES
+  #ifndef SYS_MINGW
    char src_locale_path[strlen(SRCDIR)+10];
- #else
+  #endif
+ #endif /* WITH_EMBEDDED_SRC_PATH_YES */
+ #ifdef SYS_MINGW
    char *bin_locale_path = NULL;
  #endif
 #endif
@@ -273,9 +277,13 @@ int main(int argc, char *argv[])
 #ifndef SYS_MINGW
     /* Try local source directory first */
 
+#ifdef WITH_EMBEDDED_SRC_PATH_YES
     g_sprintf(src_locale_path,"%s/locale",SRCDIR);
     bindtextdomain("dvdisaster", src_locale_path);
 //printf("testing src %s\n", src_locale_path);
+
+#endif /* WITH_EMBEDDED_SRC_PATH_YES */
+
     /* TRANSLATORS: 
        This is a dummy entry which is supposed to translate into "ok".
        Please do not return anything else here. */
@@ -383,6 +391,7 @@ int main(int argc, char *argv[])
 	{"read-raw", 0, 0, MODIFIER_READ_RAW},
 	{"redundancy", 1, 0, 'n'},
 	{"scan", 2, 0,'s'},
+	{"screen-shot", 0, 0, MODIFIER_SCREEN_SHOT },
 	{"send-cdb", 1, 0, MODE_SEND_CDB},
 	{"show-sector", 1, 0, MODE_SHOW_SECTOR},
 	{"sign", 0, 0, MODE_SIGN},
@@ -567,6 +576,9 @@ int main(int argc, char *argv[])
 	   break;
          case MODIFIER_READ_RAW:
 	   Closure->readRaw = TRUE;
+	   break;
+         case MODIFIER_SCREEN_SHOT:
+	   Closure->screenShotMode = TRUE;
 	   break;
          case MODIFIER_SIMULATE_DEFECTS:
 	   if(optarg) Closure->simulateDefects = atoi(optarg);
@@ -894,6 +906,7 @@ int main(int argc, char *argv[])
 	     "  --random-seed n   - random seed for built-in random number generator\n"
 	     "  --raw-sector n    - shows hexdump of the given raw sector from medium in drive\n"
 	     "  --read-sector n   - shows hexdump of the given sector from medium in drive\n"
+	     "  --screen-shot     - useful for generating screen shots\n"
 	     "  --send-cdb arg    - executes given cdb at drive; kills system if used wrong\n"
 	     "  --show-sector n   - shows hexdump of the given sector in an image file\n"
 	     "  --sim-defects n   - simulate n%% defective sectors on medium\n"
@@ -917,9 +930,19 @@ int main(int argc, char *argv[])
 
    if(mode == MODE_NONE)
    {  
+
+      if(Closure->screenShotMode)
+      {  GPtrArray *a=Closure->deviceNames;
+	 int i;
+	 for(i=0; i<a->len; i++)
+	 {  char *p = g_ptr_array_index(a,i);
+	    g_free(p);
+	    a->pdata[i] = g_strdup(_("Optical drive 52X FW 1.02"));
+	 }
+      }
+
       Closure->guiMode = TRUE;
       ReadDotfile();
-      InitLogFile();
       CreateMainWindow(&argc, &argv);
    }
 

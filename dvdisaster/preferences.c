@@ -1252,7 +1252,7 @@ static void logfile_select_cb(GtkWidget *widget, gpointer data)
       case 1: /* OK */
 	 g_free(Closure->logFile);
 	 Closure->logFile = g_strdup(gtk_file_selection_get_filename(GTK_FILE_SELECTION(pc->logFileChooser)));
-	 InitLogFile();
+	 Closure->logFileStamped = FALSE;
 	 if(pc->logFilePathA)
 	    gtk_label_set_text(GTK_LABEL(pc->logFilePathA), Closure->logFile);
 	 if(pc->logFilePathB)
@@ -1266,29 +1266,51 @@ static void logfile_select_cb(GtkWidget *widget, gpointer data)
    }
 }
 
+#define LOGFILE_SELECT 1
+#define LOGFILE_DELETE 2
+
 static void logfile_cb(GtkWidget *widget, gpointer data)
-{  prefs_context *pc = (prefs_context*)data;
+{  prefs_context *pc = (prefs_context*)Closure->prefsContext;
+   int action = GPOINTER_TO_INT(data);
 
-   if(!pc->logFileChooser)
-   {  char filename[strlen(Closure->logFile)+10];
+   switch(action)
+   {  case LOGFILE_SELECT:
+	 if(!pc->logFileChooser)
+	 {  
+	    pc->logFileChooser = gtk_file_selection_new(_utf("Log file"));
+	    ReverseCancelOK(GTK_DIALOG(pc->logFileChooser));
 
-      pc->logFileChooser = gtk_file_selection_new(_utf("Log file"));
-      ReverseCancelOK(GTK_DIALOG(pc->logFileChooser));
+	    g_signal_connect(G_OBJECT(pc->logFileChooser), "destroy",
+			     G_CALLBACK(logfile_select_cb), 
+			     GINT_TO_POINTER(0));
+	    g_signal_connect(G_OBJECT(GTK_FILE_SELECTION(pc->logFileChooser)->ok_button),
+			     "clicked", G_CALLBACK(logfile_select_cb), GINT_TO_POINTER(1));
+	    g_signal_connect(G_OBJECT(GTK_FILE_SELECTION(pc->logFileChooser)->cancel_button),
+			     "clicked", G_CALLBACK(logfile_select_cb), GINT_TO_POINTER(2));
+	    
+	    gtk_file_selection_set_filename(GTK_FILE_SELECTION(pc->logFileChooser),
+					    Closure->logFile);
+	 }
+	 gtk_widget_show(pc->logFileChooser);
+	 break;
 
-      g_signal_connect(G_OBJECT(pc->logFileChooser), "destroy",
-		       G_CALLBACK(logfile_select_cb), 
-		       GINT_TO_POINTER(0));
-      g_signal_connect(G_OBJECT(GTK_FILE_SELECTION(pc->logFileChooser)->ok_button),
-		       "clicked", G_CALLBACK(logfile_select_cb), GINT_TO_POINTER(1));
-      g_signal_connect(G_OBJECT(GTK_FILE_SELECTION(pc->logFileChooser)->cancel_button),
-		       "clicked", G_CALLBACK(logfile_select_cb), GINT_TO_POINTER(2));
-
-      sprintf(filename, "%s/", Closure->logFile);
-      gtk_file_selection_set_filename(GTK_FILE_SELECTION(pc->logFileChooser),
-				      filename);
+      case LOGFILE_DELETE:
+      {  GtkWidget *dialog = gtk_message_dialog_new(Closure->prefsWindow,
+						    GTK_DIALOG_DESTROY_WITH_PARENT,
+						    GTK_MESSAGE_QUESTION,
+						    GTK_BUTTONS_OK_CANCEL,
+						    _utf("Delete the log file?"));
+	 int answer;
+	   
+	 ReverseCancelOK(GTK_DIALOG(dialog));
+	 answer = gtk_dialog_run(GTK_DIALOG(dialog));
+	 
+	 if(answer == GTK_RESPONSE_OK)
+	    LargeUnlink(Closure->logFile);
+	 gtk_widget_destroy(dialog);
+	 break;
+      }
    }
-
-   gtk_widget_show(pc->logFileChooser);
 }
 
 /***
@@ -3041,10 +3063,11 @@ void CreatePreferencesWindow(void)
       RegisterPreferencesHelpWindow(lwoh);
 
       for(i=0; i<2; i++)
-      {  GtkWidget *table = gtk_table_new(3,2,FALSE);
+      {  GtkWidget *table = gtk_table_new(4,2,FALSE);
 	 GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
 	 GtkWidget *label = gtk_label_new(Closure->logFile);
 	 GtkWidget *select = gtk_button_new_with_label(_utf("Select"));
+	 GtkWidget *delete = gtk_button_new_with_label(_utf("Delete"));
 
 	 button = gtk_check_button_new();
 	 gtk_table_attach(GTK_TABLE(table), button, 
@@ -3060,8 +3083,14 @@ void CreatePreferencesWindow(void)
 			  1, 2, 1, 2, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
 
 	 gtk_table_attach(GTK_TABLE(table), select, 
-			  2, 3, 0, 2, GTK_SHRINK, GTK_SHRINK, 0, 0);
-	 g_signal_connect(G_OBJECT(select), "clicked", G_CALLBACK(logfile_cb), pc);
+			  2, 3, 0, 2, GTK_SHRINK, GTK_SHRINK, 10, 0);
+	 g_signal_connect(G_OBJECT(select), "clicked", G_CALLBACK(logfile_cb), 
+			  GINT_TO_POINTER(LOGFILE_SELECT));
+
+	 gtk_table_attach(GTK_TABLE(table), delete, 
+			  3, 4, 0, 2, GTK_SHRINK, GTK_SHRINK, 0, 0);
+	 g_signal_connect(G_OBJECT(delete), "clicked", G_CALLBACK(logfile_cb),
+			  GINT_TO_POINTER(LOGFILE_DELETE));
 
 
  	 if(!i) 

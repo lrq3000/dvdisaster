@@ -69,6 +69,7 @@ char* DefaultDevice()
 	 continue;
 
        g_ptr_array_add(Closure->deviceNodes, g_strdup(buf));
+
        sprintf(buf, "%s (/dev/%s)", dh->devinfo, dev);
        g_ptr_array_add(Closure->deviceNames, g_strdup(buf));
      }

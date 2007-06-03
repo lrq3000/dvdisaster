@@ -74,7 +74,8 @@ RawBuffer *CreateRawBuffer(int sample_length)
    int i,j;
 
    rb = g_malloc0(sizeof(RawBuffer));
-   rb->samplesMax = Closure->maxReadAttempts;
+   rb->samplesMax = MAX(1, Closure->maxReadAttempts);
+   rb->sampleSize = sample_length;
 
    rb->gt = CreateGaloisTables(0x11d);
    rb->rt = CreateReedSolomonTables(rb->gt, 0, 1, 10);
