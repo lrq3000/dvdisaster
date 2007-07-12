@@ -313,13 +313,17 @@ void ReadDefectiveSectorFile(DefectiveSectorHeader *dsh, RawBuffer *rb, char *pa
 
    ReallocRawBuffer(rb, dsh->nSectors);
 
-   for(rb->samplesRead=0; rb->samplesRead<dsh->nSectors; rb->samplesRead++)
+   for(rb->samplesRead=0; rb->samplesRead<dsh->nSectors; )
    {  int n=LargeRead(file, rb->rawBuf[rb->samplesRead], dsh->sectorSize);
 
       if(n != dsh->sectorSize)
       {  Stop(_("Failed reading from defective sector file: %s"), strerror(errno));
 	 return;
       }
+
+      rb->samplesRead++;
+      UpdateFrameStats(rb);
+      CollectGoodVectors(rb);
    }
 
    LargeClose(file);

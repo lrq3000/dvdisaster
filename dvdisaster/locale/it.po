@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-03 18:41+0200\n"
+"POT-Creation-Date: 2007-07-07 14:28+0200\n"
 "PO-Revision-Date: 2005-01-01 14:24+0100\n"
 "Last-Translator: Andrea Polverini <polve@polve.com>\n"
 "Language-Team: Italian <>\n"
@@ -156,8 +156,9 @@ msgid "Could not truncate %s: %s\n"
 msgstr "Non posso troncare %s: %s\n"
 
 #: debug.c:421 debug.c:1014 debug.c:1022 debug.c:1079 debug.c:1084 file.c:59
-#: file.c:125 file.c:145 read-adaptive.c:1140 read-adaptive.c:1172
-#: read-linear.c:286 read-linear.c:288 read-linear.c:319 read-linear.c:321
+#: file.c:125 file.c:145 raw-editor.c:362 read-adaptive.c:1140
+#: read-adaptive.c:1172 read-linear.c:286 read-linear.c:288 read-linear.c:319
+#: read-linear.c:321
 #, c-format
 msgid ""
 "Can't open %s:\n"
@@ -618,10 +619,8 @@ msgstr ""
 #: help-dialogs.c:738
 msgid ""
 "\n"
-"e-mail: carsten@dvdisaster.com   -or-   cgnoerlich@fsfe.org"
+"e-mail: carsten@dvdisaster.org   -or-   cgnoerlich@fsfe.org"
 msgstr ""
-"\n"
-"e-mail: carsten@dvdisaster.com    o   cgnoerlich@fsfe.org"
 
 #: help-dialogs.c:741
 msgid ""
@@ -1743,88 +1742,221 @@ msgstr ""
 msgid "unknown asc/ascq code (0x%02x, 0x%02x)."
 msgstr "Codice asc/ascq sconosciuto (0x%02x, 0x%02x)."
 
-#: raw-editor.c:296
+#: raw-editor.c:295
 msgid "windowtitle|Raw sector dump selection"
 msgstr ""
 
-#: raw-editor.c:415
+#: raw-editor.c:326
+#, c-format
+msgid "%s loaded, LBA %lld, %d samples."
+msgstr ""
+
+#: raw-editor.c:350
+msgid "EDC checksum does not match - sector still defective!"
+msgstr ""
+
+#: raw-editor.c:355
+msgid "LBA does not match MSF code in sector!"
+msgstr ""
+
+#: raw-editor.c:382
+msgid "Raw sector does not belong to the selected image!"
+msgstr ""
+
+#: raw-editor.c:388 read-adaptive.c:977 read-adaptive.c:1045
+#: read-adaptive.c:1323 read-adaptive.c:1496 read-linear.c:410
+#: read-linear.c:650 read-linear.c:897 rs01-fix.c:444 rs01-fix.c:702
+#: rs02-fix.c:741
+#, c-format
+msgid "Failed seeking to sector %lld in image [%s]: %s"
+msgstr ""
+
+#: raw-editor.c:395 read-adaptive.c:989 read-adaptive.c:1050
+#: read-adaptive.c:1348 read-adaptive.c:1361 read-adaptive.c:1502
+#: read-linear.c:416 read-linear.c:657 rs01-fix.c:449
+#, c-format
+msgid "Failed writing to sector %lld in image [%s]: %s"
+msgstr ""
+
+#: raw-editor.c:416
 msgid "windowtitle|Load buffer from file"
 msgstr ""
 
-#: raw-editor.c:433
+#: raw-editor.c:434
 msgid "windowtitle|Save buffer to file"
 msgstr ""
 
-#: raw-editor.c:949
+#: raw-editor.c:473
+#, c-format
+msgid "Buffer loaded from %s."
+msgstr ""
+
+#: raw-editor.c:489
+#, c-format
+msgid "Buffer saved to %s."
+msgstr ""
+
+#: raw-editor.c:576
+msgid "*** Well done: Sector has been recovered! ***"
+msgstr ""
+
+#: raw-editor.c:579
+#, c-format
+msgid "Current buffer state: P %d/%d, Q %d/%d"
+msgstr ""
+
+#: raw-editor.c:691
+#, c-format
+msgid "%c Vector %d has >2 erasures (nothing done)."
+msgstr ""
+
+#: raw-editor.c:720
+#, c-format
+msgid "%c Vector %d already good."
+msgstr ""
+
+#: raw-editor.c:728
+#, c-format
+msgid "%c Vector %d corrected (%d erasures)."
+msgstr ""
+
+#: raw-editor.c:731
+#, c-format
+msgid "%c Vector %d not correctable (%d erasures)."
+msgstr ""
+
+#: raw-editor.c:746
+#, c-format
+msgid "no replacements for P vector %d available"
+msgstr ""
+
+#: raw-editor.c:762
+#, c-format
+msgid "Exchanged P vector %d with version %d (of %d)."
+msgstr ""
+
+#: raw-editor.c:784
+#, c-format
+msgid "no replacements for Q vector %d available"
+msgstr ""
+
+#: raw-editor.c:798
+#, c-format
+msgid "Exchanged Q vector %d with version %d (of %d)."
+msgstr ""
+
+#: raw-editor.c:860 raw-editor.c:873
+#, c-format
+msgid "Showing sample %d (of %d)."
+msgstr ""
+
+#: raw-editor.c:918
+msgid "Sector with lowest P failures selected."
+msgstr ""
+
+#: raw-editor.c:928
+msgid "Sector with lowest Q failures selected."
+msgstr ""
+
+#: raw-editor.c:940
+#, c-format
+msgid "Smart L-EC: %s"
+msgstr ""
+
+#: raw-editor.c:961
 msgid "Raw sector editor"
 msgstr ""
 
+#: raw-editor.c:983
+msgid "Please load a raw sector file!"
+msgstr ""
+
 #: raw-editor.c:995
+msgid "Browsing"
+msgstr ""
+
+#: raw-editor.c:1007
 msgid "button|Load"
 msgstr ""
 
-#: raw-editor.c:1000
+#: raw-editor.c:1012
 msgid "button|Save"
 msgstr ""
 
-#: raw-editor.c:1006
+#: raw-editor.c:1018
 msgid "button|Prev. sector"
 msgstr ""
 
-#: raw-editor.c:1011
+#: raw-editor.c:1023
 msgid "button|Next sector"
 msgstr ""
 
-#: raw-editor.c:1016
+#: raw-editor.c:1028
 msgid "button|Sort by P"
 msgstr ""
 
-#: raw-editor.c:1021
+#: raw-editor.c:1033
 msgid "button|Sort by Q"
 msgstr ""
 
 #: raw-editor.c:1040
+msgid "Editing"
+msgstr ""
+
+#: raw-editor.c:1052
 msgid "button|Load Buf"
 msgstr ""
 
-#: raw-editor.c:1045
+#: raw-editor.c:1057
 msgid "button|Save Buf"
 msgstr ""
 
-#: raw-editor.c:1050
+#: raw-editor.c:1062
 msgid "button|Tag diffs"
 msgstr ""
 
-#: raw-editor.c:1055
+#: raw-editor.c:1067
 msgid "button|Untag all"
 msgstr ""
 
-#: raw-editor.c:1060
+#: raw-editor.c:1072
 msgid "button|Redo"
 msgstr ""
 
-#: raw-editor.c:1065
+#: raw-editor.c:1077
 msgid "button|Undo"
 msgstr ""
 
-#: raw-editor.c:1075
+#: raw-editor.c:1084
+msgid "Correction"
+msgstr ""
+
+#: raw-editor.c:1087
 msgid "button|P vector"
 msgstr ""
 
-#: raw-editor.c:1080
+#: raw-editor.c:1092
 msgid "button|Q vector"
 msgstr ""
 
-#: raw-editor.c:1085
+#: raw-editor.c:1097
 msgid "button|Find other P"
 msgstr ""
 
-#: raw-editor.c:1090
+#: raw-editor.c:1102
 msgid "button|Find other Q"
 msgstr ""
 
-#: raw-editor.c:1095
+#: raw-editor.c:1107
 msgid "button|Tag erasures"
+msgstr ""
+
+#: raw-editor.c:1114
+msgid "Heuristics"
+msgstr ""
+
+#: raw-editor.c:1117
+msgid "button|Smart L-EC"
 msgstr ""
 
 #: raw-sector-cache.c:34 raw-sector-cache.c:175 raw-sector-cache.c:304
@@ -2017,20 +2149,6 @@ msgstr "Ferma"
 #, c-format
 msgid "Filling image area [%lld..%lld]"
 msgstr "Riempio l'area immagine [%lld..%lld]"
-
-#: read-adaptive.c:977 read-adaptive.c:1045 read-adaptive.c:1323
-#: read-adaptive.c:1496 read-linear.c:410 read-linear.c:650 read-linear.c:897
-#: rs01-fix.c:444 rs01-fix.c:702 rs02-fix.c:741
-#, c-format
-msgid "Failed seeking to sector %lld in image [%s]: %s"
-msgstr ""
-
-#: read-adaptive.c:989 read-adaptive.c:1050 read-adaptive.c:1348
-#: read-adaptive.c:1361 read-adaptive.c:1502 read-linear.c:416
-#: read-linear.c:657 rs01-fix.c:449
-#, c-format
-msgid "Failed writing to sector %lld in image [%s]: %s"
-msgstr ""
 
 #: read-adaptive.c:1081 read-linear.c:172
 msgid "Reading aborted"
@@ -4293,6 +4411,13 @@ msgstr ""
 #: welcome-window.c:137
 msgid "<i>New in this Version:</i>"
 msgstr ""
+
+#~ msgid ""
+#~ "\n"
+#~ "e-mail: carsten@dvdisaster.com   -or-   cgnoerlich@fsfe.org"
+#~ msgstr ""
+#~ "\n"
+#~ "e-mail: carsten@dvdisaster.com    o   cgnoerlich@fsfe.org"
 
 #~ msgid "illegal data_mode: %d"
 #~ msgstr "data_mode illegale: %d"

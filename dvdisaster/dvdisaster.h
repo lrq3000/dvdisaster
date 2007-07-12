@@ -1020,15 +1020,20 @@ typedef struct _RawBuffer
 
    int *pLoad,*qLoad;
 
-   /* data structures for the slow_lec */
+   /* data structures for the smart_lec */
 
-   unsigned char **pList[N_P_VECTORS];
-   int *pCount[N_P_VECTORS];
+   unsigned char **pList[N_P_VECTORS];  /* List of accepting P vectors */
    int pn[N_P_VECTORS];
 
-   unsigned char **qList[N_Q_VECTORS];
-   int *qCount[N_Q_VECTORS];
+   unsigned char **qList[N_Q_VECTORS];  /* List of accepting Q vectors */
    int qn[N_Q_VECTORS];
+
+   int bestPFrame;                      /* Frame with lowest P failures */
+   int bestP1,bestP2;
+
+   int bestQFrame;                      /* Frame with lowest Q failures */
+   int bestQ1,bestQ2;
+
 } RawBuffer;
 
 enum                          /* values for byteState */
@@ -1044,13 +1049,17 @@ void FreeRawBuffer(RawBuffer*);
 
 void DumpSector(RawBuffer*, char*);
 
-int MSFtoLBA(unsigned char, unsigned char, unsigned char);
+#define STRICT_MSF_CHECK FALSE
+#define SLOPPY_MSF_CHECK TRUE
 
+int MSFtoLBA(unsigned char, unsigned char, unsigned char);
 int CheckEDC(unsigned char*, int);
-int CheckMSF(unsigned char*, int);
+int CheckMSF(unsigned char*, int, int);
 void InitializeCDFrame(unsigned char*, int, int, int);
 
+void UpdateFrameStats(RawBuffer*);
 int ValidateRawSector(RawBuffer*, unsigned char*, char*);
+int IterativeLEC(RawBuffer*);
 int TryCDFrameRecovery(RawBuffer*, unsigned char*);
 
 /*** 
@@ -1090,10 +1099,18 @@ int SendReadCDB(char*, unsigned char*, unsigned char*, int, int);
 void ShowHTML(char*);
 
 /***
- *** slow-lec.c
+ *** smart-lec.c
  ***/
 
-int SlowLEC(RawBuffer*);
+#define SMART_LEC_MESSAGE_SIZE 256
+
+void CollectGoodVectors(RawBuffer*);
+void PrintPQStats(RawBuffer*);
+int SmartLEC(RawBuffer*);
+
+void *PrepareIterativeSmartLEC(RawBuffer*);
+void SmartLECIteration(void*, char*);
+void EndIterativeSmartLEC(void*);
 
 /***
  *** spiral.c

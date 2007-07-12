@@ -335,11 +335,11 @@ void ShowHTML(char *target)
       lang = g_getenv("LANG");
 
       if(lang)
-      {  if(!strncmp(lang, "cs", 2)) 
+      {  if(!strncmp(lang, "ru", 2)) 
 #ifdef SYS_MINGW
-	     path = g_strdup_printf("%s\\cs\\%s",Closure->docDir,target); 
+	     path = g_strdup_printf("%s\\ru\\%s",Closure->docDir,target); 
 #else
-	     path = g_strdup_printf("%s/cs/%s",Closure->docDir,target); 
+	     path = g_strdup_printf("%s/ru/%s",Closure->docDir,target); 
 #endif
          else if(!strncmp(lang, "de", 2)) 
 #ifdef SYS_MINGW

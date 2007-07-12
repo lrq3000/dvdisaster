@@ -21,7 +21,7 @@
 
 #include "dvdisaster.h"
 
-#define UNDO_SLOTS 5
+#define UNDO_SLOTS 100
 
 enum
 {  ACTION_BROWSE_LOAD,
@@ -45,6 +45,7 @@ enum
    ACTION_UNTAG,
    ACTION_UNDO,
    ACTION_REDO,
+   ACTION_SMART_LEC,
    ON_CLICK_CORRECT_P,
    ON_CLICK_CORRECT_Q,
    ON_CLICK_TAG_ERASURES,
@@ -54,7 +55,8 @@ enum
 
 typedef struct _rb_info
 {  unsigned char *rawSector;
-   int pFailures;
+   int sectorIndex;
+   int pFailures;  /* uncorrectable P/Q vectors in this sector */
    int qFailures;
 } rb_info;
 
@@ -94,6 +96,8 @@ typedef struct _raw_editor_context
    int currentSample;
    int sectorChanged;
    int onClickAction;       /* What to do on next mouse click */
+
+   void *smartLECHandle;    /* handle for iterative smart-lec */
 
 } raw_editor_context;
 
@@ -170,8 +174,6 @@ static void undo_remember(raw_editor_context *rec)
    rec->undoEnd = rec->undoPos;
 
    rec->sectorChanged = TRUE;
-
-   //   printf("Undo Ring (Remember): %2d %2d %2d\n", rec->undoBegin, rec->undoPos, rec->undoEnd);
 }
 
 static void undo(raw_editor_context *rec)
@@ -183,8 +185,6 @@ static void undo(raw_editor_context *rec)
    if(rec->undoPos < 0) rec->undoPos = UNDO_SLOTS-1;
    memcpy(rec->rb->recovered, rec->undoRing[rec->undoPos], CD_RAW_DUMP_SIZE);
    memcpy(rec->tags, rec->undoTags[rec->undoPos], CD_RAW_DUMP_SIZE);
-
-   //   printf("Undo Ring (Undo)    : %2d %2d %2d\n", rec->undoBegin, rec->undoPos, rec->undoEnd);
 }
 
 static void redo(raw_editor_context *rec)
@@ -196,8 +196,6 @@ static void redo(raw_editor_context *rec)
 
    memcpy(rec->rb->recovered, rec->undoRing[rec->undoPos], CD_RAW_DUMP_SIZE);
    memcpy(rec->tags, rec->undoTags[rec->undoPos], CD_RAW_DUMP_SIZE);
-
-   //   printf("Undo Ring (Redo)    : %2d %2d %2d\n", rec->undoBegin, rec->undoPos, rec->undoEnd);
 }
 
 /***
@@ -270,6 +268,7 @@ static void calculate_failures(raw_editor_context *rec)
       }
 
       rec->rbInfo[s].rawSector = rec->rb->rawBuf[s];
+      rec->rbInfo[s].sectorIndex = s;
       rec->rbInfo[s].pFailures = defective_p;
       rec->rbInfo[s].qFailures = defective_q;
    }
@@ -316,13 +315,15 @@ static void file_select_cb(GtkWidget *widget, gpointer data)
 	    g_free(rec->filepath);
 	 rec->filepath = g_strdup(gtk_file_selection_get_filename(GTK_FILE_SELECTION(rec->fileSel)));
 	 gtk_widget_hide(rec->fileSel);
+	 ResetRawBuffer(rec->rb);
 	 ReadDefectiveSectorFile(rec->dsh, rec->rb, rec->filepath);
+	 PrintPQStats(rec->rb);
 	 memcpy(rec->rb->recovered, rec->rb->rawBuf[0], rec->rb->sampleSize);
 	 memcpy(rec->undoRing[0], rec->rb->rawBuf[0], rec->rb->sampleSize);
 	 calculate_failures(rec);
 	 evaluate_vectors(rec);
 	 render_sector(rec);
-	 SetLabelText(GTK_LABEL(rec->rightLabel), "%s loaded, LBA %lld, %d samples.",
+	 SetLabelText(GTK_LABEL(rec->rightLabel), _("%s loaded, LBA %lld, %d samples."),
 		      rec->filepath, rec->rb->lba, rec->rb->samplesRead);
 	 break;
 
@@ -346,19 +347,19 @@ static void save_sector(raw_editor_context *rec)
    /*** Sanity checks */
 
    if(!CheckEDC(rb->recovered, rb->xaMode))
-   {  Stop("EDC checksum does not match - sector still defective!");
+   {  Stop(_("EDC checksum does not match - sector still defective!"));
       return;
    }
 
-   if(!CheckMSF(rb->recovered, rb->lba))
-   {  Stop("LBA does not match MSF code in sector!");
+   if(!CheckMSF(rb->recovered, rb->lba, STRICT_MSF_CHECK))
+   {  Stop(_("LBA does not match MSF code in sector!"));
       return;
    }
 
    /*** Open image, verify fingerprint */
 
    if(!(image = LargeOpen(Closure->imageName, O_RDWR, IMG_PERMS)))
-      Stop("Can't open %s:\n%s",Closure->imageName,strerror(errno));
+      Stop(_("Can't open %s:\n%s"),Closure->imageName,strerror(errno));
 
    if(!LargeSeek(image, (gint64)(2048*FINGERPRINT_SECTOR)))
       unknown_fingerprint = TRUE;
@@ -378,20 +379,20 @@ static void save_sector(raw_editor_context *rec)
    if(  !unknown_fingerprint && rec->dsh->properties & DSH_HAS_FINGERPRINT
       && memcmp(image_fp, rec->dsh->mediumFP, 16))
    {  LargeClose(image);
-      Stop("Raw sector does not belong to the selected image!");
+      Stop(_("Raw sector does not belong to the selected image!"));
       return;
    }
 
    if(!LargeSeek(image, (gint64)(2048*rb->lba)))
    {  LargeClose(image);
-      Stop("Failed seeking to sector %lld in image [%s]: %s",
+      Stop(_("Failed seeking to sector %lld in image [%s]: %s"),
 	   rb->lba, "raw-editor", strerror(errno));
    }
 
    n = LargeWrite(image, rb->recovered+rb->dataOffset, 2048);
    if(n != 2048)
    {  LargeClose(image);
-      Stop("Failed writing to sector %lld in image [%s]: %s",
+      Stop(_("Failed writing to sector %lld in image [%s]: %s"),
 	   rb->lba, "raw-editor", strerror(errno));
    }
 
@@ -469,7 +470,7 @@ static void buffer_io_cb(GtkWidget *widget, gpointer data)
 	 render_sector(rec);
 	 undo_remember(rec);
 	 
-	 SetLabelText(GTK_LABEL(rec->rightLabel), "Buffer loaded from %s.", path);
+	 SetLabelText(GTK_LABEL(rec->rightLabel), _("Buffer loaded from %s."), path);
 	 break;
       }
 
@@ -485,7 +486,7 @@ static void buffer_io_cb(GtkWidget *widget, gpointer data)
 	 n = LargeWrite(file, rec->rb->recovered, rec->rb->sampleSize);
 	 LargeClose(file);
 
-	 SetLabelText(GTK_LABEL(rec->rightLabel), "Buffer saved to %s.", path);
+	 SetLabelText(GTK_LABEL(rec->rightLabel), _("Buffer saved to %s."), path);
 	 break;
       }
 
@@ -569,12 +570,13 @@ static void evaluate_vectors(raw_editor_context *rec)
 	 rb->byteState[QToByteIndex(q, eras[0])] |= Q1_CPOS;
    }
 
-   if(CheckEDC(rb->recovered, rb->xaMode) && CheckMSF(rb->recovered, rb->lba))
+   if(   CheckEDC(rb->recovered, rb->xaMode) 
+	 && CheckMSF(rb->recovered, rb->lba, STRICT_MSF_CHECK))
    {  gtk_widget_set_sensitive(rec->saveButton, TRUE);
-      SetLabelText(GTK_LABEL(rec->leftLabel), "*** Well done: Sector has been recovered! ***");
+      SetLabelText(GTK_LABEL(rec->leftLabel), _("*** Well done: Sector has been recovered! ***"));
    }
    else
-      SetLabelText(GTK_LABEL(rec->leftLabel), "Current buffer state: P %d/%d, Q %d/%d", 
+      SetLabelText(GTK_LABEL(rec->leftLabel), _("Current buffer state: P %d/%d, Q %d/%d"), 
 		   rec->p2, rec->p1, rec->q2, rec->q1);
 }
 
@@ -621,7 +623,6 @@ static void render_sector(raw_editor_context *rec)
 
          gdk_gc_set_rgb_fg_color(Closure->drawGC,Closure->foreground);
 
-	 //	 sprintf(byte,"%02x", buf[idx++]);
 	 sprintf(byte, "%c", isprint(buf[idx]) ? buf[idx] : '.');
 	 idx++;
 	 SetText(rec->layout, byte, &w, &h);
@@ -654,6 +655,7 @@ static gboolean expose_cb(GtkWidget *widget, GdkEventExpose *event, gpointer dat
 static gboolean button_cb(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {  static int last_action;
    raw_editor_context *rec = Closure->rawEditorContext;
+   RawBuffer *rb = rec->rb;
    int mouse_x = event->x;
    int mouse_y = event->y;
 
@@ -685,8 +687,8 @@ static gboolean button_cb(GtkWidget *widget, GdkEventButton *event, gpointer dat
 
 	 for(i=0; i<v_size; i++)
 	 {  if(!vector[i]) continue;
-	    if(erasures>=4)
-	    {  SetLabelText(GTK_LABEL(rec->rightLabel), "%c Vector %d has >4 erasures (nothing done).", type, v);
+	    if(erasures>2)
+	    {  SetLabelText(GTK_LABEL(rec->rightLabel), _("%c Vector %d has >2 erasures (nothing done)."), type, v);
 	       return TRUE;
 	    }
 	    eras[erasures++] = i;
@@ -698,110 +700,107 @@ static gboolean button_cb(GtkWidget *widget, GdkEventButton *event, gpointer dat
 	 else              e_scratch = erasures;
 
 	 if(type == 'P')
-	 {  GetPVector(rec->rb->recovered, vector, v);
+	 {  GetPVector(rb->recovered, vector, v);
 	    if(e_scratch == 2)
 	    {  vector[eras[0]] ^= 255;
 	       vector[eras[1]] ^= 255;
 	    }
-	    err = DecodePQ(rec->rb->rt, vector, P_PADDING, eras, e_scratch);
+	    err = DecodePQ(rb->rt, vector, P_PADDING, eras, e_scratch);
 	 }
 	 else
-	 {  GetQVector(rec->rb->recovered, vector, v);
+	 {  GetQVector(rb->recovered, vector, v);
 	    if(e_scratch == 2)
 	    {  vector[eras[0]] ^= 255;
 	       vector[eras[1]] ^= 255;
 	    }
-	    err = DecodePQ(rec->rb->rt, vector, Q_PADDING, eras, e_scratch);
+	    err = DecodePQ(rb->rt, vector, Q_PADDING, eras, e_scratch);
 	 }
 
 	 if(err==0) SetLabelText(GTK_LABEL(rec->rightLabel), 
-				 "%c Vector %d already good.", type, v);
+				 _("%c Vector %d already good."), type, v);
 	 else if(err==1 || err==2)
-	 {  if(type=='P') SetPVector(rec->rb->recovered, vector, v);
-	    else          SetQVector(rec->rb->recovered, vector, v);
+	 {  if(type=='P') SetPVector(rb->recovered, vector, v);
+	    else          SetQVector(rb->recovered, vector, v);
 	    evaluate_vectors(rec);
 	    render_sector(rec);
 	    undo_remember(rec);
 	    SetLabelText(GTK_LABEL(rec->rightLabel), 
-			 "%c Vector %d corrected (%d erasures).", type, v, e_scratch);
+			 _("%c Vector %d corrected (%d erasures)."), type, v, e_scratch);
 	 }
 	 else SetLabelText(GTK_LABEL(rec->rightLabel), 
-			   "%c Vector %d not correctable (%d erasures).", type, v, e_scratch);
+			   _("%c Vector %d not correctable (%d erasures)."), type, v, e_scratch);
       }
 	 break;
 
       case ON_CLICK_FIND_OTHER_P:
-      case ON_CLICK_FIND_OTHER_Q:
-      {  unsigned char vector[Q_VECTOR_SIZE];
-	 unsigned char previous[Q_VECTOR_SIZE];
-	 int eras[2];
+      {  unsigned char previous[P_VECTOR_SIZE];
 	 int i,v;
-	 int v_size;
 	 int last;
-	 char type = (rec->onClickAction == ON_CLICK_FIND_OTHER_P) ? 'P' : 'Q';
 
-	 if(type=='P')
-	 {  v = mouse_x/rec->charWidth;
-	    v_size = P_VECTOR_SIZE;
-	    GetPVector(rec->rb->recovered, previous, v);
-	    if(v != rec->lastPVector) last=0;
-	    else last=rec->lastPFrame;
-	 }
-	 else
-	 {  int bytepos = 12 + mouse_x/rec->charWidth + N_P_VECTORS*(mouse_y/rec->charHeight);
-	    int ignore;
+	 /* Find picked vector, trivially reject if no replacements available */
 
-	    ByteIndexToQ(bytepos, &v, &ignore);
-	    v_size = Q_VECTOR_SIZE;
-	    GetQVector(rec->rb->recovered, previous, v);
-	    if(v != rec->lastQVector) last=0;
-	    else last=rec->lastQFrame;
+	 v = mouse_x/rec->charWidth;
+
+	 if(!rb->pn[v])
+	 {  SetLabelText(GTK_LABEL(rec->rightLabel), 
+			 _("no replacements for P vector %d available"), v);
+	    return TRUE;
 	 }
 
-	 i = (last+1)%rec->rb->samplesRead;
-	 while(i != last)
-	 {  if(type=='P') 
-	    {  GetPVector(rec->rb->rawBuf[i], vector, v);
-	       if(!memcmp(vector, previous, P_VECTOR_SIZE))
-		  goto next_iteration;
-	       if(DecodePQ(rec->rb->rt, vector, P_PADDING, eras, 0) == 0)
-	       {  SetPVector(rec->rb->recovered, vector, v);
-		  evaluate_vectors(rec);
-		  render_sector(rec);
-		  SetLabelText(GTK_LABEL(rec->rightLabel), 
-			       "Exchanged %c vector %d with sample %d.",
-			       type, v, i);
-		  rec->lastPFrame = i;
-		  if(v != rec->lastPVector)
-		     undo_remember(rec);
-		  rec->lastPVector = v;
-		  break;
-	       }
-	    }
-	    else
-	    {  GetQVector(rec->rb->rawBuf[i], vector, v);
-	       if(!memcmp(vector, previous, Q_VECTOR_SIZE))
-		  goto next_iteration;
-	       if(DecodePQ(rec->rb->rt, vector, Q_PADDING, eras, 0) == 0)
-	       {  SetQVector(rec->rb->recovered, vector, v);
-		  evaluate_vectors(rec);
-		  render_sector(rec);
-		  SetLabelText(GTK_LABEL(rec->rightLabel), 
-			       "Exchanged %c vector %d with sample %d.",
-			       type, v, i);
-		  rec->lastQFrame = i;
-		  if(v != rec->lastQVector)
-		     undo_remember(rec);
-		  rec->lastQVector = v;
-		  break;
-	       }
-	    }
-	 next_iteration:
-	    i = (i+1)%rec->rb->samplesRead;
+	 if(v != rec->lastPVector) 
+	      last=-1;
+	 else last=rec->lastPFrame;
+	 GetPVector(rb->recovered, previous, v);
+
+	 /* Try next variant */
+
+	 i = (last+1)%rb->pn[v];
+	 SetPVector(rb->recovered, rb->pList[v][i], v);
+	 evaluate_vectors(rec);
+	 render_sector(rec);
+	 SetLabelText(GTK_LABEL(rec->rightLabel), 
+		      _("Exchanged P vector %d with version %d (of %d)."),
+		      v, i+1, rb->pn[v]);
+	 rec->lastPFrame = i;
+	 if(v != rec->lastPVector)
+	    undo_remember(rec);
+	 rec->lastPVector = v;
+      }
+	 break;
+
+      case ON_CLICK_FIND_OTHER_Q:
+      {  unsigned char previous[Q_VECTOR_SIZE];
+	 int bytepos, ignore;
+	 int i,v;
+	 int last;
+
+	 /* Find picked vector, trivially reject if no replacements available */
+
+	 bytepos = 12 + mouse_x/rec->charWidth + N_P_VECTORS*(mouse_y/rec->charHeight);
+	 ByteIndexToQ(bytepos, &v, &ignore);
+
+	 if(!rb->qn[v])
+	 {  SetLabelText(GTK_LABEL(rec->rightLabel), 
+			 _("no replacements for Q vector %d available"), v);
+	    return TRUE;
 	 }
-	 if(i==last) SetLabelText(GTK_LABEL(rec->rightLabel), 
-				  "no more replacements for %c vector %d available",
-				  type, v);
+
+	 if(v != rec->lastQVector) 
+	      last=-1;
+	 else last=rec->lastQFrame;
+	 GetQVector(rb->recovered, previous, v);
+
+	 i = (last+1)%rb->qn[v];
+	 SetQVector(rb->recovered, rb->qList[v][i], v);
+	 evaluate_vectors(rec);
+	 render_sector(rec);
+	 SetLabelText(GTK_LABEL(rec->rightLabel), 
+		      _("Exchanged Q vector %d with version %d (of %d)."),
+		      v, i+1, rb->qn[v]);
+	 rec->lastQFrame = i;
+	 if(v != rec->lastQVector)
+	    undo_remember(rec);
+	 rec->lastQVector = v;
       }
 	 break;
 
@@ -851,27 +850,27 @@ static void action_cb(GtkWidget *widget, gpointer data)
 
       case ACTION_BROWSE_PREV:
 	 if(rec->currentSample)
-	 {  rec->currentSample--;
-	    rec->sectorChanged = FALSE;
-	    memcpy(rec->rb->recovered, rec->rbInfo[rec->currentSample].rawSector, rec->rb->sampleSize);
-	    evaluate_vectors(rec);
-	    render_sector(rec);
-	    undo_remember(rec);
-	 }
-	 SetLabelText(GTK_LABEL(rec->rightLabel), "Showing sample %d (of %d).", 
+	      rec->currentSample--;
+	 else rec->currentSample = rec->rb->samplesRead-1;
+	 rec->sectorChanged = FALSE;
+	 memcpy(rec->rb->recovered, rec->rbInfo[rec->currentSample].rawSector, rec->rb->sampleSize);
+	 evaluate_vectors(rec);
+	 render_sector(rec);
+	 undo_remember(rec);
+	 SetLabelText(GTK_LABEL(rec->rightLabel), _("Showing sample %d (of %d)."), 
 		      rec->currentSample, rec->rb->samplesRead);
 	 break;
 
       case ACTION_BROWSE_NEXT:
 	 if(rec->currentSample<rec->rb->samplesRead-1)
-	 {  rec->currentSample++;
-	    rec->sectorChanged = FALSE;
-	    memcpy(rec->rb->recovered, rec->rbInfo[rec->currentSample].rawSector, rec->rb->sampleSize);
-	    evaluate_vectors(rec);
-	    render_sector(rec);
-	    undo_remember(rec);
-	 }
-	 SetLabelText(GTK_LABEL(rec->rightLabel), "Showing sample %d (of %d).", 
+	      rec->currentSample++;
+	 else rec->currentSample = 0;
+	 rec->sectorChanged = FALSE;
+	 memcpy(rec->rb->recovered, rec->rbInfo[rec->currentSample].rawSector, rec->rb->sampleSize);
+	 evaluate_vectors(rec);
+	 render_sector(rec);
+	 undo_remember(rec);
+	 SetLabelText(GTK_LABEL(rec->rightLabel), _("Showing sample %d (of %d)."), 
 		      rec->currentSample, rec->rb->samplesRead);
 	 break;
 
@@ -916,7 +915,7 @@ static void action_cb(GtkWidget *widget, gpointer data)
 	 evaluate_vectors(rec);
 	 render_sector(rec);
 	 undo_remember(rec);
-	 SetLabelText(GTK_LABEL(rec->rightLabel), "Sector with lowest P failures selected.");
+	 SetLabelText(GTK_LABEL(rec->rightLabel), _("Sector with lowest P failures selected."));
 	 break;
 
       case ACTION_SORT_BY_Q:
@@ -926,8 +925,21 @@ static void action_cb(GtkWidget *widget, gpointer data)
 	 evaluate_vectors(rec);
 	 render_sector(rec);
 	 undo_remember(rec);
-	 SetLabelText(GTK_LABEL(rec->rightLabel), "Sector with lowest Q failures selected.");
+	 SetLabelText(GTK_LABEL(rec->rightLabel), _("Sector with lowest Q failures selected."));
 	 break;
+
+      case ACTION_SMART_LEC:
+      {  char message[SMART_LEC_MESSAGE_SIZE];
+	 if(!rec->smartLECHandle)
+	    rec->smartLECHandle = PrepareIterativeSmartLEC(rec->rb);
+	 SmartLECIteration(rec->smartLECHandle, message);
+	 evaluate_vectors(rec);
+	 render_sector(rec);
+	 undo_remember(rec);
+	 SetLabelText(GTK_LABEL(rec->rightLabel), 
+		      _("Smart L-EC: %s"), message);
+	 break;
+      }
    }
 }
 
@@ -968,7 +980,7 @@ void CreateRawEditor(void)
       gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.0);
       gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 5);
 
-      rec->rightLabel = label = gtk_label_new("Please load a raw sector file!");
+      rec->rightLabel = label = gtk_label_new(_("Please load a raw sector file!"));
       gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.0);
       gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 5);
 
@@ -980,7 +992,7 @@ void CreateRawEditor(void)
 
       /* Actions for browsing the raw samples */
       
-      label = gtk_label_new("Browsing");
+      label = gtk_label_new(_utf("Browsing"));
       gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 10);
 
       hbox2 = gtk_hbox_new(FALSE, 0);
@@ -1025,7 +1037,7 @@ void CreateRawEditor(void)
 
       /* Actions for editing the recovery buffer */
       
-      label = gtk_label_new("Editing");
+      label = gtk_label_new(_utf("Editing"));
       gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 10);
 
       hbox2 = gtk_hbox_new(TRUE, 0);
@@ -1069,7 +1081,7 @@ void CreateRawEditor(void)
 
       /* Actions for correcting vectors in the recovery buffer */
 
-      label = gtk_label_new("Correction");
+      label = gtk_label_new(_utf("Correction"));
       gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 10);
 
       button = gtk_radio_button_new_with_label(NULL, _utf("button|P vector"));
@@ -1096,6 +1108,17 @@ void CreateRawEditor(void)
       g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), 
 		       (gpointer)ON_CLICK_TAG_ERASURES);
       gtk_box_pack_start(GTK_BOX(vbox), button, FALSE, FALSE, 0);
+
+      /* Error correction heuristics */
+
+      label = gtk_label_new(_utf("Heuristics"));
+      gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 10);
+
+      button = gtk_button_new_with_label(_utf("button|Smart L-EC"));
+      g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(action_cb), 
+		       (gpointer)ACTION_SMART_LEC);
+      gtk_box_pack_start(GTK_BOX(vbox), button, FALSE, FALSE, 0);
+
 
       /* drawing area */
 

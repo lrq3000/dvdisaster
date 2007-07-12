@@ -5,11 +5,11 @@
   typedef unsigned int guint32;
 #endif
 
-struct MD5Context {
+typedef struct MD5Context {
 	guint32 buf[4];
 	guint32 bits[2];
 	unsigned char in[64];
-};
+} MD5Context;
 
 void MD5Init(struct MD5Context *context);
 void MD5Update(struct MD5Context *context, unsigned char const *buf,

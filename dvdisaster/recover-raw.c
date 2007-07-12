@@ -108,22 +108,21 @@ RawBuffer *CreateRawBuffer(int sample_length)
    rb->qLoad = g_malloc0(Closure->maxReadAttempts * sizeof(int));
 
    for(i=0; i<N_P_VECTORS; i++)
-   {  rb->pCount[i] = g_malloc(Closure->maxReadAttempts * sizeof(int));
       rb->pList[i]  = g_malloc(Closure->maxReadAttempts * sizeof(char*));
-   }
 
    for(i=0; i<N_P_VECTORS; i++)
      for(j=0; j<Closure->maxReadAttempts; j++)
        rb->pList[i][j] = g_malloc(P_VECTOR_SIZE);
 
    for(i=0; i<N_Q_VECTORS; i++)
-   {  rb->qCount[i] = g_malloc(Closure->maxReadAttempts * sizeof(int));
       rb->qList[i]  = g_malloc(Closure->maxReadAttempts * sizeof(char*));
-   }
 
    for(i=0; i<N_Q_VECTORS; i++)
      for(j=0; j<Closure->maxReadAttempts; j++)
        rb->qList[i][j] = g_malloc(Q_VECTOR_SIZE);
+
+   memset(rb->pn, 0, sizeof(rb->pn));
+   memset(rb->qn, 0, sizeof(rb->qn));
 
    return rb;
 }
@@ -154,24 +153,23 @@ void ReallocRawBuffer(RawBuffer *rb, int new_samples_max)
    rb->qLoad = g_realloc(rb->qLoad, new_samples_max * sizeof(int));
 
    for(i=0; i<N_P_VECTORS; i++)
-   {  rb->pCount[i] = g_realloc(rb->pCount[i], new_samples_max * sizeof(int));
       rb->pList[i]  = g_realloc(rb->pList[i],  new_samples_max * sizeof(char*));
-   }
 
    for(i=0; i<N_P_VECTORS; i++)
      for(j=rb->samplesMax; j<new_samples_max; j++)
        rb->pList[i][j] = g_malloc(P_VECTOR_SIZE);
 
    for(i=0; i<N_Q_VECTORS; i++)
-   {  rb->qCount[i] = g_realloc(rb->qCount[i], new_samples_max * sizeof(int));
       rb->qList[i]  = g_realloc(rb->qList[i],  new_samples_max * sizeof(char*));
-   }
 
    for(i=0; i<N_Q_VECTORS; i++)
      for(j=rb->samplesMax; j<new_samples_max; j++)
        rb->qList[i][j] = g_malloc(Q_VECTOR_SIZE);
 
    rb->samplesMax = new_samples_max;
+
+   rb->bestP1 = rb->bestP2 = N_P_VECTORS;
+   rb->bestQ1 = rb->bestQ2 = N_Q_VECTORS;
 }
 
 void ResetRawBuffer(RawBuffer *rb)
@@ -184,6 +182,10 @@ void ResetRawBuffer(RawBuffer *rb)
 
    for(i=0; i<N_Q_VECTORS; i++)
      rb->qParityN[i][0] = rb->qParityN[i][1] = 0;
+
+   rb->bestPFrame = rb->bestQFrame = 0;
+   rb->bestP1 = rb->bestP2 = N_P_VECTORS;
+   rb->bestQ1 = rb->bestQ2 = N_Q_VECTORS;
 }
 
 void FreeRawBuffer(RawBuffer *rb)
@@ -212,7 +214,6 @@ void FreeRawBuffer(RawBuffer *rb)
    {  for(j=0; j<rb->samplesMax; j++)
 	 g_free(rb->pList[i][j]);
 
-      g_free(rb->pCount[i]);
       g_free(rb->pList[i]);
    }
 
@@ -220,7 +221,6 @@ void FreeRawBuffer(RawBuffer *rb)
    {  for(j=0; j<rb->samplesMax; j++)
 	 g_free(rb->qList[i][j]);
 
-      g_free(rb->qCount[i]);
       g_free(rb->qList[i]);
    }
 
@@ -268,15 +268,24 @@ static int int_to_bcd(int value)
 /*
  * Validate the MSF field contents. 
  * Returns TRUE if the given lba matches the MSF field.
+ * When sloppy==TRUE; only the frm fields must match.
+ * This is because drives often return a sector which is a few numbers
+ * off due to problems finding the sync header. These must be kept from
+ * going into the sample set. However, differences in the min/sec fields
+ * are probably just read errors in the respective bytes as the drive
+ * will probably not have derailed over such a large distance.
  */
 
-int CheckMSF(unsigned char *frame, int lba)
+int CheckMSF(unsigned char *frame, int lba, int sloppy)
 {  unsigned char min,sec,frm;
 
    lba_to_msf(lba, &min, &sec, &frm);
    min = int_to_bcd(min);
    sec = int_to_bcd(sec);
    frm = int_to_bcd(frm);
+
+   if(sloppy && frame[14] == frm)
+      return TRUE;
 
    if(   frame[12] != min
       || frame[13] != sec	
@@ -537,7 +546,7 @@ int ValidateRawSector(RawBuffer *rb, unsigned char *frame, char *msg)
 
   /* Test internal sector address */
 
-  if(!CheckMSF(frame, rb->lba))
+  if(!CheckMSF(frame, rb->lba, STRICT_MSF_CHECK))
   {  RememberSense(3, 255, 2);  /* Wrong MSF in RAW sector */
      return FALSE;
   }
@@ -640,7 +649,7 @@ static int q_decode(RawBuffer *rb, unsigned char *vector, unsigned char *state)
 
 //#define DEBUG_ITERATIVE
 
-static int iterative_lec(RawBuffer *rb)
+int IterativeLEC(RawBuffer *rb)
 {  unsigned char p_vector[P_VECTOR_SIZE];
    unsigned char q_vector[Q_VECTOR_SIZE];
    int p_failures, q_failures;
@@ -728,6 +737,76 @@ static int iterative_lec(RawBuffer *rb)
    return (p_failures + q_failures == 0);
 }
 
+/***
+ *** Some frame statistics are updated iteratively,
+ *** e.g. whenever a new frame is accumulated.
+ */
+
+void UpdateFrameStats(RawBuffer *rb)
+{  unsigned char *new_sample = rb->rawBuf[rb->samplesRead-1];
+   unsigned char vector[Q_VECTOR_SIZE];
+   int p_corr = 0;
+   int p_err  = 0;
+   int q_corr = 0;
+   int q_err  = 0;
+   int err,eras[2];
+   int p,q;
+
+   /* MAYBE TODO: Try trivial corrections first, e.g.
+      correct P/Q with single failure until they damage
+      some other vector */
+
+   /* single byte failures are added to the double
+      failure count since we want to pick the vector
+      with the least number of defective vectors. */
+
+   for(p=0; p<N_P_VECTORS; p++)
+   {  GetPVector(new_sample, vector, p);
+      err = DecodePQ(rb->rt, vector, P_PADDING, eras, 0);
+      switch(err)
+      {  case 0: 
+	    break;
+	 case 1:
+	    p_corr++;
+	    p_err++;
+	    break;
+	 default:
+	    p_err++;
+	    break;
+      }
+   }
+
+   for(q=0; q<N_Q_VECTORS; q++)
+   {  GetQVector(new_sample, vector, q);
+      err = DecodePQ(rb->rt, vector, Q_PADDING, eras, 0);
+      switch(err)
+      {  case 0: 
+	    break;
+	 case 1:
+	    q_corr++;
+	    q_err++;
+	    break;
+	 default:
+	    q_err++;
+	    break;
+      }
+   }
+
+   if(p_err < rb->bestP2 
+      || (p_err == rb->bestP2 && p_corr < rb->bestP1))
+   {  rb->bestPFrame = rb->samplesRead - 1;
+      rb->bestP1 = p_corr;
+      rb->bestP2 = p_err;
+   }
+
+   if(q_err < rb->bestQ2 
+      || (q_err == rb->bestQ2 && q_corr < rb->bestQ1))
+   {  rb->bestQFrame = rb->samplesRead - 1;
+      rb->bestQ1 = q_corr;
+      rb->bestQ2 = q_err;
+   }
+}
+
 /*** 
  *** The grand wrapper:
  ***
@@ -769,7 +848,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
    /* Compare lba against MSF field. Some drives return sectors
       from wrong places in RAW mode. */
 
-   if(!CheckMSF(new_frame, rb->lba))
+   if(!CheckMSF(new_frame, rb->lba, SLOPPY_MSF_CHECK))
    {  RememberSense(3, 255, 2); /* Wrong MSF in raw sector */
       return -1;
    }
@@ -782,6 +861,8 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
    memcpy(rb->rawBuf[rb->samplesRead], new_frame, rb->sampleSize);
    rb->samplesRead++;
 
+   UpdateFrameStats(rb);
+
    /*** Cheap shot: See if we can recover the sector itself
 	(without using the more complex heuristics and other
 	sectors).
@@ -792,10 +873,10 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
    memcpy(rb->recovered, new_frame, rb->sampleSize);
    memset(rb->byteState, 0, rb->sampleSize);
 
-   iterative_lec(rb);
+   IterativeLEC(rb);
 
    if(CheckEDC(rb->recovered, rb->xaMode)
-      && CheckMSF(rb->recovered, rb->lba))
+      && CheckMSF(rb->recovered, rb->lba, STRICT_MSF_CHECK))
    {
        PrintCLIorLabel(Closure->status, 
 		       "Sector %lld: Recovered in raw reader by iterative L-EC.\n",
@@ -818,7 +899,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
    SearchPlausibleSector(rb, 0);
 
    if(CheckEDC(rb->recovered, rb->xaMode)
-      && CheckMSF(rb->recovered, rb->lba))
+      && CheckMSF(rb->recovered, rb->lba, STRICT_MSF_CHECK))
    {  PrintCLIorLabel(Closure->status, 
 		      "Sector %lld: Recovered in raw reader by plausible sector search (0).\n",
 		      rb->lba);
@@ -829,7 +910,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
    BruteForceSearchPlausibleSector(rb);
 
    if(CheckEDC(rb->recovered, rb->xaMode)
-      && CheckMSF(rb->recovered, rb->lba))
+      && CheckMSF(rb->recovered, rb->lba, STRICT_MSF_CHECK))
    {  PrintCLIorLabel(Closure->status, 
 		      "Sector %lld: Recovered in raw reader by brute force plausible sector search (0).\n",
 		      rb->lba);
@@ -840,7 +921,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
    AckHeuristic(rb);
 
    if(CheckEDC(rb->recovered, rb->xaMode)
-      && CheckMSF(rb->recovered, rb->lba))
+      && CheckMSF(rb->recovered, rb->lba, STRICT_MSF_CHECK))
    {  PrintCLIorLabel(Closure->status, 
 		      "Sector %lld: Recovered in raw reader by mutual ack heuristic (0).\n",
 		      rb->lba);
@@ -851,7 +932,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
    HeuristicLEC(rb->recovered, rb, outbuf);
 
    if(CheckEDC(rb->recovered, rb->xaMode)
-      && CheckMSF(rb->recovered, rb->lba))
+      && CheckMSF(rb->recovered, rb->lba, STRICT_MSF_CHECK))
    {  PrintCLIorLabel(Closure->status, 
 		      "Sector %lld: Recovered in raw reader by heuristic L-EC (0).\n",
 		      rb->lba);
@@ -862,7 +943,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
    SearchPlausibleSector(rb, 1);
 
    if(CheckEDC(rb->recovered, rb->xaMode)
-      && CheckMSF(rb->recovered, rb->lba))
+      && CheckMSF(rb->recovered, rb->lba, STRICT_MSF_CHECK))
    {  PrintCLIorLabel(Closure->status, 
 		      "Sector %lld: Recovered in raw reader by plausible sector search (1).\n",
 		      rb->lba);
@@ -873,7 +954,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
    BruteForceSearchPlausibleSector(rb);
 
    if(CheckEDC(rb->recovered, rb->xaMode)
-      && CheckMSF(rb->recovered, rb->lba))
+      && CheckMSF(rb->recovered, rb->lba, STRICT_MSF_CHECK))
    {  PrintCLIorLabel(Closure->status, 
 		      "Sector %lld: Recovered in raw reader by brute force plausible sector search (1).\n",
 		      rb->lba);
@@ -884,7 +965,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
    AckHeuristic(rb);
 
    if(CheckEDC(rb->recovered, rb->xaMode)
-      && CheckMSF(rb->recovered, rb->lba))
+      && CheckMSF(rb->recovered, rb->lba, STRICT_MSF_CHECK))
    {  PrintCLIorLabel(Closure->status, 
 		      "Sector %lld: Recovered in raw reader by mutual ack heuristic (1).\n",
 		      rb->lba);
@@ -895,7 +976,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
    HeuristicLEC(rb->recovered, rb, outbuf);
 
    if(CheckEDC(rb->recovered, rb->xaMode)
-      && CheckMSF(rb->recovered, rb->lba))
+      && CheckMSF(rb->recovered, rb->lba, STRICT_MSF_CHECK))
    {  PrintCLIorLabel(Closure->status, 
 		      "Sector %lld: Recovered in raw reader by heuristic L-EC (1).\n",
 		      rb->lba);

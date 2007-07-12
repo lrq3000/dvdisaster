@@ -735,7 +735,7 @@ void AboutDialog()
    {    AboutTextWithLink(vbox, "\n[http://www.dvdisaster.com]", "http://www.dvdisaster.com");
    }
 
-   AboutText(vbox, _("\ne-mail: carsten@dvdisaster.com   -or-   cgnoerlich@fsfe.org")); 
+   AboutText(vbox, _("\ne-mail: carsten@dvdisaster.org   -or-   cgnoerlich@fsfe.org")); 
 
 #ifdef SYS_DARWIN
    AboutText(vbox, _("\nDarwin port (Mac OS X): Julian Einwag &lt;julian@einwag.de&gt;")); 

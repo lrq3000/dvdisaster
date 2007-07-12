@@ -2,8 +2,14 @@
 # Begin of dvdisaster makefile template
 ######################################################################
 
+# Currently supported locales
+
 PO_LOCALES = cs de it ru sv
 MAN_LOCALES = cs de it
+DOC_LOCALES = en ru
+
+# Search for TAGS: online-docs
+# Don't forget edit NODIST for new doc locales
 
 ######################################################################
 # Take over variables from configure
@@ -128,8 +134,9 @@ docswitch:
 	fi
 
 # Stuff needed to generate or prepare the documentation
+# TAG: online-doc
 
-documentation/en/index.html: documentation/create.bash documentation/create-cs.bash documentation/create-de.bash documentation/create-en.bash
+documentation/en/index.html: documentation/create.bash documentation/create-en.bash documentation/create-ru.bash 
 	@if test -e help-dialogs.h && grep UNMODIFIED help-dialogs.h >/dev/null; \
 	then cd documentation ; bash create.bash local-orig $(VERSION) $(PKGNAME) $(CFG_FULL_VERSION); \
 	else cd documentation ; bash create.bash local-mod $(VERSION) $(PKGNAME) $(CFG_FULL_VERSION); \
@@ -137,7 +144,7 @@ documentation/en/index.html: documentation/create.bash documentation/create-cs.b
 
 html: documentation/en/index.html
 
-documentation/images/open-img.png:
+documentation/images/email.png:
 	@if test -e THESE_ARE_THE_DEVEL_SOURCES; then \
 	  echo "not touching images"; \
         else \
@@ -145,18 +152,17 @@ documentation/images/open-img.png:
 	  echo -n "Unpacking images (may take a while) ... "; \
 	  cd $(SRCDIR)/documentation/images; \
 	  $(SRCDIR)/tools/pngpack ../images-common.pngpack >../pngpack.log; \
-	  cd $(SRCDIR)/documentation/cs/images; \
-	  $(SRCDIR)/tools/pngpack ../../images-cs.pngpack >>../../pngpack.log; echo -n "cs "; \
-	  cd $(SRCDIR)/documentation/de/images; \
-	  $(SRCDIR)/tools/pngpack ../../images-de.pngpack >>../../pngpack.log; echo -n "de ";\
-	  cd $(SRCDIR)/documentation/en/images; \
-	  $(SRCDIR)/tools/pngpack ../../images-en.pngpack >>../../pngpack.log; echo -n "en "; \
-	  cd $(SRCDIR)/documentation/testing; \
-	  $(SRCDIR)/tools/pngpack ../images-testing.pngpack >>../pngpack.log; echo -n "tmp "; \
+	  for i in $(DOC_LOCALES); do \
+	    (cd $(SRCDIR)/documentation/$$i/images; \
+	    $(SRCDIR)/tools/pngpack ../../images-$${i}.pngpack >>../../pngpack.log); \
+	    (cd $(SRCDIR)/documentation/$$i/thumbnails; \
+	    $(SRCDIR)/tools/pngpack ../../thumbnails-$${i}.pngpack >>../../pngpack.log); \
+	    echo -n "$$i "; \
+	  done;  \
 	  echo "- done"; \
         fi
 
-images: documentation/images/open-img.png
+images: documentation/images/email.png
 
 lock-images:
 	@touch documentation/MAKE_SRCDIST
@@ -165,14 +171,13 @@ lock-images:
 pack-images: tools/pngpack
 	@echo -n "Packing images (may take a while) ... "
 	@cd documentation/images; $(SRCDIR)/tools/pngpack ../images-common.pngpack *.png >../pngpack.log;
-	@cd documentation/cs/images; $(SRCDIR)/tools/pngpack ../../images-cs.pngpack *.png >>../../pngpack.log;
-	@echo -n "cs ";
-	@cd documentation/de/images; $(SRCDIR)/tools/pngpack ../../images-de.pngpack *.png >>../../pngpack.log;
-	@echo -n "de ";
-	@cd documentation/en/images; $(SRCDIR)/tools/pngpack ../../images-en.pngpack *.png >>../../pngpack.log;
-	@echo -n "en ";
-	@cd documentation/testing; $(SRCDIR)/tools/pngpack ../images-testing.pngpack *.png >>../pngpack.log;
-	@echo -n "tmp ";
+	@for i in $(DOC_LOCALES); do \
+	  (cd documentation/$$i/images; \
+	  $(SRCDIR)/tools/pngpack ../../images-$${i}.pngpack *.png >>../../pngpack.log); \
+	  (cd documentation/$$i/thumbnails; \
+	  $(SRCDIR)/tools/pngpack ../../thumbnails-$${i}.pngpack *.png >>../../pngpack.log); \
+	  echo -n "$$i "; \
+	done
 	@echo "- done"
 
 tools/pngpack: tools/pngpack.c
@@ -221,7 +226,7 @@ show:
 ######################################################################
 
 .PHONY : install uninstall clean distclean arch www 
-.PHONY : berlios-images berlios sf sf-images 
+.PHONY : sf sf-images 
 .PHONY : srcdist innodist zipdist
 
 install: dvdisaster html images
@@ -234,21 +239,17 @@ install: dvdisaster html images
 	install -m 644 CREDITS* $(BUILDROOT)$(DOCSUBDIR)
 	install -m 644 README.MODIFYING $(BUILDROOT)$(DOCSUBDIR)
 	install -m 644 TODO $(BUILDROOT)$(DOCSUBDIR)
-	install -d $(BUILDROOT)$(DOCSUBDIR)/cs
-	cd documentation; install -m 644 cs/*.html $(BUILDROOT)$(DOCSUBDIR)/cs
-	install -d $(BUILDROOT)$(DOCSUBDIR)/de
-	cd documentation; install -m 644 de/*.html $(BUILDROOT)$(DOCSUBDIR)/de
-	install -d $(BUILDROOT)$(DOCSUBDIR)/en
-	cd documentation; install -m 644 en/*.html $(BUILDROOT)$(DOCSUBDIR)/en
+	for i in $(DOC_LOCALES); do \
+	  install -d $(BUILDROOT)$(DOCSUBDIR)/$$i; \
+	  (cd documentation; install -m 644 $$i/*.html $(BUILDROOT)$(DOCSUBDIR)/$$i); \
+	  install -d $(BUILDROOT)$(DOCSUBDIR)/$$i/images; \
+	  (cd documentation/$$i; install -m 644 images/*.png $(BUILDROOT)$(DOCSUBDIR)/$$i/images); \
+	  install -d $(BUILDROOT)$(DOCSUBDIR)/$$i/thumbnails; \
+	  (cd documentation/$$i; install -m 644 thumbnails/*.png $(BUILDROOT)$(DOCSUBDIR)/$$i/thumbnails); \
+	done
 	install -d $(BUILDROOT)$(DOCSUBDIR)/images
 	cd documentation; install -m 644 images/*.png $(BUILDROOT)$(DOCSUBDIR)/images
-	cd documentation; install -m 644 images/*.jpg $(BUILDROOT)$(DOCSUBDIR)/images
-	install -d $(BUILDROOT)$(DOCSUBDIR)/cs/images
-	cd documentation/cs; install -m 644 images/*.png $(BUILDROOT)$(DOCSUBDIR)/cs/images
-	install -d $(BUILDROOT)$(DOCSUBDIR)/de/images
-	cd documentation/de; install -m 644 images/*.png $(BUILDROOT)$(DOCSUBDIR)/de/images
-	install -d $(BUILDROOT)$(DOCSUBDIR)/en/images
-	cd documentation/en; install -m 644 images/*.png $(BUILDROOT)$(DOCSUBDIR)/en/images
+#	cd documentation; install -m 644 images/*.jpg $(BUILDROOT)$(DOCSUBDIR)/images
 	install -d $(BUILDROOT)$(MANDIR)/man1
 	install -d $(BUILDROOT)$(MANDIR)/cs/man1
 	install -d $(BUILDROOT)$(MANDIR)/de/man1
@@ -316,8 +317,8 @@ clean:
 	@find . -name \*\~ -print | xargs rm -f;
 	@find . -name \*.mo -print | xargs rm -f;
 	@find . -name \#\*\# -print | xargs rm -f;
-	@rm -f documentation/cs/*.html documentation/de/*.html documentation/en/*.html
-	@if test -e THESE_ARE_THE_DEVEL_SOURCES && ! test -e documentation/MAKE_SRCDIST; then rm -f documentation/images-*.pngpack; fi
+	@for i in $(DOC_LOCALES); do rm -f documentation/$$i/*.html; done
+	@if test -e THESE_ARE_THE_DEVEL_SOURCES && ! test -e documentation/MAKE_SRCDIST; then rm -f documentation/images-*.pngpack documentation/thumbnails-*.pngpack; fi
 	@rm -f documentation/pngpack.log
 	@if test -e tools/Makefile.config; then $(MAKE) --no-print-directory -C tools clean; fi
 	@if test -e $(PKGNAME); then rm -rf $(PKGNAME); fi
@@ -328,28 +329,23 @@ clean:
 arch:	clean distclean
 	@cd .. ; tar -c -z -f $(PKGNAME)-arch.tgz $(PKGNAME)
 
-www:
+www:	
 	@echo -e "Please use one of the following targets:\n"
-	@echo "make berlios    # create WWW pages for hosting at BerliOS"
 	@echo "make sf         # create WWW pages for hosting at SourceForge"
 
+# TAG: online-docs
 sf:
 	@cd documentation ; ./create.bash sf $(VERSION) $(PKGNAME) $(CFG_FULL_VERSION); \
-	tar cjf ../../sf.tar.bz2 pubkey.asc cs/*.html de/*.html en/*.html
+	tar cjf ../../sf.tar.bz2 pubkey.asc en/*.html ru/*.html
 
 sf-images:
 	@cd documentation ; ./create.bash sf $(VERSION) $(PKGNAME) $(CFG_FULL_VERSION); \
-	tar cjf ../../sf.tar.bz2 cs/*.html de/*.html en/*.html images/*.jpg images/*.png cs/images/*.png de/images/*.png en/images/*.png testing/*.png
+	tar cjf ../../sf.tar.bz2 cs/*.html en/*.html ru/*.html images/*.png en/images/*.png ru/images/*.png
 
-berlios:
-	@cd documentation ; ./create.bash berlios $(VERSION) $(PKGNAME) $(CFG_FULL_VERSION); \
-	tar cjf ../../berlios.tar.bz2 pubkey.asc cs/*.html de/*.html en/*.html
+INSTALL: documentation/install.template
+	@sed "s/@@PKGNAME/$(PKGNAME)/" <documentation/install.template >INSTALL
 
-berlios-images:
-	@cd documentation ; ./create.bash berlios $(VERSION) $(PKGNAME) $(CFG_FULL_VERSION); \
-	tar cjf ../../berlios.tar.bz2 cs/*.html de/*.html en/*.html images/*.jpg images/*.png cs/images/*.png de/images/*.png en/images/*.png
-
-srcdist: pack-images lock-images clean distclean 
+srcdist: INSTALL pack-images lock-images clean distclean 
 	@rm -f documentation/MAKE_SRCDIST
 	@cd .. ; tar -c -j -X $(PKGNAME)/NODIST -f $(PKGNAME).tar.bz2 $(PKGNAME)
 	@cd .. ; gpg --default-key 091ad320 --detach-sign --output $(PKGNAME).tar.bz2.gpg --armor $(PKGNAME).tar.bz2 
@@ -363,7 +359,7 @@ prepare-dist:
 	@head --bytes=20 dvdisaster.exe >win-build-dir/signature
 	@cp wininst/*.bmp win-build-dir
 	@cp documentation/pubkey.asc win-build-dir/documentation
-	@for i in cs de en; do \
+	@for i in $(DOC_LOCALES) do \
 	  mkdir win-build-dir/documentation/$$i; \
 	  cp documentation/$$i/*.html win-build-dir/documentation/$$i; \
 	done

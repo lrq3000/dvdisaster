@@ -1,10 +1,14 @@
 
 0.71 (devel-24)
 	- fixed adaptive reading crash when invoked with partial image
-	  and no ecc data (thanks to Jörg for noting this!)
-	- fixed log file creation inconsistecy (thanks to mschaeff!)
+	  and no ecc data (thanks to Jörg and Wolfgang for noting this!)
+	- fixed log file creation inconsistency (thanks to mschaeff!)
 	- started with raw sector editor
 	- added --with-embedded-src-path as proposed by Klaus Heinz
+	- relaxed MSF test for incoming sectors so that read errors
+	  within the MSF can be corrected
+	- phased in new documentation
+	- cleaned up CVS for new documentation
 
 0.71 (devel-23) 06-05-2007
 	- started C2 scanning support for CD media
