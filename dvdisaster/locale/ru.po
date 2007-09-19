@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.70.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-07 14:28+0200\n"
-"PO-Revision-Date: 2007-06-23 10:21+0300\n"
-"Last-Translator: Igor Gorbounov <igorbounov@topazelectro.ru>\n"
+"POT-Creation-Date: 2007-09-15 21:06+0200\n"
+"PO-Revision-Date: 2007-08-06 21:45+0300\n"
+"Last-Translator: Igor Gorbounov <igor.gorbounov@gmail.com>\n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -686,6 +686,8 @@ msgid ""
 "\n"
 "e-mail: carsten@dvdisaster.org   -or-   cgnoerlich@fsfe.org"
 msgstr ""
+"\n"
+"e-mail: carsten@dvdisaster.org   -или-   cgnoerlich@fsfe.org"
 
 #: help-dialogs.c:741
 msgid ""
@@ -1987,19 +1989,19 @@ msgstr "Выбор дампа необработанных секторов"
 #: raw-editor.c:326
 #, c-format
 msgid "%s loaded, LBA %lld, %d samples."
-msgstr ""
+msgstr "%s загружено, LBA %lld, %d выборок."
 
 #: raw-editor.c:350
 msgid "EDC checksum does not match - sector still defective!"
-msgstr ""
+msgstr "Контрольная сумма EDC не совпадает - сектор все еще поврежден!"
 
 #: raw-editor.c:355
 msgid "LBA does not match MSF code in sector!"
-msgstr ""
+msgstr "LBA не соответствует коду MSF в секторе!"
 
 #: raw-editor.c:382
 msgid "Raw sector does not belong to the selected image!"
-msgstr ""
+msgstr "Сектор не принадлежит выбранному образу!"
 
 #: raw-editor.c:388 read-adaptive.c:977 read-adaptive.c:1045
 #: read-adaptive.c:1323 read-adaptive.c:1496 read-linear.c:410
@@ -2027,175 +2029,175 @@ msgstr "Сохранить из буфера в файл"
 #: raw-editor.c:473
 #, c-format
 msgid "Buffer loaded from %s."
-msgstr ""
+msgstr "Буфер загружен из %s."
 
 #: raw-editor.c:489
 #, c-format
 msgid "Buffer saved to %s."
-msgstr ""
+msgstr "Буфер сохранен в %s."
 
 #: raw-editor.c:576
 msgid "*** Well done: Sector has been recovered! ***"
-msgstr ""
+msgstr "*** Успешно: Сектор восстановлен! ***"
 
 #: raw-editor.c:579
 #, c-format
 msgid "Current buffer state: P %d/%d, Q %d/%d"
-msgstr ""
+msgstr "Текущее состояние буфера: P %d/%d, Q %d/%d"
 
 #: raw-editor.c:691
 #, c-format
 msgid "%c Vector %d has >2 erasures (nothing done)."
-msgstr ""
+msgstr "%c У вектора %d >2 стертых мест (ничего не сделано)."
 
 #: raw-editor.c:720
 #, c-format
 msgid "%c Vector %d already good."
-msgstr ""
+msgstr "%c Вектор %d уже в порядке."
 
 #: raw-editor.c:728
 #, c-format
 msgid "%c Vector %d corrected (%d erasures)."
-msgstr ""
+msgstr "%c Вектор %d исправлен (%d стертых мест)."
 
 #: raw-editor.c:731
 #, c-format
 msgid "%c Vector %d not correctable (%d erasures)."
-msgstr ""
+msgstr "%c Вектор %d нельзя исправить (%d стертых мест)."
 
 #: raw-editor.c:746
 #, c-format
 msgid "no replacements for P vector %d available"
-msgstr ""
+msgstr "нет замен для вектора P %d"
 
 #: raw-editor.c:762
 #, c-format
 msgid "Exchanged P vector %d with version %d (of %d)."
-msgstr ""
+msgstr "Вектор P %d заменен версией %d (с %d)."
 
 #: raw-editor.c:784
 #, c-format
 msgid "no replacements for Q vector %d available"
-msgstr ""
+msgstr "нет замен для вектора Q %d"
 
 #: raw-editor.c:798
 #, c-format
 msgid "Exchanged Q vector %d with version %d (of %d)."
-msgstr ""
+msgstr "Вектор Q %d заменен версией %d (с %d)."
 
 #: raw-editor.c:860 raw-editor.c:873
 #, c-format
 msgid "Showing sample %d (of %d)."
-msgstr ""
+msgstr "Показ выборки %d (из %d)."
 
-#: raw-editor.c:918
+#: raw-editor.c:919
 msgid "Sector with lowest P failures selected."
-msgstr ""
+msgstr "Выбран сектор с наименьшим числом ошибок P."
 
-#: raw-editor.c:928
+#: raw-editor.c:929
 msgid "Sector with lowest Q failures selected."
-msgstr ""
+msgstr "Выбран сектор с наименьшим числом ошибок Q."
 
-#: raw-editor.c:940
+#: raw-editor.c:941
 #, c-format
 msgid "Smart L-EC: %s"
-msgstr ""
+msgstr "Интеллектуальный L-EC: %s"
 
-#: raw-editor.c:961
+#: raw-editor.c:962
 msgid "Raw sector editor"
 msgstr "Редактор необработанных секторов"
 
-#: raw-editor.c:983
+#: raw-editor.c:984
 msgid "Please load a raw sector file!"
-msgstr ""
+msgstr "Загрузите файл с необработанными секторами!"
 
-#: raw-editor.c:995
+#: raw-editor.c:996
 msgid "Browsing"
-msgstr ""
+msgstr "Просмотр"
 
-#: raw-editor.c:1007
+#: raw-editor.c:1008
 msgid "button|Load"
 msgstr "Загрузить"
 
-#: raw-editor.c:1012
+#: raw-editor.c:1013
 msgid "button|Save"
 msgstr "Сохранить"
 
-#: raw-editor.c:1018
+#: raw-editor.c:1019
 msgid "button|Prev. sector"
 msgstr "Пред. сектор"
 
-#: raw-editor.c:1023
+#: raw-editor.c:1024
 msgid "button|Next sector"
 msgstr "След. сектор"
 
-#: raw-editor.c:1028
+#: raw-editor.c:1029
 msgid "button|Sort by P"
 msgstr "Сортировать по P"
 
-#: raw-editor.c:1033
+#: raw-editor.c:1034
 msgid "button|Sort by Q"
 msgstr "Сортировать по Q"
 
-#: raw-editor.c:1040
+#: raw-editor.c:1041
 msgid "Editing"
-msgstr ""
+msgstr "Редактирование"
 
-#: raw-editor.c:1052
+#: raw-editor.c:1053
 msgid "button|Load Buf"
 msgstr "Загрузить в буфер"
 
-#: raw-editor.c:1057
+#: raw-editor.c:1058
 msgid "button|Save Buf"
 msgstr "Сохранить из буфера"
 
-#: raw-editor.c:1062
+#: raw-editor.c:1063
 msgid "button|Tag diffs"
 msgstr "Пометить отличия"
 
-#: raw-editor.c:1067
+#: raw-editor.c:1068
 msgid "button|Untag all"
 msgstr "Снять пометки"
 
-#: raw-editor.c:1072
+#: raw-editor.c:1073
 msgid "button|Redo"
 msgstr "Вернуть"
 
-#: raw-editor.c:1077
+#: raw-editor.c:1078
 msgid "button|Undo"
 msgstr "Отменить"
 
-#: raw-editor.c:1084
+#: raw-editor.c:1085
 msgid "Correction"
-msgstr ""
+msgstr "Исправление"
 
-#: raw-editor.c:1087
+#: raw-editor.c:1088
 msgid "button|P vector"
 msgstr "Вектор P"
 
-#: raw-editor.c:1092
+#: raw-editor.c:1093
 msgid "button|Q vector"
 msgstr "Вектор Q"
 
-#: raw-editor.c:1097
+#: raw-editor.c:1098
 msgid "button|Find other P"
 msgstr "Найти другой P"
 
-#: raw-editor.c:1102
+#: raw-editor.c:1103
 msgid "button|Find other Q"
 msgstr "Найти другой Q"
 
-#: raw-editor.c:1107
+#: raw-editor.c:1108
 msgid "button|Tag erasures"
 msgstr "Пометить стертые места"
 
-#: raw-editor.c:1114
+#: raw-editor.c:1115
 msgid "Heuristics"
-msgstr ""
+msgstr "Эвристика"
 
-#: raw-editor.c:1117
+#: raw-editor.c:1118
 msgid "button|Smart L-EC"
-msgstr ""
+msgstr "Интеллектуальный L-EC"
 
 #: raw-sector-cache.c:34 raw-sector-cache.c:175 raw-sector-cache.c:304
 #: rs01-verify.c:537 scsi-freebsd.c:113 scsi-linux.c:99 scsi-netbsd.c:111

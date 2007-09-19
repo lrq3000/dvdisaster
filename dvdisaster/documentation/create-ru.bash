@@ -26,13 +26,13 @@ function dictionary_ru()
    trans_version="Версия"
 
    trans_to_internet="К интернет-версии"
-   trans_to_sourceforge="Краткое изложение (на SourceForge.net)"
+   trans_to_hoster="Краткое изложение (на SourceForge.net)"
 
    trans_back="Назад"
-   trans_screen_shot="Screen shot"
+   trans_screen_shot="Снимок с экрана"
 
    trans_contents="Содержание"
-   trans_news="News"
+   trans_news="Новости"
    trans_hosting="Размещено на"
 
    trans_fdl="Дословное копирование и распространение всей этой статьи разрешается на любом носителе, при условии, что это уведомление сохраняется."
@@ -58,10 +58,10 @@ function news_contents_ru()
    fi
 
    case $query in
-   title)   title="dvdisaster News" ;;
+   title)   title="dvdisaster: Новости" ;;
 
-   link)    link_title="News" ;;
-   link0)   link_title="News" ;;
+   link)    link_title="Новости" ;;
+   link0)   link_title="Новости" ;;
 
    content*) eval "news$page$lang $file $file_base $expand full" ;;
    headlines*) eval "news$page$lang $file $file_base $expand headlines" ;;
@@ -75,25 +75,20 @@ function news0ru()
    local mode=$4
 
    if [ $mode == "full"  ]; then
-     echo "<h3>dvdisaster News</h3>">>$file
+     echo "<h3>Новости dvdisaster</h3>">>$file
    fi
 
-   news_item $file "xx.xx.2007" "dvdisaster 0.71.24 released" $mode <<END_NEWS_ITEM
-   dvdisaster 0.71.24 has just been released. This release marks the start of
-   an online documentation rewrite, including a Russian translation made
-   by Igor Gorbounov. Also new are the raw CD sector editor and some improvements
-   in the raw reading heuristics. 
+   news_item $file "xx.xx.2007" "Выпущен dvdisaster 0.71.24" $mode <<END_NEWS_ITEM
+   Только что вышел dvdisaster 0.71.24. Начиная с этой версии переписывается
+   интерактивная документация, включая русский перевод, сделанный
+   Игорем Горбуновым. Новшеством также является редактор необработанных секторов CD и некоторые улучшения
+   в эвристике низкоуровневого чтения. 
 END_NEWS_ITEM
 
-   news_item $file "xx.xx.2007" "German documentation unavailable" $mode <<END_NEWS_ITEM
-   During the transition to the new documentation the German translation will be unavailable.
-   Thanks for your understanding.<p>
-END_NEWS_ITEM
-
-   news_item $file "07.07.2007" "New documentation started" $mode <<END_NEWS_ITEM
-   The dvdisaster documentation is currently being reworked for the upcoming
-   V0.72 release. Please be patient; the new documentation will hopefully be more
-   useful than the old one, but we will need a few weeks to fill in all parts.
+   news_item $file "07.07.2007" "Начата новая документация" $mode <<END_NEWS_ITEM
+   В настоящее время документация на dvdisaster перерабатывается для предстоящего
+   выхода V0.72. Наберитесь терпения; возможно, новая документация будет более
+   полезной, чем старая, но нам требуется несколько недель, чтобы все охватить.
 END_NEWS_ITEM
 }
 
@@ -409,9 +404,9 @@ function download_contents_ru()
 
    link)    link_title="Скачать" ;;
    link10)   link_title="Системные требования" ;;
-   link20)   link_title="Digital signature" ;;
+   link20)   link_title="Цифровая подпись" ;;
    link30)   link_title="Установка" ;;
-   link40)   link_title="Alpha (unstable) versions" ;;
+   link40)   link_title="Альфа (нестабильные) версии" ;;
 
    content*) eval "download$page$lang $file $file_base $expand" ;;
    esac 
@@ -422,100 +417,100 @@ function download0ru()
 {  cat >> $1 <<EOF
 <h3>Предстоит сделать</h3>
 
-dvdisaster is available for <a href="download10.html">recent versions</a>
-of the Darwin/Mac OS X, FreeBSD, Linux, NetBSD and Windows operating systems.<p>
+dvdisaster имеется для <a href="download10.html">последних версий</a>
+операционных систем Darwin/Mac OS X, FreeBSD, Linux, NetBSD и Windows.<p>
 
-Please download either the source code or a binary version from the list below.
-A <a href="download20.html">digital signature</a> is provided for verification that the
-packets are in their original state.<p>
+Ниже приводится список ссылок для скачивания исходного кода или двоичного пакета.
+<a href="download20.html">Цифровая подпись</a> приводится для проверки того, что
+пакеты - в первоначальном состоянии.<p>
 
-To <a href="download30.html">install</a> the binary version execute 
-the downloaded program and follow the dialog.
-The source code version contains a file <tt>INSTALL</tt> with further instructions.
+Для <a href="download30.html">установки</a> двоичного варианта выполните 
+загруженную программу и следуйте инструкциям.
+В составе исходного текста имеется файл <tt>INSTALL</tt> с дальнейшими инструкциями.
 
 <pre> </pre>
 
 <!---
-<b>Developer versions</b> - new and experimental for experienced users!<p>
-<b>Current version</b><p>
+<b>Версии для разработчиков</b> - новые и экспериментальные для опытных пользователей!<p>
+<b>Текущая версия</b><p>
 -->
 
-<b>Alpha (unstable) versions</b> - new and experimental for experienced users!<p>
+<b>Альфа (нестабильные) версии</b> - новые и экспериментальные для опытных пользователей!<p>
 
-Testers are welcome for the upcoming dvdisaster release, but should be aware of remaining
-bugs and incompatibilities.
-The current unstable release is 
+Приглашаем тестеров для предстоящих версий dvdisaster, но следует иметь в виду, что
+остались еще ошибки и несоответствия.
+Текущая нестабильная версия - 
 <a href="download40.html">${cooked_version}</a>.
 <pre> </pre>
 
-<b>Stable version</b> - recommended for getting started.<p>
+<b>Стабильная версия</b> - рекомендуется для начала.<p>
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.70</b></td><td align="right">20-Jan-2007</td></tr>
+<tr><td><b>dvdisaster-0.70</b></td><td align="right">20-янв-2007</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
-    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
+    <tr><td align="right">&nbsp;&nbsp;Исходный код для всех операционных систем:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.4.tar.bz2?download">dvdisaster-0.70.4.tar.bz2</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
+    <tr><td align="right">Цифровая подпись:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.4.tar.bz2.gpg?download">dvdisaster-0.70.4.tar.bz2.gpg</a></td></tr>
-    <tr><td align="right">Binary for Windows:&nbsp;</td>
+    <tr><td align="right">Двоичный пакет для Windows:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.4-setup.exe?download">dvdisaster-0.70.4-setup.exe</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
+    <tr><td align="right">Цифровая подпись:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.4-setup.exe.gpg?download">dvdisaster-0.70.4-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
-The RS02 error correction method
-is fully supported in the graphical user interface. Images created
-with RS02 can be used 
-with the adaptive reading strategy.<p>
+Метод коррекции ошибок RS02
+полностью поддерживается в графическом интерфейсе. Образы, созданные
+с использованием RS02, могут использоваться
+со стратегией адаптивного чтения.<p>
 
-Julian Einwag started porting dvdisaster 
-to Mac OS X / Darwin.<p>
+Джулиан Айнваг (Julian Einwag) начал перенос dvdisaster 
+на Mac OS X / Darwin.<p>
 
-Daniel Nylander provided Swedish translations of the screen texts.<p>
+Дэниэл Найландер (Daniel Nylander) дал шведский перевод экранных текстов.<p>
 
-<b>Patches</b> (small changes after version 0.70; files above have been updated):<br>
+<b>Исправления</b> (небольшие изменения после версии 0.70; вышеприведенные файлы были обновлены):<br>
 
-<b>pl4</b> provides better compatibility with two layered DVDs 
-(DVD-R DL and DVD+R DL).<br> 
-Some minor bugs have been fixed. <i>(20-Jan-2007)</i>.<p>
+<b>pl4</b> обеспечивает лучшую совместимость с двухслойными DVD
+(DVD-R DL и DVD+R DL).<br> 
+Были исправлены некоторые незначительные ошибки. <i>(20-янв-2007)</i>.<p>
 
-<b>pl3</b> fixes incorrect recognization of unsupported CD formats which
-produced a Windows blue screen under rare circumstances. Added cancel option
-during RS02 initialization on DVD RW media.
-<i>(10-Dec-2006)</i>.<p>
+<b>pl3</b> исправляет неправильное распознавание неподдерживаемых форматов CD, которые
+приводили к синему экрану Windows при редком стечении обстоятельств. Добавлена возможность отмены
+во время инициализации RS02 на носителях DVD RW.
+<i>(10-дек-2006)</i>.<p>
 
-<b>pl2</b> fixes incorrect memory freeing when the program window is closed.
-Unpacking of documentation screen shots is fixed for PPC platforms.
-Only the source code archives have been updated.
-<i>(03-Oct-2006)</i>.<p>
+<b>pl2</b> исправляет неправильное освобождение памяти, когда закрывается окно программы.
+Исправлена распаковка снимков экрана в документации для платформ PPC.
+Обновлены только архивы исходных текстов.
+<i>(03-окт-2006)</i>.<p>
 
-<b>pl1</b> fixes a bug in adaptive reading for RS02 which would sometimes result in
-reading insufficient data for a successful recovery. Adds some small
-improvements of documentation and usability. <i>(30-Jul-2006)</i>
+<b>pl1</b> исправляет ошибку в адаптивном чтении для RS02, которая иногда приводит к
+чтению недосточного количества данных при сообщении об успешном восстановлении. Добавляет несколько
+небольших улучшений в документации и функциональности. <i>(30-июл-2006)</i>
 </td></tr></table><p>
 
-The dvdisaster source code is also
-<a href="http://sourceforge.net/cvs/?group_id=157550">available via CVS</a>.
+Исходные тексты dvdisaster доступны также
+<a href="http://sourceforge.net/cvs/?group_id=157550">через CVS</a>.
 <pre> </pre>
 
-<b>Previous release</b> - upgrading to version 0.70.4 is recommended.<p>
+<b>Предыдущая версия</b> - рекомендуется обновление до версии 0.70.4.<p>
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.66</b></td><td align="right">25-Mar-2006</td></tr>
+<tr><td><b>dvdisaster-0.66</b></td><td align="right">25-мар-2006</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
-    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
+    <tr><td align="right">&nbsp;&nbsp;Исходные тексты для всех операционных систем:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.66.tar.bz2?download">dvdisaster-0.66.tar.bz2</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
+    <tr><td align="right">Цифровая подпись:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.66.tar.bz2.gpg?download">dvdisaster-0.66.tar.bz2.gpg</a></td></tr>
-    <tr><td align="right">Binary for Windows:&nbsp;</td>
+    <tr><td align="right">Двоичный файл для Windows:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.66.3-setup.exe?download">dvdisaster-0.66.3-setup.exe</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
+    <tr><td align="right">Цифровая подпись:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.66.3-setup.exe.gpg?download">dvdisaster-0.66.3-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
@@ -525,30 +520,30 @@ EOF
 
 function download10ru()
 {  cat >> $1 <<EOF
-<h3>System requirements</h3>
+<h3>Системные требования</h3>
 
 <ul>
- <li>Processors: x86, PowerPC or Sparc;<p></li>
- <li>with processing speed equal or better than a P4 at 2Ghz;<p></li>
- <li>an up-to-date CD/DVD/HD DVD/BD drive with ATAPI or SCSI interface;<p></li>
- <li>enough hard disk space for creating .iso images from processed media.<p>
+ <li>Процессоры: x86, PowerPC или Sparc;<p></li>
+ <li>со скоростью обработки равной или лучше, чем скорость P4 при 2ГГц;<p></li>
+ <li>современный привод CD/DVD/HD DVD/BD с интерфейсом ATAPI или SCSI;<p></li>
+ <li>достаточное пространство на жестком диске для создания .iso-образов обрабатываемых носителей.<p>
 </ul>
 
-<h3>Operating systems</h3>
+<h3>Операционные системы</h3>
 <ul>
- <li><b>FreeBSD</b> version <b>6.0</b> or later<br>
-     (using ATAPI drives requires a kernel recompile -- see INSTALL doc)<p>
+ <li><b>FreeBSD</b> версия <b>6.0</b> или новее<br>
+     (для использования ATAPI-приводов требуется перекомпиляция ядра -- см. файл INSTALL)<p>
  </li>
- <li><b>Linux</b> with kernel <b>2.6.7</b> or later,<br>
-     (using kernels >= 2.4.20 is possible, but not recommended!)<p>
+ <li><b>Linux</b> с ядром <b>2.6.7</b> или новее,<br>
+     (использование ядер >= 2.4.20 возможно, но не рекомендуется!)<p>
  </li>
- <li><b>Mac OS X</b> version 10.4 (Tiger) or later,<br> 
-      on x86 and PowerPC hardware.<p>
- <li><b>NetBSD</b> version 3.1 or later.<p></li> 
- <li><b>Windows</b> <b>2000</b> or <b>XP</b><br>
-     Windows 98 and ME are possible, but are not recommended for handling DVD
-     and larger media.<br>
-     Running under Windows Vista (R) is possible, but mostly untested.
+ <li><b>Mac OS X</b> версия 10.4 (Tiger) или новее,<br> 
+      на платформах x86 и PowerPC.<p>
+ <li><b>NetBSD</b> версия 3.1 или новее.<p></li> 
+ <li><b>Windows</b> <b>2000</b> или <b>XP</b><br>
+     Windows 98 и ME возможно использовать, но не рекомендуется для обработки DVD
+     и более крупных носителей.<br>
+     Работа под Windows Vista (R) возможна, но по большей части не протестирована.
  </li>
 </ul>
 EOF
@@ -557,14 +552,14 @@ EOF
 function download20ru()
 {  cat >> $1 <<EOF
 
-<h3>Digital signature</h3>
+<h3>Цифровая подпись</h3>
 
-The downloadable dvdisaster packages have been digitally signed using
-<a href="http://www.gnupg.org/gnupg.html">GnuPG</a> so that you can verify
-that the software is in its original state.<p>
+Выложенные для скачивания пакеты dvdisaster снабжены цифровой подписью с помощью
+<a href="http://www.gnupg.org/gnupg.html">GnuPG</a>, поэтому Вы можете проверить
+целостность пакетов.<p>
 
 
-The signature has been made with the following <a href="../pubkey.asc">public key</a>:
+Подпись была сделана с помощью следующего <a href="../pubkey.asc">открытого ключа</a>:
 
 <a href="../pubkey.asc">
 <pre>
@@ -574,149 +569,148 @@ uid                  dvdisaster (pkg signing key #1)
 sub   1024g/091AD320 2003-08-22
 </pre></a>
 
-Feel free to send an email to <img src="../images/email.png" align="top"> to obtain 
-the fingerprint directly from the developers. 
-Please include "GPG finger print" in the subject line.
+Пишите на <img src="../images/email.png" align="top"> и Вы получите
+отпечаток ключа непосредственно от разработчиков. 
+В тему письма вставьте строку "GPG finger print".
 EOF
 }
 
 function download30ru()
 {  cat >> $1 <<EOF
-<h3>Installation of the binary versions (Windows only)</h3>
+<h3>Установка двоичных версий (только Windows)</h3>
 
-Please install the Windows version by executing the setup binary
-(e.g. ${project_package}-setup.exe) and follow the 
-installation dialog. <p>
+Устанавливайте Windows-версию, запуская на выполнение двоичный файл
+(например, ${project_package}-setup.exe) и следуя диалогу в процессе установки. <p>
 
-<b>Caution:</b> dvdisaster can NOT be installed from
-manually unpacking the setup.exe program, or by copying it from
-an already existing installation. Doing so may result in strange
-errors which seem to be totally unrelated to an improper installation.
+<b>Предупреждение:</b> dvdisaster НЕ устанавливается путем ручной
+распаковки программы setup.exe или путем копирования его из уже
+существующего установленного варианта. Это может привести к появлению
+странных ошибок, которые будут казаться совсем не связанными с неправильной установкой.
 
-<h3>Installation of the source packages</h3>
+<h3>Установка из исходных текстов</h3>
 
-dvdisaster uses the common <tt>./configure; make; make install</tt> mechanism
-for installation from source. Please see the file <tt>INSTALL</tt> in the
-source distribution for further information.
+dvdisaster использует обычный механизм: <tt>./configure; make; make install</tt>,- 
+для установки из исходных текстов. Более подробно смотрите в файле <tt>INSTALL</tt> в
+дистрибутиве исходных текстов.
 EOF
 }
 
 function download40ru()
 {  cat >> $1 <<EOF
-<h3>Alpha (developer) versions</h3>
+<h3>Альфа версии (для разработчиков)</h3>
 
-<b>Help us testing!</b> We have some new functions under development and
-would like them to be tested by more people before making the next official release.<p>
+<b>Помогите нам тестировать!</b> У нас в разработке находится несколько новых функций, и
+нам хотелось бы, чтобы они были протестированы большим количеством людей, прежде чем мы выпустим следующую официальную версию.<p>
 
-Especially, support for BD und HD DVD drives has been introduced and needs more
-field testing. The <a href="howtos90.html">image compatibility test</a> described
-in the Howtos section is very useful for testing new drives. Please 
-<a href="feedback.html">report both positive and negative results</a> 
-so that we can get a better picture of how the new formats are working.<p>
+Самое главное, была добавлена поддержка приводов BD и HD DVD, и она требует более интенсивных
+полевых испытаний. Описанный в разделе "Howtos" <a href="howtos90.html">тест совместимости образов</a> 
+очень полезен для тестирования новых приводов. Пожалуйста,
+<a href="feedback.html">сообщайте как о положительных, так и негативных результатах</a>,
+чтобы мы смогли получить лучшее представление о том, как эти новые форматы работают.<p>
 
-<b>A word of caution:</b> The alpha versions might lock up the drive and/or the
-operating system and require you to reboot. They might contain other bugs
-and should not be used to process media containing important data.<p>
+<b>Предупреждение:</b> Альфа-версии могут заблокировать привод и/или операционную
+систему, и потребуется перезагрузка. Они могут содержать другие ошибки,
+и их не следует использовать для обработки носителей с важными данными.<p>
 
-If in doubt, please continue using the <a href="download.html">stable version 0.70</a>
-and wait for the release of version 0.72.
+Если сомневаетесь, продолжайте пользоваться <a href="download.html">стабильной версией 0.70</a>
+и ждите выпуска версии 0.72.
 
 <hr>
 
-<h3>Downloads</h3>
+<h3>Загрузки</h3>
 
-The alpha versions use the same package format as the regular releases.<p>
+Для альфа-версий используется такой же формат пакетов, как и для нормальных версий.<p>
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.71 (devel24)</b></td><td align="right">xx-xxx-2007</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
-    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
+    <tr><td align="right">&nbsp;&nbsp;Исходный код для всех операционных систем:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel24.tar.bz2?download">dvdisaster-0.71.devel24.tar.bz2</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
+    <tr><td align="right">Цифровая подпись:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel24.tar.bz2.gpg?download">dvdisaster-0.71.devel24.tar.bz2.gpg</a></td></tr>
-    <tr><td align="right">Binary for Windows:&nbsp;</td>
+    <tr><td align="right">Двоичный файл для Windows:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel24-setup.exe?download">dvdisaster-0.71.devel24-setup.exe</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
+    <tr><td align="right">Цифровая подпись:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel24-setup.exe.gpg?download">dvdisaster-0.71.devel24-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
-This release marks the start of
-an online documentation rewrite, including a Russian translation made
-by Igor Gorbounov. Also new are the raw CD sector editor and some improvements
-in the raw reading heuristics. 
+Эта версия знаменует начало 
+переписывания интерактивной документации, включая русский перевод, сделанный 
+Игорем Горбуновым. Также новшествами являются редактор необработанных CD секторов и некоторые улучшения
+в эвристике низкоуровневого чтения. 
 </td></tr></table><p>
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.71 (devel23)</b></td><td align="right">06-May-2007</td></tr>
+<tr><td><b>dvdisaster-0.71 (devel23)</b></td><td align="right">06-май-2007</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
-    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
+    <tr><td align="right">&nbsp;&nbsp;Исходный код для всех операционных систем:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel23.tar.bz2?download">dvdisaster-0.71.devel23.tar.bz2</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
+    <tr><td align="right">Цифровая подпись:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel23.tar.bz2.gpg?download">dvdisaster-0.71.devel23.tar.bz2.gpg</a></td></tr>
-    <tr><td align="right">Binary for Windows:&nbsp;</td>
+    <tr><td align="right">Двоичный файл для Windows:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel23-setup.exe?download">dvdisaster-0.71.devel23-setup.exe</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
+    <tr><td align="right">Цифровая подпись:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel23-setup.exe.gpg?download">dvdisaster-0.71.devel23-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
-Added support for C2 scanning of CD media.<br>
-Andrei Grecu submitted improved versions of the RAW recovery heuristics.
+Добавлена поддержка C2-сканирования CD-носителей.<br>
+Андрей Грекю (Andrei Grecu) предложил улучшенные версии эвристики низкоуровневого восстановления.
 </td></tr></table><p>
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.71 (devel22)</b></td><td align="right">22-Apr-2007</td></tr>
+<tr><td><b>dvdisaster-0.71 (devel22)</b></td><td align="right">22-апр-2007</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
-    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
+    <tr><td align="right">&nbsp;&nbsp;Исходный код для всех операционных систем:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel22.tar.bz2?download">dvdisaster-0.71.devel22.tar.bz2</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
+    <tr><td align="right">Цифровая подпись:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel22.tar.bz2.gpg?download">dvdisaster-0.71.devel22.tar.bz2.gpg</a></td></tr>
-    <tr><td align="right">Binary for Windows:&nbsp;</td>
+    <tr><td align="right">Двоичный файл для Windows:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel22-setup.exe?download">dvdisaster-0.71.devel22-setup.exe</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
+    <tr><td align="right">Цифровая подпись:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel22-setup.exe.gpg?download">dvdisaster-0.71.devel22-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
-Igor Gorbounov started the Russian translation of on-screen texts.<p>
-Added selection of 20h/21h raw reading modes to enable defective sector 
-reading on more drives. Fixed some inefficiencies during raw sector recovery.
+Игорь Горбунов начал русский перевод экранных текстов.<p>
+Добавлен выбор режимов низкоуровневого чтения 20h/21h для того, чтобы дать возможность чтения
+поврежденных секторов на большем количестве приводов. Исправлены некоторые моменты неэффективной работы во время низкоуровневого восстановления секторов.
 </td></tr></table><p>
 
 <table width="100%" $IDXCOLOR cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.71 (devel21)</b></td><td align="right">15-Apr-2007</td></tr>
+<tr><td><b>dvdisaster-0.71 (devel21)</b></td><td align="right">15-апр-2007</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
-    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
+    <tr><td align="right">&nbsp;&nbsp;Исходный код для всех операционных систем:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel21.tar.bz2?download">dvdisaster-0.71.devel21.tar.bz2</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
+    <tr><td align="right">Цифровая подпись:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel21.tar.bz2.gpg?download">dvdisaster-0.71.devel21.tar.bz2.gpg</a></td></tr>
-    <tr><td align="right">Binary for Windows:&nbsp;</td>
+    <tr><td align="right">Двоичный файл для Windows:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel21-setup.exe?download">dvdisaster-0.71.devel21-setup.exe</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
+    <tr><td align="right">Цифровая подпись:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel21-setup.exe.gpg?download">dvdisaster-0.71.devel21-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
-Andrei Grecu provided an algorithm for recovering defective CD sectors
-from multiple incomplete RAW reading attempts.
-Sergey Svishchev helped porting dvdisaster to NetBSD.<p>
+Андрей Грекю (Andrei Grecu) предоставил алгоритм восстановления поврежденных CD-секторов
+с помощью множественных попыток незавершенного низкоуровневого чтения.
+Сергей Свишчев (Sergey Svishchev) помог портировать dvdisaster на NetBSD.<p>
 
-Other features include: a selectable number of reading attempts, verification
-of CD sectors using the raw L-EC and EDC data, and a redesigned preferences dialog.
-RS02 checksum handling has been improved in the adaptive reading strategy. 
+Среди других возможностей: выбираемое число попыток чтения, проверка
+CD секторов с помощью необработанных данных L-EC и EDC и переделанный диалог настроек.
+В стратегии адаптивного чтения была улучшена работа с контрольной суммой RS02. 
 </td></tr></table><p>
 EOF
 }
@@ -1112,10 +1106,10 @@ function feedback_contents_ru()
    fi
 
    case $query in
-   title)   title="Bug reporting" ;;
+   title)   title="Сообщения об ошибках" ;;
 
-   link)    link_title="Bug reporting" ;;
-   link0)   link_title="Bug reporting" ;;
+   link)    link_title="Сообщения об ошибках" ;;
+   link0)   link_title="Сообщения об ошибках" ;;
 
    content*) eval "feedback$page$lang $file $file_base $expand" ;;
    esac 
@@ -1127,63 +1121,63 @@ function feedback0ru()
    local expand=$3
 
    cat >> $1 <<EOF
-<h3>Bug reporting</h3>
-Like all complex software, dvdisaster may contain bugs (programming errors) and
-incompatibilities with certain (drive) hardware and software setups.
-You are invited to tell us about any difficulties you encounter with the program
-or the documentation so that we can improve things in future releases.<p>
+<h3>Сообщения об ошибках</h3>
+Как всякое сложное программное обеспечение, dvdisaster может содержать ошибки (ошибки программирования) и
+может быть несовместим с некоторыми настройками аппаратуры (приводов) и программного обеспечения.
+Пожалуйста, сообщайте нам о любых затруднениях с программой
+или документацией, чтобы мы могли внести улучшения в будущих версиях.<p>
 
-To make sure that we are getting the right information, we have provided the
-following checklist for bug reporting:
+Чтобы быть уверенными, что мы получаем правильную информацию, мы составили
+следующий перечень для сообщений об ошибках:
 
 
-<h4>Please check first that you are really experiencing a bug:</h4>
+<h4>Сначала проверьте, что Вы действительно столкнулись с ошибкой:</h4>
 
 <ul>
-<li>Make sure that you are using the latest genuine version from our
-<a href="http://dvdisaster.sourceforge.net/en/download.html">download site 
-at SourceForge</a>.
-dvdisaster versions provided by third parties
-may contain functions and bugs which are not present in the original version.</li>
-<li>Double check that the issue you have encountered is not already covered in the
-<a href="qa20.html">Questions and Answers</a> section.</li>
-<li>Please note that dvdisaster will only work with the (re-)writeable varieties
-of media, so seeing it reject DVD-ROM, BD-ROM and HD DVD-ROM is <b>not an
-error</b>. Also, CD-Audio, VCD, SVCD and multisession CD are not supported 
-(<a href="qa10.html#media">complete list of supported media formats</a>).</li>
-<li>dvdisaster works only with real drives. Not supported are
-network drives, software drives (e.g. alcohol) and drives in virtual 
-machines like VMWare(R) and Xen.</li>
+<li>Убедитесь, что Вы используете самую последнюю подлинную версию с нашего
+<a href="http://dvdisaster.sourceforge.net/en/download.html">сайта 
+на SourceForge</a>.
+Версии dvdisaster, предоставленные третьими сторонами, 
+могут содержать функции и ошибки, которых нет в первоначальной версии.</li>
+<li>Тщательно проверьте, что проблема, с которой Вы столкнулись, еще не упоминается в
+разделе <a href="qa20.html">Вопросы и ответы</a>.</li>
+<li>Обратите внимание, что dvdisaster работает только с (пере-)записываемыми видами
+носителей, поэтому, если он отказывается работать с DVD-ROM, BD-ROM и HD DVD-ROM, то это <b>не
+ошибка</b>. Кроме того, не поддерживаются CD-Audio, VCD, SVCD и многосессионные CD 
+(<a href="qa10.html#media">полный список поддерживаемых форматов носителей</a>).</li>
+<li>dvdisaster работает только с физическими приводами. Не поддерживаются
+сетевые приводы, виртуальные приводы (например, alcohol) и приводы в виртуальных 
+машинах (например, VMWare(R) и Xen).</li>
 </ul>
 
-<h4>How to report issues with the program:</h4>
+<h4>Как сообщать о проблемах с программой:</h4>
 
-Please report your findings by sending an email to 
-<img src="../images/email.png" align="top">. Your report should contain:<p>
+Сообщайте о Ваших находках электронной почтой на 
+<img src="../images/email.png" align="top">. Ваше сообщение должно содержать:<p>
 
 <ul>
-<li>Information about the operating system and dvdisaster version you are using;</li>
-<li>the drive and media type(s) which exhibited the problem; </li>
-<li>a textual description of the issue you encountered;</li>
-<li>a screen shot of the error message and/or output which might provide
-further information about the problem;</li>
-<li>differences between working and non-working configurations if the issue is
-experienced only on certain drives/computers;</li>
-<li>a log file if you suspect that the issue is related to a drive or medium
-incompatibility.</li>
+<li>Информацию об операционной системе и версии dvdisaster, которыми Вы пользуетесь;</li>
+<li>привод и тип(ы) носителей, с которыми проявилась проблема; </li>
+<li>текстовое описание проблемы, с которой Вы столкнулись;</li>
+<li>снимок с экрана сообщения об ошибке и/или выходные данные, которые могли бы
+дать дополнительную информацию о проблеме;</li>
+<li>различия между работающими и неработающими конфигурациями, если проблема
+проявляется только на некоторых приводах или компьютерах;</li>
+<li>журнал сообщений, если Вы подозреваете, что проблема связана с несовместимостью привода или 
+носителя.</li>
 </ul>
 EOF
 
-screenshot $file_base "Creating a log file." "activate_logfile.png" $expand <<END_SCREENSHOT
+screenshot $file_base "Создание журнального файла." "activate_logfile.png" $expand <<END_SCREENSHOT
 
-<b>How to create a log file:</b> If you suspect incompatibilities with your drive and/or media
-as the cause of your issue, please activate the log file feature in the preferences 
-dialog as shown in the screen shot. Then perform a scanning or reading action 
-and attach the log file to your bug report.
+<b>Как создать журнальный файл:</b> Если Вы подозреваете, что причина Вашей проблемы - в несовместимости
+с Вашим приводом и/или носителем, включите в настройках возможность ведения журнала, 
+как показано на снимке с экрана. Затем выполните проверку или чтение 
+и присоедините файл журнала к Вашему сообщению об ошибке.
 END_SCREENSHOT
 
 cat >>$file <<EOF
-Thanks for your feedback!
+Спасибо за обратную связь!
 EOF
 }
 

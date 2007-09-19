@@ -225,8 +225,8 @@ show:
 # Distribution management
 ######################################################################
 
-.PHONY : install uninstall clean distclean arch www 
-.PHONY : sf sf-images 
+.PHONY : install uninstall clean distclean arch
+.PHONY : www www-images sf 
 .PHONY : srcdist innodist zipdist
 
 install: dvdisaster html images
@@ -329,18 +329,14 @@ clean:
 arch:	clean distclean
 	@cd .. ; tar -c -z -f $(PKGNAME)-arch.tgz $(PKGNAME)
 
-www:	
-	@echo -e "Please use one of the following targets:\n"
-	@echo "make sf         # create WWW pages for hosting at SourceForge"
-
 # TAG: online-docs
-sf:
-	@cd documentation ; ./create.bash sf $(VERSION) $(PKGNAME) $(CFG_FULL_VERSION); \
-	tar cjf ../../sf.tar.bz2 pubkey.asc en/*.html ru/*.html
+www:
+	@cd documentation ; ./create.bash www $(VERSION) $(PKGNAME) $(CFG_FULL_VERSION); \
+	tar cjf ../../www.tar.bz2 pubkey.asc de/*.html en/*.html ru/*.html
 
-sf-images:
-	@cd documentation ; ./create.bash sf $(VERSION) $(PKGNAME) $(CFG_FULL_VERSION); \
-	tar cjf ../../sf.tar.bz2 cs/*.html en/*.html ru/*.html images/*.png en/images/*.png ru/images/*.png
+www-images:
+	@cd documentation ; ./create.bash www $(VERSION) $(PKGNAME) $(CFG_FULL_VERSION); \
+	tar cjf ../../www.tar.bz2 de/*.html en/*.html ru/*.html images/*.png de/images en/images/*.png ru/images/*.png
 
 INSTALL: documentation/install.template
 	@sed "s/@@PKGNAME/$(PKGNAME)/" <documentation/install.template >INSTALL

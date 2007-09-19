@@ -53,11 +53,11 @@ fi
 case $major_mode in
   local) echo "Creating local documentation for $project_title $cooked_version" ;;
 
-  sf)    echo "Creating WWW homepage for $project_title $cooked_version at SourceForge" 
+  www)    echo "Creating WWW homepage for $project_title $cooked_version" 
          project_at_hoster="http://sourceforge.net/projects/dvdisaster"
          ;;
 
-  *)     echo "Error: mode $major_mode unknown. Use \"local\" or \"sf\"." ;;
+  *)     echo "Error: mode $major_mode unknown. Use \"local\" or \"www\"." ;;
 esac
 
 
@@ -173,15 +173,11 @@ EOF
   if [ $major_mode != "local" ]; then
     echo "<tr>" >> $file
 
-    case $major_mode in
-      sf) trans_to_hoster="$trans_to_sourceforge" ;;
-    esac
-
     case $lang in
       cs)  echo "   <td align=\"left\"><a href=\"$project_at_hoster\">$trans_to_hoster</a></td>" >> $file
            echo "<td align=\"right\">" >>$file
 #           echo "&#268;esky &nbsp;&nbsp;&nbsp;" >>$file
-#	   echo "<a href=\"../de/$file\" title=\"Deutsche Sprache\">Deutsch</a> &nbsp;&nbsp;&nbsp;" >>$file
+	   echo "<a href=\"../de/$file\" title=\"Deutsche Sprache\">Deutsch</a> &nbsp;&nbsp;&nbsp;" >>$file
 	   echo "<a href=\"../en/$file\" title=\"English language\">English</a>" >>$file
 	   echo "<a href=\"../en/$file\" title=\"Russian language\">Russian</a>" >>$file
            echo "</td>" >>$file
@@ -189,7 +185,7 @@ EOF
 
       de) echo "   <td align=\"left\"><a href=\"$project_at_hoster\">$trans_to_hoster</a></td>" >> $file
           echo "<td align=\"right\">" >>$file
-          echo "<a href=\"../cs/$file\">&#268;esky</a> &nbsp;&nbsp;&nbsp;" >>$file
+#          echo "<a href=\"../cs/$file\">&#268;esky</a> &nbsp;&nbsp;&nbsp;" >>$file
 	  echo "Deutsch &nbsp;&nbsp;&nbsp;" >>$file
 	  echo "<a href=\"../en/$file\">English</a> &nbsp;&nbsp;&nbsp;" >>$file
 	  echo "<a href=\"../en/$file\">Russisch</a>" >>$file
@@ -199,7 +195,7 @@ EOF
       ru) echo "   <td align=\"left\"><a href=\"$project_at_hoster\">$trans_to_hoster</a></td>" >> $file
           echo "<td align=\"right\">" >>$file
 #          echo "<a href=\"../cs/$file\">&#268;esky</a> &nbsp;&nbsp;&nbsp;" >>$file
-#	  echo "<a href=\"../de/$file\">Deutsch</a> &nbsp;&nbsp;&nbsp;" >>$file
+	  echo "<a href=\"../de/$file\">Deutsch</a> &nbsp;&nbsp;&nbsp;" >>$file
 	  echo "<a href=\"../en/$file\">English</a> &nbsp;&nbsp;&nbsp;" >>$file
 	  echo "Russian" >>$file
           echo "</td>" >>$file
@@ -208,7 +204,7 @@ EOF
       *)  echo "   <td align=\"left\"><a href=\"$project_at_hoster\">$trans_to_hoster</a></td>" >> $file
           echo "<td align=\"right\">" >>$file
 #          echo "<a href=\"../cs/$file\">&#268;esky</a> &nbsp;&nbsp;&nbsp;" >>$file
-#	  echo "<a href=\"../de/$file\">Deutsch</a> &nbsp;&nbsp;&nbsp;" >>$file
+	  echo "<a href=\"../de/$file\">Deutsch</a> &nbsp;&nbsp;&nbsp;" >>$file
 	  echo "English &nbsp;&nbsp;&nbsp;" >>$file
 	  echo "<a href=\"../ru/$file\">Russian</a>" >>$file
           echo "</td>" >>$file
@@ -411,7 +407,8 @@ if [ $show_news == 1 ]
   then insert_news_column $file_base $file $lang $variant 
 fi
 
-if [ $major_mode == "local" ]
+#if [ $major_mode == "local" ]
+if [ 1 ]
   then
 cat >> $file <<EOF
  </tr>
@@ -610,7 +607,7 @@ EOF
 
 #source create-cs.bash
 source create-en.bash
-#source create-de.bash
+source create-de.bash
 source create-ru.bash
 
 # Assemble all pages together
@@ -670,6 +667,29 @@ fi
 
 
 # Prepare entry links for each section
+
+# German translation
+
+dictionary_de
+
+for sect in $SECTIONS; do
+  link_title=error
+  eval "${sect}_contents_de ignore link ignore de 0"
+  eval "${sect}_link=\"$link_title\""
+done
+
+if ! test -e $workdir/de; then mkdir $workdir/de; fi
+cd $workdir/de
+create_subpages news de "0"
+create_subpages index de "0 10 20 30"
+create_subpages howtos de "0 10 20 21 22 30 40 50 90 91 92 93"
+create_subpages download de "0 10 20 30 40"
+create_subpages qa de "0 10 20"
+create_subpages feedback de "0"
+
+if ! test $major_mode = "local"; then
+  create_subpages imprint de "0"
+fi
 
 # English translation
 

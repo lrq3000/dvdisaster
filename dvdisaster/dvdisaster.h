@@ -1028,11 +1028,8 @@ typedef struct _RawBuffer
    unsigned char **qList[N_Q_VECTORS];  /* List of accepting Q vectors */
    int qn[N_Q_VECTORS];
 
-   int bestPFrame;                      /* Frame with lowest P failures */
-   int bestP1,bestP2;
-
-   int bestQFrame;                      /* Frame with lowest Q failures */
-   int bestQ1,bestQ2;
+   int bestFrame;                      /* Frame with lowest failures */
+   int bestP1, bestP2, bestQ1, bestQ2;
 
 } RawBuffer;
 

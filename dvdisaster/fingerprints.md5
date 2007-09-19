@@ -1,4 +1,4 @@
-052f9bd440c6b34f0c170024abeb5d97 *dvdisaster.h
+9a30066a871d30ccf653d2ab0e5ca735 *dvdisaster.h
 6dacf6d47cf1338e81391ad12114ecf7 *galois-inlines.h
 df9d88776eb3f77a93ef596b148193be *md5.h
 45b9801e2fed70519f003ac787e92cf6 *read-linear.h
@@ -34,13 +34,13 @@ eecfd7e236c89cc36e1de2062754ac2e *method-link.c
 3da2dbaf808f6e16677f8fd2b3ce2dce *preferences.c
 88f30be2486c7100a7c3124de3e7b37a *print-sense.c
 cdde449dd2a8f64b560ff18a36f86234 *random.c
-88ff3ce0824885fe28bb6c93d2cce6f3 *raw-editor.c
+de484cb8d898b491105dd17215dea1b9 *raw-editor.c
 8057ba466aa713dac8b0aab8cec84149 *raw-sector-cache.c
 fed19a2a0d87a9d2ad0d61aae2bdbaa0 *read-adaptive.c
 ed2f6ece44dce6f97302dbd45ad861d5 *read-adaptive-window.c
 980972e56aa080fcf780f4f7aecd9444 *read-linear.c
 236844b7bee1875f25c14406dacf44be *read-linear-window.c
-2da3e1ff769e495ccb133439a0d01354 *recover-raw.c
+9dc433b0d2d13f74c839cee90e089d16 *recover-raw.c
 bafff36d81d88ad9905fc6ad95af6200 *rs01-common.c
 621f011f33306d15930bb421b65c5ee0 *rs01-create.c
 295260e27642e3e71273da9cec570391 *rs01-fix.c
@@ -60,10 +60,11 @@ e45bedaa2391cf0c53b252f0e50930ea *rs02-verify.c
 63d3058f15a127e6f2ec106443c0a8b5 *scsi-unknown.c
 b13d943bd7c73d01fe6e11f322265bd6 *scsi-win32.c
 06860c3b6d8953281d517667d9cba27a *show-manual.c
-b9d8e5230b3f7f8863d9259d8d4efcef *smart-lec.c
+8835bd32455d4896eaddfca904eb23c5 *smart-lec.c
 06751c1094766fd0de46c1bc74a4965f *spiral.c
 4ebbf71d2465bf4b98af41f1fa333717 *udf.c
 169bb0bf06d58bda1241eba74d3ad8b8 *welcome-window.c
-8c38fda219eccddb1d2df6f97272001c *documentation/create.bash
-806007f62c732529478e072698436a2c *documentation/create-en.bash
-5528642448123a4d98c4d277c597b21d *documentation/create-ru.bash
+76a293e0b47e5b64906f01ca24e80c7d *documentation/create.bash
+26c31757b585e70c36eb7988461525c1 *documentation/create-de.bash
+949927ddc20fce24425473cb1243e4f8 *documentation/create-en.bash
+4cbbbb0f9bb967b0dd1cdf11d4ce301d *documentation/create-ru.bash

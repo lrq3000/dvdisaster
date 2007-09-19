@@ -910,6 +910,7 @@ static void action_cb(GtkWidget *widget, gpointer data)
 
       case ACTION_SORT_BY_P:
 	 sort_by_p(rec);
+	 printf("selected %d\n", rec->rbInfo[0].sectorIndex);
 	 rec->currentSample = 0;
 	 memcpy(rec->rb->recovered, rec->rbInfo[rec->currentSample].rawSector, rec->rb->sampleSize);
 	 evaluate_vectors(rec);

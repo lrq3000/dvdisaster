@@ -183,7 +183,7 @@ void ResetRawBuffer(RawBuffer *rb)
    for(i=0; i<N_Q_VECTORS; i++)
      rb->qParityN[i][0] = rb->qParityN[i][1] = 0;
 
-   rb->bestPFrame = rb->bestQFrame = 0;
+   rb->bestFrame = rb->bestFrame = 0;
    rb->bestP1 = rb->bestP2 = N_P_VECTORS;
    rb->bestQ1 = rb->bestQ2 = N_Q_VECTORS;
 }
@@ -756,7 +756,7 @@ void UpdateFrameStats(RawBuffer *rb)
       correct P/Q with single failure until they damage
       some other vector */
 
-   /* single byte failures are added to the double
+   /* MAYBE TODO: add single byte failures are to the double
       failure count since we want to pick the vector
       with the least number of defective vectors. */
 
@@ -768,7 +768,7 @@ void UpdateFrameStats(RawBuffer *rb)
 	    break;
 	 case 1:
 	    p_corr++;
-	    p_err++;
+	    //	    p_err++;
 	    break;
 	 default:
 	    p_err++;
@@ -784,7 +784,7 @@ void UpdateFrameStats(RawBuffer *rb)
 	    break;
 	 case 1:
 	    q_corr++;
-	    q_err++;
+	    //	    q_err++;
 	    break;
 	 default:
 	    q_err++;
@@ -792,19 +792,27 @@ void UpdateFrameStats(RawBuffer *rb)
       }
    }
 
-   if(p_err < rb->bestP2 
-      || (p_err == rb->bestP2 && p_corr < rb->bestP1))
-   {  rb->bestPFrame = rb->samplesRead - 1;
-      rb->bestP1 = p_corr;
-      rb->bestP2 = p_err;
+   if(p_err > rb->bestP2)
+      return;
+
+   if(p_err == rb->bestP2)
+   {  if(p_corr > rb->bestP1)
+	 return;
+
+      if(p_corr == rb->bestP1)
+      {  if(q_err > rb->bestQ2)
+	    return;
+
+	 if(q_err == rb->bestQ2 && q_corr >= rb->bestQ1)
+	    return;
+      }
    }
 
-   if(q_err < rb->bestQ2 
-      || (q_err == rb->bestQ2 && q_corr < rb->bestQ1))
-   {  rb->bestQFrame = rb->samplesRead - 1;
-      rb->bestQ1 = q_corr;
-      rb->bestQ2 = q_err;
-   }
+   rb->bestFrame = rb->samplesRead - 1;
+   rb->bestP1 = p_corr;
+   rb->bestP2 = p_err;
+   rb->bestQ1 = q_corr;
+   rb->bestQ2 = q_err;
 }
 
 /*** 

@@ -26,7 +26,7 @@ function dictionary_en()
    trans_version="Version"
 
    trans_to_internet="To the Internet version"
-   trans_to_sourceforge="Summary (at SourceForge.net)"
+   trans_to_hoster="Summary (at SourceForge.net)"
 
    trans_back="Back"
    trans_screen_shot="Screen shot"
@@ -84,13 +84,6 @@ function news0en()
    by Igor Gorbounov. Also new are the raw CD sector editor and some improvements
    in the raw reading heuristics. 
 
-END_NEWS_ITEM
-
-   news_item $file "xx.xx.2007" "German documentation unavailable / Deutsche Dokumentation nicht verf&uuml;gbar" $mode <<END_NEWS_ITEM
-   During the transition to the new documentation the German translation will be unavailable.
-   Thanks for your understanding.<p>
-   W&auml;hrend der Umstellung auf die neue Dokumentation wird die deutsche &Uuml;bersetzung
-   nicht verf&uuml;gbar sein. Wir bitten um Verst&auml;ndnis.
 END_NEWS_ITEM
 
    news_item $file "xx.xx.2007" "New documentation started" $mode <<END_NEWS_ITEM
