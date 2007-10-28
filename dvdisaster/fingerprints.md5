@@ -59,12 +59,8 @@ e45bedaa2391cf0c53b252f0e50930ea *rs02-verify.c
 3620918c8a3ef19fdf3ff6a8e0ff0314 *scsi-solaris.c
 63d3058f15a127e6f2ec106443c0a8b5 *scsi-unknown.c
 b13d943bd7c73d01fe6e11f322265bd6 *scsi-win32.c
-06860c3b6d8953281d517667d9cba27a *show-manual.c
+b1ea4f9e66404c533582083eca34f0eb *show-manual.c
 8835bd32455d4896eaddfca904eb23c5 *smart-lec.c
 06751c1094766fd0de46c1bc74a4965f *spiral.c
 4ebbf71d2465bf4b98af41f1fa333717 *udf.c
 169bb0bf06d58bda1241eba74d3ad8b8 *welcome-window.c
-76a293e0b47e5b64906f01ca24e80c7d *documentation/create.bash
-26c31757b585e70c36eb7988461525c1 *documentation/create-de.bash
-949927ddc20fce24425473cb1243e4f8 *documentation/create-en.bash
-4cbbbb0f9bb967b0dd1cdf11d4ce301d *documentation/create-ru.bash

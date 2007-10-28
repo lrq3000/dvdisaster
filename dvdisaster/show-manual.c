@@ -337,24 +337,24 @@ void ShowHTML(char *target)
       if(lang)
       {  if(!strncmp(lang, "ru", 2)) 
 #ifdef SYS_MINGW
-	     path = g_strdup_printf("%s\\ru\\%s",Closure->docDir,target); 
+	     path = g_strdup_printf("%s\\ru-html\\%s",Closure->docDir,target); 
 #else
-	     path = g_strdup_printf("%s/ru/%s",Closure->docDir,target); 
+	     path = g_strdup_printf("%s/ru-html/%s",Closure->docDir,target); 
 #endif
          else if(!strncmp(lang, "de", 2)) 
 #ifdef SYS_MINGW
-	     path = g_strdup_printf("%s\\de\\%s",Closure->docDir,target); 
+	     path = g_strdup_printf("%s\\de-html\\%s",Closure->docDir,target); 
 #else
-	     path = g_strdup_printf("%s/de/%s",Closure->docDir,target); 
+	     path = g_strdup_printf("%s/de-html/%s",Closure->docDir,target); 
 #endif
       }
 
       if(!path)
       {
 #ifdef SYS_MINGW
-         path = g_strdup_printf("%s\\en\\%s",Closure->docDir,target); 
+         path = g_strdup_printf("%s\\en-html\\%s",Closure->docDir,target); 
 #else
-         path = g_strdup_printf("%s/en/%s",Closure->docDir,target); 
+         path = g_strdup_printf("%s/en-html/%s",Closure->docDir,target); 
 #endif
       }
 

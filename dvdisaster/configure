@@ -21,7 +21,7 @@ fi
 
 PACKAGE dvdisaster 0.71
 
-REL_MICRO=24
+REL_MICRO=23
 #REL_STATUS=patch
 REL_STATUS=devel
 #REL_STATUS=rc
@@ -55,6 +55,9 @@ GET_DOCDIR /usr/share/doc
 GET_DIR "$PKGNAME" docsub "Documentation sub"\
         "       put documentation into this subdirectory\n                        under \$DOCDIR "
 GET_LOCALEDIR /usr/share/locale
+GET_DIR "/var/www/dvdisaster" phpmount "PHP bind mount"\
+        "     place to bind mount our PHP based documentation so that\n                        a local web server can access it\n                        "
+
 GET_BUILDROOT
 
 # Look for required libraries
@@ -142,6 +145,8 @@ if test "$cfg_with_efence" == "yes"; then
     exit 1;
   fi
 fi
+
+# -------------- end of manual configuration --------------------
 
 # Do not proceed further if in --help mode
 

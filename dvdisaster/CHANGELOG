@@ -1,5 +1,7 @@
 
 0.71 (devel-24)
+	- started rework of online documentation for PHP;
+	  package creation is currently broken
 	- fixed adaptive reading crash when invoked with partial image
 	  and no ecc data (thanks to Jörg and Wolfgang for noting this!)
 	- fixed log file creation inconsistency (thanks to mschaeff!)

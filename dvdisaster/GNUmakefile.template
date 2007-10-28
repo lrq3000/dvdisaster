@@ -25,6 +25,7 @@ MANDIR = $(CFG_MANDIR)
 DOCDIR = $(CFG_DOCDIR)
 DOCSUBDIR = $(CFG_DOCDIR)/$(CFG_DOCSUBDIR)
 LOCALEDIR = $(CFG_LOCALEDIR)
+PHPMOUNTDIR = $(CFG_PHPMOUNTDIR)
 BUILDROOT = $(CFG_BUILDROOT)
 
 INTL_INCL   = $(CFG_INTL_INCL)
@@ -60,7 +61,7 @@ OFILES = $(CFG_OFILES)
 # Compilation related
 ######################################################################
 
-.PHONY : all show locale html images pack-images lock-images
+.PHONY : all help show locale
 
 .c.o:
 	@echo "Compiling:" $*.c
@@ -101,7 +102,7 @@ help-dialogs.o: help-dialogs.c simple-md5sum
 	@if test -e fingerprints.md5; \
 	then if test -e help-dialogs.h; then rm help-dialogs.h; fi; \
 	     mv inlined-icons.h inlined-icons.saved; \
-	     ./simple-md5sum -b *.h *.c documentation/*.bash | sort -k2 >tmp.md5; \
+	     ./simple-md5sum -b *.h *.c | sort -k2 >tmp.md5; \
 	     sort -k2 < fingerprints.md5 >tmp2.md5; \
 	     mv inlined-icons.saved inlined-icons.h; \
 	     if ! cmp tmp2.md5 tmp.md5 >/dev/null; \
@@ -120,29 +121,19 @@ locale:
 simple-md5sum: md5.c
 	@$(CC) $(COPTS) -DSIMPLE_MD5SUM md5.c -o simple-md5sum
 
-# temporary: switch between old and new documentation
-
-docswitch:
-	@if test -e new-documentation; then \
-	  mv documentation old-documentation; \
-	  mv new-documentation documentation; \
-	  echo "Switched to new documentation"; \
-	else \
-	  mv documentation new-documentation; \
-	  mv old-documentation documentation; \
-	  echo "Switched to old documentation"; \
-	fi
-
 # Stuff needed to generate or prepare the documentation
 # TAG: online-doc
 
-documentation/en/index.html: documentation/create.bash documentation/create-en.bash documentation/create-ru.bash 
-	@if test -e help-dialogs.h && grep UNMODIFIED help-dialogs.h >/dev/null; \
-	then cd documentation ; bash create.bash local-orig $(VERSION) $(PKGNAME) $(CFG_FULL_VERSION); \
-	else cd documentation ; bash create.bash local-mod $(VERSION) $(PKGNAME) $(CFG_FULL_VERSION); \
-	fi
+.PHONY : images pack-images lock-images mount-php html
 
-html: documentation/en/index.html
+html: version.php
+	@if ! test -e $(SRCDIR)/documentation/wget-tmp; then \
+	  mkdir $(SRCDIR)/documentation/wget-tmp; \
+	fi
+	@cd $(SRCDIR)/documentation/wget-tmp; \
+	  wget -r -nH --cut-dirs=1 --html-extension --convert-links -q http://localhost/dvdisaster/index.html
+	@$(SRCDIR)/scripts/convert-wgetted.bash $(SRCDIR)
+	@rm -rf $(SRCDIR)/documentation/wget-tmp
 
 documentation/images/email.png:
 	@if test -e THESE_ARE_THE_DEVEL_SOURCES; then \
@@ -183,6 +174,46 @@ pack-images: tools/pngpack
 tools/pngpack: tools/pngpack.c
 	@$(MAKE) --no-print-directory -C tools
 
+version.php:
+	@echo "<?php" >$(SRCDIR)/documentation/include/version.php
+	@echo "\$$version=\"$(VERSION)\";" >>$(SRCDIR)/documentation/include/version.php
+	@echo "\$$pkgname=\"$(PKGNAME)\";" >>$(SRCDIR)/documentation/include/version.php
+	@echo "\$$cooked_version=\""$(CFG_FULL_VERSION)"\";" >>$(SRCDIR)/documentation/include/version.php
+	@if test -e help-dialogs.h && grep UNMODIFIED help-dialogs.h >/dev/null; \
+	then echo "\$$modified_source=0;" >>$(SRCDIR)/documentation/include/version.php; \
+	else echo "\$$modified_source=1;" >>$(SRCDIR)/documentation/include/version.php; \
+	fi
+	@echo "\$$mode=\"www\";" >>$(SRCDIR)/documentation/include/version.php
+	@echo "?>" >>$(SRCDIR)/documentation/include/version.php
+
+mount-php: version.php
+	@echo "* In order to create the *.html documentation from the PHP templates"
+	@echo "* we need to bind mount the documentation under your local Web server"
+	@echo "* HTML document directory (as specified by configure --phpmountdir)."
+	@echo "* You need sudo priviledges to execute the command below:"
+	@echo 
+	@if ! test -e /var/www/dvdisaster; then mkdir -p /var/www/dvdisaster; fi
+	sudo mount -o bind $(SRCDIR)/documentation $(PHPMOUNTDIR)
+
+# Some usage info
+
+help:
+	@echo "Building dvdisaster:"
+	@echo "show      - show current configuration (taken over from ./configure)"
+	@echo "all       - build dvdisaster"
+	@echo "install   - install dvdisaster locally"
+	@echo "uninstall - uninstall dvdisaster"
+	@echo
+	@echo "Documentation related:"
+	@echo "mount-php - mount documentation sub directory"
+	@echo 
+	@echo "Package maintenance:"
+	@echo "clean     - remove all easily rebuildable files"
+	@echo "distclean - remove all files which are rebuildable in an development setup"
+	@echo "arch      - distclean and tar the source directory (dirty)"
+	@echo "srcdist   - produce the source distribution tarball (polished)"
+	@echo "innodist  - produce the binary setup.exe for Windows"
+
 # Build configuration printing
 
 show: 
@@ -199,6 +230,7 @@ show:
 	@echo "LOCALEDIR    = " $(LOCALEDIR)
 	@echo "DOCDIR       = " $(DOCDIR)
 	@echo "DOCSUBDIR    = " $(DOCSUBDIR)
+	@echo "PHPMOUNTDIR  = " $(PHPMOUNTDIR)
 	@echo "BUILDROOT    = " $(BUILDROOT)
 	@echo
 	@echo "INTL_INCL    = " $(INTL_INCL)
@@ -320,10 +352,12 @@ clean:
 	@for i in $(DOC_LOCALES); do rm -f documentation/$$i/*.html; done
 	@if test -e THESE_ARE_THE_DEVEL_SOURCES && ! test -e documentation/MAKE_SRCDIST; then rm -f documentation/images-*.pngpack documentation/thumbnails-*.pngpack; fi
 	@rm -f documentation/pngpack.log
+	@rm -f documentation/include/version.php
+	@rm -rf documentation/wget-tmp
 	@if test -e tools/Makefile.config; then $(MAKE) --no-print-directory -C tools clean; fi
 	@if test -e $(PKGNAME); then rm -rf $(PKGNAME); fi
 	@if test -e ~/.dvdisaster-original-author; then \
-	  md5sum -b *.h *.c documentation/*.bash >fingerprints.md5; \
+	  md5sum -b *.h *.c >fingerprints.md5; \
 	fi
 
 arch:	clean distclean

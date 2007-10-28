@@ -1953,7 +1953,7 @@ msgstr "Kopiere Protokoll in Datei:"
 
 #: preferences.c:3070
 msgid "Delete"
-msgstr ""
+msgstr "Löschen"
 
 #: preferences.c:3115
 msgid ""
