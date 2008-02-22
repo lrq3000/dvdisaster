@@ -1,3 +1,4 @@
+
 <?php
 # dvdisaster: Online doc table of contents (all languages)
 # Copyright (C) 2004-2007 The dvdisaster translation team
@@ -40,10 +41,45 @@ section("howtos");
   en("Howtos");
   ru("Howto's");
 
+subsection("howtos60");
+  de("Das große Bild");
+  en("The big picture");
+  ru("The big picture");
+
+subsubsection("howtos61");
+  de("richtige Anwendung");
+  en("correct usage");
+  ru("correct usage");
+
+subsubsection("howtos62");
+  de("falsche Anwendung");
+  en("incorrect usage");
+  ru("incorrect usage");
+
 subsection("howtos10");
   de("Datenträger auf Lesefehler prüfen");
   en("Scanning media for errors");
   ru("Поиск ошибок на носителе");
+
+subsubsection("howtos11");
+  de("Grundeinstellungen");
+  en("Basic settings");
+  ru("Basic settings");
+
+subsubsection("howtos12");
+  de("Prüfung durchführen");
+  en("Performing the test");
+  ru("foo");
+
+subsubsection("howtos13");
+  de("Ergebnisse bewerten");
+  en("Interpreting the results");
+  ru("foo");
+
+subsubsection("howtos14");
+  de("Fortgeschrittene Einstellungen");
+  en("Advanced settings");
+  ru("Advanced settings");
 
 subsection("howtos20");
   de("Fehlerkorrektur-Daten erzeugen");
@@ -91,6 +127,25 @@ subsubsection("howtos93");
   de("Referenz-Abbild auf einen Datenträger schreiben");
   en("Writing the image to the medium.");
 
+subsection("howtosa0");
+  de("Bedienelemente");
+  en("Dialogs and buttons");
+
+subsubsection("howtosa1");
+  de("Laufwerk auswählen");
+  en("drive selection");
+
+subsubsection("howtosa2");
+  de("Abbild-Datei auswählen");
+  en("Image file selection");
+
+subsubsection("howtosa3");
+  de("Fehlerkorrektur-Datei auswählen");
+  en("Protection file selection");
+
+subsubsection("howtosa4");
+  de("Aktionen beginnen");
+  en("Starting actions");
 # Download
 
 section("download");

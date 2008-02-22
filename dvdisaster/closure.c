@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2007 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2008 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -20,6 +20,7 @@
  */
 
 #include "dvdisaster.h"
+#include <glib/gstdio.h>
 
 #ifdef SYS_MINGW
  #include <windows.h>
@@ -132,7 +133,7 @@ void WriteSignature()
    /* processing of error conditions not necessary */
 
    sprintf(loc, "%s\\signature", Closure->binDir);
-   if(!(file = fopen(loc, "wb")))
+   if(!(file = g_fopen(loc, "wb")))
      return;
    fwrite(sig, 20, 1, file);
    fclose(file);
@@ -147,7 +148,7 @@ int VerifySignature()
    int result;
 
    sprintf(loc, "%s\\signature", Closure->binDir);
-   if(!(file = fopen(loc, "rb")))
+   if(!(file = g_fopen(loc, "rb")))
      return FALSE;
 
    fread(buf, 20, 1, file);
@@ -176,7 +177,7 @@ static void get_base_dirs()
 #ifdef WITH_EMBEDDED_SRC_PATH_YES
 
 #ifndef SYS_MINGW
-   if(!stat(SRCDIR, &mystat))
+   if(!g_stat(SRCDIR, &mystat))
    {  Closure->binDir = g_strdup(SRCDIR);
       Closure->docDir = g_strdup_printf("%s/documentation",SRCDIR);
       Verbose("Using paths from SRCDIR = %s\n", SRCDIR);
@@ -192,10 +193,10 @@ static void get_base_dirs()
 	but luckily it provides a way for figuring out that location. */
 
 #ifndef SYS_MINGW
-   if(!stat(BINDIR, &mystat))
+   if(!g_stat(BINDIR, &mystat))
      Closure->binDir = g_strdup(BINDIR);
 
-   if(!stat(DOCDIR, &mystat))
+   if(!g_stat(DOCDIR, &mystat))
      Closure->docDir = g_strdup(DOCDIR);
    Verbose("Using hardcoded BINDIR = %s, DOCDIR = %s\n", BINDIR, DOCDIR);
 #endif
@@ -232,11 +233,11 @@ find_dotfile:
    if(appdata)
    {  Closure->appData = g_strdup_printf("%s\\dvdisaster", appdata);
 
-      if(!stat(appdata, &mystat)) /* CSIDL_APPDATA present? */
+      if(!g_stat(appdata, &mystat)) /* CSIDL_APPDATA present? */
       { 
 	 Verbose("- dotfile path : %s\n", Closure->appDate);
 
-	 if(!stat(Closure->appData, &mystat))
+	 if(!g_stat(Closure->appData, &mystat))
 	 {  Closure->dotFile = g_strdup_printf("%s\\.dvdisaster", Closure->appData);
 	    Verbose("- dotfile path : present\n");
 	 }
@@ -378,7 +379,7 @@ void ReadDotfile()
 {  FILE *dotfile;
    char line[MAX_LINE_LEN];
 
-   dotfile = fopen(Closure->dotFile, "rb");
+   dotfile = g_fopen(Closure->dotFile, "rb");
    if(!dotfile)
       return;
 
@@ -433,6 +434,7 @@ void ReadDotfile()
       if(!strcmp(symbol, "auto-suffix"))     { Closure->autoSuffix  = atoi(value); continue; }
       if(!strcmp(symbol, "cache-size"))      { Closure->cacheMB     = atoi(value); continue; }
       if(!strcmp(symbol, "cd-size"))         { Closure->cdSize = Closure->savedCDSize = atoll(value); continue; }
+      if(!strcmp(symbol, "codec-threads"))   { Closure->codecThreads = atoi(value); continue; }
       if(!strcmp(symbol, "dao"))             { Closure->noTruncate  = atoi(value); continue; }
       if(!strcmp(symbol, "defective-dump"))  { Closure->defectiveDump = atoi(value); continue; }
       if(!strcmp(symbol, "defective-dir"))   { if(Closure->dDumpDir) g_free(Closure->dDumpDir);
@@ -510,7 +512,7 @@ static void update_dotfile()
 
    /*** Otherwise, save our session */
 
-   dotfile = fopen(Closure->dotFile, "wb");
+   dotfile = g_fopen(Closure->dotFile, "wb");
    if(!dotfile)
    {  g_fprintf(stderr, "Could not open configuration file %s: %s\n", 
 		Closure->dotFile, strerror(errno));
@@ -532,6 +534,7 @@ static void update_dotfile()
    g_fprintf(dotfile, "auto-suffix:       %d\n", Closure->autoSuffix);
    g_fprintf(dotfile, "cache-size:        %d\n", Closure->cacheMB);
    g_fprintf(dotfile, "cd-size:           %lld\n", (long long int)Closure->cdSize);
+   g_fprintf(dotfile, "codec-threads:     %d\n", Closure->codecThreads);
    g_fprintf(dotfile, "dao:               %d\n", Closure->noTruncate);
    g_fprintf(dotfile, "defective-dump:    %d\n", Closure->defectiveDump);
    g_fprintf(dotfile, "defective-dir:     %s\n", Closure->dDumpDir);
@@ -645,6 +648,7 @@ void InitClosure()
    Closure->dDumpDir    = g_strdup("/tmp");
    Closure->dDumpPrefix = g_strdup("sector-");
    Closure->cacheMB     = 32;
+   Closure->codecThreads = 1;
    Closure->minReadAttempts = 1;
    Closure->maxReadAttempts = 1;
    Closure->rawMode     = 0x20;

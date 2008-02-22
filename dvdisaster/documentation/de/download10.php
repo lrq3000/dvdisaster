@@ -26,10 +26,10 @@ begin_page();
 <h3>Betriebssysteme</h3>
 
 <ul>
- <li><b>FreeBSD</b> ab Version <b>6.0</b><br> 
+ <li><a name="#freebsd"></a><b>FreeBSD</b> ab Version <b>6.0</b><br> 
      (für ATAPI-Laufwerke muß der Kernel neu übersetzt werden - siehe INSTALL-Dokument)<p>
  </li>
- <li><b>Linux</b> ab Kernel <b>2.6.7</b><br> 
+ <li><b>GNU/Linux</b> ab Kernel <b>2.6.7</b><br> 
      (Kernel >= 2.4.20 sind möglich, aber nicht empfohlen!)<p>
  </li>
  <li><b>Mac OS X</b> ab Version 10.4 (Tiger),<br> 

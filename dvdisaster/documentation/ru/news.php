@@ -21,14 +21,15 @@ $news_counter = 0;
 
 news_headline("Новости dvdisaster");
 
-/*
-news_item("xx.xx.2007", "Выпущен dvdisaster 0.71.24", "
-   Только что вышел dvdisaster 0.71.24. Начиная с этой версии переписывается
-   интерактивная документация, включая русский перевод, сделанный
-   Игорем Горбуновым. Новшеством также является редактор необработанных секторов CD и некоторые улучшения
-   в эвристике низкоуровневого чтения. 
+news_item("24.02.2008", "dvdisaster 0.70.5 / 0.71.24 fix problems with newer Linux versions", "
+   A problem with newer Linux kernels was fixed which would lead
+   to a frozen system under some circumstances. Please upgrade on systems 
+   running kernels 2.6.17 and above; maybe earlier kernels are also affected.<p> 
+
+   The release of dvdisaster 0.71.24 also marks the start of
+   an online documentation rewrite, including a Russian translation made
+   by Igor Gorbounov.
 "); # end of news_item
-*/
 
 news_item("28.10.2007", "Начата новая документация", "
    В настоящее время документация на dvdisaster перерабатывается для предстоящего

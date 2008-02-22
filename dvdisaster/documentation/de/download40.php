@@ -43,9 +43,8 @@ und warten Sie auf die Veröffentlichung von Version 0.72.
 Die Alpha-Versionen verwenden das gleiche Paketformat wie die normalen
 Versionen.<p>
 
-<!---
 <table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.71 (devel24)</b></td><td align="right">xx-xxx-2007</td></tr>
+<tr><td><b>dvdisaster-0.71 (devel24)</b></td><td align="right">24-Feb-2008</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
@@ -61,12 +60,13 @@ Versionen.<p>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
+Behebt ein Problem mit neueren Linux-Kernen, das unter bestimmten Bedingungen zum
+Einfrieren des Systems führen kann. Die Behandlung von Umlauten in Dateinamen wurde
+verbessert.
 Mit dieser Version beginnt die Überarbeitung der Online-Dokumentation,
 einschließlich der russischen Übersetzung durch Igor Gorbounov. 
-Ebenfalls neu sind der Editor für CD-Rohdaten und einige Verbesserungen in den
-Heuristiken zum Lesen von Rohdaten.
 </td></tr></table><p>
---->
+
 
 <table class="download" cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.71 (devel23)</b></td><td align="right">06-Mai-2007</td></tr>

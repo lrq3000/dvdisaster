@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2007 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2008 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -109,6 +109,10 @@
 #define MAX_HD_DVD_SL_SIZE (20*1024*512) /* 20 GB (covers -R and -RAM) */
 #define MAX_HD_DVD_DL_SIZE (32*1024*512) /* 32 GB */
 
+/* Maximum number of parallel encoder/decoder threads */
+
+#define MAX_CODEC_THREADS 32             /* not including IO and GUI */
+
 /***
  *** Our global closure (encapsulation of global variables)
  ***/
@@ -134,6 +138,7 @@ typedef struct _GlobalClosure
    gint64 savedDVDSize2;
    gint64 mediumSize;   /* Maximum medium size (for RS02 type images) */
    int cacheMB;         /* Cache setting for the parity codec, in megabytes */
+   int codecThreads;    /* Number of threads to use for RS encoders */
    int sectorSkip;      /* Number of sectors to skip after read error occurs */
    char *redundancy;    /* Error correction code redundancy */
    int readRaw;         /* Read CD sectors raw + verify them */
@@ -1088,6 +1093,25 @@ gint64 CurrentImageSize(void);
 gint64 CurrentImageCapacity(void);
 
 int SendReadCDB(char*, unsigned char*, unsigned char*, int, int);
+
+/***
+ *** rs-encoder.c
+ ***/
+
+typedef struct _ReedSolomonEncoder
+{  GaloisTables *gfTables;
+   ReedSolomonTables *rsTables;
+
+   guint64 chunkSize;
+   int shiftPtr;
+} ReedSolomonEncoder;
+
+ReedSolomonEncoder *CreateRSEncoder(ReedSolomonTables*, guint64);
+void FreeReedSolomonEncoder(ReedSolomonEncoder*);
+
+void ResetReedSolomonEncoder(ReedSolomonEncoder*, unsigned char*);
+void EncodeNextLayer(ReedSolomonEncoder*, unsigned char*, unsigned char*, guint64);
+
 
 /***
  *** show-manual.c

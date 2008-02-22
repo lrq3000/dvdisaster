@@ -67,7 +67,7 @@ OFILES = $(CFG_OFILES)
 	@echo "Compiling:" $*.c
 	@$(CC) $(COPTS) -c $*.c
 
-all: dvdisaster html images
+all: dvdisaster images
 
 # Building the dvdisaster binary
 
@@ -124,16 +124,7 @@ simple-md5sum: md5.c
 # Stuff needed to generate or prepare the documentation
 # TAG: online-doc
 
-.PHONY : images pack-images lock-images mount-php html
-
-html: version.php
-	@if ! test -e $(SRCDIR)/documentation/wget-tmp; then \
-	  mkdir $(SRCDIR)/documentation/wget-tmp; \
-	fi
-	@cd $(SRCDIR)/documentation/wget-tmp; \
-	  wget -r -nH --cut-dirs=1 --html-extension --convert-links -q http://localhost/dvdisaster/index.html
-	@$(SRCDIR)/scripts/convert-wgetted.bash $(SRCDIR)
-	@rm -rf $(SRCDIR)/documentation/wget-tmp
+.PHONY : images pack-images lock-images mount-php html thumbnails
 
 documentation/images/email.png:
 	@if test -e THESE_ARE_THE_DEVEL_SOURCES; then \
@@ -142,12 +133,11 @@ documentation/images/email.png:
 	  $(MAKE) --no-print-directory -C tools; \
 	  echo -n "Unpacking images (may take a while) ... "; \
 	  cd $(SRCDIR)/documentation/images; \
-	  $(SRCDIR)/tools/pngpack ../images-common.pngpack >../pngpack.log; \
+	  $(SRCDIR)/tools/pngpack -u ../images-common.pngpack >../pngpack.log; \
+	  echo -n "common "; \
 	  for i in $(DOC_LOCALES); do \
 	    (cd $(SRCDIR)/documentation/$$i/images; \
-	    $(SRCDIR)/tools/pngpack ../../images-$${i}.pngpack >>../../pngpack.log); \
-	    (cd $(SRCDIR)/documentation/$$i/thumbnails; \
-	    $(SRCDIR)/tools/pngpack ../../thumbnails-$${i}.pngpack >>../../pngpack.log); \
+	    strace $(SRCDIR)/tools/pngpack -u ../../images-$$i.pngpack -t160,../thumbnails >>../../pngpack.log  2>&1); \
 	    echo -n "$$i "; \
 	  done;  \
 	  echo "- done"; \
@@ -161,18 +151,27 @@ lock-images:
 
 pack-images: tools/pngpack
 	@echo -n "Packing images (may take a while) ... "
-	@cd documentation/images; $(SRCDIR)/tools/pngpack ../images-common.pngpack *.png >../pngpack.log;
+	@cd documentation/images; $(SRCDIR)/tools/pngpack -p ../images-common.pngpack *.png >../pngpack.log;
 	@for i in $(DOC_LOCALES); do \
 	  (cd documentation/$$i/images; \
-	  $(SRCDIR)/tools/pngpack ../../images-$${i}.pngpack *.png >>../../pngpack.log); \
-	  (cd documentation/$$i/thumbnails; \
-	  $(SRCDIR)/tools/pngpack ../../thumbnails-$${i}.pngpack *.png >>../../pngpack.log); \
+	  $(SRCDIR)/tools/pngpack -p ../../images-$${i}.pngpack *.png >>../../pngpack.log); \
 	  echo -n "$$i "; \
 	done
 	@echo "- done"
 
 tools/pngpack: tools/pngpack.c
 	@$(MAKE) --no-print-directory -C tools
+
+thumbnails: pack-images
+	@mkdir $(SRCDIR)/documentation/temp
+	@echo -n "unpacking thumbnails ... "
+	@for i in $(DOC_LOCALES); do \
+	  (cd documentation/temp; \
+	  $(SRCDIR)/tools/pngpack -u ../images-$${i}.pngpack *.png -t160,../$$i/thumbnails >>../pngpack.log); \
+	  echo -n "$$i "; \
+	done
+	@rm -rf $(SRCDIR)/documentation/temp
+	@echo "- done"
 
 version.php:
 	@echo "<?php" >$(SRCDIR)/documentation/include/version.php
@@ -186,14 +185,29 @@ version.php:
 	@echo "\$$mode=\"www\";" >>$(SRCDIR)/documentation/include/version.php
 	@echo "?>" >>$(SRCDIR)/documentation/include/version.php
 
-mount-php: version.php
-	@echo "* In order to create the *.html documentation from the PHP templates"
-	@echo "* we need to bind mount the documentation under your local Web server"
-	@echo "* HTML document directory (as specified by configure --phpmountdir)."
-	@echo "* You need sudo priviledges to execute the command below:"
-	@echo 
-	@if ! test -e /var/www/dvdisaster; then mkdir -p /var/www/dvdisaster; fi
-	sudo mount -o bind $(SRCDIR)/documentation $(PHPMOUNTDIR)
+mount-php:
+	@if ! test -e $(PHPMOUNTDIR)/dvdisaster.de.1; then\
+	  echo "* In order to create the *.html documentation from the PHP templates";\
+	  echo "* we need to bind mount the documentation under your local Web server";\
+	  echo "* HTML document directory (as specified by configure --phpmountdir).";\
+	  echo "* You need sudo priviledges to execute the command below:";\
+	  echo ;\
+	fi
+	if ! test -e $(PHPMOUNTDIR)/dvdisaster.de.1; then\
+	  if ! test -e $(PHPMOUNTDIR); then sudo mkdir -p $(PHPMOUNTDIR); fi;\
+	  sudo mount -o bind $(SRCDIR)/documentation $(PHPMOUNTDIR) ;\
+	fi
+
+html: mount-php version.php thumbnails
+	@echo -n "Producing html documentation... "
+	@if ! test -e $(SRCDIR)/documentation/wget-tmp; then \
+	  mkdir $(SRCDIR)/documentation/wget-tmp; \
+	fi
+	@cd $(SRCDIR)/documentation/wget-tmp; \
+	  wget -r -nH --cut-dirs=1 --html-extension --convert-links -q http://localhost/dvdisaster/index.html
+	@$(SRCDIR)/scripts/convert-wgetted.bash $(SRCDIR)
+	@rm -rf $(SRCDIR)/documentation/wget-tmp
+	@echo "done."
 
 # Some usage info
 
@@ -258,10 +272,10 @@ show:
 ######################################################################
 
 .PHONY : install uninstall clean distclean arch
-.PHONY : www www-images sf 
+.PHONY : www www-images 
 .PHONY : srcdist innodist zipdist
 
-install: dvdisaster html images
+install: dvdisaster images
 	@echo "Installing package..."
 	install -d $(BUILDROOT)$(BINDIR)
 	install dvdisaster$(EXE_SUFFIX) $(BUILDROOT)$(BINDIR)
@@ -330,6 +344,13 @@ uninstall:
 	   rm $(MANDIR)/$$i/man1/dvdisaster.1; \
 	done
 
+archclean: distclean
+	@echo "Removing rebuildable documentation parts"
+	@for i in $(DOC_LOCALES); do \
+	   rm -f documentation/$$i/*.html; \
+	   rm -f documentation/$$i/thumbnails/*.png; \
+	done
+
 distclean: clean
 	@echo "Removing configuration files"
 	@rm -f configure.log Makefile.config GNUmakefile locale/Makefile
@@ -349,7 +370,6 @@ clean:
 	@find . -name \*\~ -print | xargs rm -f;
 	@find . -name \*.mo -print | xargs rm -f;
 	@find . -name \#\*\# -print | xargs rm -f;
-	@for i in $(DOC_LOCALES); do rm -f documentation/$$i/*.html; done
 	@if test -e THESE_ARE_THE_DEVEL_SOURCES && ! test -e documentation/MAKE_SRCDIST; then rm -f documentation/images-*.pngpack documentation/thumbnails-*.pngpack; fi
 	@rm -f documentation/pngpack.log
 	@rm -f documentation/include/version.php
@@ -360,17 +380,17 @@ clean:
 	  md5sum -b *.h *.c >fingerprints.md5; \
 	fi
 
-arch:	clean distclean
+arch:	archclean
 	@cd .. ; tar -c -z -f $(PKGNAME)-arch.tgz $(PKGNAME)
 
 # TAG: online-docs
 www:
-	@cd documentation ; ./create.bash www $(VERSION) $(PKGNAME) $(CFG_FULL_VERSION); \
-	tar cjf ../../www.tar.bz2 pubkey.asc de/*.html en/*.html ru/*.html
+	@cd documentation ; \
+	tar cjf ../../www.tar.bz2 pubkey.asc index.html include/dvdisaster.css de/*.html en/*.html ru/*.html
 
 www-images:
-	@cd documentation ; ./create.bash www $(VERSION) $(PKGNAME) $(CFG_FULL_VERSION); \
-	tar cjf ../../www.tar.bz2 de/*.html en/*.html ru/*.html images/*.png de/images en/images/*.png ru/images/*.png
+	@cd documentation ; \
+	tar cjf ../../www.tar.bz2 pubkey.asc index.html include/dvdisaster.css de/*.html en/*.html ru/*.html images/*.png de/images de/thumbnails/*.png en/images/*.png en/thumbnails/*.png ru/images/*.png ru/thumbnails/*.png
 
 INSTALL: documentation/install.template
 	@sed "s/@@PKGNAME/$(PKGNAME)/" <documentation/install.template >INSTALL
@@ -429,7 +449,7 @@ prepare-dist:
 	  cp $(GTK_BINDIR)/../lib/locale/$$i/LC_MESSAGES/gtk*.mo win-build-dir/lib/locale/$$i/LC_MESSAGES; \
 	done
 
-innodist: dvdisaster html pack-images prepare-dist
+innodist: dvdisaster pack-images prepare-dist
 	@sed 's/dvdisaster-%version%/$(PKGNAME)/' <wininst/installer.template >wininst/installer.iss
 	@iscc wininst/installer.iss
 

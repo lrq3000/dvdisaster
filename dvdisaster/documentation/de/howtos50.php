@@ -14,16 +14,47 @@ begin_page();
 
 <!--- Insert actual page content below --->
 
-<h3>Platzhalter-Seite</h3>
+<h3>Informationen über ISO-Abbilder und Fehlerkorrektur-Daten anzeigen</h3>
 
-Diese Seite wurde noch nicht ausformuliert.
-<pre> </pre>
+<table width="100%" cellspacing="5">
+<tr>
+<td width="20%"><b>Aufgabe</b></td>
+<td>
+Es werden Informationen über den Zustand 
+von ISO-Abbildern und den zugehörigen Fehlerkorrektur-Daten angezeigt.
+</td>
+</tr>
+<tr><td> <pre> </pre> </td></tr>
 
+<tr>
+<td colspan="2"><b>Benötigte Daten:</b><p></td>
+</tr>
 
-<font size="-1">
-<i>Warum enthält diese Dokumentation leere Seiten?</i><p>
-Wir brauchen die Platzhalter-Seiten damit an anderen Stellen der
-Dokumentation bereits die passenden Querverweise gesetzt werden können. 
+<tr>
+<td>
+<img src="../images/good-image.png" align="top">
+<img src="../images/bad-image.png" align="top">
+<img src="../images/ecc.png" align="top">
+</td>
+<td>
+Diese Funktion verarbeitet Abbilder in beliebigem Zustand und die zugehörigen
+Fehlerkorrektur-Daten. Es ist auch möglich, nur Informationen über Abbilder
+oder Fehlerkorrektur-Dateien alleine anzuzeigen.
+
+</tr>
+<tr><td> <pre> </pre> </td></tr>
+
+<tr>
+<td colspan="2"><b>Durchzuführende Schritte:<p></b></td>
+</tr>
+
+<tr>
+<td></td>
+<td>
+1. Informationen über ISO-Abbilder und Fehlerkorrektur-Daten anzeigen
+</td>
+</tr>
+</table><p>
 
 <!--- do not change below --->
 

@@ -47,6 +47,7 @@ REQUIRE_LIBRARY png png_sig_cmp png
 
 echo
 CHECK_ENDIAN
+WITH_OPTION memdebug no "[no | yes]"
 
 # Do not proceed further if in --help mode
 

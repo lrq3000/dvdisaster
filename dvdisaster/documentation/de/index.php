@@ -11,9 +11,6 @@
 require("../include/dvdisaster.php");
 begin_page();
 
-#$foo=$_GET["id"];
-#if($foo == 1) echo "<a href=\"index.php?id=2\">Gehe nach Zwei</a>\n";
-#else echo "<a href=\"index.php?id=1\">Gehe nach Eins</a>\n\n";
 ?>
 
 <!--- Insert actual page content below --->

@@ -29,7 +29,7 @@ eine Liste mit Anhaltspunkten für Fehlerberichte zusammengestellt:
 
 <ul>
 <li>Verwenden Sie die aktuellste Originalversion von dvdisaster, die Sie von
-<a href="http://dvdisaster.net/de/download.html">unseren Projektseiten
+<a href="http://dvdisaster.net/de/download.php">unseren Projektseiten
    über SourceForge</a> herunterladen können. 
 dvdisaster-Versionen, die von jemand anders
 angeboten werden können Funktionen und Fehler enthalten, die es in der
@@ -66,7 +66,8 @@ Informationen enthalten:<p>
 zusammenzuhängen scheint.</li>
 </ul>
 
-<?php begin_screen_shot("Protokolldatei erzeugen", "activate_logfile.png"); ?>
+<a name="log"></a>
+<?php begin_screen_shot("Protokolldatei erzeugen", "activate-logfile.png"); ?>
 
 <b>Erzeugen der Protokolldatei:</b> 
 Wenn Sie Kompatibilitätsprobleme mit Ihrem Laufwerk oder den Datenträgern vermuten,

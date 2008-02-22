@@ -1,5 +1,23 @@
 
+NOTE to downstream maintainers:
+ - Keep up the good work! Thanks :-)
+ - GTK+ dependency has been bumped up to >= 2.6.0 (was formerly 2.0) 
+ - The documentation sources are now in PHP. For your convenience,
+   a HTML version is included in the upstream tarball.
+   If you need to recreate the html, things are getting a bit involved:
+   . you need a running Apache webserver with mod_php5
+   . add --phpmountdir=DIR to the ./configure call; this should specify
+     an empty or non-existing sub directory under your Apache document root
+   . do a make html to update the html (via wget through localhost)
+
 0.71 (devel-24)
+	- enlarged scsi timeout for Linux as newer Kernels seem
+          to freeze on timeout
+	- fixed filename handling (e.g. German umlaut corruption) under Windows
+	  (thanks to T.Barth for noting this!)
+        - fixed thread handling in command line mode so that combining
+          several actions in one call work again
+	- added thumbnail decimation and real argv[] processing to pngpack
 	- started rework of online documentation for PHP;
 	  package creation is currently broken
 	- fixed adaptive reading crash when invoked with partial image

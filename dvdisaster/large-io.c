@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2007 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2008 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -20,6 +20,7 @@
  */
 
 #include "dvdisaster.h"
+#include <glib/gstdio.h>
 
 /***
  *** Wrappers around the standard low level file system interface.
@@ -45,7 +46,6 @@
 
 #include <windows.h>
 
-#define stat _stati64
 #define lseek _lseeki64
 
 /* The original windows ftruncate has off_size (32bit) */
@@ -79,7 +79,7 @@ static int open_segment(LargeFile *lf, int n)
    if(!lf->suffix) g_sprintf(name, "%s%02d", lf->basename, n); 
    else            g_sprintf(name, "%s%02d.%s", lf->basename, n, lf->suffix); 
 
-   lf->fileSegment[n] = open(name, lf->flags, lf->mode);
+   lf->fileSegment[n] = g_open(name, lf->flags, lf->mode);
     
    if(lf->fileSegment[n] == -1)
    {  //PrintLog("open_segment(\"%s*\", %d) failed\n", lf->basename, n);
@@ -103,7 +103,7 @@ int LargeStat(char *path, gint64 *length_return)
    /* Unsplit file case */
    
    if(!Closure->splitFiles)
-   {  if(stat(path, &mystat) == -1)
+   {  if(g_stat(path, &mystat) == -1)
 	 return FALSE;
 
       if(!S_ISREG(mystat.st_mode))
@@ -127,7 +127,7 @@ int LargeStat(char *path, gint64 *length_return)
    {  if(!suffix) g_sprintf(name, "%s%02d", prefix, i); 
       else        g_sprintf(name, "%s%02d.%s", prefix,i,suffix);
 
-      if(stat(name, &mystat) == -1)
+      if(g_stat(name, &mystat) == -1)
             return i != 0;
       else if(!S_ISREG(mystat.st_mode))
 	    return FALSE;
@@ -159,12 +159,12 @@ LargeFile* LargeOpen(char *name, int flags, mode_t mode)
    {
       /* Do not try to open directories etc. */
 
-      if(    (stat(name, &mystat) == 0)
+      if(    (g_stat(name, &mystat) == 0)
 	  && !S_ISREG(mystat.st_mode))
       {  g_free(lf); return NULL;
       }
 
-      lf->fileSegment[0] = open(name, flags, mode);
+      lf->fileSegment[0] = g_open(name, flags, mode);
 
       if(lf->fileSegment[0] == -1)
       {  g_free(lf); return NULL;
@@ -193,7 +193,7 @@ LargeFile* LargeOpen(char *name, int flags, mode_t mode)
       *c = 0;
    }
 
-   if(    (stat(name, &mystat) == 0)
+   if(    (g_stat(name, &mystat) == 0)
        && !S_ISREG(mystat.st_mode))
    {  g_free(lf); return NULL;
    }
@@ -603,7 +603,7 @@ int LargeTruncate(LargeFile *lf, gint64 length)
 	 close(lf->fileSegment[i]);   /* no need for error testing */
 	 if(!lf->suffix) g_sprintf(name, "%s%02d", lf->basename, i); 
 	 else            g_sprintf(name, "%s%02d.%s", lf->basename, i, lf->suffix); 
-	 unlink(name);
+	 g_unlink(name);
       }
    }
 
@@ -623,7 +623,7 @@ int LargeUnlink(char *path)
    /* Simple unsegmented case */  
 
    if(!Closure->splitFiles)
-     return unlink(path) == 0;
+     return g_unlink(path) == 0;
 
    /* Segmented case. This will unlink name00..name99 */
 
@@ -638,7 +638,7 @@ int LargeUnlink(char *path)
    {  if(!suffix) g_sprintf(name, "%s%02d", prefix, i); 
       else        g_sprintf(name, "%s%02d.%s", prefix, i, suffix);
 
-      if(unlink(name) == -1)
+      if(g_unlink(name) == -1)
 	return i != 0;
    }
 

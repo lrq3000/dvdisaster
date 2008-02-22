@@ -14,16 +14,62 @@ begin_page();
 
 <!--- Insert actual page content below --->
 
-<h3>Platzhalter-Seite</h3>
+<h3>Fehlerkorrektur-Daten erzeugen</h3>
 
-Diese Seite wurde noch nicht ausformuliert.
-<pre> </pre>
+<table width="100%" cellspacing="5">
+<tr>
+<td width="20%"><b>Aufgabe</b></td>
+<td>
+Ein Datenträger wird mit Fehlerkorrektur-Daten versehen.
+</td>
+</tr>
+<tr><td> <pre> </pre> </td></tr>
+
+<tr>
+<td><b>Hinweis:</b></td>
+<td>Das Anlegen von Fehlerkorrektur-Daten ist vergleichbar zum Anlegen einer 
+Datensicherung. Von einem bereits beschädigten Datenträger können
+nachträglich keine Fehlerkorrektur-Daten mehr erstellt werden.
+<tr><td> <pre> </pre> </td></tr>
+
+<tr>
+<td colspan="2"><b>Benötigte Datenträger:</b><p></td>
+</tr>
+
+<tr>
+<td><img src="../images/good-cd.png"></td>
+<td>
+Zur Erstellung von Fehlerkorrektur-Daten wird ein guter, fehlerfreier Datenträger
+benötigt.
+</tr>
+<tr><td> <pre> </pre> </td></tr>
+
+<tr>
+<td colspan="2"><b>Nutzbare Zusatzdaten:</b></td>
+</tr>
+
+<tr>
+<td><img src="../images/good-image.png"></td>
+<td>Wenn Sie bereits ein ISO-Abbild des Datenträgers (zum Beispiel vom Brennvorgang)
+   haben, können Sie dieses direkt verwenden und sparen das erneute Einlesen.
+</td>
+</tr>
+<tr><td> <pre> </pre> </td></tr>
 
 
-<font size="-1">
-<i>Warum enthält diese Dokumentation leere Seiten?</i><p>
-Wir brauchen die Platzhalter-Seiten damit an anderen Stellen der
-Dokumentation bereits die passenden Querverweise gesetzt werden können. 
+<tr>
+<td colspan="2"><b>Durchzuführende Schritte:<p></b></td>
+</tr>
+
+<tr>
+<td></td>
+<td>
+1. Grundeinstellungen zum Lesen vornehmen<br>
+2. ISO-Abbild des Datenträgers erstellen<br>
+3. Fehlerkorrektur-Daten erstellen
+</td>
+</tr>
+</table><p>
 
 <!--- do not change below --->
 

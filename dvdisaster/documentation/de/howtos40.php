@@ -14,16 +14,46 @@ begin_page();
 
 <!--- Insert actual page content below --->
 
-<h3>Platzhalter-Seite</h3>
+<h3>Datenträger-Abbild rekonstruieren</h3>
 
-Diese Seite wurde noch nicht ausformuliert.
-<pre> </pre>
+<table width="100%" cellspacing="5">
+<tr>
+<td width="20%"><b>Aufgabe</b></td>
+<td>
+Die fehlenden Teile eines Datenträger-Abbild werden durch Fehlerkorrektur-Daten
+wiederhergestellt.
+</td>
+</tr>
+<tr><td> <pre> </pre> </td></tr>
 
+<tr>
+<td colspan="2"><b>Benötigte Daten:</b><p></td>
+</tr>
 
-<font size="-1">
-<i>Warum enthält diese Dokumentation leere Seiten?</i><p>
-Wir brauchen die Platzhalter-Seiten damit an anderen Stellen der
-Dokumentation bereits die passenden Querverweise gesetzt werden können. 
+<tr>
+<td><img src="../images/bad-image.png" align="top">
+<img src="../images/ecc.png" align="top">
+</td>
+<td>
+Diese Funktion benötigt das ISO-Abbild eines beschädigten Datenträgers
+sowie die zugehörigen Fehlerkorrektur-Daten. Je nach verwendetem 
+Fehlerkorrektur-Verfahren befinden sich die Fehlerkorrektur-Daten in einer
+eigenen Datei oder bereits im Abbild selbst.
+
+</tr>
+<tr><td> <pre> </pre> </td></tr>
+
+<tr>
+<td colspan="2"><b>Durchzuführende Schritte:<p></b></td>
+</tr>
+
+<tr>
+<td></td>
+<td>
+1. Abbild wiederherstellen
+</td>
+</tr>
+</table><p>
 
 <!--- do not change below --->
 

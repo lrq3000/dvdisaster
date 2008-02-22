@@ -1,8 +1,5 @@
 pngpack: lossless image compression for a series of screen shots
-Copyright (C) 2005 Carsten Gnoerlich.
-
-* Note: pngpack is work in progress.
-*       Do not apply it to end-user environments!
+Copyright (C) 2005-2008 Carsten Gnoerlich.
 
 pngpack is a specialized archival format for distributing screen
 shots (which are typically shipped with on-line documentation).

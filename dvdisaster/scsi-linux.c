@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2007 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2008 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -29,6 +29,7 @@
  ***/
 
 #ifdef SYS_LINUX
+#include <linux/param.h>
 
 char* DefaultDevice()
 {  DeviceHandle *dh;
@@ -137,7 +138,7 @@ int SendPacket(DeviceHandle *dh, unsigned char *cmd, int cdb_size, unsigned char
    cgc.buffer = buf;
    cgc.buflen = size;
    cgc.sense  = sense;
-   cgc.timeout = 5000;   /* 5 * HZ (from kernel's point of view) */
+   cgc.timeout = 10*60*HZ;   /* 10 minutes; a timeout hangs newer kernels  */
 
    switch(data_mode)
    {  case DATA_READ:

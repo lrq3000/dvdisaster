@@ -39,7 +39,7 @@ begin_page();
 <li>нет гарантированной защиты от потери данных.</li>
 </ul>
 
-Смотрите также подборку <a href="http://dvdisaster.net/legacy/en/background.php">справочной информации</a>,
+Смотрите также подборку <a href="http://dvdisaster.net/legacy/en/background.html">справочной информации</a>,
 чтобы узнать больше о том, как работает dvdisaster.
 
 <!--- do not change below --->

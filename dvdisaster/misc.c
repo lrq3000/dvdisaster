@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2007 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2008 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -197,7 +197,7 @@ static void print_greetings(FILE *where)
    if(greetings_shown) return;
 
    greetings_shown = 1;
-   g_fprintf(where, _("dvdisaster-%s%sCopyright 2004-2007 Carsten Gnoerlich.\n"),
+   g_fprintf(where, _("dvdisaster-%s%sCopyright 2004-2008 Carsten Gnoerlich.\n"),
 	     VERSION, strstr(VERSION,"pl") ? " " : "  ");
    /* TRANSLATORS: Excluding all kinds of warranty might be harmful under your
       legislature. If in doubt, just translate the following like "This is free
@@ -507,11 +507,7 @@ void Stop(char *format, ...)
 
       if(Closure->errorTitle)
       {
-#if GTK_MINOR_VERSION >= 4
 	 titled = g_strdup_printf("<b>%s</b>\n\n%s", Closure->errorTitle,msg);
-#else
-	 titled = g_strdup_printf("%s\n\n%s", Closure->errorTitle,msg);
-#endif
 	 g_free(msg);
 	 msg = titled;
       }
@@ -669,19 +665,11 @@ static gboolean message_idle_func(gpointer data)
 {  message_info *mi = (message_info*)data;
    GtkWidget *dialog;
 
-#if GTK_MINOR_VERSION >= 4
    dialog = gtk_message_dialog_new_with_markup(mi->window,
 					       GTK_DIALOG_DESTROY_WITH_PARENT,
 					       mi->type,
 					       GTK_BUTTONS_CLOSE,
 					       mi->msg, NULL);
-#else
-   dialog = gtk_message_dialog_new(mi->window, 
-				   GTK_DIALOG_DESTROY_WITH_PARENT,
-				   mi->type,
-				   GTK_BUTTONS_CLOSE,
-				   mi->msg, NULL);
-#endif
 
    gtk_label_set_line_wrap(GTK_LABEL(((struct _GtkMessageDialog*)dialog)->label), FALSE);
    g_signal_connect_swapped(dialog, "response", G_CALLBACK(gtk_widget_destroy), dialog);

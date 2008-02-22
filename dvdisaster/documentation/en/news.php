@@ -21,14 +21,15 @@ $news_counter = 0;
 
 news_headline("dvdisaster News");
 
-/*
-news_item("xx.xx.2007", "dvdisaster 0.71.24 released", "
-   dvdisaster 0.71.24 has just been released. This release marks the start of
+news_item("24.02.2008", "dvdisaster 0.70.5 / 0.71.24 fix problems with newer Linux versions", "
+   A problem with newer Linux kernels was fixed which would lead
+   to a frozen system under some circumstances. Please upgrade on systems 
+   running kernels 2.6.17 and above; maybe earlier kernels are also affected.<p> 
+
+   The release of dvdisaster 0.71.24 also marks the start of
    an online documentation rewrite, including a Russian translation made
-   by Igor Gorbounov. Also new are the raw CD sector editor and some improvements
-   in the raw reading heuristics. 
+   by Igor Gorbounov.
 "); # end of news_item
-*/
 
 news_item("28.10.2007", "New documentation started", "
    The dvdisaster documentation is currently being reworked for the upcoming

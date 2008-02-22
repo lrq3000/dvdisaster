@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2007 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2008 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -198,13 +198,16 @@ GtkWidget *CreateMenuBar(GtkWidget *parent)
 
    /* The tools menu */
 
-   menu_strip = gtk_menu_new();
+   if(Closure->debugMode && !Closure->screenShotMode)
+   {
+      menu_strip = gtk_menu_new();
 
-   add_menu_button(menu_strip, _("menu|Raw sector editor"), MENU_TOOLS_RAW_EDITOR);
+      add_menu_button(menu_strip, _("menu|Raw sector editor"), MENU_TOOLS_RAW_EDITOR);
    
-   menu_anchor = gtk_menu_item_new_with_label(_utf("menu|Tools"));
-   gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_anchor), menu_strip);
-   gtk_menu_bar_append(GTK_MENU_BAR(menu_bar), menu_anchor);
+      menu_anchor = gtk_menu_item_new_with_label(_utf("menu|Tools"));
+      gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_anchor), menu_strip);
+      gtk_menu_bar_append(GTK_MENU_BAR(menu_bar), menu_anchor);
+   }
 
    /* The help menu */
 
@@ -281,11 +284,7 @@ static void drive_select_cb(GtkWidget *widget, gpointer data)
    if(!Closure->deviceNodes->len)  /* No drives available */
      return;
 
-#if GTK_MINOR_VERSION >= 4
    n = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
-#else
-   n = gtk_option_menu_get_history(GTK_OPTION_MENU(widget));
-#endif
 
    if(n<0)
      return;
@@ -435,11 +434,7 @@ static void suffix_cb(GtkWidget *widget, gpointer data)
 
 GtkWidget *CreateToolBar(GtkWidget *parent)
 {  GtkWidget *box, *button, *ebox, *icon, *prefs, *help, *quit, *sep, *space;
-#if GTK_MINOR_VERSION >= 4
    GtkWidget *combo_box;
-#else 
-   GtkWidget *option, *menu_strip;
-#endif
    int dev_idx = 0;
    unsigned int i;
 
@@ -459,7 +454,6 @@ GtkWidget *CreateToolBar(GtkWidget *parent)
    icon = gtk_image_new_from_stock(GTK_STOCK_CDROM, GTK_ICON_SIZE_LARGE_TOOLBAR);
    gtk_container_add(GTK_CONTAINER(ebox), icon);
 
-#if GTK_MINOR_VERSION >= 4
    combo_box = gtk_combo_box_new_text();
 
    g_signal_connect(G_OBJECT(combo_box), "changed", G_CALLBACK(drive_select_cb), NULL);
@@ -481,33 +475,6 @@ GtkWidget *CreateToolBar(GtkWidget *parent)
    gtk_widget_set_size_request(combo_box, 200, -1);
    gtk_box_pack_start(GTK_BOX(box), combo_box, FALSE, FALSE, 7);
    AttachTooltip(combo_box, _("tooltip|Drive selection"), _("Selects the input drive for reading images."));
-#else
-   option = gtk_option_menu_new();
-
-   g_signal_connect(G_OBJECT(option), "changed", G_CALLBACK(drive_select_cb), NULL);
-   menu_strip = gtk_menu_new(); 
-
-   for(i=0; i<Closure->deviceNames->len; i++)   
-   {  GtkWidget *item;
-
-      item = gtk_menu_item_new_with_label(g_ptr_array_index(Closure->deviceNames,i));
-      gtk_menu_shell_append(GTK_MENU_SHELL(menu_strip), item);
-
-      if(!strcmp(Closure->device, g_ptr_array_index(Closure->deviceNodes,i)))
-	dev_idx = i;
-   }
-
-   if(!Closure->deviceNodes->len)
-   {  GtkWidget *item = gtk_menu_item_new_with_label(_utf("No drives found"));
-      gtk_menu_shell_append(GTK_MENU_SHELL(menu_strip), item);
-   }
-
-   gtk_option_menu_set_menu(GTK_OPTION_MENU(option), menu_strip);
-   gtk_option_menu_set_history(GTK_OPTION_MENU(option), dev_idx);
-   gtk_widget_set_size_request(option, 200, -1);
-   gtk_box_pack_start(GTK_BOX(box), option, FALSE, FALSE, 7);
-   AttachTooltip(option, _("tooltip|Drive selection"), _("Selects the input drive for reading images."));
-#endif
 
    space = gtk_label_new(NULL);
    gtk_box_pack_start(GTK_BOX(box), space, FALSE, FALSE, 1);

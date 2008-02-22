@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2007 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2008 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -20,6 +20,7 @@
  */
 
 #include "dvdisaster.h"
+#include <glib/gstdio.h>
 
 /*
  * Debugging function
@@ -35,7 +36,7 @@ void DumpSector(RawBuffer *rb, char *path)
 
    filename = g_strdup_printf("%s%lld.h", path, (long long)rb->lba);
 
-   file = fopen(filename, "w");
+   file = g_fopen(filename, "w");
    
    fprintf(file, 
 	   "#define SAMPLES_READ %d\n"

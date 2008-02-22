@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2007 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2008 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -277,6 +277,7 @@ RS02Layout *CalcRS02Layout(gint64 data_sectors, int requested_roots)
 
       lay->eccSectors         = 2 + lay->crcSectors + lay->rsSectors + 2*lay->headers;
       lay->sectorsPerLayer    = (lay->protectedSectors + lay->ndata - 1) / lay->ndata;
+
       lay->firstCrcLayerIndex = (2 + lay->dataSectors) % lay->sectorsPerLayer;
 
       if(requested_roots > 0)

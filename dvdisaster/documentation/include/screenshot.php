@@ -59,7 +59,7 @@ function end_screen_shot()
 
    if($screen_shot_counter == $screen_shot_expand)
    {  echo "  </td></tr>\n";
-      echo "  <tr><td>\n";
+      echo "  <tr><td align=\"center\">\n";
       echo "    <a href=\"${script_file}#snap${screen_shot_counter}\">\n";
       echo "      <img src=\"images/$screen_shot_image\">\n";
       echo "    </a>\n";

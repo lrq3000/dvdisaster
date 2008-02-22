@@ -33,7 +33,7 @@ Carsten Gnörlich (Anschrift wie oben).
 Das Impressum gilt für die Internetpräsenz unter den Domänen<br>
 <a href="http://dvdisaster.com">dvdisaster.com</a>, &nbsp;
 <a href="http://dvdisaster.de">dvdisaster.de</a>, &nbsp;
-<a href="http://dvdisaster.org">dvdisaster.net</a>, &nbsp;
+<a href="http://dvdisaster.net">dvdisaster.net</a>, &nbsp;
 <a href="http://dvdisaster.org">dvdisaster.org</a>.
 
 <!--- do not change below --->

@@ -158,6 +158,7 @@ function toc_link($msg, $lang)
    global $script_name;
    global $toc_section;
    global $toc_subsection;
+   global $toc_subsubsection;
    global $toc_mode;
 
    if(strcmp($lang, $script_lang)) return; # wrong locale
@@ -179,12 +180,24 @@ function toc_link($msg, $lang)
    }
 
    if(   !strcmp($toc_mode, "subsection") 
-	 && !strncmp($toc_section, $script_name, strlen($toc_section)))
+      && !strncmp($toc_section, $script_name, strlen($toc_section)))
    {  $target=$toc_subsection . ".php";
 
       if(!strcmp($toc_subsection, $script_name))
 	   echo "            <tr><td valign=\"top\" width=\"1%\">&middot;</td><td colspan=2><font size=\"-1\">$msg</font></td></tr>\n";
       else echo "            <tr><td valign=\"top\" width=\"1%\">&middot;</td><td colspan=2><font size=\"-1\"><a href=\"$target\">$msg</a></font></td></tr>\n";
+   }
+
+   # Using strlen($toc_section)+1 is inconvenient as it hardcodes the
+   # section/subsection10/subsubsection11 scheme. Improve!
+
+   if(   !strcmp($toc_mode, "subsubsection") 
+      && !strncmp($toc_subsection, $script_name, strlen($toc_section)+1))
+   {  $target=$toc_subsubsection . ".php";
+
+      if(!strcmp($toc_subsubsection, $script_name))
+	   echo "            <tr><td valign=\"top\"></td><td>-</td><td><font size=\"-1\">${msg}</font></td></tr>\n";
+      else echo "        <tr><td valign=\"top\"></td><td>-</td><td><font size=\"-1\"><a href=\"$target\">$msg</a></font></td></tr>\n";
    }
 
 }
@@ -366,7 +379,7 @@ function end_page()
    <td bgcolor="#f0f0f0">
 <?php 
    $old_lang = strcmp($script_lang, "ru") ? $script_lang : "en";
-   echo "      <table cellpadding=\"10\"><tr><td><a href=\"../legacy/$old_lang/index.html\"><font size=\"-1\">$trans_old_version</font></a></td></tr></table>\n"; 
+   echo "      <table cellpadding=\"10\"><tr><td><a href=\"http://dvdisaster.net/legacy/$old_lang/index.html\"><font size=\"-1\">$trans_old_version</font></a></td></tr></table>\n"; 
 ?>
    </td>
    <td></td>
@@ -395,8 +408,6 @@ function end_page()
    <font size="-1">
 <?php
    echo "     <i> $trans_copyright<br>\n";
-   if($modified_source == 1)
-     echo "         $trans_modified<br>\n";
    echo "         $trans_fdl\n";
 ?>
     </i>
@@ -410,5 +421,18 @@ function end_page()
 </body>
 </html>
 <?php
+}
+
+#
+# Special headings etc
+#
+
+function howto_headline($headline, $subtitle, $image)
+{
+   echo "<table width=\"100%\" bgcolor=\"#f0f0f0\">\n";
+   echo "<tr><td><font size=\"+1\"><b>$headline</b></font></td>\n";
+   echo "<td rowspan=\"2\" align=\"right\"><img src=\"$image\"></td></tr>\n";
+   echo "<tr><td><i>$subtitle</i></td></tr>\n";
+   echo "</table><p>\n";
 }
 ?>

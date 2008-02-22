@@ -21,14 +21,17 @@ $news_counter = 0;
 
 news_headline("Neues über dvdisaster");
 
-/*
-news_item("xx.xx.2007", "dvdisaster 0.71.24 veröffentlicht", "
-   dvdisaster 0.71.24 wurde veröffentlicht. Mit dieser Version beginnt die Überarbeitung
+news_item("24.02.2008", "dvdisaster 0.70.5 / 0.71.24 beheben Problem mit neuen Linux-Versionen", "
+   Die neuen Versionen beheben ein Problem mit neueren Linux-Kernen, das unter
+   bestimmten Umständen ein Einfrieren des Systems bewirken kann. Bitte 
+   aktualisieren Sie dvdisaster, wenn Sie Kernel 2.6.17 oder einen neueren
+   einsetzen.
+   Möglicherweise sind auch noch ältere Kernel-Versionen betroffen.
+
+   Mit dieser Version beginnt außerdem die Überarbeitung
    der Online-Dokumentation, einschließlich einer russischen Übersetzung von Igor 
-   Gorbounov. Ebenfalls neu sind der Rohdaten-Editor für CD-Sektoren sowie einige
-   Verbesserungen in den Heuristiken zum Lesen von Roh-Sektoren.
+   Gorbounov. 
 "); # end of news_item
-*/
 
 news_item("28.10.2007", "Überarbeitung der Dokumentation", "
    Die Dokumentation wird momentan für die bevorstehende Veröffentlichung von

@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2007 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2008 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -20,6 +20,7 @@
  */
 
 #include "dvdisaster.h"
+#include <glib/gstdio.h>
 
 #include "help-dialogs.h"
 
@@ -412,7 +413,7 @@ char *find_file(char *file, size_t *size, char *lang)
            path = g_strdup_printf("%s/%s.%s",Closure->binDir, file, lang_suffix);
       else path = g_strdup_printf("%s/%s",Closure->binDir, file);
 
-      if(!stat(path, &mystat))
+      if(!g_stat(path, &mystat))
       {	 *size = mystat.st_size;
 	 return path;
       }
@@ -427,7 +428,7 @@ char *find_file(char *file, size_t *size, char *lang)
            path = g_strdup_printf("%s/%s.%s",Closure->docDir, file, lang_suffix);
       else path = g_strdup_printf("%s/%s",Closure->docDir, file);
 
-      if(!stat(path, &mystat))
+      if(!g_stat(path, &mystat))
       {	 *size = mystat.st_size;
 	 return path;
       }
@@ -461,7 +462,7 @@ GtkWidget* ShowTextfile(char *title, char *explanation, char *file,
 	 size = strlen(buf);
       }
       else
-      {  FILE *file = fopen(path, "rb");
+      {  FILE *file = g_fopen(path, "rb");
 
 	 buf = g_malloc(size);
 	 fread(buf, size, 1, file);
@@ -698,11 +699,11 @@ void AboutDialog()
 
 #ifdef MODIFIED_SOURCE
    AboutTextWithLink(vbox, 
-		     _("Modified version Copyright 2007 (please fill in - [directions])\n"
-		       "Copyright 2004-2007 Carsten Gnoerlich"),
+		     _("Modified version Copyright 2008 (please fill in - [directions])\n"
+		       "Copyright 2004-2008 Carsten Gnoerlich"),
 		     "MODIFYING");
 #else
-   AboutText(vbox, _("Copyright 2004-2007 Carsten Gnoerlich"));
+   AboutText(vbox, _("Copyright 2004-2008 Carsten Gnoerlich"));
 #endif
 
    sep = gtk_hseparator_new();

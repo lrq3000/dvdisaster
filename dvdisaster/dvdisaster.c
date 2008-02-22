@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2007 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2008 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -400,6 +400,7 @@ int main(int argc, char *argv[])
 	{"spinup-delay", 1, 0, MODIFIER_SPINUP_DELAY},
 	{"split-files", 0, 0, MODIFIER_SPLIT_FILES},
 	{"test", 0, 0, 't'},
+        {"threads", 1, 0, 'x'},
 	{"truncate", 2, 0, MODIFIER_TRUNCATE},
 	{"unlink", 0, 0, 'u'},
        	{"verbose", 0, 0, 'v'},
@@ -409,7 +410,7 @@ int main(int argc, char *argv[])
       };
 
       c = getopt_long(argc, argv, 
-		      "cd:e:fhi:j:lm::n:p:r::s::tuv",
+		      "cd:e:fhi:j:lm::n:p:r::s::tuvx:",
 		      long_options, &option_index);
 
       if(c == -1) break;
@@ -475,6 +476,11 @@ int main(int argc, char *argv[])
          case 'v': Closure->verbose = TRUE;
 	           break;
 
+         case 'x': Closure->codecThreads = atoi(optarg);
+                   if(Closure->codecThreads < 1 || Closure->codecThreads > MAX_CODEC_THREADS)
+                     Stop(_("--threads must be 1..%d\n"), MAX_CODEC_THREADS);
+                   break;
+
          case  0 : break; /* flag argument */
 
          case MODIFIER_ADAPTIVE_READ:
@@ -485,8 +491,8 @@ int main(int argc, char *argv[])
 	   break;
          case MODIFIER_CACHE_SIZE:
 	   Closure->cacheMB = atoi(optarg);
-	   if(Closure->cacheMB <   1) 
-	     Stop(_("--cache-size must at least be 1MB; 16MB or higher is recommended.")); 
+	   if(Closure->cacheMB <   8) 
+	     Stop(_("--cache-size must at least be 8MB; 16MB or higher is recommended.")); 
 	   if(Closure->cacheMB > 2048) 
 	     Stop(_("--cache-size maximum is 2048MB.")); 
 	   break;
@@ -872,6 +878,7 @@ int main(int argc, char *argv[])
 	     "  -n,--redundancy n%%     - error correction file redundancy (in percent), or\n"
 	     "                           maximum error correction image size (in sectors)\n"
 	     "  -v,--verbose           - more diagnostic messages\n"
+//             "  -x, --threads n        - use n threads for en-/decoding (if supported by codec)\n"
 	     "  --adaptive-read        - use optimized strategy for reading damaged media\n"
 	     "  --auto-suffix          - automatically add .iso and .ecc file suffixes\n"
 	     "  --cache-size n         - image cache size in MB during -c mode (default: 32MB)\n"

@@ -45,7 +45,7 @@ also called "SAO / Session at once") mode for writing single session media.
 
 
 <b><a name="block">3.2  Program blocks right after invocation</a></b><p>
-Under old Linux versions (kernel 2.4.x) the program occasionally 
+Using old Linux kernel versions (kernel 2.4.x) the program occasionally 
 blocks right after the start and before any actions are
 carried out. It can not be terminated using Ctrl-C or "kill -9".<p>
 
@@ -143,7 +143,7 @@ Try another drive for reading images in these cases.
 <b><a name="freebsd">3.6 No drives appear under FreeBSD.</a></b><p>
 
 <ul>
-<li>FreeBSD may require a <a href="download20.php#freebsd">kernel recompile</a>
+<li>FreeBSD may require a <a href="download10.php#freebsd">kernel recompile</a>
 in order for ATAPI drives (nearly all current models) to become usable for
 dvdisaster.
 <li>You need read and write permission for the respective device

@@ -4,10 +4,10 @@ THESE_ARE_THE_DEVEL_SOURCES
 CVS
 .cvsignore
 .cvswrappers
-old-documentation
 documentation/CVS
 documentation/images/CVS
 documentation/images/*.png
+documentation/legacy
 documentation/cs/images/CVS
 documentation/cs/images/*.png
 documentation/cs/thumbnails/*.png
@@ -26,7 +26,5 @@ icons/CVS
 locale/CVS
 scripts/CVS
 scripts/check.bash
-stk
 test-cases
 tools/CVS
-slow-lec.c

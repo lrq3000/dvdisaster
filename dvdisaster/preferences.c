@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2007 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2008 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -1322,11 +1322,7 @@ static void method_select_cb(GtkWidget *widget, gpointer data)
    prefs_context *pc = (prefs_context*)data;
    int n;
 
-#if GTK_MINOR_VERSION >= 4
    n = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
-#else
-   n = gtk_option_menu_get_history(GTK_OPTION_MENU(widget));
-#endif
 
    if(n<0 || !pc->methodNotebook)
      return;
@@ -1345,12 +1341,7 @@ static void method_select_cb(GtkWidget *widget, gpointer data)
 	   other = pc->methodChooserB;
       else other = pc->methodChooserA;
 
-#if GTK_MINOR_VERSION >= 4
       gtk_combo_box_set_active(GTK_COMBO_BOX(other), n);
-#else
-      gtk_option_menu_set_history(GTK_OPTION_MENU(other), n);
-#endif
-
    }
 }
 
@@ -1362,11 +1353,7 @@ static gboolean notebook_idle_func(gpointer data)
 {  prefs_context *pc = (prefs_context*)data;
    int n;
 
-#if GTK_MINOR_VERSION >= 4
    n = gtk_combo_box_get_active(GTK_COMBO_BOX(pc->methodChooserA));
-#else
-   n = gtk_option_menu_get_history(GTK_OPTION_MENU(pc->methodChooserA));
-#endif
 
    if(n>=0)
      gtk_notebook_set_current_page(GTK_NOTEBOOK(pc->methodNotebook), n);
@@ -1396,9 +1383,6 @@ void CreatePreferencesWindow(void)
    {  GtkWidget *window, *outer_box, *notebook, *space;
       GtkWidget *hbox, *vbox, *vbox2, *vbox3, *button, *frame, *table;
       GtkWidget *lab;
-#if GTK_MINOR_VERSION < 4
-      GtkWidget *option_menu_strip;
-#endif
       LabelWithOnlineHelp *lwoh,*lwoh_clone;
       prefs_context *pc = g_malloc0(sizeof(prefs_context));
       int i, method_idx = 0;
@@ -1663,62 +1647,65 @@ void CreatePreferencesWindow(void)
 
       /* byte filling */
 
-      lwoh = CreateLabelWithOnlineHelp(_("Filling of unreadable sectors"), 
-				       _("Fill unreadable sectors with byte:"));
-      RegisterPreferencesHelpWindow(lwoh);
+      if(Closure->debugMode)
+      {
+	 lwoh = CreateLabelWithOnlineHelp(_("Filling of unreadable sectors"), 
+					  _("Fill unreadable sectors with byte:"));
+	 RegisterPreferencesHelpWindow(lwoh);
 
-      for(i=0; i<2; i++)
-      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 4);
-	 GtkWidget *check, *entry;
+	 for(i=0; i<2; i++)
+	 {  GtkWidget *hbox = gtk_hbox_new(FALSE, 4);
+	    GtkWidget *check, *entry;
 
-	 check = gtk_check_button_new();
-	 g_signal_connect(check, "toggled", G_CALLBACK(bytefill_check_cb), pc);
-	 gtk_box_pack_start(GTK_BOX(hbox), check, FALSE, FALSE, 0);
-	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
+	    check = gtk_check_button_new();
+	    g_signal_connect(check, "toggled", G_CALLBACK(bytefill_check_cb), pc);
+	    gtk_box_pack_start(GTK_BOX(hbox), check, FALSE, FALSE, 0);
+	    gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
 
-	 entry = gtk_entry_new();
-	 g_signal_connect(entry, "activate", G_CALLBACK(bytefill_cb), pc);
-	 gtk_entry_set_width_chars(GTK_ENTRY(entry), 5);
-	 gtk_box_pack_start(GTK_BOX(hbox), entry, FALSE, FALSE, 0);
+	    entry = gtk_entry_new();
+	    g_signal_connect(entry, "activate", G_CALLBACK(bytefill_cb), pc);
+	    gtk_entry_set_width_chars(GTK_ENTRY(entry), 5);
+	    gtk_box_pack_start(GTK_BOX(hbox), entry, FALSE, FALSE, 0);
 
-	 if(!i)
-	 {  pc->byteCheckA = check;
-	    pc->byteEntryA = entry;
-	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
-	 }
-	 else
-	 {  pc->byteCheckB = check;
-	    pc->byteEntryB = entry;
-	    AddHelpWidget(lwoh, hbox);
-	 }
+	    if(!i)
+	    {  pc->byteCheckA = check;
+	       pc->byteEntryA = entry;
+	       gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	    }
+	    else
+	    {  pc->byteCheckB = check;
+	       pc->byteEntryB = entry;
+	       AddHelpWidget(lwoh, hbox);
+	    }
 
-	 if(Closure->fillUnreadable >= 0)
-	 {  char value[11];
+	    if(Closure->fillUnreadable >= 0)
+	    {  char value[11];
 	
-	    g_snprintf(value, 10, "0x%02x", Closure->fillUnreadable);
-	    gtk_entry_set_text(GTK_ENTRY(entry), value);
-	    activate_toggle_button(GTK_TOGGLE_BUTTON(check), TRUE);
+	       g_snprintf(value, 10, "0x%02x", Closure->fillUnreadable);
+	       gtk_entry_set_text(GTK_ENTRY(entry), value);
+	       activate_toggle_button(GTK_TOGGLE_BUTTON(check), TRUE);
+	    }
+	    else set_widget_sensitive(entry, FALSE);
 	 }
-	 else set_widget_sensitive(entry, FALSE);
+
+	 AddHelpParagraph(lwoh, 
+			  _("<b>Filling of unreadable sectors</b>\n\n"
+			    
+			    "dvdisaster marks unreadable sectors with a special filling pattern which "
+			    "is very unlikely to occur in undamaged media.\n"
+			    "In other data recovery software it is common to fill unreadable sectors "
+			    "with a certain byte value. To allow interoperability with such programs, "
+			    "you can specify the byte value they are using:\n"));
+
+	 AddHelpListItem(lwoh,
+			 _("0xb0 (176 decimal): for compatibility with h2cdimage published by \"c't\", "
+			   "a German periodical.\n"));
+
+	 AddHelpParagraph(lwoh,
+			  _("<b>Note:</b> Using zero filling (0x00, decimal 0) is highly discouraged. "
+			    "Most media contain regular zero filled sectors which can not be told apart "
+			    "from unreadable sectors if zero filling is used."));
       }
-
-      AddHelpParagraph(lwoh, 
-		       _("<b>Filling of unreadable sectors</b>\n\n"
-
-			 "dvdisaster marks unreadable sectors with a special filling pattern which "
-			 "is very unlikely to occur in undamaged media.\n"
-			 "In other data recovery software it is common to fill unreadable sectors "
-			 "with a certain byte value. To allow interoperability with such programs, "
-			 "you can specify the byte value they are using:\n"));
-
-      AddHelpListItem(lwoh,
-		      _("0xb0 (176 decimal): for compatibility with h2cdimage published by \"c't\", "
-			"a German periodical.\n"));
-
-      AddHelpParagraph(lwoh,
-		       _("<b>Note:</b> Using zero filling (0x00, decimal 0) is highly discouraged. "
-			 "Most media contain regular zero filled sectors which can not be told apart "
-			 "from unreadable sectors if zero filling is used."));
 
       /*** Drive parameters page */
 
@@ -2348,8 +2335,6 @@ void CreatePreferencesWindow(void)
 
 	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
 
-#if GTK_MINOR_VERSION >= 4
-
 	 chooser = gtk_combo_box_new_text();
 
        	 g_signal_connect(G_OBJECT(chooser), "changed", G_CALLBACK(method_select_cb), pc);
@@ -2365,27 +2350,6 @@ void CreatePreferencesWindow(void)
 
 	 gtk_combo_box_set_active(GTK_COMBO_BOX(chooser), method_idx);
 	 gtk_box_pack_start(GTK_BOX(hbox), chooser, FALSE, FALSE, 0);
-#else
-	 chooser = gtk_option_menu_new();
-
-	 g_signal_connect(G_OBJECT(chooser), "changed", G_CALLBACK(method_select_cb), pc);
-	 option_menu_strip = gtk_menu_new(); 
-
-	 for(j=0; j<Closure->methodList->len; j++)
-	 {  Method *method = g_ptr_array_index(Closure->methodList, j);
-	    GtkWidget *item;
-
-	    item = gtk_menu_item_new_with_label(method->menuEntry);
-	    gtk_menu_shell_append(GTK_MENU_SHELL(option_menu_strip), item);
-
-	    if(!strncmp(Closure->methodName, method->name, 4))
-	      method_idx = j;
-	 }
-
-	 gtk_option_menu_set_menu(GTK_OPTION_MENU(chooser), option_menu_strip);
-	 gtk_option_menu_set_history(GTK_OPTION_MENU(chooser), method_idx);
-	 gtk_box_pack_start(GTK_BOX(hbox), chooser, FALSE, FALSE, 0);
-#endif
 	 
 	 if(!i)
 	 {  pc->methodChooserA = chooser;

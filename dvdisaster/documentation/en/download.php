@@ -9,6 +9,7 @@
 # navigation and news if appropriate.
 
 require("../include/dvdisaster.php");
+require("../include/footnote.php");
 begin_page();
 ?>
 
@@ -17,7 +18,10 @@ begin_page();
 <h3>Download dvdisaster</h3>
 
 dvdisaster is available for <a href="download10.php">recent versions</a>
-of the Darwin/Mac OS X, FreeBSD, Linux, NetBSD and Windows operating systems.<p>
+of the FreeBSD, GNU/Linux, Mac OS X(Darwin), NetBSD 
+and Windows operating systems. It is provided
+as <a href="http://www.germany.fsfeurope.org/documents/freesoftware.en.html">free Software</a> 
+under the <a href="http://dvdisaster.cvs.sourceforge.net/dvdisaster/dvdisaster/COPYING?view=markup">GNU General Public License V2</a><a href="#gpl3"><sup>*)</sup></a>.<p>
 
 Please download either the source code or a binary version from the list below.
 A <a href="download20.php">digital signature</a> is provided for verification that the
@@ -71,7 +75,13 @@ to Mac OS X / Darwin.<p>
 
 Daniel Nylander provided Swedish translations of the screen texts.<p>
 
-<b>Patches</b> (small changes after version 0.70; files above have been updated):<br>
+<b>Patches</b> (small changes after version 0.70; files above have been updated):<p>
+
+<b>pl5</b> 
+Fixes a problem with newer Linux kernels which may lead to a frozen system under
+some circumstances. Treatment of file names containing localized characters has
+been improved. 
+Contains backports of major bug fixes from 0.71.24. <i>(24-Feb-2008)</i>.<p>
 
 <b>pl4</b> provides better compatibility with two layered DVDs 
 (DVD-R DL and DVD+R DL).<br> 
@@ -92,9 +102,16 @@ reading insufficient data for a successful recovery. Adds some small
 improvements of documentation and usability. <i>(30-Jul-2006)</i>
 </td></tr></table><p>
 
+
 The dvdisaster source code is also
 <a href="http://sourceforge.net/cvs/?group_id=157550">available via CVS</a>.
-<pre> </pre>
+Some file of particular interest are:
+<ul>
+<li><a href="http://dvdisaster.cvs.sourceforge.net/dvdisaster/dvdisaster/CHANGELOG?view=markup">CHANGELOG</a>- changes from the previous versions;</li>
+<li><a href="http://dvdisaster.cvs.sourceforge.net/dvdisaster/dvdisaster/CREDITS.en?view=markup">CREDITS.en</a>- people involved in the project;</li>
+<li><a href="http://dvdisaster.cvs.sourceforge.net/dvdisaster/dvdisaster/INSTALL?view=markup">INSTALL</a> - additional hints for installation;</li>
+<li><a href="http://dvdisaster.cvs.sourceforge.net/dvdisaster/dvdisaster/README?view=markup">README</a> - a road map of the source code archive.</li>
+</ul>
 
 <b>Previous release</b> - upgrading to version 0.70.4 is recommended.<p>
 
@@ -114,6 +131,9 @@ The dvdisaster source code is also
   </table>
 </td></tr>
 </table><p>
+<?php
+footnote("*","gpl3","dvdisaster will switch over to the GNU General Public License version 3 in a later release.");
+?>
 
 <!--- do not change below --->
 

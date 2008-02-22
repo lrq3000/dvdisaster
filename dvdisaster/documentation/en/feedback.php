@@ -29,7 +29,7 @@ following checklist for bug reporting:
 
 <ul>
 <li>Make sure that you are using the latest genuine version from our
-<a href="http://dvdisaster.net/en/download.html">download site 
+<a href="http://dvdisaster.net/en/download.php">download site 
 at SourceForge</a>.
 dvdisaster versions provided by third parties
 may contain functions and bugs which are not present in the original version

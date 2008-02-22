@@ -47,7 +47,7 @@ um diese Probleme zu vermeiden.
 
 
 <b><a name="block">3.2 Das Programm hängt nach dem Aufruf</a></b><p>
-Unter alten Linux-Versionen (Kernel 2.4.x) bleibt das Programm 
+Bei alten Linux-Kernel-Versionen (2.4.x) bleibt das Programm 
 manchmal nach dem Starten hängen, bevor es mit der ersten
 Aktion beginnt. Es läßt sich dann weder mit Strg-C noch mit "kill -9"
 unterbrechen.<p>
@@ -62,21 +62,7 @@ Ein erneuter Aufruf von dvdisaster sollte jetzt funktionieren.
 <b><a name="crc">3.3 Was bedeutet die Meldung "CRC error, sector: n"?</a></b><p>
 Der betreffende Sektor konnte gelesen werden, aber die Prüfsumme seines Inhalts
 stimmt nicht mit ihrem Gegenstück in der Fehlerkorrekturdatei überein. 
-Dies kann mehrere Ursachen haben:<p>
-<ul>
-<li>Das Datenträger-Abbild wurde mit Schreibrechten in das System eingebunden
-und dadurch verändert (typisches Indiz: CRC-Fehler in Sektor 64 und in den Sektoren 200 bis 400).</li>
-<li>Es gibt technische Probleme mit dem verwendeten Computersystem,
-insbesondere bei der Kommunikation mit den Massenspeichern.</li>
-</ul>
-
-Falls Sie technische Probleme vermuten, erstellen  
-Sie versuchsweise eine zweite Version des Abbildes und der Fehlerkorrekturdatei
-und <a href="example50.php">vergleichen Sie die Dateien erneut</a>. 
-Wenn der Fehler verschwindet oder an einer anderen Stelle auftritt,
-hat Ihr Rechner möglicherweise ein Problem mit defektem Hauptspeicher, 
-fehlerhafter Laufwerks-Verkabelung oder falsch
-eingestellten Taktfrequenzen.
+Für die Ursachen gibt es <a href="howtos13.php?crc">mehrere mögliche Erklärungen</a>. 
 <div align=right><a href="#top">&uarr;</a></div>
 
 <b><a name="rw">3.4 Lesefehler oder falsche Abbild-Größe bei -RW/+RW/-RAM-Datenträgern</a></b><p>
@@ -117,12 +103,12 @@ auf dem Abbild unlesbar sind und eine Fehlerkorrektur-Datei verwendet wird,
 haben Sie zwei Möglichkeiten:
 
 <ul>
-<li>Führen Sie die <a href="example50.php">"Vergleichen"</a>-Funktion nur mit der 
+<li>Führen Sie die <a href="howtos50.php">"Vergleichen"</a>-Funktion nur mit der 
 Fehlerkorrektur-Datei aus. Entnehmen Sie die korrekte Abbild-Größe der Ausgabe und 
 schränken Sie den Lesebereich entsprechend ein.
 </li>
 <li>Lesen Sie einfach das Abbild mit der zu großen Länge ein. Wenn Sie nach dem Aufruf
-der <a href="example40.php#repair">"Reparieren"</a>-Funktion gefragt werden, ob das Abbild
+der <a href="howtos40.php#repair">"Reparieren"</a>-Funktion gefragt werden, ob das Abbild
 abgeschnitten werden soll, antworten Sie mit "OK".
 </li>
 </ul>
@@ -148,7 +134,7 @@ Versuchen Sie in diesen Fällen, das Abbild mit einem anderen Laufwerk einzulese
 
 <ul>
 <li>Unter FreeBSD wird für ATAPI-Laufwerke (das sind fast alle heute gebräuchlichen Typen)
-möglicherweise ein <a href="download20.php#freebsd">Neuübersetzen des Kernels</a>
+möglicherweise ein <a href="download10.php#freebsd">Neuübersetzen des Kernels</a>
 benötigt, um die Laufwerke mit dvdisaster verwenden zu können. 
 <li>Sie müssen Lese- und Schreibrechte auf dem betreffenden Gerät 
 (z.B. /dev/pass0) haben.

@@ -1,5 +1,5 @@
 #  Bash based configure - library of test functions
-#  Copyright (C) 2004-2007 Carsten Gnörlich
+#  Copyright (C) 2004-2008 Carsten Gnörlich
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -43,8 +43,8 @@
 # REQUIRE_XPM		Require the Xpm library
 # REQUIRE_MOTIF n m o	Require the Motif library version >= n.m.o
 # REQUIRE_OPENGL	Require the OpenGL library
-# REQUIRE_GLIB2		Require GLIB2.x and accompanying components
-# REQUIRE_GTK2		Require GTK2.x and accompanying components
+# REQUIRE_GLIB2 n m o	Require GLIB2.x and accompanying components >= n.m.o
+# REQUIRE_GTK2 n m o	Require GTK2.x and accompanying components 
 #
 # REQUIRE_LIBRARY	Require specified library
 #
@@ -61,7 +61,7 @@
 # WITH_OPTION name default  adds -DWITH_OPTION_VALUE for -with-option=value args
 #			    to CFG_WITH_OPTIONS,
 
-CONFIGURE_VERSION="0.53"
+CONFIGURE_VERSION="0.54"
 
 echo "Bash based configure V$CONFIGURE_VERSION"
 echo
@@ -142,6 +142,11 @@ case "$cfg_uname" in
   SunOS*) cfg_system=solaris
         CFG_SYS_OPTIONS="-DSYS_SOLARIS"
         CFG_EXE_SUFFIX=""
+	# Even a Sparc V9 is a tight fit for us...
+	if test `uname -m` == "sun4u"; then
+	   CFG_SYS_CFLAGS="-mcpu=v9"
+	fi
+
 	function add_linker_flags()
 	{  lflags_return="-L$1 $2"
 	}
@@ -859,15 +864,15 @@ function get_header()
 }
 
 #
-# Check whether the version string given in $1
+# Check whether the version string given in $5
 # is lower than $2 $3 $4
 
 function check_version()
-{  echo -n " Checking for $1 version >= $2.$3.$4. Found version $found_version. "
+{  echo -n " Checking for $1 version >= $2.$3.$4. Found version $5. "
 
-   version_major=`echo $found_version | sed -e 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\1/'`
-   version_minor=`echo $found_version | sed -e 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\2/'`
-   version_micro=`echo $found_version | sed -e 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
+   version_major=`echo $5 | sed -e 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\1/'`
+   version_minor=`echo $5 | sed -e 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\2/'`
+   version_micro=`echo $5 | sed -e 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
 
    if test $2 -lt $version_major; then 
       echo "Okay."
@@ -1127,7 +1132,7 @@ EOF
    found_version="0.0.0"
    if try_compile; then found_version=`./conftest`; fi
 
-   if ! check_version "Motif" $1 $2 $3; then
+   if ! check_version "Motif" $1 $2 $3 "$found_version"; then
      echo -e "\n Did not find a suitable version of Motif."
      exit 1
    fi
@@ -1249,18 +1254,26 @@ function REQUIRE_OPENGL()
 # and libraries by ourselves, but just query pkg-config about them.
 
 function REQUIRE_GLIB2()
-{  if test -n "$cfg_help_mode"; then
+{  local want_major="$1"
+   local want_minor="$2"
+   local want_micro="$3"
+   local want_threads="$4"
+   local found_version="0.0.0"
+
+   if test -n "$cfg_help_mode"; then
      return 0
    fi
 
+   if test "$want_threads" == "WITH_THREADS"; then threads="--libs gthread-2.0"; fi
+
    echo -e "\n/* *** REQUIRE_GLIB2 */\n" >>$LOGFILE
 
-   echo "GLib 2.x is required... "
+   echo "GLib ${want_major}.${want_minor}.${want_micro} is required... "
 
    # See if pkgconfig returns something
 
    echo -n " pkg-config... "
-   if pkg-config --cflags glib-2.0 >>config.tmp 2>&1 && pkg-config --libs glib-2.0 >>config.tmp 2>&1 ; then
+   if pkg-config --cflags glib-2.0 >>config.tmp 2>&1 && pkg-config $threads --libs glib-2.0 >>config.tmp 2>&1 ; then
         echo "works"
         rm config.tmp
    else 
@@ -1298,6 +1311,8 @@ EOF
 #include <glib.h>
 int main(int argc, char *argv[])
 { g_malloc(1024); 
+
+  printf("%d.%d.%d\n",GLIB_MAJOR_VERSION,GLIB_MINOR_VERSION,GLIB_MICRO_VERSION);
   return 0;
 }
 EOF
@@ -1307,6 +1322,11 @@ EOF
    if try_compile; then
         echo "works"
 	rm -f conftest.c
+ 	found_version=`./conftest`
+        if ! check_version "GLIB" "$want_major" "$want_minor" "$want_micro" "$found_version"; then
+          echo -e "\n Did not find a suitable version of GLIB."
+          exit 1
+        fi
    else
 	echo "failed"
 	echo -e "\nThe tail of configure.log might contain hints\nabout the compilation problem."
@@ -1332,15 +1352,21 @@ EOF
 # than with other toolkits, so we try a bit harder to diagnose them here.
 
 function REQUIRE_GTK2()
-{  if test -n "$cfg_help_mode"; then
+{  local want_major="$1"
+   local want_minor="$2"
+   local want_micro="$3"
+   local want_threads="$4"
+   local found_version="0.0.0"
+
+   if test -n "$cfg_help_mode"; then
      return 0
    fi
 
-   if test "$1" == "WITH_THREADS"; then threads="--libs gthread-2.0"; fi
+   if test "$want_threads" == "WITH_THREADS"; then threads="--libs gthread-2.0"; fi
 
    echo -e "\n/* *** REQUIRE_GTK2 */\n" >>$LOGFILE
 
-   echo "Gtk+ 2.x is required..."
+   echo "Gtk+ ${want_major}.${want_minor}.${want_micro} is required..."
 
    # See if pkgconfig returns something
 
@@ -1414,9 +1440,11 @@ EOF
    if try_compile; then
 	echo "works"
 	rm -f conftest.c
-        echo -n " Gtk+ version..."
-	found_version=`./conftest`
-	echo " $found_version"
+ 	found_version=`./conftest`
+        if ! check_version "GTK+" "$want_major" "$want_minor" "$want_micro" "$found_version"; then
+          echo -e "\n Did not find a suitable version of GTK+."
+          exit 1
+        fi
    else
 	echo "failed"
 	echo -e "\nThe tail of configure.log might contain hints\nabout the compilation problem."

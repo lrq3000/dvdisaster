@@ -25,10 +25,10 @@ begin_page();
 
 <h3>Operating systems</h3>
 <ul>
- <li><b>FreeBSD</b> version <b>6.0</b> or later<br>
+ <li><a name="#freebsd"></a><b>FreeBSD</b> version <b>6.0</b> or later<br>
      (using ATAPI drives requires a kernel recompile -- see INSTALL doc)<p>
  </li>
- <li><b>Linux</b> with kernel <b>2.6.7</b> or later,<br>
+ <li><b>GNU/Linux</b> with kernel <b>2.6.7</b> or later,<br>
      (using kernels >= 2.4.20 is possible, but not recommended!)<p>
  </li>
  <li><b>Mac OS X</b> version 10.4 (Tiger) or later,<br> 

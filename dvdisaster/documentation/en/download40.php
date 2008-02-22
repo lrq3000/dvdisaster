@@ -38,9 +38,8 @@ and wait for the release of version 0.72.
 
 The alpha versions use the same package format as the regular releases.<p>
 
-<!---
 <table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.71 (devel24)</b></td><td align="right">xx-xxx-2007</td></tr>
+<tr><td><b>dvdisaster-0.71 (devel24)</b></td><td align="right">24-Feb-2008</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
@@ -56,12 +55,13 @@ The alpha versions use the same package format as the regular releases.<p>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
-This release marks the start of
+Fixes a problem with newer Linux kernels which may lead to a frozen system under
+some circumstances. Treatment of file names containing localized characters has
+been improved. This release marks the start of
 an online documentation rewrite, including a Russian translation made
-by Igor Gorbounov. Also new are the raw CD sector editor and some improvements
-in the raw reading heuristics. 
+by Igor Gorbounov. 
 </td></tr></table><p>
---->
+
 
 <table class="download" cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.71 (devel23)</b></td><td align="right">06-May-2007</td></tr>

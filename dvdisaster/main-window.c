@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2007 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2008 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -480,21 +480,10 @@ void CreateMainWindow(int *argc, char ***argv)
 
     /* Status bar contents. */
 
-#if 1
     Closure->status = GTK_LABEL(gtk_label_new(NULL));
-#if GTK_MINOR_VERSION >= 6
     gtk_label_set_ellipsize(GTK_LABEL(Closure->status), PANGO_ELLIPSIZE_END);
-#endif
     gtk_misc_set_alignment(GTK_MISC(Closure->status), 0.0, 0.5);
     gtk_box_pack_start(GTK_BOX(status_box), GTK_WIDGET(Closure->status), TRUE, TRUE, 5);
-#endif
-
-#if 0
-    wid = gtk_layout_new(NULL, NULL);
-    gtk_box_pack_start(GTK_BOX(status_box), GTK_WIDGET(wid), TRUE, TRUE, 5);
-    Closure->status = GTK_LABEL(gtk_label_new("hello"));
-    gtk_layout_put(GTK_CONTAINER(wid), Closure->status, 0, 0);
-#endif
 
     button = gtk_button_new();
     gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);

@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2007 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2008 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -413,7 +413,7 @@ enum
    PREF_ECC_SIZE = 2
 };
 
-static int cache_size[] = { 1, 2, 4, 8, 16, 32, 64, 96, 128, 192, 256, 384, 512, 768, 1024, 1536, 2048 };
+static int cache_size[] = { 8, 16, 32, 64, 96, 128, 192, 256, 384, 512, 768, 1024, 1536, 2048 };
 
 static gchar* format_cb(GtkScale *scale, gdouble value, gpointer data)
 {  int nroots = value;
@@ -790,15 +790,16 @@ void CreateRS01PrefsPage(Method *method, GtkWidget *parent)
 
    for(i=0; i<2; i++)
    {  GtkWidget *hbox = gtk_hbox_new(FALSE, 4);
+      int n_entries = sizeof(cache_size)/sizeof(int);
 
       lab = gtk_label_new(_utf("Use"));
       gtk_box_pack_start(GTK_BOX(hbox), lab, FALSE, FALSE, 0);
 
-      for(index = 0; index < sizeof(cache_size)/sizeof(int); index++)
+      for(index = 0; index < n_entries; index++)
 	if(cache_size[index] > Closure->cacheMB)
 	  break;
 
-      scale = gtk_hscale_new_with_range(0,16,1);
+      scale = gtk_hscale_new_with_range(0,n_entries-1,1);
       gtk_scale_set_value_pos(GTK_SCALE(scale), GTK_POS_RIGHT);
       gtk_range_set_increments(GTK_RANGE(scale), 1, 1);
       gtk_range_set_value(GTK_RANGE(scale), index > 0 ? index-1 : index);

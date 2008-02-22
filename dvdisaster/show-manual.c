@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2007 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2008 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -20,6 +20,7 @@
  */
 
 #include "dvdisaster.h"
+#include <glib/gstdio.h>
 
 #if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_DARWIN) || defined(SYS_NETBSD) || defined(SYS_SOLARIS)
 #include <sys/wait.h>
@@ -337,29 +338,29 @@ void ShowHTML(char *target)
       if(lang)
       {  if(!strncmp(lang, "ru", 2)) 
 #ifdef SYS_MINGW
-	     path = g_strdup_printf("%s\\ru-html\\%s",Closure->docDir,target); 
+	     path = g_strdup_printf("%s\\ru\\%s",Closure->docDir,target); 
 #else
-	     path = g_strdup_printf("%s/ru-html/%s",Closure->docDir,target); 
+	     path = g_strdup_printf("%s/ru/%s",Closure->docDir,target); 
 #endif
          else if(!strncmp(lang, "de", 2)) 
 #ifdef SYS_MINGW
-	     path = g_strdup_printf("%s\\de-html\\%s",Closure->docDir,target); 
+	     path = g_strdup_printf("%s\\de\\%s",Closure->docDir,target); 
 #else
-	     path = g_strdup_printf("%s/de-html/%s",Closure->docDir,target); 
+	     path = g_strdup_printf("%s/de/%s",Closure->docDir,target); 
 #endif
       }
 
       if(!path)
       {
 #ifdef SYS_MINGW
-         path = g_strdup_printf("%s\\en-html\\%s",Closure->docDir,target); 
+         path = g_strdup_printf("%s\\en\\%s",Closure->docDir,target); 
 #else
-         path = g_strdup_printf("%s/en-html/%s",Closure->docDir,target); 
+         path = g_strdup_printf("%s/en/%s",Closure->docDir,target); 
 #endif
       }
 
 #ifdef SYS_MINGW      
-      if(stat(path, &mystat) == -1)
+      if(g_stat(path, &mystat) == -1)
       {  
 	 g_free(path);  /* the local dir is Windows specific */
 	 path = g_strdup_printf("%s\\local\\%s",Closure->docDir,target);
@@ -370,7 +371,7 @@ void ShowHTML(char *target)
    }
    else bi->url = target;
 
-   if(!http_url && stat(bi->url, &mystat) == -1)
+   if(!http_url && g_stat(bi->url, &mystat) == -1)
    {  
       CreateMessage(_("Documentation file\n%s\nnot found.\n"), GTK_MESSAGE_ERROR, bi->url);
       g_free(bi);

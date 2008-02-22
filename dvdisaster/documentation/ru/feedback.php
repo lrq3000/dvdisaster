@@ -29,7 +29,7 @@ begin_page();
 
 <ul>
 <li>Убедитесь, что Вы используете самую последнюю подлинную версию с нашего
-<a href="http://dvdisaster.net/en/download.html">сайта 
+<a href="http://dvdisaster.net/en/download.php">сайта 
 на SourceForge</a>.
 Версии dvdisaster, предоставленные третьими сторонами, 
 могут содержать функции и ошибки, которых нет в первоначальной версии.</li>
