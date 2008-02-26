@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: English homepage translation
-# Copyright (C) 2004-2007 Carsten Gnörlich
+# Copyright (C) 2004-2008 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -62,7 +62,7 @@ experienced only on certain drives/computers;</li>
 incompatibility.</li>
 </ul>
 
-<?php begin_screen_shot("Creating a log file.", "activate_logfile.png"); ?>
+<?php begin_screen_shot("Creating a log file.", "activate-logfile.png"); ?>
 
 <b>How to create a log file:</b> If you suspect incompatibilities with your drive and/or media
 as the cause of your issue, please activate the log file feature in the preferences 

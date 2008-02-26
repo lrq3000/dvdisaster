@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: English homepage translation
-# Copyright (C) 2004-2007 Carsten Gnörlich
+# Copyright (C) 2004-2008 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -17,14 +17,14 @@ begin_page();
 
 <h3>Examples of the error correction</h3>
 
-<?php begin_screen_shot("Reading the defective medium.", "recover_linear.png"); ?>
+<?php begin_screen_shot("Reading the defective medium.", "recover-linear.png"); ?>
    <b>Recovery of aged media.</b> The medium processed here has become
    discolored and partly unreadable in its outer region. A surface scan
    yields about 23.000 unreadable sectors of 342.000 sectors total; resulting
    in about 7,2% defective sectors.
 <?php end_screen_shot(); ?>
 
-<?php begin_screen_shot("Repairing the defective image.", "fix_image.png"); ?>
+<?php begin_screen_shot("Repairing the defective image.", "fix-image.png"); ?>
    <b>Repairing the defective image.</b> The resulting image is still incomplete
    since about 23.000 sectors could not be read. These sectors are now 
    reconstructed using 

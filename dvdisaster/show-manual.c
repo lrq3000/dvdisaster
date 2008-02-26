@@ -188,6 +188,7 @@ static void try_browser(browser_info*);
 
 static char *browsers[] = 
 {  "user-selection",
+   "xdg-open",
    "gnome-open",
    "htmlview",
    "firefox",

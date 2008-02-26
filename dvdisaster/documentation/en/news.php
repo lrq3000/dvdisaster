@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: English homepage translation
-# Copyright (C) 2004-2007 Carsten Gnörlich
+# Copyright (C) 2004-2008 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -29,6 +29,10 @@ news_item("24.02.2008", "dvdisaster 0.70.5 / 0.71.24 fix problems with newer Lin
    The release of dvdisaster 0.71.24 also marks the start of
    an online documentation rewrite, including a Russian translation made
    by Igor Gorbounov.
+
+   <i>Currently, the english documentation is far from being complete.
+   Please bear with us; we'll catch up soon.</i>
+
 "); # end of news_item
 
 news_item("28.10.2007", "New documentation started", "

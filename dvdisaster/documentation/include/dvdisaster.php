@@ -1,5 +1,8 @@
 <?php
 
+# dvdisaster: Homepage layout funtions
+# Copyright (C) 2007-2008 Carsten Gnörlich
+
 require("version.php");
 
 # Preset some global variables
@@ -58,6 +61,7 @@ function lang_link($lang_name, $lang, $spacing)
 function begin_page()
 {  global $cooked_version;
    global $trans_to_hoster;
+   global $trans_to_internet;
    global $trans_version;
    global $project_at_hoster;
    global $script_lang;
@@ -79,7 +83,10 @@ function begin_page()
    if(!strcmp($mode, "local"))
    {  echo "  </td>\n";
       echo "  <td align=\"right\">\n";
-      echo "     <font size=\"+3\">&nbsp;</font><a href=\"http://dvdisaster.sourceforge.net/$script_lang/\">$trans_to_internet</a>\n";
+      echo "     <font size=\"+3\">&nbsp;</font><a href=\"http://dvdisaster.net/$script_lang/\">$trans_to_internet</a>\n";
+      lang_link("", "de", 0); # TODO: This is a quick hack
+      lang_link("", "en", 0); # to produce all locales for
+      lang_link("", "ru", 0); # Windows. Do it better!
    }
    echo "     </td>\n";
    echo "  </tr>\n";
@@ -90,10 +97,12 @@ function begin_page()
    echo "\n<!--- Language chooser or separator --->\n";
    echo "<table width=\"100%\" cellpadding=\"0\" border=\"0\">\n";
 
+   echo "  <tr bgcolor=\"#000000\">\n";
+   echo "    <td colspan=\"2\" width=\"100%\"><img width=1 height=1 alt=\"\"></td>\n";
+   echo "  </tr>\n";
+
    if(strcmp($mode, "local"))
-   {  echo "  <tr bgcolor=\"#000000\">\n";
-      echo "    <td colspan=\"2\" width=\"100%\"><img width=1 height=1 alt=\"\"></td>\n";
-      echo "  </tr>\n";
+   {  
       echo "  <tr>\n";
       echo "    <td align=\"left\"><a href=\"$project_at_hoster\">$trans_to_hoster</a></td>\n";
       echo "    <td align=\"right\">\n";
@@ -282,10 +291,8 @@ function create_navigation()
 echo "         <font size=\"-1\"><b>$trans_contents</b></font>\n";
 ?>
           <table width="100%" cellpadding="0" cellspacing="0">
-	    <tr bgcolor="#000000" height=1>
-	      <td width="100%" height=1>
-	        <img width=1 height=1 alt="">
-	      </td>
+	    <tr bgcolor="#000000">
+	      <td width="100%"><img width=1 height=1 alt=""></td>
 	    </tr>
 	  </table><p>
 
@@ -342,10 +349,8 @@ function end_page()
   echo "      <font size=\"-1\"><b>$trans_news</b></font>\n";
 ?>
       <table width="100%" cellpadding="0" cellspacing="0">
-         <tr bgcolor="#000000" height=1>
-	   <td width="100%" height=1>
-	     <img width=1 height=1 alt="">
-	   </td>
+         <tr bgcolor="#000000">
+	   <td width="100%"><img width=1 height=1 alt=""></td>
 	 </tr>
       </table><p>
       <table width="100%">
@@ -394,14 +399,9 @@ function end_page()
 
 <!--- Page footer --->
 <table width="100%" cellpadding="0" border="0">
- <tr>
-   <td colspan="2" width="100%" height="10">
-     <img width=1 height=1 alt="">
-   </td>
+ <tr><td colspan="2" width="100%" height="10"><img width=1 height=1 alt=""></td>
  </tr>
- <tr bgcolor="#000000"><td colspan="2" width="100%">
-     <img width=1 height=1 alt="">
-   </td>
+ <tr bgcolor="#000000"><td colspan="2" width="100%"><img width=1 height=1 alt=""></td>
  </tr>
  <tr>
   <td align="center">
@@ -414,8 +414,7 @@ function end_page()
    </font>
   </td>
  </tr>
- <tr bgcolor="#000000"><td colspan="2" width="100%">
-   <td><img width=1 height=1 alt=""></td>
+ <tr bgcolor="#000000"><td colspan="2" width="100%"><img width=1 height=1 alt=""></td>
  </tr>
 </table>
 </body>

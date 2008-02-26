@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: English homepage translation
-# Copyright (C) 2004-2007 Carsten Gnörlich
+# Copyright (C) 2004-2008 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -21,7 +21,7 @@ dvdisaster is available for <a href="download10.php">recent versions</a>
 of the FreeBSD, GNU/Linux, Mac OS X(Darwin), NetBSD 
 and Windows operating systems. It is provided
 as <a href="http://www.germany.fsfeurope.org/documents/freesoftware.en.html">free Software</a> 
-under the <a href="http://dvdisaster.cvs.sourceforge.net/dvdisaster/dvdisaster/COPYING?view=markup">GNU General Public License V2</a><a href="#gpl3"><sup>*)</sup></a>.<p>
+under the <a href="http://dvdisaster.cvs.sourceforge.net/dvdisaster/dvdisaster/COPYING?view=markup">GNU General Public License v2</a><a href="#gpl3"><sup>*)</sup></a>.<p>
 
 Please download either the source code or a binary version from the list below.
 A <a href="download20.php">digital signature</a> is provided for verification that the
@@ -49,18 +49,18 @@ The current unstable release is
 <b>Stable version</b> - recommended for getting started.<p>
 
 <table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.70</b></td><td align="right">20-Jan-2007</td></tr>
+<tr><td><b>dvdisaster-0.70</b></td><td align="right">24-Feb-2008</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.4.tar.bz2?download">dvdisaster-0.70.4.tar.bz2</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.5.tar.bz2?download">dvdisaster-0.70.5.tar.bz2</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.4.tar.bz2.gpg?download">dvdisaster-0.70.4.tar.bz2.gpg</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.5.tar.bz2.gpg?download">dvdisaster-0.70.5.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Binary for Windows:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.4-setup.exe?download">dvdisaster-0.70.4-setup.exe</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.5-setup.exe?download">dvdisaster-0.70.5-setup.exe</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.4-setup.exe.gpg?download">dvdisaster-0.70.4-setup.exe.gpg</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.5-setup.exe.gpg?download">dvdisaster-0.70.5-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>

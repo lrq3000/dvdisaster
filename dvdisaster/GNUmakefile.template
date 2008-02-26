@@ -124,7 +124,7 @@ simple-md5sum: md5.c
 # Stuff needed to generate or prepare the documentation
 # TAG: online-doc
 
-.PHONY : images pack-images lock-images mount-php html thumbnails
+.PHONY : images pack-images lock-images mount-php html winhtml thumbnails
 
 documentation/images/email.png:
 	@if test -e THESE_ARE_THE_DEVEL_SOURCES; then \
@@ -137,7 +137,7 @@ documentation/images/email.png:
 	  echo -n "common "; \
 	  for i in $(DOC_LOCALES); do \
 	    (cd $(SRCDIR)/documentation/$$i/images; \
-	    strace $(SRCDIR)/tools/pngpack -u ../../images-$$i.pngpack -t160,../thumbnails >>../../pngpack.log  2>&1); \
+	    $(SRCDIR)/tools/pngpack -u ../../images-$$i.pngpack -t160,../thumbnails >>../../pngpack.log  2>&1); \
 	    echo -n "$$i "; \
 	  done;  \
 	  echo "- done"; \
@@ -163,14 +163,14 @@ tools/pngpack: tools/pngpack.c
 	@$(MAKE) --no-print-directory -C tools
 
 thumbnails: pack-images
-	@mkdir $(SRCDIR)/documentation/temp
 	@echo -n "unpacking thumbnails ... "
 	@for i in $(DOC_LOCALES); do \
+	  mkdir $(SRCDIR)/documentation/temp; \
 	  (cd documentation/temp; \
 	  $(SRCDIR)/tools/pngpack -u ../images-$${i}.pngpack *.png -t160,../$$i/thumbnails >>../pngpack.log); \
 	  echo -n "$$i "; \
+	  rm -rf $(SRCDIR)/documentation/temp; \
 	done
-	@rm -rf $(SRCDIR)/documentation/temp
 	@echo "- done"
 
 version.php:
@@ -204,7 +204,20 @@ html: mount-php version.php thumbnails
 	  mkdir $(SRCDIR)/documentation/wget-tmp; \
 	fi
 	@cd $(SRCDIR)/documentation/wget-tmp; \
-	  wget -r -nH --cut-dirs=1 --html-extension --convert-links -q http://localhost/dvdisaster/index.html
+	  wget -r -p -l 0 -nH --cut-dirs=1 --html-extension --convert-links -q http://localhost/dvdisaster/index.html
+	@$(SRCDIR)/scripts/convert-wgetted.bash $(SRCDIR)
+	@rm -rf $(SRCDIR)/documentation/wget-tmp
+	@echo "done."
+
+winhtml: mount-php version.php thumbnails
+	@sed "s/www/local/" <$(SRCDIR)/documentation/include/version.php >$(SRCDIR)/documentation/include/version1.php
+	@mv $(SRCDIR)/documentation/include/version1.php $(SRCDIR)/documentation/include/version.php
+	@echo -n "Producing html documentation... "
+	@if ! test -e $(SRCDIR)/documentation/wget-tmp; then \
+	  mkdir $(SRCDIR)/documentation/wget-tmp; \
+	fi
+	@cd $(SRCDIR)/documentation/wget-tmp; \
+	  wget -r -p -l 0 -nH --cut-dirs=1 --html-extension --convert-links -q http://localhost/dvdisaster/index.html
 	@$(SRCDIR)/scripts/convert-wgetted.bash $(SRCDIR)
 	@rm -rf $(SRCDIR)/documentation/wget-tmp
 	@echo "done."
@@ -296,6 +309,8 @@ install: dvdisaster images
 	install -d $(BUILDROOT)$(DOCSUBDIR)/images
 	cd documentation; install -m 644 images/*.png $(BUILDROOT)$(DOCSUBDIR)/images
 #	cd documentation; install -m 644 images/*.jpg $(BUILDROOT)$(DOCSUBDIR)/images
+	install -d $(BUILDROOT)$(DOCSUBDIR)/include
+	cd documentation; install -m 644 include/*.css $(BUILDROOT)$(DOCSUBDIR)/include
 	install -d $(BUILDROOT)$(MANDIR)/man1
 	install -d $(BUILDROOT)$(MANDIR)/cs/man1
 	install -d $(BUILDROOT)$(MANDIR)/de/man1
@@ -390,12 +405,12 @@ www:
 
 www-images:
 	@cd documentation ; \
-	tar cjf ../../www.tar.bz2 pubkey.asc index.html include/dvdisaster.css de/*.html en/*.html ru/*.html images/*.png de/images de/thumbnails/*.png en/images/*.png en/thumbnails/*.png ru/images/*.png ru/thumbnails/*.png
+	tar cjf ../../www.tar.bz2 pubkey.asc index.html include/dvdisaster.css include/*.php de/*.php en/*.php ru/*.php images/*.png de/images/*.png de/thumbnails/*.png en/images/*.png en/thumbnails/*.png ru/images/*.png ru/thumbnails/*.png
 
 INSTALL: documentation/install.template
 	@sed "s/@@PKGNAME/$(PKGNAME)/" <documentation/install.template >INSTALL
 
-srcdist: INSTALL pack-images lock-images clean distclean 
+srcdist: INSTALL html lock-images clean distclean 
 	@rm -f documentation/MAKE_SRCDIST
 	@cd .. ; tar -c -j -X $(PKGNAME)/NODIST -f $(PKGNAME).tar.bz2 $(PKGNAME)
 	@cd .. ; gpg --default-key 091ad320 --detach-sign --output $(PKGNAME).tar.bz2.gpg --armor $(PKGNAME).tar.bz2 
@@ -409,12 +424,13 @@ prepare-dist:
 	@head --bytes=20 dvdisaster.exe >win-build-dir/signature
 	@cp wininst/*.bmp win-build-dir
 	@cp documentation/pubkey.asc win-build-dir/documentation
-	@for i in $(DOC_LOCALES) do \
+	@for i in $(DOC_LOCALES); do \
 	  mkdir win-build-dir/documentation/$$i; \
 	  cp documentation/$$i/*.html win-build-dir/documentation/$$i; \
 	done
 	@mkdir win-build-dir/documentation/images
-	@cp documentation/images/*.jpg win-build-dir/documentation/images
+	@mkdir win-build-dir/documentation/include
+	@cp documentation/include/*.css win-build-dir/documentation/include
 	@cp tools/pngpack.exe win-build-dir/documentation
 	@mv documentation/images-*.pngpack win-build-dir/documentation
 	@cp $(GTK_BINDIR)/libglib*.dll win-build-dir

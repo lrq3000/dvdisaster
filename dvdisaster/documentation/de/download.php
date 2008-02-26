@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: German homepage translation
-# Copyright (C) 2004-2007 Carsten Gnörlich
+# Copyright (C) 2004-2008 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -20,7 +20,7 @@ begin_page();
 dvdisaster unterstützt die Betriebssysteme Darwin/Mac OS X, FreeBSD, GNU/Linux, NetBSD und Windows in den <a href="download10.php">aktuellen Versionen</a>.
 Es wird Ihnen 
 als <a href="http://www.germany.fsfeurope.org/documents/freesoftware.de.html">freie Software</a> 
-unter der <a href="http://dvdisaster.cvs.sourceforge.net/dvdisaster/dvdisaster/COPYING?view=markup">GNU General Public License V2</a><a href="#gpl3"><sup>*)</sup></a> zur 
+unter der <a href="http://dvdisaster.cvs.sourceforge.net/dvdisaster/dvdisaster/COPYING?view=markup">GNU General Public License v2</a><a href="#gpl3"><sup>*)</sup></a> zur 
 Verfügung gestellt.<p>
 
 Laden Sie sich bitte entweder den Quellkode oder eine Binärversion 

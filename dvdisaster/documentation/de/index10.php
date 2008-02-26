@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: German homepage translation
-# Copyright (C) 2004-2007 Carsten Gnörlich
+# Copyright (C) 2004-2008 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -17,14 +17,14 @@ begin_page();
 
 <h3>Beispiele für die Fehlerkorrektur</h3>
 
-<?php begin_screen_shot("Einlesen eines beschädigten Datenträgers.","recover_linear.png"); ?>
+<?php begin_screen_shot("Einlesen eines beschädigten Datenträgers.","recover-linear.png"); ?>
    <b>Einlesen beschädigter Datenträger.</b> Der hier bearbeitete Datenträger
    ist in den äußeren Bereichen verfärbt und teilweise unlesbar geworden. Eine
    Oberflächenanalyse ergibt rund 23.000 unlesbare Sektoren (von insgesamt ca. 342.000
    Sektoren, also  7,2% defekte Sektoren).
 <?php end_screen_shot(); ?>
 
-<?php begin_screen_shot("Wiederherstellung des Abbilds.","fix_image.png"); ?>
+<?php begin_screen_shot("Wiederherstellung des Abbilds.","fix-image.png"); ?>
    <b>Wiederherstellung des Abbilds.</b> Das eingelesene Abbild ist unvollständig,
    da rund 23.000 Sektoren nicht gelesen werden konnten. Diese Sektoren werden nun
    mit Hilfe der Fehlerkorrektur-Daten

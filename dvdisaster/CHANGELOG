@@ -2,6 +2,7 @@
 NOTE to downstream maintainers:
  - Keep up the good work! Thanks :-)
  - GTK+ dependency has been bumped up to >= 2.6.0 (was formerly 2.0) 
+ - Debian patches 07,08 included in upstream
  - The documentation sources are now in PHP. For your convenience,
    a HTML version is included in the upstream tarball.
    If you need to recreate the html, things are getting a bit involved:
@@ -10,7 +11,7 @@ NOTE to downstream maintainers:
      an empty or non-existing sub directory under your Apache document root
    . do a make html to update the html (via wget through localhost)
 
-0.71 (devel-24)
+0.71 (devel-24) 24-02-2008
 	- enlarged scsi timeout for Linux as newer Kernels seem
           to freeze on timeout
 	- fixed filename handling (e.g. German umlaut corruption) under Windows

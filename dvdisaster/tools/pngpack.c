@@ -27,7 +27,7 @@
 #include "pngio.h"
 #include "codec.h"
 #include "decimate.h"
-#include "aux.h"
+#include "memory.h"
 
 /***
  *** main()

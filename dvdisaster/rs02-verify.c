@@ -450,7 +450,7 @@ static void read_crc(verify_closure *cc, RS02Layout *lay)
  * Prognosis for correctability
  */
 
-int prognosis(verify_closure *vc, gint64 missing, gint64 expected)
+static int prognosis(verify_closure *vc, gint64 missing, gint64 expected)
 {  int j,eccblock;
    int worst_ecc = 0;
    gint64 damaged_sectors = 0, damaged_eccsecs = 0;

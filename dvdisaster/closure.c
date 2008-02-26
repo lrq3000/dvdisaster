@@ -642,7 +642,7 @@ void InitClosure()
    Closure->deviceNodes = g_ptr_array_new();
    Closure->imageName   = g_strdup("medium.iso");
    Closure->eccName     = g_strdup("medium.ecc");
-   Closure->browser     = g_strdup("gnome-open");
+   Closure->browser     = g_strdup("xdg-open");
    Closure->methodList  = g_ptr_array_new();
    Closure->methodName  = g_strdup("RS01");
    Closure->dDumpDir    = g_strdup("/tmp");
