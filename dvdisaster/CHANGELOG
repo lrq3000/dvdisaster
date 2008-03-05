@@ -1,15 +1,9 @@
 
-NOTE to downstream maintainers:
- - Keep up the good work! Thanks :-)
- - GTK+ dependency has been bumped up to >= 2.6.0 (was formerly 2.0) 
- - Debian patches 07,08 included in upstream
- - The documentation sources are now in PHP. For your convenience,
-   a HTML version is included in the upstream tarball.
-   If you need to recreate the html, things are getting a bit involved:
-   . you need a running Apache webserver with mod_php5
-   . add --phpmountdir=DIR to the ./configure call; this should specify
-     an empty or non-existing sub directory under your Apache document root
-   . do a make html to update the html (via wget through localhost)
+0.71 (devel-25) 04-03-2008
+	- replaced treatment of localized file names with a different
+	  approach; the previous one broke large file support under Windows.
+	  Thanks to Markus G. for bringing this to my attention!
+	- fixed failure when trying to re-read incomplete image using split files
 
 0.71 (devel-24) 24-02-2008
 	- enlarged scsi timeout for Linux as newer Kernels seem

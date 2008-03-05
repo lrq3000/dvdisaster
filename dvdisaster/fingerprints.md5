@@ -1,4 +1,4 @@
-b661f82586d6a5775450048b64d919f6 *dvdisaster.h
+aaf00139932273ad4d92898b36afd9c3 *dvdisaster.h
 ac2fb8154c69d437ec7c98abc3be9477 *galois-inlines.h
 df9d88776eb3f77a93ef596b148193be *md5.h
 7687f37a4e024e14386634e7017032fd *read-linear.h
@@ -9,8 +9,7 @@ cb04a9d3242d0f9cc8ebe8772f35b88e *rs03-includes.h
 70e1a5a3a9a49edcfa07706ba4ad0f5c *scsi-layer.h
 8394e28e8e1cbc4b907edc4f7121622d *udf.h
 f878a198a8aa3d68d266d8adf99ec281 *bitmap.c
-7c60e2e807cf10ca5880c1cba3604126 *closure.c
-b5654017ee4b04ac4372ed0d65292ac1 *conftest.c
+c2a93234e3ad5afaee587514cbdf2a57 *closure.c
 672b8ce52c6f0406bd78a3ee8a0f166d *crc32.c
 6f1eb677d53016997d2f1943ed4174d3 *crcbuf.c
 4d9d4c63dda79673eb322604b6db84ad *curve.c
@@ -24,14 +23,14 @@ b63a84d88f57e276254ae58860a32b8c *ecc-rs03s.c
 a152273ff5d2681ea6f41f32c3f523de *endian.c
 fe799f2538e564b636f43ddb8422f1b9 *file.c
 922489712d70161c090a8b69c7fbbca4 *galois.c
-adcb640baec77d475d71b9b058bd9dae *help-dialogs.c
+ab8a07bdb2583fd4b130fe15af4d7bda *help-dialogs.c
 59ed97e35ad1e41c2fac42c6ba2e24c4 *heuristic-lec.c
 974cddc671905589bcd66f12969fadd2 *icon-factory.c
-c82b3f0d8afdbfc624de671bd04f1b7e *large-io.c
+d4f841e131af72e255d4f1d242a4d6b2 *large-io.c
 6a3e08dad2baddc1c40f1fec7fdc1625 *l-ec.c
 4f3a719d69dba9939d49e981d4882871 *logfile.c
 02940e3ef50eae15acc112b1e9f40a2b *main-window.c
-d94748df74856dbc85e933364c2faab4 *md5.c
+9f8e7da67068ae5229eef9bab8fa18a2 *md5.c
 339f3597e0513245ca5b04184e18c347 *memtrack.c
 1b7ecd6f46324c17925a3a51499113cb *menubar.c
 42cd9c4242d604be17fcaecae9c64086 *method.c
@@ -44,9 +43,9 @@ cdde449dd2a8f64b560ff18a36f86234 *random.c
 c01bf69b639f56bd2dfbdd484492fde6 *raw-sector-cache.c
 b3f98938b4ed4d8b333775989d79cceb *read-adaptive.c
 58ffe3e16300b8305f47d06edad58c91 *read-adaptive-window.c
-202840fe54f2ab84f8f644c823160a61 *read-linear.c
+e09d84e8e416f2011389aabef22b1285 *read-linear.c
 90dd5b9a6c714f0945aaa288cf60ef53 *read-linear-window.c
-904e27aaa181b3d78c63b0f80316d778 *recover-raw.c
+eb26e3ede7a736f107bdf8379aea1f80 *recover-raw.c
 136b21f2dde44356718ae8032965aab2 *rs01-common.c
 972533a852e811523db065b068d5c658 *rs01-create.c
 7945700c979df7c46afca1369df0f332 *rs01-fix.c
@@ -61,7 +60,7 @@ e698d88ffa1e259ca262cd5ed6e17f63 *rs02-create.c
 ff106d1e1e0e19e6c562b0cac6948f87 *rs02-fix.c
 2521acf001f09ac75f62a4e2ddc1cd01 *rs02-verify.c
 a62e56db7db6233696cb5c8464a513dc *rs02-window.c
-10133b44ee931f1c7d86422a644ede17 *rs03-common.c
+e1b956cd51252196f0b3271629468c87 *rs03-common.c
 821f19be74e3472f2280684497654831 *rs03-create.c
 e4ef4298af4e45197ba1b1dab7c2393d *rs03-fix.c
 bcd2edb2aa2b0413106fa8f2190615d6 *rs03-preferences.c
@@ -78,8 +77,8 @@ d35742b1b8c4908123812a5feb0121f2 *scsi-netbsd.c
 5a8f4eea5e870f09a73fb197117a58b6 *scsi-solaris.c
 b4001389f47b00de00dca867a9699060 *scsi-unknown.c
 15839cd48c75c15bfb3ddcc31c9cf704 *scsi-win32.c
-0b4139b6e6933571570c8bcf36b0bc0d *show-manual.c
+c1c72dc571decda7d722537df8a370c0 *show-manual.c
 176ab4f4ce8750369e45e38be56eb88e *smart-lec.c
-6a2fb441ed7d27729e0637400a99d837 *spiral.c
+764d112c1882a14268cbdca9e46a17dd *spiral.c
 4190794df130b2b04be06fcf4cb9f3f2 *udf.c
 45b6d14908940c348b6799c54c53e0a3 *welcome-window.c

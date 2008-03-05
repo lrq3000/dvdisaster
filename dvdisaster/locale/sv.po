@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-26 09:59+0100\n"
+"POT-Creation-Date: 2008-03-04 17:02+0100\n"
 "PO-Revision-Date: 2006-06-14 23:48+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: closure.c:523
+#: closure.c:521
 #, c-format
 msgid ""
 "# dvdisaster-%s configuration file\n"
@@ -66,7 +66,7 @@ msgstr ""
 #: debug.c:1042 debug.c:1149 rs01-common.c:54 rs01t-common.c:56
 #: rs02-common.c:62 rs02-create.c:309 rs02-create.c:942 rs02-fix.c:383
 #: rs02-verify.c:391 rs03-common.c:62 rs03-create.c:490 rs03-create.c:504
-#: rs03-fix.c:377 rs03s-create.c:798 rs03s-create.c:824 rs03-verify.c:391
+#: rs03-fix.c:370 rs03s-create.c:798 rs03s-create.c:824 rs03-verify.c:391
 #, c-format
 msgid "Failed seeking to sector %lld in image: %s"
 msgstr "Misslyckades med att söka fram till sektor %lld i avbild: %s"
@@ -232,7 +232,7 @@ msgstr ""
 
 #: debug.c:629 debug.c:1038 debug.c:1107 debug.c:1111 debug.c:1189
 #: rs01-common.c:70 rs01t-common.c:72 rs02-common.c:67 rs02-create.c:192
-#: rs02-fix.c:386 rs03-common.c:67 rs03-fix.c:380
+#: rs02-fix.c:386 rs03-common.c:67 rs03-fix.c:373
 #, c-format
 msgid "Failed reading sector %lld in image: %s"
 msgstr "Misslyckades med att läsa sektor %lld i avbild: %s"
@@ -559,11 +559,11 @@ msgstr ""
 msgid "Image file %s not deleted: %s\n"
 msgstr "Avbildsfil %s inte borttagen: %s\n"
 
-#: help-dialogs.c:369
+#: help-dialogs.c:368
 msgid "windowtitle|Log data"
 msgstr "Loggdata"
 
-#: help-dialogs.c:370
+#: help-dialogs.c:369
 msgid ""
 "<big>Log data</big>\n"
 "<i>Protocol of the current or previous action</i>"
@@ -571,11 +571,11 @@ msgstr ""
 "<big>Loggdata</big>\n"
 "<i>Protokoll för aktuell eller tidigare operation</i>"
 
-#: help-dialogs.c:386
+#: help-dialogs.c:385
 msgid "windowtitle|GNU General Public License"
 msgstr "GNU General Public License"
 
-#: help-dialogs.c:387
+#: help-dialogs.c:386
 msgid ""
 "<big>GNU General Public License</big>\n"
 "<i>The license terms of dvdisaster.</i>"
@@ -583,7 +583,7 @@ msgstr ""
 "<big>GNU General Public License</big>\n"
 "<i>Licensvillkoren för dvdisaster.</i>"
 
-#: help-dialogs.c:459
+#: help-dialogs.c:458
 #, c-format
 msgid ""
 "File\n"
@@ -594,31 +594,31 @@ msgstr ""
 "%s\n"
 "inte tillgänglig"
 
-#: help-dialogs.c:542
+#: help-dialogs.c:541
 msgid "windowtitle|Modifying dvdisaster"
 msgstr "Ändra dvdisaster"
 
-#: help-dialogs.c:543
+#: help-dialogs.c:542
 msgid ""
 "<big>Modifying dvdisaster</big>\n"
 "<i>Your changes are not ours.</i>"
 msgstr ""
 
-#: help-dialogs.c:682
+#: help-dialogs.c:681
 msgid "windowtitle|About dvdisaster"
 msgstr "Om dvdisaster"
 
-#: help-dialogs.c:702
+#: help-dialogs.c:701
 msgid ""
 "Modified version Copyright 2008 (please fill in - [directions])\n"
 "Copyright 2004-2008 Carsten Gnoerlich"
 msgstr ""
 
-#: help-dialogs.c:706
+#: help-dialogs.c:705
 msgid "Copyright 2004-2008 Carsten Gnoerlich"
 msgstr "Copyright 2004-2008 Carsten Gnörlich"
 
-#: help-dialogs.c:713
+#: help-dialogs.c:712
 msgid ""
 "dvdisaster provides a margin of safety against data loss\n"
 "on CD and DVD media caused by aging or scratches.\n"
@@ -630,7 +630,7 @@ msgstr ""
 "Det skapar felkorrigeringsdata som kan användas för att\n"
 "återskapa oläsliga sektorer om skivan senare blir skadad.\n"
 
-#: help-dialogs.c:718
+#: help-dialogs.c:717
 msgid ""
 "This software comes with  <b>absolutely no warranty</b>.\n"
 "This is free software and you are welcome to redistribute it\n"
@@ -642,7 +642,7 @@ msgstr ""
 "\n"
 "Svensk översättning av Daniel Nylander (info@danielnylander.se)\n"
 
-#: help-dialogs.c:724
+#: help-dialogs.c:723
 msgid ""
 "\n"
 "This program is <b>not the original</b>. It is based on the\n"
@@ -652,25 +652,25 @@ msgid ""
 "([www.dvdisaster.org]) about issues with this version.\n"
 msgstr ""
 
-#: help-dialogs.c:739
+#: help-dialogs.c:738
 msgid ""
 "\n"
 "e-mail: carsten@dvdisaster.org   -or-   cgnoerlich@fsfe.org"
 msgstr ""
 
-#: help-dialogs.c:742
+#: help-dialogs.c:741
 msgid ""
 "\n"
 "Darwin port (Mac OS X): Julian Einwag &lt;julian@einwag.de&gt;"
 msgstr ""
 
-#: help-dialogs.c:745
+#: help-dialogs.c:744
 msgid ""
 "\n"
 "NetBSD port: Sergey Svishchev &lt;svs@ropnet.ru&gt;"
 msgstr ""
 
-#: large-io.c:420
+#: large-io.c:483
 #, c-format
 msgid ""
 "Error while writing the file:\n"
@@ -1808,7 +1808,7 @@ msgstr ""
 #: raw-editor.c:388 read-adaptive.c:978 read-adaptive.c:1046
 #: read-adaptive.c:1324 read-adaptive.c:1497 read-linear.c:410
 #: read-linear.c:650 read-linear.c:897 rs01-fix.c:445 rs01-fix.c:703
-#: rs02-fix.c:742 rs03-fix.c:738
+#: rs02-fix.c:742 rs03-fix.c:728
 #, c-format
 msgid "Failed seeking to sector %lld in image [%s]: %s"
 msgstr "Misslyckades med att söka fram till sektor %lld i avbild [%s]: %s"
@@ -2245,7 +2245,7 @@ msgstr ""
 "Det kanske inte är möjligt att återhämta från detta fel.\n"
 "Ska detta fel ignoreras och läsningen fortsätta?"
 
-#: read-adaptive.c:1344 rs01-fix.c:399 rs02-fix.c:431 rs03-fix.c:426
+#: read-adaptive.c:1344 rs01-fix.c:399 rs02-fix.c:431 rs03-fix.c:417
 #, c-format
 msgid "CRC error in sector %lld\n"
 msgstr "CRC-fel i sektor %lld\n"
@@ -2554,7 +2554,7 @@ msgstr "Oläsbar / överhoppad"
 msgid "Speed"
 msgstr "Hastighet"
 
-#: recover-raw.c:64
+#: recover-raw.c:63
 #, c-format
 msgid "Sector %lld dumped to %s\n"
 msgstr ""
@@ -2875,12 +2875,12 @@ msgstr "Oväntat bytefel i sektor %lld, byte %d\n"
 msgid "Bad error location %d; corrupted .ecc file?\n"
 msgstr "Felaktig felplats %d; skadad .ecc-fil?\n"
 
-#: rs01-fix.c:692 rs02-fix.c:709 rs03-fix.c:705
+#: rs01-fix.c:692 rs02-fix.c:709 rs03-fix.c:695
 #, c-format
 msgid "  %3d repaired sectors: "
 msgstr "  %3d reparerade sektorer: "
 
-#: rs01-fix.c:711 rs02-fix.c:750 rs03-fix.c:746
+#: rs01-fix.c:711 rs02-fix.c:750 rs03-fix.c:736
 #, c-format
 msgid ""
 "could not write medium sector %lld:\n"
@@ -2889,12 +2889,12 @@ msgstr ""
 "kunde inte skriva mediumsektor %lld:\n"
 "%s"
 
-#: rs01-fix.c:737 rs02-fix.c:787 rs03-fix.c:783
+#: rs01-fix.c:737 rs02-fix.c:787 rs03-fix.c:773
 #, c-format
 msgid "Ecc progress: %3d.%1d%%"
 msgstr "Ecc-förlopp: %3d.%1d%%"
 
-#: rs01-fix.c:749 rs02-fix.c:801 rs03-fix.c:797
+#: rs01-fix.c:749 rs02-fix.c:801 rs03-fix.c:787
 #, c-format
 msgid "Ecc progress: 100.0%%\n"
 msgstr "Ecc-förlopp: 100.0%%\n"
@@ -2904,30 +2904,30 @@ msgstr "Ecc-förlopp: 100.0%%\n"
 msgid "Repaired sectors: %lld     \n"
 msgstr "Reparerade sektorer: %lld     \n"
 
-#: rs01-fix.c:752 rs02-fix.c:806 rs03-fix.c:802
+#: rs01-fix.c:752 rs02-fix.c:806 rs03-fix.c:792
 #, c-format
 msgid "Unrepaired sectors: %lld\n"
 msgstr "Ej reparerade sektorer: %lld\n"
 
-#: rs01-fix.c:755 rs02-fix.c:809 rs03-fix.c:805
+#: rs01-fix.c:755 rs02-fix.c:809 rs03-fix.c:795
 #, c-format
 msgid "Image sectors could not be fully restored (%lld repaired; <span %s>%lld unrepaired</span>)"
 msgstr "Avbildssektorer kunde inte fullständigt återställas (%lld reparerade; <span %s>%lld ej reparerade</span>)"
 
-#: rs01-fix.c:761 rs02-fix.c:815 rs03-fix.c:811
+#: rs01-fix.c:761 rs02-fix.c:815 rs03-fix.c:801
 msgid "Good! All sectors are already present."
 msgstr "Bra! Alla sektorer finns tillgängliga."
 
-#: rs01-fix.c:765 rs02-fix.c:819 rs03-fix.c:815
+#: rs01-fix.c:765 rs02-fix.c:819 rs03-fix.c:805
 msgid "Good! All sectors are repaired."
 msgstr "Bra! Alla sektorer är reparerade."
 
-#: rs01-fix.c:770 rs02-fix.c:824 rs03-fix.c:820
+#: rs01-fix.c:770 rs02-fix.c:824 rs03-fix.c:810
 #, c-format
 msgid "Erasure counts per ecc block:  avg =  %.1f; worst = %d.\n"
 msgstr "Raderingsantal per ecc-block:  medel =  %.1f; sämst = %d.\n"
 
-#: rs01-fix.c:775 rs02-fix.c:829 rs03-fix.c:825
+#: rs01-fix.c:775 rs02-fix.c:829 rs03-fix.c:815
 msgid "Repair results:"
 msgstr "Reparationsresultat:"
 
@@ -3464,13 +3464,13 @@ msgstr "Förlopp: %3d.%1d%%"
 msgid "Errors/Ecc block"
 msgstr "Fel/Ecc-block"
 
-#: rs02-common.c:328 rs02-common.c:340 rs02-verify.c:611 rs03-common.c:314
-#: rs03-common.c:326 rs03-verify.c:600
+#: rs02-common.c:328 rs02-common.c:340 rs02-verify.c:611 rs03-common.c:310
+#: rs03-common.c:322 rs03-verify.c:600
 #, c-format
 msgid "Failed seeking to ecc header at %lld: %s\n"
 msgstr "Misslyckades med att söka till ecc-huvud på %lld: %s\n"
 
-#: rs02-common.c:332 rs02-common.c:344 rs03-common.c:318 rs03-common.c:330
+#: rs02-common.c:332 rs02-common.c:344 rs03-common.c:314 rs03-common.c:326
 #, c-format
 msgid "Failed writing ecc header at %lld: %s\n"
 msgstr "Misslyckades med att skriva ecc-huvud vid %lld: %s\n"
@@ -3605,22 +3605,22 @@ msgstr ""
 "\n"
 "%s"
 
-#: rs02-fix.c:459 rs03-fix.c:455
+#: rs02-fix.c:459 rs03-fix.c:445
 #, c-format
 msgid "* Ecc block %lld: %3d unrepairable sectors: "
 msgstr "* Ecc-block %lld: %3d ej reparerbara sektorer: "
 
-#: rs02-fix.c:678 rs03-fix.c:674
+#: rs02-fix.c:678 rs03-fix.c:664
 #, c-format
 msgid "-> CRC-predicted error in sector %lld at byte %4d (value %02x '%c', expected %02x '%c')\n"
 msgstr "-> CRC-förutsett fel i sektor %lld vid byte %4d (värde %02x \"%c\", förväntade %02x \"%c\")\n"
 
-#: rs02-fix.c:681 rs03-fix.c:677
+#: rs02-fix.c:681 rs03-fix.c:667
 #, c-format
 msgid "-> Non-predicted error in sector %lld at byte %4d (value %02x '%c', expected %02x '%c')\n"
 msgstr "-> Icke förutsett fel i sektor %lld vid byte %4d (värde %02x \"%c\", förväntade %02x \"%c\")\n"
 
-#: rs02-fix.c:803 rs03-fix.c:799
+#: rs02-fix.c:803 rs03-fix.c:789
 #, c-format
 msgid "Repaired sectors: %lld (%lld data, %lld ecc)\n"
 msgstr "Reparerade sektorer: %lld (%lld data, %lld ecc)\n"
@@ -4455,15 +4455,15 @@ msgstr ""
 "\n"
 "Varken SPTI eller ASPI fungerade att öppna %s."
 
-#: show-manual.c:76
+#: show-manual.c:75
 msgid "windowtitle|Choose a browser"
 msgstr "Välj en webbläsare"
 
-#: show-manual.c:113
+#: show-manual.c:112
 msgid "windowtitle|Browser required"
 msgstr "Webbläsare krävs"
 
-#: show-manual.c:129
+#: show-manual.c:128
 msgid ""
 "<b>Could not find a suitable browser.</b>\n"
 "\n"
@@ -4481,15 +4481,15 @@ msgstr ""
 "Ange dess namn (exempelvis mozilla) eller\n"
 "använd \"Sök\"-knappen för att få fram en fildialog.\n"
 
-#: show-manual.c:142
+#: show-manual.c:141
 msgid "Search"
 msgstr "Sök"
 
-#: show-manual.c:332
+#: show-manual.c:331
 msgid "Documentation not installed."
 msgstr "Dokumentationen är inte installerad."
 
-#: show-manual.c:377
+#: show-manual.c:376
 #, c-format
 msgid ""
 "Documentation file\n"
@@ -4500,7 +4500,7 @@ msgstr ""
 "%s\n"
 "hittades inte.\n"
 
-#: show-manual.c:386
+#: show-manual.c:385
 msgid "Please hang on until the browser comes up!"
 msgstr "Vänta tills webbläsaren har startats!"
 

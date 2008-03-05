@@ -394,6 +394,7 @@ clean:
 	@if test -e ~/.dvdisaster-original-author; then \
 	  md5sum -b *.h *.c >fingerprints.md5; \
 	fi
+	@$(MAKE) --no-print-directory -C papers clean
 
 arch:	archclean
 	@cd .. ; tar -c -z -f $(PKGNAME)-arch.tgz $(PKGNAME)

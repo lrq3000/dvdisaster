@@ -44,18 +44,37 @@ Die Alpha-Versionen verwenden das gleiche Paketformat wie die normalen
 Versionen.<p>
 
 <table class="download" cellpadding="0" cellspacing="5">
+<tr><td><b>dvdisaster-0.71 (devel25)</b></td><td align="right">05-Mär-2008</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+  <table>
+    <tr><td align="right">&nbsp;&nbsp;Quellkode für alle Betriebssysteme:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.25.tar.bz2?download">dvdisaster-0.71.25.tar.bz2</a></td></tr>
+    <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.25.tar.bz2.gpg?download">dvdisaster-0.71.25.tar.bz2.gpg</a></td></tr>
+    <tr><td align="right">Binärversion für Windows:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.25-setup.exe?download">dvdisaster-0.71.25-setup.exe</a></td></tr>
+    <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.25-setup.exe.gpg?download">dvdisaster-0.71.25-setup.exe.gpg</a></td></tr>
+
+  </table>
+</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+Das Verfahren zur Behandlung von Dateinamen mit Sonderzeichen wurde gegen
+ein neues ausgetauscht, da das alte unter Windows fehlerhaft war.
+</td></tr></table><p>
+
+<table class="download" cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.71 (devel24)</b></td><td align="right">24-Feb-2008</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Quellkode für alle Betriebssysteme:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel24.tar.bz2?download">dvdisaster-0.71.devel24.tar.bz2</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.24.tar.bz2?download">dvdisaster-0.71.24.tar.bz2</a></td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel24.tar.bz2.gpg?download">dvdisaster-0.71.devel24.tar.bz2.gpg</a></td></tr>
-    <tr><td align="right">Binärversion für Windows:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel24-setup.exe?download">dvdisaster-0.71.devel24-setup.exe</a></td></tr>
-    <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel24-setup.exe.gpg?download">dvdisaster-0.71.devel24-setup.exe.gpg</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.24.tar.bz2.gpg?download">dvdisaster-0.71.24.tar.bz2.gpg</a></td></tr>
+    <tr><td></td><td>Version 0.71.24 ist unter Windows fehlerhaft.</td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>

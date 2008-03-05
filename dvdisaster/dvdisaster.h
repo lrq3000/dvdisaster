@@ -677,6 +677,10 @@ int LargeTruncate(LargeFile*, gint64);
 int LargeStat(char*, gint64*);
 int LargeUnlink(char*);
 
+int DirStat(char*);
+FILE *portable_fopen(char*, char*);
+int portable_mkdir(char*);
+
 /*** 
  *** l-ec.c
  ***/

@@ -20,7 +20,6 @@
  */
 
 #include "dvdisaster.h"
-#include <glib/gstdio.h>
 
 /***
  *** Wrappers around the standard low level file system interface.
@@ -46,6 +45,7 @@
 
 #include <windows.h>
 
+#define stat _stati64
 #define lseek _lseeki64
 
 /* The original windows ftruncate has off_size (32bit) */
@@ -70,19 +70,38 @@ int large_ftruncate(int fd, gint64 size)
 #endif /* SYS_MINGW */
 
 /*
+ * convert special chars in file names to correct OS encoding
+ */
+
+static gchar* os_path(char *path_in)
+{  gchar *cp_path = g_locale_from_utf8(path_in, -1, NULL, NULL, NULL);
+
+   if(cp_path == NULL)
+   {  errno = EINVAL;
+      return NULL;
+   }
+   return cp_path;
+}
+
+/*
  * local aux function: opens the given segment of a large file.
  */
 
 static int open_segment(LargeFile *lf, int n)
 {  char name[lf->namelen];
+   gchar *cp_path;
 
    if(!lf->suffix) g_sprintf(name, "%s%02d", lf->basename, n); 
    else            g_sprintf(name, "%s%02d.%s", lf->basename, n, lf->suffix); 
 
-   lf->fileSegment[n] = g_open(name, lf->flags, lf->mode);
+   cp_path = os_path(name);
+   if(!cp_path) return FALSE;
+
+   lf->fileSegment[n] = open(cp_path, lf->flags, lf->mode);
+   g_free(cp_path);
     
    if(lf->fileSegment[n] == -1)
-   {  //PrintLog("open_segment(\"%s*\", %d) failed\n", lf->basename, n);
+   {  PrintLog("open_segment(\"%s*\", %d) failed\n", lf->basename, n);
       return FALSE;
    }
 
@@ -103,8 +122,15 @@ int LargeStat(char *path, gint64 *length_return)
    /* Unsplit file case */
    
    if(!Closure->splitFiles)
-   {  if(g_stat(path, &mystat) == -1)
+   {  gchar *cp_path = os_path(path);
+
+      if(!cp_path) return FALSE;
+
+      if(stat(cp_path, &mystat) == -1)
+      {  g_free(cp_path);
 	 return FALSE;
+      }
+      g_free(cp_path);
 
       if(!S_ISREG(mystat.st_mode))
 	 return FALSE;
@@ -124,15 +150,46 @@ int LargeStat(char *path, gint64 *length_return)
    }
 
    for(i=0; i<MAX_FILE_SEGMENTS; i++)
-   {  if(!suffix) g_sprintf(name, "%s%02d", prefix, i); 
+   {  gchar *cp_path;
+      int result;
+
+      if(!suffix) g_sprintf(name, "%s%02d", prefix, i); 
       else        g_sprintf(name, "%s%02d.%s", prefix,i,suffix);
 
-      if(g_stat(name, &mystat) == -1)
-            return i != 0;
+      cp_path = os_path(name);
+      if(!cp_path) return FALSE;
+
+      result = stat(cp_path, &mystat);
+      g_free(cp_path);
+
+      if( result == -1)
+         return i != 0;
       else if(!S_ISREG(mystat.st_mode))
 	    return FALSE;
       else  *length_return += mystat.st_size;
    }
+
+   return TRUE;
+}
+
+/*
+ * Stat() variant for testing directories
+ */
+
+int DirStat(char *path)
+{  struct stat mystat;
+   gchar *cp_path = os_path(path);
+
+   if(!cp_path) return FALSE;
+
+   if(stat(cp_path, &mystat) == -1)
+   {  g_free(cp_path);
+      return FALSE;
+   }
+   g_free(cp_path);
+
+   if(!S_ISDIR(mystat.st_mode))
+     return FALSE;
 
    return TRUE;
 }
@@ -144,6 +201,7 @@ int LargeStat(char *path, gint64 *length_return)
 LargeFile* LargeOpen(char *name, int flags, mode_t mode)
 {  LargeFile *lf = g_malloc0(sizeof(LargeFile));
    struct stat mystat;
+   gchar *cp_path;
    char *c; 
 
 #ifdef HAVE_O_LARGEFILE
@@ -156,21 +214,24 @@ LargeFile* LargeOpen(char *name, int flags, mode_t mode)
    /* Unsplit file case */
 
    if(!Closure->splitFiles)
-   {
+   {  cp_path = os_path(name);
+      if(!cp_path) return FALSE;
+
       /* Do not try to open directories etc. */
 
-      if(    (g_stat(name, &mystat) == 0)
+      if(    (stat(cp_path, &mystat) == 0)
 	  && !S_ISREG(mystat.st_mode))
-      {  g_free(lf); return NULL;
+      {  g_free(cp_path), g_free(lf); return NULL;
       }
 
-      lf->fileSegment[0] = g_open(name, flags, mode);
+      lf->fileSegment[0] = open(cp_path, flags, mode);
+      g_free(cp_path);
 
       if(lf->fileSegment[0] == -1)
       {  g_free(lf); return NULL;
       }
       
-      LargeStat(name, &lf->size);
+      LargeStat(name, &lf->size);  /* Do NOT use cp_path! */
 
       return lf;
    }
@@ -182,8 +243,8 @@ LargeFile* LargeOpen(char *name, int flags, mode_t mode)
     */
 
    lf->flags = flags;
-   if(lf->flags & O_RDWR)    /* O_RDWR must imply O_CREAT here to create */
-     lf->flags |= O_CREAT;   /* the additional file segments */
+   if(lf->flags & (O_RDWR | O_WRONLY)) /* these imply O_CREAT here to create */
+     lf->flags |= O_CREAT;             /* the additional file segments */
    lf->mode  = mode;
    lf->namelen = strlen(name+3);
    lf->basename = g_strdup(name);
@@ -193,10 +254,14 @@ LargeFile* LargeOpen(char *name, int flags, mode_t mode)
       *c = 0;
    }
 
-   if(    (g_stat(name, &mystat) == 0)
+   cp_path = os_path(name);
+   if(!cp_path) return NULL;
+
+   if(    (stat(cp_path, &mystat) == 0)
        && !S_ISREG(mystat.st_mode))
-   {  g_free(lf); return NULL;
+   {  g_free(cp_path); g_free(lf); return NULL;
    }
+   g_free(cp_path);
    
    if(!open_segment(lf, 0))
    {  g_free(lf); return NULL;
@@ -599,11 +664,14 @@ int LargeTruncate(LargeFile *lf, gint64 length)
 
       for(i=seg+1; i<MAX_FILE_SEGMENTS; i++)
       {  char name[lf->namelen];
+	 gchar *cp_path; 
 
 	 close(lf->fileSegment[i]);   /* no need for error testing */
 	 if(!lf->suffix) g_sprintf(name, "%s%02d", lf->basename, i); 
 	 else            g_sprintf(name, "%s%02d.%s", lf->basename, i, lf->suffix); 
-	 g_unlink(name);
+	 cp_path = os_path(name);
+	 unlink(cp_path);
+	 g_free(cp_path);
       }
    }
 
@@ -618,12 +686,21 @@ int LargeUnlink(char *path)
 {  char name[strlen(path)+3];
    char prefix[strlen(path)+1];
    char *suffix = NULL, *c;
+   gchar *cp_path;
    int i;
 
    /* Simple unsegmented case */  
 
    if(!Closure->splitFiles)
-     return g_unlink(path) == 0;
+   {  int result;
+
+      cp_path = os_path(path);
+      if(!cp_path) return FALSE;
+      result = unlink(cp_path);
+      g_free(cp_path);
+
+      return result == 0;
+   }
 
    /* Segmented case. This will unlink name00..name99 */
 
@@ -635,12 +712,46 @@ int LargeUnlink(char *path)
    }
 
    for(i=0; i<MAX_FILE_SEGMENTS; i++)
-   {  if(!suffix) g_sprintf(name, "%s%02d", prefix, i); 
-      else        g_sprintf(name, "%s%02d.%s", prefix, i, suffix);
+   {  int result;
 
-      if(g_unlink(name) == -1)
+      if(!suffix) g_sprintf(name, "%s%02d", prefix, i); 
+      else        g_sprintf(name, "%s%02d.%s", prefix, i, suffix);
+      cp_path = os_path(name);
+      if(!cp_path) return FALSE;
+
+      result = unlink(cp_path);
+      g_free(cp_path);
+      if(result == -1)
 	return i != 0;
    }
 
    return TRUE;
 }
+
+/***
+ *** Wrappers around other IO
+ ***/
+
+FILE *portable_fopen(char *path, char *modes)
+{  FILE *file;
+   char *cp_path;
+
+   cp_path = os_path(path);
+   file = fopen(cp_path, modes);
+   g_free(cp_path);
+
+   return file;
+}
+
+#ifdef SYS_MINGW
+int portable_mkdir(char *path)
+{  int status;
+   char *cp_path;
+
+   cp_path = os_path(path);
+   status = mkdir(cp_path);
+   g_free(cp_path);
+
+   return status;
+}
+#endif

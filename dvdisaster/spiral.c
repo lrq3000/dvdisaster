@@ -120,7 +120,7 @@ void DrawSpiral(Spiral *spiral)
       yi1 = spiral->my + scale_i*sin(a);
       xo1 = spiral->mx + scale_o*cos(a);
       yo1 = spiral->my + scale_o*sin(a);
-   
+
       points[0].x = xi0; points[0].y = yi0;
       points[1].x = xo0; points[1].y = yo0;
       points[2].x = xo1; points[2].y = yo1;

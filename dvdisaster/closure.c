@@ -20,7 +20,6 @@
  */
 
 #include "dvdisaster.h"
-#include <glib/gstdio.h>
 
 #ifdef SYS_MINGW
  #include <windows.h>
@@ -133,7 +132,7 @@ void WriteSignature()
    /* processing of error conditions not necessary */
 
    sprintf(loc, "%s\\signature", Closure->binDir);
-   if(!(file = g_fopen(loc, "wb")))
+   if(!(file = portable_fopen(loc, "wb")))
      return;
    fwrite(sig, 20, 1, file);
    fclose(file);
@@ -148,7 +147,7 @@ int VerifySignature()
    int result;
 
    sprintf(loc, "%s\\signature", Closure->binDir);
-   if(!(file = g_fopen(loc, "rb")))
+   if(!(file = portable_fopen(loc, "rb")))
      return FALSE;
 
    fread(buf, 20, 1, file);
@@ -163,8 +162,7 @@ int VerifySignature()
 
 
 static void get_base_dirs()
-{  struct stat mystat;
-
+{  
 #ifdef SYS_MINGW
    char *appdata;
 #endif
@@ -177,7 +175,7 @@ static void get_base_dirs()
 #ifdef WITH_EMBEDDED_SRC_PATH_YES
 
 #ifndef SYS_MINGW
-   if(!g_stat(SRCDIR, &mystat))
+   if(DirStat(SRCDIR))
    {  Closure->binDir = g_strdup(SRCDIR);
       Closure->docDir = g_strdup_printf("%s/documentation",SRCDIR);
       Verbose("Using paths from SRCDIR = %s\n", SRCDIR);
@@ -193,10 +191,10 @@ static void get_base_dirs()
 	but luckily it provides a way for figuring out that location. */
 
 #ifndef SYS_MINGW
-   if(!g_stat(BINDIR, &mystat))
+   if(DirStat(BINDIR))
      Closure->binDir = g_strdup(BINDIR);
 
-   if(!g_stat(DOCDIR, &mystat))
+   if(DirStat(DOCDIR))
      Closure->docDir = g_strdup(DOCDIR);
    Verbose("Using hardcoded BINDIR = %s, DOCDIR = %s\n", BINDIR, DOCDIR);
 #endif
@@ -233,15 +231,15 @@ find_dotfile:
    if(appdata)
    {  Closure->appData = g_strdup_printf("%s\\dvdisaster", appdata);
 
-      if(!g_stat(appdata, &mystat)) /* CSIDL_APPDATA present? */
+      if(DirStat(appdata)) /* CSIDL_APPDATA present? */
       { 
-	 Verbose("- dotfile path : %s\n", Closure->appDate);
+	 Verbose("- dotfile path : %s\n", Closure->appData);
 
-	 if(!g_stat(Closure->appData, &mystat))
+	 if(DirStat(Closure->appData))
 	 {  Closure->dotFile = g_strdup_printf("%s\\.dvdisaster", Closure->appData);
 	    Verbose("- dotfile path : present\n");
 	 }
-	 else if(!mkdir(Closure->appData)) /* Note: Windows! */
+	 else if(!portable_mkdir(Closure->appData)) /* Note: Windows! */
 	 {  Closure->dotFile = g_strdup_printf("%s\\.dvdisaster", Closure->appData);
 	    Verbose("- dotfile path : - created -\n");
 	 }
@@ -379,7 +377,7 @@ void ReadDotfile()
 {  FILE *dotfile;
    char line[MAX_LINE_LEN];
 
-   dotfile = g_fopen(Closure->dotFile, "rb");
+   dotfile = portable_fopen(Closure->dotFile, "rb");
    if(!dotfile)
       return;
 
@@ -512,7 +510,7 @@ static void update_dotfile()
 
    /*** Otherwise, save our session */
 
-   dotfile = g_fopen(Closure->dotFile, "wb");
+   dotfile = portable_fopen(Closure->dotFile, "wb");
    if(!dotfile)
    {  g_fprintf(stderr, "Could not open configuration file %s: %s\n", 
 		Closure->dotFile, strerror(errno));

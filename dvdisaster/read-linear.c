@@ -374,9 +374,8 @@ reopen_image:
         Exception: We must start from the beginning if multiple reading passes are requested. */
       
    Closure->checkCrc = 0; /* makes only sense if image is completely read */
-
    if(!Closure->readStart && !Closure->readEnd 
-      && rc->readMarker < rc->sectors-1 && Closure->readingPasses == 1)
+      && rc->readMarker < rc->sectors-1 && Closure->readingPasses <= 1)
    {  PrintLog(_("Completing image %s. Continuing with sector %lld.\n"),
 	       Closure->imageName, rc->readMarker);
       rc->firstSector = rc->readMarker;

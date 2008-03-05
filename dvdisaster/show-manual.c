@@ -20,7 +20,6 @@
  */
 
 #include "dvdisaster.h"
-#include <glib/gstdio.h>
 
 #if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_DARWIN) || defined(SYS_NETBSD) || defined(SYS_SOLARIS)
 #include <sys/wait.h>
@@ -314,7 +313,7 @@ static void try_browser(browser_info *bi)
 
 void ShowHTML(char *target)
 {  browser_info *bi = g_malloc0(sizeof(browser_info));
-   struct stat mystat;
+   gint64 ignore;
    const char *lang;
    char *path = NULL;
    int http_url;
@@ -361,7 +360,7 @@ void ShowHTML(char *target)
       }
 
 #ifdef SYS_MINGW      
-      if(g_stat(path, &mystat) == -1)
+      if(!LargeStat(path, &ignore))
       {  
 	 g_free(path);  /* the local dir is Windows specific */
 	 path = g_strdup_printf("%s\\local\\%s",Closure->docDir,target);
@@ -372,7 +371,7 @@ void ShowHTML(char *target)
    }
    else bi->url = target;
 
-   if(!http_url && g_stat(bi->url, &mystat) == -1)
+   if(!http_url && !LargeStat(bi->url, &ignore))
    {  
       CreateMessage(_("Documentation file\n%s\nnot found.\n"), GTK_MESSAGE_ERROR, bi->url);
       g_free(bi);

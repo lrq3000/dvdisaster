@@ -28,10 +28,8 @@
 
 #if defined(PNGPACK) || defined(SIMPLE_MD5SUM)    /* pngpack or simple-md5sum*/
   #include <string.h>
-  #define g_fopen fopen
 #else                                             /* dvdisaster */
   #include "dvdisaster.h"
-  #include <glib/gstdio.h>
 #endif
 
 #include "md5.h"
@@ -307,7 +305,7 @@ static void print_sum(char *path)
    char ascii_digest[33];
    int size = 0;
 
-   file = g_fopen(path, "rb");
+   file = fopen(path, "rb");
    if(!file) return;
 
    MD5Init(&ctxt);

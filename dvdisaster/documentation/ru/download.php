@@ -45,18 +45,18 @@ dvdisaster имеется для <a href="download10.php">последних в�
 <b>Стабильная версия</b> - рекомендуется для начала.<p>
 
 <table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.70</b></td><td align="right">24-02-2008</td></tr>
+<tr><td><b>dvdisaster-0.70</b></td><td align="right">04-03-2008</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Исходный код для всех операционных систем:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.5.tar.bz2?download">dvdisaster-0.70.5.tar.bz2</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.6.tar.bz2?download">dvdisaster-0.70.6.tar.bz2</a></td></tr>
     <tr><td align="right">Цифровая подпись:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.5.tar.bz2.gpg?download">dvdisaster-0.70.5.tar.bz2.gpg</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.6.tar.bz2.gpg?download">dvdisaster-0.70.6.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Двоичный пакет для Windows:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.5-setup.exe?download">dvdisaster-0.70.5-setup.exe</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.6-setup.exe?download">dvdisaster-0.70.6-setup.exe</a></td></tr>
     <tr><td align="right">Цифровая подпись:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.5-setup.exe.gpg?download">dvdisaster-0.70.5-setup.exe.gpg</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.6-setup.exe.gpg?download">dvdisaster-0.70.6-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
@@ -72,6 +72,11 @@ dvdisaster имеется для <a href="download10.php">последних в�
 Дэниэл Найландер (Daniel Nylander) дал шведский перевод экранных текстов.<p>
 
 <b>Исправления</b> (небольшие изменения после версии 0.70; вышеприведенные файлы были обновлены):<p>
+
+<b>pl6</b> Rolled back support for localized file names
+as is broke large file support under Windows. A new handler
+for localized file names will first be tested in the experimental version
+0.71.25. <i>(04-Mar-2008)</i><p>
 
 <b>pl5</b> 
 Fixes a problem with newer Linux kernels which may lead to a frozen system under

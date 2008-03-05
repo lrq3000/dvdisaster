@@ -49,18 +49,18 @@ The current unstable release is
 <b>Stable version</b> - recommended for getting started.<p>
 
 <table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.70</b></td><td align="right">24-Feb-2008</td></tr>
+<tr><td><b>dvdisaster-0.70</b></td><td align="right">04-Mar-2008</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.5.tar.bz2?download">dvdisaster-0.70.5.tar.bz2</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.6.tar.bz2?download">dvdisaster-0.70.6.tar.bz2</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.5.tar.bz2.gpg?download">dvdisaster-0.70.5.tar.bz2.gpg</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.6.tar.bz2.gpg?download">dvdisaster-0.70.6.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Binary for Windows:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.5-setup.exe?download">dvdisaster-0.70.5-setup.exe</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.6-setup.exe?download">dvdisaster-0.70.6-setup.exe</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.5-setup.exe.gpg?download">dvdisaster-0.70.5-setup.exe.gpg</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.6-setup.exe.gpg?download">dvdisaster-0.70.6-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
@@ -76,6 +76,11 @@ to Mac OS X / Darwin.<p>
 Daniel Nylander provided Swedish translations of the screen texts.<p>
 
 <b>Patches</b> (small changes after version 0.70; files above have been updated):<p>
+
+<b>pl6</b> Rolled back support for localized file names
+as it broke large file support under Windows. A new handler
+for localized file names will first be tested in the experimental version
+0.71.25. <i>(04-Mar-2008)</i><p>
 
 <b>pl5</b> 
 Fixes a problem with newer Linux kernels which may lead to a frozen system under

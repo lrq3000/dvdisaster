@@ -21,6 +21,21 @@ $news_counter = 0;
 
 news_headline("Neues über dvdisaster");
 
+news_item("05.03.2008", "Problem mit vorheriger Windows-Version behoben (0.70.6 / 0.71.25)", "
+  Die Unterstützung für Dateinamen mit Umlauten wurde aus Version 0.70.6
+  wieder herausgenommen weil dadurch Dateien &gt; 2GB
+  unter Windows nicht mehr verarbeitet werden konnten.
+  Eine korrekte Behandlung von Dateinamen mit Sonderzeichen wird jetzt
+  erst in der experimentellen Version 0.71.25 erprobt.
+");
+
+news_item("03.03.2008", "Ups - Abbilder >2GB erzeugen Fehler in 0.70.5 and 0.71.24 unter Windows", "
+   Die Behandlung von Umlauten in Dateinamen hat dazu geführt, daß unter Windows
+   keine Abbilder >2GB mehr verarbeitet werden können. Betroffen sind nur die gerade
+   veröffentlichten Versionen 0.70.5 and 0.71.24. Verbesserte Versionen kommen 
+   in den nächsten Tagen.
+");
+
 news_item("24.02.2008", "dvdisaster 0.70.5 / 0.71.24 beheben Problem mit neuen Linux-Versionen", "
    Die neuen Versionen beheben ein Problem mit neueren Linux-Kernen, das unter
    bestimmten Umständen ein Einfrieren des Systems bewirken kann. Bitte 

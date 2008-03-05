@@ -20,7 +20,6 @@
  */
 
 #include "dvdisaster.h"
-#include <glib/gstdio.h>
 
 #include "help-dialogs.h"
 
@@ -396,7 +395,7 @@ void ShowGPL()
 char *find_file(char *file, size_t *size, char *lang)
 {  char *path;
    char lang_suffix[3];
-   struct stat mystat;
+   gint64 stat_size;
 
    lang_suffix[0] = lang_suffix[2] = 0;
 
@@ -413,8 +412,8 @@ char *find_file(char *file, size_t *size, char *lang)
            path = g_strdup_printf("%s/%s.%s",Closure->binDir, file, lang_suffix);
       else path = g_strdup_printf("%s/%s",Closure->binDir, file);
 
-      if(!g_stat(path, &mystat))
-      {	 *size = mystat.st_size;
+      if(LargeStat(path, &stat_size))
+      {	 *size = stat_size;
 	 return path;
       }
 
@@ -428,8 +427,8 @@ char *find_file(char *file, size_t *size, char *lang)
            path = g_strdup_printf("%s/%s.%s",Closure->docDir, file, lang_suffix);
       else path = g_strdup_printf("%s/%s",Closure->docDir, file);
 
-      if(!g_stat(path, &mystat))
-      {	 *size = mystat.st_size;
+      if(LargeStat(path, &stat_size))
+      {	 *size = stat_size;
 	 return path;
       }
 
@@ -462,7 +461,7 @@ GtkWidget* ShowTextfile(char *title, char *explanation, char *file,
 	 size = strlen(buf);
       }
       else
-      {  FILE *file = g_fopen(path, "rb");
+      {  FILE *file = portable_fopen(path, "rb");
 
 	 buf = g_malloc(size);
 	 fread(buf, size, 1, file);

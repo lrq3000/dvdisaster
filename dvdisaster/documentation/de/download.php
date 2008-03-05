@@ -48,18 +48,18 @@ ist <a href="download40.php"><?php echo $cooked_version ?></a>.
 <b>Stabile Version</b> - zum Einstieg empfohlen<p> 
 
 <table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.70</b></td><td align="right">24-Feb-2008</td></tr>
+<tr><td><b>dvdisaster-0.70</b></td><td align="right">04-Mär-2008</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Quellkode für alle Betriebssysteme:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.5.tar.bz2?download">dvdisaster-0.70.5.tar.bz2</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.6.tar.bz2?download">dvdisaster-0.70.6.tar.bz2</a></td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.5.tar.bz2.gpg?download">dvdisaster-0.70.5.tar.bz2.gpg</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.6.tar.bz2.gpg?download">dvdisaster-0.70.6.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Binärversion für Windows:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.5-setup.exe?download">dvdisaster-0.70.5-setup.exe</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.6-setup.exe?download">dvdisaster-0.70.6-setup.exe</a></td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.5-setup.exe.gpg?download">dvdisaster-0.70.5-setup.exe.gpg</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.6-setup.exe.gpg?download">dvdisaster-0.70.6-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
@@ -75,6 +75,13 @@ für Mac OS X / Darwin anzupassen.<p>
 Daniel Nylander hat die Bildschirmtexte ins Schwedische übersetzt.<p>
 
 <b>Patches</b> (kleine Änderungen nach Version 0.70; die obigen Dateien wurden erneuert):<p>
+
+<b>pl6</b> Die Unterstützung von Umlauten in Dateinamen wurde
+wieder rückgängig gemacht,
+da sie zur fehlerhaften Bearbeitung von Dateien &gt; 2GB unter Windows führte. 
+Eine korrekte Behandlung von Dateinamen mit Sonderzeichen
+ wird jetzt erst in der
+experimentellen Version 0.71.25 erprobt. <i>(04-Mär-2008)</i><p>
 
 <b>pl5</b> Behebt ein Problem mit neueren Linux-Kernen, das unter bestimmten Bedingungen zum
 Einfrieren des Systems führen kann. Die Behandlung von Umlauten in Dateinamen wurde

@@ -24,6 +24,7 @@ documentation/pngpack.log
 documentation/screenshots
 icons/CVS
 locale/CVS
+papers
 scripts/CVS
 scripts/check.bash
 test-cases
