@@ -430,6 +430,8 @@ void ReadDotfile()
 
       if(!strcmp(symbol, "adaptive-read"))   { Closure->adaptiveRead   = atoi(value); continue; }
       if(!strcmp(symbol, "auto-suffix"))     { Closure->autoSuffix  = atoi(value); continue; }
+      if(!strcmp(symbol, "bd-size1"))        { Closure->bdSize1 = Closure->savedBDSize1 = atoll(value); continue; }
+      if(!strcmp(symbol, "bd-size2"))        { Closure->bdSize2 = Closure->savedBDSize2 = atoll(value); continue; }
       if(!strcmp(symbol, "cache-size"))      { Closure->cacheMB     = atoi(value); continue; }
       if(!strcmp(symbol, "cd-size"))         { Closure->cdSize = Closure->savedCDSize = atoll(value); continue; }
       if(!strcmp(symbol, "codec-threads"))   { Closure->codecThreads = atoi(value); continue; }
@@ -526,6 +528,8 @@ static void update_dotfile()
    g_fprintf(dotfile, "last-device:       %s\n", Closure->device);
    g_fprintf(dotfile, "last-image:        %s\n", Closure->imageName);
    g_fprintf(dotfile, "last-ecc:          %s\n", Closure->eccName);
+   g_fprintf(dotfile, "bd-size1:          %lld\n", (long long int)Closure->bdSize1);
+   g_fprintf(dotfile, "bd-size2:          %lld\n", (long long int)Closure->bdSize2);
    g_fprintf(dotfile, "browser:           %s\n\n", Closure->browser);
 
    g_fprintf(dotfile, "adaptive-read:     %d\n", Closure->adaptiveRead);
@@ -662,6 +666,8 @@ void InitClosure()
    Closure->cdSize   = Closure->savedCDSize   = CDR_SIZE;
    Closure->dvdSize1 = Closure->savedDVDSize1 = DVD_SL_SIZE;
    Closure->dvdSize2 = Closure->savedDVDSize2 = DVD_DL_SIZE;
+   Closure->bdSize1  = Closure->savedBDSize1  = BD_SL_SIZE;
+   Closure->bdSize2  = Closure->savedBDSize2  = BD_DL_SIZE;
 
    Closure->logString = g_string_sized_new(1024);
 

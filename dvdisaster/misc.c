@@ -744,14 +744,16 @@ static gboolean label_idle_func(gpointer data)
 void SetLabelText(GtkLabel *label, char *format, ...)
 {  label_info *li = g_malloc(sizeof(label_info));
    va_list argp;
-   char *tmp;
 
    li->label = label;
 
    va_start(argp, format);
-   tmp  = g_strdup_vprintf(format, argp);
-   li->text = g_locale_to_utf8(tmp, -1, NULL, NULL, NULL);
-   g_free(tmp);
+   if(format)
+   {  char *tmp  = g_strdup_vprintf(format, argp);
+      li->text = g_locale_to_utf8(tmp, -1, NULL, NULL, NULL);
+      g_free(tmp);
+   }
+   else li->text = g_locale_to_utf8("(null)", -1, NULL, NULL, NULL);
    va_end(argp);
 
    g_idle_add(label_idle_func, li);

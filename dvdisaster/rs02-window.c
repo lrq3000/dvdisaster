@@ -23,6 +23,8 @@
 
 #include "rs02-includes.h"
 
+extern int CurrentMediumSize(int);  /* from scsi-layer.h */
+
 /***
  *** Forward declarations
  ***/
@@ -404,12 +406,18 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 	 gtk_widget_set_sensitive(wl->cdEntryA, TRUE);
 	 gtk_widget_set_sensitive(wl->dvdEntry1A, TRUE);
 	 gtk_widget_set_sensitive(wl->dvdEntry2A, TRUE);
+	 gtk_widget_set_sensitive(wl->bdEntry1A, TRUE);
+	 gtk_widget_set_sensitive(wl->bdEntry2A, TRUE);
 	 gtk_widget_set_sensitive(wl->cdButtonA, TRUE);
 	 gtk_widget_set_sensitive(wl->dvdButton1A, TRUE);
 	 gtk_widget_set_sensitive(wl->dvdButton2A, TRUE);
+	 gtk_widget_set_sensitive(wl->bdButton1A, TRUE);
+	 gtk_widget_set_sensitive(wl->bdButton2A, TRUE);
 	 gtk_widget_set_sensitive(wl->cdUndoButtonA, TRUE);
 	 gtk_widget_set_sensitive(wl->dvdUndoButton1A, TRUE);
 	 gtk_widget_set_sensitive(wl->dvdUndoButton2A, TRUE);
+	 gtk_widget_set_sensitive(wl->bdUndoButton1A, TRUE);
+	 gtk_widget_set_sensitive(wl->bdUndoButton2A, TRUE);
 
 	 gtk_widget_set_sensitive(wl->otherEntryA, FALSE);
 
@@ -423,12 +431,18 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 	 gtk_widget_set_sensitive(wl->cdEntryB, TRUE);
 	 gtk_widget_set_sensitive(wl->dvdEntry1B, TRUE);
 	 gtk_widget_set_sensitive(wl->dvdEntry2B, TRUE);
+	 gtk_widget_set_sensitive(wl->bdEntry1B, TRUE);
+	 gtk_widget_set_sensitive(wl->bdEntry2B, TRUE);
 	 gtk_widget_set_sensitive(wl->cdButtonB, TRUE);
 	 gtk_widget_set_sensitive(wl->dvdButton1B, TRUE);
 	 gtk_widget_set_sensitive(wl->dvdButton2B, TRUE);
+	 gtk_widget_set_sensitive(wl->bdButton1B, TRUE);
+	 gtk_widget_set_sensitive(wl->bdButton2B, TRUE);
 	 gtk_widget_set_sensitive(wl->cdUndoButtonB, TRUE);
 	 gtk_widget_set_sensitive(wl->dvdUndoButton1B, TRUE);
 	 gtk_widget_set_sensitive(wl->dvdUndoButton2B, TRUE);
+	 gtk_widget_set_sensitive(wl->bdUndoButton1B, TRUE);
+	 gtk_widget_set_sensitive(wl->bdUndoButton2B, TRUE);
 
 	 gtk_widget_set_sensitive(wl->otherEntryB, FALSE);
 
@@ -443,12 +457,18 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 	 gtk_widget_set_sensitive(wl->cdEntryA, FALSE);
 	 gtk_widget_set_sensitive(wl->dvdEntry1A, FALSE);
 	 gtk_widget_set_sensitive(wl->dvdEntry2A, FALSE);
+	 gtk_widget_set_sensitive(wl->bdEntry1A, FALSE);
+	 gtk_widget_set_sensitive(wl->bdEntry2A, FALSE);
 	 gtk_widget_set_sensitive(wl->cdButtonA, FALSE);
 	 gtk_widget_set_sensitive(wl->dvdButton1A, FALSE);
 	 gtk_widget_set_sensitive(wl->dvdButton2A, FALSE);
+	 gtk_widget_set_sensitive(wl->bdButton1A, FALSE);
+	 gtk_widget_set_sensitive(wl->bdButton2A, FALSE);
 	 gtk_widget_set_sensitive(wl->cdUndoButtonA, FALSE);
 	 gtk_widget_set_sensitive(wl->dvdUndoButton1A, FALSE);
 	 gtk_widget_set_sensitive(wl->dvdUndoButton2A, FALSE);
+	 gtk_widget_set_sensitive(wl->bdUndoButton1A, FALSE);
+	 gtk_widget_set_sensitive(wl->bdUndoButton2A, FALSE);
 
 	 gtk_widget_set_sensitive(wl->otherEntryA, TRUE);
 
@@ -463,12 +483,18 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 	 gtk_widget_set_sensitive(wl->cdEntryB, FALSE);
 	 gtk_widget_set_sensitive(wl->dvdEntry1B, FALSE);
 	 gtk_widget_set_sensitive(wl->dvdEntry2B, FALSE);
+	 gtk_widget_set_sensitive(wl->bdEntry1B, FALSE);
+	 gtk_widget_set_sensitive(wl->bdEntry2B, FALSE);
 	 gtk_widget_set_sensitive(wl->cdButtonB, FALSE);
 	 gtk_widget_set_sensitive(wl->dvdButton1B, FALSE);
 	 gtk_widget_set_sensitive(wl->dvdButton2B, FALSE);
+	 gtk_widget_set_sensitive(wl->bdButton1B, FALSE);
+	 gtk_widget_set_sensitive(wl->bdButton2B, FALSE);
 	 gtk_widget_set_sensitive(wl->cdUndoButtonB, FALSE);
 	 gtk_widget_set_sensitive(wl->dvdUndoButton1B, FALSE);
 	 gtk_widget_set_sensitive(wl->dvdUndoButton2B, FALSE);
+	 gtk_widget_set_sensitive(wl->bdUndoButton1B, FALSE);
+	 gtk_widget_set_sensitive(wl->bdUndoButton2B, FALSE);
 
 	 gtk_widget_set_sensitive(wl->otherEntryB, TRUE);
 
@@ -488,7 +514,7 @@ static void query_cb(GtkWidget *widget, gpointer data)
    char value[40];
    gint64 size;
  
-   size = CurrentImageCapacity();
+   size = CurrentMediumSize(TRUE);
    g_snprintf(value, 40, "%lld", (long long int)size);
 
    if(widget == wl->cdButtonA || widget == wl->cdButtonB)
@@ -522,6 +548,28 @@ static void query_cb(GtkWidget *widget, gpointer data)
    {  g_snprintf(value, 40, "%lld", (long long int)Closure->savedDVDSize2);
       gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry2A), value);
       gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry2B), value);
+   }
+
+   if(widget == wl->bdButton1A || widget == wl->bdButton1B)
+   {  gtk_entry_set_text(GTK_ENTRY(wl->bdEntry1A), value);
+      gtk_entry_set_text(GTK_ENTRY(wl->bdEntry1B), value);
+   }
+
+   if(widget == wl->bdUndoButton1A || widget == wl->bdUndoButton1B)
+   {  g_snprintf(value, 40, "%lld", (long long int)Closure->savedBDSize1);
+      gtk_entry_set_text(GTK_ENTRY(wl->bdEntry1A), value);
+      gtk_entry_set_text(GTK_ENTRY(wl->bdEntry1B), value);
+   }
+
+   if(widget == wl->bdButton2A || widget == wl->bdButton2B)
+   {  gtk_entry_set_text(GTK_ENTRY(wl->bdEntry2A), value);
+      gtk_entry_set_text(GTK_ENTRY(wl->bdEntry2B), value);
+   }
+
+   if(widget == wl->bdUndoButton2A || widget == wl->bdUndoButton2B )
+   {  g_snprintf(value, 40, "%lld", (long long int)Closure->savedBDSize2);
+      gtk_entry_set_text(GTK_ENTRY(wl->bdEntry2A), value);
+      gtk_entry_set_text(GTK_ENTRY(wl->bdEntry2B), value);
    }
 }
 
@@ -557,6 +605,24 @@ static void entry_tracker_cb(GtkWidget *widget, gpointer data)
    if(widget == wl->dvdEntry2B)
    {  const char *text = gtk_entry_get_text(GTK_ENTRY(wl->dvdEntry2B));
       gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry2A), text);
+   }
+
+   if(widget == wl->bdEntry1A)
+   {  const char *text = gtk_entry_get_text(GTK_ENTRY(wl->bdEntry1A));
+      gtk_entry_set_text(GTK_ENTRY(wl->bdEntry1B), text);
+   }
+   if(widget == wl->bdEntry1B)
+   {  const char *text = gtk_entry_get_text(GTK_ENTRY(wl->bdEntry1B));
+      gtk_entry_set_text(GTK_ENTRY(wl->bdEntry1A), text);
+   }
+
+   if(widget == wl->bdEntry2A)
+   {  const char *text = gtk_entry_get_text(GTK_ENTRY(wl->bdEntry2A));
+      gtk_entry_set_text(GTK_ENTRY(wl->bdEntry2B), text);
+   }
+   if(widget == wl->bdEntry2B)
+   {  const char *text = gtk_entry_get_text(GTK_ENTRY(wl->bdEntry2B));
+      gtk_entry_set_text(GTK_ENTRY(wl->bdEntry2A), text);
    }
 
    if(widget == wl->otherEntryA)
@@ -602,6 +668,10 @@ void ReadRS02Preferences(Method *method)
    Closure->dvdSize1 = value > 0 ? value : 0; 
    value = atoll(gtk_entry_get_text(GTK_ENTRY(wl->dvdEntry2A)));
    Closure->dvdSize2 = value > 0 ? value : 0; 
+   value = atoll(gtk_entry_get_text(GTK_ENTRY(wl->bdEntry1A)));
+   Closure->bdSize1 = value > 0 ? value : 0; 
+   value = atoll(gtk_entry_get_text(GTK_ENTRY(wl->bdEntry2A)));
+   Closure->bdSize2 = value > 0 ? value : 0; 
 
    if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wl->radio1A)))   
    {  Closure->mediumSize = 0;
@@ -676,7 +746,7 @@ void CreateRS02PrefsPage(Method *method, GtkWidget *parent)
 			    "one/two layered DVD are given in the table. You can edit "
 			    "these sizes according to your needs."));
 
-   table = gtk_table_new(5, 4, FALSE);
+   table = gtk_table_new(5, 6, FALSE);
    gtk_box_pack_start(GTK_BOX(hbox), table, FALSE, FALSE, 0);
 
    gtk_misc_set_alignment(GTK_MISC(lwoh->linkLabel), 0.0, 0.0); 
@@ -802,9 +872,9 @@ void CreateRS02PrefsPage(Method *method, GtkWidget *parent)
 			    "may be a few sectors smaller than specified for "
 			    "technical reasons."));
 
-   /* DVD capacity table row */
+   /* DVD two layer capacity table row */
 
-   lwoh = CreateLabelWithOnlineHelp(_("DVD 2 layers"), _("DVD 2 layers:"));
+   lwoh = CreateLabelWithOnlineHelp(_("DVD 2 layers:"), _("DVD 2 layers:"));
    RegisterPreferencesHelpWindow(lwoh);
 
      gtk_misc_set_alignment(GTK_MISC(lwoh->linkLabel), 0.0, 0.0); 
@@ -862,6 +932,124 @@ void CreateRS02PrefsPage(Method *method, GtkWidget *parent)
 			    "may be a few sectors smaller than specified for "
 			    "technical reasons."));
 
+   /* BD capacity table row */
+
+   lwoh = CreateLabelWithOnlineHelp(_("BD 1 layer:"), _("BD 1 layer:"));
+   RegisterPreferencesHelpWindow(lwoh);
+
+     gtk_misc_set_alignment(GTK_MISC(lwoh->linkLabel), 0.0, 0.0); 
+     gtk_table_attach(GTK_TABLE(table), lwoh->linkBox, 0, 1, 4, 5, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+
+     wl->bdEntry1A = gtk_entry_new();
+     gtk_entry_set_width_chars(GTK_ENTRY(wl->bdEntry1A), 9);
+     g_signal_connect(G_OBJECT(wl->bdEntry1A), "activate", G_CALLBACK(entry_tracker_cb), wl);
+     gtk_table_attach(GTK_TABLE(table), wl->bdEntry1A, 1, 2, 4, 5, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+
+     wl->bdButton1A = gtk_button_new_with_label(_utf("query medium"));
+     g_signal_connect(G_OBJECT(wl->bdButton1A), "clicked", G_CALLBACK(query_cb), wl);
+     gtk_table_attach(GTK_TABLE(table), wl->bdButton1A, 2, 3, 4, 5, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+
+     icon = gtk_image_new_from_stock(GTK_STOCK_UNDO, GTK_ICON_SIZE_SMALL_TOOLBAR);
+     wl->bdUndoButton1A = gtk_button_new();
+     gtk_container_add(GTK_CONTAINER(wl->bdUndoButton1A), icon);
+     g_signal_connect(G_OBJECT(wl->bdUndoButton1A), "clicked", G_CALLBACK(query_cb), wl);
+     gtk_table_attach(GTK_TABLE(table), wl->bdUndoButton1A, 3, 4, 4, 5, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+
+   hbox = gtk_hbox_new(FALSE, 4);
+
+   gtk_box_pack_start(GTK_BOX(hbox), lwoh->normalLabel, FALSE, FALSE, 0);
+
+   wl->bdEntry1B = gtk_entry_new();
+   gtk_entry_set_width_chars(GTK_ENTRY(wl->bdEntry1B), 9);
+   g_signal_connect(G_OBJECT(wl->bdEntry1B), "activate", G_CALLBACK(entry_tracker_cb), wl);
+   gtk_box_pack_start(GTK_BOX(hbox), wl->bdEntry1B, FALSE, FALSE, 0);
+
+   wl->bdButton1B = gtk_button_new_with_label(_utf("query medium"));
+   g_signal_connect(G_OBJECT(wl->bdButton1B), "clicked", G_CALLBACK(query_cb), wl);
+   gtk_box_pack_start(GTK_BOX(hbox), wl->bdButton1B, FALSE, FALSE, 0);
+
+   icon = gtk_image_new_from_stock(GTK_STOCK_UNDO, GTK_ICON_SIZE_SMALL_TOOLBAR);
+   wl->bdUndoButton1B = gtk_button_new();
+   gtk_container_add(GTK_CONTAINER(wl->bdUndoButton1B), icon);
+   g_signal_connect(G_OBJECT(wl->bdUndoButton1B), "clicked", G_CALLBACK(query_cb), wl);
+   gtk_box_pack_start(GTK_BOX(hbox), wl->bdUndoButton1B, FALSE, FALSE, 0);
+
+   AddHelpWidget(lwoh, hbox);
+
+   AddHelpParagraph(lwoh, _("<b>Single layer BD medium size</b>\n\n"
+			    "This is the maximum capacity assumed for single layer BD media. "
+			    "Images exceeding the smaller media sizes but smaller "
+			    "than this value will be augmented with error correction information "
+			    "so that they will fit on the specified BD.\n\n"
+			    "You can enter the medium size in sectors of 2K each, "
+			    "or press the \"query medium\" button to use the size "
+			    "of a blank medium currently inserted in the selected drive.\n"
+			    "Use the arrow button to revert to the last saved value.\n\n"
+			    "Please note that augmented images will at most triple "
+			    "in size as the highest possible redundancy is 200%%.\n"
+			    "Even if this limit is not reached the augmented image "
+			    "may be a few sectors smaller than specified for "
+			    "technical reasons."));
+
+   /* BD two layer capacity table row */
+
+   lwoh = CreateLabelWithOnlineHelp(_("BD 2 layers:"), _("BD 2 layers:"));
+   RegisterPreferencesHelpWindow(lwoh);
+
+     gtk_misc_set_alignment(GTK_MISC(lwoh->linkLabel), 0.0, 0.0); 
+     gtk_table_attach(GTK_TABLE(table), lwoh->linkBox, 0, 1, 5, 6, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+
+     wl->bdEntry2A = gtk_entry_new();
+     gtk_entry_set_width_chars(GTK_ENTRY(wl->bdEntry2A), 9);
+     g_signal_connect(G_OBJECT(wl->bdEntry2A), "activate", G_CALLBACK(entry_tracker_cb), wl);
+     gtk_table_attach(GTK_TABLE(table), wl->bdEntry2A, 1, 2, 5, 6, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+
+     wl->bdButton2A = gtk_button_new_with_label(_utf("query medium"));
+     g_signal_connect(G_OBJECT(wl->bdButton2A), "clicked", G_CALLBACK(query_cb), wl);
+     gtk_table_attach(GTK_TABLE(table), wl->bdButton2A, 2, 3, 5, 6, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+
+     icon = gtk_image_new_from_stock(GTK_STOCK_UNDO, GTK_ICON_SIZE_SMALL_TOOLBAR);
+     wl->bdUndoButton2A = gtk_button_new();
+     gtk_container_add(GTK_CONTAINER(wl->bdUndoButton2A), icon);
+     g_signal_connect(G_OBJECT(wl->bdUndoButton2A), "clicked", G_CALLBACK(query_cb), wl);
+     gtk_table_attach(GTK_TABLE(table), wl->bdUndoButton2A, 3, 4, 5, 6, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 5);
+
+   hbox = gtk_hbox_new(FALSE, 4);
+
+   gtk_box_pack_start(GTK_BOX(hbox), lwoh->normalLabel, FALSE, FALSE, 0);
+
+   wl->bdEntry2B = gtk_entry_new();
+   gtk_entry_set_width_chars(GTK_ENTRY(wl->bdEntry2B), 9);
+   g_signal_connect(G_OBJECT(wl->bdEntry2B), "activate", G_CALLBACK(entry_tracker_cb), wl);
+   gtk_box_pack_start(GTK_BOX(hbox), wl->bdEntry2B, FALSE, FALSE, 0);
+
+   wl->bdButton2B = gtk_button_new_with_label(_utf("query medium"));
+   g_signal_connect(G_OBJECT(wl->bdButton2B), "clicked", G_CALLBACK(query_cb), wl);
+   gtk_box_pack_start(GTK_BOX(hbox), wl->bdButton2B, FALSE, FALSE, 0);
+
+   icon = gtk_image_new_from_stock(GTK_STOCK_UNDO, GTK_ICON_SIZE_SMALL_TOOLBAR);
+   wl->bdUndoButton2B = gtk_button_new();
+   gtk_container_add(GTK_CONTAINER(wl->bdUndoButton2B), icon);
+   g_signal_connect(G_OBJECT(wl->bdUndoButton2B), "clicked", G_CALLBACK(query_cb), wl);
+   gtk_box_pack_start(GTK_BOX(hbox), wl->bdUndoButton2B, FALSE, FALSE, 0);
+
+   AddHelpWidget(lwoh, hbox);
+
+   AddHelpParagraph(lwoh, _("<b>Two layered BD medium size</b>\n\n"
+			    "This is the maximum capacity assumed for two layered BD media. "
+			    "Images exceeding the smaller media sizes but smaller "
+			    "than this value will be augmented with error correction information "
+			    "so that they will fit on the specified BD.\n\n"
+			    "You can enter the medium size in sectors of 2K each, "
+			    "or press the \"query medium\" button to use the size "
+			    "of a blank medium currently inserted in the selected drive.\n"
+			    "Use the arrow button to revert to the last saved value.\n\n"
+			    "Please note that augmented images will at most triple "
+			    "in size as the highest possible redundancy is 200%%.\n"
+			    "Even if this limit is not reached the augmented image "
+			    "may be a few sectors smaller than specified for "
+			    "technical reasons."));
+
    /* Fill in values from the closure */
 
    g_snprintf(value, 40, "%lld", (long long int)Closure->cdSize);
@@ -873,6 +1061,12 @@ void CreateRS02PrefsPage(Method *method, GtkWidget *parent)
    g_snprintf(value, 40, "%lld", (long long int)Closure->dvdSize2);
    gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry2A), value);
    gtk_entry_set_text(GTK_ENTRY(wl->dvdEntry2B), value);
+   g_snprintf(value, 40, "%lld", (long long int)Closure->bdSize1);
+   gtk_entry_set_text(GTK_ENTRY(wl->bdEntry1A), value);
+   gtk_entry_set_text(GTK_ENTRY(wl->bdEntry1B), value);
+   g_snprintf(value, 40, "%lld", (long long int)Closure->bdSize2);
+   gtk_entry_set_text(GTK_ENTRY(wl->bdEntry2A), value);
+   gtk_entry_set_text(GTK_ENTRY(wl->bdEntry2B), value);
 
    /* custom value selection */
 

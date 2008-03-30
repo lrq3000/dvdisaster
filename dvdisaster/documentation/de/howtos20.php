@@ -9,49 +9,46 @@
 # navigation and news if appropriate.
 
 require("../include/dvdisaster.php");
+require("../include/footnote.php");
 begin_page();
 ?>
 
 <!--- Insert actual page content below --->
 
-<h3>Fehlerkorrektur-Daten erzeugen</h3>
+<h3>Fehlerkorrektur-Daten als eigenständige Datei erzeugen</h3>
 
 <table width="100%" cellspacing="5">
-<tr>
+<tr valign="top">
 <td width="20%"><b>Aufgabe</b></td>
 <td>
-Ein Datenträger wird mit Fehlerkorrektur-Daten versehen.
+Zu einem Datenträger wird eine Fehlerkorrektur-Datei erzeugt.
 </td>
 </tr>
 <tr><td> <pre> </pre> </td></tr>
 
-<tr>
-<td><b>Hinweis:</b></td>
-<td>Das Anlegen von Fehlerkorrektur-Daten ist vergleichbar zum Anlegen einer 
-Datensicherung. Von einem bereits beschädigten Datenträger können
-nachträglich keine Fehlerkorrektur-Daten mehr erstellt werden.
+<tr valign="top">
+<td></td>
+<td>Hinweis: Hier wird beschrieben, wie Fehlerkorrektur-Daten in einer eigenständigen Datei abgelegt werden.
+Es gibt auch eine Möglichkeit, Fehlerkorrektur-Daten auf dem Datenträger selbst unterzubringen. 
+<a href="howtos21.php">Möchten Sie eine Entscheidungshilfe?</a></td>
 <tr><td> <pre> </pre> </td></tr>
 
 <tr>
-<td colspan="2"><b>Benötigte Datenträger:</b><p></td>
+<td colspan="2"><b>Benötigt werden:</b><p></td>
 </tr>
 
 <tr>
 <td><img src="../images/good-cd.png"></td>
 <td>
-Zur Erstellung von Fehlerkorrektur-Daten wird ein guter, fehlerfreier Datenträger
-benötigt.
+Ein guter, fehlerfreier<a href="#footnote"><sup>*)</sup></a> Datenträger,</td>
 </tr>
-<tr><td> <pre> </pre> </td></tr>
 
-<tr>
-<td colspan="2"><b>Nutzbare Zusatzdaten:</b></td>
-</tr>
+<tr><td></td><td>oder</td></tr>
+
 
 <tr>
 <td><img src="../images/good-image.png"></td>
-<td>Wenn Sie bereits ein ISO-Abbild des Datenträgers (zum Beispiel vom Brennvorgang)
-   haben, können Sie dieses direkt verwenden und sparen das erneute Einlesen.
+<td>ein bereits vorhandenes und vollständiges<a href="#footnote"><sup>*)</sup></a> ISO-Abbild des Datenträgers (zum Beispiel vom Brennvorgang).
 </td>
 </tr>
 <tr><td> <pre> </pre> </td></tr>
@@ -64,12 +61,25 @@ benötigt.
 <tr>
 <td></td>
 <td>
-1. Grundeinstellungen zum Lesen vornehmen<br>
-2. ISO-Abbild des Datenträgers erstellen<br>
-3. Fehlerkorrektur-Daten erstellen
+1. <a href="howtos22.php">Grundeinstellungen zum Lesen vornehmen</a><br>
+2. <a href="howtos23.php">Fehlerkorrektur-Datei erstellen</a><br>
+3. <a href="howtos24.php">Fehlerkorrektur-Dateien archivieren</a>
 </td>
 </tr>
 </table><p>
+
+<a href="howtos22.php">Grundeinstellungen vornehmen...</a>
+
+<pre>
+
+
+</pre>
+
+<?php
+footnote("*","footnote","Die Fehlerkorrektur-Daten müssen vor dem Eintreten des
+Datenverlustes erzeugt werden: Von einem bereits defekten Datenträger können keine Fehlerkorrektur-Dateien 
+mehr erstellt werden.");
+?>
 
 <!--- do not change below --->
 

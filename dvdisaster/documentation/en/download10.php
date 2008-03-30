@@ -19,7 +19,7 @@ begin_page();
 <ul>
  <li>Processors: x86, PowerPC or Sparc;<p></li>
  <li>with processing speed equal or better than a P4 at 2Ghz;<p></li>
- <li>an up-to-date CD/DVD/HD DVD/BD drive with ATAPI or SCSI interface;<p></li>
+ <li>an up-to-date CD/DVD/BD drive with ATAPI or SCSI interface;<p></li>
  <li>enough hard disk space for creating .iso images from processed media.<p>
 </ul>
 

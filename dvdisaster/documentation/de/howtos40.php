@@ -14,6 +14,18 @@ begin_page();
 
 <!--- Insert actual page content below --->
 
+<h3>Platzhalter-Seite</h3>
+
+Diese Seite wurde noch nicht ausformuliert.
+<pre> </pre>
+
+
+<font size="-1">
+<i>Warum enthält diese Dokumentation leere Seiten?</i><p>
+Wir brauchen die Platzhalter-Seiten damit an anderen Stellen der
+Dokumentation bereits die passenden Querverweise gesetzt werden können. 
+
+<?php /*
 <h3>Datenträger-Abbild rekonstruieren</h3>
 
 <table width="100%" cellspacing="5">
@@ -54,6 +66,7 @@ eigenen Datei oder bereits im Abbild selbst.
 </td>
 </tr>
 </table><p>
+   */ ?>
 
 <!--- do not change below --->
 

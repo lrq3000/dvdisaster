@@ -1,4 +1,14 @@
 
+0.71 (devel-26) 30-03-2008
+	- Changed media type detection to a (hopefully) even more robust
+	  approach. Please report if this breaks compatibility with prior
+	  working drive/media combinations. 
+	- removed HD DVD support
+	- added medium info window
+	- fixed size determination of blank CD media
+	- added BD sizes to preferences dialog
+	- more BD tweaking
+
 0.71 (devel-25) 04-03-2008
 	- replaced treatment of localized file names with a different
 	  approach; the previous one broke large file support under Windows.

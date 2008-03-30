@@ -817,7 +817,6 @@ next_reading_pass:
    {  Closure->readErrors = Closure->crcErrors = 0;
       switch(rc->dh->mainType)
       {  case BD:
-	 case HDDVD:
 	    if(Closure->sectorSkip > 32)
 	       Closure->sectorSkip = 32;
 	    break;
@@ -1189,7 +1188,7 @@ step_counter:
 
    PrintTimeToLog(rc->readTimer, "for reading/scanning.\n");
 
-   if(rc->dh->subType != DVD && tao_tail && tao_tail == Closure->readErrors && !Closure->noTruncate)
+   if(rc->dh->mainType == CD && tao_tail && tao_tail == Closure->readErrors && !Closure->noTruncate)
    {  int answer;
    
       if(Closure->guiMode)

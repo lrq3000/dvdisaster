@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.70.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-03-04 17:02+0100\n"
+"POT-Creation-Date: 2008-03-30 12:29+0200\n"
 "PO-Revision-Date: 2007-08-06 21:45+0300\n"
 "Last-Translator: Igor Gorbounov <igor.gorbounov@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Poedit-Language: Russian\n"
 
-#: closure.c:521
+#: closure.c:523
 #, c-format
 msgid ""
 "# dvdisaster-%s configuration file\n"
@@ -31,13 +31,13 @@ msgstr ""
 "# он автоматически перезаписывается при каждом запуске программы.\n"
 "\n"
 
-#: crcbuf.c:45 read-linear.c:464 rs01-common.c:119 rs01-create.c:242
+#: crcbuf.c:45 read-linear.c:463 rs01-common.c:119 rs01-create.c:242
 #: rs01t-common.c:128 rs01t-common.c:314 rs01t-create.c:325 rs01-verify.c:770
 #, c-format
 msgid "Failed skipping the ecc header: %s"
 msgstr "Не удалось пропустить ecc-заголовок: %s"
 
-#: crcbuf.c:54 crcbuf.c:64 read-linear.c:472 rs01-common.c:221
+#: crcbuf.c:54 crcbuf.c:64 read-linear.c:471 rs01-common.c:221
 #: rs01t-common.c:254
 #, c-format
 msgid "Error reading CRC information: %s"
@@ -155,7 +155,7 @@ msgstr "Новая длина должна быть в диапазоне [0..%l
 msgid "Truncating image to %lld sectors.\n"
 msgstr "Усечение образа до %lld секторов.\n"
 
-#: debug.c:395 read-linear.c:1214 rs01-fix.c:198 rs01-fix.c:220 rs01-fix.c:236
+#: debug.c:395 read-linear.c:1212 rs01-fix.c:198 rs01-fix.c:220 rs01-fix.c:236
 #: rs01-fix.c:271 rs02-create.c:104 rs02-create.c:148 rs02-fix.c:237
 #: rs02-fix.c:258 rs02-fix.c:273 rs03-create.c:106 rs03-create.c:150
 #: rs03-fix.c:236 rs03-fix.c:257 rs03-fix.c:272 rs03s-create.c:104
@@ -738,7 +738,7 @@ msgstr ""
 "\n"
 "Порт на NetBSD: Sergey Svishchev &lt;svs@ropnet.ru&gt;"
 
-#: large-io.c:483
+#: large-io.c:485
 #, c-format
 msgid ""
 "Error while writing the file:\n"
@@ -853,11 +853,169 @@ msgstr "Отображение дополнительной информации
 msgid "View log"
 msgstr "Просмотреть журнал"
 
-#: menubar.c:111
+#: medium-info.c:53
+msgid "Medium not present"
+msgstr ""
+
+#: medium-info.c:86 medium-info.c:92
+msgid "empty"
+msgstr ""
+
+#: medium-info.c:87
+msgid "appendable"
+msgstr ""
+
+#: medium-info.c:88
+msgid "finalized"
+msgstr ""
+
+#: medium-info.c:89 scsi-layer.c:83
+msgid "unknown"
+msgstr "неизвестно"
+
+#: medium-info.c:93
+msgid "incomplete"
+msgstr ""
+
+#: medium-info.c:94
+msgid "damaged"
+msgstr ""
+
+#: medium-info.c:95 rs02-verify.c:647 rs02-verify.c:845 rs02-verify.c:846
+#: rs02-verify.c:847 rs03-verify.c:636 rs03-verify.c:834 rs03-verify.c:835
+#: rs03-verify.c:836
+msgid "complete"
+msgstr "готово"
+
+#: medium-info.c:98
+#, c-format
+msgid "%s (%d sessions; last session %s)"
+msgstr ""
+
+#: medium-info.c:103
+#, c-format
+msgid "%lld sectors (%lld MB), from READ CAPACITY"
+msgstr ""
+
+#: medium-info.c:105
+#, c-format
+msgid "%lld sectors (%lld MB), from DVD structure"
+msgstr ""
+
+#: medium-info.c:107 medium-info.c:134
+#, c-format
+msgid "%lld sectors (%lld MB)"
+msgstr ""
+
+#: medium-info.c:114
+#, c-format
+msgid "%d sectors (%lld MB)"
+msgstr ""
+
+#: medium-info.c:131
+#, c-format
+msgid "%s, %d roots, %4.1f%% redundancy."
+msgstr ""
+
+#: medium-info.c:218
+msgid "windowtitle|Medium info"
+msgstr ""
+
+#: medium-info.c:233
+msgid ""
+"<big>Medium info</big>\n"
+"<i>Properties of the currently inserted medium</i>"
+msgstr ""
+
+#: medium-info.c:245
+msgid "Drive selection"
+msgstr ""
+
+#: medium-info.c:252
+msgid "Drive:"
+msgstr ""
+
+#: medium-info.c:273 menubar.c:482
+msgid "No drives found"
+msgstr "Нет приводов"
+
+#: medium-info.c:278
+msgid " "
+msgstr ""
+
+#: medium-info.c:281
+msgid "Update medium info"
+msgstr ""
+
+#: medium-info.c:287
+msgid "Physical medium info"
+msgstr ""
+
+#: medium-info.c:294
+msgid "Medium type:"
+msgstr ""
+
+#: medium-info.c:301
+msgid "Book type:"
+msgstr ""
+
+#: medium-info.c:308 scsi-layer.c:2425
+msgid "Manuf.-ID:"
+msgstr "Изгот.-ID:"
+
+#: medium-info.c:315
+msgid "Drive profile:"
+msgstr ""
+
+#: medium-info.c:322
+msgid "Disc status:"
+msgstr ""
+
+#: medium-info.c:329
+msgid "Used sectors:"
+msgstr ""
+
+#: medium-info.c:343
+msgid "Blank capacity:"
+msgstr ""
+
+#: medium-info.c:352
+msgid "Filesystem info"
+msgstr ""
+
+#: medium-info.c:359
+msgid "Medium label:"
+msgstr ""
+
+#: medium-info.c:366
+msgid "File system size:"
+msgstr ""
+
+#: medium-info.c:373
+msgid "Creation time:"
+msgstr ""
+
+#: medium-info.c:382
+msgid "Augmented image info"
+msgstr ""
+
+#: medium-info.c:389
+msgid "Error correction data:"
+msgstr ""
+
+#: medium-info.c:396
+msgid "Augmented image size:"
+msgstr ""
+
+#: medium-info.c:403
+msgid "dvdisaster version:"
+msgstr ""
+
+#: menubar.c:116
 msgid "windowtitle|Change log"
 msgstr "Журнал изменений"
 
-#: menubar.c:112
+#: menubar.c:117
 msgid ""
 "<big>Change log</big>\n"
 "<i>Major differences from earlier program versions.</i>"
@@ -865,11 +1023,11 @@ msgstr ""
 "<big>Журнал изменений</big>\n"
 "<i>Основные отличия от предыдущих версий программы.</i>"
 
-#: menubar.c:118
+#: menubar.c:123
 msgid "windowtitle|Credits"
 msgstr "Благодарности"
 
-#: menubar.c:119
+#: menubar.c:124
 msgid ""
 "<big>Credits</big>\n"
 "<i>Thanks go out to...</i>"
@@ -877,11 +1035,11 @@ msgstr ""
 "<big>Благодарности</big>\n"
 "<i>Большое спасибо...</i>"
 
-#: menubar.c:125
+#: menubar.c:130
 msgid "windowtitle|To do list"
 msgstr "Список задач"
 
-#: menubar.c:126
+#: menubar.c:131
 msgid ""
 "<big>To do list</big>\n"
 "<i>A sneak preview of coming features ... perhaps ;-)</i>"
@@ -889,135 +1047,135 @@ msgstr ""
 "<big>Список задач</big>\n"
 "<i>Предварительный обзор будущих возможностей ... вероятно ;-)</i>"
 
-#: menubar.c:191
+#: menubar.c:198
 msgid "menu|Select Image"
 msgstr "Выбрать образ"
 
-#: menubar.c:192
+#: menubar.c:199
 msgid "menu|Select Parity File"
 msgstr "Выбрать файл коррекции ошибок"
 
-#: menubar.c:193
+#: menubar.c:200
 msgid "menu|Quit"
 msgstr "Выход"
 
-#: menubar.c:195
+#: menubar.c:202
 msgid "menu|File"
 msgstr "Файл"
 
-#: menubar.c:205
+#: menubar.c:209
+msgid "menu|Medium info"
+msgstr ""
+
+#: menubar.c:214
 msgid "menu|Raw sector editor"
 msgstr "Редактор необработанных секторов"
 
-#: menubar.c:207
+#: menubar.c:216
 msgid "menu|Tools"
 msgstr "Инструменты"
 
-#: menubar.c:216
+#: menubar.c:224
 msgid "menu|About"
 msgstr "О программе"
 
-#: menubar.c:217
+#: menubar.c:225
 msgid "menu|User manual"
 msgstr "Руководство пользователя"
 
-#: menubar.c:221
+#: menubar.c:229
 msgid "menu|Credits"
 msgstr "Благодарности"
 
-#: menubar.c:222
+#: menubar.c:230
 msgid "menu|Licence (GPL)"
 msgstr "Лицензия (GPL)"
 
-#: menubar.c:226
+#: menubar.c:234
 msgid "menu|Change log"
 msgstr "Журнал изменений"
 
-#: menubar.c:227
+#: menubar.c:235
 msgid "menu|To do list"
 msgstr "Список задач"
 
-#: menubar.c:229
+#: menubar.c:237
 msgid "menu|Help"
 msgstr "Справка"
 
-#: menubar.c:310
+#: menubar.c:321
 msgid "windowtitle|Image file selection"
 msgstr "Выбор файла образа"
 
-#: menubar.c:347
+#: menubar.c:358
 msgid "windowtitle|Error correction file selection"
 msgstr "Выбор файла коррекции ошибок"
 
-#: menubar.c:453 menubar.c:477
+#: menubar.c:464 menubar.c:488
 msgid "tooltip|Drive selection"
 msgstr "Выбор привода"
 
-#: menubar.c:453
+#: menubar.c:464
 msgid "Use the nearby drop-down list to select the input drive."
 msgstr "Выберите привод для чтения из расположенного рядом выпадающего списка."
 
-#: menubar.c:471
-msgid "No drives found"
-msgstr "Нет приводов"
-
-#: menubar.c:477
+#: menubar.c:488
 msgid "Selects the input drive for reading images."
 msgstr "Выбор привода для чтения образов."
 
-#: menubar.c:507
+#: menubar.c:518
 msgid "tooltip|Image file selection"
 msgstr "Выбор файла образа"
 
-#: menubar.c:507
+#: menubar.c:518
 msgid "Selects a new image file."
 msgstr "Выбор нового файла образа."
 
-#: menubar.c:508
+#: menubar.c:519
 msgid "tooltip|Current image file"
 msgstr "Текущий файл образа"
 
-#: menubar.c:508
+#: menubar.c:519
 msgid "Shows the name of the current image file."
 msgstr "Имя текущего файла образа."
 
-#: menubar.c:532
+#: menubar.c:543
 msgid "tooltip|Error correction file selection"
 msgstr "Выбор файла коррекции ошибок"
 
-#: menubar.c:532
+#: menubar.c:543
 msgid "Selects a new error correction file."
 msgstr "Выбор нового файла коррекции ошибок."
 
-#: menubar.c:533
+#: menubar.c:544
 msgid "tooltip|Current error correction file"
 msgstr "Текущий файл коррекции ошибок"
 
-#: menubar.c:533
+#: menubar.c:544
 msgid "Shows the name of the current error correction file."
 msgstr "Имя текущего файла коррекции ошибок."
 
-#: menubar.c:544
+#: menubar.c:555
 msgid "tooltip|Preferences"
 msgstr "Настройки"
 
-#: menubar.c:544
+#: menubar.c:555
 msgid "Customize settings for creating images, error correction files and other stuff."
 msgstr "Настройки для создания образов, файлов коррекции ошибок и т.п."
 
-#: menubar.c:554
+#: menubar.c:565
 msgid "tooltip|User manual"
 msgstr "Руководство пользователя"
 
-#: menubar.c:554
+#: menubar.c:565
 msgid "Displays the user manual (external HTML browser required)."
 msgstr "Вызов руководства пользователя (требуется внешний HTML браузер)."
 
-#: menubar.c:564
+#: menubar.c:575
 msgid "tooltip|Quit"
 msgstr "Выход"
 
-#: menubar.c:564
+#: menubar.c:575
 msgid "Quit dvdisaster"
 msgstr "Выход из dvdisaster"
 
@@ -1090,63 +1248,63 @@ msgstr ""
 "* dvdisaster - невозможно продолжить:\n"
 "*\n"
 
-#: preferences.c:436
+#: preferences.c:438
 msgid "Switched to the linear reading strategy."
 msgstr "Переход на стратегию линейного чтения."
 
-#: preferences.c:792
+#: preferences.c:794
 msgid "Color selection"
 msgstr "Выбор цвета"
 
-#: preferences.c:1049
+#: preferences.c:1051
 msgid "Disabled automatic error correction file generation."
 msgstr "Выключено автоматическое создание файла коррекции ошибок."
 
-#: preferences.c:1208 preferences.c:2221 preferences.c:2230 preferences.c:3016
+#: preferences.c:1210 preferences.c:2223 preferences.c:2232 preferences.c:3018
 msgid "Raw sector caching"
 msgstr "Накопление необработанных секторов"
 
-#: preferences.c:1280
+#: preferences.c:1282
 msgid "Log file"
 msgstr "Файл журнала"
 
-#: preferences.c:1302
+#: preferences.c:1304
 msgid "Delete the log file?"
 msgstr "Удалить файл журнала?"
 
-#: preferences.c:1395
+#: preferences.c:1397
 msgid "Preferences"
 msgstr "Настройки"
 
-#: preferences.c:1425
+#: preferences.c:1427
 msgid "Image"
 msgstr "Образ"
 
-#: preferences.c:1429
+#: preferences.c:1431
 msgid "Image size"
 msgstr "Размер образа"
 
-#: preferences.c:1436
+#: preferences.c:1438
 msgid "Image size determination"
 msgstr "Определение размера образа"
 
-#: preferences.c:1436
+#: preferences.c:1438
 msgid "Get Image size from: "
 msgstr "Получить размер образа из: "
 
-#: preferences.c:1448 preferences.c:1712
+#: preferences.c:1450 preferences.c:1714
 msgid "Drive"
 msgstr "Привод"
 
-#: preferences.c:1454
+#: preferences.c:1456
 msgid "ISO/UDF"
 msgstr "ISO/UDF"
 
-#: preferences.c:1460
+#: preferences.c:1462
 msgid "ECC/RS02"
 msgstr "ECC/RS02"
 
-#: preferences.c:1484
+#: preferences.c:1486
 msgid ""
 "<b>Image size determination</b>\n"
 "\n"
@@ -1170,27 +1328,27 @@ msgstr ""
 "\n"
 "<b>Привод:</b> Будет использоваться размер образа, сообщаемый приводом. Так как эта информация обычно неправильная для носителей DVD-RW/+RW/-RAM, то этот вариант присутствует только для обратной совместимости с прежними версиями dvdisaster."
 
-#: preferences.c:1503
+#: preferences.c:1505
 msgid "Image creation"
 msgstr "Создание образа"
 
-#: preferences.c:1512
+#: preferences.c:1514
 msgid "Reading strategy"
 msgstr "Стратегия чтения"
 
-#: preferences.c:1512
+#: preferences.c:1514
 msgid "Reading strategy: "
 msgstr "Стратегия чтения: "
 
-#: preferences.c:1526
+#: preferences.c:1528
 msgid "Linear"
 msgstr "Линейная"
 
-#: preferences.c:1534
+#: preferences.c:1536
 msgid "Adaptive (for defective media)"
 msgstr "Адаптивная (для поврежденного носителя)"
 
-#: preferences.c:1546
+#: preferences.c:1548
 msgid ""
 "<b>Reading strategy</b>\n"
 "\n"
@@ -1200,19 +1358,19 @@ msgstr ""
 "\n"
 "Линейная стратегия оптимизирована для неповрежденных носителей, тогда как адаптивная стратегия больше подходит для носителей, уже содержащих ошибки чтения."
 
-#: preferences.c:1553
+#: preferences.c:1555
 msgid "Reading range"
 msgstr "Диапазон чтения"
 
-#: preferences.c:1553
+#: preferences.c:1555
 msgid "Read/Scan from sector"
 msgstr "Читать/Проверять с сектора"
 
-#: preferences.c:1578
+#: preferences.c:1580
 msgid "to sector"
 msgstr "по сектор"
 
-#: preferences.c:1596
+#: preferences.c:1598
 msgid ""
 "<b>Reading range</b>\n"
 "\n"
@@ -1230,19 +1388,19 @@ msgstr ""
 "\n"
 "Эти настройки действуют только в текущей сессии и не будут сохранены."
 
-#: preferences.c:1606
+#: preferences.c:1608
 msgid "Image properties"
 msgstr "Свойства образа"
 
-#: preferences.c:1615
+#: preferences.c:1617
 msgid "DAO mode"
 msgstr "Режим DAO"
 
-#: preferences.c:1615
+#: preferences.c:1617
 msgid "Assume image to be written in DAO mode (don't truncate)"
 msgstr "Образ записывать в режиме DAO (не урезать)"
 
-#: preferences.c:1635
+#: preferences.c:1637
 msgid ""
 "<b>Assume DAO mode</b>\n"
 "\n"
@@ -1260,15 +1418,15 @@ msgstr ""
 "\n"
 "<b>Совет:</b> Чтобы избежать этих проблем, рекомендуется использовать режим \"DAO / Диск целиком\" (называемый также иногда \"SAO / Сессия целиком\") для записи односессионного носителя."
 
-#: preferences.c:1652
+#: preferences.c:1654
 msgid "Filling of unreadable sectors"
 msgstr "Заполнение нечитаемых секторов"
 
-#: preferences.c:1653
+#: preferences.c:1655
 msgid "Fill unreadable sectors with byte:"
 msgstr "Заполнять нечитаемые секторы байтом:"
 
-#: preferences.c:1692
+#: preferences.c:1694
 msgid ""
 "<b>Filling of unreadable sectors</b>\n"
 "\n"
@@ -1280,27 +1438,27 @@ msgstr ""
 "dvdisaster помечает нечитаемые сектора, заполняя их специальной комбинацией, которая очень маловероятна для неповрежденного носителя.\n"
 "В других программах восстановления данных принято заполнять нечитаемые сектора определенной байтовой величиной. Для обеспечения взаимодействия с такими программами можно указать байтовую величину, которую они используют:\n"
 
-#: preferences.c:1701
+#: preferences.c:1703
 msgid "0xb0 (176 decimal): for compatibility with h2cdimage published by \"c't\", a German periodical.\n"
 msgstr "0xb0 (176 десятичное): для совместимости с h2cdimage, опубликованной немецким журналом \"c't\".\n"
 
-#: preferences.c:1705
+#: preferences.c:1707
 msgid "<b>Note:</b> Using zero filling (0x00, decimal 0) is highly discouraged. Most media contain regular zero filled sectors which can not be told apart from unreadable sectors if zero filling is used."
 msgstr "<b>Примечание:</b> Заполнение нулями (0x00, десятичное 0) крайне не рекомендуется. Большинство носителей содержат нормальные сектора, заполненные нулями, которые невозможно отличить от нечитаемых секторов, если пользоваться нулевым заполнением."
 
-#: preferences.c:1716 preferences.c:1719
+#: preferences.c:1718 preferences.c:1721
 msgid "Drive initialisation"
 msgstr "Подготовка привода"
 
-#: preferences.c:1720
+#: preferences.c:1722
 msgid "Wait"
 msgstr "Ждать"
 
-#: preferences.c:1723
+#: preferences.c:1725
 msgid "seconds for drive to spin up"
 msgstr "секунд для раскручивания привода"
 
-#: preferences.c:1752
+#: preferences.c:1754
 msgid ""
 "<b>Drive initialisation</b>\n"
 "\n"
@@ -1310,23 +1468,23 @@ msgstr ""
 "\n"
 "Ожидает заданное количество секунд, чтобы дать приводу раскрутиться. Это позволяет избежать скачков скорости в начале кривой чтения."
 
-#: preferences.c:1758
+#: preferences.c:1760
 msgid "Raw reading parameters"
 msgstr "Параметры низкоуровневого чтения"
 
-#: preferences.c:1767
+#: preferences.c:1769
 msgid "Raw reading mode"
 msgstr "Режим низкоуровневого чтения"
 
-#: preferences.c:1767
+#: preferences.c:1769
 msgid "Raw reading mode: "
 msgstr "Режим низкоуровневого чтения:"
 
-#: preferences.c:1798
+#: preferences.c:1800
 msgid "other:"
 msgstr "другой:"
 
-#: preferences.c:1832
+#: preferences.c:1834
 msgid ""
 "<b>Raw reading mode</b>\n"
 "\n"
@@ -1350,19 +1508,19 @@ msgstr ""
 "\n"
 "<b>0x01</b> Некоторые приводы делают то, что нужно, когда им передается это значение, хотя это и не имеет смысла в соответствии со спецификациями на SCSI. Попробуйте ввести это значение в поле \"другой\", если другие варианты не работают. Дополнительную информацию по \"mode page 01h\" можно найти в главе 6 спецификации на MMC3 или на более позднюю модификацию MMC."
 
-#: preferences.c:1858
+#: preferences.c:1860
 msgid "Internal read attempts"
 msgstr "Попытки внутреннего чтения"
 
-#: preferences.c:1859
+#: preferences.c:1861
 msgid "Reread defective sectors"
 msgstr "Перечитать поврежденные сектора"
 
-#: preferences.c:1862
+#: preferences.c:1864
 msgid "times"
 msgstr "раз"
 
-#: preferences.c:1892
+#: preferences.c:1894
 msgid ""
 "<b>Internal read attempts</b>\n"
 "\n"
@@ -1378,15 +1536,15 @@ msgstr ""
 "Снижение этого значение до 0 или 1 может ускорить обработку поврежденного носителя и снизить износ привода; однако, большинство приводов просто проигнорируют то, что Вы введете здесь.\n"
 "Используйте значение -1, чтобы оставить привод при его стандартных настройках."
 
-#: preferences.c:1905 preferences.c:1908
+#: preferences.c:1907 preferences.c:1910
 msgid "Fatal error handling"
 msgstr "Обработка неустранимых ошибок"
 
-#: preferences.c:1909
+#: preferences.c:1911
 msgid "Ignore fatal errors"
 msgstr "Игнорировать неустранимые ошибки"
 
-#: preferences.c:1935
+#: preferences.c:1937
 msgid ""
 "<b>Fatal error handling</b>\n"
 "\n"
@@ -1398,15 +1556,15 @@ msgstr ""
 "По умолчанию dvdisaster прекращает чтение, когда привод сообщает о неустранимой ошибке. Это предотвращает дальнейшие бесплодные попытки чтения и возможное повреждение привода.\n"
 "Однако некоторые приводы выдают необоснованные сообщения о неустранимых ошибках. Для таких приводов игнорирование неустранимых ошибок может быть необходимо для выполнения непрерывного чтения поврежденного носителя."
 
-#: preferences.c:1945
+#: preferences.c:1947
 msgid "Media ejection"
 msgstr "Извлечь носитель"
 
-#: preferences.c:1948 preferences.c:1949
+#: preferences.c:1950 preferences.c:1951
 msgid "Eject medium after sucessful read"
 msgstr "Извлечь носитель после успешного чтения"
 
-#: preferences.c:1975
+#: preferences.c:1977
 msgid ""
 "<b>Medium ejection</b>\n"
 "\n"
@@ -1420,23 +1578,23 @@ msgstr ""
 "\n"
 "Имейте в виду, что рабочая среда может не давать другим приложениям извлекать носитель. В этом случае извлекайте носитель с помощью пользовательского интерфейса рабочего стола."
 
-#: preferences.c:1985
+#: preferences.c:1987
 msgid "Read attempts"
 msgstr "Попытки чтения"
 
-#: preferences.c:1989
+#: preferences.c:1991
 msgid "Sector read errors"
 msgstr "Ошибки чтения сектора"
 
-#: preferences.c:1998
+#: preferences.c:2000
 msgid "Raw reading"
 msgstr "Низкоуровневое чтение"
 
-#: preferences.c:1998
+#: preferences.c:2000
 msgid "Read and analyze raw sectors"
 msgstr "Чтение и анализ необработанных секторов"
 
-#: preferences.c:2019
+#: preferences.c:2021
 msgid ""
 "<b>Raw reading</b>\n"
 "\n"
@@ -1450,16 +1608,16 @@ msgstr ""
 "\n"
 "Включение этого параметра заставляет dvdisaster читать сектора в низкоуровневом режиме. Чтобы убедиться, что сектор правильно считан, проверяются вектора L-EC P/Q, контрольная сумма EDC и адрес MSF необработанных данных."
 
-#: preferences.c:2029
+#: preferences.c:2031
 msgid "Minimum number of reading attempts"
 msgstr "Минимальное число попыток чтения"
 
-#: preferences.c:2031 preferences.c:2032 preferences.c:2037 preferences.c:2038
+#: preferences.c:2033 preferences.c:2034 preferences.c:2039 preferences.c:2040
 #, c-format
 msgid "Min. %d reading attempts per sector"
 msgstr "Мин. %d попыток чтения на сектор"
 
-#: preferences.c:2059
+#: preferences.c:2061
 msgid ""
 "<b>Minimum number of reading attempts</b>\n"
 "\n"
@@ -1473,16 +1631,16 @@ msgstr ""
 "\n"
 "Увеличение числа попыток чтения может улучшить восстановление данных на носителях, находящихся на границе читаемости, а также увеличит время обработки и механический износ привода."
 
-#: preferences.c:2068
+#: preferences.c:2070
 msgid "Maximum number of reading attempts"
 msgstr "Максимальное число попыток чтения"
 
-#: preferences.c:2070 preferences.c:2071 preferences.c:2076 preferences.c:2077
+#: preferences.c:2072 preferences.c:2073 preferences.c:2078 preferences.c:2079
 #, c-format
 msgid "Max. %d reading attempts per sector"
 msgstr "Макс. %d попыток чтения на сектор"
 
-#: preferences.c:2098
+#: preferences.c:2100
 msgid ""
 "<b>Maximum number of reading attempts</b>\n"
 "\n"
@@ -1496,21 +1654,21 @@ msgstr ""
 "\n"
 "Решение сделать больше попыток чтения зависит от качества собранных к данному моменту данных, что, в свою очередь, зависит от возможностей привода CD/DVD и операционной системы. Поэтому, в зависимости от Вашей конфигурации, dvdisaster может использовать или не использовать максимальное значение."
 
-#: preferences.c:2112
+#: preferences.c:2114
 msgid "Treatment of unreadable areas"
 msgstr "Обработка нечитаемых обласетй"
 
-#: preferences.c:2114 preferences.c:2116 preferences.c:2117 preferences.c:2125
+#: preferences.c:2116 preferences.c:2118 preferences.c:2119 preferences.c:2127
 #, c-format
 msgid "Skip %d sectors after read error"
 msgstr "Пропустить %d секторов после ошибки чтения"
 
-#: preferences.c:2115 preferences.c:2120 preferences.c:2121 preferences.c:2126
+#: preferences.c:2117 preferences.c:2122 preferences.c:2123 preferences.c:2128
 #, c-format
 msgid "Stop reading when unreadable intervals &lt; %d"
 msgstr "Прекращать чтение, когда нечитаемые интервалы &lt; %d"
 
-#: preferences.c:2152
+#: preferences.c:2154
 msgid ""
 "<b>Treatment of unreadable areas</b>\n"
 "\n"
@@ -1524,15 +1682,15 @@ msgstr ""
 "\n"
 "Как это влияет на <b>линейную стратегию чтения</b>:"
 
-#: preferences.c:2159
+#: preferences.c:2161
 msgid "Skipping a large number of sectors (e.g. 1024) gives a quick overview of damaged areas, but will usually not collect enough data for repairing the image."
 msgstr "Пропуск большого числа секторов (например, 1024) дает быстрый обзор поврежденных областей, но обычно не собирает достаточно данных для исправления образа."
 
-#: preferences.c:2163
+#: preferences.c:2165
 msgid "Smaller values like 16, 32 or 64 are a good trade-off: The processing time will beconsiderably shortened, but still enough data for repairing the image is collected.\n"
 msgstr "Меньшие значения, такие как 16, 32 или 64, являются хорошим компромиссом: время обработки значительно сокращается, но собирается еще достаточно данных для исправления образа.\n"
 
-#: preferences.c:2167
+#: preferences.c:2169
 msgid ""
 "The <b>adaptive reading strategy</b> uses this setting only if no error correction data is available. In that case the reading process will stop when no unread areas larger than the selected size remain. Values smaller than 128 <i>are not recommended</i> as they cause the drive to carry out lots of laser head repositioning during the final phase of the reading process. If adaptive reading with a setting of 128 is not sufficient, try reading the remaining sectors with an additional linear reading pass.\n"
 "\n"
@@ -1542,19 +1700,19 @@ msgstr ""
 "\n"
 "На DVD-носителях ошибки чтения обычно простираются как минимум на 16 секторов по техническим причинам. Поэтому для DVD не рекомендуется выбирать значение меньше 16."
 
-#: preferences.c:2180 preferences.c:2183
+#: preferences.c:2182 preferences.c:2185
 msgid "Media read attempts"
 msgstr "Попытки чтения носителя"
 
-#: preferences.c:2184
+#: preferences.c:2186
 msgid "Read the whole medium "
 msgstr "Читать весь носитель"
 
-#: preferences.c:2199
+#: preferences.c:2201
 msgid " times"
 msgstr " раз"
 
-#: preferences.c:2214
+#: preferences.c:2216
 msgid ""
 "<b>Media read attempts</b> for the linear reading strategy\n"
 "\n"
@@ -1568,15 +1726,15 @@ msgstr ""
 "\n"
 "В дополнительных проходах чтения попытки будут делаться только для недостающих секторов."
 
-#: preferences.c:2231
+#: preferences.c:2233
 msgid "Keep uncorrectable raw sectors in the following directory:"
 msgstr "Хранить неисправимые необработанные сектора в следующем каталоге:"
 
-#: preferences.c:2238 preferences.c:3033
+#: preferences.c:2240 preferences.c:3035
 msgid "Select"
 msgstr "Выбрать"
 
-#: preferences.c:2277
+#: preferences.c:2279
 msgid ""
 "<b>Raw sector caching</b>\n"
 "\n"
@@ -1596,15 +1754,15 @@ msgstr ""
 "Обратите внимание, что не все приводы и операционные системы поддерживают чтение частичных данных. Если каталог для накопления остается пустым, это не является ошибкой.\n"
 "dvdisaster не будет удалять файлы из данного каталога; Вам необходимо очистить его вручную после успешного восстановления носителя."
 
-#: preferences.c:2295
+#: preferences.c:2297
 msgid "Raw sector file prefix"
 msgstr "Префикс имени файла для необработанных секторов"
 
-#: preferences.c:2296
+#: preferences.c:2298
 msgid "Raw sector file prefix: "
 msgstr "Префикс имени файла для необработанных секторов:"
 
-#: preferences.c:2317
+#: preferences.c:2319
 msgid ""
 "<b>Raw sector file prefix</b>\n"
 "\n"
@@ -1614,19 +1772,19 @@ msgstr ""
 "\n"
 "Используйте разные префиксы для дисков, которые Вы пытаетесь восстановить, например, \"disk1-\" и т.д."
 
-#: preferences.c:2325
+#: preferences.c:2327
 msgid "Error correction"
 msgstr "Коррекция ошибок"
 
-#: preferences.c:2327
+#: preferences.c:2329
 msgid "Error correction method"
 msgstr "Метод коррекции ошибок"
 
-#: preferences.c:2328
+#: preferences.c:2330
 msgid "Storage method:"
 msgstr "Хранить в:"
 
-#: preferences.c:2364
+#: preferences.c:2366
 msgid ""
 "<b>Error correction method</b>\n"
 "\n"
@@ -1636,7 +1794,7 @@ msgstr ""
 "\n"
 "dvdisaster создает данные для коррекции ошибок, которые используются для восстановления нечитаемых секторов, если позже диск будет поврежден. Для хранения информации для исправления ошибок имеется два разных способа:\n"
 
-#: preferences.c:2370
+#: preferences.c:2372
 msgid ""
 "Error correction files (RS01 method)\n"
 "Error correction files are the only way of protecting existing media as they can be stored somewhere else. They are kept on a separate medium which must also be protected by dvdisaster, as data loss in an error correction file will render it unusable.\n"
@@ -1644,7 +1802,7 @@ msgstr ""
 "Файлы коррекции ошибок (метод RS01)\n"
 "Файлы коррекции ошибок являются единственным способом защиты существующих носителей, так как они могут храниться в другом месте. Они хранятся на отдельном носителе, который также может быть защищен с помощью dvdisaster, так как потеря данных в файле коррекции ошибок сделает его непригодным.\n"
 
-#: preferences.c:2377
+#: preferences.c:2379
 msgid ""
 "Augmented images (RS02 method)\n"
 "The error correction data will be stored along with the user data on the same CD/DVD. This requires the creation of an image file prior to writing the medium. The error correction data will be appended to that image. Damaged sectors in the error correction information reduce the data recovery capacity, but do not make recovery impossible - a second medium for keeping or protecting the error correction information is not required."
@@ -1652,23 +1810,23 @@ msgstr ""
 "Расширенные образы (метод RS02)\n"
 "Данные для исправления ошибок могут храниться вместе с пользовательскими данными на том же CD/DVD. Это требует предварительного создания файла образа перед записью носителя. Данные для исправления ошибок добавляются в этот образ. Поврежденные сектора в информации для исправления ошибок снижают возможность восстановления данных, но не делают восстановление невозможным - второй носитель для хранения или защиты информации для исправления ошибок не требуется."
 
-#: preferences.c:2417
+#: preferences.c:2419
 msgid "Files"
 msgstr "Файлы"
 
-#: preferences.c:2421
+#: preferences.c:2423
 msgid "Local files (on hard disc)"
 msgstr "Локальные файлы (на жестком диске)"
 
-#: preferences.c:2428
+#: preferences.c:2430
 msgid "Automatic file suffixes"
 msgstr "Автоматические расширения имени файла"
 
-#: preferences.c:2428
+#: preferences.c:2430
 msgid "Automatically add .iso and .ecc file suffixes"
 msgstr "Автоматически добавлять расширения .iso и .ecc"
 
-#: preferences.c:2452
+#: preferences.c:2454
 msgid ""
 "<b>Automatically add file suffixes</b>\n"
 "\n"
@@ -1678,15 +1836,15 @@ msgstr ""
 "\n"
 "Когда этот параметр установлен, к именам файлов будут автоматически добавляться расширения \".iso\" или \".ecc\", если у файлов нет уже другого расширения."
 
-#: preferences.c:2458
+#: preferences.c:2460
 msgid "File splitting"
 msgstr "Разбиение файлов"
 
-#: preferences.c:2458
+#: preferences.c:2460
 msgid "Split files into segments &lt;= 2GB"
 msgstr "Разбить файлы на сегменты &lt;= 2Гб"
 
-#: preferences.c:2481
+#: preferences.c:2483
 msgid ""
 "<b>File splitting</b>\n"
 "\n"
@@ -1696,19 +1854,19 @@ msgstr ""
 "\n"
 "Дает возможность работать с файловыми системами, в которых есть ограничения размера файла до 2 Гб, например, FAT в Windows. Созданные файлы распределяются на сегменты, которых может быть до 100 штук, с именами \"medium00.iso\", \"medium01.iso\" и т.д. за счет небольшой потери в производительности."
 
-#: preferences.c:2490
+#: preferences.c:2492
 msgid "Automatic file creation and deletion"
 msgstr "Автоматическое создание и удаление файлов"
 
-#: preferences.c:2499
+#: preferences.c:2501
 msgid "Automatic .ecc file creation"
 msgstr "Автоматическое создание .ecc-файла"
 
-#: preferences.c:2499
+#: preferences.c:2501
 msgid "Create error correction file after reading image"
 msgstr "Создавать файл коррекции ошибок после чтения образа"
 
-#: preferences.c:2522
+#: preferences.c:2524
 msgid ""
 "<b>Automatic error correction file creation</b>\n"
 "\n"
@@ -1718,15 +1876,15 @@ msgstr ""
 "\n"
 "Автоматически создает файл коррекции ошибок после чтения образа. Совместно с параметром \"Удалить образ\" это ускоряет создание файла коррекции ошибок для последовательности разных носителей."
 
-#: preferences.c:2529
+#: preferences.c:2531
 msgid "Automatic image file removal"
 msgstr "Автоматическое удаление файла образа"
 
-#: preferences.c:2529
+#: preferences.c:2531
 msgid "Remove image after error correction file creation"
 msgstr "Удалить образ после создания файла коррекции ошибок"
 
-#: preferences.c:2552
+#: preferences.c:2554
 msgid ""
 "<b>Automatic image file removal</b>\n"
 "\n"
@@ -1736,23 +1894,23 @@ msgstr ""
 "\n"
 "Если этот параметр установлен, файл образа будет удален после успешного создания соответствующего файла коррекции ошибок."
 
-#: preferences.c:2558
+#: preferences.c:2560
 msgid "Appearance"
 msgstr "Внешний вид"
 
-#: preferences.c:2570
+#: preferences.c:2572
 msgid "Sector coloring"
 msgstr "Расцветка секторов"
 
-#: preferences.c:2581 rs01-verify.c:120 rs02-verify.c:115 rs03-verify.c:115
+#: preferences.c:2583 rs01-verify.c:120 rs02-verify.c:115 rs03-verify.c:115
 msgid "Good sectors"
 msgstr "Хорошие сектора"
 
-#: preferences.c:2581
+#: preferences.c:2583
 msgid "Good sector"
 msgstr "Хороший сектор"
 
-#: preferences.c:2605
+#: preferences.c:2607
 msgid ""
 "<b>Good sectors</b>\n"
 "\n"
@@ -1762,15 +1920,15 @@ msgstr ""
 "\n"
 "Этот цвет обозначает хорошие сектора."
 
-#: preferences.c:2610
+#: preferences.c:2612
 msgid "Checksum errors"
 msgstr "Ошибки контрольной суммы"
 
-#: preferences.c:2610
+#: preferences.c:2612
 msgid "Checksum error"
 msgstr "Ошибка контрольной суммы"
 
-#: preferences.c:2634
+#: preferences.c:2636
 msgid ""
 "<b>Checksum errors</b>\n"
 "\n"
@@ -1780,15 +1938,15 @@ msgstr ""
 "\n"
 "Этот цвет используется для отображения секторов с неправильными контрольными суммами."
 
-#: preferences.c:2639
+#: preferences.c:2641
 msgid "Unreadable sectors"
 msgstr "Нечитаемые сектора"
 
-#: preferences.c:2639
+#: preferences.c:2641
 msgid "Unreadable"
 msgstr "Не читается"
 
-#: preferences.c:2663
+#: preferences.c:2665
 msgid ""
 "<b>Unreadable sectors</b>\n"
 "\n"
@@ -1798,15 +1956,15 @@ msgstr ""
 "\n"
 "Этот цвет используется для обозначения нечитаемых секторов."
 
-#: preferences.c:2668
+#: preferences.c:2670
 msgid "Present sectors"
 msgstr "Имеющиеся сектора"
 
-#: preferences.c:2668
+#: preferences.c:2670
 msgid "Present sector"
 msgstr "Имеющийся сектор"
 
-#: preferences.c:2692
+#: preferences.c:2694
 msgid ""
 "<b>Present sectors</b>\n"
 "\n"
@@ -1816,15 +1974,15 @@ msgstr ""
 "\n"
 "Сектора, которые уже присутствуют, помечены этим цветом."
 
-#: preferences.c:2697
+#: preferences.c:2699
 msgid "Ignored sectors"
 msgstr "Игнорируемые сектора"
 
-#: preferences.c:2697
+#: preferences.c:2699
 msgid "Ignored sector"
 msgstr "Игнорируемый сектор"
 
-#: preferences.c:2721
+#: preferences.c:2723
 msgid ""
 "<b>Ignored sectors</b>\n"
 "\n"
@@ -1834,15 +1992,15 @@ msgstr ""
 "\n"
 "Сектора, помеченные этим цветом, не будут обрабатываться в текущем проходе."
 
-#: preferences.c:2727
+#: preferences.c:2729
 msgid "Highlit sectors"
 msgstr "Выделенные сектора"
 
-#: preferences.c:2727
+#: preferences.c:2729
 msgid "Highlit sector"
 msgstr "Выделенный сектор"
 
-#: preferences.c:2751
+#: preferences.c:2753
 msgid ""
 "<b>Highlit sectors</b>\n"
 "\n"
@@ -1852,15 +2010,15 @@ msgstr ""
 "\n"
 "Этот цвет используется для временного выделения секторов при адаптивном чтении."
 
-#: preferences.c:2757
+#: preferences.c:2759
 msgid "Text colors"
 msgstr "Цвета текста"
 
-#: preferences.c:2767
+#: preferences.c:2769
 msgid "Positive text"
 msgstr "Положительный цвет"
 
-#: preferences.c:2791
+#: preferences.c:2793
 msgid ""
 "<b>Positive text</b>\n"
 "\n"
@@ -1870,11 +2028,11 @@ msgstr ""
 "\n"
 "Хорошие новости печатаются этим цветом."
 
-#: preferences.c:2796
+#: preferences.c:2798
 msgid "Negative text"
 msgstr "Негативный текст"
 
-#: preferences.c:2820
+#: preferences.c:2822
 msgid ""
 "<b>Negative text</b>\n"
 "\n"
@@ -1884,15 +2042,15 @@ msgstr ""
 "\n"
 "Плохие новости печатаются этим цветом."
 
-#: preferences.c:2825
+#: preferences.c:2827
 msgid "Curve colors"
 msgstr "Цвета кривой"
 
-#: preferences.c:2834
+#: preferences.c:2836
 msgid "Curve color"
 msgstr "Цвет кривой"
 
-#: preferences.c:2858
+#: preferences.c:2860
 msgid ""
 "<b>Curve color and labels</b>\n"
 "\n"
@@ -1902,11 +2060,11 @@ msgstr ""
 "\n"
 "Кривая скорости чтения, ее левая сторона и надписи вверху выводятся этим цветом."
 
-#: preferences.c:2864 read-linear-window.c:397
+#: preferences.c:2866 read-linear-window.c:397
 msgid "C2 errors"
 msgstr "Ошибки C2"
 
-#: preferences.c:2888
+#: preferences.c:2890
 msgid ""
 "<b>C2 error color</b>\n"
 "\n"
@@ -1916,11 +2074,11 @@ msgstr ""
 "\n"
 "Логарифмическая гистограмма, отображающая ошибки C2, строится в этом цвете во время операций \"чтение\" и \"проверка\"."
 
-#: preferences.c:2895
+#: preferences.c:2897
 msgid "Error correction load"
 msgstr "Нагрузка при коррекции ошибок"
 
-#: preferences.c:2919
+#: preferences.c:2921
 msgid ""
 "<b>Error correction load</b>\n"
 "\n"
@@ -1930,19 +2088,19 @@ msgstr ""
 "\n"
 "Гистограмма нагрузки при коррекции ошибок показывается этим цветом во время операции \"Исправление\"."
 
-#: preferences.c:2931
+#: preferences.c:2933
 msgid "Default color scheme"
 msgstr "Палитра по умолчанию"
 
-#: preferences.c:2939
+#: preferences.c:2941
 msgid "Dialog boxes"
 msgstr "Диалоговые окна"
 
-#: preferences.c:2942
+#: preferences.c:2944
 msgid "Reverse OK / Cancel buttons"
 msgstr "Обратить кнопки ОК / Отменить"
 
-#: preferences.c:2966
+#: preferences.c:2968
 msgid ""
 "<b>Reverse OK / Cancel buttons</b>\n"
 "\n"
@@ -1956,19 +2114,19 @@ msgstr ""
 "\n"
 "Изменения вступят в силу после перезапуска dvdisaster."
 
-#: preferences.c:2973
+#: preferences.c:2975
 msgid "Misc"
 msgstr "Разное"
 
-#: preferences.c:2977
+#: preferences.c:2979
 msgid "Logging"
 msgstr "Журналы"
 
-#: preferences.c:2984
+#: preferences.c:2986
 msgid "Verbose logging"
 msgstr "Подробное журналирование"
 
-#: preferences.c:3008
+#: preferences.c:3010
 msgid ""
 "<b>Verbose logging</b>\n"
 "\n"
@@ -1978,19 +2136,19 @@ msgstr ""
 "\n"
 "Больше информации будет выдаваться в окно журнала и/или журнальный файл. Полезно для отладки, но может привести к меньшей производительности."
 
-#: preferences.c:3025
+#: preferences.c:3027
 msgid "Logfile:"
 msgstr "Журнал:"
 
-#: preferences.c:3026
+#: preferences.c:3028
 msgid "Copy log to file:"
 msgstr "Скопировать журнал в файл:"
 
-#: preferences.c:3034
+#: preferences.c:3036
 msgid "Delete"
 msgstr "Удалить"
 
-#: preferences.c:3079
+#: preferences.c:3081
 msgid ""
 "<b>Logfile</b>\n"
 "\n"
@@ -2037,8 +2195,8 @@ msgid "Raw sector does not belong to the selected image!"
 msgstr "Сектор не принадлежит выбранному образу!"
 
 #: raw-editor.c:388 read-adaptive.c:978 read-adaptive.c:1046
-#: read-adaptive.c:1324 read-adaptive.c:1497 read-linear.c:410
-#: read-linear.c:650 read-linear.c:897 rs01-fix.c:445 rs01-fix.c:703
+#: read-adaptive.c:1324 read-adaptive.c:1497 read-linear.c:409
+#: read-linear.c:649 read-linear.c:895 rs01-fix.c:445 rs01-fix.c:703
 #: rs02-fix.c:742 rs03-fix.c:728
 #, c-format
 msgid "Failed seeking to sector %lld in image [%s]: %s"
@@ -2046,7 +2204,7 @@ msgstr "Не удалось перейти к сектору %lld образа [
 
 #: raw-editor.c:395 read-adaptive.c:990 read-adaptive.c:1051
 #: read-adaptive.c:1349 read-adaptive.c:1362 read-adaptive.c:1503
-#: read-linear.c:416 read-linear.c:657 rs01-fix.c:450
+#: read-linear.c:415 read-linear.c:656 rs01-fix.c:450
 #, c-format
 msgid "Failed writing to sector %lld in image [%s]: %s"
 msgstr "Не удалось записать в сектор %lld образа [%s]: %s"
@@ -2409,15 +2567,15 @@ msgstr "Анализ существующего файла образа: %lld м
 msgid "Analysing existing image file: %lld readable, %lld still missing.\n"
 msgstr "Анализ существующего файла образа: %lld можно прочитать, %lld еще отсутствуют.\n"
 
-#: read-adaptive.c:928 read-linear.c:717
+#: read-adaptive.c:928 read-linear.c:716
 msgid "Ignore once"
 msgstr "Игнорировать один раз"
 
-#: read-adaptive.c:929 read-linear.c:718
+#: read-adaptive.c:929 read-linear.c:717
 msgid "Ignore always"
 msgstr "Игнорировать всегда"
 
-#: read-adaptive.c:930 read-linear.c:719
+#: read-adaptive.c:930 read-linear.c:718
 msgid "Abort"
 msgstr "Прервать"
 
@@ -2459,7 +2617,7 @@ msgstr ""
 "\n"
 "Достаточно данных для восстановления образа.\n"
 
-#: read-adaptive.c:1297 read-linear.c:952
+#: read-adaptive.c:1297 read-linear.c:950
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -2470,7 +2628,7 @@ msgstr ""
 "Не удается продолжить после приведенной выше ошибки.\n"
 "Используйте параметр --ignore-fatal-sense, чтобы не принимать во внимание."
 
-#: read-adaptive.c:1302 read-linear.c:957
+#: read-adaptive.c:1302 read-linear.c:955
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -2488,12 +2646,12 @@ msgstr ""
 msgid "CRC error in sector %lld\n"
 msgstr "CRC-ошибка в секторе %lld\n"
 
-#: read-adaptive.c:1486 scsi-layer.c:1032
+#: read-adaptive.c:1486 scsi-layer.c:1526
 #, c-format
 msgid "Sectors %lld-%lld: %s\n"
 msgstr "Сектора %lld-%lld: %s\n"
 
-#: read-adaptive.c:1489 read-linear.c:1104 scsi-layer.c:1031
+#: read-adaptive.c:1489 read-linear.c:1102 scsi-layer.c:1525
 #, c-format
 msgid "Sector %lld: %s\n"
 msgstr "Сектор %lld: %s\n"
@@ -2546,7 +2704,7 @@ msgstr "Адаптивное чтение:"
 msgid "Sectors processed"
 msgstr "Обработанные сектора"
 
-#: read-adaptive-window.c:110 scsi-layer.c:1013
+#: read-adaptive-window.c:110 scsi-layer.c:1507
 msgid "readable"
 msgstr "можно прочитать"
 
@@ -2610,7 +2768,7 @@ msgstr ""
 msgid "<span %s>Aborted by user request!</span>"
 msgstr "<span %s>Прервано пользователем!</span>"
 
-#: read-linear.c:263 read-linear.c:295 read-linear.c:466
+#: read-linear.c:263 read-linear.c:295 read-linear.c:465
 msgid "Reading CRC information from ecc file"
 msgstr "Чтение CRC-информации из ecc-файла"
 
@@ -2619,122 +2777,122 @@ msgstr "Чтение CRC-информации из ecc-файла"
 msgid "<span %s>Reading aborted.</span> Please select a different image file."
 msgstr "<span %s>Чтение прервано.</span> Выберите другой файл образа."
 
-#: read-linear.c:380
+#: read-linear.c:379
 #, c-format
 msgid "Completing image %s. Continuing with sector %lld.\n"
 msgstr "Завершение образа %s. Продолжение с сектора %lld.\n"
 
-#: read-linear.c:386
+#: read-linear.c:385
 #, c-format
 msgid "Completing image %s. Only missing sectors will be read.\n"
 msgstr "Завершение образа %s. Будут прочитаны только недостающие сектора.\n"
 
-#: read-linear.c:478
+#: read-linear.c:477
 msgid "done.\n"
 msgstr "готово.\n"
 
-#: read-linear.c:497 scsi-layer.c:1427
+#: read-linear.c:496 scsi-layer.c:1847
 #, c-format
 msgid "Waiting %d seconds for drive to spin up...\n"
 msgstr "Задержка на %d секунд для раскручивания привода...\n"
 
-#: read-linear.c:519 read-linear-window.c:100
+#: read-linear.c:518 read-linear-window.c:100
 #, c-format
 msgid "Unreadable / skipped sectors: %lld"
 msgstr "Нечитаемые / пропущенные сектора: %lld"
 
-#: read-linear.c:589
+#: read-linear.c:588
 #, c-format
 msgid "Sector %lld: Speed increased to %4.1fx\n"
 msgstr "Сектор %lld: Скорость увеличена до %4.1fx\n"
 
-#: read-linear.c:592
+#: read-linear.c:591
 #, c-format
 msgid "Sector %lld: Speed dropped to %4.1fx\n"
 msgstr "Сектор %lld: Скорость снижена до %4.1fx\n"
 
-#: read-linear.c:597
+#: read-linear.c:596
 #, c-format
 msgid "Read position: %3d.%1d%% (%4.1fx)"
 msgstr "Положение чтения: %3d.%1d%% (%4.1fx)"
 
-#: read-linear.c:680 rs01-common.c:227 rs01t-common.c:260 rs02-verify.c:737
+#: read-linear.c:679 rs01-common.c:227 rs01t-common.c:260 rs02-verify.c:737
 #: rs03-verify.c:726
 #, c-format
 msgid "* CRC error, sector: %lld\n"
 msgstr "* CRC-ошибка, сектор: %lld\n"
 
-#: read-linear.c:853 read-linear.c:967
+#: read-linear.c:851 read-linear.c:965
 #, c-format
 msgid "<span %s>Aborted by user request!</span> %lld sectors read, %lld sectors unreadable/skipped so far."
 msgstr "<span %s>Прервано пользователем!</span> %lld секторов прочитано, %lld секторов не читаются или пропущены."
 
-#: read-linear.c:908
+#: read-linear.c:906
 #, c-format
 msgid "unexpected read error in image for sector %lld"
 msgstr "неожиданная ошибка чтения образа в секторе %lld"
 
-#: read-linear.c:982
+#: read-linear.c:980
 #, c-format
 msgid "Sector %lld: %3d C2 errors.%s\n"
 msgstr "Сектор %lld: %3d ошибок C2.%s\n"
 
-#: read-linear.c:1084
+#: read-linear.c:1082
 #, c-format
 msgid "Sector %lld: %s Skipping %d sectors.\n"
 msgstr "Сектор %lld: %s Пропуск %d секторов.\n"
 
-#: read-linear.c:1156
+#: read-linear.c:1154
 #, c-format
 msgid "%lld sectors read.     "
 msgstr "%lld секторов прочитано.     "
 
-#: read-linear.c:1157
+#: read-linear.c:1155
 #, c-format
 msgid "%lld sectors read; %lld unreadable sectors."
 msgstr "%lld секторов прочитано; %lld нечитаемых секторов."
 
-#: read-linear.c:1165
+#: read-linear.c:1163
 #, c-format
 msgid "All sectors successfully read, but wrong image length (%lld sectors difference)"
 msgstr "Все сектора успешно прочитаны, но размер образа неправильный (разница на %lld секторов)"
 
-#: read-linear.c:1169
+#: read-linear.c:1167
 msgid "All sectors successfully read, but wrong image checksum."
 msgstr "Все сектора успешно прочитаны, но неправильная контрольная сумма образа."
 
-#: read-linear.c:1170
+#: read-linear.c:1168
 msgid "All sectors successfully read. Checksums match."
 msgstr "Все сектора успешно прочитаны. Контрольные суммы совпадают."
 
-#: read-linear.c:1172
+#: read-linear.c:1170
 msgid "All sectors successfully read."
 msgstr "Все сектора успешно прочитаны."
 
-#: read-linear.c:1176
+#: read-linear.c:1174
 #, c-format
 msgid "%lld unreadable sectors."
 msgstr "%lld нечитаемых секторов."
 
-#: read-linear.c:1178
+#: read-linear.c:1176
 #, c-format
 msgid "%lld CRC errors."
 msgstr "%lld CRC-ошибок."
 
-#: read-linear.c:1179
+#: read-linear.c:1177
 #, c-format
 msgid "%lld CRC errors, %lld unreadable sectors."
 msgstr "%lld CRC-ошибок, %lld нечитаемых секторов."
 
-#: read-linear.c:1185
+#: read-linear.c:1183
 msgid "Scanning finished: "
 msgstr "Проверка завершена: "
 
-#: read-linear.c:1187
+#: read-linear.c:1185
 msgid "Reading finished: "
 msgstr "Чтение завершено: "
 
-#: read-linear.c:1198
+#: read-linear.c:1196
 #, c-format
 msgid ""
 "%d sectors missing at the end of the disc.\n"
@@ -2745,7 +2903,7 @@ msgstr ""
 "Это нормально, если CD записан в режиме TAO (track at once).\n"
 "Образ будет соответственно укорочен. Подробнее см. в руководстве.\n"
 
-#: read-linear.c:1204
+#: read-linear.c:1202
 #, c-format
 msgid ""
 "%d sectors missing at the end of the disc.\n"
@@ -3194,7 +3352,7 @@ msgstr ""
 msgid "Avg performance: %5.2fs (%5.2fMB/s) crc, %5.2fs (%5.2fMB/s) ecc\n"
 msgstr ""
 
-#: rs01t-preferences.c:54 rs01-window.c:428 rs02-window.c:368
+#: rs01t-preferences.c:54 rs01-window.c:428 rs02-window.c:370
 #: rs03-preferences.c:46
 #, c-format
 msgid "%4.1f%% redundancy (%d roots)"
@@ -3202,8 +3360,8 @@ msgstr "избыточность %4.1f%% (%d корней)"
 
 #: rs01t-preferences.c:72 rs01t-preferences.c:426 rs01t-preferences.c:432
 #: rs01t-preferences.c:433 rs01-window.c:445 rs01-window.c:782
-#: rs01-window.c:788 rs01-window.c:789 rs02-window.c:385 rs02-window.c:947
-#: rs02-window.c:953 rs02-window.c:954 rs03-preferences.c:63
+#: rs01-window.c:788 rs01-window.c:789 rs02-window.c:387 rs02-window.c:1141
+#: rs02-window.c:1147 rs02-window.c:1148 rs03-preferences.c:63
 #: rs03-preferences.c:625 rs03-preferences.c:631 rs03-preferences.c:632
 #, c-format
 msgid "%d MB of file cache"
@@ -3286,7 +3444,7 @@ msgstr ""
 msgid "Space-delimited redundancy"
 msgstr "Избыточность, ограниченная местом"
 
-#: rs01t-preferences.c:340 rs01-window.c:696 rs02-window.c:879
+#: rs01t-preferences.c:340 rs01-window.c:696 rs02-window.c:1073
 #: rs03-preferences.c:557
 msgid "Use at most"
 msgstr "Использовать не больше"
@@ -3309,22 +3467,22 @@ msgstr ""
 "\n"
 "<b>Предупреждение:</b> Когда один и тот же размер используется для образов очень разного размера, для меньших образов получается избыточность больше, чем для более крупных. Обычно это не то, что Вам нужно."
 
-#: rs01t-preferences.c:423 rs01-window.c:779 rs02-window.c:944
+#: rs01t-preferences.c:423 rs01-window.c:779 rs02-window.c:1138
 #: rs03-preferences.c:622
 msgid "Memory utilization"
 msgstr "Использование памяти"
 
-#: rs01t-preferences.c:427 rs01-window.c:783 rs02-window.c:948
+#: rs01t-preferences.c:427 rs01-window.c:783 rs02-window.c:1142
 #: rs03-preferences.c:626
 msgid "File cache"
 msgstr "Файловый буфер"
 
 #: rs01t-preferences.c:439 rs01t-preferences.c:489 rs01-window.c:795
-#: rs02-window.c:960 rs03-preferences.c:638
+#: rs02-window.c:1154 rs03-preferences.c:638
 msgid "Use"
 msgstr "Используется"
 
-#: rs01t-preferences.c:467 rs01-window.c:823 rs02-window.c:988
+#: rs01t-preferences.c:467 rs01-window.c:823 rs02-window.c:1182
 #: rs03-preferences.c:666
 msgid ""
 "<b>File cache</b>\n"
@@ -3346,7 +3504,7 @@ msgid ""
 "An experimental feature for dvdisaster V0.73 and beyond."
 msgstr ""
 
-#: rs01t-window.c:117 rs01-window.c:125 rs02-window.c:85 rs03s-window.c:85
+#: rs01t-window.c:117 rs01-window.c:125 rs02-window.c:87 rs03s-window.c:85
 #: rs03-window.c:85
 msgid "<b>2. Creating error correction data:</b>"
 msgstr "<b>2. Создание данных для коррекции ошибок:</b>"
@@ -3417,8 +3575,7 @@ msgstr "Отпечаток:"
 msgid "Ecc blocks:"
 msgstr "Ecc-блоки:"
 
-#: rs01-verify.c:331 rs02-verify.c:47 rs02-verify.c:319 rs03-verify.c:47
-#: rs03-verify.c:319
+#: rs01-verify.c:331 rs02-verify.c:47 rs02-verify.c:319 rs03-verify.c:319
 msgid "Ecc checksum:"
 msgstr "Контрольная сумма ecc:"
 
@@ -3693,7 +3850,7 @@ msgstr "<span %s>плохо</span>"
 msgid "<span %s>Error correction file may be damaged!</span>"
 msgstr "<span %s>Файл коррекции ошибок может быть поврежден!</span>"
 
-#: rs01-verify.c:803 rs02-verify.c:1036 rs03-verify.c:1025
+#: rs01-verify.c:803 rs02-verify.c:1036
 #, c-format
 msgid "- ecc md5sum       : %s (good)\n"
 msgstr "- ecc md5sum       : %s (хорошо)\n"
@@ -3703,32 +3860,32 @@ msgstr "- ecc md5sum       : %s (хорошо)\n"
 msgid "<span %s>Good error correction file.</span>"
 msgstr "<span %s>Хороший файл коррекции ошибок.</span>"
 
-#: rs01-window.c:188 rs02-window.c:137 rs03-window.c:137
+#: rs01-window.c:188 rs02-window.c:139 rs03-window.c:137
 #, c-format
 msgid "Repaired: %lld"
 msgstr "Исправлено: %lld"
 
-#: rs01-window.c:189 rs02-window.c:138 rs03-window.c:138
+#: rs01-window.c:189 rs02-window.c:140 rs03-window.c:138
 #, c-format
 msgid "Unrepairable: <span %s>%lld</span>"
 msgstr "Не исправляются: <span %s>%lld</span>"
 
-#: rs01-window.c:190 rs02-window.c:139 rs03-window.c:139
+#: rs01-window.c:190 rs02-window.c:141 rs03-window.c:139
 #, c-format
 msgid "Progress: %3d.%1d%%"
 msgstr "Прогресс: %3d.%1d%%"
 
-#: rs01-window.c:398 rs02-window.c:344 rs03-window.c:344
+#: rs01-window.c:398 rs02-window.c:346 rs03-window.c:344
 msgid "Errors/Ecc block"
 msgstr "Ошибки/Ecc-блок"
 
-#: rs02-common.c:328 rs02-common.c:340 rs02-verify.c:611 rs03-common.c:310
-#: rs03-common.c:322 rs03-verify.c:600
+#: rs02-common.c:332 rs02-common.c:344 rs02-verify.c:611 rs03-common.c:311
+#: rs03-common.c:323 rs03-verify.c:600
 #, c-format
 msgid "Failed seeking to ecc header at %lld: %s\n"
 msgstr "Не удалось перейти к ecc-заголовку в %lld: %s\n"
 
-#: rs02-common.c:332 rs02-common.c:344 rs03-common.c:314 rs03-common.c:326
+#: rs02-common.c:336 rs02-common.c:348 rs03-common.c:315 rs03-common.c:327
 #, c-format
 msgid "Failed writing ecc header at %lld: %s\n"
 msgstr "Не удалось записать ecc-заголовок в %lld: %s\n"
@@ -3893,7 +4050,7 @@ msgstr "Исправленные сектора: %lld (%lld data, %lld ecc)\n"
 msgid "Data checksum:"
 msgstr "Контрольная сумма данных:"
 
-#: rs02-verify.c:46 rs02-verify.c:311 rs03-verify.c:46 rs03-verify.c:311
+#: rs02-verify.c:46 rs02-verify.c:311 rs03-verify.c:311
 msgid "CRC checksum:"
 msgstr "Контрольная сумма CRC:"
 
@@ -3927,11 +4084,11 @@ msgstr "- количество стертых областей    :  средн�
 msgid "- prognosis        : %lld of %lld sectors recoverable (%d.%d%%)\n"
 msgstr "- прогноз        : %lld из %lld секторов восстановимы (%d.%d%%)\n"
 
-#: rs02-verify.c:502 rs03-verify.c:491
+#: rs02-verify.c:502 rs03-verify.c:46 rs03-verify.c:491
 msgid "Erasure counts:"
 msgstr "Количество стертых областей:"
 
-#: rs02-verify.c:503 rs03-verify.c:492
+#: rs02-verify.c:503 rs03-verify.c:47 rs03-verify.c:492
 msgid "Prognosis:"
 msgstr "Прогноз:"
 
@@ -3971,11 +4128,6 @@ msgstr "<span %s>Файл образа на %lld секторов больше, 
 #, c-format
 msgid "Failed reading ecc header at %lld: %s\n"
 msgstr "Не удалось прочитать ecc-заголовок в %lld: %s\n"
-
-#: rs02-verify.c:647 rs02-verify.c:845 rs02-verify.c:846 rs02-verify.c:847
-#: rs03-verify.c:636 rs03-verify.c:834 rs03-verify.c:835 rs03-verify.c:836
-msgid "complete"
-msgstr "готово"
 
 #: rs02-verify.c:649 rs03-verify.c:638
 #, c-format
@@ -4064,68 +4216,68 @@ msgstr "- md5sum данных      : %s (хорошо)\n"
 msgid "* data md5sum      : %s (BAD)\n"
 msgstr "* md5sum данных      : %s (ПЛОХО)\n"
 
-#: rs02-verify.c:1000 rs03-verify.c:989
+#: rs02-verify.c:1000 rs03-verify.c:994
 #, c-format
 msgid "- data md5sum      : %s\n"
 msgstr "- md5sum данных      : %s\n"
 
-#: rs02-verify.c:1012 rs03-verify.c:1001
+#: rs02-verify.c:1012
 #, c-format
 msgid "- crc md5sum       : %s (good)\n"
 msgstr "- crc md5sum       : %s (хорошо)\n"
 
-#: rs02-verify.c:1017 rs03-verify.c:1006
+#: rs02-verify.c:1017
 #, c-format
 msgid "* crc md5sum       : %s (BAD)\n"
 msgstr "* crc md5sum       : %s (ПЛОХО)\n"
 
-#: rs02-verify.c:1024 rs03-verify.c:1013
+#: rs02-verify.c:1024
 #, c-format
 msgid "- crc md5sum       : %s\n"
 msgstr "- crc md5sum       : %s\n"
 
-#: rs02-verify.c:1041 rs03-verify.c:1030
+#: rs02-verify.c:1041
 #, c-format
 msgid "* ecc md5sum       : %s (BAD)\n"
 msgstr "* ecc md5sum       : %s (ПЛОХО)\n"
 
-#: rs02-verify.c:1048 rs03-verify.c:1037
+#: rs02-verify.c:1048
 #, c-format
 msgid "- ecc md5sum       : %s\n"
 msgstr "- ecc md5sum       : %s\n"
 
-#: rs02-verify.c:1067 rs03-verify.c:1056
+#: rs02-verify.c:1067 rs03-verify.c:1012
 #, c-format
 msgid "<span %s>Good error correction data.</span>"
 msgstr "<span %s>Хорошие данные для исправления ошибок.</span>"
 
-#: rs02-verify.c:1071 rs03-verify.c:1060
+#: rs02-verify.c:1071 rs03-verify.c:1016
 #, c-format
 msgid "<span %s>Full data recovery is likely.</span>"
 msgstr "<span %s>Вероятно полное восстановление данных.</span>"
 
-#: rs02-verify.c:1074 rs03-verify.c:1063
+#: rs02-verify.c:1074 rs03-verify.c:1019
 #, c-format
 msgid "<span %s>Full data recovery is NOT possible.</span>"
 msgstr "<span %s>Полное восстановление данных НЕВОЗМОЖНО.</span>"
 
-#: rs02-window.c:76 rs03s-window.c:76 rs03-window.c:76
+#: rs02-window.c:78 rs03s-window.c:76 rs03-window.c:76
 msgid "<b>1. Preparing image:</b>"
 msgstr "<b>1. Подготовка образа:</b>"
 
-#: rs02-window.c:632 rs03-preferences.c:310
+#: rs02-window.c:702 rs03-preferences.c:310
 msgid "Maximum image size"
 msgstr "Максимальный размер образа"
 
-#: rs02-window.c:644 rs03-preferences.c:322
+#: rs02-window.c:714 rs03-preferences.c:322
 msgid "Using the smallest possible size from table"
 msgstr "Используется наименьший возможный размер из таблицы"
 
-#: rs02-window.c:644 rs03-preferences.c:322
+#: rs02-window.c:714 rs03-preferences.c:322
 msgid "Use smallest possible size from following table (in sectors):"
 msgstr "Использование наименьшего возможного размера из следующей таблицы (в секторах):"
 
-#: rs02-window.c:668 rs03-preferences.c:346
+#: rs02-window.c:738 rs03-preferences.c:346
 msgid ""
 "<b>Determine augmented image size from table</b>\n"
 "\n"
@@ -4139,18 +4291,19 @@ msgstr ""
 "\n"
 "Чтобы выбрать подходящий носитель, нужно знать размеры имеющихся носителей. В таблице даны стандартные размеры CD и одно-/двухслойных DVD. Вы можете изменять эти размеры в соответствии с Вашими потребностями."
 
-#: rs02-window.c:687 rs03-preferences.c:365
+#: rs02-window.c:757 rs03-preferences.c:365
 msgid "CD-R / CD-RW:"
 msgstr "CD-R / CD-RW:"
 
-#: rs02-window.c:698 rs02-window.c:717 rs02-window.c:758 rs02-window.c:777
-#: rs02-window.c:818 rs02-window.c:837 rs03-preferences.c:376
+#: rs02-window.c:768 rs02-window.c:787 rs02-window.c:828 rs02-window.c:847
+#: rs02-window.c:888 rs02-window.c:907 rs02-window.c:948 rs02-window.c:967
+#: rs02-window.c:1007 rs02-window.c:1026 rs03-preferences.c:376
 #: rs03-preferences.c:395 rs03-preferences.c:436 rs03-preferences.c:455
 #: rs03-preferences.c:496 rs03-preferences.c:515
 msgid "query medium"
 msgstr "запросить носитель"
 
-#: rs02-window.c:729 rs03-preferences.c:407
+#: rs02-window.c:799 rs03-preferences.c:407
 #, c-format
 msgid ""
 "<b>CD medium size</b>\n"
@@ -4173,11 +4326,11 @@ msgstr ""
 "Обратите внимание, что расширенные образы самое большее утраиваются в размере, так как наибольшая возможная избыточность составляет 200%%.\n"
 "Даже если этот предел не достигнут, расширенный образ по техническим причинам может быть на несколько сегментов меньше, чем задан."
 
-#: rs02-window.c:747 rs03-preferences.c:425
+#: rs02-window.c:817 rs03-preferences.c:425
 msgid "DVD 1 layer:"
 msgstr "Однослойный DVD:"
 
-#: rs02-window.c:789 rs03-preferences.c:467
+#: rs02-window.c:859 rs03-preferences.c:467
 #, c-format
 msgid ""
 "<b>Single layer DVD medium size</b>\n"
@@ -4200,15 +4353,11 @@ msgstr ""
 "Имейте в виду, что расширенные образы самое большее утраиваются в размере, так как наибольшая возможная избыточность составляет 200%%.\n"
 "Даже если этот предел не достигается, расширенный образ по техническим причинам может быть на несколько секторов меньше, чем указано."
 
-#: rs02-window.c:807 rs03-preferences.c:485
-msgid "DVD 2 layers"
-msgstr "DVD 2 слоя"
-
-#: rs02-window.c:807 rs03-preferences.c:485
+#: rs02-window.c:877 rs03-preferences.c:485
 msgid "DVD 2 layers:"
 msgstr "Двухслойный DVD:"
 
-#: rs02-window.c:849 rs03-preferences.c:527
+#: rs02-window.c:919 rs03-preferences.c:527
 #, c-format
 msgid ""
 "<b>Two layered DVD medium size</b>\n"
@@ -4231,11 +4380,47 @@ msgstr ""
 "Обратите внимание, что расширенные образы самое большее утраиваются в размере, так как наибольшая возможная избыточность составляет 200%%.\n"
 "Даже если этот предел не достигается, расширенный образ по техническим причинам может быть на несколько секторов меньше, чем указано."
 
-#: rs02-window.c:899 rs03-preferences.c:577
+#: rs02-window.c:937
+msgid "BD 1 layer:"
+msgstr ""
+
+#: rs02-window.c:979
+#, c-format
+msgid ""
+"<b>Single layer BD medium size</b>\n"
+"\n"
+"This is the maximum capacity assumed for single layer BD media. Images exceeding the smaller media sizes but smaller than this value will be augmented with error correction information so that they will fit on the specified BD.\n"
+"\n"
+"You can enter the medium size in sectors of 2K each, or press the \"query medium\" button to use the size of a blank medium currently inserted in the selected drive.\n"
+"Use the arrow button to revert to the last saved value.\n"
+"\n"
+"Please note that augmented images will at most triple in size as the highest possible redundancy is 200%%.\n"
+"Even if this limit is not reached the augmented image may be a few sectors smaller than specified for technical reasons."
+msgstr ""
+
+#: rs02-window.c:996
+msgid "BD 2 layers:"
+msgstr ""
+
+#: rs02-window.c:1038
+#, c-format
+msgid ""
+"<b>Two layered BD medium size</b>\n"
+"\n"
+"This is the maximum capacity assumed for two layered BD media. Images exceeding the smaller media sizes but smaller than this value will be augmented with error correction information so that they will fit on the specified BD.\n"
+"\n"
+"You can enter the medium size in sectors of 2K each, or press the \"query medium\" button to use the size of a blank medium currently inserted in the selected drive.\n"
+"Use the arrow button to revert to the last saved value.\n"
+"\n"
+"Please note that augmented images will at most triple in size as the highest possible redundancy is 200%%.\n"
+"Even if this limit is not reached the augmented image may be a few sectors smaller than specified for technical reasons."
+msgstr ""
+
+#: rs02-window.c:1093 rs03-preferences.c:577
 msgid "sectors."
 msgstr "секторов."
 
-#: rs02-window.c:912 rs03-preferences.c:590
+#: rs02-window.c:1106 rs03-preferences.c:590
 #, c-format
 msgid ""
 "<b>Use at most ... sectors</b>\n"
@@ -4276,6 +4461,10 @@ msgstr ""
 msgid "Image contains error correction data: Method RS03, %d roots, %4.1f%% redundancy."
 msgstr ""
 
+#: rs03-preferences.c:485
+msgid "DVD 2 layers"
+msgstr "DVD 2 слоя"
+
 #: rs03s-create.c:874
 #, c-format
 msgid "Encoding with Method RS03: %lld MB data, %lld MB ecc (%d roots; %4.1f%% redundancy)."
@@ -4308,10 +4497,6 @@ msgstr ""
 "Не найдено приводов CD/DVD в /dev.\n"
 "Не будет предустановленных приводов.\n"
 
-#: scsi-layer.c:83
-msgid "unknown"
-msgstr "неизвестно"
-
 #: scsi-layer.c:87
 #, c-format
 msgid ""
@@ -4340,53 +4525,7 @@ msgstr "Устройство %s (%s) не является приводом CDRO
 msgid "Device %s (%s) is a hard disk."
 msgstr "Устройство %s (%s) является жестким диском."
 
-#: scsi-layer.c:181
-#, c-format
-msgid ""
-"%s\n"
-"Could not query BD disc structure length.\n"
-msgstr ""
-"%s\n"
-"Не удалось запросить размер структуры BD диска.\n"
-
-#: scsi-layer.c:211
-#, c-format
-msgid ""
-"%s\n"
-"Could not query BD disc structure.\n"
-msgstr ""
-"%s\n"
-"Не удалось запросить структуру BD диска.\n"
-
-#: scsi-layer.c:275
-#, c-format
-msgid ""
-"%s\n"
-"Could not query dvd structure length.\n"
-msgstr ""
-"%s\n"
-"Не удалось запросить размер dvd-структуры.\n"
-
-#: scsi-layer.c:286
-#, c-format
-msgid "Could not query dvd physical structure - implausible packet length %d\n"
-msgstr "Не удалось запросить физическую структуру dvd - неправдоподобная длина пакета %d\n"
-
-#: scsi-layer.c:303
-#, c-format
-msgid ""
-"%s\n"
-"Could not query physical dvd structure.\n"
-msgstr ""
-"%s\n"
-"Не удалось запросить физическую структуру dvd.\n"
-
-#: scsi-layer.c:342 scsi-layer.c:352
-#, c-format
-msgid "READ DVD STRUCTURE: implausible medium size, %lld-%lld=%lld sectors\n"
-msgstr "READ DVD STRUCTURE: неправильный размер носителя, %lld-%lld=%lld секторов\n"
-
-#: scsi-layer.c:598
+#: scsi-layer.c:294
 #, c-format
 msgid ""
 "%s\n"
@@ -4395,12 +4534,16 @@ msgstr ""
 "%s\n"
 "Не удалось запросить размер TOC.\n"
 
-#: scsi-layer.c:613 scsi-layer.c:669
+#: scsi-layer.c:299
+msgid "blank"
+msgstr ""
+
+#: scsi-layer.c:312 scsi-layer.c:368
 #, c-format
 msgid "TOC info too long (%d), probably multisession.\n"
 msgstr "Информация в TOC слишком большая (%d), вероятно многосессионная запись.\n"
 
-#: scsi-layer.c:627
+#: scsi-layer.c:326
 #, c-format
 msgid ""
 "%s\n"
@@ -4409,7 +4552,7 @@ msgstr ""
 "%s\n"
 "Не удалось прочитать TOC.\n"
 
-#: scsi-layer.c:653
+#: scsi-layer.c:352
 #, c-format
 msgid ""
 "%s\n"
@@ -4418,12 +4561,12 @@ msgstr ""
 "%s\n"
 "Не удалось запросить весь размер TOC.\n"
 
-#: scsi-layer.c:664
+#: scsi-layer.c:363
 #, c-format
 msgid "TOC info too short, length %d.\n"
 msgstr "Информация в TOC слишком мала, длина %d.\n"
 
-#: scsi-layer.c:684
+#: scsi-layer.c:383
 #, c-format
 msgid ""
 "%s\n"
@@ -4432,7 +4575,7 @@ msgstr ""
 "%s\n"
 "Не удалось прочитать всю TOC.\n"
 
-#: scsi-layer.c:693
+#: scsi-layer.c:392
 #, c-format
 msgid ""
 "\n"
@@ -4441,31 +4584,57 @@ msgstr ""
 "\n"
 "Неожиданный формат TOC (длина %d):\n"
 
-#: scsi-layer.c:700
+#: scsi-layer.c:399
 msgid "Consider sending a bug report.\n"
 msgstr "Рекомендуется отправить отчет об ошибке.\n"
 
-#: scsi-layer.c:709
-msgid "Data CD mode 1"
-msgstr "CD с данными в mode 1"
+#: scsi-layer.c:452
+#, c-format
+msgid ""
+"%s\n"
+"Could not query dvd structure length.\n"
+msgstr ""
+"%s\n"
+"Не удалось запросить размер dvd-структуры.\n"
 
-#: scsi-layer.c:710
-msgid "CD-I"
-msgstr "CD-I"
+#: scsi-layer.c:462
+#, c-format
+msgid "Could not query dvd physical structure - implausible packet length %d\n"
+msgstr "Не удалось запросить физическую структуру dvd - неправдоподобная длина пакета %d\n"
 
-#: scsi-layer.c:711
-msgid "CD XA form 1"
-msgstr "CD XA form 1"
+#: scsi-layer.c:479
+#, c-format
+msgid ""
+"%s\n"
+"Could not query physical dvd structure.\n"
+msgstr ""
+"%s\n"
+"Не удалось запросить физическую структуру dvd.\n"
 
-#: scsi-layer.c:712
-msgid "Unknown"
-msgstr "Неизвестно"
+#: scsi-layer.c:508 scsi-layer.c:518
+#, c-format
+msgid "READ DVD STRUCTURE: implausible medium size, %lld-%lld=%lld sectors\n"
+msgstr "READ DVD STRUCTURE: неправильный размер носителя, %lld-%lld=%lld секторов\n"
 
-#: scsi-layer.c:715
-msgid "CD Audio"
-msgstr "Звуковой CD"
+#: scsi-layer.c:776
+#, c-format
+msgid ""
+"%s\n"
+"Could not query BD disc structure length.\n"
+msgstr ""
+"%s\n"
+"Не удалось запросить размер структуры BD диска.\n"
 
-#: scsi-layer.c:962
+#: scsi-layer.c:807
+#, c-format
+msgid ""
+"%s\n"
+"Could not query BD disc structure.\n"
+msgstr ""
+"%s\n"
+"Не удалось запросить структуру BD диска.\n"
+
+#: scsi-layer.c:1456
 #, c-format
 msgid ""
 "%s\n"
@@ -4474,12 +4643,12 @@ msgstr ""
 "%s\n"
 "Не удалось запросить размер dvd-структуры для кода формата 1.\n"
 
-#: scsi-layer.c:972
+#: scsi-layer.c:1466
 #, c-format
 msgid "Could not query dvd copyright info - implausible packet length %d\n"
 msgstr "Не удалось запросить информацию об авторских правах dvd - неправдоподобный размер пакета %d\n"
 
-#: scsi-layer.c:987
+#: scsi-layer.c:1481
 #, c-format
 msgid ""
 "%s\n"
@@ -4488,23 +4657,23 @@ msgstr ""
 "%s\n"
 "Не удалось запросить информацию об авторских правах.\n"
 
-#: scsi-layer.c:1047
+#: scsi-layer.c:1541
 msgid "is undecideable because of read error"
 msgstr "не ясно из-за ошибок чтения"
 
-#: scsi-layer.c:1053
+#: scsi-layer.c:1547
 msgid "looks GOOD"
 msgstr "выглядит ПРАВИЛЬНО"
 
-#: scsi-layer.c:1059
+#: scsi-layer.c:1553
 msgid "gives unformatted size (UNUSABLE)"
 msgstr "дает неформатированный размер (НЕПРИГОДНО)"
 
-#: scsi-layer.c:1064
+#: scsi-layer.c:1558
 msgid "is UNUSABLE"
 msgstr "НЕПРИГОДНО"
 
-#: scsi-layer.c:1086
+#: scsi-layer.c:1579
 #, c-format
 msgid ""
 "%s\n"
@@ -4513,12 +4682,12 @@ msgstr ""
 "%s\n"
 "Не удалось запросить размер носителя.\n"
 
-#: scsi-layer.c:1106
+#: scsi-layer.c:1599
 #, c-format
 msgid "READ CAPACITY: implausible medium size, %lld sectors\n"
 msgstr "READ CAPACITY: неправильный размер носителя, %lld секторов\n"
 
-#: scsi-layer.c:1185
+#: scsi-layer.c:1678
 #, c-format
 msgid ""
 "Different media sizes depending on query method:\n"
@@ -4531,7 +4700,7 @@ msgstr ""
 "READ DVD STRUCTURE: %lld секторов\n"
 "\n"
 
-#: scsi-layer.c:1190
+#: scsi-layer.c:1683
 msgid ""
 "Evaluation of returned medium sizes:\n"
 "\n"
@@ -4539,15 +4708,15 @@ msgstr ""
 "Оценка полученных размеров носителя:\n"
 "\n"
 
-#: scsi-layer.c:1245
+#: scsi-layer.c:1738
 msgid "Using value from READ CAPACITY"
 msgstr "Используется значение из READ CAPACITY"
 
-#: scsi-layer.c:1249
+#: scsi-layer.c:1742
 msgid "Using value from READ DVD STRUCTURE"
 msgstr "Используется значение из READ DVD STRUCTURE"
 
-#: scsi-layer.c:1259
+#: scsi-layer.c:1752
 #, c-format
 msgid ""
 "FAILED to determine image size.\n"
@@ -4558,7 +4727,7 @@ msgstr ""
 "Использование значения меньшего, чем это, работает на >90%% приводов,\n"
 "но ПРОДОЛЖАЙТЕ НА СВОЙ РИСК (образ может быть неполным/непригодным)"
 
-#: scsi-layer.c:1264
+#: scsi-layer.c:1757
 #, c-format
 msgid ""
 "Final decision: %s\n"
@@ -4567,7 +4736,7 @@ msgstr ""
 "Окончательное решение: %s\n"
 "\n"
 
-#: scsi-layer.c:1272
+#: scsi-layer.c:1765
 msgid ""
 "Failed to determine image size.\n"
 "Try using a different drive."
@@ -4575,7 +4744,7 @@ msgstr ""
 "Не удалось определить размер образа.\n"
 "Попробуйте другой привод."
 
-#: scsi-layer.c:1470 scsi-layer.c:1496
+#: scsi-layer.c:1890 scsi-layer.c:1916
 #, c-format
 msgid ""
 "%s\n"
@@ -4584,7 +4753,7 @@ msgstr ""
 "%s\n"
 "Не удалось загрузить/выгрузить носитель.\n"
 
-#: scsi-layer.c:1486
+#: scsi-layer.c:1906
 #, c-format
 msgid ""
 "%s\n"
@@ -4593,41 +4762,37 @@ msgstr ""
 "%s\n"
 "Не удалось разблокировать носитель.\n"
 
-#: scsi-layer.c:1539
+#: scsi-layer.c:1960
 #, c-format
 msgid "Waiting 10 seconds for drive: %d\n"
 msgstr "Выжидание 10 секунд для привода: %d\n"
 
-#: scsi-layer.c:1590
-msgid "Setting the drive speed failed:\n"
-msgstr "Не удалось установить скорость привода:\n"
-
-#: scsi-layer.c:1841
+#: scsi-layer.c:2227
 #, c-format
 msgid "Sectors %lld - %lld: %s\n"
 msgstr "Сектора %lld - %lld: %s\n"
 
-#: scsi-layer.c:1855
+#: scsi-layer.c:2241
 #, c-format
 msgid "Sector %lld, try %d: %s Sector returned: %d.\n"
 msgstr "Сектор %lld, попытка %d: %s Возвращен сектор: %d.\n"
 
-#: scsi-layer.c:1861
+#: scsi-layer.c:2247
 #, c-format
 msgid "Sector %lld, try %d: %s\n"
 msgstr "Сектор %lld, попытка %d: %s\n"
 
-#: scsi-layer.c:1872
+#: scsi-layer.c:2258
 #, c-format
 msgid "Sector %lld, try %d: success\n"
 msgstr "Сектор %lld, попытка %d: успешно\n"
 
-#: scsi-layer.c:1939
+#: scsi-layer.c:2325 scsi-layer.c:2473
 #, c-format
 msgid "Device %s: no medium present\n"
 msgstr "Устройство %s: нет носителя\n"
 
-#: scsi-layer.c:1940
+#: scsi-layer.c:2326 scsi-layer.c:2474
 #, c-format
 msgid ""
 "Device %s does not become ready:\n"
@@ -4638,7 +4803,7 @@ msgstr ""
 "%s\n"
 "\n"
 
-#: scsi-layer.c:1945
+#: scsi-layer.c:2331
 #, c-format
 msgid ""
 "\n"
@@ -4647,7 +4812,7 @@ msgstr ""
 "\n"
 "Устройство: %s, %s\n"
 
-#: scsi-layer.c:1949
+#: scsi-layer.c:2335
 #, c-format
 msgid ""
 "\n"
@@ -4656,52 +4821,48 @@ msgstr ""
 "\n"
 "Устройство: %s (%s), %s\n"
 
-#: scsi-layer.c:1964 scsi-layer.c:2052
+#: scsi-layer.c:2350 scsi-layer.c:2437
 #, c-format
 msgid "This software does not support \"%s\" type media."
 msgstr "Эта программа не поддерживает \"%s\" тип носителя."
 
-#: scsi-layer.c:1972
+#: scsi-layer.c:2358
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr "Эта программа не поддерживает многосессионные (%d сессиий) носители."
 
-#: scsi-layer.c:1995 scsi-layer.c:2004
+#: scsi-layer.c:2381 scsi-layer.c:2390
 msgid "Using READ CD"
 msgstr "Используется READ CD"
 
-#: scsi-layer.c:1996
+#: scsi-layer.c:2382
 msgid ", RAW reading"
 msgstr ", чтение \"RAW\""
 
-#: scsi-layer.c:1999
+#: scsi-layer.c:2385
 #, c-format
 msgid ", Mode page 1 ERP = %02xh"
 msgstr ", Mode page 1 ERP = %02xh"
 
-#: scsi-layer.c:2002
+#: scsi-layer.c:2388
 msgid ", C2 scanning"
 msgstr ", поиск C2"
 
-#: scsi-layer.c:2009
+#: scsi-layer.c:2395
 msgid "Using READ(10).\n"
 msgstr "Используется READ(10).\n"
 
-#: scsi-layer.c:2030
+#: scsi-layer.c:2414
 #, c-format
 msgid "Medium: %s, %lld sectors%s"
 msgstr "Носитель: %s, %lld секторов%s"
 
-#: scsi-layer.c:2034
+#: scsi-layer.c:2418
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s created %s"
 msgstr "Носитель \"%s\": %s, %lld секторов%s создан %s"
 
-#: scsi-layer.c:2040
-msgid "Manuf.-ID:"
-msgstr "Изгот.-ID:"
-
-#: scsi-layer.c:2059
+#: scsi-layer.c:2444
 msgid "This software does not support encrypted media.\n"
 msgstr "Эта программа не поддерживает шифрованные носители.\n"
 
@@ -4721,11 +4882,11 @@ msgstr ""
 "* Неподдерживаемая операционная система - нет слоя SCSI.\n"
 "* Никакие приводы не могут использоваться.\n"
 
-#: scsi-win32.c:413
+#: scsi-win32.c:415
 msgid "ASPI manager present, but no CD/DVD drives managed.\n"
 msgstr "Менеджер ASPI есть, но никакими приводами CD/DVD не управляет.\n"
 
-#: scsi-win32.c:415
+#: scsi-win32.c:417
 #, c-format
 msgid ""
 "%d SPTI drives, but %d ASPI drives.\n"
@@ -4734,7 +4895,7 @@ msgstr ""
 "%d приводов SPTI, но %d приводов ASPI.\n"
 "Назначение букв приводам ASPI, вероятно, неправильное.\n"
 
-#: scsi-win32.c:433
+#: scsi-win32.c:435
 msgid ""
 "\n"
 "List of ASPI CD/DVD drives:\n"
@@ -4742,7 +4903,7 @@ msgstr ""
 "\n"
 "Список ASPI CD/DVD приводов:\n"
 
-#: scsi-win32.c:438
+#: scsi-win32.c:440
 msgid ""
 "\n"
 "To force ASPI usage over SPTI, refer to the drive by the\n"
@@ -4752,11 +4913,11 @@ msgstr ""
 "Чтобы использовать ASPI вместо SPTI, обращайтесь к приводу по\n"
 "указанным выше номерам (то есть, 1:, 2:,... вместо of C:, D:,...)\n"
 
-#: scsi-win32.c:443
+#: scsi-win32.c:445
 msgid "ASPI manager not available or installed.\n"
 msgstr "Менеджер ASPI не доступен или не установлен.\n"
 
-#: scsi-win32.c:567
+#: scsi-win32.c:569
 #, c-format
 msgid ""
 "\n"
@@ -4765,7 +4926,7 @@ msgstr ""
 "\n"
 "Неправильное имя устройства \"%s\" (используйте устройства \"C:\" ... \"Z:\")"
 
-#: scsi-win32.c:657
+#: scsi-win32.c:659
 #, c-format
 msgid ""
 "\n"
@@ -4913,6 +5074,24 @@ msgstr ""
 #: welcome-window.c:137
 msgid "<i>New in this Version:</i>"
 msgstr "<i>Новое в этой версии:</i>"
+
+#~ msgid "Setting the drive speed failed:\n"
+#~ msgstr "Не удалось установить скорость привода:\n"
+
+#~ msgid "Data CD mode 1"
+#~ msgstr "CD с данными в mode 1"
+
+#~ msgid "CD-I"
+#~ msgstr "CD-I"
+
+#~ msgid "CD XA form 1"
+#~ msgstr "CD XA form 1"
+
+#~ msgid "Unknown"
+#~ msgstr "Неизвестно"
+
+#~ msgid "CD Audio"
+#~ msgstr "Звуковой CD"
 
 #~ msgid "--cache-size must at least be 1MB; 16MB or higher is recommended."
 #~ msgstr "--cache-size должен быть по меньшей мере 1 Мб; рекомендуется 16 Мб или больше."

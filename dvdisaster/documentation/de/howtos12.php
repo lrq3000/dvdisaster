@@ -85,16 +85,13 @@ auf den "Prüfen"-Knopf durch.</td>
 </tr>
 </table>
 
-<table>
-<tr>
-<td width="200px" align="center"><img src="../images/watch-scan.png"></td>
-<td>&nbsp;&nbsp;</td>
-<td valign="top"><b>Beobachten Sie den Fortschritt der Überprüfung.</b>
+<?php begin_howto_shot("Abbild einlesen.","good-cd.png", ""); ?>
+<b>Beobachten Sie den Fortschritt der Überprüfung.</b>
 Führen Sie während dieser Zeit keine anderen Aktionen auf dem Computer durch.
 Das Aufrufen oder Bedienen von anderen Programmen oder auch das 
-Verschieben von Fenstern kann die Überprüfung beeinflussen.</td>
-</tr>
-</table><p>
+Verschieben von Fenstern kann die Überprüfung beeinflussen.
+<?php end_howto_shot(); ?>
+<p>
 
 <hr>
 

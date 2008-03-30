@@ -1,3 +1,4 @@
+
 /*  dvdisaster: Additional error correction for optical media.
  *  Copyright (C) 2004-2008 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
@@ -97,17 +98,14 @@
 #define CDR_SIZE         (351*1024)
 #define DVD_SL_SIZE      2295104  /* DVD+R/RW size used at least common denominator */
 #define DVD_DL_SIZE 	 4171712  /* also seen: 4148992 4173824  */
-#define HD_DVD_SIZE      7361595  /* HD DVD-R */
-#define HD_DVD_RAM_SIZE  9848064  /* HD DVD-RAM */
-#define HD_DVD_DL_SIZE  16305407  /* HD DVD-R DL */
+#define BD_SL_SIZE      11826176
+#define BD_DL_SIZE	21826176  /* whats the right value here? */
 
 /* Maximum accepted media sizes (in 2K sectors) */
 
 #define MAX_CDR_SIZE     (100*60*75)     /* CDs can't have >100min w/o severe hacks  */
 #define MAX_DVD_SL_SIZE  2500000         /* I have to guess here */
 #define MAX_DVD_DL_SIZE  4600000         /* I have to guess here */
-#define MAX_HD_DVD_SL_SIZE (20*1024*512) /* 20 GB (covers -R and -RAM) */
-#define MAX_HD_DVD_DL_SIZE (32*1024*512) /* 32 GB */
 
 /* Maximum number of parallel encoder/decoder threads */
 
@@ -131,12 +129,16 @@ typedef struct _GlobalClosure
    gint64 readStart;    /* Range to read */
    gint64 readEnd;
    gint64 cdSize;       /* Maximum cd size (for RS02 type images) */
-   gint64 dvdSize1;     /* Maximum 1-layer dvd size (for RS02 type images) */
-   gint64 dvdSize2;     /* Maximum 2-layer dvd size (for RS02 type images) */
+   gint64 dvdSize1;     /* Maximum 1-layer dvd size (for augmented images) */
+   gint64 dvdSize2;     /* Maximum 2-layer dvd size (for augmented images) */
+   gint64 bdSize1;      /* Maximum 1-layer dvd size (for augmented images) */
+   gint64 bdSize2;      /* Maximum 2-layer dvd size (for augmented images) */
    gint64 savedCDSize;  /* Undo values for above */
    gint64 savedDVDSize1;
    gint64 savedDVDSize2;
-   gint64 mediumSize;   /* Maximum medium size (for RS02 type images) */
+   gint64 savedBDSize1;
+   gint64 savedBDSize2;
+   gint64 mediumSize;   /* Maximum medium size (for augmented images) */
    int cacheMB;         /* Cache setting for the parity codec, in megabytes */
    int codecThreads;    /* Number of threads to use for RS encoders */
    int sectorSkip;      /* Number of sectors to skip after read error occurs */
@@ -224,6 +226,8 @@ typedef struct _GlobalClosure
    GtkTooltips *tooltips;    /* our global tooltips structure */
    GdkPixbuf *windowIcon;    /* main window icon */
 
+   GtkWidget *driveCombo;    /* combo box for drive selection */
+
    GtkWidget *imageFileSel;  /* image file selector */
    GtkWidget *imageEntry;    /* image name entry field */
    GtkWidget *eccFileSel;    /* ecc file selector */
@@ -249,6 +253,12 @@ typedef struct _GlobalClosure
    /*** The raw editor window */
 
    void *rawEditorContext;
+
+   /*** The medium info window */
+
+   GtkWidget *mediumWindow;   /* Dialog for the medium info window */
+   GtkWidget *mediumDrive;
+   void *mediumInfoContext;   /* private data */
 
    /*** Common stuff for drawing curves and spirals */
 
@@ -355,6 +365,8 @@ typedef struct _EccInfo
 
 #define MFLAG_DEVEL (1<<0)    /* for methodFlags[3] */
 #define MFLAG_RC    (1<<1)                      
+
+#define MFLAG_DATA_MD5 (1<<0)  /* specific to RS03 */
 
 typedef struct _EccHeader
 {  gint8 cookie[12];           /* "*dvdisaster*" */
@@ -744,6 +756,12 @@ typedef enum
 
 void CreateMainWindow(int*, char***);
 void ContinueWithAction(int);
+
+/***
+ *** medium-info.c
+ ***/
+
+void CreateMediumInfoWindow(void);
 
 /***
  *** memtrack.c

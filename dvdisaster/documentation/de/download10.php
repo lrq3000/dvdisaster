@@ -19,7 +19,7 @@ begin_page();
 <ul>
  <li>Prozessoren: x86, PowerPC oder Sparc;<p></li>
  <li>Rechenleistung vergleichbar mit oder besser als P4 mit 2Ghz;<p>
- <li>ein aktuelles CD-/DVD-/HD-DVD-/BD-Laufwerk mit ATAPI- oder SCSI-Schnittstelle;<p></li>
+ <li>ein aktuelles CD-/DVD-/BD-Laufwerk mit ATAPI- oder SCSI-Schnittstelle;<p></li>
  <li>ausreichend Festplattenplatz zum Abspeichern eines ISO-Abbildes der bearbeiteten Datenträger.</li>
 </ul>
 

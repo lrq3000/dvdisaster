@@ -38,9 +38,10 @@ Originalversion nicht gibt (und wir können dessen Fehler nicht beheben).
 <li>Schauen Sie im <a href="qa20.php">Fragen und Antworten</a>-Bereich nach, ob das
 Problem dort bereits behandelt wird.</li>
 <li>Bitte beachten Sie daß dvdisaster nur mit (wieder-)beschreibbaren Datenträgern
-arbeitet. Es ist <b>kein Fehler</b>, daß dvdisaster <b>DVD-ROM</b>, <b>BD-ROM</b> und 
-<b>HD DVD-ROM</b> nicht akzeptiert. Ebenso werden CD-Audio, VCD, SVCD 
-und CDs mit Mehrfachsitzungen ("multisession") nicht unterstützt. Siehe auch die
+arbeitet. Es ist <b>kein Fehler</b>, daß dvdisaster <b>DVD-ROM</b> und <b>BD-ROM</b>
+nicht akzeptiert. Ebenso werden CD-Audio, VCD, SVCD 
+und CDs mit Mehrfachsitzungen ("multisession") sowie alle HD-DVD-Formate 
+nicht unterstützt. Siehe auch die
 <a href="qa10.php#media">vollständige Liste der unterstützten Formate</a>.</li>
 <li>dvdisaster funktioniert nur mit echten Laufwerken. Nicht unterstützt sind
 Netzwerklaufwerke, Software-Laufwerke (z.B. die Alkohol-Laufwerke :-), und

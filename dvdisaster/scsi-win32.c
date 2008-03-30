@@ -121,6 +121,8 @@ void CloseDevice(DeviceHandle *dh)
 
   if(dh->rs02Header)
     g_free(dh->rs02Header);
+  if(dh->typeDescr) 
+    g_free(dh->typeDescr);
   if(dh->mediumDescr) 
      g_free(dh->mediumDescr);
   if(dh->isoInfo)

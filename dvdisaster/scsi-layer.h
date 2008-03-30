@@ -60,45 +60,26 @@
 #ifdef SYS_LINUX
 #define MAX_CDB_SIZE CDROM_PACKET_SIZE
 
-typedef struct request_sense Sense;
+/* Now globally defined for all OSes here */
+//typedef struct request_sense Sense;
 #endif
 
 #ifdef SYS_FREEBSD
 #define MAX_CDB_SIZE SCSI_MAX_CDBLEN
-
-//typedef struct scsi_sense_data Sense;
-
-/* This is actually the little endian version of the
- * Linux Sense struct. FreeBSD does not have the asb entry.
- */
-
-typedef struct request_sense {
-	guint8 error_code		: 7;
-	guint8 valid			: 1;
-	guint8 segment_number;
-	guint8 sense_key		: 4;
-	guint8 reserved2		: 1;
-	guint8 ili			: 1;
-	guint8 reserved1		: 2;
-	guint8 information[4];
-	guint8 add_sense_len;
-	guint8 command_info[4];
-	guint8 asc;
-	guint8 ascq;
-	guint8 fruc;
-	guint8 sks[3];
-	guint8 asb[46];
-} Sense;
 #endif
 
-#ifdef SYS_MINGW
+#if defined(SYS_UNKNOWN) || defined(SYS_MINGW) || defined(SYS_NETBSD) || defined(SYS_SOLARIS) || defined(SYS_DARWIN)
 #define MAX_CDB_SIZE 16   /* longest possible SCSI command */
+#endif
 
-/* This is actually the little endian version of the
- * Linux Sense struct. Windows uses only the first 24 bytes.
+/* 
+ * The sense struct is named differently on various OSes,
+ * Some have subtle differences in the used data types.
+ * To avoid typecasting mayhem we simply reproduce the Linux
+ * version here and use it on all OS versions.
  */
 
-typedef struct request_sense {
+typedef struct _Sense {
 	guint8 error_code		: 7;
 	guint8 valid			: 1;
 	guint8 segment_number;
@@ -115,59 +96,6 @@ typedef struct request_sense {
 	guint8 sks[3];
 	guint8 asb[46];
 } Sense;
-#endif
-
-#if defined(SYS_UNKNOWN) || defined(SYS_NETBSD) || defined(SYS_SOLARIS)
-#define MAX_CDB_SIZE 16   /* longest possible SCSI command */
-
-/* This is actually the little endian version of the
- * Linux Sense struct. 
- */
-
-typedef struct request_sense {
-	guint8 error_code		: 7;
-	guint8 valid			: 1;
-	guint8 segment_number;
-	guint8 sense_key		: 4;
-	guint8 reserved2		: 1;
-	guint8 ili			: 1;
-	guint8 reserved1		: 2;
-	guint8 information[4];
-	guint8 add_sense_len;
-	guint8 command_info[4];
-	guint8 asc;
-	guint8 ascq;
-	guint8 fruc;
-	guint8 sks[3];
-	guint8 asb[46];
-} Sense;
-#endif
-
-#ifdef SYS_DARWIN
-#define MAX_CDB_SIZE 16   /* longest possible SCSI command */
-
-/* This is actually the little endian version of the
- * Linux Sense struct. 
- */
-
-typedef struct request_sense {
-	guint8 error_code		: 7;
-	guint8 valid			: 1;
-	guint8 segment_number;
-	guint8 sense_key		: 4;
-	guint8 reserved2		: 1;
-	guint8 ili			: 1;
-	guint8 reserved1		: 2;
-	guint8 information[4];
-	guint8 add_sense_len;
-	guint8 command_info[4];
-	guint8 asc;
-	guint8 ascq;
-	guint8 fruc;
-	guint8 sks[3];
-	guint8 asb[46];
-} Sense;
-#endif
 
 /***
  ***  The DeviceHandle is pretty much our device abstraction layer. 
@@ -231,13 +159,20 @@ typedef struct _DeviceHandle
     * Information about currently inserted medium 
     */
 
-   gint64 sectors;            /* Number of sectors */
-   int sessions;              
-   int layers;
+   gint64 sectors;            /* actually used number of sectors */
+   int sessions;              /* number of sessions */
+   int layers;                /* and layers */
    char manuID[20];           /* Manufacturer info from ADIP/lead-in */
    int mainType;              /* CD or DVD */
    int subType;               /* see enum below */
-   char *typedescr;           /* human readable form of subType */
+   char *typeDescr;           /* human readable form of subType */
+   int bookType;              /* book type */
+   char *bookDescr;           /* human readable of above */
+   int profile;               /* profile selected by drive */
+   char *profileDescr;        /* human readable form of above */
+   int isDash;                /* DVD- */
+   int isPlus;                /* DVD+ */
+   int discStatus;            /* obtained from READ DISC INFORMATION query */
    int rewriteable;
    char *mediumDescr;         /* textual description of medium */
 
@@ -249,7 +184,9 @@ typedef struct _DeviceHandle
     * size alternatives from different sources 
     */
 
+   gint64 readCapacity;       /* value returned by READ CAPACITY */
    gint64 userAreaSize;       /* size of user area according to DVD Info struct */
+   gint64 blankCapacity;      /* blank capacity (maybe 0 if query failed) */
    gint64 rs02Size;           /* size reported in RS02 header */
 
    /*
@@ -266,11 +203,35 @@ typedef struct _DeviceHandle
    Bitmap *defects;           /* for defect simulation */
 } DeviceHandle;
 
-/* These seem not to be standardized anywhere,
- * so we make up our own enum here.
+/* 
+ * Media types seem not to be standardized anywhere,
+ * so we make up our own here.
  */
 
-enum { DATA1, XA21, CD, DVD, HDDVD, BD, UNSUPPORTED };
+#define MAIN_TYPE_MASK 0xf0
+
+#define CD             0x10
+#define DATA1          0x11
+#define XA21           0x12
+
+#define DVD            0x20
+#define DVD_RAM        0x21
+#define DVD_DASH_R     0x22
+#define DVD_DASH_RW    0x23
+#define DVD_PLUS_R     0x24
+#define DVD_PLUS_RW    0x25
+#define DVD_DASH_R_DL  0x26
+#define DVD_DASH_RW_DL 0x27
+#define DVD_PLUS_R_DL  0x28
+#define DVD_PLUS_RW_DL 0x29
+
+#define BD             0x40
+#define BD_R           0x41
+#define BD_RE          0x42
+
+#define UNSUPPORTED    0x00 
+
+/* transport io modes */
 
 #define DATA_WRITE 0
 #define DATA_READ  1
@@ -305,6 +266,8 @@ enum
 };
 
 DeviceHandle* OpenAndQueryDevice(char*);
+DeviceHandle* QueryMediumInfo(char*);
+gint64 CurrentMediumSize(int);
 int  GetMediumFingerprint(DeviceHandle*, guint8*, gint64);
 void CloseDevice(DeviceHandle*);
 

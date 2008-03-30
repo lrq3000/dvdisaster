@@ -9,54 +9,48 @@
 # navigation and news if appropriate.
 
 require("../include/dvdisaster.php");
+require("../include/footnote.php");
 begin_page();
 ?>
 
 <!--- Insert actual page content below --->
 
-<h3>Beschädigten Datenträger einlesen</h3>
+<h3>Fehlerkorrektur-Daten auf dem Datenträger selbst unterbringen</h3>
 
-<table width="100%" cellspacing="5" valign="top">
-<tr>
+<table width="100%" cellspacing="5">
+<tr valign="top">
 <td width="20%"><b>Aufgabe</b></td>
 <td>
-Von einem beschädigten Datenträger werden so viele Sektoren wie möglich eingelesen.
+Fehlerkorrektur-Daten werden zusammen mit den Nutzdaten auf dem gleichen Datenträger
+abgelegt.
 </td>
 </tr>
 <tr><td> <pre> </pre> </td></tr>
 
-<tr>
-<td><b>Hinweis:</b></td>
-<td>Nur durch wiederholtes Einlesen ist eine Wiederherstellung des 
-Datenträger-Inhaltes sehr unwahrscheinlich. 
-Zur vollständigen Wiederherstellung werden  Fehlerkorrektur-Daten benötigt. 
+<tr valign="top">
+<td></td>
+<td>Hinweis: Hier wird beschrieben, wie Fehlerkorrektur-Daten auf dem Datenträger selbst
+untergebracht werden. 
+Es gibt auch eine Möglichkeit, Fehlerkorrektur-Daten in Form einer eigenständigen Datei
+zu erzeugen.
+<a href="howtos21.php">Möchten Sie eine Entscheidungshilfe?</a></td>
 <tr><td> <pre> </pre> </td></tr>
 
-
 <tr>
-<td colspan="2"><b>Benötigte Datenträger:</b><p></td>
+<td colspan="2"><b>Voraussetzungen:</b><p></td>
 </tr>
 
 <tr>
-<td><img src="../images/bad-cd.png"></td>
+<td><img src="../images/good-image.png"></td>
 <td>
-Diese Funktion ist auf das Lesen von beschädigten Datenträgern spezialisiert.
+<ul>
+<li>eine (Brenn-)Software, die ISO-Abbilder erzeugen kann</li>
+<li>der zu schützende Datenträger soll erst noch gebrannt werden
+<a href="#footnote"><sup>*)</sup></a></li>
+<li>mindestens 20% sind noch auf dem zu erzeugenden Datenträger frei</li>
+</ul>
 </tr>
 <tr><td> <pre> </pre> </td></tr>
-
-<tr>
-<td colspan="2"><b>Nutzbare Zusatzdaten:</b></td>
-</tr>
-
-<tr>
-<td><img src="../images/ecc.png"></td>
-<td>
-dvdisaster reduziert den Leseaufwand auf das benötigte Minimum, um das Abbild
-mit Hilfe der Fehlerkorrektur-Daten wiederherzustellen.
-</td>
-</tr>
-<tr><td> <pre> </pre> </td></tr>
-
 
 <tr>
 <td colspan="2"><b>Durchzuführende Schritte:<p></b></td>
@@ -65,16 +59,27 @@ mit Hilfe der Fehlerkorrektur-Daten wiederherzustellen.
 <tr>
 <td></td>
 <td>
-1. Grundeinstellungen zum Lesen beschädigter Datenträger vornehmen<br>
-2. ISO-Abbild des Datenträgers erstellen (soweit möglich)<br>
+1. <a href="howtos32.php">ISO-Abbild der zu schreibenden Daten erzeugen</a><br>
+2. <a href="howtos33.php">Grundeinstellungen für die Fehlerkorrektur-Daten vornehmen</a><br>
+2. <a href="howtos34.php">ISO-Abbild um Fehlerkorrektur-Daten erweitern</a><br>
+3. <a href="howtos35.php">ISO-Abbild auf den Datenträger schreiben</a>
 </td>
 </tr>
 </table><p>
 
+<a href="howtos32.php">ISO-Abbild erzeugen...</a>
+
+<pre>
+
+
+</pre>
+
 <!--- do not change below --->
 
 <?php
-# end_page() adds the footer line and closes the HTML properly.
+footnote("*","footnote","Ein bereits geschriebener Datenträger kann nicht mehr nachträglich um
+Fehlerkorrektur-Daten erweitert werden.");
 
+# end_page() adds the footer line and closes the HTML properly.
 end_page();
 ?>

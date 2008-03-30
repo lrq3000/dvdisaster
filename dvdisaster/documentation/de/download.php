@@ -141,7 +141,7 @@ betrachtet werden. Einige interessante Dateien darin sind:
 </table><p>
 
 <?php
-footnote("*","gpl3","dvdisaster wird zu einem späteren Zeitpunkt zur GNU General Public License Version 3 wechseln..");
+footnote("*","gpl3","dvdisaster wird zu einem späteren Zeitpunkt zur GNU General Public License Version 3 wechseln.");
 ?>
 
 <!--- do not change below --->

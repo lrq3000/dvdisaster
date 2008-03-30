@@ -21,6 +21,8 @@
 
 #include "dvdisaster.h"
 
+extern int CurrentMediumSize(int);  /* from scsi-layer.h */
+
 /***
  *** debugging workaround
  ***/
@@ -227,7 +229,7 @@ void HidePreferences(void)
 
    /* Get fill byte and recalculate the dead sector marker */
 
-   if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pc->byteCheckA)))   
+   if(pc->byteCheckA && gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pc->byteCheckA)))   
    {  const char *value1 = gtk_entry_get_text(GTK_ENTRY(pc->byteEntryA));
       const char *value2 = gtk_entry_get_text(GTK_ENTRY(pc->byteEntryB));
       int v1 = strtol(value1, NULL, 0);
@@ -539,7 +541,7 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 	break;
 
       case TOGGLE_RANGE:
-      {  int image_size = CurrentImageSize() - 1;
+      {  int image_size = CurrentMediumSize(FALSE) - 1;
 
 	 set_widget_sensitive(pc->rangeSpin1A, state);
 	 set_widget_sensitive(pc->rangeSpin1B, state);

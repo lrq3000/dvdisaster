@@ -37,8 +37,10 @@ may contain functions and bugs which are not present in the original version
 <li>Double check that the issue you have encountered is not already covered in the
 <a href="qa20.php">Questions and Answers</a> section.</li>
 <li>Please note that dvdisaster will only work with the (re-)writeable varieties
-of media, so seeing it <b>reject</b> <b>DVD-ROM</b>, <b>BD-ROM</b> and <b>HD DVD-ROM</b>
-is <b>not an error</b>. Also, CD-Audio, VCD, SVCD and multisession CD are not supported 
+of media, so seeing it <b>reject</b> <b>DVD-ROM</b> and <b>BD-ROM</b> 
+is <b>not an error</b>. 
+Also, CD-Audio, VCD, SVCD and multisession CD are not supported as well as all
+HD-DVD formats
 (<a href="qa10.php#media">complete list of supported media formats</a>).</li>
 <li>dvdisaster works only with real drives. Not supported are
 network drives, software drives (e.g. alcohol) and drives in virtual 

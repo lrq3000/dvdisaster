@@ -44,6 +44,7 @@ typedef enum
      MENU_FILE_ECC_DESTROY,
    MENU_FILE_QUIT,
 
+   MENU_TOOLS_MEDIUM_INFO,
    MENU_TOOLS_RAW_EDITOR,
 
    MENU_PREFERENCES,
@@ -86,6 +87,10 @@ static void menu_cb(GtkWidget *widget, gpointer data)
 
         gtk_main_quit();
         break;
+
+      case MENU_TOOLS_MEDIUM_INFO:
+	 CreateMediumInfoWindow();
+	 break;
 
       case MENU_TOOLS_RAW_EDITOR:
 	 CreateRawEditor();
@@ -142,7 +147,7 @@ static void menu_cb(GtkWidget *widget, gpointer data)
  * Helper functions for creating the menu system
  */
 
-static void add_menu_button(GtkWidget *parent, char *title, int action)
+static GtkWidget* add_menu_button(GtkWidget *parent, char *title, int action)
 {  char *utf_title = g_locale_to_utf8(title, -1, NULL, NULL, NULL);
    GtkWidget *item;
 
@@ -150,6 +155,8 @@ static void add_menu_button(GtkWidget *parent, char *title, int action)
    g_free(utf_title);
    gtk_menu_shell_append(GTK_MENU_SHELL(parent), item);
    g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(menu_cb), GINT_TO_POINTER(action));
+
+   return item;
 }
 
 static void add_menu_separator(GtkWidget *parent)
@@ -177,7 +184,7 @@ static void append_sub_menu(GtkWidget *parent, GtkWidget *strip, char *name)
  */
 
 GtkWidget *CreateMenuBar(GtkWidget *parent)
-{  GtkWidget *menu_bar, *menu_anchor, *menu_strip;
+{  GtkWidget *menu_bar, *menu_anchor, *menu_strip, *item;
 
    /* The overall menu bar */
 
@@ -198,16 +205,17 @@ GtkWidget *CreateMenuBar(GtkWidget *parent)
 
    /* The tools menu */
 
-   if(Closure->debugMode && !Closure->screenShotMode)
-   {
-      menu_strip = gtk_menu_new();
+   menu_strip = gtk_menu_new();
+   item = add_menu_button(menu_strip, _("menu|Medium info"), MENU_TOOLS_MEDIUM_INFO);
+   if(!Closure->deviceNodes->len)
+     gtk_widget_set_sensitive(item, FALSE);
 
+   if(Closure->debugMode && !Closure->screenShotMode)
       add_menu_button(menu_strip, _("menu|Raw sector editor"), MENU_TOOLS_RAW_EDITOR);
    
-      menu_anchor = gtk_menu_item_new_with_label(_utf("menu|Tools"));
-      gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_anchor), menu_strip);
-      gtk_menu_bar_append(GTK_MENU_BAR(menu_bar), menu_anchor);
-   }
+   menu_anchor = gtk_menu_item_new_with_label(_utf("menu|Tools"));
+   gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_anchor), menu_strip);
+   gtk_menu_bar_append(GTK_MENU_BAR(menu_bar), menu_anchor);
 
    /* The help menu */
 
@@ -292,6 +300,9 @@ static void drive_select_cb(GtkWidget *widget, gpointer data)
    dnode = g_ptr_array_index(Closure->deviceNodes, n);
    g_free(Closure->device);
    Closure->device = g_strdup(dnode);
+
+   if(Closure->mediumDrive) /* propagate to medium info window */
+     gtk_combo_box_set_active(GTK_COMBO_BOX(Closure->mediumDrive), n);
 }
 
 /*
@@ -454,7 +465,7 @@ GtkWidget *CreateToolBar(GtkWidget *parent)
    icon = gtk_image_new_from_stock(GTK_STOCK_CDROM, GTK_ICON_SIZE_LARGE_TOOLBAR);
    gtk_container_add(GTK_CONTAINER(ebox), icon);
 
-   combo_box = gtk_combo_box_new_text();
+   Closure->driveCombo = combo_box = gtk_combo_box_new_text();
 
    g_signal_connect(G_OBJECT(combo_box), "changed", G_CALLBACK(drive_select_cb), NULL);
 

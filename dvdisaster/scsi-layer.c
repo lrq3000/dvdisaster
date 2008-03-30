@@ -133,127 +133,310 @@ int InquireDevice(DeviceHandle *dh, int probe_only)
 }
 
 /*
- * Find out what type of disc has been inserted.
+ * Ask drive for active profile; this give us a hint
+ * about the kind of medium the drive believes to see
  */
 
-static int query_type(DeviceHandle *dh, int probe_only)
-{  static char sbuf[32];
-   AlignedBuffer *ab = CreateAlignedBuffer(2048);
-   unsigned char *buf = ab->buf;
-   Sense sense;
+static int get_configuration(DeviceHandle *dh)
+{  AlignedBuffer *ab;
+   Sense *sense = &dh->sense;
    unsigned char cmd[MAX_CDB_SIZE];
-   unsigned int length;
-   int control;
-   unsigned int ua_start,ua_end,ua_end0;
-   int phy_info4, phy_info6;
-   int is_dvd_plus = FALSE;
-   int is_dvd_dash = FALSE;
-   int is_hd_dvd   = FALSE;
-   int book_type   = 0;
-   int i;
+   guint32 data_length;
+   int len,ret;
 
-   Verbose("# *** query_type(%s, %d) ***\n", dh->devinfo, probe_only);
-   Verbose("#BD: starting media probe\n");
+   Verbose("# *** get_configuration(%s) ***\n", dh->devinfo);
 
-   /*** If the medium is a BD, the following will succeed. */
-
-   dh->mainType    = BD;
-   dh->read        = read_dvd_sector;
-   dh->singleRate  = 36000.0/8.0;  /* 1x = 36 kbit */
-   dh->maxRate     = 8;
-   dh->clusterSize = 32;
-
-   /* Query length of returned data */
+   len = 2048;
+   ab = CreateAlignedBuffer(len); 
 
    memset(cmd, 0, MAX_CDB_SIZE);
-   cmd[0] = 0xad;     /* READ DVD STRUCTURE */
-   cmd[1] = 0x01;     /* subcommand for BD */
-   cmd[6] = 0;        /* First layer */
-   cmd[7] = 0;        /* We want DI (disc information) */
-   cmd[8] = 0;        /* Allocation length */
-   cmd[9] = 2;
+   cmd[0] = 0x46;      /* GET CONFIGURATION */
+   cmd[1] = 1;         /* only current features */
+   cmd[7] = len>>8;    /* buffer size */
+   cmd[8] = len&0xff;  
 
-   /*** Only a BD should respond positively here */
-   
-   Verbose("#BD: trying READ DVD with BD subcommand for size\n");
-   if(SendPacket(dh, cmd, 12, buf, 2, &sense, DATA_READ)<0)
-   {  
-	Verbose(_("%s\nCould not query BD disc structure length.\n"), 
-	     GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
-   
-      goto try_dvd;
+   ret = SendPacket(dh, cmd, 10, ab->buf, len, sense, DATA_READ);
+
+   if(ret<0) 
+   {  RememberSense(sense->sense_key, sense->asc, sense->ascq);
+      Verbose("# -> failure\n");
    }
 
-   length = buf[0]<<8 | buf[1];
-   length += 2;
-   Verbose("#BD: disc structure query succeeded, length %d bytes\n", length);
+   data_length = ab->buf[0]<<24 | ab->buf[1] | ab->buf[2] | ab->buf[3];
+   dh->profile = ab->buf[6]<<8 | ab->buf[7];
+   FreeAlignedBuffer(ab);
 
-   /*** Some DVD drives ignore the media type 0x01 and return the dvd structure.
-	Since the DVD structure is 2052 bytes while the BD DI is 4100 bytes,
-	we can tell from the size whether we have been fooled. */
+   Verbose("# %d data len, %x current\n", data_length, dh->profile);
 
-   if(length != 4100) /* not a BD */
-      goto try_dvd;
+   switch(dh->profile)
+   {  /* Note: subType handling is different for CD for historical reasons */
+      case 0x08: dh->profileDescr = "CD-ROM";
+                 dh->mainType = CD;
+	         break;
+      case 0x09: dh->profileDescr = "CD-R";
+                 dh->mainType = CD;
+	         break;
+      case 0x0a: dh->profileDescr = "CD-RW";
+                 dh->mainType = CD;
+		 dh->rewriteable = TRUE;
+	         break;
 
-   /* Do the real query */
+      case 0x10: dh->profileDescr = "DVD-ROM";
+                 dh->mainType = DVD;
+		 dh->subType = DVD;
+	         break;
+      case 0x11: dh->profileDescr = "DVD-R Sequential recording";
+	         dh->mainType = DVD; dh->isDash = TRUE;
+		 dh->subType = DVD_DASH_R;
+	         break;
+      case 0x12: dh->profileDescr = "DVD-RAM";
+                 dh->mainType = DVD;
+		 dh->rewriteable = TRUE;
+		 dh->subType = DVD_RAM;
+	         break;
+      case 0x13: dh->profileDescr = "DVD-RW Restricted overwrite";
+	         dh->mainType = DVD; dh->isDash = TRUE;
+		 dh->rewriteable = TRUE;
+		 dh->subType = DVD_DASH_RW;
+	         break;
+      case 0x14: dh->profileDescr = "DVD-RW Sequential overwrite";
+	         dh->mainType = DVD; dh->isDash = TRUE;
+		 dh->rewriteable = TRUE;
+		 dh->subType = DVD_DASH_RW;
+	         break;
+      case 0x15: dh->profileDescr = "DVD-R DL Sequential recording";
+	         dh->mainType = DVD; dh->isDash = TRUE;
+		 dh->subType = DVD_DASH_R_DL;
+	         break;
+      case 0x16: dh->profileDescr = "DVD-R DL Layer jump recording";
+	         dh->mainType = DVD; dh->isDash = TRUE;
+		 dh->subType = DVD_DASH_R_DL;
+	         break;
+      case 0x17: dh->profileDescr = "DVD-RW DL";
+	         dh->mainType = DVD; dh->isDash = TRUE;
+		 dh->rewriteable = TRUE;
+		 dh->subType = DVD_DASH_RW_DL;
+	         break;
 
+      case 0x1a: dh->profileDescr = "DVD+RW";
+	         dh->mainType = DVD; dh->isPlus = TRUE;
+		 dh->rewriteable = TRUE;
+		 dh->subType = DVD_PLUS_RW;
+	         break;
+      case 0x1b: dh->profileDescr = "DVD+R";
+	         dh->mainType = DVD; dh->isPlus = TRUE;
+		 dh->subType = DVD_PLUS_R;
+	         break;
+      case 0x2a: dh->profileDescr = "DVD+RW DL";
+	         dh->mainType = DVD; dh->isPlus = TRUE;
+		 dh->rewriteable = TRUE;
+		 dh->subType = DVD_PLUS_RW_DL;
+	         break;
+      case 0x2b: dh->profileDescr = "DVD+R DL";
+	         dh->mainType = DVD; dh->isPlus = TRUE;
+		 dh->subType = DVD_PLUS_R_DL;
+	         break;
+
+      case 0x40: dh->profileDescr = "BD-ROM";
+	         dh->mainType = BD;
+		 dh->subType = BD;
+	         break;
+      case 0x41: dh->profileDescr = "BD-R Sequential recording mode";
+	         dh->mainType = BD;
+		 dh->subType = BD_R;
+	         break;
+      case 0x42: dh->profileDescr = "BD-R Random recording mode";
+	         dh->mainType = BD;
+		 dh->subType = BD_R;
+	         break;
+      case 0x43: dh->profileDescr = "BD-RE";
+	         dh->mainType = BD;
+		 dh->rewriteable = TRUE;
+		 dh->subType = BD_RE;
+	         break;
+
+      default:   dh->profileDescr = "Unknown profile";
+	         dh->mainType = UNSUPPORTED;
+		 dh->subType = UNSUPPORTED;
+	         break;
+   }
+
+   return ret;
+}
+
+/*
+ * CD specific probing
+ */
+
+static int query_cd(DeviceHandle *dh, int probe_only)
+{  AlignedBuffer *ab = CreateAlignedBuffer(4096);
+   unsigned char *buf = ab->buf;
+   unsigned char cmd[MAX_CDB_SIZE];
+   Sense *sense = &dh->sense;
+   unsigned int length;
+   int control;
+
+   Verbose("#CD: starting media probe\n");
+
+   /*** First, do a READ TOC with format 0 to fetch the CONTROL field. */
+   
    memset(cmd, 0, MAX_CDB_SIZE);
-   cmd[0] = 0xad;     /* READ DVD STRUCTURE */
-   cmd[1] = 0x01;     /* subcommand for BD */
-   cmd[6] = 0;        /* First layer */
-   cmd[7] = 0;        /* We want DI (disc information) */
-   cmd[8] = (length>>8) & 0xff;  /* Allocation length */
-   cmd[9] = length & 0xff;
+   cmd[0] = 0x43;  /* READ TOC/PMA/ATIP */
+   cmd[2] = 0;     /* format; we want the TOC */
+   cmd[6] = 1;     /* track/session number */
+   cmd[7] = 0;     /* allocation length */
+   cmd[8] = 2;
 
-   Verbose("#BD: trying READ DVD with BD subcommand for real query\n");
-   if(SendPacket(dh, cmd, 12, buf, length, &sense, DATA_READ)<0)
-   {  FreeAlignedBuffer(ab);
-      Stop(_("%s\nCould not query BD disc structure.\n"),
-	   GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
+   Verbose("#CD: querying size of READ TOC/PMA/ATIP (for TOC)\n");
+   if(SendPacket(dh, cmd, 10, buf, 2, sense, DATA_READ)<0)
+   {  if(!probe_only)
+      {  FreeAlignedBuffer(ab);
+         Stop(_("%s\nCould not query TOC length.\n"),
+	      GetSenseString(sense->sense_key, sense->asc, sense->ascq, TRUE));
+      }
+      /* Blank CDs have no TOC, so they fail here.
+	 Give back some meaningful medium description. */
+      dh->typeDescr = g_strdup_printf("%s (%s)", dh->profileDescr, _("blank"));
       return FALSE;
    }
 
+   length = buf[0]<<8 | buf[1];
+   length += 2  ;  /* MMC3: "Disc information length excludes itself" */
+   Verbose("#CD: size returned is %d\n", length);
+
+   if(length>1024) /* don't let the drive hack us using a buffer overflow ;-) */
+   {  if(Closure->verbose)
+	 HexDump(buf, 1024, 16);
+
+      FreeAlignedBuffer(ab);
+      Stop(_("TOC info too long (%d), probably multisession.\n"),length);
+      return FALSE;
+   }
+
+   memset(cmd, 0, MAX_CDB_SIZE);
+   cmd[0] = 0x43;  /* READ TOC/PMA/ATIP */
+   cmd[2] = 0;     /* format; we want the TOC */
+   cmd[6] = 1;     /* track/session number */
+   cmd[7] = (length>>8) & 0xff; /* allocation length */
+   cmd[8] = length & 0xff;
+
+   Verbose("#CD: querying real READ TOC/PMA/ATIP (for TOC)\n");
+   if(SendPacket(dh, cmd, 10, buf, length, sense, DATA_READ)<0)
+   {  FreeAlignedBuffer(ab);
+      Stop(_("%s\nCould not read TOC.\n"),
+	   GetSenseString(sense->sense_key, sense->asc, sense->ascq, TRUE));
+      return FALSE;
+   }
    if(Closure->verbose)
       HexDump(buf, length, 16);
 
-   dh->layers = 0;        /* n.a. ? */
-   dh->sessions = 1;
-   dh->userAreaSize = 0;  /* n.a. ? */
+   control = buf[5];
+   Verbose("#CD: control is 0x%x\n", control);
+   
+   /*** Do the READ TOC again with format 2 to fetch the full toc
+        as we want the disc type info also. 
+	We do not use the CONTROL data included here as it turned
+	out to be invalid on certain CD-ROMs. Bleah. */
 
-   for(i=0; i<6; i++)
-      dh->manuID[i] = isprint(buf[4+100+i]) ? buf[4+100+i] : ' ';
-   dh->manuID[6] = 0;
+   memset(cmd, 0, MAX_CDB_SIZE);
+   cmd[0] = 0x43;  /* READ TOC/PMA/ATIP */
+   cmd[1] = 0x02;  /* TIME bit required for this format */
+   cmd[2] = 2;     /* format; we want the full TOC */
+   cmd[6] = 1;     /* track/session number */
+   cmd[7] = 0;     /* allocation length */
+   cmd[8] = 2;
 
-   if(!strncmp((char*)&buf[4+8], "BDO", 3))
-   {  dh->typedescr = "BD-ROM";
+   Verbose("#CD: querying size of READ TOC/PMA/ATIP (for full TOC)\n");
+   if(SendPacket(dh, cmd, 10, buf, 2, sense, DATA_READ)<0)
+   {  FreeAlignedBuffer(ab);
+      Stop(_("%s\nCould not query full TOC length.\n"),
+	   GetSenseString(sense->sense_key, sense->asc, sense->ascq, TRUE));
+      return FALSE;
+   }
+
+   length = buf[0]<<8 | buf[1];
+   length += 2;    /* MMC3: "Disc information length excludes itself" */
+   Verbose("#CD: size returned is %d\n", length);
+
+   if(length < 15)
+   {  FreeAlignedBuffer(ab);
+      Stop(_("TOC info too short, length %d.\n"),length);
+      return FALSE;
+   }
+   if(length>1024) /* don't let the drive hack us using a buffer overflow ;-) */
+   {  FreeAlignedBuffer(ab);
+      Stop(_("TOC info too long (%d), probably multisession.\n"),length);
+      return FALSE;
+   }
+
+   memset(cmd, 0, MAX_CDB_SIZE);
+   cmd[0] = 0x43;  /* READ TOC/PMA/ATIP */
+   cmd[1] = 0x02;  /* TIME bit required for this format */
+   cmd[2] = 2;     /* format; we want the full TOC */
+   cmd[6] = 1;     /* track/session number */
+   cmd[7] = (length>>8) & 0xff; /* allocation length */
+   cmd[8] = length & 0xff;
+
+   Verbose("#CD: querying real READ TOC/PMA/ATIP (for full TOC)\n");
+   if(SendPacket(dh, cmd, 10, buf, length, sense, DATA_READ)<0)
+   {  FreeAlignedBuffer(ab);
+      Stop(_("%s\nCould not read full TOC.\n"),
+	   GetSenseString(sense->sense_key, sense->asc, sense->ascq, TRUE));
+      return FALSE;
+   }
+   if(Closure->verbose)
+      HexDump(buf, length, 16);
+
+   if(buf[7] != 0xa0)
+   {  int i;
+      PrintLog(_("\nUnexpected TOC format (length %d):\n"),length);
+
+      for(i=0; i<(int)length; i++) 
+      {  PrintLog("%02x ",buf[i]);
+	 if(i==3 || (i-3)%11 == 0) PrintLog("\n");
+      }
+      FreeAlignedBuffer(ab);
+      Stop(_("Consider sending a bug report.\n"));
+      return FALSE;
+   }
+
+   dh->sessions = buf[3];
+   Verbose("#CD: %d sessions\n", dh->sessions);
+
+   if(control & 4)
+     switch(buf[13])
+     {  case 0x00: dh->typeDescr = g_strdup_printf("%s mode 1", dh->profileDescr); dh->subType = DATA1; break;
+        case 0x10: dh->typeDescr = g_strdup_printf("%s/CD-I", dh->profileDescr); dh->subType = UNSUPPORTED; break;
+        case 0x20: dh->typeDescr = g_strdup_printf("%s XA",dh->profileDescr); dh->subType = XA21; break;
+        default:   dh->typeDescr = g_strdup_printf("%s ??",dh->profileDescr); dh->subType = UNSUPPORTED; break;
+     }
+   else 
+   {  dh->typeDescr = g_strdup_printf("%s Audio", dh->profileDescr); 
       dh->subType = UNSUPPORTED;
    }
 
-   if(!strncmp((char*)&buf[4+8], "BDW", 3))
-   {  dh->typedescr = "BD-RE";
-      dh->subType = BD;
-   }
-
-   if(!strncmp((char*)&buf[4+8], "BDR", 3))
-   {  dh->typedescr = "BD-R";
-      dh->subType = BD;
-   }
-
-   Verbose("#BD: BD medium detected, type %s\n", dh->typedescr);
    FreeAlignedBuffer(ab);
+   Verbose("#CD: CD medium detected, type: %s\n", dh->typeDescr);
    return TRUE;
+}
 
-   /*** If the medium is a DVD, the following query will succeed. */
+/*
+ * DVD specific probing
+ */
 
-try_dvd:
+static int query_dvd(DeviceHandle *dh, int probe_only)
+{  AlignedBuffer *ab = CreateAlignedBuffer(4096);
+   unsigned char *buf = ab->buf;
+   unsigned char cmd[MAX_CDB_SIZE];
+   Sense *sense = &dh->sense;
+   unsigned int ua_start,ua_end,ua_end0;
+   int phy_info4, phy_info6;
+   unsigned int length;
+   int i;
+
    Verbose("#DVD: starting media probe\n");
-   dh->mainType    = DVD;  /* default assumption */
-   dh->read        = read_dvd_sector;
-   dh->singleRate  = 1352.54;
-   dh->maxRate     = 17;
-   dh->clusterSize = 16;
 
-   /* Query length of returned data */
+   /* Query length of returned data for READ DVD STRUCTURE */
 
    memset(cmd, 0, MAX_CDB_SIZE);
    cmd[0] = 0xad;     /* READ DVD STRUCTURE */
@@ -262,20 +445,13 @@ try_dvd:
    cmd[8] = 0;        /* Allocation length */
    cmd[9] = 2;
 
-   /* Different drives react with different error codes on this request;
-      especially CDROMs seem to react very indeterministic here 
-      (okay, they obviously do not know about DVD cdbs).
-      So we do not look for specific error and regard any failure as a sign
-      that the medium is not a DVD. */
-
    Verbose("#DVD: trying READ DVD for size of PHYSICAL info\n");
-   if(SendPacket(dh, cmd, 12, buf, 2, &sense, DATA_READ)<0)
-   {  
-      if(Closure->verbose)
-	Verbose(_("%s\nCould not query dvd structure length.\n"), 
-	     GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
-   
-      goto assume_cd;
+   if(SendPacket(dh, cmd, 12, buf, 2, sense, DATA_READ)<0)
+   {  FreeAlignedBuffer(ab);
+      if(!probe_only)
+	 Stop(_("%s\nCould not query dvd structure length.\n"), 
+	      GetSenseString(sense->sense_key, sense->asc, sense->ascq, TRUE));
+      return FALSE;
    }
 
    length = buf[0]<<8 | buf[1];
@@ -298,27 +474,17 @@ try_dvd:
    cmd[9] = length & 0xff;
 
    Verbose("#DVD: trying READ DVD for real PHYSICAL info\n");
-   if(SendPacket(dh, cmd, 12, buf, length, &sense, DATA_READ)<0)
+   if(SendPacket(dh, cmd, 12, buf, length, sense, DATA_READ)<0)
    {  FreeAlignedBuffer(ab);
       Stop(_("%s\nCould not query physical dvd structure.\n"),
-	   GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
+	   GetSenseString(sense->sense_key, sense->asc, sense->ascq, TRUE));
       return FALSE;
    }
    if(Closure->verbose)
       HexDump(buf, length, 16);
 
-   /* Determine whether we have DVD or HD DVD */
-
-   book_type = (buf[4]>>4) & 0x0f;
-   is_hd_dvd = (book_type >= 4 && book_type <= 6);
-   Verbose("#DVD: book type %d; is HD DVD: %d\n", book_type, is_hd_dvd);
-
-   if(is_hd_dvd)
-   {  dh->mainType    = HDDVD;
-      dh->singleRate  = 36550.0/8.0;  /* 1x = 36.5 kbit */
-      dh->maxRate     = 8;
-      dh->clusterSize = 32;
-   }
+   dh->bookType = (buf[4]>>4) & 0x0f;
+   Verbose("#DVD: book type %d\n", dh->bookType);
 
    /* Determine number of layers */
 
@@ -335,20 +501,20 @@ try_dvd:
    Verbose("#DVD: ua_start/_end/_end0: %d %d %d\n", ua_start, ua_end, ua_end0);
 
    if(dh->layers == 1)
-   {  gint64 max_size = is_hd_dvd ? MAX_HD_DVD_SL_SIZE : MAX_DVD_SL_SIZE;
+   {  
       dh->userAreaSize = (gint64)(ua_end-ua_start);
 
-      if(dh->userAreaSize < 0 || dh->userAreaSize > max_size)
+      if(dh->userAreaSize < 0 || dh->userAreaSize > MAX_DVD_SL_SIZE)
       {  LogWarning(_("READ DVD STRUCTURE: implausible medium size, %lld-%lld=%lld sectors\n"),
 		    (gint64)ua_end, (gint64)ua_start, (gint64)dh->userAreaSize);
 	 dh->userAreaSize = 0;
       }
    }
    else 
-   {  gint64 max_size = is_hd_dvd ? MAX_HD_DVD_DL_SIZE : MAX_DVD_DL_SIZE;
+   {  
       dh->userAreaSize = (gint64)(ua_end0-ua_start)*2;
 
-      if(dh->userAreaSize < 0 || dh->userAreaSize > max_size)
+      if(dh->userAreaSize < 0 || dh->userAreaSize > MAX_DVD_DL_SIZE)
       {  LogWarning(_("READ DVD STRUCTURE: implausible medium size, %lld-%lld=%lld sectors\n"),
 		    (gint64)ua_end0, (gint64)ua_start, (gint64)dh->userAreaSize);
 	 dh->userAreaSize = 0;
@@ -393,101 +559,97 @@ try_dvd:
    /* Try getting ADIP information. 
       This is more reliable than the physical info. */
 
-   if(!is_hd_dvd)
-   {  memset(cmd, 0, MAX_CDB_SIZE);
-      cmd[0] = 0xad;     /* READ DVD STRUCTURE */
-      cmd[6] = 0;        /* First layer */
-      cmd[7] = 0x11;     /* We want the ADIP */
-      cmd[8] = 0;        /* Allocation length */
-      cmd[9] = 2;
+   memset(cmd, 0, MAX_CDB_SIZE);
+   cmd[0] = 0xad;     /* READ DVD STRUCTURE */
+   cmd[6] = 0;        /* First layer */
+   cmd[7] = 0x11;     /* We want the ADIP */
+   cmd[8] = 0;        /* Allocation length */
+   cmd[9] = 2;
 
-      Verbose("#DVD: trying READ DVD for size of ADIP\n");
-      if(SendPacket(dh, cmd, 12, buf, 2, &sense, DATA_READ) == 0)
-      {  length = buf[0]<<8 | buf[1];
-	 length += 2;
+   Verbose("#DVD: trying READ DVD for size of ADIP\n");
+   if(SendPacket(dh, cmd, 12, buf, 2, sense, DATA_READ) == 0)
+   {  length = buf[0]<<8 | buf[1];
+      length += 2;
 
-	 Verbose("#DVD: size returned is %d\n", length);
+      Verbose("#DVD: size returned is %d\n", length);
 
-	 if(length < 4096)
-	 {  memset(cmd, 0, MAX_CDB_SIZE);
-	    cmd[0] = 0xad;     /* READ DVD STRUCTURE */
-	    cmd[6] = 0;        /* First layer */
-	    cmd[7] = 0x11;     /* We want the ADIP */
-	    cmd[8] = (length>>8) & 0xff;  /* Allocation length */
-	    cmd[9] = length & 0xff;
+      if(length < 4096)
+      {  memset(cmd, 0, MAX_CDB_SIZE);
+	 cmd[0] = 0xad;     /* READ DVD STRUCTURE */
+	 cmd[6] = 0;        /* First layer */
+	 cmd[7] = 0x11;     /* We want the ADIP */
+	 cmd[8] = (length>>8) & 0xff;  /* Allocation length */
+	 cmd[9] = length & 0xff;
 	    
-	    Verbose("#DVD: trying READ DVD for real ADIP\n");
-	    if(SendPacket(dh, cmd, 12, buf, length, &sense, DATA_READ) == 0)
-	    {  int i;
+	 Verbose("#DVD: trying READ DVD for real ADIP\n");
+	 if(SendPacket(dh, cmd, 12, buf, length, sense, DATA_READ) == 0)
+	 {  int i;
 
-	       if(Closure->verbose)
-		  HexDump(buf, length, 16);
+	    if(Closure->verbose)
+	      HexDump(buf, length, 16);
 
-	       is_dvd_plus = TRUE;
-	       phy_info4 = buf[4];
-	       phy_info6 = buf[6];
-	       Verbose("#DVD: assuming DVD plus; phy_info4/6 now 0x%x 0x%x\n", phy_info4, phy_info6);
+	    dh->isPlus = TRUE;
+	    phy_info4 = buf[4];
+	    phy_info6 = buf[6];
+	    Verbose("#DVD: assuming DVD plus; phy_info4/6 now 0x%x 0x%x\n", phy_info4, phy_info6);
 
-	       for(i=0; i<11; i++)
-		  dh->manuID[i] = isprint(buf[23+i]) ? buf[23+i] : ' ';
-	       dh->manuID[11] = 0;
+	    for(i=0; i<11; i++)
+	      dh->manuID[i] = isprint(buf[23+i]) ? buf[23+i] : ' ';
+	    dh->manuID[11] = 0;
 
-	       for(i=10; i>=0; i--)
-		  if(dh->manuID[i] == ' ') dh->manuID[i] = 0;
-		  else break;
-	    }
+	    for(i=10; i>=0; i--)
+	      if(dh->manuID[i] == ' ') dh->manuID[i] = 0;
+	      else break;
 	 }
       }
-      else Verbose("#DVD: no ADIP\n");
    }
+   else Verbose("#DVD: no ADIP\n");
 
    /* Get pre-recorded info from lead-in (only on -R/-RW media).
       Only used for getting the manufacturer ID. */
    
-   if(!is_hd_dvd)
-   {  memset(cmd, 0, MAX_CDB_SIZE);
-      cmd[0] = 0xad;     /* READ DVD STRUCTURE */
-      cmd[6] = 0;        /* First layer */
-      cmd[7] = 0x0E;     /* We want the lead-in info */
-      cmd[8] = 0;        /* Allocation length */
-      cmd[9] = 2;
+   memset(cmd, 0, MAX_CDB_SIZE);
+   cmd[0] = 0xad;     /* READ DVD STRUCTURE */
+   cmd[6] = 0;        /* First layer */
+   cmd[7] = 0x0E;     /* We want the lead-in info */
+   cmd[8] = 0;        /* Allocation length */
+   cmd[9] = 2;
 
-      Verbose("#DVD: trying READ DVD for size of lead-in\n");
-      if(SendPacket(dh, cmd, 12, buf, 2, &sense, DATA_READ) == 0)
-      {  length = buf[0]<<8 | buf[1];
-	 length += 2;
+   Verbose("#DVD: trying READ DVD for size of lead-in\n");
+   if(SendPacket(dh, cmd, 12, buf, 2, sense, DATA_READ) == 0)
+   {  length = buf[0]<<8 | buf[1];
+      length += 2;
 
-	 Verbose("#DVD: size returned is %d\n", length);
-	 if(length < 4096)
-	 {  memset(cmd, 0, MAX_CDB_SIZE);
-	    cmd[0] = 0xad;     /* READ DVD STRUCTURE */
-	    cmd[6] = 0;        /* First layer */
-	    cmd[7] = 0x0E;     /* We want the lead-in info */
-	    cmd[8] = (length>>8) & 0xff;  /* Allocation length */
-	    cmd[9] = length & 0xff;
+      Verbose("#DVD: size returned is %d\n", length);
+      if(length < 4096)
+      {  memset(cmd, 0, MAX_CDB_SIZE);
+	 cmd[0] = 0xad;     /* READ DVD STRUCTURE */
+	 cmd[6] = 0;        /* First layer */
+	 cmd[7] = 0x0E;     /* We want the lead-in info */
+	 cmd[8] = (length>>8) & 0xff;  /* Allocation length */
+	 cmd[9] = length & 0xff;
 
-	    Verbose("#DVD: trying READ DVD for real lead-in\n");
-	    if(SendPacket(dh, cmd, 12, buf, length, &sense, DATA_READ) == 0)
-	    {  int i;
+	 Verbose("#DVD: trying READ DVD for real lead-in\n");
+	 if(SendPacket(dh, cmd, 12, buf, length, sense, DATA_READ) == 0)
+	 {  int i;
 
-	       is_dvd_dash = TRUE;
-	       Verbose("#DVD: assuming DVD dash\n");
+ 	    dh->isDash = TRUE;
+	    Verbose("#DVD: assuming DVD dash\n");
 
-	       for(i=0; i<6; i++)
-		  dh->manuID[i] = isprint(buf[21+i]) ? buf[21+i] : ' ';
-	       dh->manuID[6] = ' ';
+	    for(i=0; i<6; i++)
+	      dh->manuID[i] = isprint(buf[21+i]) ? buf[21+i] : ' ';
+	    dh->manuID[6] = ' ';
 
-	       for(i=0; i<6; i++)
-		  dh->manuID[i+7] = isprint(buf[29+i]) ? buf[29+i] : ' ';
-	       dh->manuID[13] = 0;
+	    for(i=0; i<6; i++)
+	      dh->manuID[i+7] = isprint(buf[29+i]) ? buf[29+i] : ' ';
+	    dh->manuID[13] = 0;
 
-	       for(i=11; i>=0; i--)
-		  if(dh->manuID[i] == ' ') dh->manuID[i] = 0;
-		  else break;
-	    }
+	    for(i=11; i>=0; i--)
+	      if(dh->manuID[i] == ' ') dh->manuID[i] = 0;
+	      else break;
 	 }
-      } else Verbose("#DVD: lead-in could not be queried\n");
-   }
+      }
+   } else Verbose("#DVD: lead-in could not be queried\n");
 
    /*** Layer type info (may be faked) */
 
@@ -502,229 +664,561 @@ try_dvd:
 
    /*** Evaluate book type */
 
-   dh->subType = DVD;
-
-   book_type = (phy_info4>>4) & 0x0f;
-   Verbose("#DVD: book type (%d) evaluation...\n", book_type);
-   switch(book_type)   /* evaluate the book type */
-   {  case  1: dh->typedescr = "DVD-RAM"; 
+   dh->bookType = (phy_info4>>4) & 0x0f;
+   Verbose("#DVD: book type (%d) evaluation...\n", dh->bookType);
+   switch(dh->bookType)   /* evaluate the book type */
+   {  case  1: dh->bookDescr = "DVD-RAM"; 
                dh->rewriteable = TRUE;
+	       dh->subType = DVD_RAM;
                break;
-      case  2: dh->typedescr = dh->layers == 1 ? "DVD-R" : "DVD-R DL"; 
+      case  2: dh->bookDescr = dh->layers == 1 ? "DVD-R" : "DVD-R DL"; 
+	       dh->subType   = dh->layers == 1 ? DVD_DASH_R : DVD_DASH_R_DL;
 	       break;
-      case  3: dh->typedescr = "DVD-RW"; 
+      case  3: dh->bookDescr = "DVD-RW"; 
+	       dh->subType = DVD_DASH_RW;
                dh->rewriteable = TRUE;
 	       break;
-      case  4: dh->typedescr = "HD DVD-ROM";
+      case  4: dh->bookDescr = "HD DVD-ROM";
 	       dh->subType = UNSUPPORTED;
 	       break;
-      case  5: dh->typedescr = "HD DVD-RAM";
-	       dh->subType = HDDVD;
+      case  5: dh->bookDescr = "HD DVD-RAM";
+	       dh->subType = UNSUPPORTED;
+	       break;
+      case  6: dh->bookDescr = "HD DVD-R";
+	       dh->subType = UNSUPPORTED;
+	       break;
+      case  9: dh->bookDescr = "DVD+RW"; 
                dh->rewriteable = TRUE;
+	       dh->subType = DVD_PLUS_RW;
 	       break;
-      case  6: dh->typedescr = "HD DVD-R";
-	       dh->subType = HDDVD;
+      case 10: dh->bookDescr = "DVD+R"; 
+	       dh->subType = DVD_PLUS_R;
 	       break;
-      case  9: dh->typedescr = "DVD+RW"; 
+      case 13: dh->bookDescr = "DVD+RW DL"; 
                dh->rewriteable = TRUE;
+	       dh->subType = DVD_PLUS_RW_DL;
 	       break;
-      case 10: dh->typedescr = "DVD+R"; 
-	       break;
-      case 13: dh->typedescr = "DVD+RW DL"; 
-               dh->rewriteable = TRUE;
-	       break;
-      case 14: dh->typedescr = "DVD+R DL"; 
+      case 14: dh->bookDescr = "DVD+R DL"; 
+	       dh->subType = DVD_PLUS_R_DL;
 	       break;
 
       case  0: /* tricky case: real or faked DVD-ROM? */
       {  int layer_type = phy_info6 & 0x0f;
 	 
 	 Verbose("#DVD: fake DVD-ROM detection (%d %d 0x%x)\n", 
-		 is_dvd_dash, is_dvd_plus, layer_type); 
-	 if(is_dvd_dash)
-	 {  dh->typedescr = dh->layers == 1 ? "DVD-R/-RW" : "DVD-R DL"; 
+		 dh->isDash, dh->isPlus, layer_type); 
+	 if(dh->isDash)
+	 {  dh->typeDescr = g_strdup(dh->layers == 1 ? "DVD-R/-RW" : "DVD-R DL"); 
+	    dh->subType = DVD;
 	    break;
 	 }
 
-	 if(is_dvd_plus)
-	 {  dh->typedescr = dh->layers == 1 ? "DVD+R/+RW" : "DVD+R DL"; 
+	 if(dh->isPlus)
+	 {  dh->typeDescr = g_strdup(dh->layers == 1 ? "DVD+R/+RW" : "DVD+R DL"); 
+	    dh->subType = DVD;
 	    break;
 	 }
 
 	 if(layer_type & 0x06) /* strange thing: (re-)writeable but neither plus nor dash */ 
-	 {  dh->typedescr = "DVD-ROM (fake)";
+	 {  dh->typeDescr = g_strdup("DVD-ROM (fake)");
+	    dh->subType = DVD;
 	    break;
 	 }
 
-	 dh->typedescr = "DVD-ROM";
+	 dh->typeDescr = g_strdup("DVD-ROM");
 	 dh->subType = UNSUPPORTED;
 	 break;
       }
 
       default: 
-	g_sprintf(sbuf,"DVD book type 0x%02x",(phy_info4>>4) & 0x0f); 
-	dh->typedescr=sbuf; 
+	dh->typeDescr = g_strdup_printf("DVD book type 0x%02x",(phy_info4>>4) & 0x0f); 
+	dh->subType = UNSUPPORTED;
 	break;
    }
+   
+   if(!dh->typeDescr)
+     dh->typeDescr = g_strdup(dh->bookDescr);
 
    FreeAlignedBuffer(ab);
-   Verbose("#DVD: DVD medium detected, type %s\n", dh->typedescr);
-   return TRUE;
-
-   /*** If we reach this, the medium is assumed to be one of the CD varities.*/
-
-assume_cd:
-   Verbose("#CD: starting media probe\n");
-   dh->mainType    = CD;
-   dh->read        = read_cd_sector;
-   dh->readRaw     = read_raw_cd_sector;
-   dh->singleRate  = 150.0;
-   dh->maxRate     = 52;
-   dh->clusterSize = 16;  /* really 1, but this is faster */ 
-
-   /*** First, do a READ TOC with format 0 to fetch the CONTROL field. */
-   
-   memset(cmd, 0, MAX_CDB_SIZE);
-   cmd[0] = 0x43;  /* READ TOC/PMA/ATIP */
-   cmd[2] = 0;     /* format; we want the TOC */
-   cmd[6] = 1;     /* track/session number */
-   cmd[7] = 0;     /* allocation length */
-   cmd[8] = 2;
-
-   Verbose("#CD: querying size of READ TOC/PMA/ATIP (for TOC)\n");
-   if(SendPacket(dh, cmd, 10, buf, 2, &sense, DATA_READ)<0)
-   {  if(!probe_only)
-      {  FreeAlignedBuffer(ab);
-         Stop(_("%s\nCould not query TOC length.\n"),
-	      GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
-      }
-      return FALSE;
-   }
-
-   length = buf[0]<<8 | buf[1];
-   length += 2  ;  /* MMC3: "Disc information length excludes itself" */
-   Verbose("#CD: size returned is %d\n", length);
-
-   if(length>1024) /* don't let the drive hack us using a buffer overflow ;-) */
-   {  if(Closure->verbose)
-	 HexDump(buf, 1024, 16);
-
-      FreeAlignedBuffer(ab);
-      Stop(_("TOC info too long (%d), probably multisession.\n"),length);
-      return FALSE;
-   }
-
-   memset(cmd, 0, MAX_CDB_SIZE);
-   cmd[0] = 0x43;  /* READ TOC/PMA/ATIP */
-   cmd[2] = 0;     /* format; we want the TOC */
-   cmd[6] = 1;     /* track/session number */
-   cmd[7] = (length>>8) & 0xff; /* allocation length */
-   cmd[8] = length & 0xff;
-
-   Verbose("#CD: querying real READ TOC/PMA/ATIP (for TOC)\n");
-   if(SendPacket(dh, cmd, 10, buf, length, &sense, DATA_READ)<0)
-   {  FreeAlignedBuffer(ab);
-      Stop(_("%s\nCould not read TOC.\n"),
-	   GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
-      return FALSE;
-   }
-   if(Closure->verbose)
-      HexDump(buf, length, 16);
-
-   control = buf[5];
-   Verbose("#CD: control is 0x%x\n", control);
-   
-   /*** Do the READ TOC again with format 2 to fetch the full toc
-        as we want the disc type info also. 
-	We do not use the CONTROL data included here as it turned
-	out to be invalid on certain CD-ROMs. Bleah. */
-
-   memset(cmd, 0, MAX_CDB_SIZE);
-   cmd[0] = 0x43;  /* READ TOC/PMA/ATIP */
-   cmd[1] = 0x02;  /* TIME bit required for this format */
-   cmd[2] = 2;     /* format; we want the full TOC */
-   cmd[6] = 1;     /* track/session number */
-   cmd[7] = 0;     /* allocation length */
-   cmd[8] = 2;
-
-   Verbose("#CD: querying size of READ TOC/PMA/ATIP (for full TOC)\n");
-   if(SendPacket(dh, cmd, 10, buf, 2, &sense, DATA_READ)<0)
-   {  FreeAlignedBuffer(ab);
-      Stop(_("%s\nCould not query full TOC length.\n"),
-	   GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
-      return FALSE;
-   }
-
-   length = buf[0]<<8 | buf[1];
-   length += 2;    /* MMC3: "Disc information length excludes itself" */
-   Verbose("#CD: size returned is %d\n", length);
-
-   if(length < 15)
-   {  FreeAlignedBuffer(ab);
-      Stop(_("TOC info too short, length %d.\n"),length);
-      return FALSE;
-   }
-   if(length>1024) /* don't let the drive hack us using a buffer overflow ;-) */
-   {  FreeAlignedBuffer(ab);
-      Stop(_("TOC info too long (%d), probably multisession.\n"),length);
-      return FALSE;
-   }
-
-   memset(cmd, 0, MAX_CDB_SIZE);
-   cmd[0] = 0x43;  /* READ TOC/PMA/ATIP */
-   cmd[1] = 0x02;  /* TIME bit required for this format */
-   cmd[2] = 2;     /* format; we want the full TOC */
-   cmd[6] = 1;     /* track/session number */
-   cmd[7] = (length>>8) & 0xff; /* allocation length */
-   cmd[8] = length & 0xff;
-
-   Verbose("#CD: querying real READ TOC/PMA/ATIP (for full TOC)\n");
-   if(SendPacket(dh, cmd, 10, buf, length, &sense, DATA_READ)<0)
-   {  FreeAlignedBuffer(ab);
-      Stop(_("%s\nCould not read full TOC.\n"),
-	   GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
-      return FALSE;
-   }
-   if(Closure->verbose)
-      HexDump(buf, length, 16);
-
-   if(buf[7] != 0xa0)
-   {  int i;
-      PrintLog(_("\nUnexpected TOC format (length %d):\n"),length);
-
-      for(i=0; i<(int)length; i++) 
-      {  PrintLog("%02x ",buf[i]);
-	 if(i==3 || (i-3)%11 == 0) PrintLog("\n");
-      }
-      FreeAlignedBuffer(ab);
-      Stop(_("Consider sending a bug report.\n"));
-      return FALSE;
-   }
-
-   dh->sessions = buf[3];
-   Verbose("#CD: %d sessions\n", dh->sessions);
-
-   if(control & 4)
-     switch(buf[13])
-     {  case 0x00: dh->typedescr = _("Data CD mode 1"); dh->subType = DATA1; break;
-        case 0x10: dh->typedescr = _("CD-I"); dh->subType = UNSUPPORTED; break;
-        case 0x20: dh->typedescr = _("CD XA form 1"); dh->subType = XA21; break;
-        default:   dh->typedescr = _("Unknown"); dh->subType = UNSUPPORTED; break;
-     }
-   else 
-   {  dh->typedescr = _("CD Audio"); 
-      dh->subType = UNSUPPORTED;
-   }
-
-   FreeAlignedBuffer(ab);
-   Verbose("#CD: CD medium detected, type: %s\n", dh->typedescr);
+   Verbose("#DVD: DVD medium detected, type %s\n", dh->typeDescr);
    return TRUE;
 }
 
+/*
+ * BD specific probing
+ */
+
+static int query_bd(DeviceHandle *dh, int probe_only)
+{  AlignedBuffer *ab = CreateAlignedBuffer(8196);
+   unsigned char *buf = ab->buf;
+   unsigned char cmd[MAX_CDB_SIZE];
+   Sense *sense = &dh->sense;
+   unsigned int length;
+   int i,j;
+
+   Verbose("#BD: starting media probe\n");
+
+   /* Query length of returned data.
+      Maybe skip this in the future; it must be 4098 (+2) on BD */
+
+   memset(cmd, 0, MAX_CDB_SIZE);
+   cmd[0] = 0xad;     /* READ DISC STRUCTURE */
+   cmd[1] = 0x01;     /* subcommand for BD */
+   cmd[6] = 0;        /* First layer */
+   cmd[7] = 0;        /* We want DI (disc information) */
+   cmd[8] = 0;        /* Allocation length */
+   cmd[9] = 2;
+
+   Verbose("#BD: trying READ DISC STRUCTURE for size\n");
+   if(SendPacket(dh, cmd, 12, buf, 2, sense, DATA_READ)<0)
+   {  	FreeAlignedBuffer(ab);
+        if(!probe_only)
+	  Stop(_("%s\nCould not query BD disc structure length.\n"), 
+	       GetSenseString(sense->sense_key, sense->asc, sense->ascq, TRUE));
+  	return FALSE;
+   }
+
+   length = buf[0]<<8 | buf[1];
+   length += 2;
+   Verbose("#BD: disc structure query succeeded, length %d bytes\n", length);
+
+#if 0  /* no longer needed here */
+   /*** Some DVD drives ignore the media type 0x01 and return the dvd structure.
+	Since the DVD structure is 2052 bytes while the BD DI is 4100 bytes,
+	we can tell from the size whether we have been fooled. */
+
+   if(length != 4100) /* not a BD */
+      goto try_dvd;
+#endif
+
+   /* Do the real query */
+
+   memset(cmd, 0, MAX_CDB_SIZE);
+   cmd[0] = 0xad;     /* READ DISC STRUCTURE */
+   cmd[1] = 0x01;     /* media type BD */
+   cmd[6] = 0;        /* First layer */
+   cmd[7] = 0;        /* We want DI (disc information) */
+   cmd[8] = (length>>8) & 0xff;  /* Allocation length */
+   cmd[9] = length & 0xff;
+
+   Verbose("#BD: trying READ DISC STRUCTURE for real query\n");
+   if(SendPacket(dh, cmd, 12, buf, length, sense, DATA_READ)<0)
+   {  FreeAlignedBuffer(ab);
+      Stop(_("%s\nCould not query BD disc structure.\n"),
+	   GetSenseString(sense->sense_key, sense->asc, sense->ascq, TRUE));
+      return FALSE;
+   }
+
+   if(Closure->verbose)
+      HexDump(buf, length, 16);
+
+   dh->layers = 0;        /* n.a. ? */
+   dh->sessions = 1;
+   dh->userAreaSize = 0;  /* n.a. ? */
+
+   /* Assemble manufacturer info */
+
+   for(i=0,j=-1; i<6; i++)  /* Disc Manufacturer ID */
+   {  char c = buf[4+100+i];
+
+      if(isprint(c))
+      {  dh->manuID[i] = c; j=i;
+      }
+      else dh->manuID[i] = ' ';
+   }
+   dh->manuID[++j]=',';
+
+   for(i=0; i<3; i++)       /* Media type ID */
+   {  char c = buf[4+106+i];
+      dh->manuID[++j] = isprint(c) ? c : ' ';
+   }
+   if(dh->manuID[j] == ',') 
+        dh->manuID[j]=0;
+   else dh->manuID[++j] = 0;
+
+   /* Media type recognition */
+
+   if(!strncmp((char*)&buf[4+8], "BDO", 3))
+   {  dh->typeDescr = g_strdup("BD-ROM");
+      dh->subType = UNSUPPORTED;
+   }
+
+   if(!strncmp((char*)&buf[4+8], "BDW", 3))
+   {  dh->typeDescr = g_strdup("BD-RE");
+      dh->rewriteable = TRUE;
+      dh->subType = BD_RE;
+   }
+
+   if(!strncmp((char*)&buf[4+8], "BDR", 3))
+   {  dh->typeDescr = g_strdup("BD-R");
+      dh->subType = BD_R;
+   }
+
+   Verbose("#BD: BD medium successfully probed, type %s\n", dh->typeDescr);
+   FreeAlignedBuffer(ab);
+   return TRUE;
+}
+
+/*
+ * Find out what type of disc has been inserted.
+ */
+
+static int query_type(DeviceHandle *dh, int probe_only)
+{  int status;
+
+   /*** See which profile the drive selected.
+	This should at least give us a hint to decide 
+	between CD, DVD and BD. */
+
+   Verbose("# *** query_type(%s, %d) ***\n", dh->devinfo, probe_only);
+
+   status = get_configuration(dh);
+   if(status)  /* something went terribly wrong */
+     return FALSE;
+
+   /*** Some defaults */
+
+   strcpy(dh->manuID, "-");
+   dh->bookDescr = "-";
+   
+   /*** Main type has been decided now */
+
+   switch(dh->mainType)
+   {  case CD:
+        dh->read        = read_cd_sector;
+	dh->readRaw     = read_raw_cd_sector;
+	dh->singleRate  = 150.0;
+	dh->maxRate     = 52;
+	dh->clusterSize = 16;  /* really 1, but this is faster */ 
+	return query_cd(dh, probe_only);
+
+      case DVD:
+	dh->read        = read_dvd_sector;
+	dh->singleRate  = 1352.54;
+	dh->maxRate     = 17;
+	dh->clusterSize = 16;
+	return query_dvd(dh, probe_only);
+
+      case BD:
+	dh->read        = read_dvd_sector;
+	dh->singleRate  = 36000.0/8.0;  /* 1x = 36 kbit */
+	dh->maxRate     = 9;
+	dh->clusterSize = 32;
+	return query_bd(dh, probe_only);
+
+      default:  /* maybe HD DVD or sth else we do not support */
+	return FALSE;
+   }
+
+   return FALSE; /* unreachable */
+}
+
+/*
+ * Find out whether the disc is blank,
+ * and the blank disc capacity.
+ */
+
+static int query_blank(DeviceHandle *dh)
+{  AlignedBuffer *ab = CreateAlignedBuffer(4096);
+   unsigned char *buf = ab->buf;
+   unsigned char cmd[MAX_CDB_SIZE];
+   Sense *sense = &dh->sense;
+   unsigned int length;
+
+   Verbose("# *** QueryBlank(%s) ***\n", dh->devinfo);
+
+   /* Get disc information to learn the disc state (blank, finalized etc.) */
+
+   memset(cmd, 0, MAX_CDB_SIZE);
+   cmd[0] = 0x51;     /* READ DISC INFORMATION */
+   cmd[1] = 0;        /* standard disc info */
+   cmd[7] = 0;        /* Allocation length */
+   cmd[8] = 2;
+
+   Verbose("# trying READ DISC INFORMATION for size\n");
+   if(SendPacket(dh, cmd, 10, buf, 2, sense, DATA_READ) == 0)
+   {  length = buf[0]<<8 | buf[1];
+
+      Verbose("# size returned is %d\n", length);
+
+      memset(cmd, 0, MAX_CDB_SIZE);
+      cmd[0] = 0x51;         /* READ DISC INFORMATION */
+      cmd[1] = 0;            /* standard disc info */
+      cmd[7] = length>>8;    /* Allocation length */
+      cmd[8] = length&0xff;
+
+      Verbose("# trying READ DISC INFORMATION for real info\n");
+      if(SendPacket(dh, cmd, 10, buf, length, sense, DATA_READ) == 0)
+      {  dh->discStatus = buf[2];
+	 if(Closure->verbose)
+	   HexDump(buf, length, 16);
+ 	 Verbose("# status is %x\n", dh->discStatus);
+      }
+      else 
+      {  FreeAlignedBuffer(ab);
+	 return FALSE;
+      }
+   }
+   else 
+   {  Verbose("# READ DISC INFORMATION failed\n");
+      FreeAlignedBuffer(ab);
+      return FALSE;
+   }
+
+   /*** Determine blank size for CD media ***/
+
+   if(dh->mainType == CD)
+   {  memset(cmd, 0, MAX_CDB_SIZE);
+      cmd[0] = 0x43;  /* READ TOC/PMA/ATIP */
+      cmd[1] = 0x02;  /* TIME bit required for this format */
+      cmd[2] = 4;     /* format; we want the ATIP */
+      cmd[6] = 0;     /* track/session number */
+      cmd[7] = 0;     /* allocation length */
+      cmd[8] = 2;
+
+      Verbose("#CD: querying size of READ TOC/PMA/ATIP (for ATIP)\n");
+      if(SendPacket(dh, cmd, 10, buf, 2, sense, DATA_READ)<0)
+      {  FreeAlignedBuffer(ab);
+	 return FALSE;
+      }
+
+      length = buf[0]<<8 | buf[1];
+      length += 2;    /* MMC3: "Disc information length excludes itself" */
+      Verbose("#CD: size returned is %d\n", length);
+
+      if(length < 15 || length > 1024)  /* implausible */
+      {  FreeAlignedBuffer(ab);
+	 return FALSE;
+      }
+      
+      memset(cmd, 0, MAX_CDB_SIZE);
+      cmd[0] = 0x43;  /* READ TOC/PMA/ATIP */
+      cmd[1] = 0x02;  /* TIME bit required for this format */
+      cmd[2] = 4;     /* format; we want the full ATIP */
+      cmd[6] = 0;     /* track/session number */
+      cmd[7] = (length>>8) & 0xff; /* allocation length */
+      cmd[8] = length & 0xff;
+
+      Verbose("#CD: querying real READ TOC/PMA/ATIP (for ATIP)\n");
+      if(SendPacket(dh, cmd, 10, buf, length, sense, DATA_READ)<0)
+      {  FreeAlignedBuffer(ab);
+	 return FALSE;
+      }
+
+      if(Closure->verbose)
+	 HexDump(buf, length, 16);
+
+      Verbose("#CD: Lead-in @ %d:%d.%d; last possible lead-out %d:%d.%d\n",
+	      buf[8], buf[9], buf[10], buf[12], buf[13], buf[14]);
+
+      /* frame + 75 * (second - 2 + 60 * minute) */
+      dh->blankCapacity = buf[14] + 75 * (buf[13] - 2 + 60 * buf[12]);
+   }
+
+   /*** Determine blank size for DVD media ***/
+
+   if(dh->mainType == DVD)
+   {  switch(dh->subType)
+      {  case DVD_DASH_R:
+	 case DVD_PLUS_R:
+	 case DVD_DASH_R_DL:
+	 case DVD_PLUS_R_DL:
+	    memset(cmd, 0, MAX_CDB_SIZE);
+	    cmd[0] = 0x52;  /* READ TRACK INFORMATION */
+	    cmd[1] = 0x01;  /* TCDB (track number) addressing) */
+	    cmd[5] = 1;     /* we want the first track info */
+	    cmd[7] = 0;     /* allocation length */
+	    cmd[8] = 2;
+
+	    Verbose("#DVD: querying size of READ TRACK INFORMATION\n");
+	    if(SendPacket(dh, cmd, 10, buf, 2, sense, DATA_READ)<0)
+	    {  FreeAlignedBuffer(ab);
+	       return FALSE;
+	    }
+
+	    length = buf[0]<<8 | buf[1];
+	    length += 2;    /* MMC3: "Disc information length excludes itself" */
+	    Verbose("#DVD: size returned is %d\n", length);
+
+	    memset(cmd, 0, MAX_CDB_SIZE);
+	    cmd[0] = 0x52;  /* READ TRACK INFORMATION */
+	    cmd[1] = 0x01;  /* TCDB (track number) addressing) */
+	    cmd[5] = 1;     /* we want the first track info */
+	    cmd[7] = length>>8;  /* allocation length */
+	    cmd[8] = length&0xff;
+
+	    Verbose("#DVD: querying size of READ TRACK INFORMATION\n");
+	    if(SendPacket(dh, cmd, 10, buf, length, sense, DATA_READ)<0)
+	    {  FreeAlignedBuffer(ab);
+	       return FALSE;
+	    }
+
+	    if(Closure->verbose)
+	       HexDump(buf, length, 16);
+
+	    Verbose("#DVD: free: %d\n", buf[16]<<24|buf[17]<<16|buf[18]<<8|buf[19]);
+	    Verbose("#DVD: size: %d\n", buf[24]<<24|buf[25]<<16|buf[26]<<8|buf[27]);
+
+	    dh->blankCapacity = buf[16]<<24|buf[17]<<16|buf[18]<<8|buf[19];
+	    break;
+
+	 case DVD_DASH_RW:
+	 case DVD_PLUS_RW:
+	 case DVD_DASH_RW_DL:
+	 case DVD_PLUS_RW_DL:
+         {  int cmc_size;
+	    int n_lists;
+	    int i,idx;
+
+	    memset(cmd, 0, MAX_CDB_SIZE);
+	    cmd[0] = 0x23;  /* READ FORMAT CAPACITIES */
+	    cmd[7] = 0;     /* allocation length */
+	    cmd[8] = 4;
+
+	    Verbose("#DVD: querying size of READ FORMAT CAPACITIES\n");
+	    if(SendPacket(dh, cmd, 10, buf, 4, sense, DATA_READ)<0)
+	    {  FreeAlignedBuffer(ab);
+	       return FALSE;
+	    }
+
+	    length = 4+buf[3];
+	    Verbose("#DVD: size returned is %d\n", length);
+
+	    memset(cmd, 0, MAX_CDB_SIZE);
+	    cmd[0] = 0x23;        /* READ FORMAT CAPACITIES */
+	    cmd[7] = length>>8;   /* allocation length */
+	    cmd[8] = length&0xff;
+
+	    Verbose("#DVD: real query of READ FORMAT CAPACITIES\n");
+	    if(SendPacket(dh, cmd, 10, buf, length, sense, DATA_READ)<0)
+	    {  FreeAlignedBuffer(ab);
+	       return FALSE;
+	    }
+
+	    if(Closure->verbose)
+	       HexDump(buf, length, 16);
+
+	    cmc_size = buf[4]<<24 | buf[5]<<16 | buf[6]<<8 | buf[7];
+
+	    n_lists = buf[3] / 8;
+	    n_lists--;
+
+	    Verbose("#DVD: Current/Maximum capacity: %d blocks\n", cmc_size);
+
+	    switch(buf[8] & 3)
+	    {  case 1: /* unformatted */
+		  Verbose("#DVD: unformatted\n");
+		  break;
+	       case 2: /* formatted */
+		  Verbose("#DVD: formatted\n");
+		  break;
+	       case 3: /* no medium */
+		  Verbose("#DVD: %d no medium\n", buf[8]);
+		  break;
+	       default: /* b0rked */
+		  Verbose("#DVD: b0rked\n");
+		  break;
+	    }
+
+	    if(!n_lists) 
+	    {  FreeAlignedBuffer(ab);
+	       return FALSE;
+	    }
+
+	    /* Now go through all capacity lists */
+
+	    for(i=0, idx=12; i<n_lists; i++, idx+=8)
+	    {  gint64 size;
+	       
+	       size = (gint64)(buf[idx]<<24 | buf[idx+1]<<16 | buf[idx+2]<<8 | buf[idx+3]);
+	       Verbose("#DVD: Cap list %d - type %x, size %lld\n", i, buf[idx+4]>>2, size);
+	       
+	       switch(buf[idx+4]>>2)  /* format type */
+	       {  case 0x00:  /* all media */
+		  case 0x10:  /* blank CD-RW capacity */
+		  case 0x26:  /* blank DVD+RW capacity */
+		     FreeAlignedBuffer(ab);
+		     dh->blankCapacity = size;
+		     return TRUE;
+	       }
+	    }
+	 }
+	    break;
+      }
+   }
+
+   /*** Determine blank size for BD media ***/
+
+   if(dh->mainType == BD)
+   {  unsigned int size,sa_size;
+      int n_lists, i, idx;
+
+      memset(cmd, 0, MAX_CDB_SIZE);
+      cmd[0] = 0x23;  /* READ FORMAT CAPACITIES */
+      cmd[7] = 0;     /* allocation length */
+      cmd[8] = 4;
+
+      Verbose("#BD: querying size of READ FORMAT CAPACITIES\n");
+      if(SendPacket(dh, cmd, 10, buf, 4, sense, DATA_READ)<0)
+      {  FreeAlignedBuffer(ab);
+	 return FALSE;
+      }
+
+      length = 4+buf[3];
+      Verbose("#BD: size returned is %d\n", length);
+
+      memset(cmd, 0, MAX_CDB_SIZE);
+      cmd[0] = 0x23;        /* READ FORMAT CAPACITIES */
+      cmd[7] = length>>8;   /* allocation length */
+      cmd[8] = length&0xff;
+
+      Verbose("#BD: real query of READ FORMAT CAPACITIES\n");
+      if(SendPacket(dh, cmd, 10, buf, length, sense, DATA_READ)<0)
+      {  FreeAlignedBuffer(ab);
+	 return FALSE;
+      }
+
+      if(Closure->verbose)
+	 HexDump(buf, length, 16);
+
+      size = (buf[4]<<24 | buf[5]<<16 | buf[6]<<8 | buf[7]);
+      sa_size = buf[9]<<16 | buf[10]<<8 | buf[11];
+      Verbose("#BD: Current/Maximum capacity: %d blocks, %d spare area\n", size, sa_size);
+
+      n_lists = buf[3] / 8;
+      n_lists--;
+
+      if(!n_lists) 
+      {  FreeAlignedBuffer(ab);
+	 return FALSE;
+      }
+
+      /* Now go through all capacity lists */
+
+      for(i=0, idx=12; i<n_lists; i++, idx+=8)
+      {  gint64 size;
+	       
+	 size = (gint64)(buf[idx]<<24 | buf[idx+1]<<16 | buf[idx+2]<<8 | buf[idx+3]);
+	 sa_size = buf[idx+5]<<16 | buf[idx+6]<<8 | buf[idx+7];
+	 Verbose("#BD: Cap list %d - type %x, size %lld, spare %d\n", 
+		 i, buf[idx+4]>>2, size, sa_size);
+	       
+	 switch(buf[idx+4]>>2)  /* format type */
+	 {  case 0x00:  /* all media */
+	       //     FreeAlignedBuffer(ab);
+	       dh->blankCapacity = size;
+	       //	       return TRUE;
+	 }
+      }
+   }
+
+   FreeAlignedBuffer(ab);
+   return TRUE;
+}
 
 /*
  * Find out whether the drive can do C2 scans.
- * Done by empirically trying a READ CD; 
+ * Done by empirically trying a READ CD;
  * maybe we should examine the drive feature codes instead. 
  */
 
@@ -1073,7 +1567,6 @@ static unsigned int query_size(DeviceHandle *dh)
    AlignedBuffer *ab = CreateAlignedBuffer(2048);
    unsigned char *buf = ab->buf; 
    unsigned char cmd[MAX_CDB_SIZE];
-   gint64 read_capacity;
    int implausible = FALSE;
 
    /*** Query size by doing READ CAPACITY */
@@ -1088,24 +1581,24 @@ static unsigned int query_size(DeviceHandle *dh)
       return 0;
    }
 
-   read_capacity = (gint64)(buf[0]<<24 | buf[1]<<16 | buf[2]<<8 | buf[3]);
+   dh->readCapacity = (gint64)(buf[0]<<24 | buf[1]<<16 | buf[2]<<8 | buf[3]);
    FreeAlignedBuffer(ab);
 
    /*** Validate capacity */
 
-   if(dh->mainType == CD && read_capacity > MAX_CDR_SIZE)
+   if(dh->mainType == CD && dh->readCapacity > MAX_CDR_SIZE)
       implausible = TRUE;
 
-   if(dh->mainType == DVD && dh->layers == 1 && read_capacity > MAX_DVD_SL_SIZE)
+   if(dh->mainType == DVD && dh->layers == 1 && dh->readCapacity > MAX_DVD_SL_SIZE)
       implausible = TRUE;
 
-   if(dh->mainType == DVD && dh->layers == 2 && read_capacity > MAX_DVD_DL_SIZE)
+   if(dh->mainType == DVD && dh->layers == 2 && dh->readCapacity > MAX_DVD_DL_SIZE)
       implausible = TRUE;
 
    if(implausible)
    {  LogWarning(_("READ CAPACITY: implausible medium size, %lld sectors\n"), 
-		 (gint64)read_capacity);
-      read_capacity = 0;
+		 (gint64)dh->readCapacity);
+      dh->readCapacity = 0;
    }
 
    /*** If RS02 header search is enabled and we can find an appropriate header,
@@ -1113,7 +1606,7 @@ static unsigned int query_size(DeviceHandle *dh)
 
    if(Closure->querySize >= 2)
    {  if(dh->rs02Size <= 0)
-      {  gint64 last_sector = MAX(read_capacity, dh->userAreaSize);
+      {  gint64 last_sector = MAX(dh->readCapacity, dh->userAreaSize);
       
 	 if(last_sector > 0)
 	    dh->rs02Size = MediumLengthFromRS02(dh, last_sector);
@@ -1150,16 +1643,16 @@ static unsigned int query_size(DeviceHandle *dh)
    /* For CD media, thats all we have to do */
 
    if(dh->mainType == CD)
-   {  Verbose("CD medium - using size from READ CAPACITY: %lld sectors\n", read_capacity+1);
-      return read_capacity+1;  /* size is the number of the last sector, starting with 0 */
+   {  Verbose("CD medium - using size from READ CAPACITY: %lld sectors\n", dh->readCapacity+1);
+      return dh->readCapacity+1;  /* size is the number of the last sector, starting with 0 */
    }
 
    /* BD drives have neither dh->userAreaSize nor will the following heuristics
-      works as unformatted sectors can be always read. Stick with READ CAPACITY. */
+      work as unformatted sectors can be always read. Stick with READ CAPACITY. */
 
    if(dh->mainType == BD)
-   {  Verbose("BD medium - using size from READ CAPACITY: %lld sectors\n", read_capacity+1);
-      return read_capacity+1;  /* size is the number of the last sector, starting with 0 */
+   {  Verbose("BD medium - using size from READ CAPACITY: %lld sectors\n", dh->readCapacity+1);
+      return dh->readCapacity+1;  /* size is the number of the last sector, starting with 0 */
    }
 
    /* For DVD media, READ CAPACITY should give the real image size.
@@ -1167,9 +1660,9 @@ static unsigned int query_size(DeviceHandle *dh)
       But some drives appear to have both functions reversed,
       so we have to be careful here. */
 
-   if(read_capacity == dh->userAreaSize)  /* If they are equal just return one */
-   {  Verbose("READ CAPACITY and READ DVD STRUCTUE agree: %lld sectors\n", read_capacity+1);
-      return read_capacity+1;  
+   if(dh->readCapacity == dh->userAreaSize)  /* If they are equal just return one */
+   {  Verbose("READ CAPACITY and READ DVD STRUCTURE agree: %lld sectors\n", dh->readCapacity+1);
+      return dh->readCapacity+1;  
    }
    else                                   /* Tricky case. Try some heuristics. */
    {  int last_valid, first_out;
@@ -1185,13 +1678,13 @@ static unsigned int query_size(DeviceHandle *dh)
 		      _("Different media sizes depending on query method:\n"
 			"READ CAPACITY:      %lld sectors\n"
 			"READ DVD STRUCTURE: %lld sectors\n\n"),
-		      read_capacity+1, dh->userAreaSize+1);
+		      dh->readCapacity+1, dh->userAreaSize+1);
 
       g_string_append_printf(warning, _("Evaluation of returned medium sizes:\n\n"));
 
       /*** Look at READ CAPACITY results */
 
-      test_sector = read_capacity;
+      test_sector = dh->readCapacity;
       last_valid = check_sector(dh, warning, test_sector,   1);
       first_out  = check_sector(dh, warning, test_sector+1, 1);
 
@@ -1250,11 +1743,11 @@ static unsigned int query_size(DeviceHandle *dh)
       }
 
       if(!decision)
-      {  if(!read_capacity) decision = 2;
+      {  if(!dh->readCapacity) decision = 2;
          if(!dh->userAreaSize) decision = 1;
 
-	 if(read_capacity && dh->userAreaSize)
-	   decision = read_capacity < dh->userAreaSize ? 1 : 2;
+	 if(dh->readCapacity && dh->userAreaSize)
+	   decision = dh->readCapacity < dh->userAreaSize ? 1 : 2;
 
 	 decision_msg = _("FAILED to determine image size.\n"
 			  "Using smaller value as this is right on >90%% of all drives,\n"
@@ -1267,7 +1760,7 @@ static unsigned int query_size(DeviceHandle *dh)
       g_string_free(warning, TRUE);
 
       switch(decision)
-      {  case 1  : return read_capacity+1;
+      {  case 1  : return dh->readCapacity+1;
          case 2  : return dh->userAreaSize+1;
          default : Stop(_("Failed to determine image size.\n"
 			  "Try using a different drive."));
@@ -1282,7 +1775,7 @@ static unsigned int query_size(DeviceHandle *dh)
  * Return size of current drive and medium (if any)
  */
 
-gint64 CurrentImageSize()
+gint64 CurrentMediumSize(int get_blank_size)
 {  DeviceHandle *dh = NULL;
    gint64 size;
 
@@ -1297,112 +1790,39 @@ gint64 CurrentImageSize()
       return 0;
    }
 
-   if(!query_type(dh, 1))
+   /* Avoid size query on unknown media */
+
+   if(!query_type(dh, 1) && !get_blank_size)
    {  CloseDevice(dh);
       return 0;
    }
 
-   size = query_size(dh);
+   /* A size query on unsupported media would derail */
+
+   if((dh->subType == UNSUPPORTED) && !get_blank_size)
+   {  CloseDevice(dh);
+      return 0;
+   }
+
+   /* We can return either the image size or the size of  blank media. */
+
+   if(get_blank_size)
+   {  if(!query_blank(dh))
+      {  CloseDevice(dh);
+	 return 0;
+      }
+
+      size = dh->blankCapacity;
+   }
+   else
+   {  if(Closure->querySize >= 1)  /* parseUDF or better requested */
+	 ExamineUDF(dh);
+      size = query_size(dh);
+   }
+
    CloseDevice(dh);
 
    return size;
-}
-
-/*
- * Return capacity of current medium (if any)
- */
-
-gint64 CurrentImageCapacity()
-{  DeviceHandle *dh = NULL;
-   Sense sense;
-   AlignedBuffer *ab = CreateAlignedBuffer(2048);
-   unsigned char *buf = ab->buf; 
-   unsigned char cmd[MAX_CDB_SIZE];
-   gint64 cmc_size;
-   int i,idx, n_lists;
-
-#ifdef SYS_UNKNOWN
-   return 0;
-#endif
-
-   dh = OpenDevice(Closure->device);
-   if(!dh)
-   {  FreeAlignedBuffer(ab);
-      return 0;
-   }
-
-   if(InquireDevice(dh, 1) != 0x05) 
-   {  CloseDevice(dh);
-      FreeAlignedBuffer(ab);
-      return 0;
-   }
-
-   /* Get size by doing READ CAPACITY */
-
-   memset(cmd, 0, MAX_CDB_SIZE);
-   cmd[0] = 0x23;  /* READ FORMAT CAPACITIES */
-   cmd[7] = 1;     /* 256 bytes of buffer (32*8 lists maximum) */
-
-   if(SendPacket(dh, cmd, 10, buf, 256, &sense, DATA_READ)<0)
-   {  FreeAlignedBuffer(ab);
-      return 0;
-   }
-
-//   printf("Cap list length %d\n", buf[3]);
-
-   CloseDevice(dh);
-
-   /* Current/Maximum capacacity descriptor */
-
-   cmc_size = (gint64)(buf[4]<<24 | buf[5]<<16 | buf[6]<<8 | buf[7]);
-
-   n_lists = buf[3] / 8;
-   n_lists--;
-
-   if(!n_lists) 
-   {  FreeAlignedBuffer(ab);
-      return cmc_size;
-   }
-
-#if 0
-   printf("CMC descriptor: %lld blocks\n", cmc_size);
-
-   switch(buf[8] & 3)
-   {  case 1: /* unformatted */
-        printf("unformatted\n");
-        break;
-      case 2: /* formatted */
-        printf("formatted\n");
-        break;
-      case 3: /* no medium */
-        printf("%d no medium\n", buf[8]);
-        break;
-      default: /* b0rked */
-        printf("b0rked\n");
-        break;
-   }
-#endif
-
-   /* Now go through all capacity lists */
-
-   for(i=0, idx=12; i<n_lists; i++, idx+=8)
-   {  gint64 result;
-      //printf("Cap list %d - type %d\n", i, buf[idx+4]>>2);
-      //size = (gint64)(buf[idx]<<24 | buf[idx+1]<<16 | buf[idx+2]<<8 | buf[idx+3]);
-      //printf(".. size %lld\n", size);
-
-      switch(buf[idx+4]>>2)  /* format type */
-      {  case 0x00:
-         case 0x10:  /* blank CD-RW capacity */
-         case 0x26:  /* blank DVD+RW capacity */
-	     result = (gint64)(buf[idx]<<24 | buf[idx+1]<<16 | buf[idx+2]<<8 | buf[idx+3]);
-	     FreeAlignedBuffer(ab);
-	     return result;
-	     break;
-      }
-   }
-   
-   return 0;
 }
 
 /***
@@ -1532,19 +1952,20 @@ int TestUnitReady(DeviceHandle *dh)
 	 return TRUE;
       }
 
-      if(   dh->sense.sense_key == 2   /* Not Ready */
-	 && dh->sense.asc  == 0x04     /* but in process of becoming so */
-	 && dh->sense.ascq == 0x01)
-      {  PrintCLIorLabel(Closure->status,
-			 _("Waiting 10 seconds for drive: %d\n"),9-i);
+      if(dh->sense.sense_key == 2)  /* Not Ready */
+	 if(   (dh->sense.asc == 0x04 && dh->sense.ascq == 0x01) /* but in process of becoming so */
+	     || dh->sense.asc == 0x3a    /* flawed firmware workaround */
+	   )
+	 {  PrintCLIorLabel(Closure->status,
+			    _("Waiting 10 seconds for drive: %d\n"),9-i);
 
-	 if(Closure->stopActions)
-	    return FALSE;
+	    if(Closure->stopActions)
+	       return FALSE;
 
-	 g_usleep(G_USEC_PER_SEC);
-	 continue;
-      }
-
+	    g_usleep(G_USEC_PER_SEC);
+	    continue;
+	 }
+      printf("fell out %x %x %x\n",dh->sense.sense_key,dh->sense.asc,dh->sense.ascq);
       break;  /* Something is wrong with the drive */
    }
 
@@ -1557,41 +1978,6 @@ int TestUnitReady(DeviceHandle *dh)
 /*
  * Set the reading speed. Does not work reliably yet. 
  */
-
-#if 0
-static void set_speed(DeviceHandle *dh)
-{  Sense sense;
-   char cmd[MAX_CDB_SIZE];
-   char buf[4];
-   int speed_kb;
-   int rotcntl;
-
-   if(driveSpeed < 0) 
-   {  rotcntl = 1; 
-      driveSpeed = -driveSpeed;
-   }
-   else rotcntl = 0;
-
-   if(!driveSpeed)		/* use maximum performance */
-        speed_kb = 0xffff;
-   else speed_kb = dh->subType == DVD ? 1353*driveSpeed : 177*driveSpeed;
-
-   if(speed_kb > 0xffff) speed_kb = 0xffff;
-
-   memset(cmd, 0, MAX_CDB_SIZE);
-   cmd[0] = 0xbb;            /* SET CD SPEED */
-   cmd[1] = rotcntl & 0x01;  /* CLV or CAV speed */
-   cmd[2] = (speed_kb >> 8) & 0xff;
-   cmd[3] = speed_kb & 0xff;
-   cmd[4] = 0xff;            /* Set write speed always to max */
-   cmd[5] = 0xff;
-
-   if(SendPacket(dh, cmd, 12, buf, 4, &sense, DATA_READ)<0)
-   {  LogWarning(_("Setting the drive speed failed:\n"));
-      PrintSenseNow(sense.sense_key, sense.asc, sense.ascq);
-   }
-}
-#endif
 
 /***
  *** Sector reading routines
@@ -1957,9 +2343,9 @@ DeviceHandle* OpenAndQueryDevice(char *device)
    Verbose("# query_type() returned.\n");
    
    if(dh->subType == UNSUPPORTED)
-   {  char *td = alloca(strlen(dh->typedescr)+1);
+   {  char *td = alloca(strlen(dh->typeDescr)+1);
 
-      strcpy(td, dh->typedescr);
+      strcpy(td, dh->typeDescr);
       CloseDevice(dh);
       Stop(_("This software does not support \"%s\" type media."), td);
       return NULL;
@@ -2019,42 +2405,41 @@ DeviceHandle* OpenAndQueryDevice(char *device)
    dh->sectors = query_size(dh);
    Verbose("# returned: %lld sectors\n", dh->sectors); 
 
-   switch(dh->subType)
+   switch(dh->subType & MAIN_TYPE_MASK)
    {  case BD:
-      case HDDVD:
       case DVD:
-      case DATA1:
-      case XA21:
+      case CD:
       {  char *tmp;
          if(!dh->isoInfo) // || dh->rs02Size > 0)
 	    tmp = g_strdup_printf(_("Medium: %s, %lld sectors%s"),
-				  dh->typedescr, dh->sectors,
+				  dh->typeDescr, dh->sectors,
 				  dh->rs02Size ? ", Ecc" : "");
 	 else
 	    tmp = g_strdup_printf(_("Medium \"%s\": %s, %lld sectors%s created %s"),
 				  dh->isoInfo->volumeLabel,
-				  dh->typedescr, dh->sectors,
+				  dh->typeDescr, dh->sectors,
 				  dh->rs02Size ? ", Ecc," : ",",
 				  dh->isoInfo->creationDate);
 
-	 if(dh->manuID[0]) dh->mediumDescr = g_strdup_printf("%s, %s %s.", tmp, _("Manuf.-ID:"), dh->manuID);
-	 else              dh->mediumDescr = g_strdup_printf("%s.", tmp);
+	 if(dh->manuID[0] && dh->manuID[0] != '-') 
+	      dh->mediumDescr = g_strdup_printf("%s, %s %s.", tmp, _("Manuf.-ID:"), dh->manuID);
+	 else dh->mediumDescr = g_strdup_printf("%s.", tmp);
 	 g_free(tmp);
 	 PrintLog("%s\n\n", dh->mediumDescr);
 	 break;
       }
 
       default:
-      {  char *td = alloca(strlen(dh->typedescr)+1);
+      {  char *td = alloca(strlen(dh->typeDescr)+1);
 
- 	 strcpy(td, dh->typedescr);
+ 	 strcpy(td, dh->typeDescr);
 	 CloseDevice(dh);
        	 Stop(_("This software does not support \"%s\" type media."), td);
        	 return NULL;
       }
    }
 
-   if(dh->mainType != CD && query_copyright(dh))
+   if(dh->mainType == DVD && query_copyright(dh))
    {  CloseDevice(dh);
       Stop(_("This software does not support encrypted media.\n"));
    }
@@ -2063,6 +2448,46 @@ DeviceHandle* OpenAndQueryDevice(char *device)
 
    if(Closure->simulateDefects)
      dh->defects = SimulateDefects(dh->sectors);
+
+   return dh;
+}
+
+/*** 
+ *** Open the device and query some of the medium properties.
+ ***
+ * Does NOT gather enough information for actually reading from the device;
+ * use OpenAndQueryDevice() for that.
+ */
+
+DeviceHandle* QueryMediumInfo(char *device)
+{  DeviceHandle *dh = NULL;
+
+   /* Open the device. */
+
+   dh = OpenDevice(device);
+   InquireDevice(dh, 0);
+
+   if(!TestUnitReady(dh))
+   {  if(   dh->sense.sense_key == 2  /* Not Ready */
+	 && dh->sense.asc == 0x3a)    /* Medium not present */
+	   Stop(_("Device %s: no medium present\n"), device);
+      else Stop(_("Device %s does not become ready:\n%s\n\n"), device,
+		GetSenseString(dh->sense.sense_key, dh->sense.asc, dh->sense.ascq, FALSE));
+   }
+
+   /* General type detection */
+
+   query_type(dh, 1);
+   query_blank(dh);
+
+   /* Examine medium size (only on known/handled formats) */
+
+   if(dh->subType != UNSUPPORTED)
+   {  if(Closure->querySize >= 1)  /* parseUDF or better requested */
+	 ExamineUDF(dh);
+
+      dh->sectors = query_size(dh);
+   }
 
    return dh;
 }

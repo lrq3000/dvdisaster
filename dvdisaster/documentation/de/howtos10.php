@@ -50,6 +50,7 @@ howto_headline("Datenträger überprüfen", "Übersicht", "images/scan-icon.png"
  <td>
   1. <a href="howtos11.php">Grundeinstellungen vornehmen</a><br>
   2. <a href="howtos12.php">Datenträger überprüfen</a><br>
+  3. <a href="howtos13.php">Ergebnisse bewerten</a><br>
  </td>
 </tr>
 

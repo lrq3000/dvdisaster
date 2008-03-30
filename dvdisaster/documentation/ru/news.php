@@ -21,6 +21,14 @@ $news_counter = 0;
 
 news_headline("Новости dvdisaster");
 
+news_item("30.03.2008", "dvdisaster 0.71.26 released", "
+  This version contains a new dialog providing information about inserted 
+  media (menu Tools/Medium info);
+  during this course detection of media types (CD/DVD/BD) was changed. 
+  Please report if this breaks compatibility with formerly working drives.
+  Improved support for BlueRay media.
+");
+
 news_item("05.03.2008", "Problem with previous Windows release fixed  (0.70.6 / 0.71.25)", "
   Rolled back support for localized file names in version 0.70.6
   as it broke large file support under Windows. A new handler

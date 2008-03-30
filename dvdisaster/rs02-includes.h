@@ -83,12 +83,12 @@ typedef struct
    /*** Widgets in the Preferences window */
 
    GtkWidget *radio1A, *radio1B, *radio2A, *radio2B;
-   GtkWidget *cdButtonA, *dvdButton1A, *dvdButton2A;
-   GtkWidget *cdButtonB, *dvdButton1B, *dvdButton2B;
-   GtkWidget *cdUndoButtonA, *dvdUndoButton1A, *dvdUndoButton2A;
-   GtkWidget *cdUndoButtonB, *dvdUndoButton1B, *dvdUndoButton2B;
-   GtkWidget *cdEntryA, *dvdEntry1A, *dvdEntry2A, *otherEntryA;
-   GtkWidget *cdEntryB, *dvdEntry1B, *dvdEntry2B, *otherEntryB;
+   GtkWidget *cdButtonA, *dvdButton1A, *dvdButton2A, *bdButton1A, *bdButton2A;
+   GtkWidget *cdButtonB, *dvdButton1B, *dvdButton2B, *bdButton1B, *bdButton2B;
+   GtkWidget *cdUndoButtonA, *dvdUndoButton1A, *dvdUndoButton2A, *bdUndoButton1A, *bdUndoButton2A;
+   GtkWidget *cdUndoButtonB, *dvdUndoButton1B, *dvdUndoButton2B, *bdUndoButton1B, *bdUndoButton2B;
+   GtkWidget *cdEntryA, *dvdEntry1A, *dvdEntry2A, *bdEntry1A, *bdEntry2A, *otherEntryA;
+   GtkWidget *cdEntryB, *dvdEntry1B, *dvdEntry2B, *bdEntry1B, *bdEntry2B, *otherEntryB;
    GtkWidget *cacheScaleA, *cacheScaleB;
    LabelWithOnlineHelp *cacheLwoh;
 

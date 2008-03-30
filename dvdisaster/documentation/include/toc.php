@@ -37,7 +37,7 @@ subsection("index30");
 # Howtos
 
 section("howtos");
-  de("typische Anwendungen");
+  de("Typische Anwendungen");
   en("Howtos");
   ru("Howto's");
 
@@ -82,24 +82,64 @@ subsubsection("howtos14");
   ru("Advanced settings");
 
 subsection("howtos20");
-  de("Fehlerkorrektur-Daten erzeugen");
-  en("Creating error correction data");
+  de("Fehlerkorrektur-Daten als Datei erzeugen");
+  en("Putting error correction data on a separate file");
   ru("Создание данных для исправления ошибок");
 
 subsubsection("howtos21");
-  de("als Datei");
-  en("as a file");
-  ru("в виде файла");
+  de("Entscheidungshilfe");
+  en("Decision help");
+  ru("Decision help");
 
 subsubsection("howtos22");
-  de("im Abbild");
-  en("within the image");
-  ru("внутри образа");
+  de("Grundeinstellungen");
+  en("Basic settings for reading");
+  ru("Basic settings for reading");
+
+subsubsection("howtos23");
+  de("Fehlerkorrektur-Datei erzeugen");
+  en("Creating the error correction file");
+  ru("Creating the error correction file");
+
+subsubsection("howtos24");
+  de("Fehlerkorrektur-Datei archivieren");
+  en("Archiving error correction files");
+  ru("Archiving error correction files");
+
+subsubsection("howtos25");
+  de("Fortgeschrittene Einstellungen");
+  en("Advanced settings");
+  ru("Advanced settings");
 
 subsection("howtos30");
-  de("Beschädigten Datenträger einlesen");
-  en("Reading defective media");
-  ru("Чтение поврежденных носителей");
+  de("Fehlerkorrektur-Daten auf dem Datenträger ablegen");
+  en("Putting error correction data on the medium");
+  ru("Putting error correction data on the medium");
+
+subsubsection("howtos31");
+  de("Entscheidungshilfe");
+  en("Decision help");
+  ru("Decision help");
+
+subsubsection("howtos32");
+  de("ISO-Abbild erzeugen");
+  en("Creating the iso image");
+  ru("Creating the iso image");
+
+subsubsection("howtos33");
+  de("Einstellungen");
+  en("Settings");
+  ru("Settings");
+
+subsubsection("howtos34");
+  de("ISO-Abbild erweitern");
+  en("Augmenting the ISO image");
+  ru("Augmenting the ISO image");
+
+subsubsection("howtos35");
+  de("ISO-Abbild schreiben");
+  en("Writing the ISO image");
+  ru("Writing the ISO image");
 
 subsection("howtos40");
   de("Datenträger-Abbild rekonstruieren");

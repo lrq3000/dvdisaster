@@ -229,7 +229,11 @@ RS02Layout *CalcRS02Layout(gint64 data_sectors, int requested_roots)
             lay->mediumCapacity = Closure->cdSize;   /* CDR */
       else if(data_sectors < Closure->dvdSize1)
             lay->mediumCapacity = Closure->dvdSize1; /* Single layered DVD */
-      else  lay->mediumCapacity = Closure->dvdSize2; /* Double layered DVD */
+      else if(data_sectors < Closure->dvdSize2)
+	    lay->mediumCapacity = Closure->dvdSize2; /* Double layered DVD */
+      else if(data_sectors < Closure->bdSize1)
+	    lay->mediumCapacity = Closure->bdSize1;  /* Single layered BD */
+      else  lay->mediumCapacity = Closure->bdSize2;  /* Double layered BD */
    }
 
    lay->dataSectors      = data_sectors;

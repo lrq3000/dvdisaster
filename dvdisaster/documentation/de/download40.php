@@ -20,7 +20,7 @@ begin_page();
 und möchten sehen, wie diese bei anderen Anwendern funktionieren,
 bevor wir die nächste stabile Version von dvdisaster veröffentlichen.<p>
 
-Insbesondere erhält dvdisaster gerade Unterstützung für BD und HD-DVD-Datenträger,
+Insbesondere erhält dvdisaster gerade Unterstützung für BD-Datenträger,
 die noch auf mehr Laufwerken getestet werden muß. Die Methode zum 
 <a href="howtos90.php">Überprüfen der Kompatibilität von Abbildern</a> ist
 sehr hilfreich beim Ausprobieren neuer Laufwerke. Bitte 
@@ -42,6 +42,29 @@ und warten Sie auf die Veröffentlichung von Version 0.72.
 
 Die Alpha-Versionen verwenden das gleiche Paketformat wie die normalen
 Versionen.<p>
+
+<table class="download" cellpadding="0" cellspacing="5">
+<tr><td><b>dvdisaster-0.71 (devel26)</b></td><td align="right">30-Mär-2008</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+  <table>
+    <tr><td align="right">&nbsp;&nbsp;Quellkode für alle Betriebssysteme:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.26.tar.bz2?download">dvdisaster-0.71.26.tar.bz2</a></td></tr>
+    <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.26.tar.bz2.gpg?download">dvdisaster-0.71.26.tar.bz2.gpg</a></td></tr>
+    <tr><td align="right">Binärversion für Windows:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.26-setup.exe?download">dvdisaster-0.71.26-setup.exe</a></td></tr>
+    <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.26-setup.exe.gpg?download">dvdisaster-0.71.26-setup.exe.gpg</a></td></tr>
+
+  </table>
+</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+Diese Version enthält einen neuen Dialog mit Informationen über den
+eingelegten Datenträger; dazu wurde die Erkennung des Datenträger-Typs 
+(CD/DVD/BD) verändert. Die Unterstützung von BlueRay-Datenträgern wurde verbessert.
+</td></tr></table><p>
 
 <table class="download" cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.71 (devel25)</b></td><td align="right">05-Mär-2008</td></tr>
