@@ -1,4 +1,6 @@
 0.71 (devel-27)
+	- synced CVS with development tree
+	- started english online documentation
 	- more robust handling for incomplete/unfinalized media; should produce 
 	  less dreaded "couldn't query [several possiblilities] length" 
 	  errors now ;-)
