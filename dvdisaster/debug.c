@@ -22,7 +22,9 @@
 #include "dvdisaster.h"
 
 #include "rs02-includes.h"
-#include "rs03-includes.h"
+#ifdef HAVE_RS03
+  #include "rs03-includes.h"
+#endif
 #include "udf.h"
 
 #include <time.h>
@@ -272,6 +274,7 @@ static void random_error2(EccHeader *eh, char *prefix, char *arg)
 
 /* RS03 ecc images */
 
+#ifdef HAVE_RS03
 static void random_error3(EccHeader *eh, char *prefix, char *arg)
 {  RS03Layout *lay;
    ImageInfo *ii;
@@ -403,6 +406,7 @@ static void random_error3(EccHeader *eh, char *prefix, char *arg)
    FreeImageInfo(ii);
    g_free(lay);
 }
+#endif
 
 void RandomError(char *prefix, char *arg)
 {  Method *method = EccFileMethod(TRUE);
@@ -419,11 +423,12 @@ void RandomError(char *prefix, char *arg)
    }
 
    /* FIXME: currently only handles augmented images */
-
+#ifdef HAVE_RS03
    if(!strncmp(method->name, "RS03", 4))
    {  random_error3(method->lastEh, prefix, arg);
       return;
    }
+#endif
 
    strncpy(buf, method->name, 4); buf[4] = 0;
    Stop("Don't know how to handle codec %s\n", buf);

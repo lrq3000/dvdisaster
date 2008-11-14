@@ -399,7 +399,9 @@ clean:
 	@if test -e ~/.dvdisaster-original-author; then \
 	  md5sum -b *.h *.c >fingerprints.md5; \
 	fi
-	@$(MAKE) --no-print-directory -C papers clean
+	@if test -e $(SRCDIR)/papers; then \
+	  $(MAKE) --no-print-directory -C papers clean; \
+	fi
 
 BUILD=`grep BUILD $(SRCDIR)/build.h | cut -d ' ' -f 3`
 arch:	archclean time-stamp
