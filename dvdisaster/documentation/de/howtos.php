@@ -72,12 +72,19 @@ Datenträgers sind die Abbilder vollständig oder unvollständig.</td>
 
 <table cellspacing="10">
 <tr>
-<td colspan="2" align="center" width="15%"><img src="../images/ecc.png"></td>
+<td align="center" width="15%"><img src="../images/good-cd-ecc.png"></td>
+<td align="center" width="15%"><img src="../images/ecc.png"></td>
 <td width="55%">Die zentrale Anwendung von dvdisaster ist die Wiederherstellung
 von Abbildern durch Fehlerkorrektur-Daten. An diesem Symbol erkennen Sie, ob
-Fehlerkorrektur-Daten benötigt werden.</td>
+Fehlerkorrektur-Daten benötigt werden.
+</td>
 </tr>
-</table>
+<tr  valign="top">
+<td>Datenträger mit Fehlerkorrektur- Daten</td>
+<td>separate Fehlerkorrektur- Datei</td>
+<td></td>
+</tr>
+</table><p>
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

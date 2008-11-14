@@ -28,8 +28,10 @@ function begin_screen_shot($caption, $image)
    global $screen_shot_image;
    global $screen_shot_caption;
    global $screen_shot_expand;
+   global $screen_shot_way;
 
    $screen_shot_expand=$_GET["expand"];
+   $screen_shot_way=$_GET["way"];
    $screen_shot_counter++;
    $screen_shot_image = $image;
    $screen_shot_caption = $caption;
@@ -58,13 +60,16 @@ function end_screen_shot()
    global $screen_shot_image;
    global $screen_shot_caption;
    global $screen_shot_expand;
+   global $screen_shot_way;
    global $script_file;
    global $trans_screen_shot;
 
    if($screen_shot_counter == $screen_shot_expand)
    {  echo "  </td></tr>\n";
       echo "  <tr><td align=\"center\">\n";
-      echo "    <a href=\"${script_file}#snap${screen_shot_counter}\">\n";
+      if($screen_shot_way != "")
+	   echo "    <a href=\"${script_file}?way=$screen_shot_way&#snap${screen_shot_counter}\">\n";
+      else echo "    <a href=\"${script_file}#snap${screen_shot_counter}\">\n";
       echo "      <img src=\"images/$screen_shot_image\">\n";
       echo "    </a>\n";
       echo "  </td></tr>\n";
@@ -78,7 +83,9 @@ function end_screen_shot()
       echo "      <a name=\"snap${screen_shot_counter}\"></a>\n";
       echo "      <table class=\"thumbnail\" width=\"160px\">\n";
       echo "        <tr><td><font size=\"-1\">$screen_shot_caption</font></td></tr>\n";
-      echo "        <tr><td><a href=\"${script_file}?expand=${screen_shot_counter}#snap${screen_shot_counter}\">";
+      if($screen_shot_way != "")
+	   echo "        <tr><td><a href=\"${script_file}?way=$screen_shot_way&expand=${screen_shot_counter}#snap${screen_shot_counter}\">";
+      else echo "        <tr><td><a href=\"${script_file}?expand=${screen_shot_counter}#snap${screen_shot_counter}\">";
       echo "<img src=\"thumbnails/$screen_shot_image\"></a>";
       echo "</td></tr>\n";
       echo "      </table>\n";

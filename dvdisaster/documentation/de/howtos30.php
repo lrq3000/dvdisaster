@@ -11,6 +11,7 @@
 require("../include/dvdisaster.php");
 require("../include/footnote.php");
 begin_page();
+howto_headline("Fehlerkorrektur-Daten erstellen", "Übersicht", "images/create-icon.png");
 ?>
 
 <!--- Insert actual page content below --->
@@ -59,10 +60,10 @@ zu erzeugen.
 <tr>
 <td></td>
 <td>
-1. <a href="howtos32.php">ISO-Abbild der zu schreibenden Daten erzeugen</a><br>
-2. <a href="howtos33.php">Grundeinstellungen für die Fehlerkorrektur-Daten vornehmen</a><br>
-2. <a href="howtos34.php">ISO-Abbild um Fehlerkorrektur-Daten erweitern</a><br>
-3. <a href="howtos35.php">ISO-Abbild auf den Datenträger schreiben</a>
+1. <a href="howtos32.php">Grundeinstellungen für die Fehlerkorrektur-Daten vornehmen</a><p>
+2a. <a href="howtos33.php#a">Ein ISO-Abbild erstellen,</a><br>
+2b. <a href="howtos33.php#b">mit Fehlerkorrektur-Daten erweitern</a><br>
+2c. <a href="howtos33.php#c">und auf einen Datenträger schreiben.</a>
 </td>
 </tr>
 </table><p>

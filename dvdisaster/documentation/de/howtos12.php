@@ -33,8 +33,7 @@ beeinflussen. Führen Sie dann die folgenden Schritte aus:<p>
 <td valign="top"><b>Legen Sie den zu prüfenden Datenträger in ein Laufwerk</b>, 
 das direkt mit 
 Ihrem Rechner verbunden ist. Sie können keine Netzwerklaufwerke und keine
-Laufwerke innerhalb von virtuellen Maschinen wie VMWare(R) oder Xen(R) 
-verwenden.</td>
+Laufwerke innerhalb von virtuellen Maschinen verwenden.</td>
 </tr>
 </table>
 
@@ -85,7 +84,7 @@ auf den "Prüfen"-Knopf durch.</td>
 </tr>
 </table>
 
-<?php begin_howto_shot("Abbild einlesen.","good-cd.png", ""); ?>
+<?php begin_howto_shot("Datenträger prüfen.","good-cd.png", ""); ?>
 <b>Beobachten Sie den Fortschritt der Überprüfung.</b>
 Führen Sie während dieser Zeit keine anderen Aktionen auf dem Computer durch.
 Das Aufrufen oder Bedienen von anderen Programmen oder auch das 

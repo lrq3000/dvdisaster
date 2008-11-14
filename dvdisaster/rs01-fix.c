@@ -388,16 +388,17 @@ void RS01Fix(Method *method)
         erasure_map[i] = 0;
 
         if(block_idx[i] < ei->sectors)  /* ignore the padding sectors! */
-	{
-	  if(!memcmp(fc->imgBlock[i]+cache_offset, Closure->deadSector, 2048))
-	  {  erasure_map[i] = 1;
-	     erasure_list[erasure_count++] = i;
-          }
-	  else if(crc != fc->crcBuf[i][cache_sector])
-	  {  erasure_map[i] = 3;
-	     erasure_list[erasure_count++] = i;
-	     PrintCLI(_("CRC error in sector %lld\n"),block_idx[i]);
-          }
+	{  int err=CheckForMissingSector(fc->imgBlock[i]+cache_offset, block_idx[i], NULL, 0);
+
+	   if(err != SECTOR_PRESENT)
+	   {  erasure_map[i] = 1;
+	      erasure_list[erasure_count++] = i;
+	   }
+	   else if(crc != fc->crcBuf[i][cache_sector])
+	   {  erasure_map[i] = 3;
+	      erasure_list[erasure_count++] = i;
+	      PrintCLI(_("CRC error in sector %lld\n"),block_idx[i]);
+	   }
 	}
      }
 
@@ -437,6 +438,7 @@ void RS01Fix(Method *method)
 
 	for(i=0; i<erasure_count; i++)
 	{  gint64 idx = block_idx[erasure_list[i]];
+	   unsigned char buf[2048];
 
 	   if(idx < ii->sectors)
 	     continue;  /* It's (already) dead, Jim ;-) */
@@ -445,7 +447,9 @@ void RS01Fix(Method *method)
 	     Stop(_("Failed seeking to sector %lld in image [%s]: %s"),
 		  idx, "FD", strerror(errno));
 
-	   n = LargeWrite(ii->file, Closure->deadSector, 2048);
+	   CreateMissingSector(buf, idx, eh->mediumFP, eh->fpSector,
+			       NULL);  //FIXME: add volume label if available
+	   n = LargeWrite(ii->file, buf, 2048);
 	   if(n != 2048)
 	     Stop(_("Failed writing to sector %lld in image [%s]: %s"),
 		  idx, "WD", strerror(errno));

@@ -11,11 +11,9 @@
 require("../include/dvdisaster.php");
 require("../include/footnote.php");
 begin_page();
-?>
+howto_headline("Fehlerkorrektur-Daten als eigenständige Datei erzeugen", "Übersicht", "images/create-icon.png");?>
 
 <!--- Insert actual page content below --->
-
-<h3>Fehlerkorrektur-Daten als eigenständige Datei erzeugen</h3>
 
 <table width="100%" cellspacing="5">
 <tr valign="top">
@@ -61,7 +59,7 @@ Ein guter, fehlerfreier<a href="#footnote"><sup>*)</sup></a> Datenträger,</td>
 <tr>
 <td></td>
 <td>
-1. <a href="howtos22.php">Grundeinstellungen zum Lesen vornehmen</a><br>
+1. <a href="howtos22.php">Grundeinstellungen vornehmen</a><br>
 2. <a href="howtos23.php">Fehlerkorrektur-Datei erstellen</a><br>
 3. <a href="howtos24.php">Fehlerkorrektur-Dateien archivieren</a>
 </td>

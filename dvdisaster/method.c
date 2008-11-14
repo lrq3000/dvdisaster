@@ -118,7 +118,7 @@ static int read_fingerprint(LargeFile *file, unsigned char *fingerprint, gint64 
 
    if(n != 2048) return FALSE;
 
-   if(!memcmp(buf, Closure->deadSector, 2048))
+   if(CheckForMissingSector(buf, sector, NULL, 0) != SECTOR_PRESENT)
      return FALSE;
 
    MD5Init(&md5ctxt);
@@ -167,8 +167,8 @@ EccHeader* FindHeaderInImage(char *filename)
 
 	    /* Medium read error in ecc header? */
 
-	    if(   !memcmp(buf, Closure->deadSector, 2048)
-	       || !memcmp(buf+2048, Closure->deadSector, 2048))
+	    if(   (CheckForMissingSector(buf, pos, NULL, 0) != SECTOR_PRESENT)
+	       || (CheckForMissingSector(buf+2048, pos+1, NULL, 0) != SECTOR_PRESENT))
 	    {  
 //printf(" header at %lld: read error\n", (long long int)pos);
 	       goto check_next_header;

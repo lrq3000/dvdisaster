@@ -95,6 +95,10 @@ static void action_cb(GtkWidget *widget, gpointer data)
       {  remove_the_00s(Closure->imageName);
 	 remove_the_00s(Closure->eccName);
       }
+
+      /* Reset warnings which may be temporarily disabled during an action */
+
+      Closure->noMissingWarnings = FALSE;
    }
 
    /* Dispatch action */
@@ -377,7 +381,6 @@ void CreateMainWindow(int *argc, char ***argv)
     /* and with destroy events */
 
     g_signal_connect(window, "destroy", G_CALLBACK(destroy_cb), NULL);
-
 
     /*** Validate our binary directory */
 

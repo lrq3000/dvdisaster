@@ -170,8 +170,10 @@ typedef struct _DeviceHandle
    char *bookDescr;           /* human readable of above */
    int profile;               /* profile selected by drive */
    char *profileDescr;        /* human readable form of above */
+   char *shortProfile;        /* short version of above */
    int isDash;                /* DVD- */
    int isPlus;                /* DVD+ */
+   int incomplete;            /* disc is not finalized or otherwise broken */
    int discStatus;            /* obtained from READ DISC INFORMATION query */
    int rewriteable;
    char *mediumDescr;         /* textual description of medium */

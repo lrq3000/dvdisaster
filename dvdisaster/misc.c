@@ -755,7 +755,6 @@ void SetLabelText(GtkLabel *label, char *format, ...)
    }
    else li->text = g_locale_to_utf8("(null)", -1, NULL, NULL, NULL);
    va_end(argp);
-
    g_idle_add(label_idle_func, li);
 }
 

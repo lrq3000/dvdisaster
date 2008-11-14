@@ -63,7 +63,7 @@ Versionen.<p>
 <tr><td colspan="2">
 Diese Version enthält einen neuen Dialog mit Informationen über den
 eingelegten Datenträger; dazu wurde die Erkennung des Datenträger-Typs 
-(CD/DVD/BD) verändert. Die Unterstützung von BlueRay-Datenträgern wurde verbessert.
+(CD/DVD/BD) verändert. Die Unterstützung von BD-Datenträgern wurde verbessert.
 </td></tr></table><p>
 
 <table class="download" cellpadding="0" cellspacing="5">

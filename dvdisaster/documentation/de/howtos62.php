@@ -14,108 +14,87 @@ begin_page();
 
 <!--- Insert actual page content below --->
 
-<h3>Falsche Anwendung von dvdisaster</h3>
+<h3>Richtige Anwendung von dvdisaster</h3>
 
-Joe User verläßt sich darauf, daß seine Datenträger 
-auch ohne zusätzlichen Schutz halten.<p>
+Das folgende Beispiel skizziert, wie Jane dvdisaster anwendet. <p>
 
 <table width="100%">
 <tr>
 <td width="15%">10. Feb. 2004</td>
 <td width="60px"><img src="../images/good-cd.png"></td>
-<td width="60px"><img src="../images/good-cd.png"></td>
-<td>Joe User brennt zwei CDs mit wichtigen Daten. Er trifft jedoch keine weiteren
-Maßnahmen, um die Daten auf seinen CDs zu schützen.</td>
+<td width="60px"></td>
+<td>Jane brennt eine neue CD mit wichtigen Daten.</td>
+</tr>
+<tr><td colspan="4"> <p> </td></tr>
+<tr>
+<td> </td>
+<td><img align="top" src="../images/good-cd.png"></td>
+<td><img align="top" src="../images/ecc.png"></td>
+<td>Um ihre CD vor Datenverlust zu schützen, 
+    <a href="howtos20.php">erzeugt sie mit dvdisaster Fehlerkorrektur-Daten</a>.<br>
+    Beides hebt sie für eine zukünftige Verwendung auf.</td>
 </tr>
 <tr><td colspan="4"> <hr> </td></tr>
 <tr>
 <td>14. Mai 2005</td>
 <td><img align="top" src="../images/good-cd.png"></td>
-<td><img align="top" src="../images/good-cd.png"></td>
-<td>Joe verwendet seine CDs regelmäßig. Sie sind nach einem Jahr
-noch völlig in Ordnung.</td>
+<td><img align="top" src="../images/ecc.png"></td>
+<td>Jane weiß, daß bei einer normalen Nutzung Ihrer CD nicht auf alle Datenbereiche
+   täglich zugegriffen wird. Daher führt sie nach einem Jahr mit dvdisaster eine
+   <a href="howtos10.php">Überprüfung auf Lesefehler</a> durch, um sicherzustellen,
+   daß die CD nicht an einer wenige benutzten Stelle bereits Beschädigungen aufweist.
+   Nach gut einem Jahr ist die CD noch völlig in Ordnung.</td>
 </tr>
 <tr><td colspan="4"> <hr> </td></tr>
 <tr>
 <td>19. Aug 2007</td>
 <td><img align="top" src="../images/bad-cd.png"></td>
-<td><img align="top" src="../images/good-cd.png"></td>
-<td>Nach weiteren zwei Jahren stellt Joe fest, daß er auf einige Daten von seiner
-ersten CD nicht mehr zugreifen kann.</td> 
-</tr>
-<tr>
- <td align="right"><a href="howtos10.php">prüfen</a></td>
- <td align="center"><img align="top" src="../images/down-arrow.png"></td>
- <td align="center"><img align="top" src="../images/down-arrow.png"></td>
- <td></td>
-</tr>
-<tr>
-<td>20. Aug 2007</td>
-<td><img align="top" src="../images/bad-cd.png"></td>
-<td><img align="top" src="../images/bad-cd.png"></td>
-<td>Joe lädt sich dvdisaster herunter und führt eine 
-<a href="howtos10.php">Überprüfung auf Lesefehler</a> durch. 
-Dabei stellt er fest, daß die CD 25000 unlesbare Sektoren enthält.
-Ein Test der zweiten CD ergibt, daß auch diese bisher 
-unbemerkt 1500 unlesbare Sektoren entwickelt hat. </td>
+<td><img align="top" src="../images/ecc.png"></td>
+<td>Nach weiteren zwei Jahren stellt Jane fest,
+daß sie einige Dateien auf der CD nicht mehr lesen kann. 
+Eine <a href="howtos10.php">Überprüfung auf Lesefehler</a> bestätigt, daß
+die CD durch Alterung unbrauchbar geworden ist und defekte Sektoren aufweist.</td>
 </tr>
 <tr>
  <td align="right"><a href="howtos30.php">lesen</a></td>
  <td align="center"><img align="top" src="../images/down-arrow.png"></td>
- <td align="center"><img align="top" src="../images/down-arrow.png"></td>
+ <td></td><td></td>
+</tr>
+<tr><td colspan="4"> <p> </td></tr>
+<tr>
+<td> </td>
+<td><img align="top" src="../images/bad-image.png"></td>
+<td><img align="top" src="../images/ecc.png"></td>
+<td>Jane verwendet dvdisaster, um von der beschädigten CD 
+<a href="howtos30.php">noch so viele Sektoren wie möglich in ein ISO-Abbild</a>
+einzulesen.</td>
+<tr>
+ <td align="right"><a href="howtos40.php">wieder-<br>herstellen</a></td>
+ <td align="center" colspan="2"><img align="top" src="../images/dbl-arrow-left.png"></td>
  <td></td>
 </tr>
 <tr><td colspan="4"> <p> </td></tr>
 <tr>
-<td>21. Aug 2007</td>
-<td><img align="top" src="../images/bad-image.png"></td>
-<td><img align="top" src="../images/bad-image.png"></td>
-<td>Joe verwendet dvdisaster, um von den beschädigten CDs noch 
-<a href="howtos30.php">so viele Sektoren wie möglich</a> einzulesen. 
-Da er jedoch keine Fehlerkorrektur-Daten hat, kann er
-die verbleibenden unlesbaren Sektoren nicht neu durch dvdisaster berechnen lassen.</td>
-</tr>
-<tr>
- <td align="right"><a href="howtos30.php">viele Lese-<br>versuche</a></td>
- <td align="center"><img align="top" src="../images/down-arrow.png"></td>
- <td align="center"><img align="top" src="../images/down-arrow.png"></td>
- <td></td>
-</tr>
-<tr><td colspan="4"> <p> </td></tr>
-<tr>
-<td>05. Sep 2007</td>
-<td><img align="top" src="../images/bad-image.png"></td>
+<td> </td>
 <td><img align="top" src="../images/good-image.png"></td>
-<td>Joe nutzt aus, daß dvdisaster ein unvollständiges Abbild durch mehrere
-Leseversuche weiter vervollständigen kann. Er überträgt die beschädigten Abbilder
-nacheinander auf mehrere Rechner, um Leseversuche mit verschiedenen Laufwerken
-zu unternehmen. Nach gut zwei Wochen konnte er zumindest die fehlenden Sektoren
-der zweiten CD wieder einlesen. Von der ersten CD sind jedoch noch immer 21000 
-Sektoren unlesbar.</td>
-</tr>
+<td><img align="top" src="../images/ecc.png"></td>
+<td>Mit Hilfe der Fehlerkorrektur-Daten kann Jane das
+    <a href="howtos40.php">ISO-Abbild vollständig wiederherstellen</a>.
 <tr>
- <td align="right">nur eine CD<br>gerettet</td>
+ <td align="right">Neue CD brennen</td>
  <td align="center"><img align="top" src="../images/down-arrow.png"></td>
- <td align="center"><img align="top" src="../images/down-arrow.png"></td>
- <td></td>
+ <td></td><td></td>
 </tr>
 <tr><td colspan="4"> <p> </td></tr>
 <tr>
-<td>06. Sep 2007</td>
-<td><img align="top" src="../images/bad-cd.png"></td>
+<td> </td>
 <td><img align="top" src="../images/good-cd.png"></td>
-<td>Joe schreibt die erste CD als unrettbar ab und freut sich, daß er zumindest
-von dem Abbild der zweiten CD wieder einen neuen Datenträger brennen kann. 
-Wenn er rechtzeitig Fehlerkorrektur-Daten erzeugt hätte, wären ihm 
-vermutlich<sup>1)</sup> die zwei Wochen Leseversuche erspart geblieben und er hätte
-die Daten von beiden CDs noch retten können.</td></tr>
+<td><img align="top" src="../images/ecc.png"></td>
+<td>Mit dem wiederhergestellten ISO-Abbild brennt Jane eine neue CD.
+    Die Fehlerkorrektur-Daten behält sie für den Fall, daß auch die neue CD
+kaputt geht.</td>
 </table>
-<hr>
-<sup>1)</sup>Die Fehlerkorrektur setzt einen typischen Alterungsprozeß voraus.
-Wenn die CD total zerstört wird, kann sie auch mit Hilfe der Fehlerkorrektur-Daten
-nicht mehr gerettet werden. Für sehr wichtige Daten müssen Sie zusätzlich 
-Schutzmaßnahmen treffen, indem Sie zum Beispiel mehrere Kopien auf unterschiedlichen
-Datenträger-Typen erstellen.
+
 
 <!--- do not change below --->
 

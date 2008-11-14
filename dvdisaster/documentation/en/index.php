@@ -16,13 +16,13 @@ begin_page();
 
 <h3>The dvdisaster project:</h3>
 
-CD and DVD media keep their data only for a finite time (typically for many years).
+CD, DVD and BD media keep their data only for a finite time (typically for many years).
 After that time, data loss develops slowly with read errors 
 growing from the outer media region towards the inside.<p>
 
 <b>Archival with data loss protection</b><p>
 
-dvdisaster stores data on CD/DVD (<a href="qa10.php#media">supported media</a>)
+dvdisaster stores data on CD/DVD/BD (<a href="qa10.php#media">supported media</a>)
 in a way that it is fully recoverable even after some read errors have developed. 
 This enables you to rescue the complete data to a new medium.<p>
 

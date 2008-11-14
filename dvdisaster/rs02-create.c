@@ -163,8 +163,15 @@ static void check_image(ecc_closure *ec)
    guint32 *crcptr;
    int last_percent, percent;
 
-   if(Closure->crcCache) /* Discard old CRC cache no matter what it contains */
-     ClearCrcCache();    /* We will create a new one a few lines below */
+   /* Discard old CRC cache no matter what it contains.
+    * We will create a new one a few lines below.
+    * Note that it is very unusual to augment an image with ecc data
+    * which was just from an actual medium, so optimizing for the cached
+    * CRCs is not necessary. 
+    */
+
+   if(Closure->crcCache) 
+     ClearCrcCache();    
 
    last_percent = 0;
    MD5Init(&image_md5);
@@ -176,7 +183,7 @@ static void check_image(ecc_closure *ec)
 
    for(sectors = 0; sectors < lay->dataSectors; sectors++)
    {  unsigned char buf[2048];
-      int expected,n;
+      int expected,n,err;
 
       if(Closure->stopActions) /* User hit the Stop button */
 	abort_encoding(ec, FALSE);
@@ -191,10 +198,26 @@ static void check_image(ecc_closure *ec)
       if(n != expected)
 	Stop(_("Failed reading sector %lld in image: %s"),sectors,strerror(errno));
 
-      if(!memcmp(buf, Closure->deadSector, n))
-	Stop(_("Image contains unread(able) sectors.\n"
-	       "Error correction information can only be\n"
-	       "appended to complete (undamaged) images.\n"));
+      /* Look for the dead sector marker */
+
+      err = CheckForMissingSector(buf, sectors, ii->fpValid ? ii->mediumFP : NULL, FINGERPRINT_SECTOR);
+      if(err != SECTOR_PRESENT)
+      {    if(err == SECTOR_MISSING)
+	    Stop(_("Image contains unread(able) sectors.\n"
+		   "Error correction information can only be\n"
+		   "appended to complete (undamaged) images.\n"));
+	 else
+	    Stop(_("Sector %lld in the image is marked unreadable\n"
+		   "and seems to come from a different medium.\n\n"
+		   "The image was probably mastered from defective content.\n"
+		   "For example it might contain one or more files which came\n"
+		   "from a damaged medium which was NOT fully recovered.\n" 
+		   "This means that some files may have been silently corrupted.\n\n"
+		   "Error correction information can only be\n"
+		   "appended to complete (undamaged) images.\n"));
+      }
+      
+      /* Update and cache the CRC sums */
 
       *crcptr++ = Crc32(buf, 2048);
       MD5Update(&image_md5, buf, n);
@@ -251,12 +274,16 @@ static void expand_image(ecc_closure *ec)
 
    last_percent = 0;
    for(sectors = 0; sectors < lay->eccSectors; sectors++)
-   {  int n;
+   {  unsigned char buf[2048];
+      int n;
 
       if(Closure->stopActions) /* User hit the Stop button */
 	abort_encoding(ec, TRUE);
 
-      n = LargeWrite(ii->file, Closure->deadSector, 2048);
+      CreateMissingSector(buf, lay->dataSectors+sectors, 
+			  ii->mediumFP, FINGERPRINT_SECTOR, 
+			  "RS02 generation placeholder");
+      n = LargeWrite(ii->file, buf, 2048);
       if(n != 2048)
 	Stop(_("Failed expanding the image: %s\n"), strerror(errno));
 

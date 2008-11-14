@@ -445,10 +445,7 @@ void ReadDotfile()
       if(!strcmp(symbol, "dvd-size1"))       { Closure->dvdSize1 = Closure->savedDVDSize1 = atoll(value); continue; }
       if(!strcmp(symbol, "dvd-size2"))       { Closure->dvdSize2 = Closure->savedDVDSize2 = atoll(value); continue; }
       if(!strcmp(symbol, "eject"))           { Closure->eject  = atoi(value); continue; }
-      if(!strcmp(symbol, "fill-unreadable")) { Closure->fillUnreadable = atoi(value); 
-	                                       PrepareDeadSector();
-	                                       continue; 
-                                             }
+      if(!strcmp(symbol, "fill-unreadable")) { Closure->fillUnreadable = atoi(value); continue; }
       if(!strcmp(symbol, "ignore-fatal-sense")) { Closure->ignoreFatalSense  = atoi(value); continue; }
       if(!strcmp(symbol, "internal-attempts"))  { Closure->internalAttempts = atoi(value); continue; }
       if(!strcmp(symbol, "jump"))            { Closure->sectorSkip  = atoi(value); continue; }
@@ -460,6 +457,7 @@ void ReadDotfile()
 	                                       Closure->methodName = g_strdup(value); continue; }
       if(!strcmp(symbol, "max-read-attempts"))   { Closure->maxReadAttempts = atoi(value); continue; }
       if(!strcmp(symbol, "min-read-attempts"))   { Closure->minReadAttempts = atoi(value); continue; }
+      if(!strcmp(symbol, "missing-sector-marker"))  { Closure->dsmVersion  = atoi(value); continue; }
       if(!strcmp(symbol, "query-size"))      { Closure->querySize  = atoi(value); continue; }
       if(!strcmp(symbol, "raw-mode"))        { Closure->rawMode = atoi(value); continue; }
       if(!strcmp(symbol, "read-and-create")) { Closure->readAndCreate = atoi(value); continue; }
@@ -555,6 +553,7 @@ static void update_dotfile()
    g_fprintf(dotfile, "method-name:       %s\n", Closure->methodName);
    g_fprintf(dotfile, "max-read-attempts: %d\n", Closure->maxReadAttempts);
    g_fprintf(dotfile, "min-read-attempts: %d\n", Closure->minReadAttempts);
+   g_fprintf(dotfile, "missing-sector-marker: %d\n", Closure->dsmVersion);
    g_fprintf(dotfile, "query-size:        %d\n", Closure->querySize);
    g_fprintf(dotfile, "raw-mode:          %d\n", Closure->rawMode);
    g_fprintf(dotfile, "read-and-create:   %d\n", Closure->readAndCreate);
@@ -759,7 +758,6 @@ void FreeClosure()
    cond_free(Closure->docDir);
    cond_free(Closure->appData);
    cond_free(Closure->browser);
-   cond_free(Closure->deadSector);
    cond_free(Closure->errorTitle);
    cond_free(Closure->dDumpDir);
    cond_free(Closure->dDumpPrefix);

@@ -90,8 +90,11 @@ ImageInfo* OpenImageFile(EccHeader *eh, int mode)
 	  fp_sector,n,strerror(errno));
    MD5Update(&md5ctxt, buf, n);
    MD5Final(ii->mediumFP, &md5ctxt);
-   if(!memcmp(buf,Closure->deadSector,2048))  /* No sector, no md5sum */
-     memset(ii->mediumFP, 0 ,16);
+   if(CheckForMissingSector(buf, fp_sector, NULL, 0) != SECTOR_PRESENT) /* No sector, no md5sum */
+   {  memset(ii->mediumFP, 0 ,16);
+      ii->fpValid=FALSE;
+   }
+   else ii->fpValid=TRUE;
    LargeSeek(ii->file, 0);                     /* rewind */
 
    return ii;

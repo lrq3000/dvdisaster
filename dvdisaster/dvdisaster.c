@@ -27,33 +27,6 @@
 #endif
 
 /*
- * A special marker for a unread sector 
- */
-
-void PrepareDeadSector()
-{   char *end_marker;
-    int end_length; 
-
-    if(!Closure->deadSector)
-      Closure->deadSector = g_malloc(2048);
-
-    if(Closure->fillUnreadable >= 0)
-      memset(Closure->deadSector, Closure->fillUnreadable, 2048);
-    else
-    {  memset(Closure->deadSector, 0 ,2048);
-       g_sprintf(Closure->deadSector,
-		 "dvdisaster dead sector marker\n"
-		 "This sector could not be read from the image.\n"
-		 "Its contents have been substituted by the dvdisaster read routine.\n");
-
-       end_marker = "dvdisaster dead sector end marker\n";
-       end_length = strlen(end_marker);
-       memcpy(Closure->deadSector+2046-end_length, end_marker, end_length); 
-    }
-}
-
-
-/*
  * Create the error correction file
  */
 
@@ -437,7 +410,7 @@ int main(int argc, char *argv[])
 	           if(Closure->sectorSkip<0) Closure->sectorSkip = 0;
 		   break;
 	 case 'l': mode = MODE_LIST_ASPI; break;
-         case 'm': if(optarg) 
+         case 'm': if(optarg && strlen(optarg) == 4) 
 	           {  g_free(Closure->methodName);
 	              Closure->methodName = g_strdup(optarg); 
                    }
@@ -693,8 +666,6 @@ int main(int argc, char *argv[])
           break;
      }
 	  
-   PrepareDeadSector();
-
 #ifdef WIN_CONSOLE
    if(mode != MODE_SIGN && !VerifySignature())
    {  char version[80];

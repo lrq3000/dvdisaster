@@ -93,9 +93,13 @@ static void expand_image(ImageInfo *ii, gint64 new_size)
    last_percent = 0;
    new_sectors = new_size - ii->sectors;
    for(sectors = 0; sectors < new_sectors; sectors++)
-   {  int n;
+   {  unsigned char buf[2048];
+      int n;
 
-      n = LargeWrite(ii->file, Closure->deadSector, 2048);
+      CreateMissingSector(buf, ii->sectors+sectors, 
+			  ii->mediumFP, FINGERPRINT_SECTOR, 
+			  "RS02 fix placeholder");
+      n = LargeWrite(ii->file, buf, 2048);
       if(n != 2048)
 	Stop(_("Failed expanding the image: %s\n"), strerror(errno));
 
@@ -389,9 +393,6 @@ void RS02Fix(Method *self)
 	   }
 	}
 
-//if(!s) fc->imgBlock[233][19] ^= 15;
-//if(!s) memcpy(fc->imgBlock[3], Closure->deadSector, 2048);
-
         cache_sector = cache_offset = 0;
      }
 
@@ -403,15 +404,17 @@ void RS02Fix(Method *self)
      {  
         erasure_map[i] = 0;
         if(block_idx[i] < lay->protectedSectors)  /* ignore the padding sectors! */
-	{
-	  if(!memcmp(fc->imgBlock[i]+cache_offset, Closure->deadSector, 2048))
-	  {  erasure_map[i] = 1;
-	     erasure_list[erasure_count++] = i;
-	     damaged_sectors++;
-          }
+	{  int err = CheckForMissingSector(fc->imgBlock[i]+cache_offset, block_idx[i],
+					   eh->mediumFP, eh->fpSector);
+	   if(err != SECTOR_PRESENT)
+	   {  erasure_map[i] = 1;
+	      erasure_list[erasure_count++] = i;
+	      damaged_sectors++;
+	   }
 
 	  if(block_idx[i] < lay->dataSectors)     /* only data sectors have CRCs */
 	  {  guint32 crc = Crc32(fc->imgBlock[i]+cache_offset, 2048);
+	     int err;
 
 	     if(crc_idx >= 512)
 	     {  if(!LargeSeek(ii->file, crc_sector_byte))
@@ -420,9 +423,12 @@ void RS02Fix(Method *self)
 		if(LargeRead(ii->file, crc_buf, 2048) != 2048)
 		  Stop(_("problem reading crc data: %s"), strerror(errno));
 
+		err = CheckForMissingSector((unsigned char*)crc_buf, crc_sector_byte/2048,
+					    eh->mediumFP, eh->fpSector);
+
 		crc_sector_byte += 2048;
 		crc_idx = 0;
-		crc_valid = memcmp(crc_buf, Closure->deadSector, 2048);
+		crc_valid = (err == SECTOR_PRESENT);
 	     }
 
 	     if(crc_valid && !erasure_map[i] && crc != crc_buf[crc_idx])
@@ -441,13 +447,16 @@ void RS02Fix(Method *self)
      }
 
      for(i=lay->ndata; i<GF_FIELDMAX; i++)  /* Check the ecc sectors */
-     {  
-        erasure_map[i] = 0;
-	if(!memcmp(fc->imgBlock[i]+cache_offset, Closure->deadSector, 2048))
+     {  int err = CheckForMissingSector(fc->imgBlock[i]+cache_offset,
+					fc->eccIdx[i-ndata][cache_sector],
+					eh->mediumFP, eh->fpSector);
+
+	if(err)
 	{  erasure_map[i] = 1;
 	   erasure_list[erasure_count++] = i;
 	   damaged_sectors++;
 	}
+        else erasure_map[i] = 0;
 
 	ecc_count++;
      }

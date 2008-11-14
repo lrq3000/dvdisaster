@@ -22,6 +22,8 @@
 #ifndef READ_LINEAR_H
 #define READ_LINEAR_H
 
+#include "rs02-includes.h"
+
 /*
  * Local data package used during reading 
  */
@@ -34,8 +36,17 @@ typedef struct
    struct _DeviceHandle *dh;
    EccInfo *ei;
    GThread *worker;
-   struct MD5Context md5ctxt;
+   struct MD5Context md5ctxt;   /* Complete image checksum (RS01) */
+   struct MD5Context dataCtxt;  /* Image section checksums (RS02) */
+   struct MD5Context crcCtxt;   /* Image section checksums (RS02) */
+   struct MD5Context eccCtxt;   /* Ecc layer checksum (RS02) */
+   struct MD5Context metaCtxt;  /* Ecc meta checksum (RS02) */
+   int doMD5sums;               /* whether we should calculate the above */
    int savedSectorSkip;
+   CrcBuf *crcBuf;              /* CRC sums retrieved from above */
+   RS02Layout *lay;             /* needed for processing RS02 images */
+   unsigned char *fingerprint;  /* needed for missing sector generation */
+   char *volumeLabel;
 
    /* Data exchange between reader and worker */
 
@@ -50,7 +61,8 @@ typedef struct
 
    /* for usage within the reader */
 
-   gint64 sectors;                   /* medium capacity */
+   gint64 sectors;                   /* medium capacity (total number of sectors) */
+   gint64 dataSectors;               /* crc protected data sectors (RS02) */
    gint64 firstSector, lastSector;   /* reading range */
 
    gint64 readPos;                   /* current sector reading position */
@@ -80,6 +92,7 @@ typedef struct
    gint lastSegment;
    gint lastPlotted;
    gint lastPlottedY;
+   gint activeRenderers;
 
 } read_closure;
 

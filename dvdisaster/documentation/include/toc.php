@@ -47,11 +47,16 @@ subsection("howtos60");
   ru("The big picture");
 
 subsubsection("howtos61");
+  de("Fehlerkorrektur");
+  en("error correction");
+  ru("error correction");
+
+subsubsection("howtos62");
   de("richtige Anwendung");
   en("correct usage");
   ru("correct usage");
 
-subsubsection("howtos62");
+subsubsection("howtos63");
   de("falsche Anwendung");
   en("incorrect usage");
   ru("incorrect usage");
@@ -122,34 +127,54 @@ subsubsection("howtos31");
   ru("Decision help");
 
 subsubsection("howtos32");
-  de("ISO-Abbild erzeugen");
-  en("Creating the iso image");
-  ru("Creating the iso image");
+  de("Grundeinstellungen");
+  en("Basic settings");
+  ru("Basic settings");
 
 subsubsection("howtos33");
-  de("Einstellungen");
-  en("Settings");
-  ru("Settings");
+  de("Datenträger erzeugen");
+  en("Creating the medium");
+  ru("Creating the medium");
 
 subsubsection("howtos34");
-  de("ISO-Abbild erweitern");
-  en("Augmenting the ISO image");
-  ru("Augmenting the ISO image");
-
-subsubsection("howtos35");
-  de("ISO-Abbild schreiben");
-  en("Writing the ISO image");
-  ru("Writing the ISO image");
+  de("Fortgeschrittene Einstellungen");
+  en("Advanced settings");
+  ru("Advanced settings");
 
 subsection("howtos40");
   de("Datenträger-Abbild rekonstruieren");
   en("Recovering media images");
   ru("Восстановление образов носителей");
 
+subsubsection("howtos41");
+  de("Grundeinstellungen");
+  en("Basic settings");
+  ru("Basic settings");
+
+subsubsection("howtos42");
+  de("Abbild rekonstruieren");
+  en("Recovering the image");
+  ru("Recovering the image");
+
+subsubsection("howtos43");
+  de("Fortgeschrittene Einstellungen");
+  en("Advanced settings");
+  ru("Advanced settings");
+
 subsection("howtos50");
-  de("Informationen über Abbild und Fehlerkorrektur-Daten anzeigen");
+  de("Informationen über Abbilder und Fehlerkorrektur-Daten anzeigen");
   en("Getting information about images and error correction data");
   ru("Получение информации об образах и данных для исправления ошибок");
+
+subsubsection("howtos51");
+  de("Informationen anzeigen");
+  en("Show information");
+  ru("Show information");
+
+subsubsection("howtos52");
+  de("Ergebnisse auswerten");
+  en("Interpreting the results");
+  ru("Interpreting the results");
 
 subsection("howtos90");
   de("Abbild-Kompatibilität überprüfen");

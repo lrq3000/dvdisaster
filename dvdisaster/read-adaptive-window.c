@@ -354,6 +354,7 @@ void CreateAdaptiveReadWindow(GtkWidget *parent)
    Closure->readAdaptiveHeadline = gtk_label_new(NULL);
    gtk_misc_set_alignment(GTK_MISC(Closure->readAdaptiveHeadline), 0.0, 0.0); 
    gtk_misc_set_padding(GTK_MISC(Closure->readAdaptiveHeadline), 5, 0);
+   gtk_label_set_ellipsize(GTK_LABEL(Closure->readAdaptiveHeadline), PANGO_ELLIPSIZE_END);
    gtk_box_pack_start(GTK_BOX(parent), Closure->readAdaptiveHeadline, FALSE, FALSE, 3);
 
    sep = gtk_hseparator_new();

@@ -9,69 +9,72 @@
 # navigation and news if appropriate.
 
 require("../include/dvdisaster.php");
+require("../include/footnote.php");
 begin_page();
+howto_headline("Datenträger-Abbild rekonstruieren", "Übersicht", "images/fix-icon.png");
 ?>
 
 <!--- Insert actual page content below --->
 
-<h3>Platzhalter-Seite</h3>
-
-Diese Seite wurde noch nicht ausformuliert.
-<pre> </pre>
-
-
-<font size="-1">
-<i>Warum enthält diese Dokumentation leere Seiten?</i><p>
-Wir brauchen die Platzhalter-Seiten damit an anderen Stellen der
-Dokumentation bereits die passenden Querverweise gesetzt werden können. 
-
-<?php /*
-<h3>Datenträger-Abbild rekonstruieren</h3>
+<h3>Datenträger-Abbilder rekonstruieren</h3>
 
 <table width="100%" cellspacing="5">
-<tr>
+<tr valign="top">
 <td width="20%"><b>Aufgabe</b></td>
 <td>
-Die fehlenden Teile eines Datenträger-Abbild werden durch Fehlerkorrektur-Daten
-wiederhergestellt.
+Wiederherstellen des Inhalts eines defekten Datenträgers.
 </td>
 </tr>
 <tr><td> <pre> </pre> </td></tr>
 
 <tr>
-<td colspan="2"><b>Benötigte Daten:</b><p></td>
+<td colspan="2"><b>Benötigt werden:</b><p></td>
 </tr>
-
 <tr>
-<td><img src="../images/bad-image.png" align="top">
-<img src="../images/ecc.png" align="top">
-</td>
+ <td width="150px" align="right">
+   <img src="../images/bad-cd-ecc.png" align="top">
+ </td>
 <td>
-Diese Funktion benötigt das ISO-Abbild eines beschädigten Datenträgers
-sowie die zugehörigen Fehlerkorrektur-Daten. Je nach verwendetem 
-Fehlerkorrektur-Verfahren befinden sich die Fehlerkorrektur-Daten in einer
-eigenen Datei oder bereits im Abbild selbst.
-
+Ein defekter Datenträger, der <a href="howtos30.php">Fehlerkorrektur-Daten enthält</a>,
+</td>
+</tr>
+<tr><td></td><td>oder</td></tr>
+<tr>
+ <td width="150px" align="right">
+   <img src="../images/bad-cd.png">
+   <img src="../images/ecc.png">
+ </td>
+<td>
+ein defekter Datenträger und eine zugehörige <a href="howtos20.php">Fehlerkorrektur-Datei</a><a href="#footnote"><sup>*)</sup></a>.
+</td>
 </tr>
 <tr><td> <pre> </pre> </td></tr>
 
 <tr>
-<td colspan="2"><b>Durchzuführende Schritte:<p></b></td>
+<td colspan="2"><b>Dies ist zu tun:<p></b></td>
 </tr>
 
 <tr>
 <td></td>
 <td>
-1. Abbild wiederherstellen
+1. <a href="howtos41.php">Grundeinstellungen zum Lesen vornehmen,</a><br>
+2a. <a href="howtos42.php#a">ein ISO-Abbild von dem defekten Datenträger erstellen,</a><br>
+2b. <a href="howtos42.php#b">das Abbild rekonstruieren und erneut brennen.</a>
 </td>
 </tr>
 </table><p>
-   */ ?>
+
+<a href="howtos42.php">ISO-Abbild erstellen...</a>
+
+<pre>
+
+
+</pre>
 
 <!--- do not change below --->
-
 <?php
+footnote("*","footnote",
+"Die Fehlerkorrektur-Datei muß erstellt worden sein als der Datenträger noch in Ordnung war: Von einem bereits defekten Datenträger können keine Fehlerkorrektur-Dateien mehr erstellt werden.");
 # end_page() adds the footer line and closes the HTML properly.
-
 end_page();
 ?>

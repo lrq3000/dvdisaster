@@ -9,21 +9,48 @@
 # navigation and news if appropriate.
 
 require("../include/dvdisaster.php");
+require("../include/screenshot.php");
 begin_page();
+
+howto_headline("Fehlerkorrektur-Daten erstellen", "Grundeinstellungen", "images/create-icon.png");
 ?>
 
 <!--- Insert actual page content below --->
 
-<h3>Platzhalter-Seite</h3>
+<?php begin_screen_shot("Einstellungsdialog aufrufen.","global-prefs-invoke.png"); ?>
+<table><tr><td valign="top"><img src="../images/prefs-icon.png" valign="bottom"></td>
+<td>Die nachfolgend besprochene Reiterkarte finden Sie
+im Einstellungsdialog, den Sie durch Anklicken des links gezeigten 
+Werkzeug-Symbols aufrufen. Im Bildschirmfoto auf der rechten Seite
+(Anklicken vergrößert das Bild) 
+ist es grün markiert.</td>
+</tr></table>
+<?php end_screen_shot(); ?>
 
-Diese Seite wurde noch nicht ausformuliert.
 <pre> </pre>
 
+<?php begin_screen_shot("Reiterkarte \"Fehlerkorrektur\".","create-prefs-ecc2.png"); ?>
+<b>Reiterkarte "Fehlerkorrektur".</b> Wählen Sie
+als Fehlerkorrektur-Verfahren "Erweitertes Abbild (RS02)" (grünes Auswahlmenü, oben).
+Überlassen Sie dvdisaster die Auswahl der Abbild-Größe, indem Sie die
+Funktion "Verwende kleinsten möglichen Wert aus folgender Tabelle" (ebenfalls
+grün markiert) aktivieren. Dies bewirkt, daß dvdisaster den kleinsten
+Datenträger-Typ auswählt, auf den das erweiterte Abbild gespeichert werden kann.<p>
+<?php end_screen_shot(); ?>
 
-<font size="-1">
-<i>Warum enthält diese Dokumentation leere Seiten?</i><p>
-Wir brauchen die Platzhalter-Seiten damit an anderen Stellen der
-Dokumentation bereits die passenden Querverweise gesetzt werden können. 
+
+<pre> </pre>
+
+<b>Nicht verwendete Reiterkarten</b><p>
+
+Die übrigen Reiterkarten haben keinen Einfluß auf die Erstellung der 
+Fehlerkorrektur-Daten. Mit der Reiterkarte "Darstellung" können Sie die Anzeige
+von dvdisaster nach Ihrem Geschmack farblich verändern; dies hat aber
+keine Auswirkungen auf die erstellten Fehlerkorrektur-Daten.
+
+<pre> </pre>
+
+<a href="howtos33.php">Fehlerkorrektur-Daten erzeugen...</a>
 
 <!--- do not change below --->
 

@@ -372,7 +372,7 @@ static void save_sector(raw_editor_context *rec)
       MD5Update(&md5ctxt, buf, 2048);
       MD5Final(image_fp, &md5ctxt);
 	 
-      if(n != 2048 || !memcmp(buf, Closure->deadSector, 2048))
+      if(n != 2048 || (CheckForMissingSector(buf, FINGERPRINT_SECTOR, NULL, 0) != SECTOR_PRESENT))
 	 unknown_fingerprint = TRUE;
    }
 

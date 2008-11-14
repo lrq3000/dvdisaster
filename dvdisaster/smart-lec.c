@@ -1647,7 +1647,8 @@ int SmartLEC(RawBuffer *rb)
    printf("%s\n", shc->msg);
 #endif
 
-   memcpy(prev_state, Closure->deadSector, 2048);
+   CreateMissingSector(prev_state, rb->lba, NULL, 0,
+		       "SmartLEC() dummy sector");
    while(TRUE)
    {  smart_lec_iteration(shc, NULL);
 #ifdef PRINT_STEPS

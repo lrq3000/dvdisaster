@@ -33,7 +33,7 @@ INTL_LFLAGS = $(CFG_INTL_LFLAGS)
 INTL_LIBS   = $(CFG_INTL_LIBS)
 
 CAM_LFLAGS = $(CFG_CAM_LFLAGS)
-CAM_LIBS   = $(CFG_CAM_LIBS)
+AM_LIBS   = $(CFG_CAM_LIBS)
 
 GTK_CFLAGS   = $(CFG_GTK2_CFLAGS)
 GTK_LIBS     = $(CFG_GTK2_LIBS)
@@ -61,15 +61,18 @@ OFILES = $(CFG_OFILES)
 # Compilation related
 ######################################################################
 
-.PHONY : all help show locale
+.PHONY : all help show locale time-stamp
 
 .c.o:
 	@echo "Compiling:" $*.c
 	@$(CC) $(COPTS) -c $*.c
 
-all: dvdisaster images
+all: time-stamp dvdisaster images 
 
 # Building the dvdisaster binary
+
+time-stamp:
+	@$(SRCDIR)/scripts/time-stamper.bash $(SRCDIR)/build.h
 
 dvdisaster: inlined-icons.h $(OFILES) 
 	@if test $(CFG_SYS_OPTIONS) == -DSYS_MINGW; \
@@ -197,6 +200,8 @@ mount-php:
 	  if ! test -e $(PHPMOUNTDIR); then sudo mkdir -p $(PHPMOUNTDIR); fi;\
 	  sudo mount -o bind $(SRCDIR)/documentation $(PHPMOUNTDIR) ;\
 	fi
+	make version.php
+	make thumbnails
 
 html: mount-php version.php thumbnails
 	@echo -n "Producing html documentation... "
@@ -396,8 +401,9 @@ clean:
 	fi
 	@$(MAKE) --no-print-directory -C papers clean
 
-arch:	archclean
-	@cd .. ; tar -c -z -f $(PKGNAME)-arch.tgz $(PKGNAME)
+BUILD=`grep BUILD $(SRCDIR)/build.h | cut -d ' ' -f 3`
+arch:	archclean time-stamp
+	@cd .. ; tar -c -z -f $(PKGNAME)-$(BUILD).tgz $(PKGNAME)
 
 # TAG: online-docs
 www:

@@ -57,7 +57,7 @@ The alpha versions use the same package format as the regular releases.<p>
 <tr><td colspan="2">
 This version contains a new dialog providing information about inserted media;
 during this course detection of media types (CD/DVD/BD) was changed. Improved
-support for BlueRay media.
+support for BD media.
 </td></tr></table><p>
 
 <table class="download" cellpadding="0" cellspacing="5">

@@ -1,15 +1,25 @@
 
-CURRENTLY WORKING ON
+To do/ Release schedule
 
-- 0.72: improved data recovery for CD
 
-- 0.74: multi threaded encoding/decoding for multicore processor support
+Version 0.72: coming soon
+ - German/English documentation needs to be completed
+ - some more work with the CD raw reading heuristics required
 
-TODO  (with no particular order / schedule)
+Version 0.74: catch up with queued up suggestions
+- add pause/resume button
+- optionally pause after n read errors for drives which
+  need to cool down 
+- add function for stripping RS02 data from image
+- don't create unusable images when RS02 encoding is aborted
+- add quiet option for command line mode
+- display estimated finishing time for encoding/decoding
 
-- let user select the number of reading passes so that a defective
-  medium can be read in several passed overnight
-  a user-specified pause between passes should also be included
+Version 0.80: new RS03 codec
+ - lots of speed optimizations in error correction data encoding
+ - multithreaded / multicore processor support
+
+Unspecified / later releases
 
 - provide a function for searching directories for suitable .ecc files 
   for the current image
@@ -17,8 +27,5 @@ TODO  (with no particular order / schedule)
 - add real UDF parsing to udf.c 
   (currently only the backward compatibility ISO structures are used)
 
-- See if we can support the graphical GNU Installer 
-
-- Add support for .h2i files
-
-- provide a command line only version (without linking against GTK+)
+- provide a command line only version (without linkage against GTK+);
+  this is non-trivial.

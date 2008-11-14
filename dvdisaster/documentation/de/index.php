@@ -18,13 +18,13 @@ begin_page();
 <h3>Das dvdisaster-Projekt</h3>
 
 
-CD- und DVD-Datenträger behalten ihre Daten nur eine endlich lange Zeit (normalerweise
+CD-, DVD- und BD-Datenträger behalten ihre Daten nur eine endlich lange Zeit (normalerweise
 viele Jahre). Danach beginnt typischerweise ein langsamer Datenverlust, 
 indem von außen nach innen immer mehr Lesefehler auftreten.<p>
 
 <b>Archivieren mit Schutz vor Datenverlust</b><p>
 
-dvdisaster archiviert Daten so auf CD/DVD (<a href="qa10.php#media">unterstützte Formate</a>), 
+dvdisaster archiviert Daten so auf CD/DVD/BD (<a href="qa10.php#media">unterstützte Formate</a>), 
 daß sie auch dann noch wiederherstellbar sind, 
 wenn der Datenträger bereits einige Lesefehler enthält. Dadurch
 können Sie Ihre Daten noch vollständig auf einen neuen Datenträger retten.<p>

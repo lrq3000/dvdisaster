@@ -112,8 +112,12 @@ den das Abbild beim Erstellen der Fehlerkorrektur-Daten hatte, und dies entspric
 offensichtlich nicht mehr dem Inhalt der Daten auf dem Datenträger.<p></li>
 
 <li><b>Es gibt technische Probleme mit dem verwendeten Computersystem,</b> 
-insbesondere bei der Kommunikation mit den Massenspeichern. Erstellen Sie versuchsweise eine zweite Version des Abbildes und der Fehlerkorrekturdatei und führen Sie die
-Überprüfung erneut durch. Wenn der Fehler verschwindet oder an einer anderen Stelle auftritt, hat Ihr Rechner möglicherweise ein Problem mit defektem Hauptspeicher, fehlerhafter Laufwerks-Verkabelung oder falsch eingestellte Taktfrequenzen.</li></ul>
+insbesondere bei der Kommunikation mit den Massenspeichern. Merken Sie
+sich an welchen Stellen die Fehler auftraten und führen Sie die
+Überprüfung erneut durch. Wenn die Fehler verschwinden oder an einer 
+anderen Stelle auftreten, hat Ihr Rechner möglicherweise ein Problem mit 
+defektem Hauptspeicher, fehlerhaften Laufwerks-Verkabelungen/-Kontrollern
+oder falsch eingestellte Taktfrequenzen.</li></ul>
 <?php end_screen_shot(); ?><p>
 
 <?php

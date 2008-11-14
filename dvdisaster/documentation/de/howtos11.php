@@ -31,11 +31,9 @@ ist es grün markiert.</td>
 <b>Reiterkarte "Abbild".</b> Es ist wichtig, die Methode zum Ermitteln der
 Abbild-Größe korrekt einzustellen. Die Einstellung "ISO/UDF" (grüne Markierung) ist
 eine gute Wahl, da sie in so gut wie allen Situationen funktioniert. 
-Hingegen verbessert die Einstellung "ECC/RS02" (rote Markierung) die Prüfergebnisse
-nur, wenn der Datenträger Fehlerkorrektur-Daten enthält. 
-Aktivieren Sie diese Einstellung nur, wenn Sie sicher sind, 
-daß der Datenträger RS02-Fehlerkorrektur-Daten enthält,
-denn die vergebliche Suche nach diesen Daten kostet mehrere Minuten.<p>
+Wählen Sie die Einstellung "ECC/RS02" (rote Markierung)
+nur, wenn der Datenträger Fehlerkorrektur-Daten enthält. Die Fehlerkorrektur-Daten verbessern
+die Prüfergebnisse, aber die vergebliche Suche nach diesen Daten kostet mehrere Minuten.<p>
 Nehmen Sie die übrigen Einstellung wie in dem Bildschirmfoto angegeben vor.<p>
 <?php end_screen_shot(); ?>
 

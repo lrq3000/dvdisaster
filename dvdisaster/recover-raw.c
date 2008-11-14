@@ -493,7 +493,7 @@ int ValidateRawSector(RawBuffer *rb, unsigned char *frame, char *msg)
 
    /* See if the buffer was returned unchanged. */
 
-   if(!memcmp(frame, Closure->deadSector, 2048))
+   if(CheckForMissingSector(frame, rb->lba, NULL, 0) != SECTOR_PRESENT)
    {  RememberSense(3, 255, 0);  /* No data returned */
       return FALSE;
    }
@@ -829,7 +829,7 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
 
    /* See if the buffer was returned unchanged. */
 
-   if(!memcmp(new_frame, Closure->deadSector, 2048))
+   if(CheckForMissingSector(new_frame, rb->lba, NULL, 0) != SECTOR_PRESENT)
    {  RememberSense(3, 255, 0);  /* No data returned */
       return -1;
    }

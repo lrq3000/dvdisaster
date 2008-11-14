@@ -21,12 +21,24 @@ $news_counter = 0;
 
 news_headline("Neues über dvdisaster");
 
+news_item("29.09.2008", "Gut Ding will Weile haben :-)", "
+
+Bis zum ersten Veröffentlichungskandidaten der 0.72er-Reihe müssen noch
+umfangreiche interne Tests durchlaufen werden, da zwischen der Version
+0.71.26 und der kommenden Version 0.71.27 noch eine große interne Änderung
+stattfindet. Der Wechsel von 0.70.* auf 0.72 wird damit der längste
+und umfangreichste in der bisherigen Projektgeschichte.<p>
+In der Zwischenzeit gibt es schon mal eine Ergänzung der deutschen Dokumentation;
+diese ist jetzt bis auf ein Unterkapitel fertig. Danach wird die englische
+Übersetzung beginnen.
+");
+
 news_item("30.03.2008", "dvdisaster 0.71.26 veröffentlicht", "
 Diese Version enthält einen neuen Dialog mit Informationen über den
 eingelegten Datenträger (Menü Werkzeuge/Datenträger-Info); 
 dazu wurde die Erkennung des Datenträger-Typs (CD/DVD/BD) verändert. 
 Falls dadurch vorher unterstützte Laufwerke nicht mehr funktionieren, bitte
-eine Rückmeldung geben. Die Unterstützung von BlueRay-Datenträgern wurde verbessert.
+eine Rückmeldung geben. Die Unterstützung von BD-Datenträgern wurde verbessert.
 ");
 
 news_item("05.03.2008", "Problem mit vorheriger Windows-Version behoben (0.70.6 / 0.71.25)", "

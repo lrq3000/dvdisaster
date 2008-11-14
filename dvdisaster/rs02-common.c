@@ -52,7 +52,7 @@ void RS02ReadSector(ImageInfo *ii, RS02Layout *lay, unsigned char *buf, gint64 s
   /* Reading beyond the image returns dead sectors */
 
   if(s >= ii->sectors)
-  {  memcpy(buf, Closure->deadSector, 2048);  
+  {  CreateMissingSector(buf, s, NULL, 0, NULL);
      return;
   }
 

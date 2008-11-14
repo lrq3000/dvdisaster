@@ -80,6 +80,8 @@ static gchar* os_path(char *path_in)
    {  errno = EINVAL;
       return NULL;
    }
+   
+   REMEMBER(cp_path);
    return cp_path;
 }
 

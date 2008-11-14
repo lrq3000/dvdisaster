@@ -50,6 +50,9 @@ typedef struct
    Bitmap *map;                 /* bitmap for keeping track of read sectors */
    CrcBuf *crcBuf;              /* preloaded CRC info from ecc data */
 
+   unsigned char *fingerprint;  /* needed for missing sector */
+   char *volumeLabel;           /* generation */
+
    gint64 readable;             /* current outcome of reading process */
    gint64 unreadable;
    gint64 correctable;
@@ -156,6 +159,9 @@ bail_out:
    
    if(rc->intervals) g_free(rc->intervals);
    if(rc->crcBuf) FreeCrcBuf(rc->crcBuf);
+
+   if(rc->fingerprint) g_free(rc->fingerprint);
+   if(rc->volumeLabel) g_free(rc->volumeLabel);
 
    if(rc->map)
      FreeBitmap(rc->map);
@@ -372,9 +378,22 @@ static void mark_sector(read_closure *rc, gint64 sector, GdkColor *color)
  */
 
 static void open_and_determine_mode(read_closure *rc)
-{
+{  unsigned char fp[16];
+ 
+   /* open the device */
+
    rc->dh = OpenAndQueryDevice(Closure->device);
    rc->readMode = IMAGE_ONLY;
+
+   /* save some useful information for the missing sector marker */
+
+   if(GetMediumFingerprint(rc->dh, fp, FINGERPRINT_SECTOR))
+   {  rc->fingerprint = g_malloc(16);
+      memcpy(rc->fingerprint, fp, 16);
+   }
+
+   if(rc->dh->isoInfo && rc->dh->isoInfo->volumeLabel[0])
+      rc->volumeLabel = g_strdup(rc->dh->isoInfo->volumeLabel);
 
    /* See if we have ecc information available. 
       Prefer the error correction file over augmented images if both are available. */
@@ -588,7 +607,7 @@ int check_image_fingerprint(read_closure *rc)
 
    fp_read = GetMediumFingerprint(rc->dh, medium_fp, fingerprint_sector);
 
-   if(n != 2048 || !fp_read || !memcmp(rc->buf, Closure->deadSector, 2048))
+   if(n != 2048 || !fp_read || (CheckForMissingSector(rc->buf, fingerprint_sector, NULL, 0) != SECTOR_PRESENT))
      return 0; /* can't tell, assume okay */
 
    /* If both could be read, compare them */
@@ -710,10 +729,12 @@ static void build_interval_from_image(read_closure *rc)
 
       /* Look for the dead sector marker */
 
-      current_missing = !memcmp(rc->buf, Closure->deadSector, n);
+      current_missing = CheckForMissingSector(rc->buf, s, NULL, 0);
 
       if(current_missing)
-	mark_sector(rc, s, Closure->redSector);
+      {  mark_sector(rc, s, Closure->redSector);
+	 ExplainMissingSector(rc->buf, s, current_missing, TRUE);
+      }
 
       /* Compare checksums if available */
 
@@ -981,11 +1002,13 @@ void fill_gap(read_closure *rc)
   /*** Fill image with dead sector markers until rc->intervalStart */
 
   for(i=firstUnwritten, j=0; i<rc->intervalStart; i++)
-  {  int n;
+  {  unsigned char buf[2048];
+     int n;
 
      /* Write next sector */ 
     
-     n = LargeWrite(rc->image, Closure->deadSector, 2048);
+     CreateMissingSector(buf, i, rc->fingerprint, FINGERPRINT_SECTOR, rc->volumeLabel);
+     n = LargeWrite(rc->image, buf, 2048);
      if(n != 2048)
        Stop(_("Failed writing to sector %lld in image [%s]: %s"),
 	    i, "fill", strerror(errno));
@@ -1038,16 +1061,18 @@ void fill_gap(read_closure *rc)
  */
 
 void fill_correctable_gap(read_closure *rc, gint64 correctable)
-{
+{  
    if(correctable > rc->highestWrittenSector)
    {  gint64 ds = rc->highestWrittenSector+1;
-     
+      unsigned char buf[2048];
+
       if(!LargeSeek(rc->image, (gint64)(2048*ds)))
 	Stop(_("Failed seeking to sector %lld in image [%s]: %s"),
 	     ds, "skip-corr", strerror(errno));
 
       for(ds=rc->highestWrittenSector+1; ds<=correctable; ds++)
-      {  if(LargeWrite(rc->image, Closure->deadSector, 2048) != 2048)
+      {  CreateMissingSector(buf, ds, rc->fingerprint, FINGERPRINT_SECTOR, rc->volumeLabel);
+	 if(LargeWrite(rc->image, buf, 2048) != 2048)
 	  Stop(_("Failed writing to sector %lld in image [%s]: %s"),
 	       ds, "skip-corr", strerror(errno));
       }
@@ -1340,11 +1365,14 @@ reopen_image:
 
 	       switch(result)
 	       {  case CRC_BAD:
+		  {  unsigned char buf[2048];
+
 		     PrintCLI("\n");
 		     PrintCLI(_("CRC error in sector %lld\n"),b);
 		     print_progress(rc, TRUE);
 
-		     n = LargeWrite(rc->image, Closure->deadSector, 2048);
+		     CreateMissingSector(buf, b, rc->fingerprint, FINGERPRINT_SECTOR, rc->volumeLabel);
+		     n = LargeWrite(rc->image, buf, 2048);
 		     if(n != 2048)
 			Stop(_("Failed writing to sector %lld in image [%s]: %s"),
 			     b, "unv", strerror(errno));
@@ -1354,7 +1382,7 @@ reopen_image:
 		     if(rc->highestWrittenSector < b)
 			rc->highestWrittenSector = b;
 		     break;
-
+		  }
 		  case CRC_UNKNOWN:
 		  case CRC_GOOD:
 		     n = LargeWrite(rc->image, rc->buf+i*2048, 2048);
@@ -1481,7 +1509,9 @@ reopen_image:
 	 }  /* end of if(!status) (successful reading of sector(s)) */
 
 	 else  /* Process the read error. */
-	 {  PrintCLI("\n");
+	 {  unsigned char buf[2048];
+
+	    PrintCLI("\n");
 	    if(nsectors>1) PrintCLIorLabel(Closure->status,
 					   _("Sectors %lld-%lld: %s\n"),
 					   s, s+nsectors-1, GetLastSenseString(FALSE));  
@@ -1498,7 +1528,9 @@ reopen_image:
 		   s, "nds", strerror(errno));
 
 	    for(i=0; i<nsectors; i++)
-	    {  n = LargeWrite(rc->image, Closure->deadSector, 2048);
+	    {  CreateMissingSector(buf, s+i, rc->fingerprint, FINGERPRINT_SECTOR, rc->volumeLabel);
+
+	       n = LargeWrite(rc->image, buf, 2048);
 	       if(n != 2048)
 		 Stop(_("Failed writing to sector %lld in image [%s]: %s"),
 		      s, "nds", strerror(errno));
@@ -1574,8 +1606,7 @@ reopen_image:
 
       /* Apply interval size termination criterion */
 
-      if(   rc->readMode == IMAGE_ONLY
-	 && rc->intervalSize < Closure->sectorSkip)
+      if(rc->intervalSize < Closure->sectorSkip)
 	 goto finished;
    }
 

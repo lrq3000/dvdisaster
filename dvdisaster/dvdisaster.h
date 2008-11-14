@@ -1,4 +1,3 @@
-
 /*  dvdisaster: Additional error correction for optical media.
  *  Copyright (C) 2004-2008 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
@@ -99,7 +98,7 @@
 #define DVD_SL_SIZE      2295104  /* DVD+R/RW size used at least common denominator */
 #define DVD_DL_SIZE 	 4171712  /* also seen: 4148992 4173824  */
 #define BD_SL_SIZE      11826176
-#define BD_DL_SIZE	21826176  /* whats the right value here? */
+#define BD_DL_SIZE	23652352
 
 /* Maximum accepted media sizes (in 2K sectors) */
 
@@ -154,6 +153,7 @@ typedef struct _GlobalClosure
    int spinupDelay;     /* Seconds to wait for drive to spin up */
    int truncate;        /* confirms truncation of large images */
    int noTruncate;      /* do not truncate image at the end */
+   int dsmVersion;      /* 1 means new style dead sector marker */
    int unlinkImage;     /* delete image after ecc file creation */
    int driveSpeed;      /* currently unused */
    int debugMode;       /* may activate additional features */
@@ -179,7 +179,6 @@ typedef struct _GlobalClosure
    int pauseEject;      /* Eject medium during pause */
    int ignoreFatalSense;/* Continue reading after potential fatal sense errors */
   
-   char *deadSector;    /* Copy of our "dead sector" marker. */
    char *dotFile;       /* path to .dvdisaster file */
    char *logFile;       /* path to logfile */
    int  logFileEnabled; /* logfile enabled */
@@ -212,8 +211,9 @@ typedef struct _GlobalClosure
 
    /*** GUI-related things */
 
-   int guiMode;         /* TRUE if GUI is active */
-   int stopActions;     /* crude method to stop ongoing action(s) */
+   int guiMode;              /* TRUE if GUI is active */
+   int stopActions;          /* crude method to stop ongoing action(s) */
+   int noMissingWarnings;    /* suppress warnings about inconsistent missing sectors */
 
    GtkWidget *logWidget;     /* Dialog for the log display */
    GtkScrolledWindow *logScroll; /* and its scrolled window */
@@ -290,9 +290,8 @@ typedef struct _GlobalClosure
    GtkWidget *readLinearErrors;
    GtkWidget *readLinearFootline;
    GtkWidget *readLinearFootlineBox;
-   int    checkCrc;               /* these are passed between threads and */
-   gint64 crcErrors, readErrors;  /* must therefore be global */
-
+   gint64 crcErrors, readErrors;  /* these are passed between threads and must therefore be global */
+   int    eccType;                /* type of ecc data provided while reading/scanning */
    /*** Widgets for the adaptive reading action */
 
    GtkWidget *readAdaptiveHeadline;
@@ -338,6 +337,7 @@ typedef struct _ImageInfo
    gint64 crcErrors;                 /* sectors with CRC32 errors */
    int inLast;                       /* bytes in last sector */
    unsigned char mediumFP[16];       /* md5sum of first sector */
+   int fpValid;                      /* TRUE if above is a valid md5sum */
    unsigned char mediumSum[16];      /* complete md5sum of whole medium */
 } ImageInfo;
 
@@ -386,7 +386,7 @@ typedef struct _EccHeader
    gint32 inLast;              /* bytes contained in last sector */
    gint8 padding[3976];        /* pad to 4096 bytes: room for future expansion */
 
-  /* Note: Bytes 2048 and up are currently used by the RS02 codec
+  /* Note: Bytes 2048 and up are currently used by the RS02/RS03 codec
            for a copy of the first ecc blocks CRC sums. */
 } EccHeader;
 
@@ -399,8 +399,6 @@ struct _RawBuffer *rawbuffer_forward;
 /***
  *** dvdisaster.c
  ***/
-
-void PrepareDeadSector(void);
 
 void CreateEcc(void);
 void FixEcc(void);
@@ -527,6 +525,21 @@ void ShowSector(char*);
 Bitmap* SimulateDefects(gint64);
 void TruncateImage(char*);
 void ZeroUnreadable(void);
+
+/***
+ *** ds-marker.c
+ ***/
+
+enum
+{  SECTOR_PRESENT,
+   SECTOR_MISSING,
+   SECTOR_MISSING_DISPLACED,
+   SECTOR_MISSING_WRONG_FP
+};
+
+void CreateMissingSector(unsigned char*, gint64, unsigned char*, gint64, char*);
+int CheckForMissingSector(unsigned char*, gint64, unsigned char*, gint64);
+void ExplainMissingSector(unsigned char*, gint64, int, int);
 
 /***
  *** endian.c
@@ -968,6 +981,10 @@ void ReadDefectiveSectorFile(DefectiveSectorHeader *, struct _RawBuffer*, char*)
  *** read-linear.c
  ***/
 
+enum
+{ ECC_NONE, ECC_RS01, ECC_RS02
+};
+
 void ReadMediumLinear(gpointer);
 
 /***
@@ -1123,6 +1140,7 @@ int SendReadCDB(char*, unsigned char*, unsigned char*, int, int);
 typedef struct _ReedSolomonEncoder
 {  GaloisTables *gfTables;
    ReedSolomonTables *rsTables;
+   guint8 *eLut[4][GF_FIELDSIZE];     /* special lookup tables at different byte offsets */
 
    guint64 chunkSize;
    int shiftPtr;

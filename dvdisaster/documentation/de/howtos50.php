@@ -9,69 +9,59 @@
 # navigation and news if appropriate.
 
 require("../include/dvdisaster.php");
+require("../include/footnote.php");
 begin_page();
+howto_headline("Informationen zu Abbildern/Fehlerkorrektur-Daten anzeigen", "Übersicht", "images/compare-icon.png");
 ?>
 
 <!--- Insert actual page content below --->
 
-<h3>Platzhalter-Seite</h3>
-
-Diese Seite wurde noch nicht ausformuliert.
-<pre> </pre>
-
-
-<font size="-1">
-<i>Warum enthält diese Dokumentation leere Seiten?</i><p>
-Wir brauchen die Platzhalter-Seiten damit an anderen Stellen der
-Dokumentation bereits die passenden Querverweise gesetzt werden können. 
-
-<?php /*
-<h3>Informationen über ISO-Abbilder und Fehlerkorrektur-Daten anzeigen</h3>
-
 <table width="100%" cellspacing="5">
-<tr>
+<tr valign="top">
 <td width="20%"><b>Aufgabe</b></td>
 <td>
-Es werden Informationen über den Zustand 
-von ISO-Abbildern und den zugehörigen Fehlerkorrektur-Daten angezeigt.
+Zeigt Informationen über die Art und den Zustand von Abbildern 
+und Fehlerkorrektur-Dateien.
 </td>
 </tr>
 <tr><td> <pre> </pre> </td></tr>
 
 <tr>
-<td colspan="2"><b>Benötigte Daten:</b><p></td>
+<td colspan="2"><b>Benötigt werden:</b><p></td>
 </tr>
-
 <tr>
+ <td width="150px" align="right">
+   <img src="../images/good-image.png" align="top">
+   <img src="../images/ecc.png">
+ </td>
 <td>
-<img src="../images/good-image.png" align="top">
-<img src="../images/bad-image.png" align="top">
-<img src="../images/ecc.png" align="top">
+Ein Datenträger-Abbild und gegebenenfalls die zugehörige
+Fehlerkorrektur-Datei. 
 </td>
-<td>
-Diese Funktion verarbeitet Abbilder in beliebigem Zustand und die zugehörigen
-Fehlerkorrektur-Daten. Es ist auch möglich, nur Informationen über Abbilder
-oder Fehlerkorrektur-Dateien alleine anzuzeigen.
-
-</tr>
 <tr><td> <pre> </pre> </td></tr>
 
 <tr>
-<td colspan="2"><b>Durchzuführende Schritte:<p></b></td>
+<td colspan="2"><b>Dies ist zu tun:<p></b></td>
 </tr>
 
 <tr>
 <td></td>
 <td>
-1. Informationen über ISO-Abbilder und Fehlerkorrektur-Daten anzeigen
+1. <a href="howtos51.php">Informationen anzeigen</a><br>
+2. <a href="howtos51.php">Ergebnisse auswerten</a><br>
 </td>
 </tr>
 </table><p>
-      */ ?>
-<!--- do not change below --->
 
+<a href="howtos51.php">Informationen anzeigen...</a>
+
+<pre>
+
+
+</pre>
+
+<!--- do not change below --->
 <?php
 # end_page() adds the footer line and closes the HTML properly.
-
 end_page();
 ?>

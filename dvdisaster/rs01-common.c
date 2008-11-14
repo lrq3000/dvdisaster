@@ -41,7 +41,7 @@ void RS01ReadSector(ImageInfo *ii, EccHeader *eh, unsigned char *buf, gint64 s)
 
   if(s >= ii->sectors && s < eh_sectors)
   {
-     memcpy(buf, Closure->deadSector, 2048);   /* truncated image / dead sector */
+     CreateMissingSector(buf, s, NULL, 0, NULL); /* truncated image */
   }
   else if(s >= eh_sectors)      
   {
@@ -96,6 +96,7 @@ void RS01ScanImage(Method *method, ImageInfo *ii, EccInfo *ei, int mode)
    gint64 prev_missing = 0;
    gint64 prev_crc_errors = 0;
    int last_percent,current_missing;
+   int fp_sector = FINGERPRINT_SECTOR;
    char *msg;
 
    /* Extract widget list from method */
@@ -109,6 +110,7 @@ void RS01ScanImage(Method *method, ImageInfo *ii, EccInfo *ei, int mode)
    {   LargeSeek(ei->file, 0);
        LargeRead(ei->file, &eh, sizeof(EccHeader));
        eh_sectors = uchar_to_gint64(eh.sectors);
+       fp_sector = eh.fpSector;
    }     
 
    /* Position behind the ecc file header,
@@ -139,7 +141,7 @@ void RS01ScanImage(Method *method, ImageInfo *ii, EccInfo *ei, int mode)
    /* Go through all sectors and look for the "dead sector marker" */
    
    for(s=0; s<ii->sectors; s++)
-   {  int n,percent;
+   {  int n,percent,err;
 
       /* Check for user interruption */
 
@@ -163,7 +165,13 @@ void RS01ScanImage(Method *method, ImageInfo *ii, EccInfo *ei, int mode)
 
       /* Look for the dead sector marker */
 
-      current_missing = !memcmp(buf, Closure->deadSector, n);
+      err = CheckForMissingSector(buf, s, ii->fpValid ? ii->mediumFP : NULL, FINGERPRINT_SECTOR);
+      if(err != SECTOR_PRESENT)
+      {    current_missing = TRUE;
+	   ExplainMissingSector(buf, s, err, TRUE);
+      }
+      else current_missing = FALSE;
+
       if(current_missing)
       {  if(first_missing < 0) first_missing = s;
          last_missing = s;

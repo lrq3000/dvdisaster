@@ -109,6 +109,7 @@ typedef struct _prefs_context
    GtkWidget *rawButtonA, *rawButtonB;
    GtkWidget *jumpScaleA, *jumpScaleB;
    GtkWidget *daoButtonA, *daoButtonB;
+   GtkWidget *dsmButtonA, *dsmButtonB;
    GtkWidget *byteEntryA, *byteEntryB;
    GtkWidget *byteCheckA, *byteCheckB;
    GtkWidget *spinUpA, *spinUpB;
@@ -253,7 +254,6 @@ void HidePreferences(void)
       if(Closure->fillUnreadable > 255)
 	Closure->fillUnreadable = 255;
    }
-   PrepareDeadSector();
 
    /* Get raw reading mode */
 
@@ -361,6 +361,7 @@ enum
    TOGGLE_UNLINK,
    TOGGLE_SUFFIX,
    TOGGLE_DAO,
+   TOGGLE_DSM,
    TOGGLE_2GB,
    TOGGLE_RANGE,
    TOGGLE_RAW,
@@ -475,6 +476,18 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 	Closure->noTruncate = state;
 	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->daoButtonA), state);
 	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->daoButtonB), state);
+	break;
+
+      case TOGGLE_DSM:
+	Closure->dsmVersion = state;
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->dsmButtonA), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->dsmButtonB), state);
+	if(state)
+	{  if(pc->byteCheckA)
+	      activate_toggle_button(GTK_TOGGLE_BUTTON(pc->byteCheckA), FALSE);
+	   if(pc->byteCheckB)
+	      activate_toggle_button(GTK_TOGGLE_BUTTON(pc->byteCheckB), FALSE);
+	}
 	break;
 
       case TOGGLE_2GB:
@@ -1140,6 +1153,10 @@ static void bytefill_check_cb(GtkWidget *widget, gpointer data)
 
       if(pc->byteEntryA) gtk_entry_set_text(GTK_ENTRY(pc->byteEntryA), byte);
       if(pc->byteEntryB) gtk_entry_set_text(GTK_ENTRY(pc->byteEntryB), byte);
+
+      if(pc->dsmButtonA) activate_toggle_button(GTK_TOGGLE_BUTTON(pc->dsmButtonA), FALSE);
+      if(pc->dsmButtonB) activate_toggle_button(GTK_TOGGLE_BUTTON(pc->dsmButtonB), FALSE);
+
    }
    else
    {  Closure->fillUnreadable = -1;
@@ -1647,6 +1664,53 @@ void CreatePreferencesWindow(void)
 			 "(sometimes also called \"SAO / Session at once\") mode for writing single "
 			 "session media."));
 
+      /** Image format */
+if(Closure->debugMode)  /* hidden until version 0.80 */
+{                       /* because of severe compatibility issues */
+      frame = gtk_frame_new(_utf("Image format"));
+      gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
+
+      vbox2 = gtk_vbox_new(FALSE, 15);
+      gtk_container_set_border_width(GTK_CONTAINER(vbox2), 10);
+      gtk_container_add(GTK_CONTAINER(frame), vbox2);
+
+      /* new style missing sector marker */
+
+      lwoh = CreateLabelWithOnlineHelp(_("Missing sector tags"), _("Use new style missing sector tags (Warning: compatibility issues!)"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
+	 GtkWidget *button = gtk_check_button_new();
+
+	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
+	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
+
+	 if(!i) pc->dsmButtonA = button;
+	 else   pc->dsmButtonB = button;
+
+	 activate_toggle_button(GTK_TOGGLE_BUTTON(button), Closure->dsmVersion);
+	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_DSM));
+	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	 else   AddHelpWidget(lwoh, hbox);
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Missing sector tagging</b>\n\n"
+			 "Missing sectors are tagged with a special code sequence "
+			 "in the image. If this value is activated, an improved "
+			 "code is used which can detect some wilfully damaged "
+			 "content. This includes media which have been created "
+			 "from partially recovered images, and images containing "
+			 "files from such partial media.\n"
+			 "However only dvdisaster 0.72 and up will recognize "
+			 "the new tags. You must NOT process the resulting "
+			 "images with older dvdisaster versions as they would "
+                         "not see any missing sectors in the resulting images.\n"
+			 "N.b.: dvdisaster >= 0.72 will automatically recognize "
+			 "both tag formats when reading images; setting this value "
+			 "only affects the creation of new images."));
+}
       /* byte filling */
 
       if(Closure->debugMode)
@@ -3014,16 +3078,6 @@ void CreatePreferencesWindow(void)
 
       /** Log file */
 
-#if 0      
-      frame = gtk_frame_new(_utf("Raw sector caching"));
-      gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
-
-      vbox2 = gtk_vbox_new(FALSE, 20);
-      gtk_container_set_border_width(GTK_CONTAINER(vbox2), 10);
-      gtk_container_add(GTK_CONTAINER(frame), vbox2);
-#endif
-      /* Toggle button */
-
       lwoh = CreateLabelWithOnlineHelp(_("Logfile:"), 
 				       _("Copy log to file:"));
       RegisterPreferencesHelpWindow(lwoh);
@@ -3042,9 +3096,10 @@ void CreatePreferencesWindow(void)
 			  1, 2, 0, 1, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
 	 gtk_misc_set_alignment(GTK_MISC(lwoh->linkLabel), 0.0, 0.0);
 	 gtk_misc_set_alignment(GTK_MISC(lwoh->normalLabel), 0.0, 0.0);
+	 gtk_label_set_ellipsize(GTK_LABEL(label), PANGO_ELLIPSIZE_END);
 
 	 hbox = gtk_hbox_new(FALSE, 0);
-	 gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+	 gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
 	 gtk_table_attach(GTK_TABLE(table), hbox, 
 			  1, 2, 1, 2, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
 

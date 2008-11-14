@@ -180,6 +180,6 @@ int CheckAgainstCrcBuffer(CrcBuf *cb, gint64 idx, unsigned char *buf)
 void FreeCrcBuf(CrcBuf *cb)
 {  
    g_free(cb->crcbuf);
-   g_free(cb->valid);
+   FreeBitmap(cb->valid);
    g_free(cb);
 }

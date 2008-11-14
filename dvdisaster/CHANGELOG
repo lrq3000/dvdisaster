@@ -1,3 +1,13 @@
+0.71 (devel-27)
+	- more robust handling for incomplete/unfinalized media; should produce 
+	  less dreaded "couldn't query [several possiblilities] length" 
+	  errors now ;-)
+	- added on-the-fly checkum verification for RS02
+	- skipped color glitch in the GUI; skipped sectors would not always be marked
+	  blue in the spiral
+	- reading media in multiple passes could crash on finish due to a
+	  race condition on very fast systems; fixed. 
+	- started support for a new missing sector marker
 
 0.71 (devel-26) 30-03-2008
 	- Changed media type detection to a (hopefully) even more robust

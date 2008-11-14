@@ -66,8 +66,9 @@ void InitializeCurve(void *rc_ptr, int max_rate, int can_c2)
 
    if(Closure->readLinearSpiral)
      for(i=rc->lastCopied-1; i>=0; i--)
-       Closure->readLinearSpiral->segmentColor[i] = Closure->blueSector;
-
+     {  Closure->readLinearSpiral->segmentColor[i] = Closure->blueSector;
+        Closure->readLinearCurve->ivalue[i] = 0;
+     }
    g_idle_add(max_speed_idle_func, NULL);
 }
 
@@ -118,6 +119,7 @@ static gboolean curve_idle_func(gpointer data)
 
    if(rc->pass)      /* 2nd or higher reading pass, don't touch the curve */
    {  g_free(ci);
+      rc->activeRenderers--;
       return FALSE;
    }
 
@@ -136,6 +138,7 @@ static gboolean curve_idle_func(gpointer data)
       rc->lastPlotted = ci->percent;
       rc->lastPlottedY = CurveY(Closure->readLinearCurve, Closure->readLinearCurve->fvalue[ci->percent]); 
       g_free(ci);
+      rc->activeRenderers--;
       return FALSE;
    }
 
@@ -171,6 +174,7 @@ static gboolean curve_idle_func(gpointer data)
    }
 
    g_free(ci);
+   rc->activeRenderers--;
    return FALSE;
 }
 
@@ -208,11 +212,14 @@ void AddCurveValues(void *rc_ptr, int percent, int color, int c2)
 
    /* lastCopied+1 ? */
 
-   for(i=rc->lastCopied; i<=percent; i++)
-     Closure->readLinearCurve->ivalue[i] = color;
+   if(rc->lastCopied <= percent)
+   {  for(i=rc->lastCopied; i<=percent; i++)
+	 Closure->readLinearCurve->ivalue[i] = color;
 
-   rc->lastCopied = percent;
+      rc->lastCopied = percent;
+   }
 
+   rc->activeRenderers++;
    g_idle_add(curve_idle_func, ci);
 }
 
@@ -264,7 +271,7 @@ static void update_geometry(void)
    Closure->readLinearSpiral->mx = a->width - 15 - Closure->readLinearSpiral->diameter / 2;
    Closure->readLinearSpiral->my = a->height / 2;
 
-   if(Closure->checkCrc || Closure->crcErrors)
+   if(Closure->eccType != ECC_NONE || Closure->crcErrors)
    {  int w,h;
 
       SetText(Closure->readLinearCurve->layout, _("Sectors with CRC errors"), &w, &h);
@@ -290,7 +297,7 @@ static void redraw_curve(void)
 
    x = Closure->readLinearCurve->rightX + 20;
    gdk_gc_set_rgb_fg_color(Closure->drawGC, Closure->curveColor);
-   SetText(Closure->readLinearCurve->layout, _("Media state"), &w, &h);
+   SetText(Closure->readLinearCurve->layout, _("Medium state"), &w, &h);
    gdk_draw_layout(d, Closure->drawGC, 
 		   x,
 		   Closure->readLinearCurve->topY - h - 5, 
@@ -307,7 +314,7 @@ static void redraw_curve(void)
    DrawSpiralLabel(Closure->readLinearSpiral, Closure->readLinearCurve->layout,
 		   _("Successfully read"), Closure->greenSector, x, pos++);
 
-   if(Closure->checkCrc || Closure->crcErrors)
+   if(Closure->eccType != ECC_NONE || Closure->crcErrors)
      DrawSpiralLabel(Closure->readLinearSpiral, Closure->readLinearCurve->layout,
 		     _("Sectors with CRC errors"), Closure->yellowSector, x, pos++);
    
@@ -358,6 +365,7 @@ void CreateLinearReadWindow(GtkWidget *parent)
    Closure->readLinearHeadline = gtk_label_new(NULL);
    gtk_misc_set_alignment(GTK_MISC(Closure->readLinearHeadline), 0.0, 0.0); 
    gtk_misc_set_padding(GTK_MISC(Closure->readLinearHeadline), 5, 0);
+   gtk_label_set_ellipsize(GTK_LABEL(Closure->readLinearHeadline), PANGO_ELLIPSIZE_END);
    gtk_box_pack_start(GTK_BOX(parent), Closure->readLinearHeadline, FALSE, FALSE, 3);
 
    sep = gtk_hseparator_new();

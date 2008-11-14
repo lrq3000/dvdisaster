@@ -26,7 +26,7 @@ news_item("30.03.2008", "dvdisaster 0.71.26 released", "
   media (menu Tools/Medium info);
   during this course detection of media types (CD/DVD/BD) was changed. 
   Please report if this breaks compatibility with formerly working drives.
-  Improved support for BlueRay media.
+  Improved support for BD media.
 ");
 
 news_item("05.03.2008", "Problem with previous Windows release fixed  (0.70.6 / 0.71.25)", "

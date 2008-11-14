@@ -338,6 +338,7 @@ void CreateRS02VerifyWindow(Method *self, GtkWidget *parent)
 
 typedef struct
 {  LargeFile *file;
+   EccHeader *eh;
    RS02Layout *lay;
    RS02Widgets *wl;
    Bitmap *map;
@@ -372,10 +373,11 @@ static void cleanup(gpointer data)
  */
 
 static void read_crc(verify_closure *cc, RS02Layout *lay)
-{  struct MD5Context crc_md5;
+{  EccHeader *eh = cc->eh;
+   struct MD5Context crc_md5;
    gint64 block_idx[256];
    guint32 crc_buf[512];
-   gint64 s;
+   gint64 crc_sector,s;
    int i,crc_idx;
    int crc_valid = 1;
 
@@ -390,6 +392,7 @@ static void read_crc(verify_closure *cc, RS02Layout *lay)
    if(!LargeSeek(cc->file, 2048*(lay->dataSectors+2)))
      Stop(_("Failed seeking to sector %lld in image: %s"), 
 	  lay->dataSectors+2, strerror(errno));
+   crc_sector = lay->dataSectors+2;
 
    /* Initialize ecc block index pointers.
       The first CRC set (of lay->ndata checksums) relates to
@@ -424,10 +427,17 @@ static void read_crc(verify_closure *cc, RS02Layout *lay)
 	    /* Refill crc cache if needed */
 	    
 	    if(crc_idx >= 512)
-	    {   if(LargeRead(cc->file, crc_buf, 2048) != 2048)
+	    {  int err;
+ 
+	       if(LargeRead(cc->file, crc_buf, 2048) != 2048)
 		  Stop(_("problem reading crc data: %s"), strerror(errno));
 
-	        crc_valid = memcmp(crc_buf, Closure->deadSector, 2048);
+	       err = CheckForMissingSector((unsigned char*)crc_buf, crc_sector, eh->mediumFP, eh->fpSector);
+	       if(err != SECTOR_PRESENT)
+		  ExplainMissingSector((unsigned char*)crc_buf, crc_sector, err, TRUE);
+
+	        crc_sector++;
+	        crc_valid = (err == SECTOR_PRESENT);
 		
 	        MD5Update(&crc_md5, (unsigned char*)crc_buf, 2048);
 		crc_idx = 0;
@@ -514,7 +524,9 @@ static int prognosis(verify_closure *vc, gint64 missing, gint64 expected)
       }
    }	      
 
-   if(damaged_sectors && worst_ecc <= vc->lay->nroots && recoverable >= expected)
+   /* Why the first test?
+      if(damaged_sectors && worst_ecc <= vc->lay->nroots && recoverable >= expected) */
+   if(worst_ecc <= vc->lay->nroots && recoverable >= expected)
         return TRUE;
    else return FALSE;
 }
@@ -544,6 +556,7 @@ void RS02Verify(Method *self)
    gint64 data_crc_errors,hdr_crc_errors;
    gint64 hdr_ok,hdr_pos;
    gint64 ecc_sector,expected_sectors;
+   int ecc_md5_failure = FALSE;
    int ecc_slice;
    int major,minor,pl;
    char method[5];
@@ -573,7 +586,7 @@ void RS02Verify(Method *self)
    PrintLog("\n%s: ",Closure->imageName);
    PrintLog(_("present, contains %lld medium sectors.\n"),image_sectors);
 
-   eh  = self->lastEh;  /* will always be present */
+   eh  = cc->eh = self->lastEh;  /* will always be present */
    lay = cc->lay = CalcRS02Layout(uchar_to_gint64(eh->sectors), eh->eccBytes); 
    expected_sectors = lay->eccSectors+lay->dataSectors;
    if(!eh->inLast)      /* 0.66 pre-releases did not set this */
@@ -694,7 +707,7 @@ void RS02Verify(Method *self)
          if(n != 2048)
 	    Stop(_("premature end in image (only %d bytes): %s\n"),n,strerror(errno));
       }
-      else memcpy(buf, Closure->deadSector, 2048);
+      else CreateMissingSector(buf, s, eh->mediumFP, eh->fpSector, "padding beyond the image");
 
       if(s < lay->dataSectors)
       {  if(s < lay->dataSectors - 1)
@@ -704,7 +717,10 @@ void RS02Verify(Method *self)
 
       /* Look for the dead sector marker */
 
-      current_missing = !memcmp(buf, Closure->deadSector, 2048);
+      current_missing = CheckForMissingSector(buf, s, eh->mediumFP, eh->fpSector);
+      if(current_missing != SECTOR_PRESENT)
+	 ExplainMissingSector(buf, s, current_missing, TRUE);
+
       if(current_missing)
       {  if(first_missing < 0) first_missing = s;
          last_missing = s;
@@ -1018,6 +1034,7 @@ void RS02Verify(Method *self)
            if(Closure->guiMode)
 	   {  SetLabelText(GTK_LABEL(wl->cmpEcc2Msg), "<span %s>%s</span>", Closure->redMarkup, digest);
 	   }
+	   ecc_md5_failure = TRUE;
       }
    }
    else
@@ -1042,6 +1059,7 @@ void RS02Verify(Method *self)
            if(Closure->guiMode)
 	   {  SetLabelText(GTK_LABEL(wl->cmpEcc3Msg), "<span %s>%s</span>", Closure->redMarkup, digest);
 	   }
+	   ecc_md5_failure = TRUE;
       }
    }
    else
@@ -1062,7 +1080,7 @@ void RS02Verify(Method *self)
          g_free(ecc_advice);
       }
       else 
-	if(!crc_missing && !ecc_missing && !hdr_missing && !hdr_crc_errors)
+	if(!crc_missing && !ecc_missing && !hdr_missing && !hdr_crc_errors && !ecc_md5_failure)
 	  SetLabelText(GTK_LABEL(wl->cmpEccResult),
 		       _("<span %s>Good error correction data.</span>"),
 		       Closure->greenMarkup);
