@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-20 15:31+0200\n"
+"POT-Creation-Date: 2008-11-15 22:04+0100\n"
 "PO-Revision-Date: 2005-01-01 14:24+0100\n"
 "Last-Translator: Andrea Polverini <polve@polve.com>\n"
 "Language-Team: Italian <>\n"
@@ -41,17 +41,17 @@ msgstr ""
 msgid "Error reading CRC information: %s"
 msgstr "Errore di lettura delle informazioni CRC: %s"
 
-#: debug.c:53 debug.c:451 debug.c:1079 debug.c:1156
+#: debug.c:55 debug.c:456 debug.c:1084 debug.c:1161
 msgid "2nd argument is missing"
 msgstr "Il secondo argomento è mancante"
 
-#: debug.c:60
+#: debug.c:62
 msgid ""
 "Number of roots must be 8..100;\n"
 "the number of erasures must be > 0 and less than the number of roots.\n"
 msgstr ""
 
-#: debug.c:79 debug.c:170 debug.c:307
+#: debug.c:81 debug.c:172 debug.c:310
 #, c-format
 msgid ""
 "\n"
@@ -60,8 +60,8 @@ msgstr ""
 "\n"
 "Generazione di cancellazioni correggibili casuali (%d radici, max = %d).\n"
 
-#: debug.c:110 debug.c:200 debug.c:248 debug.c:338 debug.c:382 debug.c:693
-#: debug.c:793 debug.c:1120 debug.c:1128 debug.c:1235 rs01-common.c:54
+#: debug.c:112 debug.c:202 debug.c:250 debug.c:341 debug.c:385 debug.c:698
+#: debug.c:798 debug.c:1125 debug.c:1133 debug.c:1240 rs01-common.c:54
 #: rs01t-common.c:56 rs02-common.c:62 rs02-create.c:336 rs02-create.c:969
 #: rs02-fix.c:387 rs02-verify.c:393 rs03-common.c:81 rs03-create.c:502
 #: rs03-create.c:516 rs03s-create.c:787 rs03s-create.c:817 rs03-verify.c:392
@@ -69,8 +69,8 @@ msgstr ""
 msgid "Failed seeking to sector %lld in image: %s"
 msgstr ""
 
-#: debug.c:115 debug.c:205 debug.c:253 debug.c:343 debug.c:387 debug.c:531
-#: debug.c:653 debug.c:698 debug.c:1132 debug.c:1239 debug.c:1279
+#: debug.c:117 debug.c:207 debug.c:255 debug.c:346 debug.c:390 debug.c:536
+#: debug.c:658 debug.c:703 debug.c:1137 debug.c:1244 debug.c:1284
 #: rs02-create.c:359 rs02-create.c:385 rs02-create.c:972 rs03-create.c:505
 #: rs03-create.c:519 rs03s-create.c:794 rs03s-create.c:820 udf.c:1108
 #: udf.c:1166 udf.c:1223 udf.c:1236 udf.c:1241 udf.c:1244 udf.c:1247
@@ -79,12 +79,12 @@ msgstr ""
 msgid "Failed writing to sector %lld in image: %s"
 msgstr ""
 
-#: debug.c:123 debug.c:259 debug.c:393 debug.c:657 debug.c:705 debug.c:1253
+#: debug.c:125 debug.c:261 debug.c:396 debug.c:662 debug.c:710 debug.c:1258
 #, c-format
 msgid "Progress: %3d%%"
 msgstr "Avanzamento: %3d%%"
 
-#: debug.c:128 debug.c:264 debug.c:398
+#: debug.c:130 debug.c:266 debug.c:401
 #, c-format
 msgid ""
 "Progress: 100%%\n"
@@ -96,64 +96,64 @@ msgstr ""
 "Altrimenti accumulerete >= %d cancellazioni/Blocchi ECC e l'immagine sarà compromessa.\n"
 "\n"
 
-#: debug.c:161 debug.c:298
+#: debug.c:163 debug.c:301
 #, c-format
 msgid "Number of erasures must be > 0 and <= %d\n"
 msgstr ""
 
-#: debug.c:458 debug.c:1085
+#: debug.c:463 debug.c:1090
 msgid "3rd argument is missing"
 msgstr "Il terzo argomento è mancante"
 
-#: debug.c:465 debug.c:786 debug.c:832 debug.c:893
+#: debug.c:470 debug.c:791 debug.c:837 debug.c:898
 #, c-format
 msgid "Sector must be in range [0..%lld]\n"
 msgstr "I Settori devono rientrare nell'intervallo [0..%lld]\n"
 
-#: debug.c:468
+#: debug.c:473
 msgid "Byte position must be in range [0..2047]"
 msgstr "La Byte-Position deve rientrare nell'intervallo [0..2047]"
 
-#: debug.c:471
+#: debug.c:476
 msgid "Byte value must be in range [0..255]"
 msgstr "Il valore del Byte deve rientrare nell'intervallo [0..255]"
 
-#: debug.c:473
+#: debug.c:478
 #, c-format
 msgid "Setting byte %d in sector %lld to value %d.\n"
 msgstr "Settaggio del byte %d nel settore %lld al valore %d.\n"
 
-#: debug.c:480 debug.c:519 rs02-create.c:182 rs02-verify.c:676
+#: debug.c:485 debug.c:524 rs02-create.c:182 rs02-verify.c:676
 #: rs03-verify.c:660
 #, c-format
 msgid "Failed seeking to start of image: %s\n"
 msgstr ""
 
-#: debug.c:483
+#: debug.c:488
 msgid "Could not write the new byte value"
 msgstr "Impossibile scrivere il nuovo valore del byte"
 
-#: debug.c:512 read-adaptive.c:537
+#: debug.c:517 read-adaptive.c:537
 #, c-format
 msgid "Sectors must be in range [0..%lld].\n"
 msgstr "I settori devi rientrare nell'intervallo [0..%lld].\n"
 
-#: debug.c:514
+#: debug.c:519
 #, c-format
 msgid "Erasing sectors [%lld,%lld]\n"
 msgstr "Cancellazione settori [%lld,%lld]\n"
 
-#: debug.c:556
+#: debug.c:561
 #, c-format
 msgid "New length must be in range [0..%lld].\n"
 msgstr ""
 
-#: debug.c:558
+#: debug.c:563
 #, c-format
 msgid "Truncating image to %lld sectors.\n"
 msgstr ""
 
-#: debug.c:563 read-linear.c:1364 rs01-fix.c:198 rs01-fix.c:220 rs01-fix.c:236
+#: debug.c:568 read-linear.c:1364 rs01-fix.c:198 rs01-fix.c:220 rs01-fix.c:236
 #: rs01-fix.c:271 rs02-create.c:104 rs02-create.c:148 rs02-fix.c:241
 #: rs02-fix.c:262 rs02-fix.c:277 rs03-create.c:106 rs03-create.c:150
 #: rs03-fix.c:241 rs03-fix.c:262 rs03-fix.c:277 rs03s-create.c:104
@@ -162,7 +162,7 @@ msgstr ""
 msgid "Could not truncate %s: %s\n"
 msgstr "Non posso troncare %s: %s\n"
 
-#: debug.c:589 debug.c:1100 debug.c:1108 debug.c:1165 debug.c:1170 file.c:59
+#: debug.c:594 debug.c:1105 debug.c:1113 debug.c:1170 debug.c:1175 file.c:59
 #: file.c:128 file.c:148 raw-editor.c:362 read-adaptive.c:1166
 #: read-adaptive.c:1198 read-linear.c:307 read-linear.c:309 read-linear.c:340
 #: read-linear.c:342 rs03-create.c:327
@@ -174,7 +174,7 @@ msgstr ""
 "Impossibile aprire %s:\n"
 "%s"
 
-#: debug.c:593
+#: debug.c:598
 #, c-format
 msgid ""
 "\n"
@@ -193,7 +193,7 @@ msgstr ""
 "dvdisaster --debug %s %lld --random-seed %d\n"
 "\n"
 
-#: debug.c:665 file.c:107 read-adaptive.c:150 read-linear.c:111
+#: debug.c:670 file.c:107 read-adaptive.c:150 read-linear.c:111
 #: read-linear.c:114
 #, c-format
 msgid ""
@@ -203,11 +203,11 @@ msgstr ""
 "Errore durante la chiusura del file immagine:\n"
 "%s"
 
-#: debug.c:679
+#: debug.c:684
 msgid "Replacing the \"unreadable sector\" markers with zeros.\n"
 msgstr "Sostituzione dei marcatori \"unreadable sector\" con zeri.\n"
 
-#: debug.c:686
+#: debug.c:691
 #, c-format
 msgid ""
 "Could not read image sector %lld:\n"
@@ -216,49 +216,49 @@ msgstr ""
 "Impossibile leggere il settore %lld dell'immagine:\n"
 "%s\n"
 
-#: debug.c:710
+#: debug.c:715
 #, c-format
 msgid "%lld \"unreadable sector\" markers replaced.\n"
 msgstr "%lld marcatori \"unreadable sector\" sostituiti.\n"
 
-#: debug.c:788 debug.c:835 debug.c:896
+#: debug.c:793 debug.c:840 debug.c:901
 #, c-format
 msgid ""
 "Contents of sector %lld:\n"
 "\n"
 msgstr "Contenuto del settore %lld:\n"
 
-#: debug.c:797 debug.c:1124 debug.c:1193 debug.c:1197 debug.c:1275
+#: debug.c:802 debug.c:1129 debug.c:1198 debug.c:1202 debug.c:1280
 #: rs01-common.c:70 rs01t-common.c:72 rs02-common.c:67 rs02-create.c:199
 #: rs02-fix.c:390 rs03-common.c:86
 #, c-format
 msgid "Failed reading sector %lld in image: %s"
 msgstr ""
 
-#: debug.c:846
+#: debug.c:851
 #, c-format
 msgid "Failed reading sector %lld: %s"
 msgstr ""
 
-#: debug.c:883
+#: debug.c:888
 msgid "Raw reading only possible on CD media\n"
 msgstr ""
 
-#: debug.c:1091
+#: debug.c:1096
 msgid "4th argument is missing"
 msgstr ""
 
-#: debug.c:1104
+#: debug.c:1109
 #, c-format
 msgid "Source sector must be in range [0..%lld]\n"
 msgstr ""
 
-#: debug.c:1112
+#: debug.c:1117
 #, c-format
 msgid "Destination sector must be in range [0..%lld]\n"
 msgstr ""
 
-#: debug.c:1116
+#: debug.c:1121
 #, c-format
 msgid "Copying sector %lld from %s to sector %lld in %s.\n"
 msgstr ""

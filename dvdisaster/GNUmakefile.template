@@ -140,6 +140,7 @@ documentation/images/email.png:
 	  echo -n "common "; \
 	  for i in $(DOC_LOCALES); do \
 	    (cd $(SRCDIR)/documentation/$$i/images; \
+	    if ! test -e ../thumbnails; then mkdir ../thumbnails; fi; \
 	    $(SRCDIR)/tools/pngpack -u ../../images-$$i.pngpack -t160,../thumbnails >>../../pngpack.log  2>&1); \
 	    echo -n "$$i "; \
 	  done;  \
