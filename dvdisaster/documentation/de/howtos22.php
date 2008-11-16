@@ -44,7 +44,7 @@ erzeugen keine brauchbaren Fehlerkorrektur-Dateien.
 </table><p>
 
 <?php begin_screen_shot("Reiterkarte \"Abbild\".","create-prefs-image.png"); ?>
-<b>Reiterkarte "Abbild".</b> Achten Sie bei dieser Reiterkarte unbedingt darauf,
+<b>Reiterkarte "Abbild".</b> Achten Sie unbedingt darauf,
 daß "ISO/UDF" zur Ermittlung der Abbild-Größe eingestellt ist und das lineare
 Leseverfahren verwendet wird. Diese beiden Einstellungen sind grün markiert.
 Lassen Sie die übrigen Einstellungen ausgeschaltet.<p>
