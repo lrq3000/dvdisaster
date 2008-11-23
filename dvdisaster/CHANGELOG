@@ -1,6 +1,6 @@
 0.71 (devel-27)
+	- currently al work goes into finishing German and English documentation
 	- synced CVS with development tree
-	- started english online documentation
 	- more robust handling for incomplete/unfinalized media; should produce 
 	  less dreaded "couldn't query [several possiblilities] length" 
 	  errors now ;-)

@@ -20,7 +20,7 @@ switch($way)
    default: $action="Walkthrough"; break;
 }
 
-howto_headline("Creating error correction data", $action, "images/create-icon.png");
+howto_headline("Creating error correction files", $action, "images/create-icon.png");
 ?>
 
 <!--- Insert actual page content below --->

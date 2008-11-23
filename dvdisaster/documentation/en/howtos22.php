@@ -12,7 +12,7 @@ require("../include/dvdisaster.php");
 require("../include/screenshot.php");
 begin_page();
 
-howto_headline("Creating error correction data", "Basic settings", "images/create-icon.png");
+howto_headline("Creating error correction files", "Basic settings", "images/create-icon.png");
 ?>
 
 <!--- Insert actual page content below --->

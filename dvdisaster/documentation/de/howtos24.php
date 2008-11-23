@@ -11,15 +11,17 @@
 require("../include/dvdisaster.php");
 require("../include/footnote.php");
 begin_page();
-$answer=$_GET["answer"];
+
 howto_headline("Fehlerkorrektur-Datei erstellen", "Archivieren", "images/create-icon.png");
 ?>
 
 <!--- Insert actual page content below --->
 <h3>Tips zum Aufbewahren der Fehlerkorrektur-Datei</h3>
 
-Zur Zeit gibt es kaum Wechselspeichersysteme, die eine wirtschaftliche Alternative zu CD/DVD-Formaten darstellen. 
-Vermutlich werden Sie daher Ihre Fehlerkorrektur-Dateien auch auf CD/DVD speichern.<p>
+Zur Zeit gibt es kaum Wechselspeichersysteme, 
+die eine wirtschaftliche Alternative zu CD/DVD/BD-Formaten darstellen. 
+Vermutlich werden Sie daher Ihre Fehlerkorrektur-Dateien 
+auch auf diesen Formaten speichern.<p>
 
 Dagegen ist nichts einzuwenden, aber Sie müssen sich dabei bewußt sein, daß sich Ihre Nutzdaten und die Fehlerkorrektur-Dateien auf Speichermedien mit ähnlicher Verläßlichkeit befinden. Wenn Lesefehler auf einem zu rekonstruierenden Datenträger auftreten, so müssen Sie damit rechnen, daß die zur gleichen Zeit erstellte Scheibe mit den Fehlerkorrektur-Dateien ebenfalls nicht mehr vollständig lesbar ist.<p>
 
