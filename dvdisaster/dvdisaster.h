@@ -620,6 +620,7 @@ typedef struct _ReedSolomonTables
    gint32 primElem;      /* primitive field element */
    gint32 nroots;        /* degree of RS generator polynomial */
    gint32 ndata;         /* data bytes per ecc block */
+   gint32 shiftInit;     /* starting value for iteratively processing parity */
 } ReedSolomonTables;
 
 GaloisTables* CreateGaloisTables(gint32);
@@ -1137,21 +1138,7 @@ int SendReadCDB(char*, unsigned char*, unsigned char*, int, int);
  *** rs-encoder.c
  ***/
 
-typedef struct _ReedSolomonEncoder
-{  GaloisTables *gfTables;
-   ReedSolomonTables *rsTables;
-   guint8 *eLut[4][GF_FIELDSIZE];     /* special lookup tables at different byte offsets */
-
-   guint64 chunkSize;
-   int shiftPtr;
-} ReedSolomonEncoder;
-
-ReedSolomonEncoder *CreateRSEncoder(ReedSolomonTables*, guint64);
-void FreeReedSolomonEncoder(ReedSolomonEncoder*);
-
-void ResetReedSolomonEncoder(ReedSolomonEncoder*, unsigned char*);
-void EncodeNextLayer(ReedSolomonEncoder*, unsigned char*, unsigned char*, guint64);
-
+void EncodeNextLayer(ReedSolomonTables*, unsigned char*, unsigned char*, guint64, int);
 
 /***
  *** show-manual.c

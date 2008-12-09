@@ -1,6 +1,7 @@
 0.71 (devel-27)
-	- currently al work goes into finishing German and English documentation
-	- synced CVS with development tree
+	- currently all work goes into finishing German and English documentation
+	- fixed crash when using ancient CD-ROM drives.
+	  Thanks to mschaeff to bringing this to my attention!
 	- more robust handling for incomplete/unfinalized media; should produce 
 	  less dreaded "couldn't query [several possiblilities] length" 
 	  errors now ;-)

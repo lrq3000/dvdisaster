@@ -9,22 +9,49 @@
 # navigation and news if appropriate.
 
 require("../include/dvdisaster.php");
+require("../include/screenshot.php");
 begin_page();
+
+howto_headline("Augmenting images with error correction data", "Basic settings", "images/create-icon.png");
 ?>
 
 <!--- Insert actual page content below --->
 
-<h3>Placeholder page</h3>
+<?php begin_screen_shot("Opening the configuration dialog.","global-prefs-invoke.png"); ?>
+<table><tr><td valign="top"><img src="../images/prefs-icon.png" valign="bottom"></td>
+<td>The following tabs are found in the configuration dialog.
+Open the dialog by clicking the tools symbol.
+Please refer to the screen shot to the right (click the image to expand it) to locate
+the symbol; it is marked in green.</td>
+</tr></table>
+<?php end_screen_shot(); ?>
 
-This page has not yet been written.
 <pre> </pre>
 
+<?php begin_screen_shot("\"Error correction\" tab.","create-prefs-ecc2.png"); ?>
+<b>"Error correction" tab.</b> Choose "Augmented Image (RS02)" as storage
+method (green menu). Select "Use smallest possible size from 
+following table" if you are working with standard media sizes.
+dvdisaster will then choose the smallest possible medium type which can
+be used for storing the image. The remaining free space on the medium
+will be used for error correction data and the image will be prepared
+accordingly.
+<?php end_screen_shot(); ?>
 
-<font size="-1">
-<i>Why does this documentation contain empty pages?</i><p>
-We need an empty placeholder page so that hyperlinks to this topic
-can already be placed into the documentation.
 
+<pre> </pre>
+
+<b>Not used tabs</b><p>
+
+The "Misc" tab currently has only functions for creating
+log files. This is helpful for sending in <a href="feedback.php">bug reports</a>
+but should be left off during normal operation.
+The "Appearance" tab allows you to adapt the output colors to your taste, 
+but these have no further effects on the error correction data creation.
+
+<pre> </pre>
+
+<a href="howtos33.php">Augmenting the image with error correction data...</a>
 
 <!--- do not change below --->
 

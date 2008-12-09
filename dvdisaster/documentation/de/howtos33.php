@@ -21,7 +21,7 @@ else	     $write_iso_action=$way|2;
 <!--- Insert actual page content below --->
 
 <?php
-howto_headline("Fehlerkorrektur-Daten erstellen", "Durchführen", "images/create-icon.png");
+howto_headline("Fehlerkorrektur-Daten auf dem Datenträger ablegen", "Durchführen", "images/create-icon.png");
 ?>
 
 dvdisaster ist ein Spezialist für das Arbeiten mit Fehlerkorrektur-Daten und das
@@ -66,7 +66,7 @@ if($way&1)
 
 <b>Ausführliches Beispiel: ISO-Abbild auf der Festplatte erzeugen</b>. 
 Da es viele verschiedene Brennprogramme gibt, stellen wir Ihnen die benötigten
-Schritte anhand des Linux-Programmes <i>K3b</i> stellvertretend für alle 
+Schritte anhand des GNU/Linux-Programmes <i>K3b</i> stellvertretend für alle 
 anderen vor. Es dürfte für Sie ein Leichtes sein, 
 die entsprechenden Aktionen mit dem von Ihnen verwendeten 
 Programm nachzuvollziehen.<p>
@@ -113,8 +113,7 @@ nachfolgend beschrieben das Erstellen eines ISO-Abbildes auf der Festplatte.<p>
 <b>Tip:</b> Nehmen Sie zur Sicherheit alle Datenträger aus den Laufwerken
 um zu verhindern daß Sie den Brennvorgang versehentlich jetzt schon auslösen.<p>
 
-In K3b: <i>Öffnen Sie den Dialog zum
-Brennen, der sich links in der Mitte des Fensters befindet (gelbe Markierung).
+In K3b: <i>Öffnen Sie den Einstellungs-Dialog mit Hilfe des "Brennen"-Knopfes an der linken Seite des Fensters.</i>
 <?php end_screen_shot(); ?>
 
 <?php begin_screen_shot("Abbild-Schreiben auswählen","make-iso3.png"); ?>
@@ -126,7 +125,7 @@ anstelle des Brenners einen "Abbild-Aufzeichner"
 ein ISO-Abbild auf der Festplatte umleitet.<p>
 
 In K3b: <i>Wählen Sie die Reiterkarte "Brennen". Aktivieren Sie dort die grün markierte Option
-"Nur Abbild-Datei erzeugen".
+"Nur Abbild-Datei erzeugen".</i>
 <?php end_screen_shot(); ?>
 
 <?php begin_screen_shot("Abbild-Datei auswählen","make-iso4.png"); ?>
@@ -137,9 +136,9 @@ wie z.B. ".nrg" werden von dvdisaster nicht unterstützt; typischerweise werden 
 Abbilder durch die Bearbeitung mit dvdisaster unbrauchbar ohne daß es eine
 Fehlermeldung gibt.<p>
 
-In K3b: <i>Wähen Sie die Reiterkarte "Abbild". Geben Sie dort den Speicherort
+In K3b: <i>Wählen Sie die Reiterkarte "Abbild". Geben Sie dort den Speicherort
 für die Abbild-Datei an (im Beispiel "medium.iso" im Unterverzeichnis "/var/tmp/cg").
-K3b erzeugt immer .iso-Abbilder, d.h. zum Typ ist nichts weiter einzustellen.
+K3b erzeugt immer .iso-Abbilder, d.h. zum Typ ist nichts weiter einzustellen.</i>
 <?php end_screen_shot(); ?>
 
 <hr>

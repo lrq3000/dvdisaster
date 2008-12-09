@@ -25,58 +25,14 @@
 #include "dvdisaster.h"
 
 /***
- *** General housekeeping
- ***/
-
-/*
- * Create the Reed-Solomon mass data encoder
- */
-
-ReedSolomonEncoder *CreateRSEncoder(ReedSolomonTables *rst, guint64 chunk_size)
-{  ReedSolomonEncoder *rse = g_malloc(sizeof(ReedSolomonEncoder));
-
-   rse->gfTables  = rst->gfTables;
-   rse->rsTables  = rst;
-   rse->chunkSize = chunk_size;
-
-   return rse;
-}
-
-/*
- * Clean up
- */
-
-void FreeReedSolomonEncoder(ReedSolomonEncoder *rsc)
-{
-   g_free(rsc);
-}
-
-/***
  *** Reed-Solomon encoding
  ***/
-
-void ResetReedSolomonEncoder(ReedSolomonEncoder *rse, unsigned char *parity)
-{  gint32 nroots = rse->rsTables->nroots;
-   gint32 ndata  = rse->rsTables->ndata;
-
-  /* 
-   * Initialize the shift pointer so that we will come out at shiftPtr==0
-   * respectively (ndata+sp) mod nroots = 0 after working in all ndata layers.
-   */
-
-   rse->shiftPtr = nroots - ndata % nroots;
-   if(rse->shiftPtr == nroots)
-     rse->shiftPtr = 0;
-  
-   /* Prepare the parity data for the next chunk. */
-
-   memset(parity, 0, rse->rsTables->nroots * rse->chunkSize);
-}
 
 /*
  * Optimized encoder for 32 roots
  */
 
+#if 0
 void encode_layer_32(ReedSolomonEncoder *rse, unsigned char *data, unsigned char *par_idx, guint64 layer_size)
 {  //unsigned char *par_idx = rse->parity;
    gint32 *gf_index_of  = rse->gfTables->indexOf;
@@ -222,24 +178,24 @@ void encode_layer_64(ReedSolomonEncoder *rse, unsigned char *data, unsigned char
 
    rse->shiftPtr = (rse->shiftPtr+1) & 63;         /* shift */
 }
+#endif
 
 /*
  * Encoder for any number roots
  */
 
-void encode_layer(ReedSolomonEncoder *rse, unsigned char *data, unsigned char *par_idx, guint64 layer_size)
-{  //unsigned char *par_idx = rse->parity;
-   gint32 *gf_index_of  = rse->gfTables->indexOf;
-   gint32 *enc_alpha_to = rse->gfTables->encAlphaTo;
-   gint32 *rs_gpoly     = rse->rsTables->gpoly;
-   int nroots = rse->rsTables->nroots;
+void encode_layer(ReedSolomonTables *rt, unsigned char *data, unsigned char *par_idx, guint64 layer_size, int shift)
+{  gint32 *gf_index_of  = rt->gfTables->indexOf;
+   gint32 *enc_alpha_to = rt->gfTables->encAlphaTo;
+   gint32 *rs_gpoly     = rt->gpoly;
+   int nroots = rt->nroots;
    int i;
 
    for(i=0; i<layer_size; i++)
-   {  register int feedback = gf_index_of[data[i] ^ par_idx[rse->shiftPtr]];
+   {  register int feedback = gf_index_of[data[i] ^ par_idx[shift]];
 
       if(feedback != GF_ALPHA0) /* non-zero feedback term */
-      {  register int spk = rse->shiftPtr+1;
+      {  register int spk = shift+1;
          register int *gpoly = rs_gpoly + nroots;
 
 	 switch(nroots-spk)
@@ -357,7 +313,7 @@ void encode_layer(ReedSolomonEncoder *rse, unsigned char *data, unsigned char *p
 	 }
          spk = 0;
 
-         switch(rse->shiftPtr)
+         switch(shift)
          {
              case 110: par_idx[spk++] ^= enc_alpha_to[feedback + *--gpoly];
 	     case 109: par_idx[spk++] ^= enc_alpha_to[feedback + *--gpoly];
@@ -470,33 +426,37 @@ void encode_layer(ReedSolomonEncoder *rse, unsigned char *data, unsigned char *p
 	      case  2: par_idx[spk++] ^= enc_alpha_to[feedback + *--gpoly];
 	      case  1: par_idx[spk++] ^= enc_alpha_to[feedback + *--gpoly];
 	   }
- 	   par_idx[rse->shiftPtr] = enc_alpha_to[feedback + rs_gpoly[0]];
+ 	   par_idx[shift] = enc_alpha_to[feedback + rs_gpoly[0]];
        }
        else  /* zero feedback term */
-	   par_idx[rse->shiftPtr] = 0;
+	   par_idx[shift] = 0;
 
        par_idx += nroots;
    }
-   if(++(rse->shiftPtr)>=nroots) rse->shiftPtr=0;   /* shift */
+#if 0 /* shift now deliverd from external call */
+   if(++(shift)>=nroots) shift=0;   /* shift */
+#endif
 }
 
 /*
  * Wrapper around the optimized encoder routines
  */
 
-void EncodeNextLayer(ReedSolomonEncoder *rse, unsigned char *data, unsigned char *parity, guint64 layer_size)
+void EncodeNextLayer(ReedSolomonTables *rt, unsigned char *data, unsigned char *parity, guint64 layer_size, int shift)
 {
-   switch(rse->rsTables->nroots)
-   {  case 32:
+   switch(rt->nroots)
+   {  
+#if 0
+      case 32:
         encode_layer_32(rse, data, parity, layer_size);
         break;
 
       case 64:
         encode_layer_64(rse, data, parity, layer_size);
         break;
-      
+#endif 
       default:
-        encode_layer(rse, data, parity, layer_size);
+        encode_layer(rt, data, parity, layer_size, shift);
         break;
    }
 }

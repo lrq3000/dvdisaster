@@ -133,7 +133,109 @@ int InquireDevice(DeviceHandle *dh, int probe_only)
 }
 
 /*
- * Ask drive for active profile; this give us a hint
+ * Some drives do not know about profiles.
+ * In theory only plain CD-ROM type drives have no choices between
+ * different profiles, but we must consider buggy firmware also.
+ * Do a quick and dirty differentiation between the possible formats.
+ */
+
+static int try_fallback_type_check(DeviceHandle *dh)
+{  AlignedBuffer *ab;
+   Sense *sense = &dh->sense;
+   unsigned char cmd[MAX_CDB_SIZE];
+   int length;
+
+   Verbose("# *** try_fallback_type_check(%s) ***\n", dh->devinfo);
+
+   ab = CreateAlignedBuffer(2048); 
+  
+   /*** If the medium is a BD, the following will succeed. */
+
+   /* Query length of returned data */
+
+   memset(cmd, 0, MAX_CDB_SIZE);
+   cmd[0] = 0xad;     /* READ DVD STRUCTURE */
+   cmd[1] = 0x01;     /* subcommand for BD */
+   cmd[6] = 0;        /* First layer */
+   cmd[7] = 0;        /* We want DI (disc information) */
+   cmd[8] = 0;        /* Allocation length */
+   cmd[9] = 2;
+
+   /*** Only a BD should respond positively here */
+   
+   Verbose("# BD: trying READ DVD with BD subcommand for size\n");
+   if(SendPacket(dh, cmd, 12, ab->buf, 2, sense, DATA_READ)<0)
+   {  
+      Verbose("# failed -> not a BD type medium.\n");
+      goto try_dvd;
+   }
+
+   /*** Some DVD drives ignore the media type 0x01 and return the dvd structure.
+	Since the DVD structure is 2052 bytes while the BD DI is 4100 bytes,
+	we can tell from the size whether we have been fooled. */
+
+   length = ab->buf[0]<<8 | ab->buf[1];
+   length += 2;
+   if(length != 4100) /* not a BD */
+   {  Verbose("# allocation length = %d != 4100 -> not a BD type medium.\n", length);
+      goto try_dvd;
+   }
+
+   Verbose("# -> Looks like a BD type medium.\n");
+   dh->profileDescr = "(BD)";
+   dh->shortProfile = "(BD)";
+   dh->mainType = DVD;
+   dh->subType = DVD;
+   FreeAlignedBuffer(ab);
+   return TRUE;
+
+   /*** If the medium is a DVD, the following query will succeed. */
+
+   /* Query length of returned data */
+try_dvd:
+   Verbose("# DVD: Trying READ DVD STRUCTURE.\n");
+
+   memset(cmd, 0, MAX_CDB_SIZE);
+   cmd[0] = 0xad;     /* READ DVD STRUCTURE */
+   cmd[6] = 0;        /* First layer */
+   cmd[7] = 0;        /* We want PHYSICAL info */
+   cmd[8] = 0;        /* Allocation length */
+   cmd[9] = 2;
+
+   /* Different drives react with different error codes on this request;
+      especially CDROMs seem to react very indeterministic here 
+      (okay, they obviously do not know about DVD cdbs).
+      So we do not look for specific error and regard any failure as a sign
+      that the medium is not a DVD. */
+
+   if(SendPacket(dh, cmd, 12, ab->buf, 2, sense, DATA_READ)<0)
+   {  
+      Verbose("# failed -> not a DVD type medium\n");
+      goto assume_cd;
+   }
+
+   Verbose("# -> Looks like a DVD type medium.\n");
+   dh->profileDescr = "(DVD)";
+   dh->shortProfile = "(DVD)";
+   dh->mainType = DVD;
+   dh->subType = DVD;
+   FreeAlignedBuffer(ab);
+   return TRUE;
+
+   /*** No need to investigate further; if it is not a CD some
+	subsequent tests will fail. */
+
+assume_cd:  
+   Verbose("# CD: It's either a CD or totally broken.\n");
+   dh->profileDescr = "(CD)";
+   dh->shortProfile = "(CD)";
+   dh->mainType = CD;
+   FreeAlignedBuffer(ab);
+   return TRUE;
+}
+
+/*
+ * Ask drive for active profile; this gives us a hint
  * about the kind of medium the drive believes to see
  */
 
@@ -160,6 +262,10 @@ static int get_configuration(DeviceHandle *dh)
    if(ret<0) 
    {  RememberSense(sense->sense_key, sense->asc, sense->ascq);
       Verbose("# -> failure\n");
+      FreeAlignedBuffer(ab);
+      if(try_fallback_type_check(dh))
+	return 0;
+      return ret;
    }
 
    data_length = ab->buf[0]<<24 | ab->buf[1] | ab->buf[2] | ab->buf[3];
@@ -2045,7 +2151,7 @@ int TestUnitReady(DeviceHandle *dh)
 	    g_usleep(G_USEC_PER_SEC);
 	    continue;
 	 }
-      printf("fell out %x %x %x\n",dh->sense.sense_key,dh->sense.asc,dh->sense.ascq);
+      Verbose("fell out waiting for drive %x %x %x\n",dh->sense.sense_key,dh->sense.asc,dh->sense.ascq);
       break;  /* Something is wrong with the drive */
    }
 
@@ -2420,7 +2526,11 @@ DeviceHandle* OpenAndQueryDevice(char *device)
    /* Query the type and fail immediately if incompatible medium is found
       so that the later tests are not derailed by the wrong medium type */
 
-   query_type(dh, 0);
+   if(!query_type(dh, 0))
+   {  Stop(_("Drive failed to report media type."));
+      return NULL;
+   }
+     
    Verbose("# query_type() returned.\n");
 
    if(dh->subType == UNSUPPORTED)

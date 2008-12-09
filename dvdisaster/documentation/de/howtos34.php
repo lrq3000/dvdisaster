@@ -12,7 +12,7 @@ require("../include/dvdisaster.php");
 require("../include/screenshot.php");
 begin_page();
 
-howto_headline("Fehlerkorrektur-Daten erstellen", "fortgeschrittene Einstellungen", "images/create-icon.png");
+howto_headline("Fehlerkorrektur-Daten auf dem Datenträger ablegen", "fortgeschrittene Einstellungen", "images/create-icon.png");
 ?>
 
 <?php begin_screen_shot("Reiterkarte \"Fehlerkorrektur\".","create-prefs-ecc2-adv.png"); ?>
