@@ -1,15 +1,15 @@
 # Russian translations for dvdisaster package
 # Английские переводы для пакета dvdisaster.
-# Copyright (C) 2008 THE dvdisaster'S COPYRIGHT HOLDER
+# Copyright (C) 2009 THE dvdisaster'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the dvdisaster package.
-# Igor Gorbounov <igorbounov@topazelectro.ru>, 2008.
+# Igor Gorbounov <igorbounov@topazelectro.ru>, 2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.70.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-07 22:00+0100\n"
-"PO-Revision-Date: 2008-11-13 19:14+0300\n"
+"POT-Creation-Date: 2008-12-27 19:29+0100\n"
+"PO-Revision-Date: 2009-11-13 19:14+0300\n"
 "Last-Translator: Игорь Горбунов <igor.gorbounov@gmail.com>\n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -65,16 +65,16 @@ msgstr ""
 #: debug.c:112 debug.c:202 debug.c:250 debug.c:341 debug.c:385 debug.c:698
 #: debug.c:798 debug.c:1125 debug.c:1133 debug.c:1240 rs01-common.c:54
 #: rs02-common.c:62 rs02-create.c:336 rs02-create.c:969 rs02-fix.c:387
-#: rs02-verify.c:393 rs03-common.c:81 rs03-create.c:398 rs03-create.c:626
-#: rs03s-create.c:796 rs03s-create.c:826 rs03-verify.c:392
+#: rs02-verify.c:393 rs03-common.c:81 rs03-create.c:388 rs03-create.c:403
+#: rs03-create.c:481 rs03s-create.c:796 rs03s-create.c:826 rs03-verify.c:392
 #, c-format
 msgid "Failed seeking to sector %lld in image: %s"
 msgstr "Не удалось найти сектор %lld в образе: %s"
 
 #: debug.c:117 debug.c:207 debug.c:255 debug.c:346 debug.c:390 debug.c:536
 #: debug.c:658 debug.c:703 debug.c:1137 debug.c:1244 debug.c:1284
-#: rs02-create.c:359 rs02-create.c:385 rs02-create.c:972 rs03-create.c:401
-#: rs03-create.c:629 rs03s-create.c:803 rs03s-create.c:829 udf.c:1108
+#: rs02-create.c:359 rs02-create.c:385 rs02-create.c:972 rs03-create.c:391
+#: rs03-create.c:484 rs03s-create.c:803 rs03s-create.c:829 udf.c:1108
 #: udf.c:1166 udf.c:1223 udf.c:1236 udf.c:1241 udf.c:1244 udf.c:1247
 #: udf.c:1250 udf.c:1253 udf.c:1256
 #, c-format
@@ -156,7 +156,7 @@ msgstr "Усечение образа до %lld секторов.\n"
 
 #: debug.c:568 read-linear.c:1364 rs01-fix.c:198 rs01-fix.c:220 rs01-fix.c:236
 #: rs01-fix.c:271 rs02-create.c:104 rs02-create.c:148 rs02-fix.c:241
-#: rs02-fix.c:262 rs02-fix.c:277 rs03-create.c:144 rs03-create.c:188
+#: rs02-fix.c:262 rs02-fix.c:277 rs03-create.c:131 rs03-create.c:175
 #: rs03-fix.c:241 rs03-fix.c:262 rs03-fix.c:277 rs03s-create.c:104
 #: rs03s-create.c:148
 #, c-format
@@ -233,7 +233,7 @@ msgstr ""
 
 #: debug.c:802 debug.c:1129 debug.c:1198 debug.c:1202 debug.c:1280
 #: rs01-common.c:70 rs02-common.c:67 rs02-create.c:199 rs02-fix.c:390
-#: rs03-common.c:86
+#: rs03-common.c:86 rs03-create.c:408
 #, c-format
 msgid "Failed reading sector %lld in image: %s"
 msgstr "Не удалось прочитать сектор %lld в образе: %s"
@@ -316,7 +316,7 @@ msgid ""
 "error correction data for it. Sorry for the bad news.\n"
 msgstr ""
 
-#: dvdisaster.c:39 main-window.c:133
+#: dvdisaster.c:39 main-window.c:137
 #, c-format
 msgid ""
 "\n"
@@ -711,15 +711,15 @@ msgstr "О программе dvdisaster"
 
 #: help-dialogs.c:701
 msgid ""
-"Modified version Copyright 2008 (please fill in - [directions])\n"
-"Copyright 2004-2008 Carsten Gnoerlich"
+"Modified version Copyright 2009 (please fill in - [directions])\n"
+"Copyright 2004-2009 Carsten Gnoerlich"
 msgstr ""
-"Измененнная версия Copyright 2008 (пожалуйста, заполните - [инструкции])\n"
-"Copyright 2004-2008 Carsten Gnoerlich"
+"Измененнная версия Copyright 2009 (пожалуйста, заполните - [инструкции])\n"
+"Copyright 2004-2009 Carsten Gnoerlich"
 
 #: help-dialogs.c:705
-msgid "Copyright 2004-2008 Carsten Gnoerlich"
-msgstr "Copyright 2004-2008 Carsten Gnoerlich"
+msgid "Copyright 2004-2009 Carsten Gnoerlich"
+msgstr "Copyright 2004-2009 Carsten Gnoerlich"
 
 #: help-dialogs.c:712
 msgid ""
@@ -803,79 +803,79 @@ msgstr ""
 msgid "dvdisaster-%s log\n"
 msgstr "Журнал dvdisaster-%s\n"
 
-#: main-window.c:235
+#: main-window.c:239
 msgid "button|Read"
 msgstr "Читать"
 
-#: main-window.c:238
+#: main-window.c:242
 msgid "tooltip|Read Image"
 msgstr "Читать образ"
 
-#: main-window.c:238
+#: main-window.c:242
 msgid "Reads a CD/DVD image into a file (or tries to complete an existing image file)."
 msgstr "Считывание образа CD/DVD в файл (или попытка завершить существующий файл образа)."
 
-#: main-window.c:252
+#: main-window.c:256
 msgid "button|Create"
 msgstr "Создать"
 
-#: main-window.c:255
+#: main-window.c:259
 msgid "tooltip|Create error correction data"
 msgstr "Создать данные для исправления ошибок"
 
-#: main-window.c:255
+#: main-window.c:259
 msgid "Creates error correction data. Requires an image file."
 msgstr "Создание данных для исправления ошибок. Требуется файл образа."
 
-#: main-window.c:259
+#: main-window.c:263
 msgid "button|Scan"
 msgstr "Проверить"
 
-#: main-window.c:262
+#: main-window.c:266
 msgid "tooltip|Scan medium"
 msgstr "Проверить носитель"
 
-#: main-window.c:262
+#: main-window.c:266
 msgid "Scans medium for unreadable sectors."
 msgstr "Проверяет носитель на нечитаемые секторы."
 
-#: main-window.c:266
+#: main-window.c:270
 msgid "button|Fix"
 msgstr "Исправить"
 
-#: main-window.c:269
+#: main-window.c:273
 msgid "tooltip|Repair image"
 msgstr "Исправить образ"
 
-#: main-window.c:269
+#: main-window.c:273
 msgid "Repairs an image. Requires an image file and error correction data."
 msgstr "Исправление образа. Требуется файл образа и данные для исправления ошибок."
 
-#: main-window.c:273
+#: main-window.c:277
 msgid "button|Verify"
 msgstr "Проверить"
 
-#: main-window.c:276
+#: main-window.c:280
 msgid "tooltip|Consistency check"
 msgstr "Проверка целостности"
 
-#: main-window.c:276
+#: main-window.c:280
 msgid "Tests consistency of error correction data and image file."
 msgstr "Проверяет соответствие данных для исправления ошибок и файла образа."
 
-#: main-window.c:280
+#: main-window.c:284
 msgid "button|Stop"
 msgstr "Прервать"
 
-#: main-window.c:283
+#: main-window.c:287
 msgid "tooltip|Abort action"
 msgstr "Прервать работу"
 
-#: main-window.c:283
+#: main-window.c:287
 msgid "Aborts an ongoing action."
 msgstr "Прерывание текущей работы."
 
-#: main-window.c:412
+#: main-window.c:416
 #, c-format
 msgid ""
 "<b>dvdisaster is not properly installed</b>\n"
@@ -886,15 +886,15 @@ msgstr ""
 "\n"
 "Просьба выполнить программу установки (%s) еще раз.\n"
 
-#: main-window.c:496
+#: main-window.c:500
 msgid "tooltip|Protocol for current action"
 msgstr "Журнал текущей работы"
 
-#: main-window.c:497
+#: main-window.c:501
 msgid "Displays additional information created during the current or last action."
 msgstr "Отображение дополнительной информации о текущей или последней работе."
 
-#: main-window.c:506
+#: main-window.c:510
 msgid "View log"
 msgstr "Просмотреть журнал"
 
@@ -1006,7 +1006,7 @@ msgstr "Тип носителя:"
 msgid "Book type:"
 msgstr "Формат (book type):"
 
-#: medium-info.c:308 scsi-layer.c:2512
+#: medium-info.c:308 scsi-layer.c:2616
 msgid "Manuf.-ID:"
 msgstr "Изгот.-ID:"
 
@@ -1260,8 +1260,8 @@ msgstr ""
 
 #: misc.c:200
 #, c-format
-msgid "dvdisaster-%s%sCopyright 2004-2008 Carsten Gnoerlich.\n"
-msgstr "dvdisaster-%s%sCopyright 2004-2008 Carsten Gnoerlich.\n"
+msgid "dvdisaster-%s%sCopyright 2004-2009 Carsten Gnoerlich.\n"
+msgstr "dvdisaster-%s%sCopyright 2004-2009 Carsten Gnoerlich.\n"
 
 #. TRANSLATORS: Excluding all kinds of warranty might be harmful under your
 #. legislature. If in doubt, just translate the following like "This is free
@@ -2713,12 +2713,12 @@ msgstr ""
 msgid "CRC error in sector %lld\n"
 msgstr "CRC-ошибка в секторе %lld\n"
 
-#: read-adaptive.c:1516 scsi-layer.c:1608
+#: read-adaptive.c:1516 scsi-layer.c:1712
 #, c-format
 msgid "Sectors %lld-%lld: %s\n"
 msgstr "Сектора %lld-%lld: %s\n"
 
-#: read-adaptive.c:1519 read-linear.c:1215 scsi-layer.c:1607
+#: read-adaptive.c:1519 read-linear.c:1215 scsi-layer.c:1711
 #, c-format
 msgid "Sector %lld: %s\n"
 msgstr "Сектор %lld: %s\n"
@@ -2771,7 +2771,7 @@ msgstr "Адаптивное чтение:"
 msgid "Sectors processed"
 msgstr "Обработанные сектора"
 
-#: read-adaptive-window.c:110 scsi-layer.c:1589
+#: read-adaptive-window.c:110 scsi-layer.c:1693
 msgid "readable"
 msgstr "можно прочитать"
 
@@ -2828,7 +2828,7 @@ msgstr ""
 #: read-linear.c:215 rs01-create.c:644 rs01-fix.c:188 rs01-fix.c:210
 #: rs01-fix.c:256 rs01-fix.c:286 rs01-fix.c:303 rs01-fix.c:356
 #: rs01-verify.c:430 rs01-verify.c:787 rs02-create.c:112 rs02-fix.c:232
-#: rs02-fix.c:253 rs02-fix.c:344 rs02-verify.c:698 rs03-create.c:152
+#: rs02-fix.c:253 rs02-fix.c:344 rs02-verify.c:698 rs03-create.c:139
 #: rs03-fix.c:232 rs03-fix.c:253 rs03-fix.c:339 rs03s-create.c:112
 #: rs03-verify.c:682
 #, c-format
@@ -2866,7 +2866,7 @@ msgstr ""
 msgid "done.\n"
 msgstr "готово.\n"
 
-#: read-linear.c:528 scsi-layer.c:1929
+#: read-linear.c:528 scsi-layer.c:2033
 #, c-format
 msgid "Waiting %d seconds for drive to spin up...\n"
 msgstr "Задержка на %d секунд для раскручивания привода...\n"
@@ -3087,7 +3087,7 @@ msgid "Redundancy %d out of useful range [8..100]."
 msgstr "Избыточность %d вне полезного диапазона [8..100]."
 
 #: rs01-create.c:125 rs01-fix.c:77 rs02-create.c:58 rs02-fix.c:53
-#: rs03-create.c:91 rs03-fix.c:53 rs03s-create.c:58
+#: rs03-create.c:80 rs03-fix.c:53 rs03s-create.c:58
 #, c-format
 msgid "<span %s>Aborted by unrecoverable error.</span>"
 msgstr "<span %s>Прервано из-за неисправимой ошибки.</span>"
@@ -3139,7 +3139,7 @@ msgid "Failed skipping ecc+crc header: %s"
 msgstr "Неудалось пропустить заголовок ecc+crc: %s"
 
 #: rs01-create.c:502 rs01-create.c:626 rs01-create.c:920 rs02-create.c:942
-#: rs03-create.c:492 rs03s-create.c:786
+#: rs03-create.c:449 rs03s-create.c:786
 #, c-format
 msgid "Ecc generation: %3d.%1d%%"
 msgstr "Генерация ecc: %3d.%1d%%"
@@ -3162,7 +3162,7 @@ msgstr ""
 "Не удается записать заголовок ecc:\n"
 "%s"
 
-#: rs01-create.c:956 rs02-create.c:1091 rs03-create.c:864 rs03s-create.c:921
+#: rs01-create.c:956 rs02-create.c:1091 rs03-create.c:774 rs03s-create.c:921
 #, c-format
 msgid "Ecc generation: 100.0%%\n"
 msgstr "Генерация ecc: 100.0%%\n"
@@ -3928,12 +3928,12 @@ msgstr "Не удалось перейти к ecc-заголовку в %lld: %s
 msgid "Failed writing ecc header at %lld: %s\n"
 msgstr "Не удалось записать ecc-заголовок в %lld: %s\n"
 
-#: rs02-create.c:107 rs03-create.c:147 rs03s-create.c:107
+#: rs02-create.c:107 rs03-create.c:134 rs03s-create.c:107
 #, c-format
 msgid "<span %s>Aborted by user request!</span> (partial ecc data removed from image)"
 msgstr "<span %s>Прервано пользователем!</span> (незавершенные ecc-данные удалены из образа)"
 
-#: rs02-create.c:139 rs03-create.c:179 rs03s-create.c:139
+#: rs02-create.c:139 rs03-create.c:166 rs03s-create.c:139
 #, c-format
 msgid ""
 "Image \"%s\" already contains error correction information.\n"
@@ -3967,29 +3967,29 @@ msgid ""
 "appended to complete (undamaged) images.\n"
 msgstr ""
 
-#: rs02-create.c:228 rs02-create.c:292 rs02-create.c:301 rs03-create.c:243
-#: rs03-create.c:252 rs03s-create.c:203 rs03s-create.c:212
+#: rs02-create.c:228 rs02-create.c:292 rs02-create.c:301 rs03-create.c:230
+#: rs03-create.c:239 rs03s-create.c:203 rs03s-create.c:212
 #, c-format
 msgid "Preparing image (checksums, adding space): %3d%%"
 msgstr "Подготовка образа (контрольные суммы, увеличение размера): %3d%%"
 
-#: rs02-create.c:263 rs02-create.c:273 rs02-fix.c:91 rs03-create.c:215
-#: rs03-create.c:225 rs03-fix.c:91 rs03s-create.c:175 rs03s-create.c:185
+#: rs02-create.c:263 rs02-create.c:273 rs02-fix.c:91 rs03-create.c:202
+#: rs03-create.c:212 rs03-fix.c:91 rs03s-create.c:175 rs03s-create.c:185
 #, c-format
 msgid "Failed seeking to end of image: %s\n"
 msgstr "Не удалось перейти к концу образа: %s\n"
 
-#: rs02-create.c:267 rs02-create.c:288 rs02-fix.c:104 rs03-create.c:219
-#: rs03-create.c:239 rs03-fix.c:105 rs03s-create.c:179 rs03s-create.c:199
+#: rs02-create.c:267 rs02-create.c:288 rs02-fix.c:104 rs03-create.c:206
+#: rs03-create.c:226 rs03-fix.c:105 rs03s-create.c:179 rs03s-create.c:199
 #, c-format
 msgid "Failed expanding the image: %s\n"
 msgstr "Не удалось увеличить образ: %s\n"
 
-#: rs02-create.c:1012 rs03-create.c:795 rs03s-create.c:852
+#: rs02-create.c:1012 rs03-create.c:703 rs03s-create.c:852
 msgid "Error correction data creation aborted"
 msgstr "Создание данных коррекции ошибок прервано"
 
-#: rs02-create.c:1016 rs02-create.c:1036 rs03-create.c:799 rs03-create.c:819
+#: rs02-create.c:1016 rs02-create.c:1036 rs03-create.c:707 rs03-create.c:727
 #: rs03s-create.c:856 rs03s-create.c:876
 #, c-format
 msgid ""
@@ -3999,7 +3999,7 @@ msgstr ""
 "<big>Присоединение к образу данных для коррекции ошибок.</big>\n"
 "<i>%s</i>"
 
-#: rs02-create.c:1017 rs03-create.c:800 rs03s-create.c:857
+#: rs02-create.c:1017 rs03-create.c:708 rs03s-create.c:857
 msgid "- checking image -"
 msgstr "- проверка образа -"
 
@@ -4017,7 +4017,7 @@ msgstr ""
 "Увеличение образа с использованием метода RS02:\n"
 " %lld МБ данных, %lld МБ ecc (%d корней; избыточность %4.1f%%)."
 
-#: rs02-create.c:1049 rs03-create.c:832 rs03s-create.c:889
+#: rs02-create.c:1049 rs03-create.c:740 rs03s-create.c:889
 #, c-format
 msgid ""
 "Not enough space on medium left for error correction data.\n"
@@ -4032,7 +4032,7 @@ msgstr ""
 "большего размера, создайте отдельный файл коррекции ошибок,\n"
 "с помощью метода RS01.\n"
 
-#: rs02-create.c:1060 rs03-create.c:843 rs03s-create.c:900
+#: rs02-create.c:1060 rs03-create.c:751 rs03s-create.c:900
 #, c-format
 msgid ""
 "Using redundancies below 20%%%% may not give\n"
@@ -4041,7 +4041,7 @@ msgstr ""
 "Применение избыточности менее 20%%%% может не дать\n"
 "ожидаемой защиты от потери данных.\n"
 
-#: rs02-create.c:1092 rs02-create.c:1101 rs03-create.c:865 rs03-create.c:874
+#: rs02-create.c:1092 rs02-create.c:1101 rs03-create.c:775 rs03-create.c:787
 #: rs03s-create.c:922 rs03s-create.c:931
 #, c-format
 msgid ""
@@ -4510,12 +4510,16 @@ msgstr ""
 "Обратите внимание, что расширенные образы самое большее утраиваются в размере, так как наибольшая возможная избыточность составляет 200%%.\n"
 "Даже если этот предел не достигается, расширенный образ по техническим причинам может быть на несколько секторов меньше, чем указано."
 
-#: rs03-create.c:815 rs03s-create.c:872
+#: rs03-create.c:459
+msgid "Flushing output cache..."
+msgstr ""
+
+#: rs03-create.c:723 rs03s-create.c:872
 #, c-format
 msgid "Encoding with Method RS03: %lld MB data, %lld MB ecc (%d roots; %4.1f%% redundancy)."
 msgstr "Кодирование методом RS03: %lld МБ данные, %lld МБ ecc (%d корней; избыточность %4.1f%%)."
 
-#: rs03-create.c:823
+#: rs03-create.c:731
 #, c-format
 msgid ""
 "Augmenting image with Method RS03 [%d threads]:\n"
@@ -4523,6 +4527,11 @@ msgid ""
 msgstr ""
 "Расширение образа методом RS03 [%d потоков]:\n"
 " %lld МБ данные, %lld МБ ecc (%d корней; избыточность %4.1f%%)."
+
+#: rs03-create.c:780
+#, c-format
+msgid "Avg performance: %5.2fs (%5.2fMB/s) total\n"
+msgstr "Ср. производительность: %5.2fs (%5.2fМБ/с) в сумме\n"
 
 #: rs03-fix.c:200
 #, c-format
@@ -4588,12 +4597,12 @@ msgstr "Устройство %s (%s) не является приводом CDRO
 msgid "Device %s (%s) is a hard disk."
 msgstr "Устройство %s (%s) является жестким диском."
 
-#: scsi-layer.c:311
+#: scsi-layer.c:415
 #, c-format
 msgid "Incomplete %s"
 msgstr ""
 
-#: scsi-layer.c:349
+#: scsi-layer.c:453
 #, c-format
 msgid ""
 "%s\n"
@@ -4602,16 +4611,16 @@ msgstr ""
 "%s\n"
 "Не удалось запросить размер TOC.\n"
 
-#: scsi-layer.c:354
+#: scsi-layer.c:458
 msgid "blank"
 msgstr "пустой"
 
-#: scsi-layer.c:368 scsi-layer.c:428
+#: scsi-layer.c:472 scsi-layer.c:532
 #, c-format
 msgid "TOC info too long (%d), probably multisession.\n"
 msgstr "Информация в TOC слишком большая (%d), вероятно многосессионная запись.\n"
 
-#: scsi-layer.c:383
+#: scsi-layer.c:487
 #, c-format
 msgid ""
 "%s\n"
@@ -4620,7 +4629,7 @@ msgstr ""
 "%s\n"
 "Не удалось прочитать TOC.\n"
 
-#: scsi-layer.c:410
+#: scsi-layer.c:514
 #, c-format
 msgid ""
 "%s\n"
@@ -4629,12 +4638,12 @@ msgstr ""
 "%s\n"
 "Не удалось запросить весь размер TOC.\n"
 
-#: scsi-layer.c:422
+#: scsi-layer.c:526
 #, c-format
 msgid "TOC info too short, length %d.\n"
 msgstr "Информация в TOC слишком мала, длина %d.\n"
 
-#: scsi-layer.c:444
+#: scsi-layer.c:548
 #, c-format
 msgid ""
 "%s\n"
@@ -4643,7 +4652,7 @@ msgstr ""
 "%s\n"
 "Не удалось прочитать всю TOC.\n"
 
-#: scsi-layer.c:453
+#: scsi-layer.c:557
 #, c-format
 msgid ""
 "\n"
@@ -4652,11 +4661,11 @@ msgstr ""
 "\n"
 "Неожиданный формат TOC (длина %d):\n"
 
-#: scsi-layer.c:461
+#: scsi-layer.c:565
 msgid "Consider sending a bug report.\n"
 msgstr "Рекомендуется отправить отчет об ошибке.\n"
 
-#: scsi-layer.c:514
+#: scsi-layer.c:618
 #, c-format
 msgid ""
 "%s\n"
@@ -4665,12 +4674,12 @@ msgstr ""
 "%s\n"
 "Не удалось запросить размер dvd-структуры.\n"
 
-#: scsi-layer.c:525
+#: scsi-layer.c:629
 #, c-format
 msgid "Could not query dvd physical structure - implausible packet length %d\n"
 msgstr "Не удалось запросить физическую структуру dvd - неправдоподобная длина пакета %d\n"
 
-#: scsi-layer.c:543
+#: scsi-layer.c:647
 #, c-format
 msgid ""
 "%s\n"
@@ -4679,12 +4688,12 @@ msgstr ""
 "%s\n"
 "Не удалось запросить физическую структуру dvd.\n"
 
-#: scsi-layer.c:572 scsi-layer.c:582
+#: scsi-layer.c:676 scsi-layer.c:686
 #, c-format
 msgid "READ DVD STRUCTURE: implausible medium size, %lld-%lld=%lld sectors\n"
 msgstr "READ DVD STRUCTURE: неправильный размер носителя, %lld-%lld=%lld секторов\n"
 
-#: scsi-layer.c:840
+#: scsi-layer.c:944
 #, c-format
 msgid ""
 "%s\n"
@@ -4693,7 +4702,7 @@ msgstr ""
 "%s\n"
 "Не удалось запросить размер структуры BD диска.\n"
 
-#: scsi-layer.c:863
+#: scsi-layer.c:967
 #, c-format
 msgid ""
 "%s\n"
@@ -4702,7 +4711,7 @@ msgstr ""
 "%s\n"
 "Не удалось запросить структуру BD диска.\n"
 
-#: scsi-layer.c:1538
+#: scsi-layer.c:1642
 #, c-format
 msgid ""
 "%s\n"
@@ -4711,12 +4720,12 @@ msgstr ""
 "%s\n"
 "Не удалось запросить размер dvd-структуры для кода формата 1.\n"
 
-#: scsi-layer.c:1548
+#: scsi-layer.c:1652
 #, c-format
 msgid "Could not query dvd copyright info - implausible packet length %d\n"
 msgstr "Не удалось запросить информацию об авторских правах dvd - неправдоподобный размер пакета %d\n"
 
-#: scsi-layer.c:1563
+#: scsi-layer.c:1667
 #, c-format
 msgid ""
 "%s\n"
@@ -4725,23 +4734,23 @@ msgstr ""
 "%s\n"
 "Не удалось запросить информацию об авторских правах.\n"
 
-#: scsi-layer.c:1623
+#: scsi-layer.c:1727
 msgid "is undecideable because of read error"
 msgstr "не ясно из-за ошибок чтения"
 
-#: scsi-layer.c:1629
+#: scsi-layer.c:1733
 msgid "looks GOOD"
 msgstr "выглядит ПРАВИЛЬНО"
 
-#: scsi-layer.c:1635
+#: scsi-layer.c:1739
 msgid "gives unformatted size (UNUSABLE)"
 msgstr "дает неформатированный размер (НЕПРИГОДНО)"
 
-#: scsi-layer.c:1640
+#: scsi-layer.c:1744
 msgid "is UNUSABLE"
 msgstr "НЕПРИГОДНО"
 
-#: scsi-layer.c:1661
+#: scsi-layer.c:1765
 #, c-format
 msgid ""
 "%s\n"
@@ -4750,12 +4759,12 @@ msgstr ""
 "%s\n"
 "Не удалось запросить размер носителя.\n"
 
-#: scsi-layer.c:1681
+#: scsi-layer.c:1785
 #, c-format
 msgid "READ CAPACITY: implausible medium size, %lld sectors\n"
 msgstr "READ CAPACITY: неправильный размер носителя, %lld секторов\n"
 
-#: scsi-layer.c:1760
+#: scsi-layer.c:1864
 #, c-format
 msgid ""
 "Different media sizes depending on query method:\n"
@@ -4768,7 +4777,7 @@ msgstr ""
 "READ DVD STRUCTURE: %lld секторов\n"
 "\n"
 
-#: scsi-layer.c:1765
+#: scsi-layer.c:1869
 msgid ""
 "Evaluation of returned medium sizes:\n"
 "\n"
@@ -4776,15 +4785,15 @@ msgstr ""
 "Оценка полученных размеров носителя:\n"
 "\n"
 
-#: scsi-layer.c:1820
+#: scsi-layer.c:1924
 msgid "Using value from READ CAPACITY"
 msgstr "Используется значение из READ CAPACITY"
 
-#: scsi-layer.c:1824
+#: scsi-layer.c:1928
 msgid "Using value from READ DVD STRUCTURE"
 msgstr "Используется значение из READ DVD STRUCTURE"
 
-#: scsi-layer.c:1834
+#: scsi-layer.c:1938
 #, c-format
 msgid ""
 "FAILED to determine image size.\n"
@@ -4795,7 +4804,7 @@ msgstr ""
 "Использование значения меньшего, чем это, работает на >90%% приводов,\n"
 "но ПРОДОЛЖАЙТЕ НА СВОЙ РИСК (образ может быть неполным/непригодным)"
 
-#: scsi-layer.c:1839
+#: scsi-layer.c:1943
 #, c-format
 msgid ""
 "Final decision: %s\n"
@@ -4804,7 +4813,7 @@ msgstr ""
 "Окончательное решение: %s\n"
 "\n"
 
-#: scsi-layer.c:1847
+#: scsi-layer.c:1951
 msgid ""
 "Failed to determine image size.\n"
 "Try using a different drive."
@@ -4812,7 +4821,7 @@ msgstr ""
 "Не удалось определить размер образа.\n"
 "Попробуйте другой привод."
 
-#: scsi-layer.c:1972 scsi-layer.c:1998
+#: scsi-layer.c:2076 scsi-layer.c:2102
 #, c-format
 msgid ""
 "%s\n"
@@ -4821,7 +4830,7 @@ msgstr ""
 "%s\n"
 "Не удалось загрузить/выгрузить носитель.\n"
 
-#: scsi-layer.c:1988
+#: scsi-layer.c:2092
 #, c-format
 msgid ""
 "%s\n"
@@ -4830,37 +4839,37 @@ msgstr ""
 "%s\n"
 "Не удалось разблокировать носитель.\n"
 
-#: scsi-layer.c:2042
+#: scsi-layer.c:2146
 #, c-format
 msgid "Waiting 10 seconds for drive: %d\n"
 msgstr "Выжидание 10 секунд для привода: %d\n"
 
-#: scsi-layer.c:2310
+#: scsi-layer.c:2414
 #, c-format
 msgid "Sectors %lld - %lld: %s\n"
 msgstr "Сектора %lld - %lld: %s\n"
 
-#: scsi-layer.c:2324
+#: scsi-layer.c:2428
 #, c-format
 msgid "Sector %lld, try %d: %s Sector returned: %d.\n"
 msgstr "Сектор %lld, попытка %d: %s Возвращен сектор: %d.\n"
 
-#: scsi-layer.c:2330
+#: scsi-layer.c:2434
 #, c-format
 msgid "Sector %lld, try %d: %s\n"
 msgstr "Сектор %lld, попытка %d: %s\n"
 
-#: scsi-layer.c:2341
+#: scsi-layer.c:2445
 #, c-format
 msgid "Sector %lld, try %d: success\n"
 msgstr "Сектор %lld, попытка %d: успешно\n"
 
-#: scsi-layer.c:2408 scsi-layer.c:2560
+#: scsi-layer.c:2512 scsi-layer.c:2664
 #, c-format
 msgid "Device %s: no medium present\n"
 msgstr "Устройство %s: нет носителя\n"
 
-#: scsi-layer.c:2409 scsi-layer.c:2561
+#: scsi-layer.c:2513 scsi-layer.c:2665
 #, c-format
 msgid ""
 "Device %s does not become ready:\n"
@@ -4871,7 +4880,7 @@ msgstr ""
 "%s\n"
 "\n"
 
-#: scsi-layer.c:2414
+#: scsi-layer.c:2518
 #, c-format
 msgid ""
 "\n"
@@ -4880,7 +4889,7 @@ msgstr ""
 "\n"
 "Устройство: %s, %s\n"
 
-#: scsi-layer.c:2418
+#: scsi-layer.c:2522
 #, c-format
 msgid ""
 "\n"
@@ -4889,52 +4898,52 @@ msgstr ""
 "\n"
 "Устройство: %s (%s), %s\n"
 
-#: scsi-layer.c:2426
+#: scsi-layer.c:2530
 msgid "Drive failed to report media type."
 msgstr ""
 
-#: scsi-layer.c:2437 scsi-layer.c:2524
+#: scsi-layer.c:2541 scsi-layer.c:2628
 #, c-format
 msgid "This software does not support \"%s\" type media."
 msgstr "Эта программа не поддерживает \"%s\" тип носителя."
 
-#: scsi-layer.c:2445
+#: scsi-layer.c:2549
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr "Эта программа не поддерживает многосессионные (%d сессиий) носители."
 
-#: scsi-layer.c:2468 scsi-layer.c:2477
+#: scsi-layer.c:2572 scsi-layer.c:2581
 msgid "Using READ CD"
 msgstr "Используется READ CD"
 
-#: scsi-layer.c:2469
+#: scsi-layer.c:2573
 msgid ", RAW reading"
 msgstr ", чтение \"RAW\""
 
-#: scsi-layer.c:2472
+#: scsi-layer.c:2576
 #, c-format
 msgid ", Mode page 1 ERP = %02xh"
 msgstr ", Mode page 1 ERP = %02xh"
 
-#: scsi-layer.c:2475
+#: scsi-layer.c:2579
 msgid ", C2 scanning"
 msgstr ", поиск C2"
 
-#: scsi-layer.c:2482
+#: scsi-layer.c:2586
 msgid "Using READ(10).\n"
 msgstr "Используется READ(10).\n"
 
-#: scsi-layer.c:2501
+#: scsi-layer.c:2605
 #, c-format
 msgid "Medium: %s, %lld sectors%s"
 msgstr "Носитель: %s, %lld секторов%s"
 
-#: scsi-layer.c:2505
+#: scsi-layer.c:2609
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s created %s"
 msgstr "Носитель \"%s\": %s, %lld секторов%s создан %s"
 
-#: scsi-layer.c:2531
+#: scsi-layer.c:2635
 msgid "This software does not support encrypted media.\n"
 msgstr "Эта программа не поддерживает шифрованные носители.\n"
 
@@ -5182,9 +5191,6 @@ msgstr "<i>Новое в этой версии:</i>"
 
 #~ msgid "Encoding with Method RS03 [%d threads]: %lld MB data, %lld MB ecc (%d roots; %4.1f%% redundancy)."
 #~ msgstr "Кодирование методом RS03 [%d потоков]: %lld МБ данные, %lld МБ ecc (%d корней; избыточность %4.1f%%)."
-
-#~ msgid "Avg performance: %5.2fs (%5.2fMB/s) total\n"
-#~ msgstr "Ср. производительность: %5.2fs (%5.2fМБ/с) в сумме\n"
 
 #~ msgid "Media state"
 #~ msgstr "Состояние носителя"

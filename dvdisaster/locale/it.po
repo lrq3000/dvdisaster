@@ -1,14 +1,14 @@
 # Italian translations for dvdisaster package by Andrea Polverini (polve@polve.com)
 # Italian messages for dvdisaster.
-# Copyright (C) 2004-2008 THE dvdisaster'S COPYRIGHT HOLDER
+# Copyright (C) 2004-2009 THE dvdisaster'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the dvdisaster package.
-# Carsten Gnörlich <carsten@dvdisaster.de>, 2008.
+# Carsten Gnörlich <carsten@dvdisaster.de>, 2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-07 22:00+0100\n"
+"POT-Creation-Date: 2008-12-27 19:29+0100\n"
 "PO-Revision-Date: 2005-01-01 14:24+0100\n"
 "Last-Translator: Andrea Polverini <polve@polve.com>\n"
 "Language-Team: Italian <>\n"
@@ -62,16 +62,16 @@ msgstr ""
 #: debug.c:112 debug.c:202 debug.c:250 debug.c:341 debug.c:385 debug.c:698
 #: debug.c:798 debug.c:1125 debug.c:1133 debug.c:1240 rs01-common.c:54
 #: rs02-common.c:62 rs02-create.c:336 rs02-create.c:969 rs02-fix.c:387
-#: rs02-verify.c:393 rs03-common.c:81 rs03-create.c:398 rs03-create.c:626
-#: rs03s-create.c:796 rs03s-create.c:826 rs03-verify.c:392
+#: rs02-verify.c:393 rs03-common.c:81 rs03-create.c:388 rs03-create.c:403
+#: rs03-create.c:481 rs03s-create.c:796 rs03s-create.c:826 rs03-verify.c:392
 #, c-format
 msgid "Failed seeking to sector %lld in image: %s"
 msgstr ""
 
 #: debug.c:117 debug.c:207 debug.c:255 debug.c:346 debug.c:390 debug.c:536
 #: debug.c:658 debug.c:703 debug.c:1137 debug.c:1244 debug.c:1284
-#: rs02-create.c:359 rs02-create.c:385 rs02-create.c:972 rs03-create.c:401
-#: rs03-create.c:629 rs03s-create.c:803 rs03s-create.c:829 udf.c:1108
+#: rs02-create.c:359 rs02-create.c:385 rs02-create.c:972 rs03-create.c:391
+#: rs03-create.c:484 rs03s-create.c:803 rs03s-create.c:829 udf.c:1108
 #: udf.c:1166 udf.c:1223 udf.c:1236 udf.c:1241 udf.c:1244 udf.c:1247
 #: udf.c:1250 udf.c:1253 udf.c:1256
 #, c-format
@@ -154,7 +154,7 @@ msgstr ""
 
 #: debug.c:568 read-linear.c:1364 rs01-fix.c:198 rs01-fix.c:220 rs01-fix.c:236
 #: rs01-fix.c:271 rs02-create.c:104 rs02-create.c:148 rs02-fix.c:241
-#: rs02-fix.c:262 rs02-fix.c:277 rs03-create.c:144 rs03-create.c:188
+#: rs02-fix.c:262 rs02-fix.c:277 rs03-create.c:131 rs03-create.c:175
 #: rs03-fix.c:241 rs03-fix.c:262 rs03-fix.c:277 rs03s-create.c:104
 #: rs03s-create.c:148
 #, c-format
@@ -229,7 +229,7 @@ msgstr "Contenuto del settore %lld:\n"
 
 #: debug.c:802 debug.c:1129 debug.c:1198 debug.c:1202 debug.c:1280
 #: rs01-common.c:70 rs02-common.c:67 rs02-create.c:199 rs02-fix.c:390
-#: rs03-common.c:86
+#: rs03-common.c:86 rs03-create.c:408
 #, c-format
 msgid "Failed reading sector %lld in image: %s"
 msgstr ""
@@ -312,7 +312,7 @@ msgid ""
 "error correction data for it. Sorry for the bad news.\n"
 msgstr ""
 
-#: dvdisaster.c:39 main-window.c:133
+#: dvdisaster.c:39 main-window.c:137
 #, c-format
 msgid ""
 "\n"
@@ -652,13 +652,13 @@ msgstr "Info su dvdisaster"
 
 #: help-dialogs.c:701
 msgid ""
-"Modified version Copyright 2008 (please fill in - [directions])\n"
-"Copyright 2004-2008 Carsten Gnoerlich"
+"Modified version Copyright 2009 (please fill in - [directions])\n"
+"Copyright 2004-2009 Carsten Gnoerlich"
 msgstr ""
 
 #: help-dialogs.c:705
-msgid "Copyright 2004-2008 Carsten Gnoerlich"
-msgstr "Copyright 2004-2008 Carsten Gnörlich"
+msgid "Copyright 2004-2009 Carsten Gnoerlich"
+msgstr "Copyright 2004-2009 Carsten Gnörlich"
 
 #: help-dialogs.c:712
 msgid ""
@@ -727,79 +727,79 @@ msgstr ""
 msgid "dvdisaster-%s log\n"
 msgstr "dvdisaster-%s protocollo\n"
 
-#: main-window.c:235
+#: main-window.c:239
 msgid "button|Read"
 msgstr "Leggi"
 
-#: main-window.c:238
+#: main-window.c:242
 msgid "tooltip|Read Image"
 msgstr "Leggi Immagine"
 
-#: main-window.c:238
+#: main-window.c:242
 msgid "Reads a CD/DVD image into a file (or tries to complete an existing image file)."
 msgstr "Legge un'immagine CD/DVD in un file (oppure prova a completare un file immagine esistente)"
 
-#: main-window.c:252
+#: main-window.c:256
 msgid "button|Create"
 msgstr "Crea"
 
-#: main-window.c:255
+#: main-window.c:259
 msgid "tooltip|Create error correction data"
 msgstr ""
 
-#: main-window.c:255
+#: main-window.c:259
 msgid "Creates error correction data. Requires an image file."
 msgstr ""
 
-#: main-window.c:259
+#: main-window.c:263
 msgid "button|Scan"
 msgstr "Scansiona"
 
-#: main-window.c:262
+#: main-window.c:266
 msgid "tooltip|Scan medium"
 msgstr "Scansiona Supporto"
 
-#: main-window.c:262
+#: main-window.c:266
 msgid "Scans medium for unreadable sectors."
 msgstr "Scansiona il supporto per i settori illeggibili."
 
-#: main-window.c:266
+#: main-window.c:270
 msgid "button|Fix"
 msgstr "Ripara"
 
-#: main-window.c:269
+#: main-window.c:273
 msgid "tooltip|Repair image"
 msgstr "Ripara Immagine"
 
-#: main-window.c:269
+#: main-window.c:273
 msgid "Repairs an image. Requires an image file and error correction data."
 msgstr ""
 
-#: main-window.c:273
+#: main-window.c:277
 msgid "button|Verify"
 msgstr ""
 
-#: main-window.c:276
+#: main-window.c:280
 msgid "tooltip|Consistency check"
 msgstr ""
 
-#: main-window.c:276
+#: main-window.c:280
 msgid "Tests consistency of error correction data and image file."
 msgstr ""
 
-#: main-window.c:280
+#: main-window.c:284
 msgid "button|Stop"
 msgstr "Ferma"
 
-#: main-window.c:283
+#: main-window.c:287
 msgid "tooltip|Abort action"
 msgstr "Ferma Operazione"
 
-#: main-window.c:283
+#: main-window.c:287
 msgid "Aborts an ongoing action."
 msgstr "Ferma una operazione in esecuzione"
 
-#: main-window.c:412
+#: main-window.c:416
 #, c-format
 msgid ""
 "<b>dvdisaster is not properly installed</b>\n"
@@ -807,15 +807,15 @@ msgid ""
 "Please execute the installer program (%s) again.\n"
 msgstr ""
 
-#: main-window.c:496
+#: main-window.c:500
 msgid "tooltip|Protocol for current action"
 msgstr "Protocollo dell'operazione corrente"
 
-#: main-window.c:497
+#: main-window.c:501
 msgid "Displays additional information created during the current or last action."
 msgstr "Visualizza informazioni addizionali create durante l'operazione corrente o precedente."
 
-#: main-window.c:506
+#: main-window.c:510
 msgid "View log"
 msgstr "Protocollo"
 
@@ -925,7 +925,7 @@ msgstr ""
 msgid "Book type:"
 msgstr ""
 
-#: medium-info.c:308 scsi-layer.c:2512
+#: medium-info.c:308 scsi-layer.c:2616
 msgid "Manuf.-ID:"
 msgstr ""
 
@@ -1179,8 +1179,8 @@ msgstr ""
 
 #: misc.c:200
 #, c-format
-msgid "dvdisaster-%s%sCopyright 2004-2008 Carsten Gnoerlich.\n"
-msgstr "dvdisaster-%s%sCopyright 2004-2008 Carsten Gnörlich.\n"
+msgid "dvdisaster-%s%sCopyright 2004-2009 Carsten Gnoerlich.\n"
+msgstr "dvdisaster-%s%sCopyright 2004-2009 Carsten Gnörlich.\n"
 
 #. TRANSLATORS: Excluding all kinds of warranty might be harmful under your
 #. legislature. If in doubt, just translate the following like "This is free
@@ -2466,12 +2466,12 @@ msgstr ""
 msgid "CRC error in sector %lld\n"
 msgstr "Errore CRC nel settore %lld\n"
 
-#: read-adaptive.c:1516 scsi-layer.c:1608
+#: read-adaptive.c:1516 scsi-layer.c:1712
 #, c-format
 msgid "Sectors %lld-%lld: %s\n"
 msgstr "Settori %lld-%lld: %s\n"
 
-#: read-adaptive.c:1519 read-linear.c:1215 scsi-layer.c:1607
+#: read-adaptive.c:1519 read-linear.c:1215 scsi-layer.c:1711
 #, c-format
 msgid "Sector %lld: %s\n"
 msgstr "Settore %lld: %s\n"
@@ -2524,7 +2524,7 @@ msgstr "Modo di lettura adattivo:"
 msgid "Sectors processed"
 msgstr "Settori processati"
 
-#: read-adaptive-window.c:110 scsi-layer.c:1589
+#: read-adaptive-window.c:110 scsi-layer.c:1693
 msgid "readable"
 msgstr "Leggibile"
 
@@ -2581,7 +2581,7 @@ msgstr ""
 #: read-linear.c:215 rs01-create.c:644 rs01-fix.c:188 rs01-fix.c:210
 #: rs01-fix.c:256 rs01-fix.c:286 rs01-fix.c:303 rs01-fix.c:356
 #: rs01-verify.c:430 rs01-verify.c:787 rs02-create.c:112 rs02-fix.c:232
-#: rs02-fix.c:253 rs02-fix.c:344 rs02-verify.c:698 rs03-create.c:152
+#: rs02-fix.c:253 rs02-fix.c:344 rs02-verify.c:698 rs03-create.c:139
 #: rs03-fix.c:232 rs03-fix.c:253 rs03-fix.c:339 rs03s-create.c:112
 #: rs03-verify.c:682
 #, c-format
@@ -2619,7 +2619,7 @@ msgstr ""
 msgid "done.\n"
 msgstr "compiuto.\n"
 
-#: read-linear.c:528 scsi-layer.c:1929
+#: read-linear.c:528 scsi-layer.c:2033
 #, c-format
 msgid "Waiting %d seconds for drive to spin up...\n"
 msgstr "Attendere %d secondi per far avviare il drive...\n"
@@ -2840,7 +2840,7 @@ msgid "Redundancy %d out of useful range [8..100]."
 msgstr "Ridondanza %d al di fuori dell'intervallo utilizzabile [8..100]."
 
 #: rs01-create.c:125 rs01-fix.c:77 rs02-create.c:58 rs02-fix.c:53
-#: rs03-create.c:91 rs03-fix.c:53 rs03s-create.c:58
+#: rs03-create.c:80 rs03-fix.c:53 rs03s-create.c:58
 #, c-format
 msgid "<span %s>Aborted by unrecoverable error.</span>"
 msgstr "<span %s>Interrotto da un errore irrecuperabile.</span>"
@@ -2892,7 +2892,7 @@ msgid "Failed skipping ecc+crc header: %s"
 msgstr ""
 
 #: rs01-create.c:502 rs01-create.c:626 rs01-create.c:920 rs02-create.c:942
-#: rs03-create.c:492 rs03s-create.c:786
+#: rs03-create.c:449 rs03s-create.c:786
 #, c-format
 msgid "Ecc generation: %3d.%1d%%"
 msgstr "Generazione Ecc: %3d.%1d%%"
@@ -2915,7 +2915,7 @@ msgstr ""
 "Impossibile scrivere lo header Ecc:\n"
 "%s"
 
-#: rs01-create.c:956 rs02-create.c:1091 rs03-create.c:864 rs03s-create.c:921
+#: rs01-create.c:956 rs02-create.c:1091 rs03-create.c:774 rs03s-create.c:921
 #, c-format
 msgid "Ecc generation: 100.0%%\n"
 msgstr "Generazione Ecc: 100.0%%\n"
@@ -3662,12 +3662,12 @@ msgstr ""
 msgid "Failed writing ecc header at %lld: %s\n"
 msgstr ""
 
-#: rs02-create.c:107 rs03-create.c:147 rs03s-create.c:107
+#: rs02-create.c:107 rs03-create.c:134 rs03s-create.c:107
 #, c-format
 msgid "<span %s>Aborted by user request!</span> (partial ecc data removed from image)"
 msgstr ""
 
-#: rs02-create.c:139 rs03-create.c:179 rs03s-create.c:139
+#: rs02-create.c:139 rs03-create.c:166 rs03s-create.c:139
 #, c-format
 msgid ""
 "Image \"%s\" already contains error correction information.\n"
@@ -3696,29 +3696,29 @@ msgid ""
 "appended to complete (undamaged) images.\n"
 msgstr ""
 
-#: rs02-create.c:228 rs02-create.c:292 rs02-create.c:301 rs03-create.c:243
-#: rs03-create.c:252 rs03s-create.c:203 rs03s-create.c:212
+#: rs02-create.c:228 rs02-create.c:292 rs02-create.c:301 rs03-create.c:230
+#: rs03-create.c:239 rs03s-create.c:203 rs03s-create.c:212
 #, c-format
 msgid "Preparing image (checksums, adding space): %3d%%"
 msgstr ""
 
-#: rs02-create.c:263 rs02-create.c:273 rs02-fix.c:91 rs03-create.c:215
-#: rs03-create.c:225 rs03-fix.c:91 rs03s-create.c:175 rs03s-create.c:185
+#: rs02-create.c:263 rs02-create.c:273 rs02-fix.c:91 rs03-create.c:202
+#: rs03-create.c:212 rs03-fix.c:91 rs03s-create.c:175 rs03s-create.c:185
 #, c-format
 msgid "Failed seeking to end of image: %s\n"
 msgstr ""
 
-#: rs02-create.c:267 rs02-create.c:288 rs02-fix.c:104 rs03-create.c:219
-#: rs03-create.c:239 rs03-fix.c:105 rs03s-create.c:179 rs03s-create.c:199
+#: rs02-create.c:267 rs02-create.c:288 rs02-fix.c:104 rs03-create.c:206
+#: rs03-create.c:226 rs03-fix.c:105 rs03s-create.c:179 rs03s-create.c:199
 #, c-format
 msgid "Failed expanding the image: %s\n"
 msgstr ""
 
-#: rs02-create.c:1012 rs03-create.c:795 rs03s-create.c:852
+#: rs02-create.c:1012 rs03-create.c:703 rs03s-create.c:852
 msgid "Error correction data creation aborted"
 msgstr ""
 
-#: rs02-create.c:1016 rs02-create.c:1036 rs03-create.c:799 rs03-create.c:819
+#: rs02-create.c:1016 rs02-create.c:1036 rs03-create.c:707 rs03-create.c:727
 #: rs03s-create.c:856 rs03s-create.c:876
 #, c-format
 msgid ""
@@ -3726,7 +3726,7 @@ msgid ""
 "<i>%s</i>"
 msgstr ""
 
-#: rs02-create.c:1017 rs03-create.c:800 rs03s-create.c:857
+#: rs02-create.c:1017 rs03-create.c:708 rs03s-create.c:857
 msgid "- checking image -"
 msgstr ""
 
@@ -3742,7 +3742,7 @@ msgid ""
 " %lld MB data, %lld MB ecc (%d roots; %4.1f%% redundancy)."
 msgstr ""
 
-#: rs02-create.c:1049 rs03-create.c:832 rs03s-create.c:889
+#: rs02-create.c:1049 rs03-create.c:740 rs03s-create.c:889
 #, c-format
 msgid ""
 "Not enough space on medium left for error correction data.\n"
@@ -3752,14 +3752,14 @@ msgid ""
 "file using the RS01 method.\n"
 msgstr ""
 
-#: rs02-create.c:1060 rs03-create.c:843 rs03s-create.c:900
+#: rs02-create.c:1060 rs03-create.c:751 rs03s-create.c:900
 #, c-format
 msgid ""
 "Using redundancies below 20%%%% may not give\n"
 "the expected data loss protection.\n"
 msgstr ""
 
-#: rs02-create.c:1092 rs02-create.c:1101 rs03-create.c:865 rs03-create.c:874
+#: rs02-create.c:1092 rs02-create.c:1101 rs03-create.c:775 rs03-create.c:787
 #: rs03s-create.c:922 rs03s-create.c:931
 #, c-format
 msgid ""
@@ -4161,16 +4161,25 @@ msgid ""
 "Even if this limit is not reached the augmented image may be a few sectors smaller than specified for technical reasons."
 msgstr ""
 
-#: rs03-create.c:815 rs03s-create.c:872
+#: rs03-create.c:459
+msgid "Flushing output cache..."
+msgstr ""
+
+#: rs03-create.c:723 rs03s-create.c:872
 #, c-format
 msgid "Encoding with Method RS03: %lld MB data, %lld MB ecc (%d roots; %4.1f%% redundancy)."
 msgstr ""
 
-#: rs03-create.c:823
+#: rs03-create.c:731
 #, c-format
 msgid ""
 "Augmenting image with Method RS03 [%d threads]:\n"
 " %lld MB data, %lld MB ecc (%d roots; %4.1f%% redundancy)."
+msgstr ""
+
+#: rs03-create.c:780
+#, c-format
+msgid "Avg performance: %5.2fs (%5.2fMB/s) total\n"
 msgstr ""
 
 #: rs03-fix.c:200
@@ -4238,12 +4247,12 @@ msgstr "La periferica %s (%s) non è un CDROM."
 msgid "Device %s (%s) is a hard disk."
 msgstr "La periferica %s (%s) è un disco rigido."
 
-#: scsi-layer.c:311
+#: scsi-layer.c:415
 #, c-format
 msgid "Incomplete %s"
 msgstr ""
 
-#: scsi-layer.c:349
+#: scsi-layer.c:453
 #, c-format
 msgid ""
 "%s\n"
@@ -4252,16 +4261,16 @@ msgstr ""
 "%s\n"
 "Non riesco ad indentificare lunghezza della TOC.\n"
 
-#: scsi-layer.c:354
+#: scsi-layer.c:458
 msgid "blank"
 msgstr ""
 
-#: scsi-layer.c:368 scsi-layer.c:428
+#: scsi-layer.c:472 scsi-layer.c:532
 #, c-format
 msgid "TOC info too long (%d), probably multisession.\n"
 msgstr "TOC info troppo lunga (%d), probabile multisessione.\n"
 
-#: scsi-layer.c:383
+#: scsi-layer.c:487
 #, c-format
 msgid ""
 "%s\n"
@@ -4270,7 +4279,7 @@ msgstr ""
 "%s\n"
 "Non riesco a leggere la TOC.\n"
 
-#: scsi-layer.c:410
+#: scsi-layer.c:514
 #, c-format
 msgid ""
 "%s\n"
@@ -4279,12 +4288,12 @@ msgstr ""
 "%s\n"
 "Non riesco a leggere tutta la lunghezza della TOC.\n"
 
-#: scsi-layer.c:422
+#: scsi-layer.c:526
 #, c-format
 msgid "TOC info too short, length %d.\n"
 msgstr "TOC info troppo corta, lunghezza %d.\n"
 
-#: scsi-layer.c:444
+#: scsi-layer.c:548
 #, c-format
 msgid ""
 "%s\n"
@@ -4293,7 +4302,7 @@ msgstr ""
 "%s\n"
 "Non riesco a leggere tutta la TOC.\n"
 
-#: scsi-layer.c:453
+#: scsi-layer.c:557
 #, c-format
 msgid ""
 "\n"
@@ -4302,11 +4311,11 @@ msgstr ""
 "\n"
 "formato TOC inatteso (lunghezza %d):\n"
 
-#: scsi-layer.c:461
+#: scsi-layer.c:565
 msgid "Consider sending a bug report.\n"
 msgstr "Considera di inviare una comunicazione di errore.\n"
 
-#: scsi-layer.c:514
+#: scsi-layer.c:618
 #, c-format
 msgid ""
 "%s\n"
@@ -4315,12 +4324,12 @@ msgstr ""
 "%s\n"
 "Non posso identificare la lunghezza della struttura del dvd.\n"
 
-#: scsi-layer.c:525
+#: scsi-layer.c:629
 #, c-format
 msgid "Could not query dvd physical structure - implausible packet length %d\n"
 msgstr "Non riesco ad identificare la struttura fisica del dvd - lunghezza pachetto non plausibile %d\n"
 
-#: scsi-layer.c:543
+#: scsi-layer.c:647
 #, c-format
 msgid ""
 "%s\n"
@@ -4329,26 +4338,26 @@ msgstr ""
 "%s\n"
 "Non riesco ad identificare la struttura fisica del dvd\n"
 
-#: scsi-layer.c:572 scsi-layer.c:582
+#: scsi-layer.c:676 scsi-layer.c:686
 #, c-format
 msgid "READ DVD STRUCTURE: implausible medium size, %lld-%lld=%lld sectors\n"
 msgstr ""
 
-#: scsi-layer.c:840
+#: scsi-layer.c:944
 #, c-format
 msgid ""
 "%s\n"
 "Could not query BD disc structure length.\n"
 msgstr ""
 
-#: scsi-layer.c:863
+#: scsi-layer.c:967
 #, c-format
 msgid ""
 "%s\n"
 "Could not query BD disc structure.\n"
 msgstr ""
 
-#: scsi-layer.c:1538
+#: scsi-layer.c:1642
 #, c-format
 msgid ""
 "%s\n"
@@ -4357,14 +4366,14 @@ msgstr ""
 "%s\n"
 "Non posso identificare la lunghezza della struttura dvd per il format code 1.\n"
 
-#: scsi-layer.c:1548
+#: scsi-layer.c:1652
 #, c-format
 msgid "Could not query dvd copyright info - implausible packet length %d\n"
 msgstr ""
 "Non posso identificare le informazioni del copyright del dvd\n"
 "- lunghezza del pacchetto non plausibile %d\n"
 
-#: scsi-layer.c:1563
+#: scsi-layer.c:1667
 #, c-format
 msgid ""
 "%s\n"
@@ -4373,23 +4382,23 @@ msgstr ""
 "%s\n"
 "Non posso identificare le informazioni del copyright.\n"
 
-#: scsi-layer.c:1623
+#: scsi-layer.c:1727
 msgid "is undecideable because of read error"
 msgstr "Illeggibile per errori di lettura"
 
-#: scsi-layer.c:1629
+#: scsi-layer.c:1733
 msgid "looks GOOD"
 msgstr "sembra BUONA"
 
-#: scsi-layer.c:1635
+#: scsi-layer.c:1739
 msgid "gives unformatted size (UNUSABLE)"
 msgstr "rende la dimensione non formattata (INUTILIZZABILE)"
 
-#: scsi-layer.c:1640
+#: scsi-layer.c:1744
 msgid "is UNUSABLE"
 msgstr "è UTILIZZABILE"
 
-#: scsi-layer.c:1661
+#: scsi-layer.c:1765
 #, c-format
 msgid ""
 "%s\n"
@@ -4398,12 +4407,12 @@ msgstr ""
 "%s\n"
 "Non riesco ad indentificare la dimensione del supporto.\n"
 
-#: scsi-layer.c:1681
+#: scsi-layer.c:1785
 #, c-format
 msgid "READ CAPACITY: implausible medium size, %lld sectors\n"
 msgstr ""
 
-#: scsi-layer.c:1760
+#: scsi-layer.c:1864
 #, c-format
 msgid ""
 "Different media sizes depending on query method:\n"
@@ -4416,7 +4425,7 @@ msgstr ""
 "\"READ DVD STRUCTURE\": %lld Settori\n"
 "\n"
 
-#: scsi-layer.c:1765
+#: scsi-layer.c:1869
 msgid ""
 "Evaluation of returned medium sizes:\n"
 "\n"
@@ -4424,15 +4433,15 @@ msgstr ""
 "Valutazione della dimensione del media:\n"
 "\n"
 
-#: scsi-layer.c:1820
+#: scsi-layer.c:1924
 msgid "Using value from READ CAPACITY"
 msgstr "Usa il valore dalla READ CAPACITY"
 
-#: scsi-layer.c:1824
+#: scsi-layer.c:1928
 msgid "Using value from READ DVD STRUCTURE"
 msgstr "Usa il valore dalla READ DVD STRUCTURE"
 
-#: scsi-layer.c:1834
+#: scsi-layer.c:1938
 #, c-format
 msgid ""
 "FAILED to determine image size.\n"
@@ -4444,7 +4453,7 @@ msgstr ""
 "ma CONTINUATE A VOSTRO RISCHIO (l'immagine potrebbe essere\n"
 "incompleta o illeggibile)."
 
-#: scsi-layer.c:1839
+#: scsi-layer.c:1943
 #, c-format
 msgid ""
 "Final decision: %s\n"
@@ -4453,7 +4462,7 @@ msgstr ""
 "Decisione finale: %s\n"
 "\n"
 
-#: scsi-layer.c:1847
+#: scsi-layer.c:1951
 msgid ""
 "Failed to determine image size.\n"
 "Try using a different drive."
@@ -4461,51 +4470,51 @@ msgstr ""
 "Impossibile determinare la dimensione dell'immagine.\n"
 "Provare ad utilizzare un drive diverso."
 
-#: scsi-layer.c:1972 scsi-layer.c:1998
+#: scsi-layer.c:2076 scsi-layer.c:2102
 #, c-format
 msgid ""
 "%s\n"
 "Could not load/unload the medium.\n"
 msgstr ""
 
-#: scsi-layer.c:1988
+#: scsi-layer.c:2092
 #, c-format
 msgid ""
 "%s\n"
 "Could not unlock the medium.\n"
 msgstr ""
 
-#: scsi-layer.c:2042
+#: scsi-layer.c:2146
 #, c-format
 msgid "Waiting 10 seconds for drive: %d\n"
 msgstr ""
 
-#: scsi-layer.c:2310
+#: scsi-layer.c:2414
 #, c-format
 msgid "Sectors %lld - %lld: %s\n"
 msgstr ""
 
-#: scsi-layer.c:2324
+#: scsi-layer.c:2428
 #, c-format
 msgid "Sector %lld, try %d: %s Sector returned: %d.\n"
 msgstr ""
 
-#: scsi-layer.c:2330
+#: scsi-layer.c:2434
 #, c-format
 msgid "Sector %lld, try %d: %s\n"
 msgstr ""
 
-#: scsi-layer.c:2341
+#: scsi-layer.c:2445
 #, c-format
 msgid "Sector %lld, try %d: success\n"
 msgstr ""
 
-#: scsi-layer.c:2408 scsi-layer.c:2560
+#: scsi-layer.c:2512 scsi-layer.c:2664
 #, c-format
 msgid "Device %s: no medium present\n"
 msgstr ""
 
-#: scsi-layer.c:2409 scsi-layer.c:2561
+#: scsi-layer.c:2513 scsi-layer.c:2665
 #, c-format
 msgid ""
 "Device %s does not become ready:\n"
@@ -4513,7 +4522,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: scsi-layer.c:2414
+#: scsi-layer.c:2518
 #, c-format
 msgid ""
 "\n"
@@ -4522,7 +4531,7 @@ msgstr ""
 "\n"
 "Periferica: %s, %s\n"
 
-#: scsi-layer.c:2418
+#: scsi-layer.c:2522
 #, c-format
 msgid ""
 "\n"
@@ -4531,52 +4540,52 @@ msgstr ""
 "\n"
 "Periferica: %s (%s), %s\n"
 
-#: scsi-layer.c:2426
+#: scsi-layer.c:2530
 msgid "Drive failed to report media type."
 msgstr ""
 
-#: scsi-layer.c:2437 scsi-layer.c:2524
+#: scsi-layer.c:2541 scsi-layer.c:2628
 #, c-format
 msgid "This software does not support \"%s\" type media."
 msgstr ""
 
-#: scsi-layer.c:2445
+#: scsi-layer.c:2549
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr ""
 
-#: scsi-layer.c:2468 scsi-layer.c:2477
+#: scsi-layer.c:2572 scsi-layer.c:2581
 msgid "Using READ CD"
 msgstr ""
 
-#: scsi-layer.c:2469
+#: scsi-layer.c:2573
 msgid ", RAW reading"
 msgstr ""
 
-#: scsi-layer.c:2472
+#: scsi-layer.c:2576
 #, c-format
 msgid ", Mode page 1 ERP = %02xh"
 msgstr ""
 
-#: scsi-layer.c:2475
+#: scsi-layer.c:2579
 msgid ", C2 scanning"
 msgstr ""
 
-#: scsi-layer.c:2482
+#: scsi-layer.c:2586
 msgid "Using READ(10).\n"
 msgstr ""
 
-#: scsi-layer.c:2501
+#: scsi-layer.c:2605
 #, c-format
 msgid "Medium: %s, %lld sectors%s"
 msgstr "Supporto: %s, %lld settori%s"
 
-#: scsi-layer.c:2505
+#: scsi-layer.c:2609
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s created %s"
 msgstr "Supporto \"%s\": %s, %lld settori%s creato %s"
 
-#: scsi-layer.c:2531
+#: scsi-layer.c:2635
 msgid "This software does not support encrypted media.\n"
 msgstr ""
 

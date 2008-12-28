@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: English homepage translation
-# Copyright (C) 2004-2008 Carsten Gnörlich
+# Copyright (C) 2004-2009 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -10,20 +10,46 @@
 
 require("../include/dvdisaster.php");
 begin_page();
+
 ?>
 
 <!--- Insert actual page content below --->
 
-<h3>Placeholder page</h3>
+<h3>Dialogs and Buttons</h3>
 
-This page has not yet been written.
+This section explains commonly used dialogs and buttons:
+
 <pre> </pre>
 
+<table width="100%">
+<tr>
+<td align="center"><a href="howtosa1.php"><img src="../images/good-cd.png" border="0"></a></td>
+<td>The <a href="howtosa1.php">drive selection menu</a>.</td>
+</tr>
+<tr>
+<tr><td>&nbsp;</td><td></td></tr>
+<td align="center"><a href="howtosa2.php"><img src="../images/good-image.png" border="0"></a></td>
+<td>The <a href="howtosa2.php">image file chooser window</a>.</td>
+</tr>
+<tr><td>&nbsp;</td><td></td></tr>
+<tr>
+<td align="center"><a href="howtosa3.php"><img src="../images/ecc.png" border="0"></a></td>
+<td>The <a href="howtosa3.php">error correction file chooser window</a>.</td>
+</tr>
+<tr><td>&nbsp;</td><td></td></tr>
+<tr>
+<td align="center"><a href="howtosa4.php">
+  <img src="images/read-icon.png" border="0">
+  <img src="images/create-icon.png" border="0"><br>
+  <img src="images/scan-icon.png" border="0">
+  <img src="images/fix-icon.png" border="0"><br>
+  <img src="images/compare-icon.png" border="0">
+  <img src="images/stop-icon.png" border="0">
+</a></td>
+<td>The <a href="howtosa4.php">buttons for starting actions</a>.</td>
+</tr>
+</table>
 
-<font size="-1">
-<i>Why does this documentation contain empty pages?</i><p>
-We need an empty placeholder page so that hyperlinks to this topic
-can already be placed into the documentation.
 
 
 <!--- do not change below --->

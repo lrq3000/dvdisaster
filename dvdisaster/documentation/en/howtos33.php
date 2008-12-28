@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: English homepage translation
-# Copyright (C) 2004-2008 Carsten Gnörlich
+# Copyright (C) 2004-2009 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -304,7 +304,7 @@ screen shot.</i>
 <td width="200px" align="center">
 <img src="../images/good-cd-ecc.png" border="0"></td>
 <td>&nbsp;&nbsp;</td>
-<td valign="top"><b>Finished!</b> You have now created a CDd which is
+<td valign="top"><b>Finished!</b> You have now created a CD which is
 protected by error correction code.</td>
 </tr>
 </table>

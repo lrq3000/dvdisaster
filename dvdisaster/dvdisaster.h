@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2008 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2009 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -621,6 +621,8 @@ typedef struct _ReedSolomonTables
    gint32 nroots;        /* degree of RS generator polynomial */
    gint32 ndata;         /* data bytes per ecc block */
    gint32 shiftInit;     /* starting value for iteratively processing parity */
+
+   guint8 *eLut[4][GF_FIELDSIZE]; /* fixme: experimental alternative approach */
 } ReedSolomonTables;
 
 GaloisTables* CreateGaloisTables(gint32);

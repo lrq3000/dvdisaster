@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: English homepage translation
-# Copyright (C) 2004-2008 Carsten Gnörlich
+# Copyright (C) 2004-2009 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -20,6 +20,14 @@ $news_counter = 0;
 # Do not insert plain HTML!
 
 news_headline("dvdisaster News");
+
+
+news_item("01.01.2009", "Happy new year! dvdisaster 0.71.27 released.", "
+  The documentation is finally complete. Some crashes and incompatibilities
+  with difficult media and drives have been fixed. This version includes
+  the last major internal overhaul planned for the 0.71.x series, so if
+  all goes well the next version will be a stable release candidate.
+");
 
 news_item("30.03.2008", "dvdisaster 0.71.26 released", "
   This version contains a new dialog providing information about inserted 
@@ -54,12 +62,6 @@ news_item("24.02.2008", "dvdisaster 0.70.5 / 0.71.24 fix problems with newer Lin
    <i>Currently, the english documentation is far from being complete.
    Please bear with us; we'll catch up soon.</i>
 
-"); # end of news_item
-
-news_item("28.10.2007", "New documentation started", "
-   The dvdisaster documentation is currently being reworked for the upcoming
-   V0.72 release. Please be patient; the new documentation will hopefully be more
-   useful than the old one, but we will need a few weeks to fill in all parts.
 "); # end of news_item
 
 if($news_flash == 0) 

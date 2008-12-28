@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: English homepage translation
-# Copyright (C) 2004-2008 Carsten Gnörlich
+# Copyright (C) 2004-2009 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -9,22 +9,45 @@
 # navigation and news if appropriate.
 
 require("../include/dvdisaster.php");
+require("../include/screenshot.php");
 begin_page();
+
 ?>
 
 <!--- Insert actual page content below --->
 
-<h3>Placeholder page</h3>
+<h3>Drive selection</h3>
 
-This page has not yet been written.
-<pre> </pre>
+<?php begin_screen_shot("Drive selection","dialog-drive-full.png"); ?>
+The drive selection menu is located in the upper left corner of the
+tool bar (see green marking). Click into the field to the right of the CD symbol
+to drop down the drive selection. Then select the drive which contains the medium
+you want to process with dvdisaster.<p>
+
+To simplify identification of the drives the following information
+is given in the menu entries:
+<ul>
+<li>The device identification which is typically comprised of the vendor name
+and the drive model number. These values have been programmed into the drive
+by the vendor. Since dvdisaster is displaying them without further processing
+you will see here whatever the drive vendor deemed appropriate. Sometimes
+this identification is not very meaningful.<p></li>
+<li>The handle under which the drive is managed by the operating system 
+(e.g. /dev/hda using GNU/Linux or F: using Windows)</li>
+</ul>
+<?php end_screen_shot(); ?>
 
 
-<font size="-1">
-<i>Why does this documentation contain empty pages?</i><p>
-We need an empty placeholder page so that hyperlinks to this topic
-can already be placed into the documentation.
-
+<p>
+<b>Examples:</b>
+<table width="100%">
+<tr>
+<td width="50%" align="center"><img src="images/select-drive-linux.png"><br>
+Unfolded selection using GNU/Linux</td>
+<td width="50%" align="center"><img src="images/select-drive-win.png"><br>
+Unfolded selection using Windows</td>
+</tr>
+</table><p>
 
 <!--- do not change below --->
 

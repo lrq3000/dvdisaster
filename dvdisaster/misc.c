@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2008 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2009 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -197,7 +197,7 @@ static void print_greetings(FILE *where)
    if(greetings_shown) return;
 
    greetings_shown = 1;
-   g_fprintf(where, _("dvdisaster-%s%sCopyright 2004-2008 Carsten Gnoerlich.\n"),
+   g_fprintf(where, _("dvdisaster-%s%sCopyright 2004-2009 Carsten Gnoerlich.\n"),
 	     VERSION, strstr(VERSION,"pl") ? " " : "  ");
    /* TRANSLATORS: Excluding all kinds of warranty might be harmful under your
       legislature. If in doubt, just translate the following like "This is free

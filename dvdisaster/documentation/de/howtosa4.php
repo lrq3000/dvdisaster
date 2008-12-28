@@ -1,7 +1,7 @@
 
 <?php
 # dvdisaster: German homepage translation
-# Copyright (C) 2004-2008 Carsten Gnörlich
+# Copyright (C) 2004-2009 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -31,7 +31,7 @@ der grün markierten Knöpfe:<p>
 <li><a href="howtos30.php">einen beschädigten Datenträger</a> für eine nachfolgende
 Rekonstruktion einzulesen. 
 <li><a href="howtos20.php">einen fehlerfreien Datenträger</a> zur Erstellung
-einer Fehlerkorrektur-Datei einzulesen</a>.</td>
+einer Fehlerkorrektur-Datei einzulesen.</td>
 </tr>
 
 <tr>

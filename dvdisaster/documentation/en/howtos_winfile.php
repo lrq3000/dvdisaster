@@ -1,35 +1,50 @@
 <?php
 # dvdisaster: English homepage translation
-# Copyright (C) 2004-2008 Carsten Gnörlich
+# Copyright (C) 2004-2009 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
-#
-# Include our PHP sub routines, then call begin_page()
-# to start the HTML page, insert the header, 
-# navigation and news if appropriate.
-
-require("../include/dvdisaster.php");
-begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<a name="filechooser"></a>
+<b>Notes for using the file chooser under Windows</b><p>
 
-<h3>Placeholder page</h3>
+dvdisaster uses the <a href="http://www.gtk.org">GTK+</a> user interface toolkit
+which makes sure that it runs on many different operating systems. Since the
+GTK+ file chooser behaves differently from its Windows counterpart (which we
+can't use), a small introduction is included further down this page.
+Please note that creating the Windows version would have required
+a huge effort without GTK+ - we would probably just have concentrated 
+on doing the GNU/Linux version instead ;-)<p>
 
-This page has not yet been written.
-<pre> </pre>
+<?php begin_screen_shot("Choosing files in the Windows version","filebrowser.png"); ?>
 
+<b>Choosing existing files.</b>
+The areas marked <font color="#008000">green</font> are used for choosing existing files.
+Directories are picked and navigated in the left half of the dialog; the files
+contained are shown and selectable in the right half.</b><p>
 
-<font size="-1">
-<i>Why does this documentation contain empty pages?</i><p>
-We need an empty placeholder page so that hyperlinks to this topic
-can already be placed into the documentation.
+<b>Choosing a name and location for new files.</b> 
+First choose a directory for the new file using the
+<font color="#008000">green</font> area in the left half of the dialog.
+Then enter the name for the new file in the 
+text field marked <font color="0000A0">blue</font>. 
+To double check that you are creating the file in the right place please review
+the "Selection:" caption of the <font color="0000A0">blue</font> field; it contains the
+drive letter and directory path under which the new file will be created.<p>
 
+<b>Switching between partitions ("drive letters").</b>
 
-<!--- do not change below --->
+The available partitions are listed in 
+the <font color="#e0b000">yellow</font> marked area. If the currently selected drive
+contains lots of subdirectories you might have to scroll down to see the
+drive letters.<p>
 
-<?php
-# end_page() adds the footer line and closes the HTML properly.
+<b>Going back to the parent directory.</b>
+Click on the two dots (..) marked <font color="#a00000">red</font>
+to go back one directory level. All directories leading up to the current one
+are contained in the drop down menu centered at the top of the dialog
+(also marked <font color="#a00000">red</font>). 
+Note that this drop down menu is <i>not</i> used for switching drive letters;
+please use the <font color="#e0b000">yellow</font> part of the selection for that.
 
-end_page();
-?>
+<?php end_screen_shot(); ?>

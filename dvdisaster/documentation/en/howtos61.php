@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: English homepage translation
-# Copyright (C) 2004-2008 Carsten Gnörlich
+# Copyright (C) 2004-2009 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -118,7 +118,7 @@ The above shown example does not generalize into an error correction
 scheme for recovering more than one missing data value. To do so a more
 powerful equation system is needed which can be solved for more than
 one missing value. dvdisaster uses 
-a <a hef="http://de.wikipedia.org/wiki/Reed-Solomon-Code">Reed-Solomon code</a> 
+a <a href="http://de.wikipedia.org/wiki/Reed-Solomon-Code">Reed-Solomon code</a> 
 which does have such properties; however the required math is not taught
 in school. Interested readers are therefore referred to the respective
 books in coding theory.

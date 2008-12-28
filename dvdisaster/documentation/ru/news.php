@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: Russian homepage translation
-# Copyright (C) 2007-2008 Igor Gorbounov
+# Copyright (C) 2007-2009 Igor Gorbounov
 #
 # UTF-8 trigger: äöüß 
 #
@@ -20,6 +20,13 @@ $news_counter = 0;
 # Do not insert plain HTML!
 
 news_headline("Новости dvdisaster");
+
+news_item("01.01.2009", "Happy new year! dvdisaster 0.71.27 released.", "
+  The documentation is finally complete. Some crashes and incompatibilities
+  with difficult media and drives have been fixed. This version includes
+  the last major internal overhaul planned for the 0.71.x series, so if
+  all goes well the next version will be a stable release candidate.
+");
 
 news_item("30.03.2008", "dvdisaster 0.71.26 released", "
   This version contains a new dialog providing information about inserted 
@@ -50,12 +57,6 @@ news_item("24.02.2008", "dvdisaster 0.70.5 / 0.71.24 fix problems with newer Lin
    The release of dvdisaster 0.71.24 also marks the start of
    an online documentation rewrite, including a Russian translation made
    by Igor Gorbounov.
-"); # end of news_item
-
-news_item("28.10.2007", "Начата новая документация", "
-   В настоящее время документация на dvdisaster перерабатывается для предстоящего
-   выхода V0.72. Наберитесь терпения; возможно, новая документация будет более
-   полезной, чем старая, но нам требуется несколько недель, чтобы все охватить.
 "); # end of news_item
 
 if($news_flash == 0) 

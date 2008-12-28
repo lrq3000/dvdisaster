@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2008 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2009 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -99,6 +99,10 @@ static void action_cb(GtkWidget *widget, gpointer data)
       /* Reset warnings which may be temporarily disabled during an action */
 
       Closure->noMissingWarnings = FALSE;
+
+      /* Do not queue up stop actions */
+
+      Closure->stopActions = FALSE;
    }
 
    /* Dispatch action */

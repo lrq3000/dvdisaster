@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: German homepage translation
-# Copyright (C) 2004-2008 Carsten Gnörlich
+# Copyright (C) 2004-2009 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -41,9 +41,9 @@ Manchmal ist dieser Text nicht sehr aussagekräftig.<p></li>
 <b>Beispiele:</b>
 <table width="100%">
 <tr>
-<td width="50%" align="center"><img src="../images/select-drive-linux.png"><br>
+<td width="50%" align="center"><img src="images/select-drive-linux.png"><br>
 Ausgeklappte Auswahl unter GNU/Linux</td>
-<td width="50%" align="center"><img src="../images/select-drive-win.png"><br>
+<td width="50%" align="center"><img src="images/select-drive-win.png"><br>
 Ausgeklappte Auswahl unter Windows</td>
 </tr>
 </table><p>

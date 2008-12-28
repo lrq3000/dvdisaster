@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: English homepage translation
-# Copyright (C) 2004-2008 Carsten Gnörlich
+# Copyright (C) 2004-2009 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -9,22 +9,31 @@
 # navigation and news if appropriate.
 
 require("../include/dvdisaster.php");
+require("../include/screenshot.php");
 begin_page();
+
 ?>
 
 <!--- Insert actual page content below --->
 
-<h3>Placeholder page</h3>
+<h3>Error correction file selection</h3>
 
-This page has not yet been written.
-<pre> </pre>
+The error correction file contains information for reconstructing unreadable
+sectors from a defective medium. It can also be used to check a medium for
+damaged or altered sectors. The default file extension is ".ecc".<p>
 
+<?php begin_screen_shot("Error correction file selection","dialog-ecc-full.png"); ?>
+There are two ways of choosing the error correction file:
+<ul>
+<li>using a <a href="#filechooser">file chooser dialog</a> (button marked green), or</li>
+<li>by directly entering the error correction file location (text entry field marked blue).</li><p>
+</ul>
+The direct entry is helpful when you are going to create several error correction
+files in the same directory. In that case simply change the file name
+in the text field.<p>
+<?php end_screen_shot(); ?>
 
-<font size="-1">
-<i>Why does this documentation contain empty pages?</i><p>
-We need an empty placeholder page so that hyperlinks to this topic
-can already be placed into the documentation.
-
+<? require("howtos_winfile.php"); ?>
 
 <!--- do not change below --->
 

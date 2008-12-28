@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: Russian homepage translation
-# Copyright (C) 2007-2008 Igor Gorbounov
+# Copyright (C) 2007-2009 Igor Gorbounov
 #
 # UTF-8 trigger: äöüß 
 #

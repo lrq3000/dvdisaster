@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: Russian homepage translation
-# Copyright (C) 2007-2008 Igor Gorbounov
+# Copyright (C) 2007-2009 Igor Gorbounov
 #
 # UTF-8 trigger: äöüß 
 #
@@ -38,6 +38,27 @@ begin_page();
 
 Для альфа-версий используется такой же формат пакетов, как и для нормальных версий.<p>
 
+
+<table class="download" cellpadding="0" cellspacing="5">
+<tr><td><b>dvdisaster-0.71 (devel27)</b></td><td align="right">30-Mar-2008</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+  <table>
+    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.27.tar.bz2?download">dvdisaster-0.71.27.tar.bz2</a></td></tr>
+    <tr><td align="right">Digital signature:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.27.tar.bz2.gpg?download">dvdisaster-0.71.27.tar.bz2.gpg</a></td></tr>
+    <tr><td align="right">Binary for Windows:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.27-setup.exe?download">dvdisaster-0.71.27-setup.exe</a></td></tr>
+    <tr><td align="right">Digital signature:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.27-setup.exe.gpg?download">dvdisaster-0.71.27-setup.exe.gpg</a></td></tr>
+  </table>
+</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+The documentation is finally complete. Some crashes and incompatibilities
+with difficult media and drives have been fixed.
+</td></tr></table><p>
 
 <table class="download" cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.71 (devel26)</b></td><td align="right">30-Mar-2008</td></tr>

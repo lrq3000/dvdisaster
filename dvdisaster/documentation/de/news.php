@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: German homepage translation
-# Copyright (C) 2004-2008 Carsten Gnörlich
+# Copyright (C) 2004-2009 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -21,16 +21,12 @@ $news_counter = 0;
 
 news_headline("Neues über dvdisaster");
 
-news_item("29.09.2008", "Gut Ding will Weile haben :-)", "
-
-Bis zum ersten Veröffentlichungskandidaten der 0.72er-Reihe müssen noch
-umfangreiche interne Tests durchlaufen werden, da zwischen der Version
-0.71.26 und der kommenden Version 0.71.27 noch eine große interne Änderung
-stattfindet. Der Wechsel von 0.70.* auf 0.72 wird damit der längste
-und umfangreichste in der bisherigen Projektgeschichte.<p>
-In der Zwischenzeit gibt es schon mal eine Ergänzung der deutschen Dokumentation;
-diese ist jetzt bis auf ein Unterkapitel fertig. Danach wird die englische
-Übersetzung beginnen.
+news_item("01.01.2009", "Frohes neues Jahr! dvdisaster 0.71.27 veröffentlicht.", "
+Die Dokumentation ist wieder komplett. Einige Crashes und
+Inkompatibilitäten mit ungewöhnlichen Laufwerken und Datenträgern wurden behoben.
+Diese Version enthält die letzte große interne Änderung, die für die 0.71.x-Serie
+geplant war. Wenn alles gut geht wird die nächste Version ein 
+Veröffentlichungskandidat für den stabilen Zweig (0.72).
 ");
 
 news_item("30.03.2008", "dvdisaster 0.71.26 veröffentlicht", "
@@ -66,13 +62,6 @@ news_item("24.02.2008", "dvdisaster 0.70.5 / 0.71.24 beheben Problem mit neuen L
    Mit dieser Version beginnt außerdem die Überarbeitung
    der Online-Dokumentation, einschließlich einer russischen Übersetzung von Igor 
    Gorbounov. 
-"); # end of news_item
-
-news_item("28.10.2007", "Überarbeitung der Dokumentation", "
-   Die Dokumentation wird momentan für die bevorstehende Veröffentlichung von
-   Version 0.72 überarbeitet. Bitte haben Sie ein wenig Geduld; die neue Dokumentation
-   wird hoffentlich hilfreicher als die alte sein, aber es wird ein paar Wochen dauern
-   bis alle Lücken wieder gefüllt sind.
 "); # end of news_item
 
 if($news_flash == 0) 

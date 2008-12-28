@@ -1,6 +1,6 @@
 <?php
-# dvdisaster: Russion homepage dictionary
-# Copyright (C) 2007 Igor Gorbounov
+# dvdisaster: Russian homepage dictionary
+# Copyright (C) 2007-2009 Igor Gorbounov
 #
 # UTF-8 trigger: äöüß 
 
@@ -19,7 +19,7 @@ $trans_news="Новости";
 $trans_hosting="Размещено на";
 
 $trans_fdl="Дословное копирование и распространение всей этой статьи разрешается на любом носителе, при условии, что это уведомление сохраняется.";
-$trans_copyright="Copyright 2007 Igor Gorbounov.";
+$trans_copyright="Copyright 2007-2009 Igor Gorbounov.";
 $trans_modified="Информация в этом руководстве относится к первоначальной версии программы dvdisaster и не может быть применима.";
 
 $trans_old_version="Old documentation (V0.70)";

@@ -1,7 +1,7 @@
 
 <?php
 # dvdisaster: Online doc table of contents (all languages)
-# Copyright (C) 2007-2008 The dvdisaster translation team
+# Copyright (C) 2007-2009 The dvdisaster translation team
 #
 # UTF-8 trigger: äöüß 
 
@@ -11,6 +11,11 @@ section("news");
   de("Neuigkeiten");
   en("News");
   ru("Новости");
+
+subsection("news2007");
+  de("2007");
+  en("2007");
+  ru("2007");
 
 # Overview
 
@@ -181,16 +186,12 @@ subsection("howtos90");
   en("Testing image compatibility");
 
 subsubsection("howtos91");
-  de("Erzeugen eines Referenz-Abbildes");
-  en("Creating the reference image");
+  de("bei Fehlerkorrektur-Dateien");
+  en("with error correction files");
 
 subsubsection("howtos92");
-  de("Erzeugen der zugehörigen Fehlerkorrektur-Daten");
-  en("Creating the error correction file");
-
-subsubsection("howtos93");
-  de("Referenz-Abbild auf einen Datenträger schreiben");
-  en("Writing the image to the medium.");
+  de("beim Ablegen von Fehlerkorrektur-Daten auf dem Datenträger");
+  en("when augmenting images with error correction data");
 
 subsection("howtosa0");
   de("Bedienelemente");
@@ -198,7 +199,7 @@ subsection("howtosa0");
 
 subsubsection("howtosa1");
   de("Laufwerk auswählen");
-  en("drive selection");
+  en("Drive selection");
 
 subsubsection("howtosa2");
   de("Abbild-Datei auswählen");
@@ -206,7 +207,7 @@ subsubsection("howtosa2");
 
 subsubsection("howtosa3");
   de("Fehlerkorrektur-Datei auswählen");
-  en("Protection file selection");
+  en("Error correction file selection");
 
 subsubsection("howtosa4");
   de("Aktionen beginnen");
