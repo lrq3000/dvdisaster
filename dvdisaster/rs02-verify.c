@@ -975,10 +975,12 @@ void RS02Verify(Method *self)
    /* Number of sectors medium is supposed to have */
 
    if(image_sectors == expected_sectors)
-   {  PrintLog(_("- medium sectors   : %lld (good)\n"), expected_sectors);
+   {  PrintLog(_("- medium sectors   : %lld / %lld (good)\n"), 
+	       expected_sectors, lay->dataSectors);
 
       if(Closure->guiMode)
-	SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), "%lld", expected_sectors);
+	SetLabelText(GTK_LABEL(wl->cmpEccMediumSectors), "%lld / %lld", 
+		     expected_sectors, lay->dataSectors);
    }
    else 
    {  if(image_sectors > expected_sectors && image_sectors - expected_sectors <= 2)   

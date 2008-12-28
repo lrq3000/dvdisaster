@@ -107,6 +107,7 @@ auf Datenträger schreiben.
 
 <hr>
 
+<a name="err"> </a>
 <b>Mögliche Fehlerursachen und -behebungen:</b><p>
 
 <?php begin_howto_shot("Falsche Abbildgröße.","compat-150-rs02.png", "down-arrow.png"); ?>

@@ -138,6 +138,7 @@ den ISO-Abbildern der Brennsoftware erzeugen.
 
 <hr>
 
+<a name="err"> </a>
 <b>Mögliche Fehlerursachen und -behebungen:</b><p>
 
 <?php begin_howto_shot("Falsche Abbildgröße.","compat-150-rs01.png", "down-arrow.png"); ?>

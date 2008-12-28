@@ -74,7 +74,14 @@ Fehlerkorrektur-Datei vollständig gelesen werden.
 
 <hr>
 
-<a href="howtos52.php">Ergebnisse bewerten...</a>
+<a name="examine">Weiterführende Informationen zum Auswerten der Ergebnisse:</a><p>
+
+<ul>
+<li><a href="howtos52.php">Erklärung der Ausgaben für Fehlerkorrektur-Dateien</a><p></li>
+<li><a href="howtos53.php">Erklärung der Ausgaben für Abbilder mit Fehlerkorrektur-Daten</a><p></li>
+<li><a href="howtos59.php">Beispiele</a><p></li>
+</ul>
+
 
 <!--- do not change below --->
 

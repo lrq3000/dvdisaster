@@ -177,9 +177,19 @@ subsubsection("howtos51");
   ru("Show information");
 
 subsubsection("howtos52");
-  de("Ergebnisse auswerten");
-  en("Interpreting the results");
-  ru("Interpreting the results");
+  de("Ausgaben für Fehlerkorrektur-Dateien");
+  en("Results for error correction files");
+  ru("Results for error correction files");
+
+subsubsection("howtos53");
+  de("Ausgaben für erweiterte Abbilder");
+  en("Results für augmented images");
+  ru("Results für augmented images");
+
+subsubsection("howtos59");
+  de("Beispiele");
+  en("Examples");
+  ru("Examples");
 
 subsection("howtos90");
   de("Abbild-Kompatibilität überprüfen");

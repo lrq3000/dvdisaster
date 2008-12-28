@@ -1,5 +1,5 @@
-0.71 (devel-27)
-	- currently all work goes into finishing German and English documentation
+0.71 (devel-27) 28-12-2008
+	- Phew. English and German documentation finished.
 	- fixed crash when using ancient CD-ROM drives.
 	  Thanks to mschaeff to bringing this to my attention!
 	- more robust handling for incomplete/unfinalized media; should produce 

@@ -142,6 +142,7 @@ by the authoring software.
 
 <hr>
 
+<a name="err"> </a>
 <b>Possible error causes and remedy:</b><p>
 
 <?php begin_howto_shot("Wrong image size.","compat-150-rs01.png", "down-arrow.png"); ?>

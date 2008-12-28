@@ -47,13 +47,11 @@ Fehlerkorrektur-Datei.
 <tr>
 <td></td>
 <td>
-1. <a href="howtos51.php">Informationen anzeigen</a><br>
-2. <a href="howtos51.php">Ergebnisse auswerten</a><br>
+1. <a href="howtos51.php">Informationen anzeigen</a><p>
+2. <a href="howtos51.php#examine">Ergebnisse auswerten</a>
 </td>
 </tr>
 </table><p>
-
-<a href="howtos51.php">Informationen anzeigen...</a>
 
 <pre>
 
