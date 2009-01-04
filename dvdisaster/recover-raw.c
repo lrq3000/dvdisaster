@@ -871,15 +871,49 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
 
    UpdateFrameStats(rb);
 
-   /*** Cheap shot: See if we can recover the sector itself
+   /*** Cheap shots: See if we can recover the sector itself
 	(without using the more complex heuristics and other
 	sectors).
-        Note that we ignore the return value of iterative_recovery().
+        Note that we ignore the return value of IterativeLEC().
         If e.g. some parity bytes remain uncorrected we don't care
         as long as the EDC tells us that the user data part is okay. */
 
    memcpy(rb->recovered, new_frame, rb->sampleSize);
    memset(rb->byteState, 0, rb->sampleSize);
+
+   /* If the data section is unaffected by the error,
+      do not investigate further. */
+
+   if(CheckEDC(rb->recovered, rb->xaMode)
+      && CheckMSF(rb->recovered, rb->lba, STRICT_MSF_CHECK))
+   {
+       PrintCLIorLabel(Closure->status, 
+		       "Sector %lld: Good. Data section passes EDC test.\n",
+		       rb->lba);
+       memcpy(outbuf, rb->recovered+rb->dataOffset, 2048);
+       return 0;
+   }
+
+   /* Sometimes we have only errors in the sync pattern and the P/Q vectors,
+      but the data section will pass the EDC test. Try it. */
+
+   if(memcmp(rb->recovered, sync_pattern, 12))
+   {  memcpy(rb->recovered, sync_pattern, 12);
+
+      if(CheckEDC(rb->recovered, rb->xaMode)
+	 && CheckMSF(rb->recovered, rb->lba, STRICT_MSF_CHECK))
+      {
+	 PrintCLIorLabel(Closure->status, 
+			 "Sector %lld: Recovered in raw reader after correcting sync pattern.\n",
+			 rb->lba);
+	 
+	 memcpy(outbuf, rb->recovered+rb->dataOffset, 2048);
+	 return 0;
+      }
+   }
+
+
+   /* Try the simple iterative L-EC */
 
    IterativeLEC(rb);
 
@@ -903,6 +937,19 @@ int TryCDFrameRecovery(RawBuffer *rb, unsigned char *outbuf)
    UpdatePQParityList(rb, new_frame);
 
    /* The actual heuristics */
+
+#if 0
+   SmartLEC(rb);
+
+   if(CheckEDC(rb->recovered, rb->xaMode)
+      && CheckMSF(rb->recovered, rb->lba, STRICT_MSF_CHECK))
+   {  PrintCLIorLabel(Closure->status, 
+		      "Sector %lld: Recovered in raw reader by smart L-EC.\n",
+		      rb->lba);
+      memcpy(outbuf, rb->recovered+rb->dataOffset, 2048);
+      return 0; 
+   }
+#endif
 
    SearchPlausibleSector(rb, 0);
 

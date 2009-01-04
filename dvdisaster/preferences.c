@@ -865,8 +865,8 @@ static color_button_info *create_color_button(GdkColor *color, int user_data)
  *** Non-linear scales
  ***/
 
-static int jump_values[] = { 0, 16, 32, 64, 128, 256, 384, 512, 768, 1024, 2048, 4096, 10240,
- 20480 };
+static int jump_values[] = { 0, 16, 32, 64, 128, 256, 384, 512, 768, 
+			     1024, 2048, 4096, 10240, 20480 };
 #define JUMP_VALUE_LENGTH 14
 
 static int min_attempts_values[] = { 1, 2, 3, 4, 5, 7, 9, 11, 15, 20, 25, 30, 40, 50}; 

@@ -247,7 +247,8 @@ void PrintCLI(char *format, ...)
  */
 
 void PrintProgress(char *format, ...)
-{  char msg[256];
+{  static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+   char msg[256];
    va_list argp;
    int n;
 
@@ -273,9 +274,11 @@ void PrintProgress(char *format, ...)
    if(strchr(msg, '\n'))
       g_fprintf(stderr, "%s", msg);
    else
-   {  Closure->bs[n] = 0;
+   {  g_static_mutex_lock(&mutex);
+      Closure->bs[n] = 0;
       g_fprintf(stderr, "%s%s", msg, Closure->bs);
       Closure->bs[n] = '\b';
+      g_static_mutex_unlock(&mutex);
    }
 
    fflush(stderr);   /* at least needed for Windows */

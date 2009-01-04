@@ -100,10 +100,11 @@ CFG_CFLAGS="$CFG_CFLAGS -D_LARGEFILE64_SOURCE"
 CHECK_SYMBOL fcntl.h O_LARGEFILE
 CFG_CFLAGS=$SAVE_CFLAGS
 
-# Byte order
+# Machine specific
 
 echo
 CHECK_ENDIAN
+CHECK_SSE2
 
 # Look for required tools
 

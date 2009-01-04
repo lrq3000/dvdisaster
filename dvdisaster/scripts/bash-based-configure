@@ -56,12 +56,13 @@
 # EXECUTE_PROGRAM	Invoke a command to see if a certain program is available
 #
 # CHECK_ENDIAN		Test whether system is little or big endian
+# CHECK_SSE2		Test whether when can compile for SSE2 extensions
 # FINALIZE_HELP		Finish --help output (optional, but user friendly)
 #
 # WITH_OPTION name default  adds -DWITH_OPTION_VALUE for -with-option=value args
 #			    to CFG_WITH_OPTIONS,
 
-CONFIGURE_VERSION="0.54"
+CONFIGURE_VERSION="0.55"
 
 echo "Bash based configure V$CONFIGURE_VERSION"
 echo
@@ -263,8 +264,6 @@ if test -z $cfg_debug; then
   else
      CFG_LDFLAGS="$RECOMMENDED_LDFLAGS $REQUIRED_LDFLAGS $CFG_SYS_LDFLAGS"
   fi
-  echo "CFLAGS = $CFG_CFLAGS" >>Makefile.config
-  echo "LDFLAGS = $CFG_LDFLAGS" >>Makefile.config
 fi
 
 # Find out where bash resides
@@ -1553,6 +1552,8 @@ function CHECK_FUNCTION()
      return 0
    fi
 
+   echo -e "\n/* *** CHECK_FUNCTION $1 */\n" >>$LOGFILE
+
    if try_function $fname; then
      answer="yes"
      CFG_HAVE_OPTIONS="$CFG_HAVE_OPTIONS -DHAVE_$fname_upcase"
@@ -1578,6 +1579,8 @@ function CHECK_SYMBOL()
    if test -n "$cfg_help_mode"; then
      return 0
    fi
+
+   echo -e "\n/* *** CHECK_SYMBOL $1 $2 */\n" >>$LOGFILE
 
    rm -f conftest.c conftest conftest.exe
    cat > conftest.c <<EOF
@@ -1668,6 +1671,7 @@ function CHECK_ENDIAN()
      return 0
    fi
 
+   echo -e "\n/* *** CHECK_ENDIAN */\n" >>$LOGFILE
    echo -n "Checking byte order..."
 
    # See if user wants to override our test
@@ -1726,6 +1730,62 @@ EOF
 }
 
 #
+# Check for SSE2.
+#
+
+function CHECK_SSE2()
+{
+   if test -n "$cfg_help_mode"; then
+     echo " --with-sse2=[yes | no]"
+     return 0
+   fi
+
+   echo -e "\n/* *** CHECK_SSE2 */\n" >>$LOGFILE
+   echo -n "Checking for SSE2..."
+
+   # See if user wants to override our test
+
+   if test -n "$cfg_with_sse2"; then
+      case "$cfg_with_sse2" in
+	no)  echo " no (user supplied)"
+	        ;;
+	yes) echo " yes (user supplied)"
+	        CFG_HAVE_OPTIONS="$CFG_HAVE_OPTIONS -DHAVE_SSE2"
+		CFG_CFLAGS="-msse2 $CFG_CFLAGS"
+	        ;;
+        *) echo -e " $cfg_with_sse2 (illegal value)\n"
+	   echo "Please use one of the following values:"
+	   echo "--with-sse2=[yes | no]"
+	   exit 1
+	   ;;
+      esac
+      return 0;
+   fi
+
+   # Do automatic detection
+
+   cat > conftest.c <<EOF
+#include <emmintrin.h>
+
+int main()
+{ __m128i a, b, c;
+
+  c = _mm_xor_si128(a, b);
+}
+EOF
+
+   local cflags_save=$CFG_CFLAGS
+   CFG_CFLAGS="-msse2 $CFG_CFLAGS"
+   if try_compile; then
+      echo " yes"
+      CFG_HAVE_OPTIONS="$CFG_HAVE_OPTIONS -DHAVE_SSE2"
+   else
+      echo " no"
+      CFG_CFLAGS=$cflags_save
+   fi
+}
+
+#
 # Check whether a certain program is there and executable.
 #
 
@@ -1759,6 +1819,8 @@ function CREATE_MAKEFILES()
 
    rm -f conftest.c conftest conftest.exe
    echo >> Makefile.config
+   echo "CFLAGS = $CFG_CFLAGS" >>Makefile.config
+   echo "LDFLAGS = $CFG_LDFLAGS" >>Makefile.config
    echo "CFG_SYS_OPTIONS  = $CFG_SYS_OPTIONS" >> Makefile.config
    echo "CFG_EXE_SUFFIX   = $CFG_EXE_SUFFIX" >> Makefile.config
    echo "CFG_HAVE_OPTIONS = $CFG_HAVE_OPTIONS" >> Makefile.config

@@ -622,7 +622,7 @@ typedef struct _ReedSolomonTables
    gint32 ndata;         /* data bytes per ecc block */
    gint32 shiftInit;     /* starting value for iteratively processing parity */
 
-   guint8 *eLut[4][GF_FIELDSIZE]; /* fixme: experimental alternative approach */
+   guint8 *bLut[GF_FIELDSIZE];  /* experimental 8bit lookup table */
 } ReedSolomonTables;
 
 GaloisTables* CreateGaloisTables(gint32);
@@ -698,8 +698,8 @@ void CreateIconFactory();
 LargeFile *LargeOpen(char*, int, mode_t);
 int LargeSeek(LargeFile*, gint64);
 int LargeEOF(LargeFile*);
-int LargeRead(LargeFile*, void*, size_t);
-int LargeWrite(LargeFile*, void*, size_t);
+size_t LargeRead(LargeFile*, void*, size_t);
+size_t LargeWrite(LargeFile*, void*, size_t);
 int LargeClose(LargeFile*);
 int LargeTruncate(LargeFile*, gint64);
 int LargeStat(char*, gint64*);

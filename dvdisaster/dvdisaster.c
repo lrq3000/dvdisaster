@@ -466,8 +466,8 @@ int main(int argc, char *argv[])
 	   Closure->cacheMB = atoi(optarg);
 	   if(Closure->cacheMB <   8) 
 	     Stop(_("--cache-size must at least be 8MB; 16MB or higher is recommended.")); 
-	   if(Closure->cacheMB > 2048) 
-	     Stop(_("--cache-size maximum is 2048MB.")); 
+	   if(Closure->cacheMB > 8192) 
+	     Stop(_("--cache-size maximum is 8192MB.")); 
 	   break;
          case MODIFIER_CDUMP:
 	   Closure->debugCDump = TRUE;

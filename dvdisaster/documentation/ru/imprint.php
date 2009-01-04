@@ -25,12 +25,12 @@ Internet: www.dvdisaster.org
 
 <pre> </pre>
 
-Ответственный за содержание сайта: <p>
+Ответственный за содержимое сайта: <p>
 Carsten Gnörlich (адрес смотри выше).
 
 <pre> </pre>
 
-Эти выходные данные охватывают веб-сайты на:<br>
+Эти выходные данные относятся к веб-сайтам:<br>
 <a href="http://dvdisaster.com">dvdisaster.com</a>, &nbsp;
 <a href="http://dvdisaster.de">dvdisaster.de</a>, &nbsp;
 <a href="http://dvdisaster.net">dvdisaster.net</a>, &nbsp;

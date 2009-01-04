@@ -1,4 +1,13 @@
-0.71 (devel-27) 28-12-2008
+0.71 (devel-27) 04-01-2009
+        - fixed failure on writing ecc files with now possible larger
+	  cache settings in command line mode
+	- increased encoder cache size to 8GB for RS01 and RS02
+        - some fine-tuning in recover-raw.c; added recognition of
+	  bad sectors whose data portion is actually good; added
+	  trivial correction by resetting the sync pattern
+        - corrected a data flow anomaly and missing parentheses in
+	  heuristic-lec.c
+        - Blank capacity of DVD-RAM could not be queried. Fixed.
 	- Phew. English and German documentation finished.
 	- fixed crash when using ancient CD-ROM drives.
 	  Thanks to mschaeff to bringing this to my attention!

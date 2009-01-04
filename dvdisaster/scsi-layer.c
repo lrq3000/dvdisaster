@@ -386,6 +386,7 @@ static int get_configuration(DeviceHandle *dh)
 	         break;
    }
 
+   Verbose("-> profile %x: %s\n", dh->profile, dh->profileDescr);
    return ret;
 }
 
@@ -1247,6 +1248,7 @@ static int query_blank(DeviceHandle *dh)
 	 case DVD_PLUS_RW:
 	 case DVD_DASH_RW_DL:
 	 case DVD_PLUS_RW_DL:
+	 case DVD_RAM:
          {  int cmc_size;
 	    int n_lists;
 	    int i,idx;
@@ -1757,6 +1759,7 @@ static unsigned int query_size(DeviceHandle *dh)
 
    /*** Query size by doing READ CAPACITY */
 
+   Verbose("# *** query_size(%s) ***\n", dh->devinfo);
    memset(cmd, 0, MAX_CDB_SIZE);
    cmd[0] = 0x25;  /* READ CAPACITY */
 
@@ -2655,6 +2658,7 @@ DeviceHandle* QueryMediumInfo(char *device)
 
    /* Open the device. */
 
+   Verbose("# *** QueryMediumInfo(%s) ***\n", device);
    dh = OpenDevice(device);
    InquireDevice(dh, 0);
 

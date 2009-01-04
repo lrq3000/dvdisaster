@@ -17,7 +17,7 @@ begin_page();
 <h3>Цифровая подпись</h3>
 
 Выложенные для скачивания пакеты dvdisaster снабжены цифровой подписью с помощью
-<a href="http://www.gnupg.org/gnupg.html">GnuPG</a>, поэтому Вы можете проверить
+<a href="http://www.gnupg.org/gnupg.html">GnuPG</a>, поэтому вы можете проверить
 целостность пакетов.<p>
 
 
@@ -31,7 +31,7 @@ uid                  dvdisaster (pkg signing key #1)
 sub   1024g/091AD320 2003-08-22
 </pre></a>
 
-Пишите на <img src="../images/email.png" align="top"> и Вы получите
+Пишите на <img src="../images/email.png" align="top"> и вы получите
 отпечаток ключа непосредственно от разработчиков. 
 В тему письма вставьте строку "GPG finger print".
 

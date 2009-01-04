@@ -151,16 +151,13 @@ ReedSolomonTables *CreateReedSolomonTables(GaloisTables *gt,
      rt->shiftInit = 0;
 
    /*
-    * Initialize lookup tables for the 32bit encoder
+    * Initialize lookup tables for the 8bit encoder 
     */
 
-   lut_size = (rt->nroots+3) & 0xfffc;
+   lut_size = (rt->nroots+15)&~15;
+   lut_size += 16;
    for(i=0; i<GF_FIELDSIZE; i++)
-   {  rt->eLut[0][i] = g_malloc0(2*lut_size+4);
-      rt->eLut[1][i] = g_malloc0(2*lut_size+4);
-      rt->eLut[2][i] = g_malloc0(2*lut_size+4);
-      rt->eLut[3][i] = g_malloc0(2*lut_size+4);
-   }
+      rt->bLut[i] = g_malloc0(2*lut_size);
 
    for(feedback=0; feedback<256; feedback++)
    {  gint32 *gpoly        = rt->gpoly + rt->nroots;
@@ -169,13 +166,7 @@ ReedSolomonTables *CreateReedSolomonTables(GaloisTables *gt,
 
       for(i=0; i<nroots; i++)
       {  guint8 value = (guint8)enc_alpha_to[feedback + *--gpoly];
-	 rt->eLut[0][feedback][i] = rt->eLut[0][feedback][nroots+i] = value; 
-	 if(i>=1) rt->eLut[1][feedback][i-1] = value;
-	 rt->eLut[1][feedback][nroots+i-1] = value; 
-	 if(i>=2) rt->eLut[2][feedback][i-2] = value;
-	 rt->eLut[2][feedback][nroots+i-2] = value; 
-	 if(i>=3) rt->eLut[3][feedback][i-3] = value;
-	 rt->eLut[3][feedback][nroots+i-3] = value; 
+	 rt->bLut[feedback][i] = rt->bLut[feedback][nroots+i] = value; 
       }
    }
 
@@ -188,10 +179,7 @@ void FreeReedSolomonTables(ReedSolomonTables *rt)
   if(rt->gpoly)        g_free(rt->gpoly);
 
   for(i=0; i<GF_FIELDSIZE; i++)
-  {  g_free(rt->eLut[0][i]);
-     g_free(rt->eLut[1][i]);
-     g_free(rt->eLut[2][i]);
-     g_free(rt->eLut[3][i]);
+  {  g_free(rt->bLut[i]);
   }
 
   g_free(rt);

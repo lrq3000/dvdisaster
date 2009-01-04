@@ -164,12 +164,13 @@ void RS01Create(Method *self)
    ImageInfo *ii = NULL;
    EccInfo   *ei = NULL;
    gint64 block_idx[256];  /* must be >= ndata */
-   gint64 s,si;
-   int i,n;
+   gint64 s,si,n;
+   int i;
    int percent = 0,max_percent,progress = 0, last_percent = -1;
-   int n_parity_blocks,n_layer_sectors;
-   int n_parity_bytes,n_layer_bytes;
-   int layer,chunk;
+   guint64 n_parity_blocks,n_layer_sectors;
+   guint64 n_parity_bytes,n_layer_bytes;
+   guint64 chunk;
+   int layer;
    int loop_type = GENERIC;
    gint32 nroots;         /* These are copied to increase performance. */
    gint32 ndata;
@@ -193,9 +194,9 @@ void RS01Create(Method *self)
 	                                          loop_type = NORMAL;
    else if(!strcmp(Closure->redundancy, "high"))  loop_type = HIGH;
 
-   n = calculate_redundancy(Closure->imageName);
+   i  = calculate_redundancy(Closure->imageName);
    gt = ec->gt = CreateGaloisTables(RS_GENERATOR_POLY);
-   rt = ec->rt = CreateReedSolomonTables(gt, RS_FIRST_ROOT, RS_PRIM_ELEM, n);
+   rt = ec->rt = CreateReedSolomonTables(gt, RS_FIRST_ROOT, RS_PRIM_ELEM, i);
 
    nroots       = rt->nroots;
    ndata        = rt->ndata;
@@ -357,9 +358,9 @@ void RS01Create(Method *self)
         The algorithm builds the parity file consecutively in chunks of n_parity_blocks.
         We use all the amount of memory allowed by cacheMB for caching the parity blocks. */
 
-   n_parity_blocks = (Closure->cacheMB<<20) / nroots;
+   n_parity_blocks = ((guint64)Closure->cacheMB<<20) / (guint64)nroots;
    n_parity_blocks &= ~0x7ff;                   /* round down to multiple of 2048 */
-   n_parity_bytes  = nroots * n_parity_blocks;
+   n_parity_bytes  = (guint64)nroots * n_parity_blocks;
 
    /* Each chunk of parity blocks is built iteratively by processing the data in layers
       (first all bytes at pos 0, then pos 1, until ndata layers have been processed).
@@ -373,8 +374,14 @@ void RS01Create(Method *self)
    if(n_layer_sectors*2048 != n_parity_blocks)
      Stop("Internal error: parity blocks are not a multiple of sector size.\n");
 
-   ec->parity = g_malloc(n_parity_bytes);
-   ec->data   = g_malloc(n_layer_bytes);
+   ec->parity = g_try_malloc(n_parity_bytes);
+   ec->data   = g_try_malloc(n_layer_bytes);
+
+   if(!ec->parity || !ec->data)
+      Stop(_("Failed allocating memory for I/O cache.\n"
+	     "Cache size is currently %d MB.\n"
+	     "Try reducing it.\n"),
+	   Closure->cacheMB);
 
    /*** Setup the block counters for mapping medium sectors to ecc blocks 
         The image is divided into ndata sections;
@@ -395,7 +402,7 @@ void RS01Create(Method *self)
       So after (s/n_layer_sectors)+1 iterations the whole image has been processed. */
 
    for(chunk=0; chunk<s; chunk+=n_layer_sectors) 
-   {  int actual_layer_bytes,actual_layer_sectors;
+   {  guint64 actual_layer_bytes,actual_layer_sectors;
 
       /* Prepare the parity data for the next chunk. */
 
@@ -433,7 +440,7 @@ void RS01Create(Method *self)
 
 	    /* Read the next data sectors of this layer. */
 
-	    for(i=0; i<actual_layer_sectors; i++)
+	    for(si=0; si<actual_layer_sectors; si++)
 	    {  RS01ReadSector(ii, ei->eh, ec->data+offset, block_idx[layer]);
 	       block_idx[layer]++;
 	       offset += 2048;
@@ -441,10 +448,10 @@ void RS01Create(Method *self)
 
 	    /* Now process the data bytes of the current layer. */
 
-	    for(i=0; i<actual_layer_bytes; i++)
+	    for(si=0; si<actual_layer_bytes; si++)
 	    {  register int feedback;
 
-	       feedback = gf_index_of[ec->data[i] ^ par_idx[sp]];
+	       feedback = gf_index_of[ec->data[si] ^ par_idx[sp]];
 
 	       if(feedback != GF_ALPHA0) /* non-zero feedback term */
 	       {  register int spk = sp;
@@ -525,7 +532,7 @@ void RS01Create(Method *self)
 
 	    /* Read the next data sectors of this layer. */
 
-	    for(i=0; i<actual_layer_sectors; i++)
+	    for(si=0; si<actual_layer_sectors; si++)
 	    {  RS01ReadSector(ii, ei->eh, ec->data+offset, block_idx[layer]);
 	       block_idx[layer]++;
 	       offset += 2048;
@@ -533,10 +540,10 @@ void RS01Create(Method *self)
 
 	    /* Now process the data bytes of the current layer. */
 
-	    for(i=0; i<actual_layer_bytes; i++)
+	    for(si=0; si<actual_layer_bytes; si++)
 	    {  register int feedback;
 
-	       feedback = gf_index_of[ec->data[i] ^ par_idx[sp]];
+	       feedback = gf_index_of[ec->data[si] ^ par_idx[sp]];
 
 	       if(feedback != GF_ALPHA0) /* non-zero feedback term */
 	       {  register int spk = sp;
@@ -652,7 +659,7 @@ void RS01Create(Method *self)
 
             /* Read the next data sectors of this layer. */
 
-   	    for(i=0; i<actual_layer_sectors; i++)
+   	    for(si=0; si<actual_layer_sectors; si++)
 	    {  RS01ReadSector(ii, ei->eh, ec->data+offset, block_idx[layer]);
 	       block_idx[layer]++;
 	       offset += 2048;
@@ -660,10 +667,10 @@ void RS01Create(Method *self)
 
 	    /* Now process the data bytes of the current layer. */
 
-	    for(i=0; i<actual_layer_bytes; i++)
+	    for(si=0; si<actual_layer_bytes; si++)
 	    {  register int feedback;
 
-	       feedback = gf_index_of[ec->data[i] ^ par_idx[sp]];
+	       feedback = gf_index_of[ec->data[si] ^ par_idx[sp]];
 
 	       if(feedback != GF_ALPHA0) /* non-zero feedback term */
 	       {  register int spk = sp+1;

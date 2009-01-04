@@ -14,7 +14,7 @@ begin_page();
 
 <!--- Insert actual page content below --->
 
-<b>Privacy statement for the web sites</b><p>
+<b>Заявление о конфиденциальности для веб-сайтов</b><p>
 
 dvdisaster.com, &nbsp; 
 dvdisaster.de, &nbsp;
@@ -23,52 +23,52 @@ dvdisaster.org
 
 <p>
 
-The dvdisaster project (<a href="imprint.php">see the imprint for representatives</a>)
-is taking your privacy seriously. The following statement is an oddity required
-by German law. It gives you an overview  about the kind and purpose of the 
-data we are collecting:
+Проект dvdisaster (<a href="imprint.php">представители указаны в выходных данных</a>)
+серьезно относится к вашей конфиденциальности. Следующее заявление - странность, 
+требуемая немецким законодательством. Оно дает вам представление о том, какого 
+типа данные и с какой целью мы собираем:
 
 <p>
 
-<b>Log files</b> (data processed by our internet servers)<p>
+<b>Журналы</b> (данные, обрабатываемые нашими интернет-серверами)<p>
 
-Your visit of our internet sites is being logged. 
-Our servers collect the following data:
+Посещения наших интернет-сайтов журналируется. 
+Наши сервера собирают следующие данные:
 
 <ul>
-<li>the type and version of your web browser</li>
-<li>the operating system being used</li>
-<li>the web site from which you we directed to our internet site (if applicable)</li>
-<li>the host name or IP address of the computer which made the access</li>
-<li>the time and date of the server query</li>
-<li>the file names of the visited pages.</li>
+<li>тип и версию вашего браузера</li>
+<li>используемая операционная система</li>
+<li>веб-сайт, с которого вы были направлены на наш интернет-сайт (если это применимо)</li>
+<li>имя или IP-адрес компьютера, с которого сделан доступ</li>
+<li>время и дата запроса сервера</li>
+<li>именя файлов посещенных страниц.</li>
 </ul>
 
-This data is not used to identify the visitors of our web sites.
-It will not be combined with other data sources. The data will be
-deleted after a statistical analysis.
+Эти данные не используются для идентификации посетителей наших веб-сайтов.
+Они не будут рассматриваться в сочетании с другими источниками данных. Эти данные будут 
+удалены после статистического анализа.
 
 <p>
 
 <b>Cookies</b><p>
 
-This internet site does not use cookies.
+Этот интернет-сайт не использует cookies.
 
 <p>
 
-<b>Links to other internet sites</b><p>
+<b>Ссылки на другие интернет-сайты</b><p>
 
-Our internet pages contain links to other internet sites.
-The dvdisaster project has no control over their publishers,
-and whether they follow our privacy policy.
+Наши интернет-страницы содержат ссылки на другие интернет-сайты.
+Проект dvdisaster не имеет контроля над их издателями,
+а также над тем, следуют ли они нашей политике конфиденциальности.
 
 <p>
 
-<b>Further development our these internet pages</b><p>
+<b>Дальнейшее развитие этих интернет-страниц</b><p>
 
-Further development of these internet pages may require our privacy policy
-to be changed. Please revisit this policy statement occasionally and watch for
-change notices. 
+Дальнейшее развитие этих интернет-страниц может потребовать изменения нашей
+политики конфиденциальности. Пожалуйста, время от времени просматривайте это заявление 
+о конфиденциальности и следите за уведомлениями об изменениях. 
 
 <!--- do not change below --->
 

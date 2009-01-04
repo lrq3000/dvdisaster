@@ -22,7 +22,7 @@
 #include "dvdisaster.h"
 
 //#define LOCAL_ONLY 1
-#define PRINT_STEPS 1
+//#define PRINT_STEPS 1
 
 #define VERBOSE 1
 #ifdef VERBOSE

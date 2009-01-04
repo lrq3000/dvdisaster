@@ -21,42 +21,41 @@ $news_counter = 0;
 
 news_headline("Новости dvdisaster");
 
-news_item("01.01.2009", "Happy new year! dvdisaster 0.71.27 released.", "
-  The documentation is finally complete. Some crashes and incompatibilities
-  with difficult media and drives have been fixed. This version includes
-  the last major internal overhaul planned for the 0.71.x series, so if
-  all goes well the next version will be a stable release candidate.
+news_item("30.03.2008", "выпущен dvdisaster 0.71.26", "
+  В этой версии содержится новый диалог с информацией о вставленном 
+  носителе (меню Инструменты/Информация о носителе);
+  кроме того, изменено распознавание типов носителей (CD/DVD/BD). 
+  Сообщите, если это нарушает совместимость с ранее работавшими приводами.
+  Улучшена поддержка BD-носителей.
 ");
 
-news_item("30.03.2008", "dvdisaster 0.71.26 released", "
-  This version contains a new dialog providing information about inserted 
-  media (menu Tools/Medium info);
-  during this course detection of media types (CD/DVD/BD) was changed. 
-  Please report if this breaks compatibility with formerly working drives.
-  Improved support for BD media.
+news_item("05.03.2008", "Исправлена проблема с предыдущей версией для Windows (0.70.6 / 0.71.25)", "
+  Сделан откат назад поддержки локализованных имен файлов в версии 0.70.6,
+  поскольку она нарушила поддержку больших файлов под Windows. Новый обработчик
+  локализованных имен файлов будет сначала тестироваться в экспериментальной версии
+  0.71.25.
 ");
 
-news_item("05.03.2008", "Problem with previous Windows release fixed  (0.70.6 / 0.71.25)", "
-  Rolled back support for localized file names in version 0.70.6
-  as it broke large file support under Windows. A new handler
-  for localized file names will now be tested in the experimental version
-  0.71.25 first.
+news_item("03.03.2008", "Ой! - образы &gt;2ГБ не работают в 0.70.5 и 0.71.24 под Windows", "
+   Исправление для локализованных имен файлов вызвало проблемы при обработке
+   образов &gt; 2GB под Windows в только что выпущенных версиях 0.70.5 и 0.71.24.
+   Пожалуйста, следите за выходом исправленных версий.
 ");
 
-news_item("03.03.2008", "Oops - images &gt;2GB fail in 0.70.5 and 0.71.24 under Windows", "
-   The fix for localized file names caused problems when processing
-   images &gt; 2GB under Windows in the just released versions 0.70.5 and 0.71.24.
-   Please stay tuned for fixed versions.
-");
+news_item("24.02.2008", "dvdisaster 0.70.5 / 0.71.24 - исправление проблем с новыми версиями Linux", "
+   Исправлена проблема для новых ядер Linux, которая могла вызвать зависание системы
+   в некоторых случаях. Обновите программу на системах 
+   с ядрами 2.6.17 и выше; может быть, более ранние ядра тоже подвержены этой проблеме.<p> 
 
-news_item("24.02.2008", "dvdisaster 0.70.5 / 0.71.24 fix problems with newer Linux versions", "
-   A problem with newer Linux kernels was fixed which would lead
-   to a frozen system under some circumstances. Please upgrade on systems 
-   running kernels 2.6.17 and above; maybe earlier kernels are also affected.<p> 
+   В версии dvdisaster 0.71.24 начато переписывание 
+   онлайновой документации, включая перевод на русский язык, сделанный
+   Игорем Горбуновым.
+"); # end of news_item
 
-   The release of dvdisaster 0.71.24 also marks the start of
-   an online documentation rewrite, including a Russian translation made
-   by Igor Gorbounov.
+news_item("28.10.2007", "Начата новая документация", "
+   В настоящее время документация на dvdisaster перерабатывается для предстоящего
+   выхода V0.72. Наберитесь терпения; возможно, новая документация будет более
+   полезной, чем старая, но нам требуется несколько недель, чтобы все охватить.
 "); # end of news_item
 
 if($news_flash == 0) 

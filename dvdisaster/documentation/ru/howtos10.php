@@ -1,6 +1,6 @@
 <?php
-# dvdisaster: English homepage translation
-# Copyright (C) 2004-2009 Carsten Gnörlich
+# dvdisaster: Russian homepage translation
+# Copyright (C) 2007-2009 Igor Gorbounov
 #
 # UTF-8 trigger: äöüß 
 #
@@ -10,20 +10,61 @@
 
 require("../include/dvdisaster.php");
 begin_page();
+
+howto_headline("Поиск ошибок на носителе", "Обзор", "images/scan-icon.png");
 ?>
 
 <!--- Insert actual page content below --->
 
-<h3>Placeholder page</h3>
+<table width="100%" cellspacing="5">
+<tr>
+ <td><b>Задача</b></td>
+ <td>
+   Носитель проверяется на нечитаемые сектора.
+  </td>
+</tr>
+<tr><td> <pre> </pre> </td></tr>
 
-This page has not yet been written.
+<tr>
+ <td colspan="2"><b>Требуется:</b></td>
+</tr>
+<tr>
+ <td width="150px"><img src="../images/good-cd.png" align="top">
+   &nbsp; <img src="../images/bad-cd.png" align="top"></td>
+<td>
+   Носитель в любом состоянии (хорошем или с ошибками чтения).
+</td>
+</tr>
+
+<tr>
+ <td><img src="../images/ecc.png"></td>
+ <td>Если имеются данные для исправления ошибок, выполняются дополнительные тесты.
+Но поиск ошибок работает и без данных для исправления ошибок.</td>
+</tr>
+
+<tr><td> <pre> </pre> </td></tr>
+
+<tr valign="top">
+ <td><b>Что делать:</b></td>
+ <td>
+  1. <a href="howtos11.php">Конфигурирование основных настроек</a><br>
+  2. <a href="howtos12.php">Проверка носителя</a><br>
+  3. <a href="howtos13.php">Интерпретация результатов</a><br>
+ </td>
+</tr>
+
+<tr><td> <pre> </pre> </td></tr>
+
+<tr valign="top">
+ <td><b>Соответствующие функции:<p></td>
+ <td><a href="howtos30.html">Чтение поврежденных носителей</a> и<br>
+     <a href="howtos40.html">Восстановление образов</a>.</td>
+ </tr>
+</table><p>
+
 <pre> </pre>
 
-
-<font size="-1">
-<i>Why does this documentation contain empty pages?</i><p>
-We need an empty placeholder page so that hyperlinks to this topic
-can already be placed into the documentation.
+<a href="howtos11.php">Конфигурирование основных настроек...</a>
 
 
 <!--- do not change below --->

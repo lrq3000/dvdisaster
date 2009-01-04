@@ -439,11 +439,13 @@ static void create_reed_solomon(ecc_closure *ec)
    int nroots = lay->nroots;
    int ndata  = lay->ndata;
    gint64 b_idx, block_idx[256]; 
-   int n_parity_blocks,n_layer_sectors;
-   int n_parity_bytes,n_layer_bytes;
+   guint64 n_parity_blocks,n_layer_sectors;
+   guint64 n_parity_bytes,n_layer_bytes;
+   guint64 si,chunk;
    int last_percent, percent, max_percent, progress;
-   int layer,chunk,i,j,k;
+   int layer,i,j,k;
    unsigned char *par_ptr;
+   int out_of_memory = 0;
 static gint32 *gf_index_of;    /* These need to be static globals */
 static gint32 *rs_gpoly;       /* for optimization reasons. */
 static gint32 *enc_alpha_to;
@@ -473,10 +475,10 @@ static gint32 *enc_alpha_to;
         The algorithm builds the parity file consecutively in chunks of n_parity_blocks.
         We use all the amount of memory allowed by cacheMB for caching the parity blocks. */
 
-   n_parity_blocks = (Closure->cacheMB<<20) / nroots;  /* 1 MB = 2^20 */
+   n_parity_blocks = ((guint64)Closure->cacheMB<<20) / (guint64)nroots;  /* 1 MB = 2^20 */
    n_parity_blocks >>= 1;                              /* two buffer sets for scrambling */
    n_parity_blocks &= ~0x7ff;                          /* round down to multiple of 2048 */
-   n_parity_bytes  = nroots * n_parity_blocks;
+   n_parity_bytes  = (guint64)nroots * n_parity_blocks;
 
    /* Each chunk of parity blocks is built iteratively by processing the data in layers
       (first all bytes at pos 0, then pos 1, until ndata layers have been processed).
@@ -490,8 +492,24 @@ static gint32 *enc_alpha_to;
    if(n_layer_sectors*2048 != n_parity_blocks)
      Stop("Internal error: parity blocks are not a multiple of sector size.\n");
 
-   ec->parity = g_malloc(n_parity_bytes);
-   ec->data   = g_malloc(n_layer_bytes);
+   ec->parity = g_try_malloc(n_parity_bytes);
+   ec->data   = g_try_malloc(n_layer_bytes);
+
+   /*** Create buffers for dividing the ecc information into nroots slices */
+
+   for(i=0; i<nroots; i++)
+   {  ec->slice[i] = g_try_malloc(n_layer_bytes);
+      if(!ec->slice[i])
+	 out_of_memory = 1;
+   }
+
+   if(out_of_memory || !ec->parity || !ec->data)
+   {  LargeTruncate(ec->ii->file, (gint64)(2048*ec->lay->dataSectors));
+      Stop(_("Failed allocating memory for I/O cache.\n"
+	     "Cache size is currently %d MB.\n"
+	     "Try reducing it.\n"),
+	   Closure->cacheMB);
+   }
 
    /*** Setup the block counters for mapping medium sectors to ecc blocks 
         The image is divided into ndata layers;
@@ -499,11 +517,6 @@ static gint32 *enc_alpha_to;
 
    for(b_idx=0, i=0; i<ndata; b_idx+=lay->sectorsPerLayer, i++)
      block_idx[i] = b_idx;
-
-   /*** Create buffers for dividing the ecc information into nroots slices */
-
-   for(i=0; i<nroots; i++)
-     ec->slice[i] = g_malloc(n_layer_bytes);
 
    /*** Initialize md5 contexts for checksumming the nroots slices */
 
@@ -523,7 +536,7 @@ static gint32 *enc_alpha_to;
       the whole image has been processed. */
 
    for(chunk=0; chunk<lay->sectorsPerLayer; chunk+=n_layer_sectors) 
-   {  int actual_layer_bytes,actual_layer_sectors;
+   {  guint64 actual_layer_bytes,actual_layer_sectors;
       int sp;
 
       /* Prepare the parity data for the next chunk. */
@@ -554,7 +567,7 @@ static gint32 *enc_alpha_to;
 
          /* Read the next data sectors of this layer. */
 
-   	 for(i=0; i<actual_layer_sectors; i++)
+   	 for(si=0; si<actual_layer_sectors; si++)
 	 {  RS02ReadSector(ec->ii, lay, ec->data+offset, block_idx[layer]);
 	    block_idx[layer]++;
 	    offset += 2048;
@@ -562,10 +575,10 @@ static gint32 *enc_alpha_to;
 
 	 /* Now process the data bytes of the current layer. */
 
-	 for(i=0; i<actual_layer_bytes; i++)
+	 for(si=0; si<actual_layer_bytes; si++)
 	 {  register int feedback;
 
-	    feedback = gf_index_of[ec->data[i] ^ par_idx[sp]];
+	    feedback = gf_index_of[ec->data[si] ^ par_idx[sp]];
 
 	    if(feedback != GF_ALPHA0) /* non-zero feedback term */
 	    {  register int spk = sp+1;
@@ -950,8 +963,8 @@ static gint32 *enc_alpha_to;
 
       par_ptr = ec->parity;
 
-      for(i=0; i<actual_layer_sectors; i++)
-      {  int idx = 2048*i;
+      for(si=0; si<actual_layer_sectors; si++)
+      {  guint64 idx = 2048*si;
 
 	 for(j=0; j<2048; j++, idx++)
 	 {  for(k=0; k<nroots; k++)
@@ -962,8 +975,8 @@ static gint32 *enc_alpha_to;
       for(k=0; k<nroots; k++)
       {  int idx=0;
 
-	for(i=0; i<actual_layer_sectors; i++, idx+=2048)
-	 {  gint64 s = RS02EccSectorIndex(lay, k, chunk + i);
+	for(si=0; si<actual_layer_sectors; si++, idx+=2048)
+	 {  gint64 s = RS02EccSectorIndex(lay, k, chunk + si);
 
 	    if(!LargeSeek(file, 2048*s))
 	      Stop(_("Failed seeking to sector %lld in image: %s"), s, strerror(errno));

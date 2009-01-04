@@ -16,7 +16,7 @@ begin_page();
 
 <h3>Альфа версии (для разработчиков)</h3>
 
-<b>Помогите нам тестировать!</b> У нас в разработке находится несколько новых функций, и
+<b>Помогите нам с тестированием!</b> У нас в разработке находится несколько новых функций, и
 нам хотелось бы, чтобы они были протестированы большим количеством людей, прежде чем мы выпустим следующую официальную версию.<p>
 
 Самое главное, была добавлена поддержка приводов BD и HD DVD, и она требует более интенсивных
@@ -40,67 +40,46 @@ begin_page();
 
 
 <table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.71 (devel27)</b></td><td align="right">30-Mar-2008</td></tr>
+<tr><td><b>dvdisaster-0.71 (devel26)</b></td><td align="right">30-мар-2008</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
-    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.27.tar.bz2?download">dvdisaster-0.71.27.tar.bz2</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.27.tar.bz2.gpg?download">dvdisaster-0.71.27.tar.bz2.gpg</a></td></tr>
-    <tr><td align="right">Binary for Windows:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.27-setup.exe?download">dvdisaster-0.71.27-setup.exe</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.27-setup.exe.gpg?download">dvdisaster-0.71.27-setup.exe.gpg</a></td></tr>
-  </table>
-</td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
-<tr><td colspan="2">
-The documentation is finally complete. Some crashes and incompatibilities
-with difficult media and drives have been fixed.
-</td></tr></table><p>
-
-<table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.71 (devel26)</b></td><td align="right">30-Mar-2008</td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
-<tr><td colspan="2">
-  <table>
-    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
+    <tr><td align="right">&nbsp;&nbsp;Исходный текст для всех операционных систем:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.26.tar.bz2?download">dvdisaster-0.71.26.tar.bz2</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
+    <tr><td align="right">Цифровая подпись:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.26.tar.bz2.gpg?download">dvdisaster-0.71.26.tar.bz2.gpg</a></td></tr>
-    <tr><td align="right">Binary for Windows:&nbsp;</td>
+    <tr><td align="right">Двоичный файл для Windows:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.26-setup.exe?download">dvdisaster-0.71.26-setup.exe</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
+    <tr><td align="right">Цифровая подпись:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.26-setup.exe.gpg?download">dvdisaster-0.71.26-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
-This version contains a new dialog providing information about inserted media;
-during this course detection of media types (CD/DVD/BD) was changed. Improved
-support for BD media.
+В этой версии содержится новый диалог с информацией о вставленном носителе;
+кроме того, изменено распознавание типов носителей (CD/DVD/BD). Улучшена
+поддержка BD-носителей.
 </td></tr></table><p>
 
 <table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.71 (devel25)</b></td><td align="right">05-Mar-2008</td></tr>
+<tr><td><b>dvdisaster-0.71 (devel25)</b></td><td align="right">05-мар-2008</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
-    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
+    <tr><td align="right">&nbsp;&nbsp;Исходный текст для всех операционных систем:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.25.tar.bz2?download">dvdisaster-0.71.25.tar.bz2</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
+    <tr><td align="right">Цифровая подпись:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.25.tar.bz2.gpg?download">dvdisaster-0.71.25.tar.bz2.gpg</a></td></tr>
-    <tr><td align="right">Binary for Windows:&nbsp;</td>
+    <tr><td align="right">Двоичный файл для Windows:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.25-setup.exe?download">dvdisaster-0.71.25-setup.exe</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
+    <tr><td align="right">Цифровая подпись:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.25-setup.exe.gpg?download">dvdisaster-0.71.25-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
-The method for processing localized file names was replaced with a new
-approach as the old one was broken under Windows.
+Метод обработки локализованных имен файлов заменен на новый
+подход, так как старый перестал работать под Windows.
 </td></tr></table><p>
 
 <table class="download" cellpadding="0" cellspacing="5">
@@ -108,16 +87,16 @@ approach as the old one was broken under Windows.
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
-    <tr><td align="right">&nbsp;&nbsp;Исходный код для всех операционных систем:&nbsp;</td>
+    <tr><td align="right">&nbsp;&nbsp;Исходный текст для всех операционных систем:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.24.tar.bz2?download">dvdisaster-0.71.24.tar.bz2</a></td></tr>
     <tr><td align="right">Цифровая подпись:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.24.tar.bz2.gpg?download">dvdisaster-0.71.24.tar.bz2.gpg</a></td></tr>
-    <tr><td></td><td>Version 0.71.24 is broken under Windows.</td></tr>
+    <tr><td></td><td>Версия 0.71.24 перестала работать под Windows.</td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
-Fixes a problem with newer Linux kernels which may lead to a frozen system under some circumstances. Treatment of file names containing localized characters has been improved. This release marks the start of an online documentation rewrite, including a Russian translation made by Igor Gorbounov.
+Исправляет проблему для новых ядер Linux, которая может приводить в некоторых случаях к зависанию системы. Улучшена обработка имен файлов, содержащих локализованные символы. В этой версии начато переписывание документации, включая перевод на русский язык, сделанный Игорем Горбуновым.
 </td></tr></table><p>
 
 
@@ -126,7 +105,7 @@ Fixes a problem with newer Linux kernels which may lead to a frozen system under
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
-    <tr><td align="right">&nbsp;&nbsp;Исходный код для всех операционных систем:&nbsp;</td>
+    <tr><td align="right">&nbsp;&nbsp;Исходный текст для всех операционных систем:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel23.tar.bz2?download">dvdisaster-0.71.devel23.tar.bz2</a></td></tr>
     <tr><td align="right">Цифровая подпись:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel23.tar.bz2.gpg?download">dvdisaster-0.71.devel23.tar.bz2.gpg</a></td></tr>
@@ -147,7 +126,7 @@ Fixes a problem with newer Linux kernels which may lead to a frozen system under
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
-    <tr><td align="right">&nbsp;&nbsp;Исходный код для всех операционных систем:&nbsp;</td>
+    <tr><td align="right">&nbsp;&nbsp;Исходный текст для всех операционных систем:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel22.tar.bz2?download">dvdisaster-0.71.devel22.tar.bz2</a></td></tr>
     <tr><td align="right">Цифровая подпись:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel22.tar.bz2.gpg?download">dvdisaster-0.71.devel22.tar.bz2.gpg</a></td></tr>
@@ -169,7 +148,7 @@ Fixes a problem with newer Linux kernels which may lead to a frozen system under
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
-    <tr><td align="right">&nbsp;&nbsp;Исходный код для всех операционных систем:&nbsp;</td>
+    <tr><td align="right">&nbsp;&nbsp;Исходный текст для всех операционных систем:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel21.tar.bz2?download">dvdisaster-0.71.devel21.tar.bz2</a></td></tr>
     <tr><td align="right">Цифровая подпись:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel21.tar.bz2.gpg?download">dvdisaster-0.71.devel21.tar.bz2.gpg</a></td></tr>

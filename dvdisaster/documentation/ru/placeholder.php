@@ -14,16 +14,16 @@ begin_page();
 
 <!--- Insert actual page content below --->
 
-<h3>Placeholder page</h3>
+<h3>Пустая страница</h3>
 
-This page has not yet been written.
+Эта страница еще не написана.
 <pre> </pre>
 
 
 <font size="-1">
-<i>Why does this documentation contain empty pages?</i><p>
-We need an empty placeholder page so that hyperlinks to this topic
-can already be placed into the documentation.
+<i>Почему в этой документации есть пустые страницы?</i><p>
+Нам нужны такие пустые страницы, чтобы гиперссылки на эту тему уже можно
+было вставить в документацию.
 
 
 <!--- do not change below --->
