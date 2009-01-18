@@ -21,6 +21,13 @@ $news_counter = 0;
 
 news_headline("Новости dvdisaster");
 
+news_item("18.01.2009", "dvdisaster 0.71.27 released", "
+  The documentation is finally complete. Some crashes and incompatibilities
+  with uncommon media and drives have been fixed. This version includes
+  the last major internal overhaul planned for the 0.71.x series, so if
+  all goes well the next version will be a stable release candidate.
+");
+
 news_item("30.03.2008", "выпущен dvdisaster 0.71.26", "
   В этой версии содержится новый диалог с информацией о вставленном 
   носителе (меню Инструменты/Информация о носителе);

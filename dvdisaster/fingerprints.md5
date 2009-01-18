@@ -1,5 +1,4 @@
-8c249de2c88e46a5ae9a25ac61f9587e *build.h
-1e9ad932ff727acc263f5554d01f696a *dvdisaster.h
+6674d001b21139d16f8d5c75b4bb35be *dvdisaster.h
 41207624d815a1a858915240dc18bbd9 *galois-inlines.h
 df9d88776eb3f77a93ef596b148193be *md5.h
 f6e318c36cdec1a4edc71104de58daa3 *read-linear.h
@@ -26,12 +25,12 @@ e05de4fd39f9e8af14806556c95d9a7a *file.c
 98d69c041c0d3cc29879d621c3a39123 *help-dialogs.c
 c74ea6938eadb8707106d0d5ac2c41ba *heuristic-lec.c
 84841175e708cce754b316996d56e9de *icon-factory.c
-7ee81c23ab91c92fc81fde09e6b23986 *large-io.c
+8ff5665969a686785c32b750c4f2bae7 *large-io.c
 3b917b470a6a95f959038b76b643f19e *l-ec.c
 952e642347493dd5413cbdcdf9c85345 *logfile.c
 a5263d51cab53f2301c656fd172acd97 *main-window.c
 9f8e7da67068ae5229eef9bab8fa18a2 *md5.c
-61dd02ebd3a633dabad1022dc3da5c77 *medium-info.c
+d8eef848b96f1851c658dd19adde9804 *medium-info.c
 d9536c5fb18adf38e04b0d9852daca29 *memtrack.c
 44c1d3da53df9cf0e3ec333cb4356636 *menubar.c
 7f512f7bd753fb642a593c5a3f67a25d *method.c
@@ -44,7 +43,7 @@ eafadf5a714d0203626c43654f1fe16c *raw-editor.c
 9c90798272d6fa7201fc9579ba651590 *raw-sector-cache.c
 a83aa421b4e1577935ccb6b1cb0614da *read-adaptive.c
 f3569b3479d0ef4473da83457f06992d *read-adaptive-window.c
-f2237c523cce9dbd1f2b69071d70c7ec *read-linear.c
+b8b268135afe506149416f0d060b7082 *read-linear.c
 6ee78d0f63a7eea367d195b4f3fe7689 *read-linear-window.c
 017f30320e7890442b3ab50b99172b76 *recover-raw.c
 0c340317b804edd5a3476f5b89972da3 *rs01-common.c
@@ -55,10 +54,10 @@ a50445bf47ee4129987eb5c6998064de *rs01-create.c
 cd55d1406e3f2119581c03db75bed54d *rs02-common.c
 17c52b0772dc403a887e237ddae517a8 *rs02-create.c
 17f6ac68bf6dfc115fe725651004fe53 *rs02-fix.c
-f1a534e17ba369b1901c5abdb12045a6 *rs02-verify.c
+0194f4b02db5eedf7068ed1ef0615807 *rs02-verify.c
 88a2565289d2b7f520185eaf19b1abee *rs02-window.c
 696ff5482fa32498e8822d2360b3ff4a *rs03-common.c
-8e4008b19e0303c819216c691e867800 *rs03-create.c
+1659263dfa38ba01b8bb4d445d616eef *rs03-create.c
 d26e34bc64bc3b7df2db8b1995b418a4 *rs03-fix.c
 b039b9b9daae7a7deb050aba6b8a3ef1 *rs03-preferences.c
 6ad1f187287ea362afd4b1989340885e *rs03s-create.c
@@ -68,7 +67,7 @@ b6c6e69cfe751cc12f74b4df56473af5 *rs03-window.c
 2f2444641113f1baf96a9fbeeba53773 *rs-encoder.c
 4ccd9f251e9b6b52bf9a79c65ec2b762 *scsi-darwin.c
 45d8b52ab8c03d661baf4c404c94115a *scsi-freebsd.c
-859c4418c154207c36008dc14e9b2e73 *scsi-layer.c
+ee3f7bda62b590fae9ca8f829756e9d6 *scsi-layer.c
 4f19f21c0410081adba1251af6a9caa0 *scsi-linux.c
 a86f62372f2dea89f208ceafefaa1f97 *scsi-netbsd.c
 38d4cab513130a40e22b956df0c588a7 *scsi-solaris.c

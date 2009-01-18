@@ -673,16 +673,7 @@ static gpointer worker_thread(read_closure *rc)
       g_mutex_unlock(rc->mutex);
 
       /* Write out buffer, update checksums if not in scan mode */
-#if 0
-if(s == 1600) 
- {  static int foo=6;
-    if(--foo) 
-    {  rc->alignedBuf[rc->writePtr]->buf[35]--; /* FIXME */
-       printf("kaputten Sektor erzeugt %d\n", foo);
-    }
-    else printf("keinen kaputten Sektor erzeugt\n");
- }
-#endif
+
       if(!rc->scanMode)
       {  int n;
 

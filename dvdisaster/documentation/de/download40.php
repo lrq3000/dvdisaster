@@ -44,7 +44,7 @@ Die Alpha-Versionen verwenden das gleiche Paketformat wie die normalen
 Versionen.<p>
 
 <table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.71 (devel27)</b></td><td align="right">31-Dec-2008</td></tr>
+<tr><td><b>dvdisaster-0.71 (devel27)</b></td><td align="right">18-Jan-2009</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>

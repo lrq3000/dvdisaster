@@ -105,9 +105,11 @@ help-dialogs.o: help-dialogs.c simple-md5sum
 	@if test -e fingerprints.md5; \
 	then if test -e help-dialogs.h; then rm help-dialogs.h; fi; \
 	     mv inlined-icons.h inlined-icons.saved; \
+	     mv build.h build.saved; \
 	     ./simple-md5sum -b *.h *.c | sort -k2 >tmp.md5; \
 	     sort -k2 < fingerprints.md5 >tmp2.md5; \
 	     mv inlined-icons.saved inlined-icons.h; \
+	     mv build.saved build.h; \
 	     if ! cmp tmp2.md5 tmp.md5 >/dev/null; \
 	     then echo "#define MODIFIED_SOURCE 1" >> help-dialogs.h; \
 	     else echo "#define UNMODIFIED_SOURCE 1" >> help-dialogs.h; \
@@ -398,7 +400,9 @@ clean:
 	@if test -e tools/Makefile.config; then $(MAKE) --no-print-directory -C tools clean; fi
 	@if test -e $(PKGNAME); then rm -rf $(PKGNAME); fi
 	@if test -e ~/.dvdisaster-original-author; then \
-	  md5sum -b *.h *.c >fingerprints.md5; \
+	  mv build.h build.saved ;\
+	  md5sum -b *.h *.c >fingerprints.md5 ;\
+	  mv build.saved build.h; \
 	fi
 	@if test -e $(SRCDIR)/papers; then \
 	  $(MAKE) --no-print-directory -C papers clean; \

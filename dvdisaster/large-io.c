@@ -347,8 +347,8 @@ int LargeEOF(LargeFile *lf)
  * Reading in segmented files
  */
 
-size_t LargeRead(LargeFile *lf, void *buf, size_t count)
-{  size_t n;
+ssize_t LargeRead(LargeFile *lf, void *buf, size_t count)
+{  ssize_t n;
 
    /* Simple unsegmented case */  
 
@@ -461,15 +461,15 @@ static void insert_buttons(GtkDialog *dialog)
 			 GTK_STOCK_CANCEL, 0, NULL);
 } 
 
-static size_t xwrite(int fdes, void *buf_base, size_t count)
+static ssize_t xwrite(int fdes, void *buf_base, size_t count)
 {  unsigned char *buf = (unsigned char*)buf_base;
-   size_t total = 0;
+   ssize_t total = 0;
 
    /* Simply fail when going out of space in command line mode */
 
    if(!Closure->guiMode)
    {  while(count)
-      {  size_t n = write(fdes, buf, count);
+      {  ssize_t n = write(fdes, buf, count);
       
 	 if(n<=0) return total;  /* error occurred */
 
@@ -488,7 +488,7 @@ static size_t xwrite(int fdes, void *buf_base, size_t count)
       until a real error hits (n = -1). */
 
    while(count)
-   {  size_t n = write(fdes, buf, count);
+   {  ssize_t n = write(fdes, buf, count);
 
       if(n <= 0) /* error occurred */
       {  int answer; 
@@ -513,8 +513,8 @@ static size_t xwrite(int fdes, void *buf_base, size_t count)
    return total;
 }
 
-size_t LargeWrite(LargeFile *lf, void *buf, size_t count)
-{  size_t n;
+ssize_t LargeWrite(LargeFile *lf, void *buf, size_t count)
+{  ssize_t n;
 
    /* Simple unsegmented case */  
 

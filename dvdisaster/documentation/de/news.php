@@ -21,7 +21,7 @@ $news_counter = 0;
 
 news_headline("Neues über dvdisaster");
 
-news_item("01.01.2009", "Frohes neues Jahr! dvdisaster 0.71.27 veröffentlicht.", "
+news_item("18.01.2009", "dvdisaster 0.71.27 veröffentlicht", "
 Die Dokumentation ist wieder komplett. Einige Crashes und
 Inkompatibilitäten mit ungewöhnlichen Laufwerken und Datenträgern wurden behoben.
 Diese Version enthält die letzte große interne Änderung, die für die 0.71.x-Serie

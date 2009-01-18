@@ -1,4 +1,9 @@
-0.71 (devel-27) 04-01-2009
+0.71 (devel-27) 18-01-2009
+        - Verifying RS02 images would sometimes show slightly incorrect
+	  numbers of recoverable sectors in the "Prognosis: " line. Fixed.
+        - showing media info would sometimes go wild when called
+	  on empty drive. Will now report missing media correctly.
+        - fixed infinite loop on disk full state
         - fixed failure on writing ecc files with now possible larger
 	  cache settings in command line mode
 	- increased encoder cache size to 8GB for RS01 and RS02

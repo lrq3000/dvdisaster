@@ -554,7 +554,7 @@ void RS02Verify(Method *self)
    gint64 total_missing,data_missing,crc_missing,ecc_missing,hdr_missing;
    gint64 new_missing = 0, new_crc_errors = 0;
    gint64 data_crc_errors,hdr_crc_errors;
-   gint64 hdr_ok,hdr_pos;
+   gint64 hdr_ok,hdr_pos,hdr_correctable;
    gint64 ecc_sector,expected_sectors;
    int ecc_md5_failure = FALSE;
    int ecc_slice;
@@ -611,7 +611,7 @@ void RS02Verify(Method *self)
 
    /*** Check integrity of the ecc headers */
 
-   hdr_ok = hdr_missing = hdr_crc_errors = 0;
+   hdr_ok = hdr_missing = hdr_crc_errors = hdr_correctable = 0;
    hdr_pos = lay->firstEccHeader;
 
    while(hdr_pos < expected_sectors)
@@ -626,6 +626,15 @@ void RS02Verify(Method *self)
 	 n = LargeRead(image, &eh, sizeof(EccHeader));
 	 if(n != sizeof(EccHeader))
 	   Stop(_("Failed reading ecc header at %lld: %s\n"), hdr_pos, strerror(errno));
+
+	 /* Missing header blocks are always recoverable by copying information
+	    from the surviving headers */
+
+	 if(CheckForMissingSector((unsigned char*)&eh, hdr_pos, cc->eh->mediumFP, cc->eh->fpSector))
+	    hdr_correctable++;
+	 if(CheckForMissingSector(2048+((unsigned char*)&eh), hdr_pos+1, cc->eh->mediumFP, cc->eh->fpSector))
+	    hdr_correctable++;
+
       }
       else memset(&eh, 0, sizeof(EccHeader));
 
@@ -1074,7 +1083,7 @@ void RS02Verify(Method *self)
 
    /*** Print final results */
 
-   try_it = prognosis(cc, total_missing - 2*(hdr_crc_errors + hdr_missing), expected_sectors);
+   try_it = prognosis(cc, total_missing - hdr_correctable, expected_sectors);
 
    if(Closure->guiMode)
    {  if(ecc_advice) 

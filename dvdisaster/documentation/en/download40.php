@@ -39,7 +39,7 @@ and wait for the release of version 0.72.
 The alpha versions use the same package format as the regular releases.<p>
 
 <table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.71 (devel27)</b></td><td align="right">30-Mar-2008</td></tr>
+<tr><td><b>dvdisaster-0.71 (devel27)</b></td><td align="right">18-Jan-2009</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
@@ -56,7 +56,7 @@ The alpha versions use the same package format as the regular releases.<p>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
 The documentation is finally complete. Some crashes and incompatibilities
-with difficult media and drives have been fixed.
+with uncommon media and drives have been fixed.
 </td></tr></table><p>
 
 

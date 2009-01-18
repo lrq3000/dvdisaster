@@ -121,7 +121,7 @@ betrachtet werden. Einige interessante Dateien darin sind:
 
 <pre> </pre>
 
-<b>Vorangegangene Version</b> - eine Aktualisierung auf Version 0.70.4 wird empfohlen.<p> 
+<b>Vorangegangene Version</b> - eine Aktualisierung auf Version 0.70.6 wird empfohlen.<p> 
 
 <table class="download" cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.66</b></td><td align="right">25-Mär-2006</td></tr>

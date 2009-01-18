@@ -118,7 +118,7 @@ Some file of particular interest are:
 <li><a href="http://dvdisaster.cvs.sourceforge.net/dvdisaster/dvdisaster/README?view=markup">README</a> - a road map of the source code archive.</li>
 </ul>
 
-<b>Previous release</b> - upgrading to version 0.70.4 is recommended.<p>
+<b>Previous release</b> - upgrading to version 0.70.6 is recommended.<p>
 
 <table class="download" cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.66</b></td><td align="right">25-Mar-2006</td></tr>

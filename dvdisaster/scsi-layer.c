@@ -2668,6 +2668,7 @@ DeviceHandle* QueryMediumInfo(char *device)
 	   Stop(_("Device %s: no medium present\n"), device);
       else Stop(_("Device %s does not become ready:\n%s\n\n"), device,
 		GetSenseString(dh->sense.sense_key, dh->sense.asc, dh->sense.ascq, FALSE));
+      return NULL;
    }
 
    /* General type detection */

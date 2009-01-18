@@ -22,9 +22,9 @@ $news_counter = 0;
 news_headline("dvdisaster News");
 
 
-news_item("01.01.2009", "Happy new year! dvdisaster 0.71.27 released.", "
+news_item("18.01.2009", "dvdisaster 0.71.27 released", "
   The documentation is finally complete. Some crashes and incompatibilities
-  with difficult media and drives have been fixed. This version includes
+  with uncommon media and drives have been fixed. This version includes
   the last major internal overhaul planned for the 0.71.x series, so if
   all goes well the next version will be a stable release candidate.
 ");
