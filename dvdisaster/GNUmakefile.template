@@ -417,7 +417,7 @@ www:
 	@cd documentation ; \
 	tar cjf ../../www.tar.bz2 pubkey.asc index.html include/dvdisaster.css de/*.html en/*.html ru/*.html
 
-www-images:
+www-images: thumbnails
 	@cd documentation ; \
 	tar cjf ../../www.tar.bz2 pubkey.asc index.html include/dvdisaster.css include/*.php de/*.php en/*.php ru/*.php images/*.png de/images/*.png de/thumbnails/*.png en/images/*.png en/thumbnails/*.png ru/images/*.png ru/thumbnails/*.png
 

@@ -268,11 +268,11 @@ msgstr "Kopiere Sektor %lld von %s in Sektor %lld von %s.\n"
 
 #: ds-marker.c:174
 msgid "Stop reporting these errors"
-msgstr ""
+msgstr "Diese Fehler nicht mehr zeigen"
 
 #: ds-marker.c:175
 msgid "Continue reporting"
-msgstr ""
+msgstr "Weiterhin zeigen"
 
 #: ds-marker.c:198
 #, c-format
@@ -283,6 +283,11 @@ msgid ""
 "%s\n"
 "\n"
 msgstr ""
+"\n"
+"\n"
+"Die Bezeichnung des ursprünglichen (defekten) Datenträgers war:\n"
+"%s\n"
+"\n"
 
 #: ds-marker.c:209
 #, c-format
@@ -299,6 +304,18 @@ msgid ""
 "repaired by dvdisaster. Also it will not be possible to create\n"
 "error correction data for it. Sorry for the bad news.\n"
 msgstr ""
+"Nicht wiederherstellbarer Sektor gefunden!\n"
+"\n"
+"Sektor %lld ist als unlesbar markiert. Außerdem ist er\n"
+"einem anderen Ort zugeordnet (%lld).\n"
+"\n"
+"Das Abbild wurde wahrscheinlich aus defektem Ausgangsmaterial\n"
+"hergestellt. Es könnte zum Beispiel Dateien enthalten, die von\n"
+"einem NICHT komplett wiederhergestellten Datenträger kommen.\n"
+"Dies bedeutet daß einige Dateien beschädigt sind.%sDa das Abbild bereits defekt erstellt wurde kann es nicht durch\n"
+"dvdisaster wiederhergestellt werden. Es ist auch nicht möglich\n"
+"zu diesem Abbild Fehlerkorrektur-Daten zu erstellen - leider gibt\n"
+"es keine besseren Nachrichten.\n"
 
 #: ds-marker.c:226
 #, c-format
@@ -315,6 +332,18 @@ msgid ""
 "repaired by dvdisaster. Also it will not be possible to create\n"
 "error correction data for it. Sorry for the bad news.\n"
 msgstr ""
+"Nicht wiederherstellbarer Sektor gefunden!\n"
+"\n"
+"Sektor %lld ist als unlesbar markiert und scheint\n"
+"zu einem anderen Datenträger zu gehören.\n"
+"\n"
+"Das Abbild wurde wahrscheinlich aus defektem Ausgangsmaterial\n"
+"hergestellt. Es könnte zum Beispiel Dateien enthalten, die von\n"
+"einem NICHT komplett wiederhergestellten Datenträger kommen.\n"
+"Dies bedeutet daß einige Dateien beschädigt sind.%sDa das Abbild bereits defekt erstellt wurde kann es nicht durch\n"
+"dvdisaster wiederhergestellt werden. Es ist auch nicht möglich\n"
+"zu diesem Abbild Fehlerkorrektur-Daten zu erstellen - leider gibt\n"
+"es keine besseren Nachrichten.\n"
 
 #: dvdisaster.c:39 main-window.c:137
 #, c-format
@@ -349,7 +378,7 @@ msgstr "--cache-size muß mindestens 8MB sein; 16MB oder mehr werden empfohlen."
 
 #: dvdisaster.c:470
 msgid "--cache-size maximum is 8192MB."
-msgstr ""
+msgstr "--cache-size darf höchsten 8192MB sein."
 
 #: dvdisaster.c:583
 #, c-format
@@ -989,7 +1018,7 @@ msgstr "Keine Laufwerke gefunden"
 
 #: medium-info.c:278
 msgid " "
-msgstr ""
+msgstr " "
 
 #: medium-info.c:281
 msgid "Update medium info"
@@ -1470,15 +1499,15 @@ msgstr ""
 
 #: preferences.c:1670
 msgid "Image format"
-msgstr ""
+msgstr "Abbild-Format"
 
 #: preferences.c:1679
 msgid "Missing sector tags"
-msgstr ""
+msgstr "Kennzeichnung fehlender Sektoren"
 
 #: preferences.c:1679
 msgid "Use new style missing sector tags (Warning: compatibility issues!)"
-msgstr ""
+msgstr "Nach neuer Methode kennzeichen (Warnung: Kompatibilitätsprobleme!)"
 
 #: preferences.c:1699
 msgid ""
@@ -1488,6 +1517,11 @@ msgid ""
 "However only dvdisaster 0.72 and up will recognize the new tags. You must NOT process the resulting images with older dvdisaster versions as they would not see any missing sectors in the resulting images.\n"
 "N.b.: dvdisaster >= 0.72 will automatically recognize both tag formats when reading images; setting this value only affects the creation of new images."
 msgstr ""
+"<b>Kennzeichnung fehlender Sektoren</b>\n"
+"\n"
+"Fehlende Sektoren werden in dem Abbild durch eine spezielle Datensequenz gekennzeichnet. Dieser Schalter aktiviert eine verbesserte Kennzeichnung mit deren Hilfe spezielle Fälle von absichtlich beschädigten Datenträger-Inhalten identifiziert werden können. Darin eingeschlossen sind Datenträger die aus unvollständig wiederhergestellten Abbildern gebrannt wurden oder Daten daraus enthalten.\n"
+"Nur dvdisaster 0.72 und die nachfolgenden Versionen erkennen die neue Kennzeichnung. Sie dürften mit dieser Option erzeugte Abbilder AUF KEINEN FALL mit älteren dvdisaster-Versionen verarbeiten. Diese Versionen würden die betreffenden Sektoren nicht als fehlend erkennen.\n"
+"Bemerkung: dvdisaster >= 0.72 erkennt die alten und neuen Formate automatisch; dieser Schalter beinflußt nur die Erzeugung neuer Abbilder."
 
 #: preferences.c:1718
 msgid "Filling of unreadable sectors"
@@ -2845,7 +2879,7 @@ msgstr "Lese Prüfsummen aus Fehlerkorrektur-Datei"
 
 #: read-linear.c:316
 msgid "Reading CRC information"
-msgstr ""
+msgstr "Lese CRC-Prüfsummen"
 
 #: read-linear.c:380
 #, c-format
@@ -2864,7 +2898,7 @@ msgstr "Vervollständige Abbild %s. Nur die fehlenden Sektoren werden gelesen.\n
 
 #: read-linear.c:482 read-linear.c:486
 msgid "Reading CRC information from ecc data"
-msgstr ""
+msgstr "Lese Prüfsummen aus Fehlerkorrektur-Daten"
 
 #: read-linear.c:516
 msgid "done.\n"
@@ -2922,15 +2956,15 @@ msgstr "Sektor %lld: %s Überspringe %d Sektoren.\n"
 
 #: read-linear.c:1260
 msgid "but wrong ecc md5sum"
-msgstr ""
+msgstr "aber falsche MD5-Prüfsumme im ECC-Teil"
 
 #: read-linear.c:1267
 msgid "but wrong crc md5sum"
-msgstr ""
+msgstr "aber falsche MD5-Prüfsumme im CRC-Teil"
 
 #: read-linear.c:1274
 msgid "but wrong data md5sum"
-msgstr ""
+msgstr "aber falsche MD5-Prüfsumme im Daten-Teil"
 
 #: read-linear.c:1286
 #, c-format
@@ -2958,7 +2992,7 @@ msgstr "Alle Sektoren erfolgreich eingelesen. Prüfsummen stimmen."
 #: read-linear.c:1306
 #, c-format
 msgid "All sectors successfully read, %s!"
-msgstr ""
+msgstr "Alle Sektoren erfolgreich eingelesen, %s!"
 
 #: read-linear.c:1311
 msgid "All sectors successfully read."
@@ -3986,6 +4020,16 @@ msgid ""
 "Error correction information can only be\n"
 "appended to complete (undamaged) images.\n"
 msgstr ""
+"Sektor %lld ist als unlesbar markiert und scheint\n"
+"zu einem anderen Datenträger zu gehören.\n"
+"\n"
+"Das Abbild wurde wahrscheinlich aus defektem Ausgangsmaterial\n"
+"hergestellt. Es könnte zum Beispiel Dateien enthalten, die von\n"
+"einem NICHT komplett wiederhergestellten Datenträger kommen.\n"
+"Dies bedeutet daß einige Dateien beschädigt sind.\n"
+"\n"
+"Fehlerkorrekur-Daten können nur für vollständige\n"
+"(unbeschädigte) Abbilder erstellt werden.\n"
 
 #: rs02-create.c:228 rs02-create.c:292 rs02-create.c:301 rs03-create.c:244
 #: rs03-create.c:253 rs03s-create.c:203 rs03s-create.c:212
@@ -4422,6 +4466,7 @@ msgid ""
 "Please note that augmented images will at most triple in size as the highest possible redundancy is 200%%.\n"
 "Even if this limit is not reached the augmented image may be a few sectors smaller than specified for technical reasons."
 msgstr ""
+"<b>Größe einer einlagigen DVD</b>\n"
 "Dieser Wert gibt die typische Größe einer einschichtigen DVD an. Abbilder, die nicht auf die kleineren Datenträger-Formate passen, aber noch kürzer als dieser Wert sind, werden so mit Fehlerkorrektur-Daten erweitert, daß sie anschließend noch auf die DVD passen.\n"
 "\n"
 "Sie können die Datenträger-Größe in Sektoren (von je 2K Größe) angeben oder den \"Datenträger abfragen\"-Knopf drücken um die Größe des momentan eingelegten Datenträgers zu verwenden. Dies liefert allerdings manchmal falsche Werte.\n"
@@ -4447,6 +4492,7 @@ msgid ""
 "Please note that augmented images will at most triple in size as the highest possible redundancy is 200%%.\n"
 "Even if this limit is not reached the augmented image may be a few sectors smaller than specified for technical reasons."
 msgstr ""
+"<b>Größe einer zweilagigen DVD</b>\n"
 "Dieser Wert gibt die typische Größe einer zweischichtigen DVD an. Abbilder, die nicht auf die kleineren Datenträger-Formate passen, aber noch kürzer als dieser Wert sind, werden so mit Fehlerkorrektur-Daten erweitert, daß sie anschließend noch auf die DVD passen.\n"
 "\n"
 "Sie können die Datenträger-Größe in Sektoren (von je 2K Größe) angeben oder den \"Datenträger abfragen\"-Knopf drücken um die Größe des momentan eingelegten Datenträgers zu verwenden. Dies liefert allerdings manchmal falsche Werte.\n"
@@ -4472,6 +4518,14 @@ msgid ""
 "Please note that augmented images will at most triple in size as the highest possible redundancy is 200%%.\n"
 "Even if this limit is not reached the augmented image may be a few sectors smaller than specified for technical reasons."
 msgstr ""
+"<b>Größe einer einlagigen BD</b>\n"
+"Dieser Wert gibt die typische Größe einer einschichtigen BD an. Abbilder, die nicht auf die kleineren Datenträger-Formate passen, aber noch kürzer als dieser Wert sind, werden so mit Fehlerkorrektur-Daten erweitert, daß sie anschließend noch auf die BD passen.\n"
+"\n"
+"Sie können die Datenträger-Größe in Sektoren (von je 2K Größe) angeben oder den \"Datenträger abfragen\"-Knopf drücken um die Größe des momentan eingelegten Datenträgers zu verwenden. Dies liefert allerdings manchmal falsche Werte.\n"
+"Der Knopf ganz rechts stellt den zuletzt gespeicherten Wert wieder ein.\n"
+"\n"
+"Bitte beachten Sie, daß Abbilder höchstens auf die dreifache Größe erweitert werden; dies entspricht einer größtmöglichen Redundanz von 200%%.\n"
+"Aber auch wenn diese Obergrenze noch nicht erreicht ist werden aus technischen Gründen ein paar Sektoren weniger als angegeben verwendet."
 
 #: rs02-window.c:998
 msgid "BD 2 layers:"
@@ -4490,6 +4544,14 @@ msgid ""
 "Please note that augmented images will at most triple in size as the highest possible redundancy is 200%%.\n"
 "Even if this limit is not reached the augmented image may be a few sectors smaller than specified for technical reasons."
 msgstr ""
+"<b>Größe einer zweilagigen BD</b>\n"
+"Dieser Wert gibt die typische Größe einer einschichtigen BD an. Abbilder, die nicht auf die kleineren Datenträger-Formate passen, aber noch kürzer als dieser Wert sind, werden so mit Fehlerkorrektur-Daten erweitert, daß sie anschließend noch auf die BD passen.\n"
+"\n"
+"Sie können die Datenträger-Größe in Sektoren (von je 2K Größe) angeben oder den \"Datenträger abfragen\"-Knopf drücken um die Größe des momentan eingelegten Datenträgers zu verwenden. Dies liefert allerdings manchmal falsche Werte.\n"
+"Der Knopf ganz rechts stellt den zuletzt gespeicherten Wert wieder ein.\n"
+"\n"
+"Bitte beachten Sie, daß Abbilder höchstens auf die dreifache Größe erweitert werden; dies entspricht einer größtmöglichen Redundanz von 200%%.\n"
+"Aber auch wenn diese Obergrenze noch nicht erreicht ist werden aus technischen Gründen ein paar Sektoren weniger als angegeben verwendet."
 
 #: rs02-window.c:1095 rs03-preferences.c:579
 msgid "sectors."
@@ -4603,7 +4665,7 @@ msgstr "Laufwerk %s (%s) ist eine Festplatte."
 #: scsi-layer.c:416
 #, c-format
 msgid "Incomplete %s"
-msgstr ""
+msgstr "Unvollständige %s"
 
 #: scsi-layer.c:454
 #, c-format
@@ -4908,7 +4970,7 @@ msgstr ""
 
 #: scsi-layer.c:2533
 msgid "Drive failed to report media type."
-msgstr ""
+msgstr "Laufwerk erkennt den Datenträger-Typ nicht."
 
 #: scsi-layer.c:2544 scsi-layer.c:2631
 #, c-format
