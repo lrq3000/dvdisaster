@@ -2255,7 +2255,10 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
    /*** Perform the raw read */
 
    c2bit = dh->canC2Scan ? 0x02 : 0;
-
+#if 0 //fixme
+printf("raw read enter, %d sectors, %d c2bit, %d lba, %d size\n", 
+       nsectors, c2bit, lba, rb->sampleSize); 
+#endif
    memset(cdb, 0, MAX_CDB_SIZE);
    cdb[0]  = 0xbe;         /* READ CD */
    switch(dh->subType)     /* Expected sector type */
@@ -2291,6 +2294,10 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
 
    ret = SendPacket(dh, cdb, 12, rb->workBuf->buf, nsectors*rb->sampleSize, sense, DATA_READ);
    RememberSense(sense->sense_key, sense->asc, sense->ascq);
+
+#if 0  // fixme
+printf("raw read exit, %d  sectors\n", nsectors);
+#endif
 
 #if 0
    if(lba==160)  /* fixme */

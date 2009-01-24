@@ -219,6 +219,7 @@ typedef struct _GlobalClosure
    GtkScrolledWindow *logScroll; /* and its scrolled window */
    GtkTextBuffer *logBuffer; /* Text buffer for the log output */
    GString *logString;       /* holds logging output for current action */
+   GMutex *logLock;          /* protects the logString */
 
    /*** Widgets of the main window */
 
@@ -420,6 +421,12 @@ Bitmap* CreateBitmap0(int);
 #define ClearBit(bm,bit) bm->bitmap[(bit)>>5] &= ~(1<<((bit)&31)) 
 int CountBits(Bitmap*);
 void FreeBitmap(Bitmap*);
+
+/***
+ *** build.h
+ ***/
+
+int buildCount;
 
 /***
  *** closure.c

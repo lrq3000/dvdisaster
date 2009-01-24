@@ -76,7 +76,7 @@ static void query_medium(medium_info *mi)
    if(!dh) return;
 
    /* Medium properties */
-   printf("got here\n");
+
    SetLabelText(GTK_LABEL(mi->physicalType), dh->typeDescr);
    SetLabelText(GTK_LABEL(mi->bookType), dh->bookDescr);
    SetLabelText(GTK_LABEL(mi->manufID), dh->manuID);

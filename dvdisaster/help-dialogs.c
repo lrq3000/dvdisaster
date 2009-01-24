@@ -39,7 +39,7 @@ static void close_cb(GtkWidget *widget, gpointer data)
    gtk_widget_hide(lwoh->helpWindow);
 }
 
-/* Do not destroy the window when close via the window manager */
+/* Do not destroy the window when closed via the window manager */
 
 static gboolean delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
 {  LabelWithOnlineHelp *lwoh = (LabelWithOnlineHelp*)data;
@@ -321,27 +321,44 @@ void AddHelpWidget(LabelWithOnlineHelp *lwoh, GtkWidget *widget)
 
 static void log_destroy_cb(GtkWidget *widget, gpointer data)
 {
+   /* Avoid race condition with next function */
+
+   g_mutex_lock(Closure->logLock);
    Closure->logWidget = NULL;
+   Closure->logScroll = NULL;
    Closure->logBuffer = NULL;
+   g_mutex_unlock(Closure->logLock);
 }
 
 static gboolean log_jump_func(gpointer data)
 {  GtkAdjustment *a;
    GtkTextIter end;
 
+   /* Locking is needed as user might destroy the window
+      while we are updating it */
+
+   g_mutex_lock(Closure->logLock);
+   if(!Closure->logWidget)
+   {  g_mutex_unlock(Closure->logLock);
+      return FALSE;
+   }
    gtk_text_buffer_get_end_iter(Closure->logBuffer, &end);
    gtk_text_buffer_place_cursor(Closure->logBuffer, &end);
 
    a = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(Closure->logScroll));
    gtk_adjustment_set_value(a, a->upper - a->page_size);
    gtk_scrolled_window_set_vadjustment(GTK_SCROLLED_WINDOW(Closure->logScroll), a);
+   g_mutex_unlock(Closure->logLock);
 
    return FALSE;
 }
 
 static gboolean log_idle_func(gpointer data)
 {
-   gtk_text_buffer_set_text(Closure->logBuffer, Closure->logString->str, Closure->logString->len);
+   g_mutex_lock(Closure->logLock);
+   if(Closure->logBuffer)
+      gtk_text_buffer_set_text(Closure->logBuffer, Closure->logString->str, Closure->logString->len);
+   g_mutex_unlock(Closure->logLock);
 
    g_idle_add(log_jump_func, NULL);
    return FALSE;
@@ -470,8 +487,10 @@ GtkWidget* ShowTextfile(char *title, char *explanation, char *file,
       }
    }
    else 
-   {  buf  = Closure->logString->str;
+   {  g_mutex_lock(Closure->logLock);
+      buf  = Closure->logString->str;
       size = Closure->logString->len;
+      g_mutex_unlock(Closure->logLock);
    }
 
    /*** Create the dialog */
@@ -511,19 +530,8 @@ GtkWidget* ShowTextfile(char *title, char *explanation, char *file,
    gtk_text_buffer_place_cursor(buffer, &start);
 
    gtk_container_add(GTK_CONTAINER(scroll_win), view);
-   //   gtk_box_pack_start(GTK_BOX(vbox), view, FALSE, FALSE, 0);
 
    /* Show it */
-
-#if 0
-   { GtkRcStyle *rc_style = gtk_rc_style_new();
-   rc_style->color_flags[GTK_STATE_NORMAL] |= GTK_RC_BG;
-   rc_style->bg[GTK_STATE_NORMAL].red = 0xffff;
-   rc_style->bg[GTK_STATE_NORMAL].green = 0xffff;
-   rc_style->bg[GTK_STATE_NORMAL].blue = 0xffff;
-   gtk_widget_modify_style(dialog, rc_style);
-   }
-#endif
 
    gtk_widget_show_all(dialog);
 

@@ -161,6 +161,10 @@ int main(int argc, char *argv[])
     atexit(check_memleaks);
 #endif
 
+    /*** Do this early so that we can use mutexes */
+
+    g_thread_init(NULL);
+
 #ifdef SYS_MINGW
     /*** Create a named mutex so that the installer can detect
 	 that we are running. A malicious user may cause this 
@@ -176,7 +180,6 @@ int main(int argc, char *argv[])
 
     /*** Setup for multithreading */
 
-    g_thread_init(NULL);
     Closure->mainThread = g_thread_self();
 
     /*** Setup the locale.
@@ -580,7 +583,8 @@ int main(int argc, char *argv[])
 	   Closure->driveSpeed = -atoi(optarg);
 	   break;
          case MODIFIER_VERSION:
-	   PrintCLI(_("\ndvdisaster version %s\n\n"), Closure->cookedVersion);
+	   PrintCLI(_("\ndvdisaster version %s build %d\n\n"), 
+		    Closure->cookedVersion, buildCount);
 	   FreeClosure();
 	   exit(EXIT_SUCCESS); 
 	   break;

@@ -65,8 +65,10 @@ static void action_cb(GtkWidget *widget, gpointer data)
       /* Clear the log buffer, request new log file time stamp */
       
       if(action != ACTION_CREATE_CONT)
-      {  g_string_truncate(Closure->logString, 0);
+      {  g_mutex_lock(Closure->logLock);
+	 g_string_truncate(Closure->logString, 0);
          g_string_printf(Closure->logString, _("dvdisaster-%s log\n"),VERSION);
+	 g_mutex_unlock(Closure->logLock);
 	 Closure->logFileStamped = FALSE;
       }
 

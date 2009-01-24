@@ -229,7 +229,8 @@ find_dotfile:
 	   appdata ? appdata : "NULL");
 
    if(appdata)
-   {  Closure->appData = g_strdup_printf("%s\\dvdisaster", appdata);
+   {  Closure->appData  = g_strdup_printf("%s\\dvdisaster", appdata);
+      Closure->dDumpDir = g_strdup_printf("%s\\dvdisaster\\raw-sectors", appdata);
 
       if(DirStat(appdata)) /* CSIDL_APPDATA present? */
       { 
@@ -247,31 +248,52 @@ find_dotfile:
 	 {  g_free(Closure->appData);
 	    Closure->appData = NULL;
 	 }
+
+	 Verbose("- raw-sect path : %s\n", Closure->dDumpDir);
+
+	 if(DirStat(Closure->dDumpDir))
+	 {  Verbose("- raw-sect path : present\n");
+	 }
+	 else if(!portable_mkdir(Closure->dDumpDir))
+	 {  Verbose("- raw-sect path : - created -\n");
+	 }
+	 else 
+	 {  g_free(Closure->dDumpDir);
+	    Closure->dDumpDir = NULL;
+	 }
       }
       else 
       {	 Verbose("- dotfile path : *can not be used*\n");
 	 g_free(Closure->appData);
 	 Closure->appData = NULL;
+	 g_free(Closure->dDumpDir);
+	 Closure->dDumpDir = NULL;
       }
 
       g_free(appdata);
    }
 
-   /* Fallback: Expect .dvdisaster file in binDir */
+   /* Fallbacks: Expect .dvdisaster file in binDir;
+                 propose C:\Windows\Temp as raw sector dir */
 
    if(!Closure->dotFile)
       Closure->dotFile = g_strdup_printf("%s\\.dvdisaster", Closure->binDir);
+
+   if(!Closure->dDumpDir)
+      Closure->dDumpDir = g_strdup("C:\\Windows\\Temp");
 #endif
 
    Verbose("\nUsing file locations:\n"
 	   "- Bin dir: %s\n"
 	   "- Doc dir: %s\n"
 	   "- AppData: %s\n"
-	   "- dotfile: %s\n\n",
+	   "- dotfile: %s\n"
+	   "- rawsect: %s\n\n",
 	   Closure->binDir,
 	   Closure->docDir,
 	   Closure->appData,
-	   Closure->dotFile);   
+	   Closure->dotFile,
+	   Closure->dDumpDir);   
 }
 
 /***
@@ -526,12 +548,12 @@ static void update_dotfile()
    g_fprintf(dotfile, "last-device:       %s\n", Closure->device);
    g_fprintf(dotfile, "last-image:        %s\n", Closure->imageName);
    g_fprintf(dotfile, "last-ecc:          %s\n", Closure->eccName);
-   g_fprintf(dotfile, "bd-size1:          %lld\n", (long long int)Closure->bdSize1);
-   g_fprintf(dotfile, "bd-size2:          %lld\n", (long long int)Closure->bdSize2);
    g_fprintf(dotfile, "browser:           %s\n\n", Closure->browser);
 
    g_fprintf(dotfile, "adaptive-read:     %d\n", Closure->adaptiveRead);
    g_fprintf(dotfile, "auto-suffix:       %d\n", Closure->autoSuffix);
+   g_fprintf(dotfile, "bd-size1:          %lld\n", (long long int)Closure->bdSize1);
+   g_fprintf(dotfile, "bd-size2:          %lld\n", (long long int)Closure->bdSize2);
    g_fprintf(dotfile, "cache-size:        %d\n", Closure->cacheMB);
    g_fprintf(dotfile, "cd-size:           %lld\n", (long long int)Closure->cdSize);
    g_fprintf(dotfile, "codec-threads:     %d\n", Closure->codecThreads);
@@ -646,7 +668,9 @@ void InitClosure()
    Closure->browser     = g_strdup("xdg-open");
    Closure->methodList  = g_ptr_array_new();
    Closure->methodName  = g_strdup("RS01");
+#ifndef SYS_MINGW  /* this is done in get_base_dir for Windows */
    Closure->dDumpDir    = g_strdup("/tmp");
+#endif
    Closure->dDumpPrefix = g_strdup("sector-");
    Closure->cacheMB     = 32;
    Closure->codecThreads = 1;
@@ -669,6 +693,7 @@ void InitClosure()
    Closure->bdSize2  = Closure->savedBDSize2  = BD_DL_SIZE;
 
    Closure->logString = g_string_sized_new(1024);
+   Closure->logLock   = g_mutex_new();
 
    Closure->background = g_malloc0(sizeof(GdkColor));
    Closure->foreground = g_malloc0(sizeof(GdkColor));
@@ -769,7 +794,10 @@ void FreeClosure()
       FreeRawEditorContext(Closure->rawEditorContext);
 
    if(Closure->logString)
-     g_string_free(Closure->logString, TRUE);
+      g_string_free(Closure->logString, TRUE);
+
+   if(Closure->logLock)
+      g_mutex_free(Closure->logLock);
 
    if(Closure->drawGC)
      g_object_unref(Closure->drawGC);

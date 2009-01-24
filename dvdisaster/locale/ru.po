@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.70.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-16 21:29+0100\n"
+"POT-Creation-Date: 2009-01-24 21:04+0100\n"
 "PO-Revision-Date: 2009-11-13 19:14+0300\n"
 "Last-Translator: Игорь Горбунов <igor.gorbounov@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Poedit-Language: Russian\n"
 
-#: closure.c:521
+#: closure.c:543
 #, c-format
 msgid ""
 "# dvdisaster-%s configuration file\n"
@@ -316,7 +316,7 @@ msgid ""
 "error correction data for it. Sorry for the bad news.\n"
 msgstr ""
 
-#: dvdisaster.c:39 main-window.c:137
+#: dvdisaster.c:39 main-window.c:139
 #, c-format
 msgid ""
 "\n"
@@ -334,40 +334,37 @@ msgstr "Метод RS01 не применяется для сравнения ф
 #. TRANSLATORS:
 #. This is a dummy entry which is supposed to translate into "ok".
 #. Please do not return anything else here.
-#: dvdisaster.c:263 dvdisaster.c:276 dvdisaster.c:288
+#: dvdisaster.c:266 dvdisaster.c:279 dvdisaster.c:291
 msgid "test phrase for verifying the locale installation"
 msgstr "ok"
 
-#: dvdisaster.c:454
+#: dvdisaster.c:457
 #, c-format
 msgid "--threads must be 1..%d\n"
 msgstr "--потоков должно быть 1..%d\n"
 
-#: dvdisaster.c:468
+#: dvdisaster.c:471
 msgid "--cache-size must at least be 8MB; 16MB or higher is recommended."
 msgstr "--cache-size должен быть не меньше 8МБ; рекомендуется 16МБ и больше."
 
-#: dvdisaster.c:470
+#: dvdisaster.c:473
 msgid "--cache-size maximum is 8192MB."
 msgstr ""
 
-#: dvdisaster.c:583
+#: dvdisaster.c:586
 #, c-format
 msgid ""
 "\n"
-"dvdisaster version %s\n"
+"dvdisaster version %s build %d\n"
 "\n"
 msgstr ""
-"\n"
-"dvdisaster, версия %s\n"
-"\n"
 
-#: dvdisaster.c:642
+#: dvdisaster.c:646
 #, c-format
 msgid "?? illegal getopt return value %d\n"
 msgstr "?? неправильное возвращаемое значение getopt: %d\n"
 
-#: dvdisaster.c:676
+#: dvdisaster.c:680
 #, c-format
 msgid ""
 "dvdisaster is not properly installed.\n"
@@ -379,7 +376,7 @@ msgstr ""
 
 #. TRANSLATORS: Program options like -r and --read are not to be translated
 #. to avoid confusion when discussing the program in international forums.
-#: dvdisaster.c:824
+#: dvdisaster.c:828
 msgid ""
 "\n"
 "Common usage examples:\n"
@@ -403,7 +400,7 @@ msgstr ""
 "  dvdisaster -u,--unlink # Удалить файлы .iso (по завершении других действий)\n"
 "\n"
 
-#: dvdisaster.c:833
+#: dvdisaster.c:837
 #, c-format
 msgid ""
 "Drive and file specification:\n"
@@ -418,7 +415,7 @@ msgstr ""
 "  -i,--image  файл образа - имя файла образа            (по умолчанию: medium.iso)\n"
 "  -e,--ecc    ecc-файл    - имя файла с ecc-данными     (по умолчанию: medium.ecc)\n"
 
-#: dvdisaster.c:841
+#: dvdisaster.c:845
 msgid ""
 "  -l,--list              - list drives available under ASPI manager\n"
 "\n"
@@ -426,7 +423,7 @@ msgstr ""
 "  -l,--list              - список ASPI-приводов\n"
 "\n"
 
-#: dvdisaster.c:846
+#: dvdisaster.c:850
 #, c-format
 msgid ""
 "Tweaking options (see manual before using!)\n"
@@ -477,7 +474,7 @@ msgstr ""
 "  --split-files          - разбить образ на файлы <= 2ГБ\n"
 "\n"
 
-#: dvdisaster.c:871
+#: dvdisaster.c:875
 #, c-format
 msgid ""
 "Debugging options (purposefully undocumented and possibly harmful)\n"
@@ -528,7 +525,7 @@ msgstr ""
 "  --zero-unreadable - заменить маркеры \"нечитаемый сектор\" нулями\n"
 "\n"
 
-#: dvdisaster.c:896
+#: dvdisaster.c:900
 msgid ""
 "NOTE: This is the Windows console version of dvdisaster.\n"
 "The version providing a graphical user interface is called\n"
@@ -540,7 +537,7 @@ msgstr ""
 "(также содержится в этом установочном пакете).\n"
 "\n"
 
-#: dvdisaster.c:918
+#: dvdisaster.c:922
 msgid "Optical drive 52X FW 1.02"
 msgstr "Оптический привод 52X FW 1.02"
 
@@ -658,11 +655,11 @@ msgstr ""
 msgid "Image file %s not deleted: %s\n"
 msgstr "Файл образа %s не удален: %s\n"
 
-#: help-dialogs.c:368
+#: help-dialogs.c:385
 msgid "windowtitle|Log data"
 msgstr "Журнал"
 
-#: help-dialogs.c:369
+#: help-dialogs.c:386
 msgid ""
 "<big>Log data</big>\n"
 "<i>Protocol of the current or previous action</i>"
@@ -670,11 +667,11 @@ msgstr ""
 "<big>Журнал</big>\n"
 "<i>Протокол текущего или предыдущего действия</i>"
 
-#: help-dialogs.c:385
+#: help-dialogs.c:402
 msgid "windowtitle|GNU General Public License"
 msgstr "GNU General Public License"
 
-#: help-dialogs.c:386
+#: help-dialogs.c:403
 msgid ""
 "<big>GNU General Public License</big>\n"
 "<i>The license terms of dvdisaster.</i>"
@@ -682,7 +679,7 @@ msgstr ""
 "<big>GNU General Public License</big>\n"
 "<i>Лицензионные условия dvdisaster'а.</i>"
 
-#: help-dialogs.c:458
+#: help-dialogs.c:475
 #, c-format
 msgid ""
 "File\n"
@@ -693,11 +690,11 @@ msgstr ""
 "%s\n"
 "отсутствует"
 
-#: help-dialogs.c:541
+#: help-dialogs.c:549
 msgid "windowtitle|Modifying dvdisaster"
 msgstr "Изменение dvdisaster'а"
 
-#: help-dialogs.c:542
+#: help-dialogs.c:550
 msgid ""
 "<big>Modifying dvdisaster</big>\n"
 "<i>Your changes are not ours.</i>"
@@ -705,11 +702,11 @@ msgstr ""
 "<big>Изменение dvdisaster'а</big>\n"
 "<i>Ваши изменения не являются нашими.</i>"
 
-#: help-dialogs.c:681
+#: help-dialogs.c:689
 msgid "windowtitle|About dvdisaster"
 msgstr "О программе dvdisaster"
 
-#: help-dialogs.c:701
+#: help-dialogs.c:709
 msgid ""
 "Modified version Copyright 2009 (please fill in - [directions])\n"
 "Copyright 2004-2009 Carsten Gnoerlich"
@@ -717,11 +714,11 @@ msgstr ""
 "Измененнная версия Copyright 2009 (пожалуйста, заполните - [инструкции])\n"
 "Copyright 2004-2009 Carsten Gnoerlich"
 
-#: help-dialogs.c:705
+#: help-dialogs.c:713
 msgid "Copyright 2004-2009 Carsten Gnoerlich"
 msgstr "Copyright 2004-2009 Carsten Gnoerlich"
 
-#: help-dialogs.c:712
+#: help-dialogs.c:720
 msgid ""
 "dvdisaster provides a margin of safety against data loss\n"
 "on CD and DVD media caused by aging or scratches.\n"
@@ -733,7 +730,7 @@ msgstr ""
 "Он создает данные для исправления ошибок, которые используются\n"
 "для восстановления нечитаемых секторов, если диск впоследствии повреждается.\n"
 
-#: help-dialogs.c:717
+#: help-dialogs.c:725
 msgid ""
 "This software comes with  <b>absolutely no warranty</b>.\n"
 "This is free software and you are welcome to redistribute it\n"
@@ -743,7 +740,7 @@ msgstr ""
 "Это свободное ПО и вы вправе распространять его\n"
 "на условиях [GNU General Public License].\n"
 
-#: help-dialogs.c:723
+#: help-dialogs.c:731
 msgid ""
 "\n"
 "This program is <b>not the original</b>. It is based on the\n"
@@ -759,7 +756,7 @@ msgstr ""
 "Пожалуйста, не беспокойте авторов dvdisaster'а\n"
 "([www.dvdisaster.org]) проблемами этой версии.\n"
 
-#: help-dialogs.c:738
+#: help-dialogs.c:746
 msgid ""
 "\n"
 "e-mail: carsten@dvdisaster.org   -or-   cgnoerlich@fsfe.org"
@@ -767,7 +764,7 @@ msgstr ""
 "\n"
 "e-mail: carsten@dvdisaster.org   -или-   cgnoerlich@fsfe.org"
 
-#: help-dialogs.c:741
+#: help-dialogs.c:749
 msgid ""
 "\n"
 "Darwin port (Mac OS X): Julian Einwag &lt;julian@einwag.de&gt;"
@@ -775,7 +772,7 @@ msgstr ""
 "\n"
 "Порт для Darwin (Mac OS X): Julian Einwag &lt;julian@einwag.de&gt;"
 
-#: help-dialogs.c:744
+#: help-dialogs.c:752
 msgid ""
 "\n"
 "NetBSD port: Sergey Svishchev &lt;svs@ropnet.ru&gt;"
@@ -798,84 +795,84 @@ msgstr ""
 "\n"
 "Вы можете повторить эту операцию после того, как освободите место."
 
-#: main-window.c:69
+#: main-window.c:70
 #, c-format
 msgid "dvdisaster-%s log\n"
 msgstr "Журнал dvdisaster-%s\n"
 
-#: main-window.c:239
+#: main-window.c:241
 msgid "button|Read"
 msgstr "Читать"
 
-#: main-window.c:242
+#: main-window.c:244
 msgid "tooltip|Read Image"
 msgstr "Читать образ"
 
-#: main-window.c:242
+#: main-window.c:244
 msgid "Reads a CD/DVD image into a file (or tries to complete an existing image file)."
 msgstr "Считывание образа CD/DVD в файл (или попытка завершить существующий файл образа)."
 
-#: main-window.c:256
+#: main-window.c:258
 msgid "button|Create"
 msgstr "Создать"
 
-#: main-window.c:259
+#: main-window.c:261
 msgid "tooltip|Create error correction data"
 msgstr "Создать данные для исправления ошибок"
 
-#: main-window.c:259
+#: main-window.c:261
 msgid "Creates error correction data. Requires an image file."
 msgstr "Создание данных для исправления ошибок. Требуется файл образа."
 
-#: main-window.c:263
+#: main-window.c:265
 msgid "button|Scan"
 msgstr "Проверить"
 
-#: main-window.c:266
+#: main-window.c:268
 msgid "tooltip|Scan medium"
 msgstr "Проверить носитель"
 
-#: main-window.c:266
+#: main-window.c:268
 msgid "Scans medium for unreadable sectors."
 msgstr "Проверяет носитель на нечитаемые секторы."
 
-#: main-window.c:270
+#: main-window.c:272
 msgid "button|Fix"
 msgstr "Исправить"
 
-#: main-window.c:273
+#: main-window.c:275
 msgid "tooltip|Repair image"
 msgstr "Исправить образ"
 
-#: main-window.c:273
+#: main-window.c:275
 msgid "Repairs an image. Requires an image file and error correction data."
 msgstr "Исправление образа. Требуется файл образа и данные для исправления ошибок."
 
-#: main-window.c:277
+#: main-window.c:279
 msgid "button|Verify"
 msgstr "Проверить"
 
-#: main-window.c:280
+#: main-window.c:282
 msgid "tooltip|Consistency check"
 msgstr "Проверка целостности"
 
-#: main-window.c:280
+#: main-window.c:282
 msgid "Tests consistency of error correction data and image file."
 msgstr "Проверяет соответствие данных для исправления ошибок и файла образа."
 
-#: main-window.c:284
+#: main-window.c:286
 msgid "button|Stop"
 msgstr "Прервать"
 
-#: main-window.c:287
+#: main-window.c:289
 msgid "tooltip|Abort action"
 msgstr "Прервать работу"
 
-#: main-window.c:287
+#: main-window.c:289
 msgid "Aborts an ongoing action."
 msgstr "Прерывание текущей работы."
 
-#: main-window.c:416
+#: main-window.c:418
 #, c-format
 msgid ""
 "<b>dvdisaster is not properly installed</b>\n"
@@ -886,15 +883,15 @@ msgstr ""
 "\n"
 "Просьба выполнить программу установки (%s) еще раз.\n"
 
-#: main-window.c:500
+#: main-window.c:502
 msgid "tooltip|Protocol for current action"
 msgstr "Журнал текущей работы"
 
-#: main-window.c:501
+#: main-window.c:503
 msgid "Displays additional information created during the current or last action."
 msgstr "Отображение дополнительной информации о текущей или последней работе."
 
-#: main-window.c:510
+#: main-window.c:512
 msgid "View log"
 msgstr "Просмотреть журнал"
 
@@ -1006,7 +1003,7 @@ msgstr "Тип носителя:"
 msgid "Book type:"
 msgstr "Формат (book type):"
 
-#: medium-info.c:308 scsi-layer.c:2619
+#: medium-info.c:308 scsi-layer.c:2626
 msgid "Manuf.-ID:"
 msgstr "Изгот.-ID:"
 
@@ -1258,7 +1255,7 @@ msgstr ""
 "\n"
 "Не удалось обнаружить ни ecc-файл, ни ecc-данные в образе.\n"
 
-#: misc.c:200
+#: misc.c:205
 #, c-format
 msgid "dvdisaster-%s%sCopyright 2004-2009 Carsten Gnoerlich.\n"
 msgstr "dvdisaster-%s%sCopyright 2004-2009 Carsten Gnoerlich.\n"
@@ -1267,7 +1264,7 @@ msgstr "dvdisaster-%s%sCopyright 2004-2009 Carsten Gnoerlich.\n"
 #. legislature. If in doubt, just translate the following like "This is free
 #. software; please refer to the conditions of the GNU GENERAL PUBLIC LICENSE
 #. in the source code." Avoid making any legal statements by your own.
-#: misc.c:206
+#: misc.c:211
 msgid ""
 "This software comes with  ABSOLUTELY NO WARRANTY.  This\n"
 "is free software and you are welcome to redistribute it\n"
@@ -1279,11 +1276,11 @@ msgstr ""
 "GNU GENERAL PUBLIC LICENSE.\n"
 "Подробности - в файле \"COPYING\".\n"
 
-#: misc.c:427
+#: misc.c:432
 msgid "Warning"
 msgstr "Внимание"
 
-#: misc.c:490 misc.c:496
+#: misc.c:495 misc.c:501
 msgid ""
 "\n"
 "*\n"
@@ -4857,32 +4854,32 @@ msgstr ""
 msgid "Waiting 10 seconds for drive: %d\n"
 msgstr "Выжидание 10 секунд для привода: %d\n"
 
-#: scsi-layer.c:2417
+#: scsi-layer.c:2424
 #, c-format
 msgid "Sectors %lld - %lld: %s\n"
 msgstr "Сектора %lld - %lld: %s\n"
 
-#: scsi-layer.c:2431
+#: scsi-layer.c:2438
 #, c-format
 msgid "Sector %lld, try %d: %s Sector returned: %d.\n"
 msgstr "Сектор %lld, попытка %d: %s Возвращен сектор: %d.\n"
 
-#: scsi-layer.c:2437
+#: scsi-layer.c:2444
 #, c-format
 msgid "Sector %lld, try %d: %s\n"
 msgstr "Сектор %lld, попытка %d: %s\n"
 
-#: scsi-layer.c:2448
+#: scsi-layer.c:2455
 #, c-format
 msgid "Sector %lld, try %d: success\n"
 msgstr "Сектор %lld, попытка %d: успешно\n"
 
-#: scsi-layer.c:2515 scsi-layer.c:2668
+#: scsi-layer.c:2522 scsi-layer.c:2675
 #, c-format
 msgid "Device %s: no medium present\n"
 msgstr "Устройство %s: нет носителя\n"
 
-#: scsi-layer.c:2516 scsi-layer.c:2669
+#: scsi-layer.c:2523 scsi-layer.c:2676
 #, c-format
 msgid ""
 "Device %s does not become ready:\n"
@@ -4893,7 +4890,7 @@ msgstr ""
 "%s\n"
 "\n"
 
-#: scsi-layer.c:2521
+#: scsi-layer.c:2528
 #, c-format
 msgid ""
 "\n"
@@ -4902,7 +4899,7 @@ msgstr ""
 "\n"
 "Устройство: %s, %s\n"
 
-#: scsi-layer.c:2525
+#: scsi-layer.c:2532
 #, c-format
 msgid ""
 "\n"
@@ -4911,52 +4908,52 @@ msgstr ""
 "\n"
 "Устройство: %s (%s), %s\n"
 
-#: scsi-layer.c:2533
+#: scsi-layer.c:2540
 msgid "Drive failed to report media type."
 msgstr ""
 
-#: scsi-layer.c:2544 scsi-layer.c:2631
+#: scsi-layer.c:2551 scsi-layer.c:2638
 #, c-format
 msgid "This software does not support \"%s\" type media."
 msgstr "Эта программа не поддерживает \"%s\" тип носителя."
 
-#: scsi-layer.c:2552
+#: scsi-layer.c:2559
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr "Эта программа не поддерживает многосессионные (%d сессиий) носители."
 
-#: scsi-layer.c:2575 scsi-layer.c:2584
+#: scsi-layer.c:2582 scsi-layer.c:2591
 msgid "Using READ CD"
 msgstr "Используется READ CD"
 
-#: scsi-layer.c:2576
+#: scsi-layer.c:2583
 msgid ", RAW reading"
 msgstr ", чтение \"RAW\""
 
-#: scsi-layer.c:2579
+#: scsi-layer.c:2586
 #, c-format
 msgid ", Mode page 1 ERP = %02xh"
 msgstr ", Mode page 1 ERP = %02xh"
 
-#: scsi-layer.c:2582
+#: scsi-layer.c:2589
 msgid ", C2 scanning"
 msgstr ", поиск C2"
 
-#: scsi-layer.c:2589
+#: scsi-layer.c:2596
 msgid "Using READ(10).\n"
 msgstr "Используется READ(10).\n"
 
-#: scsi-layer.c:2608
+#: scsi-layer.c:2615
 #, c-format
 msgid "Medium: %s, %lld sectors%s"
 msgstr "Носитель: %s, %lld секторов%s"
 
-#: scsi-layer.c:2612
+#: scsi-layer.c:2619
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s created %s"
 msgstr "Носитель \"%s\": %s, %lld секторов%s создан %s"
 
-#: scsi-layer.c:2638
+#: scsi-layer.c:2645
 msgid "This software does not support encrypted media.\n"
 msgstr "Эта программа не поддерживает шифрованные носители.\n"
 
@@ -5168,6 +5165,15 @@ msgstr ""
 #: welcome-window.c:137
 msgid "<i>New in this Version:</i>"
 msgstr "<i>Новое в этой версии:</i>"
+
+#~ msgid ""
+#~ "\n"
+#~ "dvdisaster version %s\n"
+#~ "\n"
+#~ msgstr ""
+#~ "\n"
+#~ "dvdisaster, версия %s\n"
+#~ "\n"
 
 #~ msgid "--cache-size maximum is 2048MB."
 #~ msgstr "максимальное значение --cache-size 2048 МБ."

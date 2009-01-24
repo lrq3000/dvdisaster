@@ -167,8 +167,11 @@ static void log_window_vprintf(char *format, va_list argp)
 
    tmp = g_strdup_vprintf(format, argp);
    utf_tmp = g_locale_to_utf8(tmp, -1, NULL, NULL, NULL);
+
+   g_mutex_lock(Closure->logLock);
    g_string_append(Closure->logString, utf_tmp);
    clamp_gstring(Closure->logString);
+   g_mutex_unlock(Closure->logLock);
 
    UpdateLog();
    
@@ -179,8 +182,10 @@ static void log_window_vprintf(char *format, va_list argp)
 static void log_window_append(char *text)
 {  char *utf_tmp = g_locale_to_utf8(text, -1, NULL, NULL, NULL);
 
+   g_mutex_lock(Closure->logLock);
    g_string_append(Closure->logString, utf_tmp);
    clamp_gstring(Closure->logString);
+   g_mutex_unlock(Closure->logLock);
 
    UpdateLog();
    

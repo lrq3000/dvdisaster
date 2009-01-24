@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-16 21:29+0100\n"
+"POT-Creation-Date: 2009-01-24 21:04+0100\n"
 "PO-Revision-Date: 2006-06-14 23:48+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: closure.c:521
+#: closure.c:543
 #, c-format
 msgid ""
 "# dvdisaster-%s configuration file\n"
@@ -314,7 +314,7 @@ msgid ""
 "error correction data for it. Sorry for the bad news.\n"
 msgstr ""
 
-#: dvdisaster.c:39 main-window.c:137
+#: dvdisaster.c:39 main-window.c:139
 #, c-format
 msgid ""
 "\n"
@@ -332,40 +332,37 @@ msgstr "RS01-metoden inte tillgänglig för jämförelser av filer."
 #. TRANSLATORS:
 #. This is a dummy entry which is supposed to translate into "ok".
 #. Please do not return anything else here.
-#: dvdisaster.c:263 dvdisaster.c:276 dvdisaster.c:288
+#: dvdisaster.c:266 dvdisaster.c:279 dvdisaster.c:291
 msgid "test phrase for verifying the locale installation"
 msgstr "ok"
 
-#: dvdisaster.c:454
+#: dvdisaster.c:457
 #, c-format
 msgid "--threads must be 1..%d\n"
 msgstr ""
 
-#: dvdisaster.c:468
+#: dvdisaster.c:471
 msgid "--cache-size must at least be 8MB; 16MB or higher is recommended."
 msgstr ""
 
-#: dvdisaster.c:470
+#: dvdisaster.c:473
 msgid "--cache-size maximum is 8192MB."
 msgstr ""
 
-#: dvdisaster.c:583
+#: dvdisaster.c:586
 #, c-format
 msgid ""
 "\n"
-"dvdisaster version %s\n"
+"dvdisaster version %s build %d\n"
 "\n"
 msgstr ""
-"\n"
-"dvdisaster version %s\n"
-"\n"
 
-#: dvdisaster.c:642
+#: dvdisaster.c:646
 #, c-format
 msgid "?? illegal getopt return value %d\n"
 msgstr "?? ogiltigt getopt-svarsvärde %d\n"
 
-#: dvdisaster.c:676
+#: dvdisaster.c:680
 #, c-format
 msgid ""
 "dvdisaster is not properly installed.\n"
@@ -374,7 +371,7 @@ msgstr ""
 
 #. TRANSLATORS: Program options like -r and --read are not to be translated
 #. to avoid confusion when discussing the program in international forums.
-#: dvdisaster.c:824
+#: dvdisaster.c:828
 msgid ""
 "\n"
 "Common usage examples:\n"
@@ -399,7 +396,7 @@ msgstr ""
 "  dvdisaster -u,--unlink # Ta bort .iso-filer (när andra operationer är färdiga)\n"
 "\n"
 
-#: dvdisaster.c:833
+#: dvdisaster.c:837
 #, c-format
 msgid ""
 "Drive and file specification:\n"
@@ -414,7 +411,7 @@ msgstr ""
 "  -i,--image  avbildsfil - namn på avbildsfil       (standard: medium.iso)\n"
 "  -e,--ecc    ecc-fil    - namn på paritetsfil      (standard: medium.ecc)\n"
 
-#: dvdisaster.c:841
+#: dvdisaster.c:845
 msgid ""
 "  -l,--list              - list drives available under ASPI manager\n"
 "\n"
@@ -422,7 +419,7 @@ msgstr ""
 "  -l,--list              - lista enheter tillgängliga under ASPI-hanteraren\n"
 "\n"
 
-#: dvdisaster.c:846
+#: dvdisaster.c:850
 #, c-format
 msgid ""
 "Tweaking options (see manual before using!)\n"
@@ -450,7 +447,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: dvdisaster.c:871
+#: dvdisaster.c:875
 #, c-format
 msgid ""
 "Debugging options (purposefully undocumented and possibly harmful)\n"
@@ -478,7 +475,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: dvdisaster.c:896
+#: dvdisaster.c:900
 msgid ""
 "NOTE: This is the Windows console version of dvdisaster.\n"
 "The version providing a graphical user interface is called\n"
@@ -486,7 +483,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: dvdisaster.c:918
+#: dvdisaster.c:922
 msgid "Optical drive 52X FW 1.02"
 msgstr ""
 
@@ -604,11 +601,11 @@ msgstr ""
 msgid "Image file %s not deleted: %s\n"
 msgstr "Avbildsfil %s inte borttagen: %s\n"
 
-#: help-dialogs.c:368
+#: help-dialogs.c:385
 msgid "windowtitle|Log data"
 msgstr "Loggdata"
 
-#: help-dialogs.c:369
+#: help-dialogs.c:386
 msgid ""
 "<big>Log data</big>\n"
 "<i>Protocol of the current or previous action</i>"
@@ -616,11 +613,11 @@ msgstr ""
 "<big>Loggdata</big>\n"
 "<i>Protokoll för aktuell eller tidigare operation</i>"
 
-#: help-dialogs.c:385
+#: help-dialogs.c:402
 msgid "windowtitle|GNU General Public License"
 msgstr "GNU General Public License"
 
-#: help-dialogs.c:386
+#: help-dialogs.c:403
 msgid ""
 "<big>GNU General Public License</big>\n"
 "<i>The license terms of dvdisaster.</i>"
@@ -628,7 +625,7 @@ msgstr ""
 "<big>GNU General Public License</big>\n"
 "<i>Licensvillkoren för dvdisaster.</i>"
 
-#: help-dialogs.c:458
+#: help-dialogs.c:475
 #, c-format
 msgid ""
 "File\n"
@@ -639,31 +636,31 @@ msgstr ""
 "%s\n"
 "inte tillgänglig"
 
-#: help-dialogs.c:541
+#: help-dialogs.c:549
 msgid "windowtitle|Modifying dvdisaster"
 msgstr "Ändra dvdisaster"
 
-#: help-dialogs.c:542
+#: help-dialogs.c:550
 msgid ""
 "<big>Modifying dvdisaster</big>\n"
 "<i>Your changes are not ours.</i>"
 msgstr ""
 
-#: help-dialogs.c:681
+#: help-dialogs.c:689
 msgid "windowtitle|About dvdisaster"
 msgstr "Om dvdisaster"
 
-#: help-dialogs.c:701
+#: help-dialogs.c:709
 msgid ""
 "Modified version Copyright 2009 (please fill in - [directions])\n"
 "Copyright 2004-2009 Carsten Gnoerlich"
 msgstr ""
 
-#: help-dialogs.c:705
+#: help-dialogs.c:713
 msgid "Copyright 2004-2009 Carsten Gnoerlich"
 msgstr "Copyright 2004-2009 Carsten Gnörlich"
 
-#: help-dialogs.c:712
+#: help-dialogs.c:720
 msgid ""
 "dvdisaster provides a margin of safety against data loss\n"
 "on CD and DVD media caused by aging or scratches.\n"
@@ -675,7 +672,7 @@ msgstr ""
 "Det skapar felkorrigeringsdata som kan användas för att\n"
 "återskapa oläsliga sektorer om skivan senare blir skadad.\n"
 
-#: help-dialogs.c:717
+#: help-dialogs.c:725
 msgid ""
 "This software comes with  <b>absolutely no warranty</b>.\n"
 "This is free software and you are welcome to redistribute it\n"
@@ -687,7 +684,7 @@ msgstr ""
 "\n"
 "Svensk översättning av Daniel Nylander (info@danielnylander.se)\n"
 
-#: help-dialogs.c:723
+#: help-dialogs.c:731
 msgid ""
 "\n"
 "This program is <b>not the original</b>. It is based on the\n"
@@ -697,19 +694,19 @@ msgid ""
 "([www.dvdisaster.org]) about issues with this version.\n"
 msgstr ""
 
-#: help-dialogs.c:738
+#: help-dialogs.c:746
 msgid ""
 "\n"
 "e-mail: carsten@dvdisaster.org   -or-   cgnoerlich@fsfe.org"
 msgstr ""
 
-#: help-dialogs.c:741
+#: help-dialogs.c:749
 msgid ""
 "\n"
 "Darwin port (Mac OS X): Julian Einwag &lt;julian@einwag.de&gt;"
 msgstr ""
 
-#: help-dialogs.c:744
+#: help-dialogs.c:752
 msgid ""
 "\n"
 "NetBSD port: Sergey Svishchev &lt;svs@ropnet.ru&gt;"
@@ -730,84 +727,84 @@ msgstr ""
 "\n"
 "Du kan göra om operationen när du har frigjort mer utrymme."
 
-#: main-window.c:69
+#: main-window.c:70
 #, c-format
 msgid "dvdisaster-%s log\n"
 msgstr "dvdisaster-%s logg\n"
 
-#: main-window.c:239
+#: main-window.c:241
 msgid "button|Read"
 msgstr "Läs"
 
-#: main-window.c:242
+#: main-window.c:244
 msgid "tooltip|Read Image"
 msgstr "Läs avbild"
 
-#: main-window.c:242
+#: main-window.c:244
 msgid "Reads a CD/DVD image into a file (or tries to complete an existing image file)."
 msgstr "Läser en cd/dvd-avbild till en fil (eller försöker att färdigställa en existerande avbildsfil)."
 
-#: main-window.c:256
+#: main-window.c:258
 msgid "button|Create"
 msgstr "Skapa"
 
-#: main-window.c:259
+#: main-window.c:261
 msgid "tooltip|Create error correction data"
 msgstr ""
 
-#: main-window.c:259
+#: main-window.c:261
 msgid "Creates error correction data. Requires an image file."
 msgstr ""
 
-#: main-window.c:263
+#: main-window.c:265
 msgid "button|Scan"
 msgstr "Sök av"
 
-#: main-window.c:266
+#: main-window.c:268
 msgid "tooltip|Scan medium"
 msgstr "Sök av medium"
 
-#: main-window.c:266
+#: main-window.c:268
 msgid "Scans medium for unreadable sectors."
 msgstr "Söker av medium för oläsbara sektorer."
 
-#: main-window.c:270
+#: main-window.c:272
 msgid "button|Fix"
 msgstr "Rätta till"
 
-#: main-window.c:273
+#: main-window.c:275
 msgid "tooltip|Repair image"
 msgstr "Reparera avbild"
 
-#: main-window.c:273
+#: main-window.c:275
 msgid "Repairs an image. Requires an image file and error correction data."
 msgstr "Reparerar en avbild. Kräver en avbildsfil och felkorrigeringsdata."
 
-#: main-window.c:277
+#: main-window.c:279
 msgid "button|Verify"
 msgstr "Validera"
 
-#: main-window.c:280
+#: main-window.c:282
 msgid "tooltip|Consistency check"
 msgstr ""
 
-#: main-window.c:280
+#: main-window.c:282
 msgid "Tests consistency of error correction data and image file."
 msgstr "Testar konsistensen på felkorrigeringsdata och avbildsfil."
 
-#: main-window.c:284
+#: main-window.c:286
 msgid "button|Stop"
 msgstr "Stopp"
 
-#: main-window.c:287
+#: main-window.c:289
 msgid "tooltip|Abort action"
 msgstr "Avbryt operation"
 
-#: main-window.c:287
+#: main-window.c:289
 msgid "Aborts an ongoing action."
 msgstr "Avbryter en pågående operation."
 
-#: main-window.c:416
+#: main-window.c:418
 #, c-format
 msgid ""
 "<b>dvdisaster is not properly installed</b>\n"
@@ -815,15 +812,15 @@ msgid ""
 "Please execute the installer program (%s) again.\n"
 msgstr ""
 
-#: main-window.c:500
+#: main-window.c:502
 msgid "tooltip|Protocol for current action"
 msgstr "Protokoll för aktuell operation"
 
-#: main-window.c:501
+#: main-window.c:503
 msgid "Displays additional information created during the current or last action."
 msgstr "Visar ytterligare information skapad under aktuella eller senaste operationen."
 
-#: main-window.c:510
+#: main-window.c:512
 msgid "View log"
 msgstr "Visa logg"
 
@@ -933,7 +930,7 @@ msgstr ""
 msgid "Book type:"
 msgstr ""
 
-#: medium-info.c:308 scsi-layer.c:2619
+#: medium-info.c:308 scsi-layer.c:2626
 msgid "Manuf.-ID:"
 msgstr ""
 
@@ -1185,7 +1182,7 @@ msgstr ""
 "\n"
 "Varken fil eller ecc-data hittades i avbild.\n"
 
-#: misc.c:200
+#: misc.c:205
 #, c-format
 msgid "dvdisaster-%s%sCopyright 2004-2009 Carsten Gnoerlich.\n"
 msgstr "dvdisaster-%s%sCopyright 2004-2009 Carsten Gnörlich.\n"
@@ -1194,7 +1191,7 @@ msgstr "dvdisaster-%s%sCopyright 2004-2009 Carsten Gnörlich.\n"
 #. legislature. If in doubt, just translate the following like "This is free
 #. software; please refer to the conditions of the GNU GENERAL PUBLIC LICENSE
 #. in the source code." Avoid making any legal statements by your own.
-#: misc.c:206
+#: misc.c:211
 msgid ""
 "This software comes with  ABSOLUTELY NO WARRANTY.  This\n"
 "is free software and you are welcome to redistribute it\n"
@@ -1206,11 +1203,11 @@ msgstr ""
 "under villkoren för GNU GENERAL PUBLIC LICENSE.\n"
 "Se filen \"COPYING\" för ytterligare information.\n"
 
-#: misc.c:427
+#: misc.c:432
 msgid "Warning"
 msgstr "Varning"
 
-#: misc.c:490 misc.c:496
+#: misc.c:495 misc.c:501
 msgid ""
 "\n"
 "*\n"
@@ -4521,32 +4518,32 @@ msgstr ""
 msgid "Waiting 10 seconds for drive: %d\n"
 msgstr ""
 
-#: scsi-layer.c:2417
+#: scsi-layer.c:2424
 #, c-format
 msgid "Sectors %lld - %lld: %s\n"
 msgstr ""
 
-#: scsi-layer.c:2431
+#: scsi-layer.c:2438
 #, c-format
 msgid "Sector %lld, try %d: %s Sector returned: %d.\n"
 msgstr ""
 
-#: scsi-layer.c:2437
+#: scsi-layer.c:2444
 #, c-format
 msgid "Sector %lld, try %d: %s\n"
 msgstr ""
 
-#: scsi-layer.c:2448
+#: scsi-layer.c:2455
 #, c-format
 msgid "Sector %lld, try %d: success\n"
 msgstr ""
 
-#: scsi-layer.c:2515 scsi-layer.c:2668
+#: scsi-layer.c:2522 scsi-layer.c:2675
 #, c-format
 msgid "Device %s: no medium present\n"
 msgstr ""
 
-#: scsi-layer.c:2516 scsi-layer.c:2669
+#: scsi-layer.c:2523 scsi-layer.c:2676
 #, c-format
 msgid ""
 "Device %s does not become ready:\n"
@@ -4554,7 +4551,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: scsi-layer.c:2521
+#: scsi-layer.c:2528
 #, c-format
 msgid ""
 "\n"
@@ -4563,7 +4560,7 @@ msgstr ""
 "\n"
 "Enhet: %s, %s\n"
 
-#: scsi-layer.c:2525
+#: scsi-layer.c:2532
 #, c-format
 msgid ""
 "\n"
@@ -4572,52 +4569,52 @@ msgstr ""
 "\n"
 "Enhet: %s (%s), %s\n"
 
-#: scsi-layer.c:2533
+#: scsi-layer.c:2540
 msgid "Drive failed to report media type."
 msgstr ""
 
-#: scsi-layer.c:2544 scsi-layer.c:2631
+#: scsi-layer.c:2551 scsi-layer.c:2638
 #, c-format
 msgid "This software does not support \"%s\" type media."
 msgstr ""
 
-#: scsi-layer.c:2552
+#: scsi-layer.c:2559
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr ""
 
-#: scsi-layer.c:2575 scsi-layer.c:2584
+#: scsi-layer.c:2582 scsi-layer.c:2591
 msgid "Using READ CD"
 msgstr ""
 
-#: scsi-layer.c:2576
+#: scsi-layer.c:2583
 msgid ", RAW reading"
 msgstr ""
 
-#: scsi-layer.c:2579
+#: scsi-layer.c:2586
 #, c-format
 msgid ", Mode page 1 ERP = %02xh"
 msgstr ""
 
-#: scsi-layer.c:2582
+#: scsi-layer.c:2589
 msgid ", C2 scanning"
 msgstr ""
 
-#: scsi-layer.c:2589
+#: scsi-layer.c:2596
 msgid "Using READ(10).\n"
 msgstr ""
 
-#: scsi-layer.c:2608
+#: scsi-layer.c:2615
 #, c-format
 msgid "Medium: %s, %lld sectors%s"
 msgstr "Medium: %s, %lld sektorer%s"
 
-#: scsi-layer.c:2612
+#: scsi-layer.c:2619
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s created %s"
 msgstr "Medium \"%s\": %s, %lld sektorer%s skapade %s"
 
-#: scsi-layer.c:2638
+#: scsi-layer.c:2645
 msgid "This software does not support encrypted media.\n"
 msgstr ""
 
@@ -4808,6 +4805,15 @@ msgstr ""
 #: welcome-window.c:137
 msgid "<i>New in this Version:</i>"
 msgstr ""
+
+#~ msgid ""
+#~ "\n"
+#~ "dvdisaster version %s\n"
+#~ "\n"
+#~ msgstr ""
+#~ "\n"
+#~ "dvdisaster version %s\n"
+#~ "\n"
 
 #~ msgid "--cache-size maximum is 2048MB."
 #~ msgstr "--cache-size maximum är 2048MB."
