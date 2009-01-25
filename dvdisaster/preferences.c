@@ -34,7 +34,7 @@ extern int CurrentMediumSize(int);  /* from scsi-layer.h */
 /***
  *** Protected widget mutators
  ***
- * We might habe some race conditions where a callback tries to change
+ * We might have some race conditions where a callback tries to change
  * a not yet initialized widget.
  */
 
@@ -46,6 +46,11 @@ static void activate_toggle_button(GtkToggleButton *toggle, int state)
 static void set_widget_sensitive(GtkWidget *widget, int state)
 {  if(widget)
       gtk_widget_set_sensitive(widget, state);
+}
+
+static void set_entry_text(GtkEntry *entry, char *text)
+{  if(entry)
+      gtk_entry_set_text(entry, text);
 }
 
 /***
@@ -521,8 +526,8 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 	   activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioRawMode20B), state);
 	   set_widget_sensitive(pc->rawModeValueA, FALSE);
       	   set_widget_sensitive(pc->rawModeValueB, FALSE);
-	   gtk_entry_set_text(GTK_ENTRY(pc->rawModeValueA), "0x20");
-	   gtk_entry_set_text(GTK_ENTRY(pc->rawModeValueB), "0x20");
+	   set_entry_text(GTK_ENTRY(pc->rawModeValueA), "0x20");
+	   set_entry_text(GTK_ENTRY(pc->rawModeValueB), "0x20");
 	}
 	break;
 
@@ -533,8 +538,8 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 	   activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioRawMode21B), state);
 	   set_widget_sensitive(pc->rawModeValueA, FALSE);
 	   set_widget_sensitive(pc->rawModeValueB, FALSE);
-	   gtk_entry_set_text(GTK_ENTRY(pc->rawModeValueA), "0x21");
-	   gtk_entry_set_text(GTK_ENTRY(pc->rawModeValueB), "0x21");
+	   set_entry_text(GTK_ENTRY(pc->rawModeValueA), "0x21");
+	   set_entry_text(GTK_ENTRY(pc->rawModeValueB), "0x21");
 	}
 	break;
 
@@ -1089,8 +1094,8 @@ static void rawvalue_cb(GtkWidget *widget, gpointer data)
 
    if(Closure->rawMode < 0)
    {  Closure->rawMode = 0;
-      if(pc->rawModeValueA) gtk_entry_set_text(GTK_ENTRY(pc->rawModeValueA), "0");
-      if(pc->rawModeValueB) gtk_entry_set_text(GTK_ENTRY(pc->rawModeValueB), "0");
+      set_entry_text(GTK_ENTRY(pc->rawModeValueA), "0");
+      set_entry_text(GTK_ENTRY(pc->rawModeValueB), "0");
       return;
    }
 
@@ -1099,8 +1104,8 @@ static void rawvalue_cb(GtkWidget *widget, gpointer data)
    }
 
    g_snprintf(new_value, 10, "0x%02x", Closure->rawMode);
-   if(pc->rawModeValueA) gtk_entry_set_text(GTK_ENTRY(pc->rawModeValueA), new_value);
-   if(pc->rawModeValueB) gtk_entry_set_text(GTK_ENTRY(pc->rawModeValueB), new_value);
+   set_entry_text(GTK_ENTRY(pc->rawModeValueA), new_value);
+   set_entry_text(GTK_ENTRY(pc->rawModeValueB), new_value);
 }
 
 /*
@@ -1116,8 +1121,8 @@ static void bytefill_cb(GtkWidget *widget, gpointer data)
 
    if(Closure->fillUnreadable < 0)
    {  Closure->fillUnreadable = 1;
-      if(pc->byteEntryA) gtk_entry_set_text(GTK_ENTRY(pc->byteEntryA), "1");
-      if(pc->byteEntryB) gtk_entry_set_text(GTK_ENTRY(pc->byteEntryB), "1");
+      set_entry_text(GTK_ENTRY(pc->byteEntryA), "1");
+      set_entry_text(GTK_ENTRY(pc->byteEntryB), "1");
       return;
    }
 
@@ -1126,8 +1131,8 @@ static void bytefill_cb(GtkWidget *widget, gpointer data)
    }
 
    g_snprintf(byte, 10, "0x%02x", Closure->fillUnreadable);
-   if(pc->byteEntryA) gtk_entry_set_text(GTK_ENTRY(pc->byteEntryA), byte);
-   if(pc->byteEntryB) gtk_entry_set_text(GTK_ENTRY(pc->byteEntryB), byte);
+   set_entry_text(GTK_ENTRY(pc->byteEntryA), byte);
+   set_entry_text(GTK_ENTRY(pc->byteEntryB), byte);
 }
 
 
@@ -1143,25 +1148,25 @@ static void bytefill_check_cb(GtkWidget *widget, gpointer data)
    if(state)
    {  char byte[11];
 
-      if(pc->byteEntryA) set_widget_sensitive(pc->byteEntryA, TRUE);
-      if(pc->byteEntryB) set_widget_sensitive(pc->byteEntryB, TRUE);
+      set_widget_sensitive(pc->byteEntryA, TRUE);
+      set_widget_sensitive(pc->byteEntryB, TRUE);
 
       if(Closure->fillUnreadable < 0 || Closure->fillUnreadable > 255)
 	 Closure->fillUnreadable = 0xb0;
 
       g_snprintf(byte, 10, "0x%02x", Closure->fillUnreadable);
 
-      if(pc->byteEntryA) gtk_entry_set_text(GTK_ENTRY(pc->byteEntryA), byte);
-      if(pc->byteEntryB) gtk_entry_set_text(GTK_ENTRY(pc->byteEntryB), byte);
+      set_entry_text(GTK_ENTRY(pc->byteEntryA), byte);
+      set_entry_text(GTK_ENTRY(pc->byteEntryB), byte);
 
-      if(pc->dsmButtonA) activate_toggle_button(GTK_TOGGLE_BUTTON(pc->dsmButtonA), FALSE);
-      if(pc->dsmButtonB) activate_toggle_button(GTK_TOGGLE_BUTTON(pc->dsmButtonB), FALSE);
+      activate_toggle_button(GTK_TOGGLE_BUTTON(pc->dsmButtonA), FALSE);
+      activate_toggle_button(GTK_TOGGLE_BUTTON(pc->dsmButtonB), FALSE);
 
    }
    else
    {  Closure->fillUnreadable = -1;
-      if(pc->byteEntryA) set_widget_sensitive(pc->byteEntryA, FALSE);
-      if(pc->byteEntryB) set_widget_sensitive(pc->byteEntryB, FALSE);
+      set_widget_sensitive(pc->byteEntryA, FALSE);
+      set_widget_sensitive(pc->byteEntryB, FALSE);
    }
 }
 
@@ -1171,20 +1176,20 @@ static void bytefill_check_cb(GtkWidget *widget, gpointer data)
 
 static void defective_prefix_cb(GtkWidget *widget, gpointer data)
 {  prefs_context *pc = (prefs_context*)data;
-   const char *value = gtk_entry_get_text(GTK_ENTRY(widget));
+   char *value = (char*)gtk_entry_get_text(GTK_ENTRY(widget));
 
    if(!value || !*value)
-   {  gtk_entry_set_text(GTK_ENTRY(pc->cacheDefectivePrefixA), "sector-");
-      gtk_entry_set_text(GTK_ENTRY(pc->cacheDefectivePrefixB), "sector-");
+   {  set_entry_text(GTK_ENTRY(pc->cacheDefectivePrefixA), "sector-");
+      set_entry_text(GTK_ENTRY(pc->cacheDefectivePrefixB), "sector-");
       return;
 
    }
 
    if(widget == pc->cacheDefectivePrefixA)
-      gtk_entry_set_text(GTK_ENTRY(pc->cacheDefectivePrefixB), value);
+      set_entry_text(GTK_ENTRY(pc->cacheDefectivePrefixB), value);
 
    if(widget == pc->cacheDefectivePrefixB)
-      gtk_entry_set_text(GTK_ENTRY(pc->cacheDefectivePrefixA), value);
+      set_entry_text(GTK_ENTRY(pc->cacheDefectivePrefixA), value);
 }
 
 /*
@@ -1245,7 +1250,7 @@ static void cache_defective_dir_cb(GtkWidget *widget, gpointer data)
       file_list = GTK_FILE_SELECTION(pc->cacheDefectiveChooser)->file_list;
       set_widget_sensitive(file_list, FALSE);
       gtk_widget_hide(GTK_FILE_SELECTION(pc->cacheDefectiveChooser)->selection_entry);
-      gtk_entry_set_text(GTK_ENTRY(GTK_FILE_SELECTION(pc->cacheDefectiveChooser)->selection_entry), "");
+      set_entry_text(GTK_ENTRY(GTK_FILE_SELECTION(pc->cacheDefectiveChooser)->selection_entry), "");
 #if 0
       gtk_widget_hide(file_list->parent);
 #endif

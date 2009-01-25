@@ -165,6 +165,7 @@ static void get_base_dirs()
 {  
 #ifdef SYS_MINGW
    char *appdata;
+   char *homedir;
 #endif
 
    /*** Unless completely disabled through a configure option, the
@@ -214,23 +215,34 @@ static void get_base_dirs()
  #ifdef WITH_EMBEDDED_SRC_PATH_YES
 find_dotfile:
  #endif /* WITH_EMBEDDED_SRC_PATH_YES */
-
-   Closure->dotFile = g_strdup_printf("%s/.dvdisaster", g_getenv("HOME"));
+   
+   Closure->homeDir = g_strdup(g_getenv("HOME"));
+   Closure->dotFile = g_strdup_printf("%s/.dvdisaster", Closure->homeDir);
 #endif
 
 #ifdef SYS_MINGW
    /* For Windows the user's application directory in the roaming
-      profile is preferred; 
+      profile is preferred for the dotfile; 
       if it does not exist we use the installation directory.  */
 
    appdata = get_special_folder(CSIDL_APPDATA);
+   homedir = get_special_folder(CSIDL_PERSONAL);
    Verbose("Windows specific paths:\n"
-	   "- CSIDL_APPDATA: %s\n",
-	   appdata ? appdata : "NULL");
+	   "- CSIDL_APPDATA: %s\n"
+	   "- CSIDL_PERSONAL: %s\n",
+	   appdata ? appdata : "NULL",
+	   homedir ? homedir : "NULL");
+
+   if(homedir && DirStat(homedir))
+   {
+      Closure->homeDir = g_strdup(homedir);
+      Verbose("- homedir path : %s\n", Closure->homeDir);
+
+      g_free(homedir);
+   }
 
    if(appdata)
    {  Closure->appData  = g_strdup_printf("%s\\dvdisaster", appdata);
-      Closure->dDumpDir = g_strdup_printf("%s\\dvdisaster\\raw-sectors", appdata);
 
       if(DirStat(appdata)) /* CSIDL_APPDATA present? */
       { 
@@ -248,52 +260,36 @@ find_dotfile:
 	 {  g_free(Closure->appData);
 	    Closure->appData = NULL;
 	 }
-
-	 Verbose("- raw-sect path : %s\n", Closure->dDumpDir);
-
-	 if(DirStat(Closure->dDumpDir))
-	 {  Verbose("- raw-sect path : present\n");
-	 }
-	 else if(!portable_mkdir(Closure->dDumpDir))
-	 {  Verbose("- raw-sect path : - created -\n");
-	 }
-	 else 
-	 {  g_free(Closure->dDumpDir);
-	    Closure->dDumpDir = NULL;
-	 }
       }
       else 
       {	 Verbose("- dotfile path : *can not be used*\n");
 	 g_free(Closure->appData);
 	 Closure->appData = NULL;
-	 g_free(Closure->dDumpDir);
-	 Closure->dDumpDir = NULL;
       }
 
       g_free(appdata);
    }
 
    /* Fallbacks: Expect .dvdisaster file in binDir;
-                 propose C:\Windows\Temp as raw sector dir */
+                 propose C:\Windows\Temp as working dir */
 
    if(!Closure->dotFile)
       Closure->dotFile = g_strdup_printf("%s\\.dvdisaster", Closure->binDir);
-
-   if(!Closure->dDumpDir)
-      Closure->dDumpDir = g_strdup("C:\\Windows\\Temp");
+   if(!Closure->homeDir)
+      Closure->homeDir = g_strdup("C:\\Windows\\Temp");
 #endif
 
    Verbose("\nUsing file locations:\n"
+	   "- Homedir: %s\n"
 	   "- Bin dir: %s\n"
 	   "- Doc dir: %s\n"
 	   "- AppData: %s\n"
-	   "- dotfile: %s\n"
-	   "- rawsect: %s\n\n",
+	   "- dotfile: %s\n\n",
+	   Closure->homeDir,
 	   Closure->binDir,
 	   Closure->docDir,
 	   Closure->appData,
-	   Closure->dotFile,
-	   Closure->dDumpDir);   
+	   Closure->dotFile);   
 }
 
 /***
@@ -659,19 +655,18 @@ void InitClosure()
    printf("Version %s; %d; Flags %d\n", Closure->cookedVersion, Closure->version, Closure->releaseFlags);
 #endif
 
+   /* Get home and system directories */
+
+   get_base_dirs();
+
    /* Fill in other closure defaults */
 
    Closure->deviceNames = g_ptr_array_new();
    Closure->deviceNodes = g_ptr_array_new();
-   Closure->imageName   = g_strdup("medium.iso");
-   Closure->eccName     = g_strdup("medium.ecc");
    Closure->browser     = g_strdup("xdg-open");
    Closure->methodList  = g_ptr_array_new();
    Closure->methodName  = g_strdup("RS01");
-#ifndef SYS_MINGW  /* this is done in get_base_dir for Windows */
-   Closure->dDumpDir    = g_strdup("/tmp");
-#endif
-   Closure->dDumpPrefix = g_strdup("sector-");
+   Closure->dDumpDir    = g_strdup(Closure->homeDir);
    Closure->cacheMB     = 32;
    Closure->codecThreads = 1;
    Closure->minReadAttempts = 1;
@@ -715,13 +710,32 @@ void InitClosure()
 
    memset(Closure->bs, '\b', 255);
 
-   get_base_dirs();
    DefaultLogFile();
 
 #ifdef SYS_MINGW
    OpenAspi();
 #endif
 }
+
+/*
+ * Add some localized file name defaults.
+ * Can't do this in InitClosure() as the locale has not been
+ * initialized when it is being called. 
+ */
+
+void LocalizedFileDefaults()
+{  
+#ifdef SYS_MINGW
+   char slash = '\\';
+#else
+   char slash = '/';
+#endif
+
+   Closure->imageName   = g_strdup_printf("%s%c%s",Closure->homeDir,slash,_("medium.iso"));
+   Closure->eccName     = g_strdup_printf("%s%c%s",Closure->homeDir,slash,_("medium.ecc"));
+   Closure->dDumpPrefix = g_strdup(_("sector-"));
+}
+
 
 /*
  * Clear the CRC cache
@@ -777,6 +791,7 @@ void FreeClosure()
    cond_free_ptr_array(Closure->methodList);
 
    cond_free(Closure->methodName);
+   cond_free(Closure->homeDir);
    cond_free(Closure->dotFile);
    cond_free(Closure->logFile);
    cond_free(Closure->binDir);

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-24 21:04+0100\n"
+"POT-Creation-Date: 2009-01-25 18:05+0100\n"
 "PO-Revision-Date: 2005-01-01 14:24+0100\n"
 "Last-Translator: Andrea Polverini <polve@polve.com>\n"
 "Language-Team: Italian <>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: closure.c:543
+#: closure.c:539
 #, c-format
 msgid ""
 "# dvdisaster-%s configuration file\n"
@@ -29,6 +29,18 @@ msgstr ""
 "# Questo file è stato generato automaticamente\n"
 "# e sarà sovrascritto ogni volta che verrà eseguito dvdisaster\n"
 "\n"
+
+#: closure.c:734
+msgid "medium.iso"
+msgstr ""
+
+#: closure.c:735
+msgid "medium.ecc"
+msgstr ""
+
+#: closure.c:736
+msgid "sector-"
+msgstr ""
 
 #: crcbuf.c:45 rs01-common.c:121 rs01-create.c:243 rs01-verify.c:770
 #, c-format
@@ -330,24 +342,24 @@ msgstr ""
 #. TRANSLATORS:
 #. This is a dummy entry which is supposed to translate into "ok".
 #. Please do not return anything else here.
-#: dvdisaster.c:266 dvdisaster.c:279 dvdisaster.c:291
+#: dvdisaster.c:264 dvdisaster.c:276 dvdisaster.c:287
 msgid "test phrase for verifying the locale installation"
 msgstr "ok"
 
-#: dvdisaster.c:457
+#: dvdisaster.c:454
 #, c-format
 msgid "--threads must be 1..%d\n"
 msgstr ""
 
-#: dvdisaster.c:471
+#: dvdisaster.c:468
 msgid "--cache-size must at least be 8MB; 16MB or higher is recommended."
 msgstr ""
 
-#: dvdisaster.c:473
+#: dvdisaster.c:470
 msgid "--cache-size maximum is 8192MB."
 msgstr ""
 
-#: dvdisaster.c:586
+#: dvdisaster.c:583
 #, c-format
 msgid ""
 "\n"
@@ -355,12 +367,12 @@ msgid ""
 "\n"
 msgstr ""
 
-#: dvdisaster.c:646
+#: dvdisaster.c:643
 #, c-format
 msgid "?? illegal getopt return value %d\n"
 msgstr "?? getopt ha restituito un valore illegale: %d\n"
 
-#: dvdisaster.c:680
+#: dvdisaster.c:677
 #, c-format
 msgid ""
 "dvdisaster is not properly installed.\n"
@@ -369,7 +381,7 @@ msgstr ""
 
 #. TRANSLATORS: Program options like -r and --read are not to be translated
 #. to avoid confusion when discussing the program in international forums.
-#: dvdisaster.c:828
+#: dvdisaster.c:825
 msgid ""
 "\n"
 "Common usage examples:\n"
@@ -393,7 +405,7 @@ msgstr ""
 "  dvdisaster -u,--unlink # Cancella i file .iso (Quando le altre azioni sono concluse)\n"
 "\n"
 
-#: dvdisaster.c:837
+#: dvdisaster.c:834
 #, c-format
 msgid ""
 "Drive and file specification:\n"
@@ -408,7 +420,7 @@ msgstr ""
 "  -i,--image  Nome       - Nome del file immagine   (Standard: medium.iso)\n"
 "  -e,--ecc    Nome       - Nome del file di Parità (Standard: medium.ecc)\n"
 
-#: dvdisaster.c:845
+#: dvdisaster.c:842
 msgid ""
 "  -l,--list              - list drives available under ASPI manager\n"
 "\n"
@@ -416,7 +428,7 @@ msgstr ""
 "  -l,--list              - Elenca i drive disponibili con ASPI manager\n"
 "\n"
 
-#: dvdisaster.c:850
+#: dvdisaster.c:847
 #, c-format
 msgid ""
 "Tweaking options (see manual before using!)\n"
@@ -444,7 +456,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: dvdisaster.c:875
+#: dvdisaster.c:872
 #, c-format
 msgid ""
 "Debugging options (purposefully undocumented and possibly harmful)\n"
@@ -472,7 +484,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: dvdisaster.c:900
+#: dvdisaster.c:897
 msgid ""
 "NOTE: This is the Windows console version of dvdisaster.\n"
 "The version providing a graphical user interface is called\n"
@@ -480,7 +492,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: dvdisaster.c:922
+#: dvdisaster.c:919
 msgid "Optical drive 52X FW 1.02"
 msgstr ""
 

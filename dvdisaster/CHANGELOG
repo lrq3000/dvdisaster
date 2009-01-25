@@ -1,6 +1,7 @@
 0.71 (devel-28)
         Currently working through known (minor) bugs list to prepare
 	release candidate.
+	- opening the preferences dialog produced a GTK warning. Fixed.
         - log window would crash during update or when closed and
 	  re-opened repeatedly. Fixed the bunch of race conditions
 	  causing this.

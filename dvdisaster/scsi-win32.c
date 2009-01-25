@@ -42,7 +42,7 @@
 
 /*
  * This is independent from later decision between SPTI and ASPI. 
- * The drive letter ordering to remembered to aid the 
+ * The drive letter ordering is remembered to aid the 
  * drive letter / ASPI drive guessing / mapping.
  */
 

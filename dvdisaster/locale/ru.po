@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.70.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-24 21:04+0100\n"
+"POT-Creation-Date: 2009-01-25 18:05+0100\n"
 "PO-Revision-Date: 2009-11-13 19:14+0300\n"
 "Last-Translator: Игорь Горбунов <igor.gorbounov@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Poedit-Language: Russian\n"
 
-#: closure.c:543
+#: closure.c:539
 #, c-format
 msgid ""
 "# dvdisaster-%s configuration file\n"
@@ -30,6 +30,18 @@ msgstr ""
 "# Это автоматически сгенерированный файл,\n"
 "# он автоматически перезаписывается при каждом запуске программы.\n"
 "\n"
+
+#: closure.c:734
+msgid "medium.iso"
+msgstr ""
+
+#: closure.c:735
+msgid "medium.ecc"
+msgstr ""
+
+#: closure.c:736
+msgid "sector-"
+msgstr ""
 
 #: crcbuf.c:45 rs01-common.c:121 rs01-create.c:243 rs01-verify.c:770
 #, c-format
@@ -334,24 +346,24 @@ msgstr "Метод RS01 не применяется для сравнения ф
 #. TRANSLATORS:
 #. This is a dummy entry which is supposed to translate into "ok".
 #. Please do not return anything else here.
-#: dvdisaster.c:266 dvdisaster.c:279 dvdisaster.c:291
+#: dvdisaster.c:264 dvdisaster.c:276 dvdisaster.c:287
 msgid "test phrase for verifying the locale installation"
 msgstr "ok"
 
-#: dvdisaster.c:457
+#: dvdisaster.c:454
 #, c-format
 msgid "--threads must be 1..%d\n"
 msgstr "--потоков должно быть 1..%d\n"
 
-#: dvdisaster.c:471
+#: dvdisaster.c:468
 msgid "--cache-size must at least be 8MB; 16MB or higher is recommended."
 msgstr "--cache-size должен быть не меньше 8МБ; рекомендуется 16МБ и больше."
 
-#: dvdisaster.c:473
+#: dvdisaster.c:470
 msgid "--cache-size maximum is 8192MB."
 msgstr ""
 
-#: dvdisaster.c:586
+#: dvdisaster.c:583
 #, c-format
 msgid ""
 "\n"
@@ -359,12 +371,12 @@ msgid ""
 "\n"
 msgstr ""
 
-#: dvdisaster.c:646
+#: dvdisaster.c:643
 #, c-format
 msgid "?? illegal getopt return value %d\n"
 msgstr "?? неправильное возвращаемое значение getopt: %d\n"
 
-#: dvdisaster.c:680
+#: dvdisaster.c:677
 #, c-format
 msgid ""
 "dvdisaster is not properly installed.\n"
@@ -376,7 +388,7 @@ msgstr ""
 
 #. TRANSLATORS: Program options like -r and --read are not to be translated
 #. to avoid confusion when discussing the program in international forums.
-#: dvdisaster.c:828
+#: dvdisaster.c:825
 msgid ""
 "\n"
 "Common usage examples:\n"
@@ -400,7 +412,7 @@ msgstr ""
 "  dvdisaster -u,--unlink # Удалить файлы .iso (по завершении других действий)\n"
 "\n"
 
-#: dvdisaster.c:837
+#: dvdisaster.c:834
 #, c-format
 msgid ""
 "Drive and file specification:\n"
@@ -415,7 +427,7 @@ msgstr ""
 "  -i,--image  файл образа - имя файла образа            (по умолчанию: medium.iso)\n"
 "  -e,--ecc    ecc-файл    - имя файла с ecc-данными     (по умолчанию: medium.ecc)\n"
 
-#: dvdisaster.c:845
+#: dvdisaster.c:842
 msgid ""
 "  -l,--list              - list drives available under ASPI manager\n"
 "\n"
@@ -423,7 +435,7 @@ msgstr ""
 "  -l,--list              - список ASPI-приводов\n"
 "\n"
 
-#: dvdisaster.c:850
+#: dvdisaster.c:847
 #, c-format
 msgid ""
 "Tweaking options (see manual before using!)\n"
@@ -474,7 +486,7 @@ msgstr ""
 "  --split-files          - разбить образ на файлы <= 2ГБ\n"
 "\n"
 
-#: dvdisaster.c:875
+#: dvdisaster.c:872
 #, c-format
 msgid ""
 "Debugging options (purposefully undocumented and possibly harmful)\n"
@@ -525,7 +537,7 @@ msgstr ""
 "  --zero-unreadable - заменить маркеры \"нечитаемый сектор\" нулями\n"
 "\n"
 
-#: dvdisaster.c:900
+#: dvdisaster.c:897
 msgid ""
 "NOTE: This is the Windows console version of dvdisaster.\n"
 "The version providing a graphical user interface is called\n"
@@ -537,7 +549,7 @@ msgstr ""
 "(также содержится в этом установочном пакете).\n"
 "\n"
 
-#: dvdisaster.c:922
+#: dvdisaster.c:919
 msgid "Optical drive 52X FW 1.02"
 msgstr "Оптический привод 52X FW 1.02"
 

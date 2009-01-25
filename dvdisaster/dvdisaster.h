@@ -179,6 +179,7 @@ typedef struct _GlobalClosure
    int pauseEject;      /* Eject medium during pause */
    int ignoreFatalSense;/* Continue reading after potential fatal sense errors */
   
+   char *homeDir;       /* path to users home dir */
    char *dotFile;       /* path to .dvdisaster file */
    char *logFile;       /* path to logfile */
    int  logFileEnabled; /* logfile enabled */
@@ -433,6 +434,7 @@ int buildCount;
  ***/
 
 void InitClosure(void);
+void LocalizedFileDefaults(void);
 void UpdateMarkup(char**, GdkColor*);
 void DefaultColors(void);
 void ClearCrcCache(void);

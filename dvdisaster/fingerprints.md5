@@ -1,4 +1,4 @@
-cbd1cd3dc9a53a26742ec3623f551575 *dvdisaster.h
+ff6e89c40f4c6407ea41d0352b32ac40 *dvdisaster.h
 41207624d815a1a858915240dc18bbd9 *galois-inlines.h
 df9d88776eb3f77a93ef596b148193be *md5.h
 f6e318c36cdec1a4edc71104de58daa3 *read-linear.h
@@ -9,13 +9,13 @@ d1a7481bda654fc2dc05a03a96f09b64 *rs02-includes.h
 c7370760e0537e79e95732a2c28c51b3 *udf.h
 d08cd46c44e605e747a495e51b905815 *bitmap.c
 02433e6d8a7ba811233ae55bd402144e *build.c
-8c5220b345386787914b3cf6f90602f6 *closure.c
+159c6d2e6077e21c0476809a00b1d6d5 *closure.c
 d31cd30dbaaf4803414d159425caff7f *crc32.c
 f7142797e03aae72c789f07fb6cd6296 *crcbuf.c
 3dd4fd1fd22354f4af218a326a7bbb4f *curve.c
 ad57f7aec0d5a0314034e1d8e26527dc *debug.c
 177f8b90a4add4857f629b4d1d00bd16 *ds-marker.c
-ebb19ac7a17aeee9c5250ecad3beae1d *dvdisaster.c
+2f8cd2ccd8912e2840ae48168300249d *dvdisaster.c
 414c4bcd1056c52794ac5baf8ed0df57 *ecc-rs01.c
 a361c1485ab823d2983f51397e2bdf06 *ecc-rs02.c
 8a8d3932063f18a9119b7bfe5748ef82 *ecc-rs03.c
@@ -37,7 +37,7 @@ d9536c5fb18adf38e04b0d9852daca29 *memtrack.c
 7f512f7bd753fb642a593c5a3f67a25d *method.c
 ecdcfb21e1409bffbf4a8aab96eaa845 *method-link.c
 e0d0f9eef7888e3ee39a2eaba43df55a *misc.c
-1fbbb0253255d8f88a57ad93e0d06798 *preferences.c
+4ad84dca1e7746ba9b5cad5e7d0f4ef4 *preferences.c
 3eb56cd7ff5f16d8edeb8a0922d89058 *print-sense.c
 cdde449dd2a8f64b560ff18a36f86234 *random.c
 eafadf5a714d0203626c43654f1fe16c *raw-editor.c
@@ -73,7 +73,7 @@ b6c6e69cfe751cc12f74b4df56473af5 *rs03-window.c
 a86f62372f2dea89f208ceafefaa1f97 *scsi-netbsd.c
 38d4cab513130a40e22b956df0c588a7 *scsi-solaris.c
 12f31844b6b5663865d8e290437c64e1 *scsi-unknown.c
-ca86ae5b269371d62a512d73c26bb29c *scsi-win32.c
+8ed15376c6eff222cd75540307934fac *scsi-win32.c
 718af27fff7d9bebea801c98a61b1124 *show-manual.c
 b5dfb8fdbc3d7b4f1253cea5a795edec *smart-lec.c
 8782b08033259c2c834935c86b854613 *spiral.c

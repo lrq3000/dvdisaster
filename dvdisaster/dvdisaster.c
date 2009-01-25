@@ -256,8 +256,6 @@ int main(int argc, char *argv[])
 #ifdef WITH_EMBEDDED_SRC_PATH_YES
     g_sprintf(src_locale_path,"%s/locale",SRCDIR);
     bindtextdomain("dvdisaster", src_locale_path);
-//printf("testing src %s\n", src_locale_path);
-
 #endif /* WITH_EMBEDDED_SRC_PATH_YES */
 
     /* TRANSLATORS: 
@@ -274,7 +272,6 @@ int main(int argc, char *argv[])
        if(getcwd(buf, 256))
        {  char locale_path[strlen(buf)+20];
           g_sprintf(locale_path,"%s/locale", buf);
-//printf("testing cwd %s\n", locale_path);
           bindtextdomain("dvdisaster", locale_path);
 	  locale_test = gettext("test phrase for verifying the locale installation");
        }
@@ -283,10 +280,9 @@ int main(int argc, char *argv[])
 
 #ifdef SYS_MINGW
     /* Try the directory where our executable comes from.
-       This only possible under Windows, and should cover all cases. */
+       This is only possible under Windows, and should cover all cases. */
 
     bin_locale_path = g_strdup_printf("%s\\locale", Closure->binDir);
-//printf("testing bin %s\n", bin_locale_path);
     bindtextdomain("dvdisaster", bin_locale_path);
     locale_test = gettext("test phrase for verifying the locale installation");
     g_free(bin_locale_path);
@@ -294,12 +290,13 @@ int main(int argc, char *argv[])
 
     /* Last resort: fall back to global locale */
 
-//    if(strcmp(locale_test, "ok"))
-//      printf("fallback used\n");
-
     if(strcmp(locale_test, "ok"))
       bindtextdomain("dvdisaster", LOCALEDIR);  
 #endif /* WITH_NLS_YES */
+
+   /*** Create some localized file name presets */
+
+   LocalizedFileDefaults();   
 
    /*** Collect the Method list */
 
