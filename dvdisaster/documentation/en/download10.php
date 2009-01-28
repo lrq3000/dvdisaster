@@ -26,7 +26,7 @@ begin_page();
 <h3>Operating systems</h3>
 <ul>
  <li><a name="#freebsd"></a><b>FreeBSD</b> version <b>6.0</b> or later<br>
-     (using ATAPI drives requires a kernel recompile -- see INSTALL doc)<p>
+     (using ATAPI drives requires loading the <i>atapicam</i> kernel module -- see INSTALL doc)<p>
  </li>
  <li><b>GNU/Linux</b> with kernel <b>2.6.7</b> or later,<br>
      (using kernels >= 2.4.20 is possible, but not recommended!)<p>

@@ -27,7 +27,7 @@ begin_page();
 
 <ul>
  <li><a name="#freebsd"></a><b>FreeBSD</b> ab Version <b>6.0</b><br> 
-     (für ATAPI-Laufwerke muß der Kernel neu übersetzt werden - siehe INSTALL-Dokument)<p>
+     (für ATAPI-Laufwerke muß das Kernelmodul <i>atapicam</i> geladen werden - siehe INSTALL-Dokument)<p>
  </li>
  <li><b>GNU/Linux</b> ab Kernel <b>2.6.7</b><br> 
      (Kernel >= 2.4.20 sind möglich, aber nicht empfohlen!)<p>
