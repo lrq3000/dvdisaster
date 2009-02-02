@@ -142,8 +142,8 @@ typedef enum
 int main(int argc, char *argv[])
 {  int mode = MODE_NONE; 
    int sequence = MODE_NONE;
+   int devices_queried = FALSE;
    char *debug_arg = NULL;
-   char *default_device;
    char *read_range = NULL;
 #ifdef WITH_NLS_YES
    char *locale_test;
@@ -307,13 +307,6 @@ int main(int argc, char *argv[])
 
    if(sizeof(EccHeader) != 4096)
      Stop("sizeof(EccHeader) is %d, but must be 4096.\n", sizeof(EccHeader));
-
-   /*** Determine the default device (OS dependent!) */
-
-   default_device = DefaultDevice();
-   if(!Closure->device)
-        Closure->device = default_device;
-   else g_free(default_device);
 
    /*** Parse the options */
    
@@ -705,6 +698,14 @@ int main(int argc, char *argv[])
       Closure->imageName = ApplyAutoSuffix(Closure->imageName, "iso");
    }
 
+   /*** Determine the default device (OS dependent!) if none
+        has been specified on the command line. */
+
+   if(!Closure->device)
+   {  Closure->device = DefaultDevice();
+      devices_queried = TRUE;
+   }
+
    /*** Dispatch action depending on mode.
         The major modes can be executed in sequence, 
 	but not all combinations may be really useful.
@@ -909,7 +910,6 @@ int main(int argc, char *argv[])
 
    if(mode == MODE_NONE)
    {  
-
       if(Closure->screenShotMode)
       {  GPtrArray *a=Closure->deviceNames;
 	 int i;
@@ -918,6 +918,16 @@ int main(int argc, char *argv[])
 	    g_free(p);
 	    a->pdata[i] = g_strdup(_("Optical drive 52X FW 1.02"));
 	 }
+      }
+
+
+      /* We need to query devices in order to build
+	 the drop-down menu.*/
+
+      if(!devices_queried)
+      {  if(Closure->device)
+	    g_free(Closure->device);
+	 Closure->device = DefaultDevice();
       }
 
       Closure->guiMode = TRUE;

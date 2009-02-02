@@ -55,7 +55,6 @@ char* DefaultDevice()
      { char buf[80];
 
        sprintf(buf,"/dev/%s", dev); 
-
        memset(dh, 0, sizeof(DeviceHandle));
        dh->fd = open(buf, O_RDONLY | O_NONBLOCK);
        dh->device = buf;

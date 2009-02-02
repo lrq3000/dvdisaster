@@ -1,6 +1,9 @@
-0.71 (devel-28)
+0.71 (devel-28) 01-02-2009
         Currently working through known (minor) bugs list to prepare
 	release candidate.
+	- command line mode will no longer scan for available 
+	  devices when one is already given via -d.
+	  Thanks to Raphael M. for noting this.
 	- fixed build failure on FreeBSD; updated atapicam loading
 	  instructions.
 	- opening the preferences dialog produced a GTK warning. Fixed.

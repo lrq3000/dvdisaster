@@ -15,7 +15,7 @@ f7142797e03aae72c789f07fb6cd6296 *crcbuf.c
 3dd4fd1fd22354f4af218a326a7bbb4f *curve.c
 ad57f7aec0d5a0314034e1d8e26527dc *debug.c
 177f8b90a4add4857f629b4d1d00bd16 *ds-marker.c
-2f8cd2ccd8912e2840ae48168300249d *dvdisaster.c
+63cc960dc0a01717932099bb761aed4e *dvdisaster.c
 414c4bcd1056c52794ac5baf8ed0df57 *ecc-rs01.c
 a361c1485ab823d2983f51397e2bdf06 *ecc-rs02.c
 8a8d3932063f18a9119b7bfe5748ef82 *ecc-rs03.c
@@ -58,7 +58,7 @@ cd55d1406e3f2119581c03db75bed54d *rs02-common.c
 0194f4b02db5eedf7068ed1ef0615807 *rs02-verify.c
 88a2565289d2b7f520185eaf19b1abee *rs02-window.c
 696ff5482fa32498e8822d2360b3ff4a *rs03-common.c
-1659263dfa38ba01b8bb4d445d616eef *rs03-create.c
+5993e71fabaed4c68f506a7ebb329340 *rs03-create.c
 d26e34bc64bc3b7df2db8b1995b418a4 *rs03-fix.c
 b039b9b9daae7a7deb050aba6b8a3ef1 *rs03-preferences.c
 6ad1f187287ea362afd4b1989340885e *rs03s-create.c
@@ -69,7 +69,7 @@ b6c6e69cfe751cc12f74b4df56473af5 *rs03-window.c
 4ccd9f251e9b6b52bf9a79c65ec2b762 *scsi-darwin.c
 45d8b52ab8c03d661baf4c404c94115a *scsi-freebsd.c
 5264a217a42d252184dc76dd1ee9237e *scsi-layer.c
-4f19f21c0410081adba1251af6a9caa0 *scsi-linux.c
+d8fd82d49e627b48a442f854497dec8a *scsi-linux.c
 a86f62372f2dea89f208ceafefaa1f97 *scsi-netbsd.c
 38d4cab513130a40e22b956df0c588a7 *scsi-solaris.c
 12f31844b6b5663865d8e290437c64e1 *scsi-unknown.c

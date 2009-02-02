@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-28 21:02+0100\n"
+"POT-Creation-Date: 2009-02-01 18:43+0100\n"
 "PO-Revision-Date: 2006-03-16 20:40+0100\n"
 "Last-Translator: Luboš Staněk <lubek@users.sourceforge.net>\n"
 "Language-Team: čeština <cs@li.org>\n"
@@ -77,7 +77,7 @@ msgstr ""
 #: debug.c:112 debug.c:202 debug.c:250 debug.c:341 debug.c:385 debug.c:698
 #: debug.c:798 debug.c:1125 debug.c:1133 debug.c:1240 rs01-common.c:54
 #: rs02-common.c:62 rs02-create.c:336 rs02-create.c:982 rs02-fix.c:387
-#: rs02-verify.c:393 rs03-common.c:81 rs03-create.c:380 rs03-create.c:403
+#: rs02-verify.c:393 rs03-common.c:81 rs03-create.c:381 rs03-create.c:404
 #: rs03s-create.c:796 rs03s-create.c:826 rs03-verify.c:392
 #, c-format
 msgid "Failed seeking to sector %lld in image: %s"
@@ -85,8 +85,8 @@ msgstr "Selhalo vystavení na sektor %lld v obrazu: %s"
 
 #: debug.c:117 debug.c:207 debug.c:255 debug.c:346 debug.c:390 debug.c:536
 #: debug.c:658 debug.c:703 debug.c:1137 debug.c:1244 debug.c:1284
-#: rs02-create.c:359 rs02-create.c:385 rs02-create.c:985 rs03-create.c:383
-#: rs03-create.c:406 rs03s-create.c:803 rs03s-create.c:829 udf.c:1108
+#: rs02-create.c:359 rs02-create.c:385 rs02-create.c:985 rs03-create.c:384
+#: rs03-create.c:407 rs03s-create.c:803 rs03s-create.c:829 udf.c:1108
 #: udf.c:1166 udf.c:1223 udf.c:1236 udf.c:1241 udf.c:1244 udf.c:1247
 #: udf.c:1250 udf.c:1253 udf.c:1256
 #, c-format
@@ -168,7 +168,7 @@ msgstr "Zkrácení obrazu na %lld sektorů.\n"
 
 #: debug.c:568 read-linear.c:1355 rs01-fix.c:198 rs01-fix.c:220 rs01-fix.c:236
 #: rs01-fix.c:271 rs02-create.c:104 rs02-create.c:148 rs02-fix.c:241
-#: rs02-fix.c:262 rs02-fix.c:277 rs03-create.c:145 rs03-create.c:189
+#: rs02-fix.c:262 rs02-fix.c:277 rs03-create.c:146 rs03-create.c:190
 #: rs03-fix.c:241 rs03-fix.c:262 rs03-fix.c:277 rs03s-create.c:104
 #: rs03s-create.c:148
 #, c-format
@@ -2595,7 +2595,7 @@ msgstr ""
 #: read-linear.c:215 rs01-create.c:651 rs01-fix.c:188 rs01-fix.c:210
 #: rs01-fix.c:256 rs01-fix.c:286 rs01-fix.c:303 rs01-fix.c:356
 #: rs01-verify.c:430 rs01-verify.c:787 rs02-create.c:112 rs02-fix.c:232
-#: rs02-fix.c:253 rs02-fix.c:344 rs02-verify.c:707 rs03-create.c:153
+#: rs02-fix.c:253 rs02-fix.c:344 rs02-verify.c:707 rs03-create.c:154
 #: rs03-fix.c:232 rs03-fix.c:253 rs03-fix.c:339 rs03s-create.c:112
 #: rs03-verify.c:682
 #, c-format
@@ -2854,7 +2854,7 @@ msgid "Redundancy %d out of useful range [8..100]."
 msgstr "Redundance %d z použitelného rozsahu [8..100]."
 
 #: rs01-create.c:125 rs01-fix.c:77 rs02-create.c:58 rs02-fix.c:53
-#: rs03-create.c:91 rs03-fix.c:53 rs03s-create.c:58
+#: rs03-create.c:92 rs03-fix.c:53 rs03s-create.c:58
 #, c-format
 msgid "<span %s>Aborted by unrecoverable error.</span>"
 msgstr "<span %s>Zrušeno kvůli neopravitelné chybě.</span>"
@@ -2914,7 +2914,7 @@ msgid ""
 msgstr ""
 
 #: rs01-create.c:509 rs01-create.c:633 rs01-create.c:927 rs02-create.c:955
-#: rs03-create.c:685 rs03s-create.c:786
+#: rs03-create.c:688 rs03s-create.c:786
 #, c-format
 msgid "Ecc generation: %3d.%1d%%"
 msgstr "Tvorba ecc: %3d.%1d%%"
@@ -2937,7 +2937,7 @@ msgstr ""
 "Nelze zapsat hlavičku ecc:\n"
 "%s"
 
-#: rs01-create.c:963 rs02-create.c:1104 rs03-create.c:873 rs03s-create.c:921
+#: rs01-create.c:963 rs02-create.c:1104 rs03-create.c:876 rs03s-create.c:921
 #, c-format
 msgid "Ecc generation: 100.0%%\n"
 msgstr "Tvorba ecc: 100.0%%\n"
@@ -3676,12 +3676,12 @@ msgstr "Skok na hlavičku ecc selhal na %lld: %s\n"
 msgid "Failed writing ecc header at %lld: %s\n"
 msgstr "Selhal zápis hlavičky ecc na %lld: %s\n"
 
-#: rs02-create.c:107 rs03-create.c:148 rs03s-create.c:107
+#: rs02-create.c:107 rs03-create.c:149 rs03s-create.c:107
 #, c-format
 msgid "<span %s>Aborted by user request!</span> (partial ecc data removed from image)"
 msgstr ""
 
-#: rs02-create.c:139 rs03-create.c:180 rs03s-create.c:139
+#: rs02-create.c:139 rs03-create.c:181 rs03s-create.c:139
 #, c-format
 msgid ""
 "Image \"%s\" already contains error correction information.\n"
@@ -3715,29 +3715,29 @@ msgid ""
 "appended to complete (undamaged) images.\n"
 msgstr ""
 
-#: rs02-create.c:228 rs02-create.c:292 rs02-create.c:301 rs03-create.c:244
-#: rs03-create.c:253 rs03s-create.c:203 rs03s-create.c:212
+#: rs02-create.c:228 rs02-create.c:292 rs02-create.c:301 rs03-create.c:245
+#: rs03-create.c:254 rs03s-create.c:203 rs03s-create.c:212
 #, c-format
 msgid "Preparing image (checksums, adding space): %3d%%"
 msgstr ""
 
-#: rs02-create.c:263 rs02-create.c:273 rs02-fix.c:91 rs03-create.c:216
-#: rs03-create.c:226 rs03-fix.c:91 rs03s-create.c:175 rs03s-create.c:185
+#: rs02-create.c:263 rs02-create.c:273 rs02-fix.c:91 rs03-create.c:217
+#: rs03-create.c:227 rs03-fix.c:91 rs03s-create.c:175 rs03s-create.c:185
 #, c-format
 msgid "Failed seeking to end of image: %s\n"
 msgstr "Skok na konec obrazu se nezdařil: %s\n"
 
-#: rs02-create.c:267 rs02-create.c:288 rs02-fix.c:104 rs03-create.c:220
-#: rs03-create.c:240 rs03-fix.c:105 rs03s-create.c:179 rs03s-create.c:199
+#: rs02-create.c:267 rs02-create.c:288 rs02-fix.c:104 rs03-create.c:221
+#: rs03-create.c:241 rs03-fix.c:105 rs03s-create.c:179 rs03s-create.c:199
 #, c-format
 msgid "Failed expanding the image: %s\n"
 msgstr "Rozšíření obrazu se nezdařilo: %s\n"
 
-#: rs02-create.c:1025 rs03-create.c:802 rs03s-create.c:852
+#: rs02-create.c:1025 rs03-create.c:805 rs03s-create.c:852
 msgid "Error correction data creation aborted"
 msgstr ""
 
-#: rs02-create.c:1029 rs02-create.c:1049 rs03-create.c:806 rs03-create.c:826
+#: rs02-create.c:1029 rs02-create.c:1049 rs03-create.c:809 rs03-create.c:829
 #: rs03s-create.c:856 rs03s-create.c:876
 #, c-format
 msgid ""
@@ -3745,7 +3745,7 @@ msgid ""
 "<i>%s</i>"
 msgstr ""
 
-#: rs02-create.c:1030 rs03-create.c:807 rs03s-create.c:857
+#: rs02-create.c:1030 rs03-create.c:810 rs03s-create.c:857
 msgid "- checking image -"
 msgstr ""
 
@@ -3763,7 +3763,7 @@ msgstr ""
 "Přidávám do obrazu metodou RS02:\n"
 "  %lld MB dat, %lld MB ecc (%d kořenů; redundance %4.1f%%)"
 
-#: rs02-create.c:1062 rs03-create.c:839 rs03s-create.c:889
+#: rs02-create.c:1062 rs03-create.c:842 rs03s-create.c:889
 #, c-format
 msgid ""
 "Not enough space on medium left for error correction data.\n"
@@ -3773,14 +3773,14 @@ msgid ""
 "file using the RS01 method.\n"
 msgstr ""
 
-#: rs02-create.c:1073 rs03-create.c:850 rs03s-create.c:900
+#: rs02-create.c:1073 rs03-create.c:853 rs03s-create.c:900
 #, c-format
 msgid ""
 "Using redundancies below 20%%%% may not give\n"
 "the expected data loss protection.\n"
 msgstr ""
 
-#: rs02-create.c:1105 rs02-create.c:1114 rs03-create.c:874 rs03-create.c:886
+#: rs02-create.c:1105 rs02-create.c:1114 rs03-create.c:877 rs03-create.c:889
 #: rs03s-create.c:922 rs03s-create.c:931
 #, c-format
 msgid ""
@@ -4195,23 +4195,23 @@ msgid ""
 "Even if this limit is not reached the augmented image may be a few sectors smaller than specified for technical reasons."
 msgstr ""
 
-#: rs03-create.c:528
+#: rs03-create.c:531
 msgid "Flushing output cache..."
 msgstr ""
 
-#: rs03-create.c:822 rs03s-create.c:872
+#: rs03-create.c:825 rs03s-create.c:872
 #, c-format
 msgid "Encoding with Method RS03: %lld MB data, %lld MB ecc (%d roots; %4.1f%% redundancy)."
 msgstr ""
 
-#: rs03-create.c:830
+#: rs03-create.c:833
 #, c-format
 msgid ""
 "Augmenting image with Method RS03 [%d threads]:\n"
 " %lld MB data, %lld MB ecc (%d roots; %4.1f%% redundancy)."
 msgstr ""
 
-#: rs03-create.c:879
+#: rs03-create.c:882
 #, c-format
 msgid "Avg performance: %5.2fs (%5.2fMB/s) total\n"
 msgstr ""
