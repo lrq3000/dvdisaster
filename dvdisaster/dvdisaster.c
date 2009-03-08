@@ -97,6 +97,7 @@ typedef enum
    MODE_BYTESET, 
    MODE_COPY_SECTOR,
    MODE_CMP_IMAGES,
+   MODE_DEBUG_MAINT1,
    MODE_ERASE, 
    MODE_LIST_ASPI,
    MODE_MARKED_IMAGE,
@@ -120,11 +121,13 @@ typedef enum
    MODIFIER_DAO, 
    MODIFIER_DEBUG,
    MODIFIER_DEFECTIVE_DUMP,
+   MODIFIER_DRIVER,
    MODIFIER_EJECT,
    MODIFIER_FILL_UNREADABLE,
    MODIFIER_IGNORE_FATAL_SENSE,
    MODIFIER_INTERNAL_REREADS,
    MODIFIER_QUERY_SIZE,
+   MODIFIER_NEW_DS_MARKER,
    MODIFIER_RANDOM_SEED,
    MODIFIER_READ_ATTEMPTS,
    MODIFIER_READ_MEDIUM,
@@ -136,7 +139,7 @@ typedef enum
    MODIFIER_SPINUP_DELAY, 
    MODIFIER_SPLIT_FILES,
    MODIFIER_TRUNCATE,
-   MODIFIER_VERSION
+   MODIFIER_VERSION,
 } run_mode;
 
 int main(int argc, char *argv[])
@@ -325,8 +328,10 @@ int main(int argc, char *argv[])
 	{"create", 0, 0, 'c'},
 	{"dao", 0, 0, MODIFIER_DAO },
 	{"debug", 0, 0, MODIFIER_DEBUG },
+	{"debug1", 1, 0, MODE_DEBUG_MAINT1 },
 	{"defective-dump", 1, 0, MODIFIER_DEFECTIVE_DUMP },
 	{"device", 0, 0, 'd'},
+	{"driver", 1, 0, MODIFIER_DRIVER },
         {"ecc", 1, 0, 'e'},
 	{"eject", 0, 0, MODIFIER_EJECT },
 	{"erase", 1, 0, MODE_ERASE },
@@ -343,6 +348,7 @@ int main(int argc, char *argv[])
 	{"marked-image", 1, 0, MODE_MARKED_IMAGE },
 	{"merge-images", 1, 0, MODE_MERGE_IMAGES },
 	{"method", 2, 0, 'm' },
+	{"new-ds-marker", 0, 0, MODIFIER_NEW_DS_MARKER },
         {"prefix", 1, 0, 'p'},
 	{"query-size", 1, 0, MODIFIER_QUERY_SIZE },
 	{"random-errors", 1, 0, MODE_RANDOM_ERR },
@@ -471,6 +477,16 @@ int main(int argc, char *argv[])
          case MODIFIER_EJECT: 
 	   Closure->eject = 1; 
 	   break;
+	 case MODIFIER_DRIVER: /* currently undocumented feature */
+#if defined(SYS_LINUX)
+	   if(optarg && !strcmp(optarg,"sg"))
+	      Closure->useSGioctl = TRUE;
+	   else
+	      Stop(_("Valid args for --driver: sg"));
+#else
+	   Stop(_("--driver is only supported on GNU/Linux"));
+#endif
+	   break;
          case MODIFIER_FILL_UNREADABLE:
 	   if(optarg) Closure->fillUnreadable = strtol(optarg, NULL, 0);
 	   break;
@@ -508,6 +524,9 @@ int main(int argc, char *argv[])
 	    }
 	 }
 	   break;
+	 case MODIFIER_NEW_DS_MARKER:
+	    Closure->dsmVersion = 1;
+	    break;
          case MODIFIER_QUERY_SIZE:
 	        if(!strcmp(optarg, "drive")) Closure->querySize = 0;
 	   else if(!strcmp(optarg, "udf"))   Closure->querySize = 1;
@@ -588,6 +607,10 @@ int main(int argc, char *argv[])
 	   break;
 	 case MODE_COPY_SECTOR:
 	   mode = MODE_COPY_SECTOR;
+	   debug_arg = g_strdup(optarg);
+	   break;
+         case MODE_DEBUG_MAINT1:
+	   mode = MODE_DEBUG_MAINT1;
 	   debug_arg = g_strdup(optarg);
 	   break;
          case MODE_ERASE: 
@@ -672,6 +695,10 @@ int main(int argc, char *argv[])
    }
 #endif
 
+   /*** CPU type detection. */
+
+   Closure->useSSE2 = ProbeSSE2();
+
    /*** Parse the sector ranges for --read and --scan */
 
    if(read_range)
@@ -751,6 +778,10 @@ int main(int argc, char *argv[])
 
       case MODE_COPY_SECTOR:
 	 CopySector(debug_arg);
+	 break;
+
+      case MODE_DEBUG_MAINT1:
+ 	 Maintenance1(debug_arg);
 	 break;
 
       case MODE_ERASE:

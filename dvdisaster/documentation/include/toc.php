@@ -12,6 +12,11 @@ section("news");
   en("News");
   ru("Новости");
 
+subsection("news2008");
+  de("2008");
+  en("2008");
+  ru("2008");
+
 subsection("news2007");
   de("2007");
   en("2007");
@@ -244,10 +249,10 @@ subsection("download30");
   en("Installation");
   ru("Установка");
 
-subsection("download40");
-  de("Alpha-/Entwicklerversionen");
-  en("Alpha (unstable) versions");
-  ru("Альфа (нестабильные) версии");
+#subsection("download40");
+#  de("Alpha-/Entwicklerversionen");
+#  en("Alpha (unstable) versions");
+#  ru("Альфа (нестабильные) версии");
 
 # Questions and Answers
 

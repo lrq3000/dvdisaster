@@ -1354,6 +1354,7 @@ reopen_image:
 
 	    for(i=0, b=s; i<nsectors; i++,b++)
 	    {  int result;
+	       int err;
 
 	       /* Calculate and compare CRC sums.
 		  Sectors with bad CRC sums are marked unvisited,
@@ -1365,14 +1366,17 @@ reopen_image:
 
 	       switch(result)
 	       {  case CRC_BAD:
-		  {  unsigned char buf[2048];
+		  {  //unsigned char buf[2048];
 
 		     PrintCLI("\n");
 		     PrintCLI(_("CRC error in sector %lld\n"),b);
 		     print_progress(rc, TRUE);
 
+#if 0 // remark: Do we still need to mark CRC defects as completely missing?
 		     CreateMissingSector(buf, b, rc->fingerprint, FINGERPRINT_SECTOR, rc->volumeLabel);
 		     n = LargeWrite(rc->image, buf, 2048);
+#endif
+		     n = LargeWrite(rc->image, rc->buf+i*2048, 2048);
 		     if(n != 2048)
 			Stop(_("Failed writing to sector %lld in image [%s]: %s"),
 			     b, "unv", strerror(errno));
@@ -1399,6 +1403,19 @@ reopen_image:
 		     if(rc->highestWrittenSector < b)
 			rc->highestWrittenSector = b;
 		     break;
+	       }
+
+	       /*** Warn the user if we see dead sector markers on the image.
+		    Note: providing the fingerprint is not necessary as any 
+		    incoming missing sector marker indicates a huge problem. */
+
+	       err = CheckForMissingSector(rc->buf+i*2048, b, NULL, 0);
+	       if(err != SECTOR_PRESENT)
+	       {  ExplainMissingSector(rc->buf+i*2048, b, err, FALSE);
+
+		  if(rc->map)  /* Avoids confusion in the ecc stage */
+		     ClearBit(rc->map, b);
+		  rc->readable--;
 	       }
 	    }
 

@@ -21,6 +21,11 @@ $news_counter = 0;
 
 news_headline("dvdisaster News");
 
+news_item("08.03.2009", "dvdisaster 0.71.28 released", "
+  This version fixes \"illegal instruction\" crashes on x86 machines
+  which do not support SSE2. More minor fixes towards the release
+  candidate.
+");
 
 news_item("18.01.2009", "dvdisaster 0.71.27 released", "
   The documentation is finally complete. Some crashes and incompatibilities
@@ -49,20 +54,6 @@ news_item("03.03.2008", "Oops - images &gt;2GB fail in 0.70.5 and 0.71.24 under 
    images &gt; 2GB under Windows in the just released versions 0.70.5 and 0.71.24.
    Please stay tuned for fixed versions.
 ");
-
-news_item("24.02.2008", "dvdisaster 0.70.5 / 0.71.24 fix problems with newer Linux versions", "
-   A problem with newer Linux kernels was fixed which would lead
-   to a frozen system under some circumstances. Please upgrade on systems 
-   running kernels 2.6.17 and above; maybe earlier kernels are also affected.<p> 
-
-   The release of dvdisaster 0.71.24 also marks the start of
-   an online documentation rewrite, including a Russian translation made
-   by Igor Gorbounov.
-
-   <i>Currently, the english documentation is far from being complete.
-   Please bear with us; we'll catch up soon.</i>
-
-"); # end of news_item
 
 if($news_flash == 0) 
    end_page();

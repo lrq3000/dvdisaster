@@ -552,6 +552,7 @@ static struct error_info additional[] =
   /*
    * Faked error by defect simulation mode
    */
+  {0xff,0xfe,R,"sg driver ioctl() failed"},
   {0xff,0xff,R,"[dvdisaster: Simulated medium defect]"},
 
   {0, 0, 0, NULL}

@@ -178,6 +178,8 @@ typedef struct _GlobalClosure
    int pauseDuration;   /* duration of pause in minutes */
    int pauseEject;      /* Eject medium during pause */
    int ignoreFatalSense;/* Continue reading after potential fatal sense errors */
+   int useSSE2;         /* TRUE means to use SSE2 version of the codec. */
+   int useSGioctl;      /* Use the generic SCSI ioctl instead of CDROM one on Liux */
   
    char *homeDir;       /* path to users home dir */
    char *dotFile;       /* path to .dvdisaster file */
@@ -397,6 +399,7 @@ typedef struct _EccHeader
  ***/
 
 struct _RawBuffer *rawbuffer_forward;
+struct _DefectiveSectorHeader *dsh_forward;
 
 /***
  *** dvdisaster.c
@@ -557,6 +560,7 @@ void ExplainMissingSector(unsigned char*, gint64, int, int);
 guint32 SwapBytes32(guint32);
 guint64 SwapBytes64(guint64);
 void    SwapEccHeaderBytes(EccHeader*);
+void    SwapDefectiveHeaderBytes(struct _DefectiveSectorHeader*);
 
 /***
  *** file.c
@@ -761,6 +765,17 @@ int CountC2Errors(unsigned char*);
 void DefaultLogFile();
 void VPrintLogFile(char*, va_list);
 void PrintLogFile(char*, ...);
+
+/***
+ *** maintenance.c
+ ***
+ *
+ * Provides a context for running testing functions
+ * within the usual program context.
+ * Only for debugging / development purposes.
+ */
+
+void Maintenance1(char*);
 
 /***
  *** main-window.c
@@ -971,7 +986,7 @@ void FreeRawEditorContext(void*);
  *** raw-sector-cache.c
  ***/
 
-typedef struct _dsh
+typedef struct _DefectiveSectorHeader
 {  unsigned char mediumFP[16];       /* Medium fingerprint */
    gint64 lba;                       /* LBA of this sector */
    gint32 sectorSize;                /* Sector size in bytes */
@@ -1146,10 +1161,11 @@ gint64 CurrentImageCapacity(void);
 int SendReadCDB(char*, unsigned char*, unsigned char*, int, int);
 
 /***
- *** rs-encoder.c
+ *** rs-encoder.c and friends
  ***/
 
 void EncodeNextLayer(ReedSolomonTables*, unsigned char*, unsigned char*, guint64, int);
+int ProbeSSE2(void);
 
 /***
  *** show-manual.c

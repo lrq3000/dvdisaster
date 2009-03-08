@@ -31,22 +31,44 @@ To <a href="download30.php">install</a> the binary version execute
 the downloaded program and follow the dialog.
 The source code version contains a file <tt>INSTALL</tt> with further instructions.
 
-<pre> </pre>
-
 <!---
-<b>Developer versions</b> - new and experimental for experienced users!<p>
-<b>Current version</b><p>
--->
-
 <b>Alpha (unstable) versions</b> - new and experimental for experienced users!<p>
 
 Testers are welcome for the upcoming dvdisaster release, but should be aware of remaining
 bugs and incompatibilities.
 The current unstable release is 
 <a href="download40.php"><?php echo $cooked_version?></a>.
+-->
+
 <pre> </pre>
 
 <b>Stable version</b> - recommended for getting started.<p>
+
+<table class="download" cellpadding="0" cellspacing="5">
+<tr><td><b>dvdisaster-0.72</b></td><td align="right">xx-XXX-2009</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+  <table>
+    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72-rc1.tar.bz2?download">dvdisaster-0.72-rc1.tar.bz2</a></td></tr>
+    <tr><td align="right">Digital signature:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72-rc1.tar.bz2.gpg?download">dvdisaster-0.72-rc1.tar.bz2.gpg</a></td></tr>
+    <tr><td align="right">Binary for Windows:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72-rc1-setup.exe?download">dvdisaster-0.72-rc1-setup.exe</a></td></tr>
+    <tr><td align="right">Digital signature:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72-rc1-setup.exe.gpg?download">dvdisaster-0.72-rc1-setup.exe.gpg</a></td></tr>
+  </table>
+</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+<b>Release candidates</b> resemble the stable Version in terms of functionality
+and testing state. If no serious issues are found until May 1th, the
+current release candidate will be declared to be the next stable version.<p>
+
+<b>rc1</b> First release candidate.
+</td></tr></table><p>
+
+<b>Previous release</b> - upgrading to version 0.72 is recommended.<p>
 
 <table class="download" cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.70</b></td><td align="right">04-Mar-2008</td></tr>
@@ -117,28 +139,6 @@ Some file of particular interest are:
 <li><a href="http://dvdisaster.cvs.sourceforge.net/dvdisaster/dvdisaster/INSTALL?view=markup">INSTALL</a> - additional hints for installation;</li>
 <li><a href="http://dvdisaster.cvs.sourceforge.net/dvdisaster/dvdisaster/README?view=markup">README</a> - a road map of the source code archive.</li>
 </ul>
-
-<b>Previous release</b> - upgrading to version 0.70.6 is recommended.<p>
-
-<table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.66</b></td><td align="right">25-Mar-2006</td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
-<tr><td colspan="2">
-  <table>
-    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.66.tar.bz2?download">dvdisaster-0.66.tar.bz2</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.66.tar.bz2.gpg?download">dvdisaster-0.66.tar.bz2.gpg</a></td></tr>
-    <tr><td align="right">Binary for Windows:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.66.3-setup.exe?download">dvdisaster-0.66.3-setup.exe</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.66.3-setup.exe.gpg?download">dvdisaster-0.66.3-setup.exe.gpg</a></td></tr>
-  </table>
-</td></tr>
-</table><p>
-<?php
-footnote("*","gpl3","dvdisaster will switch over to the GNU General Public License version 3 in a later release.");
-?>
 
 <!--- do not change below --->
 

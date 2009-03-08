@@ -725,14 +725,8 @@ void InitClosure()
 
 void LocalizedFileDefaults()
 {  
-#ifdef SYS_MINGW
-   char slash = '\\';
-#else
-   char slash = '/';
-#endif
-
-   Closure->imageName   = g_strdup_printf("%s%c%s",Closure->homeDir,slash,_("medium.iso"));
-   Closure->eccName     = g_strdup_printf("%s%c%s",Closure->homeDir,slash,_("medium.ecc"));
+   Closure->imageName   = g_strdup(_("medium.iso"));
+   Closure->eccName     = g_strdup(_("medium.ecc"));
    Closure->dDumpPrefix = g_strdup(_("sector-"));
 }
 

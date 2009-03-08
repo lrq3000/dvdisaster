@@ -1740,6 +1740,8 @@ function CHECK_SSE2()
      return 0
    fi
 
+   CHECK_SSE2_INVOKED=1
+
    echo -e "\n/* *** CHECK_SSE2 */\n" >>$LOGFILE
    echo -n "Checking for SSE2..."
 
@@ -1750,8 +1752,7 @@ function CHECK_SSE2()
 	no)  echo " no (user supplied)"
 	        ;;
 	yes) echo " yes (user supplied)"
-	        CFG_HAVE_OPTIONS="$CFG_HAVE_OPTIONS -DHAVE_SSE2"
-		CFG_CFLAGS="-msse2 $CFG_CFLAGS"
+	        CFG_SSE2_OPTIONS="-msse2 -DHAVE_SSE2"
 	        ;;
         *) echo -e " $cfg_with_sse2 (illegal value)\n"
 	   echo "Please use one of the following values:"
@@ -1778,11 +1779,11 @@ EOF
    CFG_CFLAGS="-msse2 $CFG_CFLAGS"
    if try_compile; then
       echo " yes"
-      CFG_HAVE_OPTIONS="$CFG_HAVE_OPTIONS -DHAVE_SSE2"
+      CFG_SSE2_OPTIONS="-msse2 -DHAVE_SSE2"
    else
       echo " no"
-      CFG_CFLAGS=$cflags_save
    fi
+   CFG_CFLAGS=$cflags_save
 }
 
 #
@@ -1826,6 +1827,9 @@ function CREATE_MAKEFILES()
    echo "CFG_HAVE_OPTIONS = $CFG_HAVE_OPTIONS" >> Makefile.config
    echo "CFG_WITH_OPTIONS = $CFG_WITH_OPTIONS" | sed -e "$SED_UPCASE" >> Makefile.config
    echo "CFG_OTHER_OPTIONS = $CFG_OTHER_OPTIONS" >> Makefile.config
+   if test -n "$CHECK_SSE2_INVOKED"; then
+     echo "CFG_SSE2_OPTIONS = $CFG_SSE2_OPTIONS" >> Makefile.config
+   fi
    echo >> Makefile.config
 
    for i in $@; do 

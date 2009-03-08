@@ -32,20 +32,45 @@ Um die Binärversion  <a href="download30.php">für Windows zu installieren</a>,
 rufen Sie das Programm nach dem Herunterladen auf und folgen dem Dialog. <p>
 
 <!---
-<b>Entwickler-Versionen</b> - neu und experimentell für erfahrene Benutzer!<p> 
-<b>Stabile Versionen</b> - zum Einstieg empfohlen<p> 
---->
-
 <b>Alpha-/Entwickler-Versionen</b> - neu und experimentell für erfahrene Benutzer!<p> 
 
 Sie sind eingeladen, die nächste dvdisaster-Version auszuprobieren, 
 aber beachten Sie bitte, daß diese Version noch Fehler und 
 Kompatibilitätsprobleme enthalten kann. Die neueste experimentelle Version 
-ist <a href="download40.php"><?php echo $cooked_version ?></a>.
+ist <a href="download40.php"><?php echo $cooked_version ?></a>. 
+--->
 
 <pre> </pre>
 
 <b>Stabile Version</b> - zum Einstieg empfohlen<p> 
+
+<table class="download" cellpadding="0" cellspacing="5">
+<tr><td><b>dvdisaster-0.72</b></td><td align="right">xx-xxx-2009</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+  <table>
+    <tr><td align="right">&nbsp;&nbsp;Quellkode für alle Betriebssysteme:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72.rc1.tar.bz2?download">dvdisaster-0.72.rc1.tar.bz2</a></td></tr>
+    <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72.rc1.tar.bz2.gpg?download">dvdisaster-0.72.rc1.tar.bz2.gpg</a></td></tr>
+    <tr><td align="right">Binärversion für Windows:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72.rc1-setup.exe?download">dvdisaster-0.72.rc1-setup.exe</a></td></tr>
+    <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72.rc1-setup.exe.gpg?download">dvdisaster-0.72.rc1-setup.exe.gpg</a></td></tr>
+  </table>
+</td></tr>
+<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2">
+
+<b>Veröffentlichungskandidaten</b> entsprechen vom Umfang und Testzustand 
+der stabilen Version. Wenn bis zum 1. Mai keine schwerwiegenden Probleme 
+mehr berichtet werden wird der aktuelle Veröffentlichungskandidat zur
+nächsten stabilen Version erklärt.<p>
+
+<b>rc1</b> Erster Kandidat für die stabile Version.
+</td></tr></table><p>
+
+<b>Vorangegangene Version</b> - eine Aktualisierung auf Version 0.72 wird empfohlen.<p> 
 
 <table class="download" cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.70</b></td><td align="right">04-Mär-2008</td></tr>
@@ -120,25 +145,6 @@ betrachtet werden. Einige interessante Dateien darin sind:
 </ul>
 
 <pre> </pre>
-
-<b>Vorangegangene Version</b> - eine Aktualisierung auf Version 0.70.6 wird empfohlen.<p> 
-
-<table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.66</b></td><td align="right">25-Mär-2006</td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
-<tr><td colspan="2">
-  <table>
-    <tr><td align="right">&nbsp;&nbsp;Quellkode für alle Betriebssysteme:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.66.tar.bz2?download">dvdisaster-0.66.tar.bz2</a></td></tr>
-    <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.66.tar.bz2.gpg?download">dvdisaster-0.66.tar.bz2.gpg</a></td></tr>
-    <tr><td align="right">Binärversion für Windows:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.66.3-setup.exe?download">dvdisaster-0.66.3-setup.exe</a></td></tr>
-    <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.66.3-setup.exe.gpg?download">dvdisaster-0.66.3-setup.exe.gpg</a></td></tr>
-  </table>
-</td></tr>
-</table><p>
 
 <?php
 footnote("*","gpl3","dvdisaster wird zu einem späteren Zeitpunkt zur GNU General Public License Version 3 wechseln.");

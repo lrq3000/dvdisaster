@@ -1,6 +1,19 @@
-0.71 (devel-28) 01-02-2009
+0.71 (devel-28) 08-03-2009
         Currently working through known (minor) bugs list to prepare
-	release candidate.
+	the release candidate.
+	- changed SSE2 handling; now only the interesting part of
+	  dvdisaster are compiled with -msse2 and selection between
+	  normal and SSE2 code versions are done at run time.
+	  (Don't waste your time searching for SSE2 code in 0.7x -
+	   there is none; but we need the option to configure for it
+	   in preparation of 0.80)
+	   Thanks to Karsten H., Nathan S. and Tobias G. for bringing 
+	   this issue to my attention!
+	- changed treatment of CRC failures: old behaviour was to 
+	  store a defective sector marker; now the actual sector
+	  contents are written to the image file.
+	- starting a scan/after automatically loading a medium
+	  would not always work. Fixed.
 	- command line mode will no longer scan for available 
 	  devices when one is already given via -d.
 	  Thanks to Raphael M. for noting this.

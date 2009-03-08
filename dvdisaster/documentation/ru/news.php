@@ -21,6 +21,12 @@ $news_counter = 0;
 
 news_headline("Новости dvdisaster");
 
+news_item("08.03.2009", "dvdisaster 0.71.28 released", "
+  This version fixes \"illegal instruction\" crashes on x86 machines
+  which do not support SSE2. More minor fixes towards the release
+  candidate.
+");
+
 news_item("18.01.2009", "dvdisaster 0.71.27 released", "
   The documentation is finally complete. Some crashes and incompatibilities
   with uncommon media and drives have been fixed. This version includes
@@ -48,22 +54,6 @@ news_item("03.03.2008", "Ой! - образы &gt;2ГБ не работают в
    образов &gt; 2GB под Windows в только что выпущенных версиях 0.70.5 и 0.71.24.
    Пожалуйста, следите за выходом исправленных версий.
 ");
-
-news_item("24.02.2008", "dvdisaster 0.70.5 / 0.71.24 - исправление проблем с новыми версиями Linux", "
-   Исправлена проблема для новых ядер Linux, которая могла вызвать зависание системы
-   в некоторых случаях. Обновите программу на системах 
-   с ядрами 2.6.17 и выше; может быть, более ранние ядра тоже подвержены этой проблеме.<p> 
-
-   В версии dvdisaster 0.71.24 начато переписывание 
-   онлайновой документации, включая перевод на русский язык, сделанный
-   Игорем Горбуновым.
-"); # end of news_item
-
-news_item("28.10.2007", "Начата новая документация", "
-   В настоящее время документация на dvdisaster перерабатывается для предстоящего
-   выхода V0.72. Наберитесь терпения; возможно, новая документация будет более
-   полезной, чем старая, но нам требуется несколько недель, чтобы все охватить.
-"); # end of news_item
 
 if($news_flash == 0) 
    end_page();

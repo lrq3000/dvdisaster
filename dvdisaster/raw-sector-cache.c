@@ -45,10 +45,18 @@ static void init_defective_sector_file(char *path, RawBuffer *rb, LargeFile **fi
        dsh->properties |= DSH_HAS_FINGERPRINT;
     }
 
+#ifdef HAVE_BIG_ENDIAN
+    SwapDefectiveHeaderBytes(dsh);
+#endif
+
     n = LargeWrite(*file, dsh, sizeof(DefectiveSectorHeader));
 
     if(n != sizeof(DefectiveSectorHeader))
        Stop(_("Failed writing to defective sector file: %s"), strerror(errno));
+
+#ifdef HAVE_BIG_ENDIAN
+    SwapDefectiveHeaderBytes(dsh);
+#endif
 }
 
 /*

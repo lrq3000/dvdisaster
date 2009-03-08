@@ -587,7 +587,7 @@ static void show_progress(read_closure *rc)
 	 else if(Closure->crcErrors - rc->previousCRCErrors > 0)
 	    color = 4;
 	 else color = 1;
-	 
+
 	 if(rc->firstSpeedValue)
 	 {   rc->speed = kb_sec / rc->dh->singleRate;
 		
@@ -604,9 +604,19 @@ static void show_progress(read_closure *rc)
 	     rc->lastReadOK         = rc->readOK;
 	 }
 	 else
-	 {  rc->speed = (rc->speed + kb_sec / rc->dh->singleRate) / 2.0;
-	    if(rc->speed>99.9) rc->speed=99.9;
-	    
+	 {  static int cut_peaks = 3;
+
+	    /* If reading is interrupted by a requester, following
+	       reads might be extremely fast due to read-ahead in
+	       the kernel. Try to mask these out. */
+
+	    if(kb_sec / rc->dh->singleRate > 100.0 && cut_peaks)
+	       cut_peaks--;
+	    else
+	    {  rc->speed = (rc->speed + kb_sec / rc->dh->singleRate) / 2.0;
+	       cut_peaks=3;
+	    }
+
 	    if(Closure->guiMode)
 	       AddCurveValues(rc, percent, color, rc->maxC2);
 
@@ -1080,6 +1090,20 @@ reread:
 		  rc->maxC2 = rc->dh->c2[i];
 	    }
 	 }
+      }
+
+      /*** Warn the user if we see dead sector markers on the image. */
+
+      for(i=0; i<nsectors; i++)
+      {  unsigned char *sector_buf = rc->alignedBuf[rc->readPtr]->buf;
+	 int err;
+
+	 /* Note: providing the fingerprint is not necessary as any 
+	          incoming missing sector marker indicates a huge problem. */
+
+	 err = CheckForMissingSector(sector_buf+i*2048, rc->readPos+i, NULL, 0);
+	 if(err != SECTOR_PRESENT)
+	    ExplainMissingSector(sector_buf+i*2048, rc->readPos+i, err, FALSE);
       }
 
       /*** Pass sector(s) to the worker thread (if reading succeeded) */

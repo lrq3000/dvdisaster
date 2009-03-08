@@ -16,21 +16,15 @@ begin_page();
 
 <h3>Alpha (developer) versions</h3>
 
-<b>Help us testing!</b> We have some new functions under development and
-would like them to be tested by more people before making the next official release.<p>
+<b>Help us testing!</b> This page contains experimental dvdisaster versions
+which are created on the way to the next stable release.<p>
 
-Especially, support for BD drives has been introduced and needs more
-field testing. The <a href="howtos90.php">image compatibility test</a> described
-in the Howtos section is very useful for testing new drives. Please 
-<a href="feedback.php">report both positive and negative results</a> 
-so that we can get a better picture of how the new formats are working.<p>
+<b>A word of caution:</b> Alpha versions are not thoroughly tested. They
+may contain more errors than a stable version and should not be used
+to process important data.<p>
 
-<b>A word of caution:</b> The alpha versions might lock up the drive and/or the
-operating system and require you to reboot. They might contain other bugs
-and should not be used to process media containing important data.<p>
-
-If in doubt, please continue using the <a href="download.php">stable version 0.70</a>
-and wait for the release of version 0.72.
+If in doubt please continue using the <a href="download.php">stable version 0.72</a>
+and wait for the release of version 0.74.
 
 <hr>
 
@@ -39,160 +33,25 @@ and wait for the release of version 0.72.
 The alpha versions use the same package format as the regular releases.<p>
 
 <table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.71 (devel27)</b></td><td align="right">18-Jan-2009</td></tr>
+<tr><td><b>dvdisaster-0.73 (devel1)</b></td><td align="right">xx-XXX-2009</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.27.tar.bz2?download">dvdisaster-0.71.27.tar.bz2</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.73.1.tar.bz2?download">dvdisaster-0.73.1.tar.bz2</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.27.tar.bz2.gpg?download">dvdisaster-0.71.27.tar.bz2.gpg</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.73.1.tar.bz2.gpg?download">dvdisaster-0.73.1.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Binary for Windows:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.27-setup.exe?download">dvdisaster-0.71.27-setup.exe</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.73.1-setup.exe?download">dvdisaster-0.73.1-setup.exe</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.27-setup.exe.gpg?download">dvdisaster-0.71.27-setup.exe.gpg</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.73.1-setup.exe.gpg?download">dvdisaster-0.73.1-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
-The documentation is finally complete. Some crashes and incompatibilities
-with uncommon media and drives have been fixed.
+Not yet released.
 </td></tr></table><p>
 
-
-<table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.71 (devel26)</b></td><td align="right">30-Mar-2008</td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
-<tr><td colspan="2">
-  <table>
-    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.26.tar.bz2?download">dvdisaster-0.71.26.tar.bz2</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.26.tar.bz2.gpg?download">dvdisaster-0.71.26.tar.bz2.gpg</a></td></tr>
-    <tr><td align="right">Binary for Windows:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.26-setup.exe?download">dvdisaster-0.71.26-setup.exe</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.26-setup.exe.gpg?download">dvdisaster-0.71.26-setup.exe.gpg</a></td></tr>
-  </table>
-</td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
-<tr><td colspan="2">
-This version contains a new dialog providing information about inserted media;
-during this course detection of media types (CD/DVD/BD) was changed. Improved
-support for BD media.
-</td></tr></table><p>
-
-<table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.71 (devel25)</b></td><td align="right">05-Mar-2008</td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
-<tr><td colspan="2">
-  <table>
-    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.25.tar.bz2?download">dvdisaster-0.71.25.tar.bz2</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.25.tar.bz2.gpg?download">dvdisaster-0.71.25.tar.bz2.gpg</a></td></tr>
-    <tr><td align="right">Binary for Windows:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.25-setup.exe?download">dvdisaster-0.71.25-setup.exe</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.25-setup.exe.gpg?download">dvdisaster-0.71.25-setup.exe.gpg</a></td></tr>
-  </table>
-</td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
-<tr><td colspan="2">
-The method for processing localized file names was replaced with a new
-approach as the old one was broken under Windows.
-</td></tr></table><p>
-
-<table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.71 (devel24)</b></td><td align="right">24-Feb-2008</td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
-<tr><td colspan="2">
-  <table>
-    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.24.tar.bz2?download">dvdisaster-0.71.24.tar.bz2</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.24.tar.bz2.gpg?download">dvdisaster-0.71.24.tar.bz2.gpg</a></td></tr>
-    <tr><td></td><td>Version 0.71.24 is broken under Windows.</td></tr>
-  </table>
-</td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
-<tr><td colspan="2">
-Fixes a problem with newer Linux kernels which may lead to a frozen system under
-some circumstances. Treatment of file names containing localized characters has
-been improved. This release marks the start of
-an online documentation rewrite, including a Russian translation made
-by Igor Gorbounov. 
-</td></tr></table><p>
-
-
-<table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.71 (devel23)</b></td><td align="right">06-May-2007</td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
-<tr><td colspan="2">
-  <table>
-    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel23.tar.bz2?download">dvdisaster-0.71.devel23.tar.bz2</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel23.tar.bz2.gpg?download">dvdisaster-0.71.devel23.tar.bz2.gpg</a></td></tr>
-    <tr><td align="right">Binary for Windows:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel23-setup.exe?download">dvdisaster-0.71.devel23-setup.exe</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel23-setup.exe.gpg?download">dvdisaster-0.71.devel23-setup.exe.gpg</a></td></tr>
-  </table>
-</td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
-<tr><td colspan="2">
-Added support for C2 scanning of CD media.<br>
-Andrei Grecu submitted improved versions of the RAW recovery heuristics.
-</td></tr></table><p>
-
-<table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.71 (devel22)</b></td><td align="right">22-Apr-2007</td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
-<tr><td colspan="2">
-  <table>
-    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel22.tar.bz2?download">dvdisaster-0.71.devel22.tar.bz2</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel22.tar.bz2.gpg?download">dvdisaster-0.71.devel22.tar.bz2.gpg</a></td></tr>
-    <tr><td align="right">Binary for Windows:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel22-setup.exe?download">dvdisaster-0.71.devel22-setup.exe</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel22-setup.exe.gpg?download">dvdisaster-0.71.devel22-setup.exe.gpg</a></td></tr>
-  </table>
-</td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
-<tr><td colspan="2">
-Igor Gorbounov started the Russian translation of on-screen texts.<p>
-Added selection of 20h/21h raw reading modes to enable defective sector 
-reading on more drives. Fixed some inefficiencies during raw sector recovery.
-</td></tr></table><p>
-
-<table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.71 (devel21)</b></td><td align="right">15-Apr-2007</td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
-<tr><td colspan="2">
-  <table>
-    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel21.tar.bz2?download">dvdisaster-0.71.devel21.tar.bz2</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel21.tar.bz2.gpg?download">dvdisaster-0.71.devel21.tar.bz2.gpg</a></td></tr>
-    <tr><td align="right">Binary for Windows:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel21-setup.exe?download">dvdisaster-0.71.devel21-setup.exe</a></td></tr>
-    <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.71.devel21-setup.exe.gpg?download">dvdisaster-0.71.devel21-setup.exe.gpg</a></td></tr>
-  </table>
-</td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
-<tr><td colspan="2">
-Andrei Grecu provided an algorithm for recovering defective CD sectors
-from multiple incomplete RAW reading attempts.
-Sergey Svishchev helped porting dvdisaster to NetBSD.<p>
-
-Other features include: a selectable number of reading attempts, verification
-of CD sectors using the raw L-EC and EDC data, and a redesigned preferences dialog.
-RS02 checksum handling has been improved in the adaptive reading strategy. 
-</td></tr></table><p>
 
 <!--- do not change below --->
 

@@ -28,18 +28,13 @@ begin_page();
  <li><a name="#freebsd"></a><b>FreeBSD</b> version <b>6.0</b> or later<br>
      (using ATAPI drives requires loading the <i>atapicam</i> kernel module -- see INSTALL doc)<p>
  </li>
- <li><b>GNU/Linux</b> with kernel <b>2.6.7</b> or later,<br>
-     (using kernels >= 2.4.20 is possible, but not recommended!)<p>
+ <li><b>GNU/Linux</b> with kernel <b>2.6.7</b> or later.<p>
  </li>
  <li><b>Mac OS X</b> version 10.4 (Tiger) or later,<br> 
       on x86 and PowerPC hardware.<p>
  <li><b>NetBSD</b> version 3.1 or later.<p></li> 
- <li><b>Windows</b> <b>2000</b> or <b>XP</b><br>
-     Windows 98 and ME are possible, but are not recommended for handling DVD
-     and larger media.<br>
-     Running under Windows Vista (R) is possible, but mostly untested.
- </li>
-</ul>
+ <li><b>Windows 2000</b>, <b>Windows XP</b> oder <b>Windows Vista (R).</b></li>
+ </ul>
 
 <!--- do not change below --->
 

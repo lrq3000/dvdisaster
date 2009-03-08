@@ -2087,12 +2087,14 @@ if(Closure->debugMode)  /* hidden until version 0.80 */
       }
 
       AddHelpParagraph(lwoh, 
-		       _("<b>Raw reading</b>\n\n"
-			 "Some CD/DVD drives may deliver unreliable results when their "
+		       _("<b>Raw reading</b> (affects CD media only)\n\n"
+			 "Some drives may deliver unreliable results when their "
 			 "internal error correction approaches its maximum capacity.\n\n"
 			 "Activating this option makes dvdisaster read sectors in raw mode. "
 			 "The L-EC P/Q vectors, EDC checksum and MSF address contained in the "
-			 "raw data are checked to make sure that the sector was correctly read."
+			 "raw data are checked to make sure that the sector was correctly read.\n\n"
+			 "This option will also activate C2 quality scanning if supported by the "
+			 "drive and medium."
 			 ));
 
       /* Minimum reading attempts */
@@ -2242,8 +2244,8 @@ if(Closure->debugMode)  /* hidden until version 0.80 */
 			 "final phase of the reading process. If adaptive reading with a setting of 128 is not "
 			 "sufficient, try reading the remaining sectors with an additional linear reading pass.\n\n"
 
-			 "On DVD media read errors do usually extend over at least 16 sectors for technical "
-			 "reasons. Therefore selecting a value less than 16 is not recommended for DVD."
+			 "On DVD and BD media read errors do usually extend over at least 16 sectors for technical "
+			 "reasons. Therefore selecting a value less than 16 is not recommended for DVD and BD."
 			 ));
 
       /** Media re-reads */

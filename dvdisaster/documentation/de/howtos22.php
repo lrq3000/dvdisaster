@@ -20,10 +20,9 @@ howto_headline("Fehlerkorrektur-Datei erstellen", "Grundeinstellungen", "images/
 <?php begin_screen_shot("Einstellungsdialog aufrufen.","global-prefs-invoke.png"); ?>
 <table><tr><td valign="top"><img src="../images/prefs-icon.png" valign="bottom"></td>
 <td>Die nachfolgend besprochenen Reiterkarten finden Sie
-im Einstellungsdialog, den Sie durch Anklicken des links gezeigten 
-Werkzeug-Symbols aufrufen. Im Bildschirmfoto auf der rechten Seite
-(Anklicken vergrößert das Bild) 
-ist es grün markiert.</td>
+im Einstellungsdialog. Das zum Aufruf verwendete Symbol ist
+in dem Bildschirmfoto grün markiert (Anklicken vergrößert das Bild).
+Das Symbol kann je nach verwendetem Symbol-Thema anders aussehen.</td>
 </tr></table>
 <?php end_screen_shot(); ?>
 

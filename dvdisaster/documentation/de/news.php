@@ -21,6 +21,14 @@ $news_counter = 0;
 
 news_headline("Neues über dvdisaster");
 
+news_item("08.03.2009", "dvdisaster 0.71.28 veröffentlicht", "
+Diese Version behebt Abstürze durch unzulässige Befehle 
+(\"illegal Instruction\") auf x86-Maschinen die SSE2 nicht unterstützen.
+Sie enthält weitere kleinere Änderungen auf dem Weg zum 
+Veröffentlichungskandidaten für den stabilen Zweig.
+");
+
+
 news_item("18.01.2009", "dvdisaster 0.71.27 veröffentlicht", "
 Die Dokumentation ist wieder komplett. Einige Crashes und
 Inkompatibilitäten mit ungewöhnlichen Laufwerken und Datenträgern wurden behoben.
@@ -51,18 +59,6 @@ news_item("03.03.2008", "Ups - Abbilder >2GB erzeugen Fehler in 0.70.5 and 0.71.
    veröffentlichten Versionen 0.70.5 and 0.71.24. Verbesserte Versionen kommen 
    in den nächsten Tagen.
 ");
-
-news_item("24.02.2008", "dvdisaster 0.70.5 / 0.71.24 beheben Problem mit neuen Linux-Versionen", "
-   Die neuen Versionen beheben ein Problem mit neueren Linux-Kernen, das unter
-   bestimmten Umständen ein Einfrieren des Systems bewirken kann. Bitte 
-   aktualisieren Sie dvdisaster, wenn Sie Kernel 2.6.17 oder einen neueren
-   einsetzen.
-   Möglicherweise sind auch noch ältere Kernel-Versionen betroffen.
-
-   Mit dieser Version beginnt außerdem die Überarbeitung
-   der Online-Dokumentation, einschließlich einer russischen Übersetzung von Igor 
-   Gorbounov. 
-"); # end of news_item
 
 if($news_flash == 0) 
    end_page();

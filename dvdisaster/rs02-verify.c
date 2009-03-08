@@ -1083,7 +1083,7 @@ void RS02Verify(Method *self)
 
    /*** Print final results */
 
-   try_it = prognosis(cc, total_missing - hdr_correctable, expected_sectors);
+   try_it = prognosis(cc, total_missing + data_crc_errors - hdr_correctable, expected_sectors);
 
    if(Closure->guiMode)
    {  if(ecc_advice) 

@@ -53,10 +53,10 @@ Spiral* CreateSpiral(GdkColor *outline, GdkColor *fill,
 
      ring_expand =  ((double)segment_size * a) / (2.0*M_PI);
      a += atan((double)segment_size / scale_o);
-     scale_o = (double)start_radius + ring_expand + segment_size;
+     scale_o = (double)start_radius + ring_expand + (double)segment_size;
    }
 
-   spiral->diameter = 2.0 * scale_o*cos(0);
+   spiral->diameter = 2.0 * scale_o;
 
    return spiral;
 }

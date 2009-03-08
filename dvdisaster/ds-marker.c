@@ -121,7 +121,6 @@ int CheckForMissingSector(unsigned char *buf, gint64 sector,
       else return SECTOR_MISSING;
    }
 
-
    /* See if it is our dead sector marker */
 
    if(strcmp((char*)buf, 
@@ -142,9 +141,8 @@ int CheckForMissingSector(unsigned char *buf, gint64 sector,
 
    if(get_recorded_number(buf, &recorded_number))
       if(recorded_number != sector)
-      {printf("XXX %lld displaced\n", (long long)sector);
 	 return SECTOR_MISSING_DISPLACED;
-      }
+
    /* Verify medium fingerprint. If the dead sector was fingerprinted with 
       a different sector, ignore the test. Retrieving the right fingerprint
       sector is too expensive. */
@@ -238,6 +236,26 @@ void ExplainMissingSector(unsigned char *buf, gint64 sector, int error, int imag
 	    if(answer) Closure->noMissingWarnings = TRUE;
 	    break;
       }
+   }
+
+   /* Error was found while reading a medium */
+
+   else 
+   {  int answer;
+
+      answer = ModalDialog(GTK_MESSAGE_ERROR, GTK_BUTTONS_NONE, insert_buttons,
+			   _("Unrecoverable sector found!\n\n"
+			     "Sector %lld is marked unreadable on the medium.\n\n"
+			     "The medium was probably mastered from defective content.\n"
+			     "For example it might contain one or more files which came\n"
+			     "from a damaged medium which was NOT fully recovered.\n" 
+			     "This means that some files may have been silently corrupted.\n"
+			     "Since the medium was already created defective it can not be\n"
+			     "repaired by dvdisaster. Also it will not be possible to create\n"
+			     "error correction data for it. Sorry for the bad news.\n"),
+			   sector);
+      
+      if(answer) Closure->noMissingWarnings = TRUE;
    }
 
    g_free(label_msg);

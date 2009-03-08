@@ -2073,7 +2073,7 @@ void LoadMedium(DeviceHandle *dh, int load)
    cmd[0] = 0x1b;                /* START STOP */
    cmd[4] = load ? 0x03 : 0x02;  /* LOEJ=1; START=load/eject */
 
-   if(SendPacket(dh, cmd, 12, NULL, 0, &sense, DATA_READ)<0
+   if(SendPacket(dh, cmd, 6, NULL, 0, &sense, DATA_READ)<0
       && (sense.asc != 0x53 || sense.ascq != 0x02))
    {
       PrintLog(_("%s\nCould not load/unload the medium.\n"), 
@@ -2091,7 +2091,7 @@ void LoadMedium(DeviceHandle *dh, int load)
    memset(cmd, 0, MAX_CDB_SIZE);
    cmd[0] = 0x1e;                /* PREVENT ALLOW MEDIUM REMOVAL */
 
-   if(SendPacket(dh, cmd, 12, NULL, 0, &sense, DATA_READ)<0)
+   if(SendPacket(dh, cmd, 6, NULL, 0, &sense, DATA_READ)<0)
       PrintLog(_("%s\nCould not unlock the medium.\n"), 
 	       GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
 
@@ -2101,7 +2101,7 @@ void LoadMedium(DeviceHandle *dh, int load)
    cmd[0] = 0x1b;                /* START STOP */
    cmd[4] = 0x02;                /* LOEJ=1; START=eject */
 
-   if(SendPacket(dh, cmd, 12, NULL, 0, &sense, DATA_READ)<0)
+   if(SendPacket(dh, cmd, 6, NULL, 0, &sense, DATA_READ)<0)
       PrintLog(_("%s\nCould not load/unload the medium.\n"), 
 	       GetSenseString(sense.sense_key, sense.asc, sense.ascq, TRUE));
 }
@@ -2119,7 +2119,7 @@ int TestUnitReady(DeviceHandle *dh)
    memset(cmd, 0, MAX_CDB_SIZE);
    cmd[0] = 0x00;     /* TEST UNIT READY */
 
-   if(SendPacket(dh, cmd, 12, NULL, 0, &dh->sense, DATA_READ) != -1)
+   if(SendPacket(dh, cmd, 6, NULL, 0, &dh->sense, DATA_READ) != -1)
       return TRUE;
 
    /*** If no medium present, try closing the tray. */
@@ -2132,10 +2132,12 @@ int TestUnitReady(DeviceHandle *dh)
         becoming ready */
 
    for(i=0; i<10; i++)
-   {  memset(cmd, 0, MAX_CDB_SIZE);
+   {  int continue_waiting = FALSE;
+
+      memset(cmd, 0, MAX_CDB_SIZE);
       cmd[0] = 0x00;     /* TEST UNIT READY */
 
-      if(SendPacket(dh, cmd, 12, NULL, 0, &dh->sense, DATA_READ) != -1)
+      if(SendPacket(dh, cmd, 6, NULL, 0, &dh->sense, DATA_READ) != -1)
       {  if(Closure->guiMode)
 	    SetLabelText(Closure->status, "");
 	 return TRUE;
@@ -2145,15 +2147,23 @@ int TestUnitReady(DeviceHandle *dh)
 	 if(   (dh->sense.asc == 0x04 && dh->sense.ascq == 0x01) /* but in process of becoming so */
 	     || dh->sense.asc == 0x3a    /* flawed firmware workaround */
 	   )
-	 {  PrintCLIorLabel(Closure->status,
-			    _("Waiting 10 seconds for drive: %d\n"),9-i);
+	    continue_waiting = TRUE;
 
-	    if(Closure->stopActions)
-	       return FALSE;
+      if(dh->sense.sense_key == 6) /* Unit attention */
+	 if(dh->sense.asc == 0x28 && dh->sense.ascq == 0x00)
+	    continue_waiting = TRUE;
 
-	    g_usleep(G_USEC_PER_SEC);
-	    continue;
-	 }
+      if(continue_waiting)
+      {  PrintCLIorLabel(Closure->status,
+			 _("Waiting 10 seconds for drive: %d\n"),9-i);
+
+	 if(Closure->stopActions)
+	    return FALSE;
+
+	 g_usleep(G_USEC_PER_SEC);
+	 continue;
+      }
+
       Verbose("fell out waiting for drive %x %x %x\n",dh->sense.sense_key,dh->sense.asc,dh->sense.ascq);
       break;  /* Something is wrong with the drive */
    }
@@ -2224,6 +2234,12 @@ static int read_cd_sector(DeviceHandle *dh, unsigned char *buf, int lba, int nse
 
    ret = SendPacket(dh, cmd, 12, buf, 2048*nsectors, sense, DATA_READ);
 
+#if 0
+   if(lba==16000)  /* fixme */
+   {  buf[240]^=255;
+   }
+#endif
+
    if(ret<0) RememberSense(sense->sense_key, sense->asc, sense->ascq);
    return ret;
 }
@@ -2255,10 +2271,6 @@ static int read_raw_cd_sector(DeviceHandle *dh, unsigned char *outbuf, int lba, 
    /*** Perform the raw read */
 
    c2bit = dh->canC2Scan ? 0x02 : 0;
-#if 0 //fixme
-printf("raw read enter, %d sectors, %d c2bit, %d lba, %d size\n", 
-       nsectors, c2bit, lba, rb->sampleSize); 
-#endif
    memset(cdb, 0, MAX_CDB_SIZE);
    cdb[0]  = 0xbe;         /* READ CD */
    switch(dh->subType)     /* Expected sector type */
@@ -2295,13 +2307,10 @@ printf("raw read enter, %d sectors, %d c2bit, %d lba, %d size\n",
    ret = SendPacket(dh, cdb, 12, rb->workBuf->buf, nsectors*rb->sampleSize, sense, DATA_READ);
    RememberSense(sense->sense_key, sense->asc, sense->ascq);
 
-#if 0  // fixme
-printf("raw read exit, %d  sectors\n", nsectors);
-#endif
-
 #if 0
-   if(lba==160)  /* fixme */
-   rb->workBuf->buf[230]^=255;
+   if(lba==16000)  /* fixme */
+   {  rb->workBuf->buf[0*rb->sampleSize+230]^=255;
+   }
 #endif
 
    /* count c2 error bits */
@@ -2375,8 +2384,7 @@ int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
    {  gint64 i,idx;
 
      for(idx=s,i=0; i<nsectors; idx++,i++)
-	//       if(GetBit(dh->defects, idx))
-	if(GetBit(dh->defects, idx) && !((Random() & 15)))
+       if(GetBit(dh->defects, idx) && !((Random() & 15)))
        {  dh->sense.sense_key = 3;
 	  dh->sense.asc       = 255;
 	  dh->sense.ascq      = 255;
@@ -2401,11 +2409,6 @@ int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
       if(Closure->readRaw && dh->readRaw)
 	   status = dh->readRaw(dh, buf, s, nsectors);
       else status = dh->read(dh, buf, s, nsectors);
-
-#if 0
-   if(s==160 || s>=144624)  /* fixme */
-      buf[230]^=255;
-#endif
 
       if(Closure->readRaw && dh->rawBuffer)
 	recommended_attempts = dh->rawBuffer->recommendedAttempts;

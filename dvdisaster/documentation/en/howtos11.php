@@ -20,9 +20,9 @@ howto_headline("Scanning media for errors", "Basic settings", "images/scan-icon.
 <?php begin_screen_shot("Opening the configuration dialog.","global-prefs-invoke.png"); ?>
 <table><tr><td valign="top"><img src="../images/prefs-icon.png" valign="bottom"></td>
 <td>The following tabs are found in the configuration dialog.
-Open the dialog by clicking the tools symbol.
-Please refer to the screen shot to the right (click the image to expand it) to locate
-the symbol; it is marked in green.</td>
+Open the dialog by selecting the symbol marked green in the screen shot
+(click the image to expand it). The symbol may look different
+due to the symbol theme you are using.</td>
 </tr></table>
 <?php end_screen_shot(); ?>
 

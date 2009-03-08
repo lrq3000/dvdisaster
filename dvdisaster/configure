@@ -72,6 +72,9 @@ if ! CHECK_INCLUDE locale.h locale || ! CHECK_INCLUDE libintl.h intl ; then
   cfg_force_with_nls=no
 fi
 
+if CHECK_INCLUDE cpuid.h cpuid; then
+  CFG_HAVE_OPTIONS="$CFG_HAVE_OPTIONS -DHAVE_CPUID"
+fi
 CHECK_LIBRARY intl gettext intl
 CHECK_LIBRARY cam cam_open_device cam
 

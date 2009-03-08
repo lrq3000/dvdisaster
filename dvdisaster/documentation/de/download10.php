@@ -29,18 +29,14 @@ begin_page();
  <li><a name="#freebsd"></a><b>FreeBSD</b> ab Version <b>6.0</b><br> 
      (für ATAPI-Laufwerke muß das Kernelmodul <i>atapicam</i> geladen werden - siehe INSTALL-Dokument)<p>
  </li>
- <li><b>GNU/Linux</b> ab Kernel <b>2.6.7</b><br> 
-     (Kernel >= 2.4.20 sind möglich, aber nicht empfohlen!)<p>
+ <li><b>GNU/Linux</b> ab Kernel <b>2.6.7</b><p>
  </li>
  <li><b>Mac OS X</b> ab Version 10.4 (Tiger),<br> 
       auf x86 und PowerPC-Hardware.<p>
  </li>
  <li><b>NetBSD</b> ab Version 3.1.<p></li>
 
- <li><b>Windows</b> <b>2000</b> oder <b>XP</b><br>
-     Windows 98 und ME sind möglich, aber für die Bearbeitung von DVD und größeren
-     Formaten nicht empfohlen.<br>
-     Die Benutzung unter Windows Vista (R) ist möglich, aber weitgehend ungetestet.
+ <li><b>Windows 2000</b>, <b>Windows XP</b> oder <b>Windows Vista (R).</b>
  </li>
 </ul>
 

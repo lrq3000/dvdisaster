@@ -120,3 +120,12 @@ void SwapEccHeaderBytes(EccHeader *eh)
   print_ecc_header(eh);
 #endif
 }
+
+void SwapDefectiveHeaderBytes(DefectiveSectorHeader *dsh)
+{  
+  dsh->lba        = SwapBytes64(dsh->lba);
+  dsh->sectorSize = SwapBytes32(dsh->sectorSize);
+  dsh->properties = SwapBytes32(dsh->properties);
+  dsh->dshFormat  = SwapBytes32(dsh->dshFormat);
+  dsh->nSectors   = SwapBytes32(dsh->nSectors);
+}
