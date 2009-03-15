@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.70.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-08 20:04+0100\n"
+"POT-Creation-Date: 2009-03-15 17:22+0100\n"
 "PO-Revision-Date: 2009-03-07 10:56+0300\n"
 "Last-Translator: Igor Gorbounov <igor.gorbounov@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -166,7 +166,7 @@ msgstr "Новая длина должна быть в диапазоне [0..%l
 msgid "Truncating image to %lld sectors.\n"
 msgstr "Усечение образа до %lld секторов.\n"
 
-#: debug.c:568 read-linear.c:1379 rs01-fix.c:198 rs01-fix.c:220 rs01-fix.c:236
+#: debug.c:568 read-linear.c:1385 rs01-fix.c:198 rs01-fix.c:220 rs01-fix.c:236
 #: rs01-fix.c:271 rs02-create.c:104 rs02-create.c:148 rs02-fix.c:241
 #: rs02-fix.c:262 rs02-fix.c:277 rs03-create.c:146 rs03-create.c:190
 #: rs03-fix.c:241 rs03-fix.c:262 rs03-fix.c:277 rs03s-create.c:104
@@ -499,6 +499,7 @@ msgid ""
 "  --auto-suffix          - automatically add .iso and .ecc file suffixes\n"
 "  --cache-size n         - image cache size in MB during -c mode (default: 32MB)\n"
 "  --dao                  - assume DAO disc; do not trim image end\n"
+"  --defective-dump d     - directory for saving incomplete raw sectors\n"
 "  --eject                - eject medium after successful read\n"
 "  --fill-unreadable n    - fill unreadable sectors with byte n\n"
 "  --ignore-fatal-sense   - continue reading after potentially fatal error conditon\n"
@@ -513,31 +514,8 @@ msgid ""
 "  --split-files          - split image into files <= 2GB\n"
 "\n"
 msgstr ""
-"Тонкие настройки (перед применением смотрите руководство!)\n"
-"  -j,--jump n            - перейти на n секторов вперед после ошибки чтения (по умолчанию: 16)\n"
-"  -m n                   - показать/выбрать методы коррекции ошибок (по умолчанию: RS01)\n"
-"  -n,--redundancy n%%     - избыточность файла коррекции ошибок (в процентах), или\n"
-"                           максимальный размер образа с исправлением ошибок (в секторах)\n"
-"  -v,--verbose           - более содержательные сообщения\n"
-"  --adaptive-read        - использовать оптимизированную стратегию для чтения поврежденного носителя\n"
-"  --auto-suffix          - автоматически добавлять расширения имен файлов .iso и .ecc\n"
-"  --cache-size n         - размер буфера образов в МБ в режиме -c  (по умолчанию: 32Мб)\n"
-"  --dao                  - считать, что режим DAO; не урезать конец образа\n"
-"  --eject                - извлекать носитель после успешного чтения\n"
-"  --fill-unreadable n    - заполнять нечитаемые секторы байтом n\n"
-"  --ignore-fatal-sense   - продолжать чтение после возможно неустранимой ошибки\n"
-"  --internal-rereads n   - привод может сделать n попыток чтения, прежде чем сообщить об ошибке\n"
-"  --query-size n         - определить размер образа по приводу/udf/ecc (по умолчанию: ecc)\n"
-"  --raw-mode n           - режим для низкоуровневого чтения CD (20 or 21)\n"
-"  --read-attempts n-m    - от n до m попыток чтения поврежденного сектора\n"
-"  --read-medium n        - читать весь носитель вплоть до n раз\n"
-"  --read-raw             - выполняет чтение в низкоуровневом режиме, если возможно\n"
-"  --speed-warning n      - предупредить, если скорость изменяется больше, чем на n процентов\n"
-"  --spinup-delay n       - выждать n секунд для раскручивания привода\n"
-"  --split-files          - разбить образ на файлы <= 2ГБ\n"
-"\n"
 
-#: dvdisaster.c:904
+#: dvdisaster.c:905
 #, c-format
 msgid ""
 "Debugging options (purposefully undocumented and possibly harmful)\n"
@@ -546,7 +524,6 @@ msgid ""
 "  --cdump           - creates C #include file dumps instead of hexdumps\n"
 "  --compare-images a,b  - compare sectors in images a and b\n"
 "  --copy-sector a,n,b,m - copy sector n from image a to sector m in image b\n"
-"  --defective-dump p  creates C #include file dumps for unrecoverable sectors\n"
 "  --erase sector    - erase the given sector\n"
 "  --erase n-m       - erase sectors n - m, inclusively\n"
 "  --marked-image n  - create image with n marked random sectors\n"
@@ -564,29 +541,6 @@ msgid ""
 "  --zero-unreadable - replace the \"unreadable sector\" markers with zeros\n"
 "\n"
 msgstr ""
-"Параметры отладки (намеренно недокументированные и, возможно, опасные)\n"
-"  --debug           - включает следующие параметры\n"
-"  --byteset s,i,b   - установить байт i в секторе s в значение b\n"
-"  --cdump           - создает дампы в виде C #include-файлов вместо шестнадцатеричных дампов\n"
-"  --compare-images a,b  - сравнить сектора в образах a и b\n"
-"  --copy-sector a,n,b,m - скопировать сектор n из образа a в сектор m образа b\n"
-"  --defective-dump p  создает дампы в виде C #include-файлов для невосстановимых секторов\n"
-"  --erase sector    - стереть данный сектор\n"
-"  --erase n-m       - стереть секторы n - m включительно\n"
-"  --marked-image n  - создать образ с n помеченными случайными секторами\n"
-"  --merge-images a,b  объединить образ a с образом b (a получает секторы из b)\n"
-"  --random-errors r,e заполнить образ (исправимыми) случайными ошибками\n"
-"  --random-image n  - создать образ с n секторами со случайными номерами\n"
-"  --random-seed n   - начальное значение для встроенного генератора случайных чисел\n"
-"  --raw-sector n    - показывает шестнадцатиричный дамп данного необработанного сектора с носителя в приводе\n"
-"  --read-sector n   - показывает шестнадцатиричный дамп данного сектора с носителя в приводе\n"
-"  --screen-shot     - useful for generating screen shots\n"
-"  --send-cdb arg    - выполнить cdb на приводе; при ошибке система снимается\n"
-"  --show-sector n   - показывает содержимое данного сектора в шестнадцатеричном виде\n"
-"  --sim-defects n   - смоделировать n%% поврежденных секторов на носителе\n"
-"  --truncate n      - обрезает образ до n секторов\n"
-"  --zero-unreadable - заменить маркеры \"нечитаемый сектор\" нулями\n"
-"\n"
 
 #: dvdisaster.c:929
 msgid ""
@@ -1066,7 +1020,7 @@ msgstr "Тип носителя:"
 msgid "Book type:"
 msgstr "Формат (book type):"
 
-#: medium-info.c:308 scsi-layer.c:2629
+#: medium-info.c:308 scsi-layer.c:2641
 msgid "Manuf.-ID:"
 msgstr "Изгот.-ID:"
 
@@ -2323,7 +2277,7 @@ msgstr "Сектор не принадлежит выбранному образ
 
 #: raw-editor.c:388 read-adaptive.c:999 read-adaptive.c:1070
 #: read-adaptive.c:1349 read-adaptive.c:1544 read-linear.c:431
-#: read-linear.c:691 read-linear.c:994 rs01-fix.c:447 rs01-fix.c:707
+#: read-linear.c:691 read-linear.c:996 rs01-fix.c:447 rs01-fix.c:707
 #: rs02-fix.c:751 rs03-fix.c:736
 #, c-format
 msgid "Failed seeking to sector %lld in image [%s]: %s"
@@ -2743,7 +2697,7 @@ msgstr ""
 "\n"
 "Достаточно данных для восстановления образа.\n"
 
-#: read-adaptive.c:1322 read-linear.c:1056
+#: read-adaptive.c:1322 read-linear.c:1058
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -2754,7 +2708,7 @@ msgstr ""
 "Не удается продолжить после приведенной выше ошибки.\n"
 "Используйте параметр --ignore-fatal-sense, чтобы не принимать во внимание."
 
-#: read-adaptive.c:1327 read-linear.c:1061
+#: read-adaptive.c:1327 read-linear.c:1063
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -2777,7 +2731,7 @@ msgstr "CRC-ошибка в секторе %lld\n"
 msgid "Sectors %lld-%lld: %s\n"
 msgstr "Сектора %lld-%lld: %s\n"
 
-#: read-adaptive.c:1536 read-linear.c:1230 scsi-layer.c:1713
+#: read-adaptive.c:1536 read-linear.c:1232 scsi-layer.c:1713
 #, c-format
 msgid "Sector %lld: %s\n"
 msgstr "Сектор %lld: %s\n"
@@ -2955,94 +2909,108 @@ msgstr "Положение чтения: %3d.%1d%% (%4.1fx)"
 msgid "* CRC error, sector: %lld\n"
 msgstr "* CRC-ошибка, сектор: %lld\n"
 
-#: read-linear.c:950 read-linear.c:1071
+#: read-linear.c:952 read-linear.c:1073
 #, c-format
 msgid "<span %s>Aborted by user request!</span> %lld sectors read, %lld sectors unreadable/skipped so far."
 msgstr "<span %s>Прервано пользователем!</span> %lld секторов прочитано, %lld секторов не читаются или пропущены."
 
-#: read-linear.c:1006
+#: read-linear.c:1008
 #, c-format
 msgid "unexpected read error in image for sector %lld"
 msgstr "неожиданная ошибка чтения образа в секторе %lld"
 
-#: read-linear.c:1086
+#: read-linear.c:1088
 #, c-format
 msgid "Sector %lld: %3d C2 errors.%s\n"
 msgstr "Сектор %lld: %3d ошибок C2.%s\n"
 
-#: read-linear.c:1210
+#: read-linear.c:1212
 #, c-format
 msgid "Sector %lld: %s Skipping %d sectors.\n"
 msgstr "Сектор %lld: %s Пропуск %d секторов.\n"
 
-#: read-linear.c:1284
+#: read-linear.c:1264
+#, c-format
+msgid ""
+"<big>Trying to complete image, reading pass %d of %d.</big>\n"
+"%s"
+msgstr ""
+
+#: read-linear.c:1266
+#, c-format
+msgid ""
+"\n"
+"Trying to complete image, reading pass %d of %d.\n"
+msgstr ""
+
+#: read-linear.c:1290
 msgid "but wrong ecc md5sum"
 msgstr "но неправильная md5sum для ecc"
 
-#: read-linear.c:1291
+#: read-linear.c:1297
 msgid "but wrong crc md5sum"
 msgstr "но неправильная md5sum для crc"
 
-#: read-linear.c:1298
+#: read-linear.c:1304
 msgid "but wrong data md5sum"
 msgstr "но неправильная md5sum для данных"
 
-#: read-linear.c:1310
+#: read-linear.c:1316
 #, c-format
 msgid "%lld sectors read.     "
 msgstr "%lld секторов прочитано.     "
 
-#: read-linear.c:1311
+#: read-linear.c:1317
 #, c-format
 msgid "%lld sectors read; %lld unreadable sectors."
 msgstr "%lld секторов прочитано; %lld нечитаемых секторов."
 
-#: read-linear.c:1319
+#: read-linear.c:1325
 #, c-format
 msgid "All sectors successfully read, but wrong image length (%lld sectors difference)"
 msgstr "Все сектора успешно прочитаны, но размер образа неправильный (разница на %lld секторов)"
 
-#: read-linear.c:1323
+#: read-linear.c:1329
 msgid "All sectors successfully read, but wrong image checksum."
 msgstr "Все сектора успешно прочитаны, но неправильная контрольная сумма образа."
 
-#: read-linear.c:1324 read-linear.c:1328
+#: read-linear.c:1330 read-linear.c:1334
 msgid "All sectors successfully read. Checksums match."
 msgstr "Все сектора успешно прочитаны. Контрольные суммы совпадают."
 
-#: read-linear.c:1330
+#: read-linear.c:1336
 #, c-format
 msgid "All sectors successfully read, %s!"
 msgstr "Все сектора успешно прочитаны,·%s!"
 
-#: read-linear.c:1335
+#: read-linear.c:1341
 msgid "All sectors successfully read."
 msgstr "Все сектора успешно прочитаны."
 
-#: read-linear.c:1341
+#: read-linear.c:1347
 #, c-format
 msgid "%lld unreadable sectors."
 msgstr "%lld нечитаемых секторов."
 
-#: read-linear.c:1343
+#: read-linear.c:1349
 #, c-format
 msgid "%lld CRC errors."
 msgstr "%lld CRC-ошибок."
 
-#: read-linear.c:1344
+#: read-linear.c:1350
 #, c-format
 msgid "%lld CRC errors, %lld unreadable sectors."
 msgstr "%lld CRC-ошибок, %lld нечитаемых секторов."
 
-#: read-linear.c:1350
+#: read-linear.c:1356
 msgid "Scanning finished: "
 msgstr "Проверка завершена: "
 
-#: read-linear.c:1352
+#: read-linear.c:1358
 msgid "Reading finished: "
 msgstr "Чтение завершено: "
 
-#: read-linear.c:1363
+#: read-linear.c:1369
 #, c-format
 msgid ""
 "%d sectors missing at the end of the disc.\n"
@@ -3053,7 +3021,7 @@ msgstr ""
 "Это нормально, если CD записан в режиме TAO (track at once).\n"
 "Образ будет соответственно укорочен. Подробнее см. в руководстве.\n"
 
-#: read-linear.c:1369
+#: read-linear.c:1375
 #, c-format
 msgid ""
 "%d sectors missing at the end of the disc.\n"
@@ -4929,32 +4897,32 @@ msgstr ""
 msgid "Waiting 10 seconds for drive: %d\n"
 msgstr "Выжидание 10 секунд для привода: %d\n"
 
-#: scsi-layer.c:2427
+#: scsi-layer.c:2439
 #, c-format
 msgid "Sectors %lld - %lld: %s\n"
 msgstr "Сектора %lld - %lld: %s\n"
 
-#: scsi-layer.c:2441
+#: scsi-layer.c:2453
 #, c-format
 msgid "Sector %lld, try %d: %s Sector returned: %d.\n"
 msgstr "Сектор %lld, попытка %d: %s Возвращен сектор: %d.\n"
 
-#: scsi-layer.c:2447
+#: scsi-layer.c:2459
 #, c-format
 msgid "Sector %lld, try %d: %s\n"
 msgstr "Сектор %lld, попытка %d: %s\n"
 
-#: scsi-layer.c:2458
+#: scsi-layer.c:2470
 #, c-format
 msgid "Sector %lld, try %d: success\n"
 msgstr "Сектор %lld, попытка %d: успешно\n"
 
-#: scsi-layer.c:2525 scsi-layer.c:2678
+#: scsi-layer.c:2537 scsi-layer.c:2690
 #, c-format
 msgid "Device %s: no medium present\n"
 msgstr "Устройство %s: нет носителя\n"
 
-#: scsi-layer.c:2526 scsi-layer.c:2679
+#: scsi-layer.c:2538 scsi-layer.c:2691
 #, c-format
 msgid ""
 "Device %s does not become ready:\n"
@@ -4965,7 +4933,7 @@ msgstr ""
 "%s\n"
 "\n"
 
-#: scsi-layer.c:2531
+#: scsi-layer.c:2543
 #, c-format
 msgid ""
 "\n"
@@ -4974,7 +4942,7 @@ msgstr ""
 "\n"
 "Устройство: %s, %s\n"
 
-#: scsi-layer.c:2535
+#: scsi-layer.c:2547
 #, c-format
 msgid ""
 "\n"
@@ -4983,52 +4951,52 @@ msgstr ""
 "\n"
 "Устройство: %s (%s), %s\n"
 
-#: scsi-layer.c:2543
+#: scsi-layer.c:2555
 msgid "Drive failed to report media type."
 msgstr "Не удалось получить от привода сообщение о типе носителя."
 
-#: scsi-layer.c:2554 scsi-layer.c:2641
+#: scsi-layer.c:2566 scsi-layer.c:2653
 #, c-format
 msgid "This software does not support \"%s\" type media."
 msgstr "Эта программа не поддерживает \"%s\" тип носителя."
 
-#: scsi-layer.c:2562
+#: scsi-layer.c:2574
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr "Эта программа не поддерживает многосессионные (%d сессиий) носители."
 
-#: scsi-layer.c:2585 scsi-layer.c:2594
+#: scsi-layer.c:2597 scsi-layer.c:2606
 msgid "Using READ CD"
 msgstr "Используется READ CD"
 
-#: scsi-layer.c:2586
+#: scsi-layer.c:2598
 msgid ", RAW reading"
 msgstr ", чтение \"RAW\""
 
-#: scsi-layer.c:2589
+#: scsi-layer.c:2601
 #, c-format
 msgid ", Mode page 1 ERP = %02xh"
 msgstr ", Mode page 1 ERP = %02xh"
 
-#: scsi-layer.c:2592
+#: scsi-layer.c:2604
 msgid ", C2 scanning"
 msgstr ", поиск C2"
 
-#: scsi-layer.c:2599
+#: scsi-layer.c:2611
 msgid "Using READ(10).\n"
 msgstr "Используется READ(10).\n"
 
-#: scsi-layer.c:2618
+#: scsi-layer.c:2630
 #, c-format
 msgid "Medium: %s, %lld sectors%s"
 msgstr "Носитель: %s, %lld секторов%s"
 
-#: scsi-layer.c:2622
+#: scsi-layer.c:2634
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s created %s"
 msgstr "Носитель \"%s\": %s, %lld секторов%s создан %s"
 
-#: scsi-layer.c:2648
+#: scsi-layer.c:2660
 msgid "This software does not support encrypted media.\n"
 msgstr "Эта программа не поддерживает шифрованные носители.\n"
 
@@ -5240,6 +5208,104 @@ msgstr ""
 #: welcome-window.c:137
 msgid "<i>New in this Version:</i>"
 msgstr "<i>Новое в этой версии:</i>"
+
+#~ msgid ""
+#~ "Tweaking options (see manual before using!)\n"
+#~ "  -j,--jump n            - jump n sectors forward after a read error (default: 16)\n"
+#~ "  -m n                   - list/select error correction methods (default: RS01)\n"
+#~ "  -n,--redundancy n%%     - error correction file redundancy (in percent), or\n"
+#~ "                           maximum error correction image size (in sectors)\n"
+#~ "  -v,--verbose           - more diagnostic messages\n"
+#~ "  --adaptive-read        - use optimized strategy for reading damaged media\n"
+#~ "  --auto-suffix          - automatically add .iso and .ecc file suffixes\n"
+#~ "  --cache-size n         - image cache size in MB during -c mode (default: 32MB)\n"
+#~ "  --dao                  - assume DAO disc; do not trim image end\n"
+#~ "  --eject                - eject medium after successful read\n"
+#~ "  --fill-unreadable n    - fill unreadable sectors with byte n\n"
+#~ "  --ignore-fatal-sense   - continue reading after potentially fatal error conditon\n"
+#~ "  --internal-rereads n   - drive may attempt n rereads before reporting an error\n"
+#~ "  --query-size n         - query drive/udf/ecc for image size (default: ecc)\n"
+#~ "  --raw-mode n           - mode for raw reading CD media (20 or 21)\n"
+#~ "  --read-attempts n-m    - attempts n upto m reads of a defective sector\n"
+#~ "  --read-medium n        - read the whole medium up to n times\n"
+#~ "  --read-raw             - performs read in raw mode if possible\n"
+#~ "  --speed-warning n      - print warning if speed changes by more than n percent\n"
+#~ "  --spinup-delay n       - wait n seconds for drive to spin up\n"
+#~ "  --split-files          - split image into files <= 2GB\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Тонкие настройки (перед применением смотрите руководство!)\n"
+#~ "  -j,--jump n            - перейти на n секторов вперед после ошибки чтения (по умолчанию: 16)\n"
+#~ "  -m n                   - показать/выбрать методы коррекции ошибок (по умолчанию: RS01)\n"
+#~ "  -n,--redundancy n%%     - избыточность файла коррекции ошибок (в процентах), или\n"
+#~ "                           максимальный размер образа с исправлением ошибок (в секторах)\n"
+#~ "  -v,--verbose           - более содержательные сообщения\n"
+#~ "  --adaptive-read        - использовать оптимизированную стратегию для чтения поврежденного носителя\n"
+#~ "  --auto-suffix          - автоматически добавлять расширения имен файлов .iso и .ecc\n"
+#~ "  --cache-size n         - размер буфера образов в МБ в режиме -c  (по умолчанию: 32Мб)\n"
+#~ "  --dao                  - считать, что режим DAO; не урезать конец образа\n"
+#~ "  --eject                - извлекать носитель после успешного чтения\n"
+#~ "  --fill-unreadable n    - заполнять нечитаемые секторы байтом n\n"
+#~ "  --ignore-fatal-sense   - продолжать чтение после возможно неустранимой ошибки\n"
+#~ "  --internal-rereads n   - привод может сделать n попыток чтения, прежде чем сообщить об ошибке\n"
+#~ "  --query-size n         - определить размер образа по приводу/udf/ecc (по умолчанию: ecc)\n"
+#~ "  --raw-mode n           - режим для низкоуровневого чтения CD (20 or 21)\n"
+#~ "  --read-attempts n-m    - от n до m попыток чтения поврежденного сектора\n"
+#~ "  --read-medium n        - читать весь носитель вплоть до n раз\n"
+#~ "  --read-raw             - выполняет чтение в низкоуровневом режиме, если возможно\n"
+#~ "  --speed-warning n      - предупредить, если скорость изменяется больше, чем на n процентов\n"
+#~ "  --spinup-delay n       - выждать n секунд для раскручивания привода\n"
+#~ "  --split-files          - разбить образ на файлы <= 2ГБ\n"
+#~ "\n"
+
+#~ msgid ""
+#~ "Debugging options (purposefully undocumented and possibly harmful)\n"
+#~ "  --debug           - enables the following options\n"
+#~ "  --byteset s,i,b   - set byte i in sector s to b\n"
+#~ "  --cdump           - creates C #include file dumps instead of hexdumps\n"
+#~ "  --compare-images a,b  - compare sectors in images a and b\n"
+#~ "  --copy-sector a,n,b,m - copy sector n from image a to sector m in image b\n"
+#~ "  --defective-dump p  creates C #include file dumps for unrecoverable sectors\n"
+#~ "  --erase sector    - erase the given sector\n"
+#~ "  --erase n-m       - erase sectors n - m, inclusively\n"
+#~ "  --marked-image n  - create image with n marked random sectors\n"
+#~ "  --merge-images a,b  merge image a with b (a receives sectors from b)\n"
+#~ "  --random-errors r,e seed image with (correctable) random errors\n"
+#~ "  --random-image n  - create image with n sectors of random numbers\n"
+#~ "  --random-seed n   - random seed for built-in random number generator\n"
+#~ "  --raw-sector n    - shows hexdump of the given raw sector from medium in drive\n"
+#~ "  --read-sector n   - shows hexdump of the given sector from medium in drive\n"
+#~ "  --screen-shot     - useful for generating screen shots\n"
+#~ "  --send-cdb arg    - executes given cdb at drive; kills system if used wrong\n"
+#~ "  --show-sector n   - shows hexdump of the given sector in an image file\n"
+#~ "  --sim-defects n   - simulate n%% defective sectors on medium\n"
+#~ "  --truncate n      - truncates image to n sectors\n"
+#~ "  --zero-unreadable - replace the \"unreadable sector\" markers with zeros\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Параметры отладки (намеренно недокументированные и, возможно, опасные)\n"
+#~ "  --debug           - включает следующие параметры\n"
+#~ "  --byteset s,i,b   - установить байт i в секторе s в значение b\n"
+#~ "  --cdump           - создает дампы в виде C #include-файлов вместо шестнадцатеричных дампов\n"
+#~ "  --compare-images a,b  - сравнить сектора в образах a и b\n"
+#~ "  --copy-sector a,n,b,m - скопировать сектор n из образа a в сектор m образа b\n"
+#~ "  --defective-dump p  создает дампы в виде C #include-файлов для невосстановимых секторов\n"
+#~ "  --erase sector    - стереть данный сектор\n"
+#~ "  --erase n-m       - стереть секторы n - m включительно\n"
+#~ "  --marked-image n  - создать образ с n помеченными случайными секторами\n"
+#~ "  --merge-images a,b  объединить образ a с образом b (a получает секторы из b)\n"
+#~ "  --random-errors r,e заполнить образ (исправимыми) случайными ошибками\n"
+#~ "  --random-image n  - создать образ с n секторами со случайными номерами\n"
+#~ "  --random-seed n   - начальное значение для встроенного генератора случайных чисел\n"
+#~ "  --raw-sector n    - показывает шестнадцатиричный дамп данного необработанного сектора с носителя в приводе\n"
+#~ "  --read-sector n   - показывает шестнадцатиричный дамп данного сектора с носителя в приводе\n"
+#~ "  --screen-shot     - useful for generating screen shots\n"
+#~ "  --send-cdb arg    - выполнить cdb на приводе; при ошибке система снимается\n"
+#~ "  --show-sector n   - показывает содержимое данного сектора в шестнадцатеричном виде\n"
+#~ "  --sim-defects n   - смоделировать n%% поврежденных секторов на носителе\n"
+#~ "  --truncate n      - обрезает образ до n секторов\n"
+#~ "  --zero-unreadable - заменить маркеры \"нечитаемый сектор\" нулями\n"
+#~ "\n"
 
 #~ msgid ""
 #~ "\n"

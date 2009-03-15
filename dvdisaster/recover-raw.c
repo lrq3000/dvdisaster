@@ -355,7 +355,7 @@ static int check_for_sync_pattern(unsigned char *new_frame)
 int CheckEDC(unsigned char *cd_frame, int xa_mode)
 { unsigned int expected_crc, real_crc;
 
-   /* Get CRC from CD frame (byte position 2064) */
+   /* XA: Get CRC from byte position 2072 */
 
    if(xa_mode)
    {  expected_crc =  cd_frame[2072] << 24
@@ -363,7 +363,7 @@ int CheckEDC(unsigned char *cd_frame, int xa_mode)
                     | cd_frame[2074] <<  8
                     | cd_frame[2075];
    }
-   else
+   else /* Get CRC from byte position 2064 */
    {  expected_crc =  cd_frame[0x810] << 24
                     | cd_frame[0x811] << 16
                     | cd_frame[0x812] <<  8

@@ -1,6 +1,15 @@
-0.71 (devel-28) 08-03-2009
+0.71 (devel-29) 15-03-2009
         Currently working through known (minor) bugs list to prepare
 	the release candidate.
+	- --help output for --defective-dump was complete nonsense. Fixed.
+	- detection of read errors at the end of track at once disks
+	  would sometimes cut off too many sectors when doing multiple
+	  reading passes and a carefully crafted number of extra read
+	  errors occurred. Fixed.
+	- fixed crash in command line mode when doing multiple 
+	  reading passes.
+
+0.71 (devel-28) 08-03-2009
 	- changed SSE2 handling; now only the interesting part of
 	  dvdisaster are compiled with -msse2 and selection between
 	  normal and SSE2 code versions are done at run time.

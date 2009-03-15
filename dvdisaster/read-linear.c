@@ -812,7 +812,7 @@ void ReadMediumLinear(gpointer data)
    int nsectors; 
    char *t;
    int status,n;
-   int tao_tail = 0;
+   int tao_tail;
    int i;
 
    /*** This value might be temporarily changed later. */
@@ -928,7 +928,8 @@ next_reading_pass:
 	    break;
       }
       Closure->sectorSkip = 0;
-      MarkExistingSectors();
+      if(Closure->guiMode)
+	 MarkExistingSectors();
       rc->lastCopied = 0;  /* Start rendering the spiral from the beginning */
    }
 
@@ -940,6 +941,7 @@ next_reading_pass:
    rc->speed = 0;
    rc->lastSpeed = -1.0;
    rc->firstSpeedValue = TRUE;
+   tao_tail = 0;
 
    while(rc->readPos<=rc->lastSector)
    {  int cluster_mask = rc->dh->clusterSize-1;
@@ -1257,9 +1259,13 @@ step_counter:
    if(   !rc->scanMode
       && (Closure->readErrors || Closure->crcErrors)
       && rc->pass < Closure->readingPasses)
-   {  SetLabelText(GTK_LABEL(Closure->readLinearHeadline), 
-		   "<big>Trying to complete image, reading pass %d of %d.</big>\n%s",
-		   rc->pass+1, Closure->readingPasses, rc->dh->mediumDescr);
+   {  if(Closure->guiMode)
+	   SetLabelText(GTK_LABEL(Closure->readLinearHeadline), 
+			_("<big>Trying to complete image, reading pass %d of %d.</big>\n%s"),
+			rc->pass+1, Closure->readingPasses, rc->dh->mediumDescr);
+      else PrintCLI(_("\nTrying to complete image, reading pass %d of %d.\n"),
+		    rc->pass+1, Closure->readingPasses);
+
 
       goto next_reading_pass;
    }

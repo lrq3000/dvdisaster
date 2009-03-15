@@ -2393,6 +2393,18 @@ int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
        }
    }
 
+#if 0
+   if(   (s == 331600 && nsectors > 16)
+	 || s >331605)
+   {  dh->sense.sense_key = 3;
+      dh->sense.asc       = 255;
+      dh->sense.ascq      = 255;
+      RememberSense(dh->sense.sense_key, dh->sense.asc, dh->sense.ascq);
+	  
+      return TRUE;
+   }
+#endif
+
    /* Reset raw reading buffer (if there is one) */
 
    if(Closure->readRaw && dh->rawBuffer)
