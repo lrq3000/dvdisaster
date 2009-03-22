@@ -1,6 +1,9 @@
-0.71 (devel-29) 15-03-2009
+0.71 (devel-29) 22-03-2009
         Currently working through known (minor) bugs list to prepare
 	the release candidate.
+	- made adaptive reading pursue raw reading more aggressively;
+	  effectively trading in place re-reads for seeks over
+	  the medium.
 	- --help output for --defective-dump was complete nonsense. Fixed.
 	- detection of read errors at the end of track at once disks
 	  would sometimes cut off too many sectors when doing multiple

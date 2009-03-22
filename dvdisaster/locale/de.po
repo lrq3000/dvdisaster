@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-15 17:08+0100\n"
+"POT-Creation-Date: 2009-03-16 22:03+0100\n"
 "PO-Revision-Date: 2004-11-30 19:48+0100\n"
 "Last-Translator: Carsten Gnörlich <carsten@dvdisaster.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -553,7 +553,7 @@ msgstr ""
 "  --split-files          - Abbild in mehrere Dateien <= 2GB aufteilen\n"
 "\n"
 
-#: dvdisaster.c:904
+#: dvdisaster.c:905
 #, c-format
 msgid ""
 "Debugging options (purposefully undocumented and possibly harmful)\n"

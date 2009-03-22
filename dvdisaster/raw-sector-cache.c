@@ -51,12 +51,12 @@ static void init_defective_sector_file(char *path, RawBuffer *rb, LargeFile **fi
 
     n = LargeWrite(*file, dsh, sizeof(DefectiveSectorHeader));
 
-    if(n != sizeof(DefectiveSectorHeader))
-       Stop(_("Failed writing to defective sector file: %s"), strerror(errno));
-
 #ifdef HAVE_BIG_ENDIAN
     SwapDefectiveHeaderBytes(dsh);
 #endif
+
+    if(n != sizeof(DefectiveSectorHeader))
+       Stop(_("Failed writing to defective sector file: %s"), strerror(errno));
 }
 
 /*
@@ -77,6 +77,10 @@ static void open_defective_sector_file(RawBuffer *rb, char *path, LargeFile **fi
     n = LargeRead(*file, dsh, sizeof(DefectiveSectorHeader));
     if(n != sizeof(DefectiveSectorHeader))
        Stop(_("Failed reading from defective sector file: %s"), strerror(errno));
+
+#ifdef HAVE_BIG_ENDIAN
+    SwapDefectiveHeaderBytes(dsh);
+#endif
 
     dsh->nSectors = (length-sizeof(DefectiveSectorHeader))/dsh->sectorSize;
     if(dsh->nSectors*dsh->sectorSize+sizeof(DefectiveSectorHeader) != length)
@@ -106,8 +110,15 @@ static void open_defective_sector_file(RawBuffer *rb, char *path, LargeFile **fi
        if(!LargeSeek(*file, 0))
 	  Stop(_("Failed seeking in defective sector file: %s"), strerror(errno));
 
+#ifdef HAVE_BIG_ENDIAN
+    SwapDefectiveHeaderBytes(dsh);
+#endif
        n = LargeWrite(*file, dsh, sizeof(DefectiveSectorHeader));
        
+#ifdef HAVE_BIG_ENDIAN
+    SwapDefectiveHeaderBytes(dsh);
+#endif
+
        if(n != sizeof(DefectiveSectorHeader))
 	  Stop(_("Failed writing to defective sector file: %s"), strerror(errno));
 
@@ -137,7 +148,14 @@ static void open_defective_sector_file(RawBuffer *rb, char *path, LargeFile **fi
        if(!LargeSeek(*file, 0))
 	  Stop(_("Failed seeking in defective sector file: %s"), strerror(errno));
 
+#ifdef HAVE_BIG_ENDIAN
+    SwapDefectiveHeaderBytes(dsh);
+#endif
        n = LargeWrite(*file, dsh, sizeof(DefectiveSectorHeader));
+
+#ifdef HAVE_BIG_ENDIAN
+    SwapDefectiveHeaderBytes(dsh);
+#endif
        
        if(n != sizeof(DefectiveSectorHeader))
 	  Stop(_("Failed writing to defective sector file: %s"), strerror(errno));

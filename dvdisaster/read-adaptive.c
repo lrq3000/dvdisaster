@@ -1307,7 +1307,7 @@ reopen_image:
 	 }
 
 	 /* Try to actually read the next sector(s) */
-
+reread:
 	 status = ReadSectors(rc->dh, rc->buf, s, nsectors);
 
 	 /* Medium Error (3) and Illegal Request (5) may result from 
@@ -1338,6 +1338,16 @@ reopen_image:
 	       rc->earlyTermination = FALSE;  /* suppress respective error message */
 	       goto terminate;
 	    }
+	 }
+
+	 /* When encountering an error during cluster size reads,
+	    try again reading each sector one by one.
+	    Otherwise we skip cluster size chunks until the unreadable
+	    intervals become smaller than the cluster size. */
+
+	 if(status && nsectors > 1)
+	 {  nsectors = 1;
+	    goto reread;
 	 }
 
 	 /* Reading was successful. */
