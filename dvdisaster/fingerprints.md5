@@ -66,8 +66,8 @@ b039b9b9daae7a7deb050aba6b8a3ef1 *rs03-preferences.c
 311333a2cefd94f53c066c6b6d81dede *rs03s-window.c
 ada80cf542d43b361af25939f0496b50 *rs03-verify.c
 b6c6e69cfe751cc12f74b4df56473af5 *rs03-window.c
-b26118dd39914d2ba49787fc9016d52c *rs-encoder.c
-04b581d99203d47618bb28dc9b8ceaaa *rs-encoder-sse2.c
+2f2444641113f1baf96a9fbeeba53773 *rs-encoder.c
+4f60db5b21f4cbcd16dbd1b83e0b5492 *rs-encoder-sse2.c
 4ccd9f251e9b6b52bf9a79c65ec2b762 *scsi-darwin.c
 45d8b52ab8c03d661baf4c404c94115a *scsi-freebsd.c
 c025695f27d61f27b97f11d995b7b230 *scsi-layer.c
