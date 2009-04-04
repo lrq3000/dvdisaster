@@ -28,8 +28,15 @@ aus der folgenden Liste herunter. Die Pakete können mit
 einer <a href="download20.php">digitalen Unterschrift</a> auf 
 ihren Ursprungszustand überprüft werden.<p>
 
-Um die Binärversion  <a href="download30.php">für Windows zu installieren</a>, 
-rufen Sie das Programm nach dem Herunterladen auf und folgen dem Dialog. <p>
+<ul>
+<li>Die Quellkode-Version enthält eine Datei <tt>INSTALL</tt> mit weiteren
+Informationen zum Übersetzen des Programmes.</li>
+<li>Für Mac OS X laden Sie bitte das ZIP-Archiv herunter und packen es an einer
+beliebigen Stelle aus. Bitte beachten Sie die 
+<a href="download30.php#mac">speziellen Hinweise für Mac OS X</a>.</li>
+<li>Um die Binärversion <a href="download30.php#win">für Windows zu installieren</a>, 
+rufen Sie das Programm nach dem Herunterladen auf und folgen dem Dialog.</li>
+</ul> 
 
 <!---
 <b>Alpha-/Entwickler-Versionen</b> - neu und experimentell für erfahrene Benutzer!<p> 
@@ -44,6 +51,12 @@ ist <a href="download40.php"><?php echo $cooked_version ?></a>.
 
 <b>Stabile Version</b> - zum Einstieg empfohlen<p> 
 
+Es gibt einen <b>Veröffentlichungskandidaten</b>, der im Umfang
+und Testzustand der stabilen Version 0.72 enspricht. 
+Wenn bis zum 15. Mai keine schwerwiegenden Probleme 
+mehr berichtet werden wird der aktuelle Veröffentlichungskandidat zur
+nächsten stabilen Version erklärt.<p>
+
 <table class="download" cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.72</b></td><td align="right">xx-xxx-2009</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
@@ -53,6 +66,10 @@ ist <a href="download40.php"><?php echo $cooked_version ?></a>.
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72.rc1.tar.bz2?download">dvdisaster-0.72.rc1.tar.bz2</a></td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72.rc1.tar.bz2.gpg?download">dvdisaster-0.72.rc1.tar.bz2.gpg</a></td></tr>
+    <tr><td align="right">Binärversion für Mac OS X 10.5 / x86:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72.rc1.app.zip?download">dvdisaster-0.72.rc1.app.zip</a>&nbsp;--&nbsp;bitte erst den <a href="download30.php#mac">Hinweis</a> lesen</td></tr>
+    <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72.rc1.app.zip.gpg?download">dvdisaster-0.72.rc1.app.zip.gpg</a></td></tr>
     <tr><td align="right">Binärversion für Windows:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72.rc1-setup.exe?download">dvdisaster-0.72.rc1-setup.exe</a></td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
@@ -61,11 +78,20 @@ ist <a href="download40.php"><?php echo $cooked_version ?></a>.
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
-
-<b>Veröffentlichungskandidaten</b> entsprechen vom Umfang und Testzustand 
-der stabilen Version. Wenn bis zum 1. Mai keine schwerwiegenden Probleme 
-mehr berichtet werden wird der aktuelle Veröffentlichungskandidat zur
-nächsten stabilen Version erklärt.<p>
+Grundlegende Neuerungen in dieser Version:<p>
+<ul>
+<li>Unterstützung für <a href="qa10.php#media">Blu-Ray-Datenträger</a></li>
+<li>"Raw"-Lesen und C2-Überprüfungen für CD-Datenträger</li>
+<li>Einstellbare Anzahl der Leseversuche</li>
+<li>Erstes "natives" Mac OS X-Paket </li>
+<li>NetBSD-Port von Sergey Svishchev</li>
+<li>Verbesserte Typerkennung für eingelegte Datenträger</li>
+<li>Informationsfenster für eingelegten Datenträger</li>
+<li>Überarbeiteter und erweiterter Dialog für Programmeinstellungen</li>
+<li>Neu gestaltete und erweiterte Dokumentation</li>
+<li>Russische Übersetzungen von Igor Gorbounov</li>
+<li>... und unzählige weitere kleine Sachen.</li>
+</ul>
 
 <b>rc1</b> Erster Kandidat für die stabile Version.
 </td></tr></table><p>

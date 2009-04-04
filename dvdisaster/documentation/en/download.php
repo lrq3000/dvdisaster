@@ -27,9 +27,14 @@ Please download either the source code or a binary version from the list below.
 A <a href="download20.php">digital signature</a> is provided for verification that the
 packets are in their original state.<p>
 
-To <a href="download30.php">install</a> the binary version execute 
-the downloaded program and follow the dialog.
-The source code version contains a file <tt>INSTALL</tt> with further instructions.
+<ul>
+<li>The source code version contains a file <tt>INSTALL</tt> with further instructions for compiling it.</li>
+<li>For Mac OS X a ZIP archive is provided which is installed by unpacking it
+into an arbitrary place. Please note the 
+<a href="download30.php#mac">special hints for Mac OS X</a>.</li>
+<li>To <a href="download30.php#win">install</a> the binary version for Windows
+please execute the downloaded program and follow the dialog.</li>
+</ul>
 
 <!---
 <b>Alpha (unstable) versions</b> - new and experimental for experienced users!<p>
@@ -44,6 +49,11 @@ The current unstable release is
 
 <b>Stable version</b> - recommended for getting started.<p>
 
+A <b>release candidate</b> is now available which resembles
+the stable Version 0.72 in terms of functionality
+and testing state. If no serious issues are found until May 15th, the
+current release candidate will be declared to be the next stable version.<p>
+
 <table class="download" cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.72</b></td><td align="right">xx-XXX-2009</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
@@ -53,6 +63,10 @@ The current unstable release is
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72-rc1.tar.bz2?download">dvdisaster-0.72-rc1.tar.bz2</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72-rc1.tar.bz2.gpg?download">dvdisaster-0.72-rc1.tar.bz2.gpg</a></td></tr>
+    <tr><td align="right">Binary for Mac OS X 10.5 / x86:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72.rc1.app.zip?download">dvdisaster-0.72.rc1.app.zip</a>&nbsp;--&nbsp;please read these <a href="download30.php#mac">hints</a> first</td></tr>
+    <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72.rc1.app.zip.gpg?download">dvdisaster-0.72.rc1.app.zip.gpg</a></td></tr>
     <tr><td align="right">Binary for Windows:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72-rc1-setup.exe?download">dvdisaster-0.72-rc1-setup.exe</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
@@ -61,9 +75,20 @@ The current unstable release is
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
-<b>Release candidates</b> resemble the stable Version in terms of functionality
-and testing state. If no serious issues are found until May 1th, the
-current release candidate will be declared to be the next stable version.<p>
+Most important changes in this version:<p>
+<ul>
+<li>Support for <a href="qa10.php#media">Blu-Ray media</a></li>
+<li>"Raw" reading and C2 scans for CD media</li>
+<li>Selectable number of reading attempts</li>
+<li>First native Mac OS X application bundle</li>
+<li>NetBSD-Port by Sergey Svishchev</li>
+<li>Improved media type recognition</li>
+<li>Info window describing inserted medium</li>
+<li>Improved and enhanced preferences dialog</li>
+<li>Reworked and enhanced documentation</li>
+<li>Russian translations by Igor Gorbounov</li>
+<li>... and many more small changes and fixes.</li>
+</ul>
 
 <b>rc1</b> First release candidate.
 </td></tr></table><p>

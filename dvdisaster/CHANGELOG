@@ -1,6 +1,14 @@
-0.71 (devel-29) 22-03-2009
+0.72 (rc-1) 03-04-2009
         Currently working through known (minor) bugs list to prepare
 	the release candidate.
+	- added app bundle creation for Mac OS X
+	- Graphical bug: red/green sector markings were incorrect when doing
+	  linear reading with high sector skip numbers. Fixed.
+	  Speed curve will no longer travel below the x axis.
+	- fixed rare crash while linear reading due to a race condition
+	  by improper ClearCrcCache() usage.
+	- fixed bogus dead sector warning in the linear reader 
+	  after encountering unreadable sectors
 	- made adaptive reading pursue raw reading more aggressively;
 	  effectively trading in place re-reads for seeks over
 	  the medium.
@@ -242,6 +250,34 @@
 	- added CD raw reading and majority algorithm
 	- started transfer of preferences documentation from HTML manual
 	  to new online help system
+
+0.70 (pl6) 04-03-2008
+	- rolled back the Windows filename encoding fixes;
+	  they caused large file support to be broken
+	  Thanks to Markus G. for bringing this to my attention!
+
+0.70 (pl5) 24-02-2008 various backports from 0.71.24:
+	- enlarged scsi timeout for Linux as newer Kernels seem
+          to freeze on timeout
+	- Windows filename encoding fixes
+
+0.70 (pl4) 20-01-2007
+	- Adaptive reading: Fixed garbled contents of "size mismatch" dialog;
+	  move fingerprint check before size check 
+	- When limiting the reading range for adaptive reading sector 0 would
+	  not be marked as missing. Fixed.
+	- Fixed crash when using command line mode with --query-size=ecc and
+	  rewriteable DVD without RS02 ecc data. Thanks to Vincent L. for 
+	  reporting this!
+	- Fixed crash caused by drives reporting unreasonable media sizes.
+	  Thanks to Rafal K. and Klaus-Maria P. for reporting this!
+	- added ADIP extraction for better medium type determination
+
+0.70 (pl3) 10-12-2006
+	- Fixed program hanging on CD-Audio/Multisession media.
+	  They are unsupported, but we must not crash on them.
+	  Thanks to Robert Hruby for reporting this problem!
+	- Added dialog for skipping RS02 detection of DVD RW
 
 0.70 (pl2) 03-10-2006
 	- fixed crash by inappropriate g_free() on Pango layout (thanks to Dmitry

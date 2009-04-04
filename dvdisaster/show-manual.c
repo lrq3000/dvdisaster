@@ -193,8 +193,9 @@ static char *browsers[] =
    "firefox",
    "mozilla",
    "konqueror",
-   "netscape",
+   "epiphany",
    "opera",
+   "/Applications/Safari.app/Contents/MacOS/Safari",  /* better way to do this? */
    NULL
 };
 

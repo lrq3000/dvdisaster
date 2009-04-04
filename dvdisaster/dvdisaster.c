@@ -155,7 +155,7 @@ int main(int argc, char *argv[])
    char src_locale_path[strlen(SRCDIR)+10];
   #endif
  #endif /* WITH_EMBEDDED_SRC_PATH_YES */
- #ifdef SYS_MINGW
+#if defined(SYS_MINGW) || defined(SYS_DARWIN)
    char *bin_locale_path = NULL;
  #endif
 #endif
@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
 #ifdef SYS_MINGW
     /*** Create a named mutex so that the installer can detect
 	 that we are running. A malicious user may cause this 
-	 to fail be reserving the mutex for himself, 
+	 to fail by reserving the mutex for himself, 
 	 so we do not care if the mutex can not be created. */
 
     CreateMutex(NULL, FALSE, "dvdisaster");
@@ -281,11 +281,16 @@ int main(int argc, char *argv[])
     }
 #endif
 
-#ifdef SYS_MINGW
+#if defined(SYS_MINGW) || defined(SYS_DARWIN)
     /* Try the directory where our executable comes from.
-       This is only possible under Windows, and should cover all cases. */
+       This is only possible under Windows and Mac OS, 
+       and should cover all cases. */
 
+#ifdef SYS_MINGW
     bin_locale_path = g_strdup_printf("%s\\locale", Closure->binDir);
+#else
+    bin_locale_path = g_strdup_printf("%s/locale", Closure->binDir);
+#endif
     bindtextdomain("dvdisaster", bin_locale_path);
     locale_test = gettext("test phrase for verifying the locale installation");
     g_free(bin_locale_path);

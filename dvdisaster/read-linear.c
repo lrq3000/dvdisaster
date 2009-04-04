@@ -561,8 +561,8 @@ static void show_progress(read_closure *rc)
       if(Closure->guiMode)
 	ChangeSpiralCursor(Closure->readLinearSpiral, percent);
 
-      if(rc->readOK <= rc->lastReadOK)  /* anything read since last sample? */
-      {  rc->speed = 0.0;               /* nothing read */
+      if(rc->readOK <= rc->lastReadOK)  /* nothing read since last sample? */
+      {  rc->speed = 0.0;
 	 if(Closure->readErrors - rc->previousReadErrors > 0)
 	    color = 2;
 	 else if(Closure->crcErrors - rc->previousCRCErrors > 0)
@@ -577,7 +577,7 @@ static void show_progress(read_closure *rc)
 	 rc->previousCRCErrors  = Closure->crcErrors;
 	 rc->lastReadOK     = rc->readOK;
       }
-      else
+      else               /* something was read since last sample */
       {  double kb_read = (rc->readOK - rc->lastReadOK) * 2.0;
 	 double elapsed = g_timer_elapsed(rc->speedTimer, &ignore);
 	 double kb_sec  = kb_read / elapsed;
@@ -590,7 +590,7 @@ static void show_progress(read_closure *rc)
 
 	 if(rc->firstSpeedValue)
 	 {   rc->speed = kb_sec / rc->dh->singleRate;
-		
+
 	     if(Closure->guiMode)
 	     {  AddCurveValues(rc, rc->lastPercent, color, rc->maxC2);
 		AddCurveValues(rc, percent, color, rc->maxC2);
@@ -704,7 +704,7 @@ static gpointer worker_thread(read_closure *rc)
 
 	 if(Closure->crcCache)
 	 {  for(i=0; i<nsectors; i++)
-	     Closure->crcCache[s+i] = Crc32(rc->alignedBuf[rc->writePtr]->buf+2048*i, 2048);
+	       Closure->crcCache[s+i] = Crc32(rc->alignedBuf[rc->writePtr]->buf+2048*i, 2048);
 	 }
       }
 
@@ -1096,16 +1096,18 @@ reread:
 
       /*** Warn the user if we see dead sector markers on the image. */
 
-      for(i=0; i<nsectors; i++)
-      {  unsigned char *sector_buf = rc->alignedBuf[rc->readPtr]->buf;
-	 int err;
+      if(!status)
+      {  for(i=0; i<nsectors; i++)
+	 {  unsigned char *sector_buf = rc->alignedBuf[rc->readPtr]->buf;
+	    int err;
 
-	 /* Note: providing the fingerprint is not necessary as any 
-	          incoming missing sector marker indicates a huge problem. */
+	    /* Note: providing the fingerprint is not necessary as any 
+	       incoming missing sector marker indicates a huge problem. */
 
-	 err = CheckForMissingSector(sector_buf+i*2048, rc->readPos+i, NULL, 0);
-	 if(err != SECTOR_PRESENT)
-	    ExplainMissingSector(sector_buf+i*2048, rc->readPos+i, err, FALSE);
+	    err = CheckForMissingSector(sector_buf+i*2048, rc->readPos+i, NULL, 0);
+	    if(err != SECTOR_PRESENT)
+	       ExplainMissingSector(sector_buf+i*2048, rc->readPos+i, err, FALSE);
+	 }
       }
 
       /*** Pass sector(s) to the worker thread (if reading succeeded) */
@@ -1144,12 +1146,12 @@ reread:
       if(status)
       {  int nfill;
 
-	 /* Disable on the fly checksum calculation */
+	 /* Disable on the fly checksum calculation.
+	    Do NOT free the CRC cache here to avoid race condition
+	    with the worker thread! */
 
 	 if(Closure->crcCache)
-	 {  ClearCrcCache();
 	    rc->doMD5sums = FALSE;
-	 }
 
 	 /* Determine number of sectors to skip forward. 
 	    Make sure not to skip past the media end
@@ -1208,11 +1210,21 @@ reread:
 	    The nsectors>1 case can only happen when processing the tao_tail. */
 
 	 if(Closure->sectorSkip && nsectors > 1)
-	 {  PrintCLIorLabel(Closure->status,
+	 {  int i;
+
+	    PrintCLIorLabel(Closure->status,
 			    _("Sector %lld: %s Skipping %d sectors.\n"),
 			    rc->readPos, GetLastSenseString(FALSE), nfill-1);  
-	    Closure->readErrors+=nfill; 
+	    for(i=0; i<nfill; i++)         /* workaround: large values for nfill */
+	    {  Closure->readErrors++;      /* would exceed sampling of green/red */
+	       rc->readPos++;              /* in the spiral. Internal NOTE01 */
+	       show_progress(rc);
+	    }
+	    rc->readPos-=nsectors;         /* nsectors will be added again after the goto */
+#if 0
+	    Closure->readErrors+=nfill;    /* pre-workaround code */
 	    rc->readPos+=nfill-nsectors;   /* nsectors will be added again after the goto */
+#endif
 	    goto step_counter;
 	 }
 
@@ -1279,7 +1291,8 @@ step_counter:
    /*** Finalize on-the-fly checksum calculation */
 
    if(rc->doMD5sums)
-     MD5Final(Closure->md5Cache, &rc->md5ctxt);
+        MD5Final(Closure->md5Cache, &rc->md5ctxt);
+   else ClearCrcCache();  /* deferred until here to avoid race condition */
 
    if(rc->doMD5sums && Closure->eccType == ECC_RS02)
    {  MD5Final(data_md5, &rc->dataCtxt);

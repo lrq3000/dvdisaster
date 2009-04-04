@@ -19,12 +19,12 @@ fi
 
 # Set the package name and version
 
-PACKAGE dvdisaster 0.71
+PACKAGE dvdisaster 0.72
 
-REL_MICRO=29
+REL_MICRO=1
 #REL_STATUS=patch
-REL_STATUS=devel
-#REL_STATUS=rc
+#REL_STATUS=devel
+REL_STATUS=rc
 
 #REL_MICRO=0
 #REL_STATUS="-"  # requires MICRO=0

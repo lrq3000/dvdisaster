@@ -167,6 +167,9 @@ static void get_base_dirs()
    char *appdata;
    char *homedir;
 #endif
+#ifdef SYS_DARWIN
+   char *resdir;
+#endif
 
    /*** Unless completely disabled through a configure option, the
 	source directory is supposed to hold the most recent files,
@@ -189,15 +192,41 @@ static void get_base_dirs()
    /*** Otherwise try the installation directory. 
 	On Unices this is a hardcoded directory.
 	Windows has binary distributions with no prior known installation place,
-	but luckily it provides a way for figuring out that location. */
+	but luckily it provides a way for figuring out that location. 
+        Darwin is like Unix when installed via make install;
+        but tricky when app bundles are used. In that case we
+        use GTK_PATH to find out our location. */
 
-#ifndef SYS_MINGW
+#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_NETBSD) || defined(SYS_UNKNOWN) || defined(SYS_SOLARIS)
    if(DirStat(BINDIR))
      Closure->binDir = g_strdup(BINDIR);
 
    if(DirStat(DOCDIR))
      Closure->docDir = g_strdup(DOCDIR);
    Verbose("Using hardcoded BINDIR = %s, DOCDIR = %s\n", BINDIR, DOCDIR);
+#endif
+
+#ifdef SYS_DARWIN
+   resdir = (char*)g_getenv("GTK_PATH");
+   if(resdir)  /* looks like we are inside an app bundle */
+   {  if(DirStat(resdir))
+         Closure->binDir = g_strdup(resdir);
+
+      Closure->docDir = g_strdup_printf("%s/doc", resdir);
+      if(!DirStat(Closure->docDir))
+      {  g_free(Closure->docDir);
+	 Closure->docDir = NULL;
+      }
+   }
+   else  /* maybe a normal install */
+   {
+      if(DirStat(BINDIR))
+         Closure->binDir = g_strdup(BINDIR);
+
+      if(DirStat(DOCDIR))
+         Closure->docDir = g_strdup(DOCDIR);
+   }
+   Verbose("Using BINDIR = %s, DOCDIR = %s\n", BINDIR, DOCDIR);
 #endif
 
 #ifdef SYS_MINGW
@@ -288,7 +317,7 @@ find_dotfile:
 	   Closure->homeDir,
 	   Closure->binDir,
 	   Closure->docDir,
-	   Closure->appData,
+	   Closure->appData ? Closure->appData : "Null",
 	   Closure->dotFile);   
 }
 

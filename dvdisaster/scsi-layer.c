@@ -2434,7 +2434,9 @@ int ReadSectors(DeviceHandle *dh, unsigned char *buf, gint64 s, int nsectors)
 	 /* Do not attempt multiple re-reads if nsectors > 1 and sectorSkip == 0
 	    as these will be re-read with nsectors==1 anyways. */
 
-	 if(dh->canReadDefective && nsectors > 1 && Closure->sectorSkip == 0)
+//       Why only apply this shortcut to raw reading?
+//	 if(dh->canReadDefective && nsectors > 1 && Closure->sectorSkip == 0)
+	 if(nsectors > 1 && Closure->sectorSkip == 0)
 	 {  PrintCLIorLabel(Closure->status,
 			    _("Sectors %lld - %lld: %s\n"),
 			    s, s+nsectors-1, GetLastSenseString(FALSE));

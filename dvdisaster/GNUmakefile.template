@@ -252,7 +252,8 @@ help:
 	@echo "distclean - remove all files which are rebuildable in an development setup"
 	@echo "arch      - distclean and tar the source directory (dirty)"
 	@echo "srcdist   - produce the source distribution tarball (polished)"
-	@echo "innodist  - produce the binary setup.exe for Windows"
+	@echo "macdist   - produce application bundle for Mac OS X"
+	@echo "windist   - produce the binary setup.exe for Windows"
 
 # Build configuration printing
 
@@ -300,7 +301,7 @@ show:
 
 .PHONY : install uninstall clean distclean arch
 .PHONY : www www-images 
-.PHONY : srcdist innodist zipdist
+.PHONY : srcdist macdist windist
 
 install: dvdisaster images
 	@echo "Installing package..."
@@ -396,6 +397,7 @@ clean:
 	@rm -f inlined-icons.h help-dialogs.h
 	@rm -f wininst/installer.iss wininst/signature
 	@if test -e win-build-dir; then rm -rf win-build-dir; fi
+	@rm -rf macinst/.dvdisaster.app macinst/dvdisaster.app macinst/dvdisaster.app.zip macinst/dvdisaster.bundle
 	@find . -name \*\~ -print | xargs rm -f;
 	@find . -name \*.mo -print | xargs rm -f;
 	@find . -name \#\*\# -print | xargs rm -f;
@@ -419,9 +421,9 @@ arch:	archclean time-stamp
 	@cd .. ; tar -c -z -f $(PKGNAME)-$(BUILD).tgz $(PKGNAME)
 
 # TAG: online-docs
-www:
+www:   version.php
 	@cd documentation ; \
-	tar cjf ../../www.tar.bz2 pubkey.asc index.html include/dvdisaster.css de/*.php en/*.php ru/*.php
+	tar cjf ../../www.tar.bz2 pubkey.asc index.html include/dvdisaster.css include/*.php de/*.php en/*.php ru/*.php
 
 www-images: thumbnails version.php
 	@cd documentation ; \
@@ -485,11 +487,15 @@ prepare-dist:
 	  cp $(GTK_BINDIR)/../lib/locale/$$i/LC_MESSAGES/gtk*.mo win-build-dir/lib/locale/$$i/LC_MESSAGES; \
 	done
 
-innodist: dvdisaster pack-images prepare-dist
+windist: dvdisaster pack-images prepare-dist
 	@sed 's/dvdisaster-%version%/$(PKGNAME)/' <wininst/installer.template >wininst/installer.iss
 	@iscc wininst/installer.iss
 
-zipdist: prepare-dist
-	@echo "Packaging with zip"
-	@echo "MS Windows standalone distribution of $(PKGNAME)." | zip -S9rqoz $(PKGNAME).zip $(PKGNAME)
-
+macdist: 
+	@if test $(JHBUILD_PREFIX)x == "x"; then \
+	  echo "Building the app bundle only works in a jhbuild shell."; \
+	  exit 1; \
+	fi
+	@rm -rf macinst/dvdisaster.app macinst/.dvdisaster.app
+	@sed 's!%srcdir%!$(SRCDIR)!' <macinst/dvdisaster.bundle.template >macinst/dvdisaster.bundle
+	@ige-mac-bundler macinst/dvdisaster.bundle
