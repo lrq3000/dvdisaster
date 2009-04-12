@@ -60,7 +60,7 @@ of the second CD reveals that it has developed 1500 unreadable sectors
 gone unnoticed so far. </td>
 </tr>
 <tr>
- <td align="right"><a href="howtos30.php">reading</a></td>
+ <td align="right">reading</td>
  <td align="center"><img align="top" src="../images/down-arrow.png"></td>
  <td align="center"><img align="top" src="../images/down-arrow.png"></td>
  <td></td>
@@ -71,12 +71,12 @@ gone unnoticed so far. </td>
 <td><img align="top" src="../images/bad-image.png"></td>
 <td><img align="top" src="../images/bad-image.png"></td>
 <td>Joe uses dvdisaster to 
-<a href="howtos30.php">read as much sectors as possible</a> from the 
+read as much sectors as possible from the 
 defective media. But since he does not have error correction data
 there is no way of recalculating the unreadable sectors.</td>
 </tr>
 <tr>
- <td align="right"><a href="howtos30.php">many reading<br>attempts</a></td>
+ <td align="right">many reading<br>attempts</td>
  <td align="center"><img align="top" src="../images/down-arrow.png"></td>
  <td align="center"><img align="top" src="../images/down-arrow.png"></td>
  <td></td>
@@ -105,7 +105,7 @@ remain unreadable by any drive he tried.</td>
 <td><img align="top" src="../images/bad-cd.png"></td>
 <td><img align="top" src="../images/good-cd.png"></td>
 <td>Joe dismisses the first CD as unrecoverable and considers himself lucky
-to have a complete image from the second CD for writing to a new medium.
+to have a complete image from the second CD again.
 However if he had created error correction data in time, he'd probably <sup>1)</sup>
 saved two weeks of reading attempts and recovered the contents from both CDs.</td></tr>
 </table>

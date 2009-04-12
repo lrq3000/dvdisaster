@@ -42,7 +42,7 @@ Das folgende Beispiel skizziert, wie Jane dvdisaster anwendet. <p>
 <td>Jane weiß, daß bei einer normalen Nutzung Ihrer CD nicht auf alle Datenbereiche
    täglich zugegriffen wird. Daher führt sie nach einem Jahr mit dvdisaster eine
    <a href="howtos10.php">Überprüfung auf Lesefehler</a> durch, um sicherzustellen,
-   daß die CD nicht an einer wenige benutzten Stelle bereits Beschädigungen aufweist.
+   daß die CD nicht an einer wenig benutzten Stelle bereits Beschädigungen aufweist.
    Nach gut einem Jahr ist die CD noch völlig in Ordnung.</td>
 </tr>
 <tr><td colspan="4"> <hr> </td></tr>
@@ -56,7 +56,7 @@ Eine <a href="howtos10.php">Überprüfung auf Lesefehler</a> bestätigt, daß
 die CD durch Alterung unbrauchbar geworden ist und defekte Sektoren aufweist.</td>
 </tr>
 <tr>
- <td align="right"><a href="howtos30.php">lesen</a></td>
+ <td align="right"><a href="howtos42.php#a">lesen</a></td>
  <td align="center"><img align="top" src="../images/down-arrow.png"></td>
  <td></td><td></td>
 </tr>
@@ -66,10 +66,10 @@ die CD durch Alterung unbrauchbar geworden ist und defekte Sektoren aufweist.</t
 <td><img align="top" src="../images/bad-image.png"></td>
 <td><img align="top" src="../images/ecc.png"></td>
 <td>Jane verwendet dvdisaster, um von der beschädigten CD 
-<a href="howtos30.php">noch so viele Sektoren wie möglich in ein ISO-Abbild</a>
+<a href="howtos42.php#a">noch so viele Sektoren wie möglich in ein ISO-Abbild</a>
 einzulesen.</td>
 <tr>
- <td align="right"><a href="howtos40.php">wieder-<br>herstellen</a></td>
+ <td align="right"><a href="howtos42.php#b">wieder-<br>herstellen</a></td>
  <td align="center" colspan="2"><img align="top" src="../images/dbl-arrow-left.png"></td>
  <td></td>
 </tr>
@@ -79,7 +79,7 @@ einzulesen.</td>
 <td><img align="top" src="../images/good-image.png"></td>
 <td><img align="top" src="../images/ecc.png"></td>
 <td>Mit Hilfe der Fehlerkorrektur-Daten kann Jane das
-    <a href="howtos40.php">ISO-Abbild vollständig wiederherstellen</a>.
+    <a href="howtos42.php#b">ISO-Abbild vollständig wiederherstellen</a>.
 <tr>
  <td align="right">Neue CD brennen</td>
  <td align="center"><img align="top" src="../images/down-arrow.png"></td>

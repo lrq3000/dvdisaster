@@ -21,7 +21,7 @@
 
 #include "dvdisaster.h"
 
-#if 0
+#if 1
 void Maintenance1(char *debug_arg)
 {
   printf("\nMaintenance stub called with arg: %s\n\n", debug_arg);

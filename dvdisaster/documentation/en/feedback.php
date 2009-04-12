@@ -44,7 +44,7 @@ HD-DVD formats
 (<a href="qa10.php#media">complete list of supported media formats</a>).</li>
 <li>dvdisaster works only with real drives. Not supported are
 network drives, software drives (e.g. alcohol) and drives in virtual 
-machines like VMWare(R) and Xen.</li>
+machines like.</li>
 </ul>
 
 <h4>How to report issues with the program:</h4>

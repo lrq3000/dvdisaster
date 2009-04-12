@@ -51,7 +51,7 @@ The error correction will try to recover the contents of these sectors.
 
 <tr>
 <td valign="top">Image checksum:</td>
-<td>An MD5 checksum is calculated for the complete ISO image.
+<td>A MD5 checksum is calculated for the complete ISO image.
 You can reproduce this value using the command line of GNU/Linux:<br>
 <tt>md5sum medium2.iso</tt></td>
 </tr>

@@ -32,11 +32,11 @@ begin_page();
    During the recovery a maximum of 20 errors
    per error correction block is encountered. This results in a peak
    error correction load of 63%, meaning that this degree of damage is handled well
-   by an error correction data created with default settings.
+   by error correction data created with default settings.
 <?php end_screen_shot(); ?>
 
 <b>Recovery needs error correction data:</b> The recovery process described above uses
-error correction data. 
+error correction ("ecc") data. 
 Think of this data as a special
 form of backup data (it needs less space than a normal backup, though).
 Like an ordinary backup, the ecc data needs to be created

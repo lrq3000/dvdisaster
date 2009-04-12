@@ -44,7 +44,7 @@ echo "<a href=\"howtos33.php?way=$make_iso_action\">\n";
 <br><img src="../images/down-arrow.png" border="0"></a></td>
 <td>&nbsp;&nbsp;</td>
 <td valign="top"><b>First create an ISO image</b> using your CD/DVD/BD
-writing software. Select the file you want to write to medium,
+writing software. Select the files you want to write to medium,
 but do not start the writing process yet. Instead, create an ISO
 image on your hard disk. Click on the image to the left to see a 
 <?php
@@ -91,7 +91,7 @@ or drag them into the project.<p>
 Using K3b: <i>Choose the required files in the upper half of the window.
 In the example the files <i>backup.tar.gz</i>,
 <i>win.zip</i> and <i>work.tar.gz</i> have been selected for writing onto CD.
-The currently selected file are shown in the lower window half.</i><p>
+The currently selected files are shown in the lower window half.</i><p>
 
 <b>Important:</b> Do not completely fill the medium. Make sure to keep
 at least 20% of the medium space for the error correction data.<p>
@@ -128,10 +128,10 @@ Activate the "Only create image" option (marked in green).</i>
 <?php begin_screen_shot("Image file selection","make-iso4.png"); ?>
 <b>Select image file and type.</b>
 Select the target directory, name and type for the image file.
-Use image file of type ".iso" or ".udf" only! Other image formats like
-".nrg" are not supported by dvdisaster; processing such image file with
+Use image files of type ".iso" or ".udf" only! Other image formats like
+".nrg" are not supported by dvdisaster; processing such image files with
 dvdisaster will render them unusable without further notice or error
-message.<p>
+messages.<p>
 
 Using K3b: <i>Choose the "Image" tab. 
 Enter the target directory for the file 
@@ -316,7 +316,7 @@ protected by error correction code.</td>
 <ul>
 <li><a href="howtos90.php">Check whether the writing process has affected 
 the error correction data.</a><p>
-It is recommend to perform this test once every time you change to a new
+It is recommended to perform this test once every time you change to a new
 version (or vendor) of your media writing software to make sure that it
 interoperates well with dvdisaster.
 </li>

@@ -60,7 +60,7 @@ after a few years - a nearly unavoidable aging process.
 When the medium is regularly used (or scanned for defects) the data loss
 will typically be noticed after 5% to 10% of the medium have already become
 unreadable. At this point the medium is unusable as a whole, 
-but maybe 90% of it is still readable. <i>At this point a full backup copy of the 
+but maybe 90% of it is still readable. <i>On the other hand a full backup copy of the 
 medium is not required; we simply need a method for recovering the
 missing 10% of data.</i><p>
 
@@ -144,9 +144,9 @@ So let's summarize the pros and cons of dvdisaster compared with conventional ba
 <li>dvdisaster uses less storage. When using error correction data with a 20%
 recovery capability, protecting 5 media requires only one additional medium for
 the ECC data.</li>
-<li>Since all media will eventually age and start losing data in the same places
+<li>Since all media will eventually age and start losing data in similar places
 (typically in the outermost region), doing a 1:1 copy might not help at all.
-Both copies may turn out defective in similar places after a few years.</li>
+Both copies may turn out defective in the same places after a few years.</li>
 </ul></td></tr>
 <tr valign="top"><td>Similarities</td>
 <td><ul><li>Both backup copies and error correction data must be created
@@ -157,7 +157,7 @@ medium.</li></ul></td></tr>
 (or the medium gets lost), no data can be recovered!
 Especially take note that error correction data with a repair rate of 20% together
 with a 75% readable the medium does not result in 95% recovery! In that case,
-nothing beyond the 75% of readable data can be recovered!</li></ul></td></tr>
+nothing beyond the 75% readable data from the medium can be recovered!</li></ul></td></tr>
 </table> 
 
 The next three pages provide more related information:<p>
@@ -169,7 +169,7 @@ The next three pages provide more related information:<p>
 data in advance and is therefore able to recover all data when her media become defective.<p></li>
 <li>However you should <a href="howtos63.php">not follow the way</a> of Joe. 
 He does not use error correction data and finds out that his defective
-media are not recoverable even using multiple reading passes. This way he loses
+media are not recoverable even after multiple reading passes. As a consequence he loses
 data from a defective medium.<p></li>
 </ul>
 

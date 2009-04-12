@@ -28,7 +28,7 @@ due to the symbol theme you are using.</td>
 
 <hr>
 
-<b>Settings for reading the image from the medium</b><p>
+<a name="read"><b>Settings for reading the image from the medium</b></a><p>
 
 <table width="100%" cellspacing="5">
 <tr>

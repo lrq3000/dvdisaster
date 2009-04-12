@@ -30,7 +30,7 @@ information will be given with respect to:
 <tr><td colspan="2">Output field <b>"Image file summary":</b><br><hr></td><td></td></tr>
 <tr>
 <td valign="top">Medium sectors:</td>
-<td>The number of sectors in the augmented image (counting the sectors added
+<td>The number of sectors in the augmented image (including the sectors added
 by dvdisaster; one sector = 2KB).</td>
 </tr>
 <tr><td>&nbsp;</td><td></td></tr>
@@ -96,7 +96,7 @@ obtained as follows (using the command line of GNU/Linux):<br>
 The first parameter for <i>head</i> is the sector size (2048) 
 multiplied with the original image length (121353). This property
 of augmented images can also be used to cut off the error correction data:<br>
-<tt>head -c $((2048*121353)) medium.iso >ecc_free_image.iso</tt>
+<tt>head -c $((2048*121353)) medium.iso >stripped_image.iso</tt>
 </td>
 </tr>
 <tr><td>&nbsp;</td><td></td></tr>

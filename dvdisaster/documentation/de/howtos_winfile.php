@@ -6,13 +6,13 @@
 ?>
 
 <a name="filechooser"></a>
-<b>Hinweise zum Dateiauswahl-Dialog unter Windows</b><p>
+<b>Hinweise zum Dateiauswahl-Dialog unter Windows und Mac OS X</b><p>
 
 dvdisaster verwendet die <a href="http://www.gtk.org">GTK+</a>-Programmbibliothek,
 die sicherstellt, daß es auf vielen verschiedenen Betriebssystemen läuft. 
-Da die Bedienung des GTK-Dialogs zur Dateiauswahl unter Windows ungewohnt ist,
+Da die Bedienung des GTK-Dialogs zur Dateiauswahl unter Windows und Mac OS X ungewohnt ist,
 finden Sie nachfolgend eine Übersicht zur Bedienung des Dialogs.
-Ohne GTK+ wären die betriebssystemspezifischen Anpassungen für Windows übrigens
+Ohne GTK+ wären die betriebssystemspezifischen Anpassungen für Windows und Mac OS X übrigens
 zu aufwendig und es gäbe nur die GNU/Linux-Version von dvdisaster ;-)<p>
 
 <?php begin_screen_shot("Dateiauswahl unter Windows","filebrowser.png"); ?>

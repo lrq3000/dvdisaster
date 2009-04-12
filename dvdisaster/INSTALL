@@ -13,7 +13,9 @@ Contents
 2.1.1 Getting the GNU environment for Windows
 2.2 Mac OS X / Darwin
 2.3 FreeBSD
-2.3.1 Recompiling the kernel
+2.3.1 Loading the atapicam kernel module by hand
+2.3.2 (Optionally) loading the atapicam kernel module permanently
+2.3.3 (Optionally) recompiling the kernel
 
 3. Compiling the source code
 3.1 Unpacking the source code archive
@@ -92,19 +94,44 @@ Mac OS X without using X11.
 2.3 FreeBSD
 -----------
 
-2.3.1 Recompiling the kernel
+2.3.1 Loading the atapicam kernel module by hand (tested on FreeBSD 7.1)
 
 FreeBSD does not pre-install an uniform CD-ROM driver for SCSI and ATAPI drives 
 (as is the case in Linux and Windows). Therefore dvdisaster can not
 use any ATAPI drives in an out-of-the-box FreeBSD installation. 
 
-To install a suitable driver please recompile the kernel with the following 
+To manually load the required kernel module, do:
+
+root@freebsd# kldload atapicam
+
+Use the follwing command to see if any CD/DVD/BD drives became
+available:
+
+root@freebsd# camcontrol devlist
+<NAME OF YOUR DRIVE>                at scbus1 target 0 lun 0 (pass0,cd0)
+
+
+2.3.2 (Optionally) loading the atapicam kernel module permanently
+
+If the above step works you can load the kernel module at boot 
+time by adding the line
+
+atapicam_load="YES"
+
+at the end of /boot/loader.conf.local
+
+
+
+2.3.3 (Optionally) recompiling the kernel
+
+If the atapicam kernel module is not available (check the contents
+of /boot/kernel) you will need to recompile the kernel with the following 
 additional device line in the kernel configuration:
 
 device atapicam
 
 The devices ata, scbus, cd, and pass are also required, 
-but are included by default in FreeBSD 6.0.
+but are included by default in FreeBSD 6.0 and later.
 
 
 3. Compiling the source code
@@ -121,11 +148,11 @@ Please change into a directory which is writeable
 for you and unpack the source code archive:
 
 user@host> cd /var/tmp
-user@host> tar xjf dvdisaster-0.71.24.tar.bz2
+user@host> tar xjf dvdisaster-0.72.rc1.tar.bz2
 
 Then change into the newly created directory:
 
-user@host> cd /var/tmp/dvdisaster-0.71.24
+user@host> cd /var/tmp/dvdisaster-0.72.rc1
 
 3.2. Configuring the package
 ----------------------------
@@ -163,10 +190,16 @@ On some systems, GNU make must be invoked as "make".
 Invoke the program for a quick test:
 
 user@linux> ./dvdisaster
+user@windows>./dvdisaster-win
 
 After a short moment the main window should open an the program
 is ready for use. Working with the program from the current 
 directory (e.g. without installation) is okay.
+
+On windows two program version are provided as it is not possible
+to have the same binary operate in command line and window mode
+there. dvdisaster.exe is the command line version, while
+dvdisaster-win.exe provides the graphical user interface.
 
 
 4. Installation
@@ -198,7 +231,7 @@ please remove the directory you have created as described
 in section 3.1:
 
 user@host> cd /var/tmp
-user@host> rm -rf dvdisaster-0.71.24
+user@host> rm -rf dvdisaster-0.72.rc1
 
 
 5. Program documentation

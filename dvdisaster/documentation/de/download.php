@@ -58,7 +58,7 @@ mehr berichtet werden wird der aktuelle Veröffentlichungskandidat zur
 nächsten stabilen Version erklärt.<p>
 
 <table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.72</b></td><td align="right">xx-xxx-2009</td></tr>
+<tr><td><b>dvdisaster-0.72</b></td><td align="right">11-Apr-2009</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>

@@ -43,7 +43,9 @@ Leave the remaining settings at the values shown in the screen shot.<p>
 <?php end_screen_shot(); ?>
 
 <?php begin_screen_shot("\"Drive\" tab.","fix-prefs-drive.png"); ?>
-<b>"Drive" tab.</b> Leave this tab at the shown default settings for the moment.<p>
+<b>"Drive" tab.</b> Leave this tab at the shown default settings for the moment.
+Some drives might work better using the raw reading mode "21h". See the
+<a href="howtos43.php#21h">advanced settings</a> for more information.<p>
 <?php end_screen_shot(); ?>
 
 <?php begin_screen_shot("\"Reading attempts\" tab.","fix-prefs-read-attempts.png"); ?>
@@ -52,8 +54,8 @@ finding the still readable sectors and avoiding the lengthy process of trying to
 defective sectors. Therefore select "raw" reading (marked green) as it will not cost additional
 processing time, but reduce the number of reading attempts to the minimum values
 (marked yellow). Use a moderate termination criterium of 128 unreadable sectors
-(marked blue) for our first reading attempt. Do not activate raw sector caching yet.
-If it turns out later that these settings do not provide enough data for a successful
+(marked blue) for the first reading attempt. Do not activate raw sector caching yet.
+If it turns out that these settings do not provide enough data for a successful
 recovery they can be 
 <a href="howtos43.php">optimized</a> later.
 <p>

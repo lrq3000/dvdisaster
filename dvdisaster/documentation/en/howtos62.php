@@ -55,7 +55,7 @@ CD is no longer readable. A <a href="howtos10.php">scan for read errors</a>
 confirms that the CD has become defective due to aging.</td>
 </tr>
 <tr>
- <td align="right"><a href="howtos30.php">read</a></td>
+ <td align="right"><a href="howtos42.php#a">read</a></td>
  <td align="center"><img align="top" src="../images/down-arrow.png"></td>
  <td></td><td></td>
 </tr>
@@ -64,10 +64,10 @@ confirms that the CD has become defective due to aging.</td>
 <td> </td>
 <td><img align="top" src="../images/bad-image.png"></td>
 <td><img align="top" src="../images/ecc.png"></td>
-<td>Jane uses dvdisaster to <a href="howtos30.php">read as much sectors
+<td>Jane uses dvdisaster to <a href="howtos42.php#a">read as much sectors
 as possible</a> from the defective CD into an ISO image.</td>
 <tr>
- <td align="right"><a href="howtos40.php">reconstruct</a></td>
+ <td align="right"><a href="howtos42.php#b">reconstruct</a></td>
  <td align="center" colspan="2"><img align="top" src="../images/dbl-arrow-left.png"></td>
  <td></td>
 </tr>
@@ -77,7 +77,7 @@ as possible</a> from the defective CD into an ISO image.</td>
 <td><img align="top" src="../images/good-image.png"></td>
 <td><img align="top" src="../images/ecc.png"></td>
 <td>By using the error correction data Jane
-    <a href="howtos40.php">recovers the missing parts in the ISO image</a>.
+    <a href="howtos42.php#b">recovers the missing parts in the ISO image</a>.
 <tr>
  <td align="right">Write new CD</td>
  <td align="center"><img align="top" src="../images/down-arrow.png"></td>

@@ -3,6 +3,8 @@ To do/ Release schedule
 
 Version 0.73/0.74: 
 - update tool chain for Windows version
+- find workarounds for the GTK+/Mac OS glitches
+- clean up source code in some places
 - add pause/resume button
 - optionally pause after n read errors for drives which
   need to cool down 

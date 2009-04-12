@@ -182,12 +182,12 @@ haben Sie wieder ein vollständiges ISO-Abbild.
 <table>
 <tr>
 <td width="200px" align="center">
-<a href="howtos33.php?way=2">
+<a href="howtos33.php?way=2#c">
 <img src="thumbnails/write-iso1.png" border="0"></a></td>
 <td>&nbsp;&nbsp;</td>
 <td valign="top"><b>Schreiben Sie das wiederhergestellte ISO-Abbild</b> 
 auf einen neuen Datenträger. Gehen Sie dabei genau so vor wie es im
-Abschnitt zum <a href="howtos33.php">Brennen von Datenträgern</a> beschrieben
+Abschnitt zum <a href="howtos33.php?way=2#c">Brennen von Datenträgern</a> beschrieben
 ist, die <a href="howtos33.php">mit Fehlerkorrektur-Daten erweitert wurden</a>.
 </td>
 </tr>

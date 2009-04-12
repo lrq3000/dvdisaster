@@ -55,7 +55,7 @@ and testing state. If no serious issues are found until May 15th, the
 current release candidate will be declared to be the next stable version.<p>
 
 <table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.72</b></td><td align="right">xx-XXX-2009</td></tr>
+<tr><td><b>dvdisaster-0.72</b></td><td align="right">11-Apr-2009</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>

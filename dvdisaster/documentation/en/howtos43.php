@@ -106,6 +106,7 @@ messages, increasing the number of reading attempts does not pay off for the
 respective drive.
 <?php end_screen_shot(); ?>
 
+<a name="21h"></a>
 <i>Examining partial reading of defective CD sectors:</i><br>
 When the whole medium has been processed, look into the directory you entered
 above (/var/tmp/raw in the example). If no raw files have been created
@@ -113,7 +114,14 @@ the drive may not support the required reading mode.
 However if you have several drives which do create raw files, then let them all
 work in the same raw file directory. Collecting raw sector fragments from
 different drives hightens the chance of reconstructing the defective sectors.
+<p>
 
+<?php begin_screen_shot("Use different raw reading mode","fix-prefs-drive2.png"); ?>
+<i>Use a different raw reading mode for CD media:</i><br>
+Using the preset "20h" raw reading mode might not work on some drives.
+Perform another reading attempt using raw reading mode "21h" (see the screenshot).
+Check again whether some raw files have been created.
+<?php end_screen_shot(); ?>
 
 <!--- do not change below --->
 

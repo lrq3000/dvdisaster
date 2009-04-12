@@ -37,7 +37,7 @@ However, we could do it the dvdisaster way:
 <ul>
 <li><a href="howtos20.php">Create error correction data</a> for the medium.<p></li>
 <li><a href="howtos10.php">Scan the medium</a> regularly. Use it until the first read errors occur.<p></li>
-<li><a href="howtos30.php">Recover</a> the read errors <a href="howtos40.php">using the error correction data</a>.
+<li><a href="howtos40.php">Recover</a> the read errors <a href="howtos40.php">using the error correction data</a>.
 Write the recovered image to a new medium.</li>
 </ul>
 

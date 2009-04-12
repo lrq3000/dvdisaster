@@ -175,12 +175,12 @@ several minutes to hours.
 <table>
 <tr>
 <td width="200px" align="center">
-<a href="howtos33.php?way=2">
+<a href="howtos33.php?way=2#c">
 <img src="thumbnails/write-iso1.png" border="0"></a></td>
 <td>&nbsp;&nbsp;</td>
 <td valign="top"><b>Write the recovered ISO image</b> 
 to a new medium. Perform the same steps as described in the section
-about <a href="howtos33.php">writing media</a> which have been
+about <a href="howtos33.php?way=2#c">writing media</a> which have been
 <a href="howtos33.php">augmented with error correction data</a>.
 </td>
 </tr>

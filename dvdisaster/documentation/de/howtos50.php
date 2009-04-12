@@ -58,6 +58,8 @@ Fehlerkorrektur-Datei.
 
 </pre>
 
+<a href="howtos51.php">Informationen anzeigen...</a>
+
 <!--- do not change below --->
 <?php
 # end_page() adds the footer line and closes the HTML properly.

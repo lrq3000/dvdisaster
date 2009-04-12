@@ -38,7 +38,7 @@ finden Sie Beispiele für gute und schlechte Lesekurven.<p></li>
 Diese Analyse ist momentan <a href="qa.php?pipo">nur für CD-Datenträger verfügbar</a>.
 CD-Laufwerke haben eine eingebaute Fehlerkorrektur, die kleinere Beschädigungen des
 Datenträgers aus den Daten "herausrechnen" kann. Die Anzahl der C2-Fehler gibt an,
-wie oft das Laufwerke beim Lesen auf diesen Mechanismus zurückgreifen mußte - bei
+wie oft das Laufwerk beim Lesen auf diesen Mechanismus zurückgreifen mußte - bei
 guten Datenträgern wird hier nichts angezeigt.</li>
 </ul>
 <?php end_screen_shot(); ?>

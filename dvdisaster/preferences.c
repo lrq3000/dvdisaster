@@ -1568,9 +1568,14 @@ void CreatePreferencesWindow(void)
 
       AddHelpParagraph(lwoh, 
 		       _("<b>Reading strategy</b>\n\n"
-		         "The linear strategy is optimized for undamaged media "
-			 "while the adaptive strategy is better suited "
-			 "for media already containing read errors."));
+			 "Use the <b>linear strategy</b> for:\n"
+			 "- processing undamaged media, or\n"
+		         "- reading defective media when no error correction data is available.\n\n"
+			 "The <b>adaptive strategy</b> is optimized for\n"
+			 "- reading defective media\n"
+			 "- if (and only if) error correction data is available.\n\n"
+			 "Using the adaptive strategy without error correction data "
+			 "is possible but it is recommended to use linear reading in that case."), Closure->invisibleDash);
 
       /* Reading range */
 
@@ -2088,13 +2093,18 @@ if(Closure->debugMode)  /* hidden until version 0.80 */
 
       AddHelpParagraph(lwoh, 
 		       _("<b>Raw reading</b> (affects CD media only)\n\n"
-			 "Some drives may deliver unreliable results when their "
-			 "internal error correction approaches its maximum capacity.\n\n"
-			 "Activating this option makes dvdisaster read sectors in raw mode. "
-			 "The L-EC P/Q vectors, EDC checksum and MSF address contained in the "
-			 "raw data are checked to make sure that the sector was correctly read.\n\n"
-			 "This option will also activate C2 quality scanning if supported by the "
-			 "drive and medium."
+			 "Activating this option has several effects:\n\n"
+			 "C2 quality scanning will be performed when supported "
+			 "by the drive.\n\n"
+			 "Media sectors are read in raw mode. The L-EC P/Q "
+			 "vectors, EDC checksum and MSF address contained "
+			 "in the raw data are checked to make sure that the "
+			 "sector was correctly read.\n\n"
+			 "Additional data recovery heuristics and raw sector "
+			 "caching becomes available if either\n"
+			 "- adaptive reading is used, or\n"
+			 "- linear reading is configured to skip 0 sectors after a read error.\n"
+			 "Raw sector caching also needs checking of the respective option."
 			 ));
 
       /* Minimum reading attempts */

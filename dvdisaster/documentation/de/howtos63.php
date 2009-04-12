@@ -60,7 +60,7 @@ Ein Test der zweiten CD ergibt, daß auch diese bisher
 unbemerkt 1500 unlesbare Sektoren entwickelt hat. </td>
 </tr>
 <tr>
- <td align="right"><a href="howtos30.php">lesen</a></td>
+ <td align="right">lesen</td>
  <td align="center"><img align="top" src="../images/down-arrow.png"></td>
  <td align="center"><img align="top" src="../images/down-arrow.png"></td>
  <td></td>
@@ -71,12 +71,12 @@ unbemerkt 1500 unlesbare Sektoren entwickelt hat. </td>
 <td><img align="top" src="../images/bad-image.png"></td>
 <td><img align="top" src="../images/bad-image.png"></td>
 <td>Joe verwendet dvdisaster, um von den beschädigten CDs noch 
-<a href="howtos30.php">so viele Sektoren wie möglich</a> einzulesen. 
+so viele Sektoren wie möglich einzulesen. 
 Da er jedoch keine Fehlerkorrektur-Daten hat, kann er
 die verbleibenden unlesbaren Sektoren nicht neu durch dvdisaster berechnen lassen.</td>
 </tr>
 <tr>
- <td align="right"><a href="howtos30.php">viele Lese-<br>versuche</a></td>
+ <td align="right">viele Lese-<br>versuche</td>
  <td align="center"><img align="top" src="../images/down-arrow.png"></td>
  <td align="center"><img align="top" src="../images/down-arrow.png"></td>
  <td></td>
@@ -113,7 +113,7 @@ die Daten von beiden CDs noch retten können.</td></tr>
 <hr>
 <sup>1)</sup>Die Fehlerkorrektur setzt einen typischen Alterungsprozeß voraus.
 Wenn die CD total zerstört wird, kann sie auch mit Hilfe der Fehlerkorrektur-Daten
-nicht mehr gerettet werden. Für sehr wichtige Daten müssen Sie zusätzlich 
+nicht mehr gerettet werden. Für sehr wichtige Daten müssen Sie zusätzliche 
 Schutzmaßnahmen treffen, indem Sie zum Beispiel mehrere Kopien auf unterschiedlichen
 Datenträger-Typen erstellen.
 

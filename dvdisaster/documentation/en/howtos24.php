@@ -23,10 +23,10 @@ mass storage media. Therefore you are probably considering them
 for storing error correction files.<p>
 
 Nothing is wrong with doing so, but be aware that your data and protective
-error correction files are kept on media with equal reliablity.
+error correction files are kept on media with equal reliability.
 When you encounter read errors on a data medium 
 it is likely that the medium containing the respective error correction files
-has also gone defective. After all both media have been written at the time,
+has also gone defective. After all both media have been written at the same time,
 and they have the same aging characteristics.
 <p>
 
@@ -34,7 +34,7 @@ and they have the same aging characteristics.
 <td>&nbsp;</td>
 <td>This might come at a surprise, but it can not be guaranteed that an
 error correction file remains usable when it is stored on a defective medium.
-See the old documentation for an <a href="http://dvdisaster.net/legacy/de/background20.html">explanation of the technical background</a>.
+See the old documentation for an <a href="http://dvdisaster.net/legacy/en/background20.html">explanation of the technical background</a>.
 </td></tr></table><p>
 
 Therefore it is important to protect error correction files just as if 

@@ -28,7 +28,7 @@ Datenträger auf einen neuen umzukopieren:
 <li>Zu früh: Umkopieren aufgrund schlechter Qualitäts-Werte erzeugt mitunter unnötige
 Kosten - manchmal halten solche Datenträger noch viel länger als erwartet.<p></li>
 <li>Zu spät: Wenn die Qualitäts-Analyse bereits unlesbare Sektoren anzeigt, sind
-bereits Daten verloren.<p></li>
+schon Daten verloren.<p></li>
 <li>Genau bevor der Datenträger kaputt geht: Der ideale Fall, aber praktisch unmöglich
 zu treffen.
 </ul>

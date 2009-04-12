@@ -66,7 +66,7 @@ has been
 </tr>
 </table>
 
-<?php begin_howto_shot("Showing information.","compare-rs01.png", ""); ?>
+<?php begin_howto_shot("Showing information.","compat-okay-rs01.png", ""); ?>
 <b>Watch the verification progress.</b>
 In order to display all information the image and error correction files
 must be fully read. 

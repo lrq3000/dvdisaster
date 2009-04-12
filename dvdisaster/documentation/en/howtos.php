@@ -18,7 +18,7 @@ begin_page();
 
 dvdisaster is a complex tool which would require a whole book to cover
 all of its features. Since we are currently lacking the resources for
-doing a book (and you might be short on time also) we will take a
+doing a book (and you might be short on reading time also) we will take a
 different approach here.
 First we will demonstrate how the <a href="howtos60.php">different
 functions of dvdisaster work together</a>.

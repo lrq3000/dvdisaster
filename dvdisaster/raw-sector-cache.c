@@ -225,10 +225,12 @@ int SaveDefectiveSector(RawBuffer *rb, int can_c2_scan)
    for(i=0; i<rb->samplesRead; i++)
    {  int new_sector = TRUE;
 
+      /* See comment below on C2 mask field to understand rb->sampleSize-1 */
+
       if(cache_sectors)  /* Sector already in cache? */
       {  
 	 for(j=0, idx=0; j<dsh->nSectors; j++, idx+=dsh->sectorSize) 
-	 {  if(!memcmp(rb->rawBuf[i], cache_sectors+idx, rb->sampleSize))
+	 {  if(!memcmp(rb->rawBuf[i], cache_sectors+idx, rb->sampleSize-1))
 	    {  new_sector = FALSE;
 	       break;
 	    }
@@ -236,7 +238,7 @@ int SaveDefectiveSector(RawBuffer *rb, int can_c2_scan)
       }
 
       for(j=0; j<i; j++) /* Some drives return cached data after first read */
-      {  if(!memcmp(rb->rawBuf[i], rb->rawBuf[j], rb->sampleSize))
+      {  if(!memcmp(rb->rawBuf[i], rb->rawBuf[j], rb->sampleSize-1))
 	 {  new_sector = FALSE;
 	    break;
 	 }
@@ -244,6 +246,9 @@ int SaveDefectiveSector(RawBuffer *rb, int can_c2_scan)
 
       if(new_sector)   /* same sector already in cache */
       {  int n;
+
+        /* The C2 mask field is not used; so we put a flag into it
+	   to mark raw sectors containing C2 error information. */
 
 	 if(can_c2_scan)
 	    rb->rawBuf[i][CD_RAW_DUMP_SIZE-1] = 1;

@@ -92,7 +92,7 @@ Bei dvdisaster ist es ganz ähnlich; hier ist die zu schützende Zahlenfolge
 nichts anderes als das ISO-Abbild einer CD, DVD oder BD.</td>
 </tr></table><p>
 
-Der Begriff der <b>Redundanz</b> läßt sich damit wie folgt erkären:
+Der Begriff der <b>Redundanz</b> läßt sich damit wie folgt erklären:
 
 <ul>
 <li>Zu 4 Eingabezahlen wird eine weitere "Fehlerkorrektur-Zahl" berechnet.

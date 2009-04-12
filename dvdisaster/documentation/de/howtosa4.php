@@ -28,9 +28,9 @@ der grün markierten Knöpfe:<p>
 <td valign="top"><img src="images/read-icon.png"> &nbsp;</td>
 <td><b>Einlesen eines Datenträgers in eine Abbild-Datei</b>, um:
 <ul>
-<li><a href="howtos30.php">einen beschädigten Datenträger</a> für eine nachfolgende
+<li><a href="howtos42.php#a">einen beschädigten Datenträger</a> für eine nachfolgende
 Rekonstruktion einzulesen. 
-<li><a href="howtos20.php">einen fehlerfreien Datenträger</a> zur Erstellung
+<li><a href="howtos23.php?way=1&expand=0">einen fehlerfreien Datenträger</a> zur Erstellung
 einer Fehlerkorrektur-Datei einzulesen.</td>
 </tr>
 
@@ -49,7 +49,7 @@ einer Fehlerkorrektur-Datei einzulesen.</td>
 <tr>
 <td valign="top"><img src="images/fix-icon.png"> &nbsp;</td>
 <td><b><a href="howtos40.php">Rekonstruieren eines beschädigten Datenträgers</a>,</b><br>
-zu dem eine <a href="howtos30.php">Abbild-Datei</a> und
+zu dem eine <a href="howtos42.php#a">Abbild-Datei</a> und
  <a href="howtos20.php">Fehlerkorrektur-Daten</a> bereits vorliegen.
 </td>
 </tr>

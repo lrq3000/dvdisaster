@@ -31,7 +31,7 @@
  #define WIN_MAX_PATH (4*MAX_PATH)
 #endif
 
-#if 0
+#if 0 
  #define Verbose g_printf
 #else
  #define Verbose(format, ...)
@@ -754,9 +754,32 @@ void InitClosure()
 
 void LocalizedFileDefaults()
 {  
+#ifdef SYS_DARWIN
+   /* Darwin uses / as the current working directory when invoked
+      from an app bundle. Not good. */
+   char *buf = getcwd(NULL,0);
+   if(buf && !strcmp(buf,"/"))
+   {  free(buf);
+      buf = getenv("HOME");
+      if(buf)
+      {
+         Closure->imageName   = g_strdup_printf("%s/%s",buf,_("medium.iso"));
+         Closure->eccName     = g_strdup_printf("%s/%s",buf,_("medium.ecc"));
+         Closure->dDumpPrefix = g_strdup_printf("%s/%s",buf,_("sector-"));
+      }
+      else
+      {
+         Closure->imageName   = g_strdup(_("medium.iso"));
+         Closure->eccName     = g_strdup(_("medium.ecc"));
+         Closure->dDumpPrefix = g_strdup(_("sector-"));
+      }
+   }
+#else
+   /* On all other OS, storing the files in the cwd is a sane default. */
    Closure->imageName   = g_strdup(_("medium.iso"));
    Closure->eccName     = g_strdup(_("medium.ecc"));
    Closure->dDumpPrefix = g_strdup(_("sector-"));
+#endif
 }
 
 

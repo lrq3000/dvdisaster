@@ -67,7 +67,7 @@ Not shown but also possible are flat curves without any change in reading speed
 <b>An example for a weak medium</b><p>
 
 <?php begin_screen_shot("Weak CD","weak-cd.png"); ?>
-This medium is still readable as evidenced by the green spiral shown under
+This medium is still readable as indicated by the green spiral shown under
 "Medium state". However there are clear signs of serious trouble ahead:
 The drive must slow down significantly towards the end of the medium in order
 to read from it. Note the steep fall of reading speed after the 600M mark.
@@ -102,8 +102,8 @@ checksums in the error correction data. There are two main causes:
 <p>
 
 <ul><li>
-<b>The image has been manipulated</b> between the creation 
-of error correction data and writing it to the medium.
+<b>The image has been manipulated</b> after the creation 
+of error correction data and before writing it to the medium.
 This can happen on Unix systems when the image is mounted with write access
 after ecc data has been created. Typical signs are CRC errors in sector 64
 and in sectors 200 to 400 as the system updates the file access times there.
@@ -114,12 +114,12 @@ However if you have modified files in the image after creating the ecc data,
 the error correction data will be both worthless and dangerous.
 Applying a recovery to the medium will restore the image state
 at the time the ecc data has been created, and this will obviously not 
-represent the recent contents of the medium.<p></li>
+represent the most recent contents of the medium.<p></li>
 
 <li><b>There are technical problems with the computer system,</b>
 especially in mass storage communication. Perform the scan again
 and observe the CRC error locations.
-If CRC errors disappear of surface at different locations your system
+If CRC errors disappear or surface at different locations your system
 might have defective RAM, bad drive cabling/controllers or incorrect clock
 speeds.</li></ul>
 <?php end_screen_shot(); ?><p>

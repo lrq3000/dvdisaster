@@ -71,9 +71,9 @@ It may be possible to recover from this problem; see hints related to
 <b>Wrong error correction file</b>.
 The error correction file was created for a different image.
 This causes lots of CRC errors since the sectors have different contents.
-However the more important hint is:<p>
+However the most important hint is:<p>
 Fingerprint: <font color="red">mismatch</font><p>
-This tells you that the error correction file does not belong the image.
+This tells you that the error correction file does not belong to the image.
 <?php end_screen_shot(); ?>
 
 <!--- do not change below --->

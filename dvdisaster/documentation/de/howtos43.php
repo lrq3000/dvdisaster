@@ -42,7 +42,7 @@ bei entsprechender Ausdauer noch genügend Daten zusammenbekommen.
 </td></tr>
 <tr bgcolor="#ffe0c0">
 <td width="10%" align="center" valign="top">10%-20%</td>
-<td> Das wird knapp. Wenn Sie mit den nächten 2 bis 3 Leseversuchen nicht deutlich 
+<td> Das wird knapp. Wenn Sie mit den nächsten 2 bis 3 Leseversuchen nicht deutlich 
 unter 10% kommen, ist der Inhalt des Datenträger vermutlich nicht mehr zu retten.
 </td></tr>
 <tr bgcolor="#ffc0c0">
@@ -107,6 +107,7 @@ Falls Sie solche Ausgaben nie bekommen, lohnt es sich bei dem betreffenden Laufw
 die Anzahl der Leseversuche zu erhöhen.  
 <?php end_screen_shot(); ?>
 
+<a name="21h"></a>
 <i>Teilweises Lesen von beschädigten CD-Sektoren prüfen:</i><br>
 Schauen Sie nach dem Lesevorgang in den eben ausgewählten Ordner 
 (im Beispiel /var/tmp/raw). Wenn darin keine Raw-Dateien angelegt 
@@ -115,7 +116,14 @@ Lesemodus nicht. Haben Sie hingegen mehrere Laufwerke, die Raw-Dateien
 erzeugen, dann lassen Sie alle Laufwerke im selben Verzeichnis auf
 den  Raw-Dateien arbeiten, da sich Sektorenbruchstücke von 
 verschiedenen Laufwerken besonders gut ergänzen. 
+<p>
 
+<?php begin_screen_shot("Anderes RAW-Verfahren verwenden","fix-prefs-drive2.png"); ?>
+<i>Anderes RAW-Verfahren für CD einsetzen:</i><br>
+Bei einigen Laufwerken bringt das voreingestellte Leseverfahren "20h" keinen Erfolg.
+Probieren Sie einen weiteren Lesedurchlauf mit der Einstellung "21h" (siehe
+Bildschirmfoto) und schauen Sie erneut nach, ob Raw-Dateien entstehen.
+<?php end_screen_shot(); ?>
 
 <!--- do not change below --->
 

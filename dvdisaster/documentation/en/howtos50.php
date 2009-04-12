@@ -56,6 +56,8 @@ An image file and optionally the error correction file for it.
 
 </pre>
 
+<a href="howtos51.php">Show the information...</a>
+
 <!--- do not change below --->
 <?php
 # end_page() adds the footer line and closes the HTML properly.

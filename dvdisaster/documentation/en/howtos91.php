@@ -81,7 +81,7 @@ from the image.
 <td>&nbsp;&nbsp;</td>
 <td valign="top"><b>Create a <i>second</i> image from the <i>written</i> 
 medium.
-</b> Use these <a href="howtos22.php">settings</a>
+</b> Use these <a href="howtos22.php#read">settings</a>
 and read the medium as described 
 in <a href="howtos23.php?way=1">creating an image</a> 
 for making an error correction file. However you can stop the walk-through
@@ -115,7 +115,7 @@ using the CD/DVD/BD authoring software.
 <td>&nbsp;&nbsp;</td>
 <td valign="top">
 <b>Enter the name of the error correction file</b>
-in case is not already present from the previous actions.
+in case it is not already present from the previous actions.
 </td>
 </tr>
 </table>
@@ -133,7 +133,7 @@ on the "Verify" button.</td>
 </table>
 
 <?php begin_howto_shot("Show information.","compat-okay-rs01.png", ""); ?>
-<b>Look at the verfication results.</b>
+<b>Look at the verification results.</b>
 If you get the green messages "Good image." and "Good error correction file."
 your authoring software and dvdisaster are compatible. You can continue
 creating the error correction files directly from the ISO images produced

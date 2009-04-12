@@ -96,7 +96,7 @@ on the "Verify" button.</td>
 </table>
 
 <?php begin_howto_shot("Show informationen.","compat-okay-rs02.png", ""); ?>
-<b>Look at the verfication results.</b>
+<b>Look at the verification results.</b>
 If you get the green messages "Good image." and "Good error correction data."
 your authoring software and dvdisaster are compatible with respect to
 the augmented images.

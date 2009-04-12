@@ -27,7 +27,7 @@ Beispiele für fehlerhafte Situationen dargestellt.<p>
 <hr>
 
 Die nächsten beiden Situationen sind typisch, wenn Sie Informationen
-zu einem Abbild anzeigen, das noch nichtvollständig wiederhergestellt
+zu einem Abbild anzeigen, das noch nicht vollständig wiederhergestellt
 worden ist:<p>
 
 <?php begin_screen_shot("Abbild mit unlesbaren Sektoren, RS01","compare-bad-rs01.png"); ?>

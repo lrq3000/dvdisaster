@@ -21,7 +21,7 @@ howto_headline("Creating error correction data", "Decision help", "images/create
 
 <h3>Decision help</h3>
 
-Error correction data can be either created in form a separate error
+Error correction data can be either created in form of a separate error
 correction file or it can be placed directly onto the medium.
 Click on the answers to the following questions to find out which
 method is most appropriate for you.<p>
@@ -50,7 +50,7 @@ if($answer >= 2)
    echo "</ul>\n";
 
    if($answer == 3)
-   {  echo "You can put the error correction data <a href=\"howtos32.php\">directly onto the medium</a>.\n";
+   {  echo "You can put the error correction data <a href=\"howtos33.php\">directly onto the medium</a>.\n";
       echo "To do so you must create an ISO image first and then augment it\n";
       echo "with error correction data before you write it to the medium.\n";
    }
@@ -79,11 +79,11 @@ If the medium has already been written, or insufficient space is left for
 augmenting the image, you still can create error correction data in form
 of a free-standing error correction file.
 This file must then be stored somewhere else, e.g. you need to take additional
-provisions for <a href="howtos24.php">archiving</a> your error 
+provisions to <a href="howtos24.php">archive</a> your error 
 correction files.<p>
 
 More information about the pro and con of these methods
-can be found in the <a href="http://dvdisaster.net/legacy/de/background30.html">old documentation</a>. 
+can be found in the <a href="http://dvdisaster.net/legacy/en/background30.html">old documentation</a>. 
 
 <pre> </pre>
 

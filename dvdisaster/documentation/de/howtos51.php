@@ -66,7 +66,7 @@ Klicken auf den "Vergleichen"-Knopf.</td>
 </tr>
 </table>
 
-<?php begin_howto_shot("Informationen anzeigen.","compare-rs01.png", ""); ?>
+<?php begin_howto_shot("Informationen anzeigen.","compat-okay-rs01.png", ""); ?>
 <b>Beobachten Sie den Fortschritt des Vorgangs.</b>
 Zum Anzeigen aller Informationen müssen das Abbild und die
 Fehlerkorrektur-Datei vollständig gelesen werden. 

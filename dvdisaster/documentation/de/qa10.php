@@ -58,7 +58,8 @@ fehlt eventuell noch: <p>
 
 <b><a name="media">2.2 Welche Datenträger-Typen werden unterstützt?</a></b><p>
 
-dvdisaster unterstützt einmal oder mehrmals beschreibbare CD- und DVD-Datenträger.
+dvdisaster unterstützt einmal oder mehrmals beschreibbare 
+CD-, DVD- und BD-Datenträger.
 Datenträger mit Mehrfachsitzungen (engl.: multisession)
 oder einem Kopierschutz können <i>nicht</i> verwendet werden.<p>
 
@@ -101,8 +102,16 @@ Abhilfe: Abbildgröße aus dem ISO/UDF- oder ECC/RS02-Dateisystem ermitteln.
 wie oben beschrieben möglich.</li>
 </ul>
 
+<b>BD-R, BD-RW</b><p>
+
+<ul>
+<li>Momentan sind keine Einschränkungen bekannt, aber mit
+zweischichtigen Typen (die 50GB-Versionen) liegen noch kaum
+Erfahrungen vor.</li>
+</ul>
+
 <b>Nicht verwendbare Typen</b> (kein Einlesen des Abbildes möglich):<p> 
-DVD-ROM (gepreßte DVDs) sowie Audio-CD und Video-CD.
+BD-ROM (gepreßte BDs), DVD-ROM (gepreßte DVDs) sowie Audio-CD und Video-CD.
 
 <div align=right><a href="#top">&uarr;</a></div><p>
 

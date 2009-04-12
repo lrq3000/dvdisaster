@@ -80,7 +80,7 @@ aus dem Abbild.
 </td>
 <td width="100px" align="center"> </td>
 <td>&nbsp;&nbsp;</td>
-<td valign="top"><b>Erstellen Sie ein <i>zweites</i> Abbild aus dem <i>gebrannten</i> Datenträger.</b> Verwenden Sie die gleichen <a href="howtos22.php">Grundeinstellungen</a>
+<td valign="top"><b>Erstellen Sie ein <i>zweites</i> Abbild aus dem <i>gebrannten</i> Datenträger.</b> Verwenden Sie die gleichen <a href="howtos22.php#read">Grundeinstellungen</a>
 und das gleiche Vorgehen wie beim <a href="howtos23.php?way=1">Einlesen eines Datenträgers</a> zum Erstellen einer Fehlerkorrektur-Datei. Allerdings brauchen Sie die
 Fehlerkorrektur-Datei nicht noch einmal zu erzeugen.
 </td>
@@ -203,7 +203,7 @@ hat einige leere Sektoren am Ende des Abbilds beim Brennen hinzugefügt.
 können Sie <i>nicht</i> davon ausgehen, daß dvdisaster und die Brennsoftware
 kompatibel sind. Die erzeugten Fehlerkorrektur-Dateien werden voraussichtlich
 unbrauchbar sein.</font> <p> 
-Erzeugen Sie Ihre Fehlerkorrektur-Dateien mit der
+Erzeugen Sie im Fall der Inkompatibilität Ihre Fehlerkorrektur-Dateien mit der
 nachfolgend beschriebenen Methode:
 
 <hr>

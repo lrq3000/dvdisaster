@@ -61,7 +61,7 @@ on the desktop:<p>
 
 Anna is cautious and expects one of the numbers to become unreadable 
 by accidentally pouring ink over it. Therefore she also notes down
-the sum of the four numbers (the "+" and "=" - have only be added for
+the sum of the four numbers (the "+" and "=" signs have only be added for
 clarity):<p>
 
 <img src="../images/ecc-example2.png"><p>
@@ -110,15 +110,14 @@ observe that
 <ul>
 <li>no data can be recovered when the data loss exceeds the redundancy
 (the equation in the example can not be solved for two or more unknowns).</li>
-<li>the error correction data must be calculated at one point in time
+<li>the error correction data must be calculated at a point in time
 where all data is still present / readable.</li>
 </ul><p>
 
 The above shown example does not generalize into an error correction
 scheme for recovering more than one missing data value. To do so a more
 powerful equation system is needed which can be solved for more than
-one missing value. dvdisaster uses 
-a <a href="http://de.wikipedia.org/wiki/Reed-Solomon-Code">Reed-Solomon code</a> 
+one missing value. dvdisaster uses a Reed-Solomon code
 which does have such properties; however the required math is not taught
 in school. Interested readers are therefore referred to the respective
 books in coding theory.

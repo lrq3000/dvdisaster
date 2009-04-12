@@ -28,7 +28,7 @@ Das Symbol kann je nach verwendetem Symbol-Thema anders aussehen.</td>
 
 <hr>
 
-<b>Einstellungen zum Einlesen des Abbilds</b><p>
+<a name="read"><b>Einstellungen zum Einlesen des Abbilds</b></a><p>
 
 <table width="100%" cellspacing="5">
 <tr>
@@ -81,7 +81,7 @@ Weil der Idealfall natürlich selten eintritt, sollten Sie die Redundanz großz�
 mit einer der gelb markierten Möglichkeiten auswählen:
 
 <ul>
-<li>Die Voreinstellungen "normal" und "hoch" liefern eine Redundanz von 14.3% bzw. 33.5%. Mit diesen beiden Einstellungen werden Fehlerkorrektur-Dateien durch optimierten Programmcode besonders schnell erzeugt.</li>
+<li>Die Voreinstellungen "normal" und "hoch" liefern eine Redundanz von 14.3% bzw. 33.5%. Mit diesen beiden Einstellungen werden Fehlerkorrektur-Dateien durch optimierten Programmkode besonders schnell erzeugt.</li>
 <li>Nach Aktivieren des Punktes "Andere" können Sie die gewünschte Redundanz direkt in Prozent eingeben.</li>
 <li>Durch Aktivieren des "Verwende höchstens"-Punktes können Sie die Größe der Fehlerkorrektur-Datei in MB vorgeben. In diesem Fall wählt dvdisaster eine geeignete Redundanz, damit die Fehlerkorrektur-Datei nicht größer als angegeben wird.</li>
 </ul>

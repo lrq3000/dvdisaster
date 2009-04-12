@@ -57,7 +57,7 @@ However scanning will also work without error correction data.</td>
 
 <tr valign="top">
  <td><b>Related functions:<p></td>
- <td><a href="howtos30.html">Reading of damaged media</a> and<br>
+ <td><a href="howtos42.html#a">Reading of damaged media</a> and<br>
      <a href="howtos40.html">Recovering images</a>.</td>
  </tr>
 </table><p>

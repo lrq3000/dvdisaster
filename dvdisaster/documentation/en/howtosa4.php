@@ -19,15 +19,15 @@ begin_page();
 <h3>Starting actions</h3>
 
 <?php begin_screen_shot("Starting actions","action-buttons.png"); ?>
-To start an action in dvdisaster, click on one of buttons marked green:<p>
+To start an action in dvdisaster, click on one of the buttons marked green:<p>
 
 <table>
 <tr>
 <td valign="top"><img src="images/read-icon.png"> &nbsp;</td>
 <td><b>Reading medium contents into an image file</b> to:
 <ul>
-<li>read in <a href="howtos30.php">a defective medium</a> for a subsequent recovery.
-<li>read in <a href="howtos20.php">an error-free medium</a> for creating an error
+<li>read in <a href="howtos42.php#a">a defective medium</a> for a subsequent recovery.
+<li>read in <a href="howtos23.php?way=1&expand=0">an error-free medium</a> for creating an error
 correction file.</td>
 </tr>
 

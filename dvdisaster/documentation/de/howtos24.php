@@ -50,7 +50,7 @@ falls Sie später die Fehlerkorrektur-Dateien brauchen und es Probleme mit dem D
 <li>Fehlerkorrektur-Dateien jeweils auf dem nächsten Datenträger speichern:<p>
 
 Nehmen wir an, Sie nutzen ihre Datenträger für eine fortlaufende Datensicherung. Sie sammeln
-also so lange Dateien, bis Sie einen kompletten Datenträger brennen davon brennen können.
+also so lange Dateien, bis Sie einen kompletten Datenträger davon brennen können.
 Brennen Sie dann den ersten Datenträger wie gewohnt und erzeugen Sie eine Fehlerkorrektur-Datei
 davon. Nehmen Sie die Fehlerkorrektur-Datei in den Satz von Dateien auf, die Sie für den zweiten
 Datenträger sammeln, und schreiben Sie sie mit auf den zweiten Datenträger. Vom zweiten Datenträger

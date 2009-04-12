@@ -6,13 +6,13 @@
 ?>
 
 <a name="filechooser"></a>
-<b>Notes for using the file chooser under Windows</b><p>
+<b>Notes for using the file chooser under Windows and Mac OS X</b><p>
 
 dvdisaster uses the <a href="http://www.gtk.org">GTK+</a> user interface toolkit
 which makes sure that it runs on many different operating systems. Since the
-GTK+ file chooser behaves differently from its Windows counterpart (which we
+GTK+ file chooser behaves differently from its Windows and Mac OS X counterparts (which we
 can't use), a small introduction is included further down this page.
-Please note that creating the Windows version would have required
+Please note that creating the Windows or Mac OS X version would have required
 a huge effort without GTK+ - we would probably just have concentrated 
 on doing the GNU/Linux version instead ;-)<p>
 

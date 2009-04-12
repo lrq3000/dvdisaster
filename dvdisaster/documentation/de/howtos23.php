@@ -61,7 +61,7 @@ if($way==1){
 <td>&nbsp;&nbsp;</td>
 <td valign="top"><b>Legen Sie den Datenträger in ein Laufwerk</b>, 
 das direkt mit Ihrem Rechner verbunden ist. Sie können keine Netzwerklaufwerke und keine
-Laufwerke innerhalb von virtuellen Maschinen wie verwenden.</td>
+Laufwerke innerhalb von virtuellen Maschinen verwenden.</td>
 </tr>
 </table>
 

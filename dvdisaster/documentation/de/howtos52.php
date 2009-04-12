@@ -21,7 +21,7 @@ begin_page();
 <?php begin_howto_shot("Abbild und Fehlerkorrektur-Datei.","compat-okay-rs01.png", ""); ?>
 
 Beim Vergleich eines Abbilds mit der zugehörigen Fehlerkorrektur-Datei
-erhalten sie die Informationen über den Zustand des Abbilds und der
+erhalten Sie die Informationen über den Zustand des Abbilds und der
 Fehlerkorrektur-Datei in zwei getrennten Ausgabefeldern:
 <?php end_howto_shot(); ?>
 

@@ -79,7 +79,7 @@ An dieser Stelle setzt dvdisaster an. Beispiel:<p>
 <td>
 Anstelle einer kompletten Sicherungskopie erzeugt dvdisaster Fehlerkorrektur-Daten (genannt "ECC"), 
 mit denen zum Beispiel bis zu 20% eines gealterten Datenträgers repariert werden können.
-20% wurden anstelle der oben genannten 5-10% gewählt, um eine Sicherheitsmarge zu haben.
+20% wurden anstelle der oben genannten 5-10% gewählt, um eine Sicherheitsreserve zu haben.
 </td>
 </tr>
 

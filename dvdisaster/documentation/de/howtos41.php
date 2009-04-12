@@ -43,7 +43,10 @@ Nehmen Sie die übrigen Einstellungen wie in dem Bildschirmfoto angegeben vor.<p
 
 <?php begin_screen_shot("Reiterkarte \"Laufwerk\".","fix-prefs-drive.png"); ?>
 <b>Reiterkarte "Laufwerk".</b> Arbeiten Sie in dieser Reiterkarte zunächst 
-mit den gezeigten Grundeinstellungen.<p>
+mit den gezeigten Grundeinstellungen. Bei einigen Laufwerken ergibt die
+Einstellung "21h" bei "Raw-Lese-Verfahren" bessere Ergebnisse. Mehr Informationen
+dazu gibt es in den <a href="howtos43.php#21h">fortgeschrittenen Einstellungen</a>.
+<p>
 <?php end_screen_shot(); ?>
 
 <?php begin_screen_shot("Reiterkarte \"Leseversuche\".","fix-prefs-read-attempts.png"); ?>

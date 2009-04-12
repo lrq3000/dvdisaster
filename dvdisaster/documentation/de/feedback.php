@@ -45,7 +45,7 @@ nicht unterstützt. Siehe auch die
 <a href="qa10.php#media">vollständige Liste der unterstützten Formate</a>.</li>
 <li>dvdisaster funktioniert nur mit echten Laufwerken. Nicht unterstützt sind
 Netzwerklaufwerke, Software-Laufwerke (z.B. die Alkohol-Laufwerke :-), und
-Laufwerke in virtuellen Maschinen wie VMWare(R) und Xen.
+Laufwerke in virtuellen Maschinen.
 </li>
 </ul>
 

@@ -134,7 +134,7 @@ simple-md5sum: md5.c
 # Stuff needed to generate or prepare the documentation
 # TAG: online-doc
 
-.PHONY : images pack-images lock-images mount-php html winhtml thumbnails
+.PHONY : images pack-images lock-images mount-php html localhtml thumbnails
 
 documentation/images/email.png:
 	@if test -e THESE_ARE_THE_DEVEL_SOURCES; then \
@@ -222,7 +222,7 @@ html: mount-php version.php thumbnails
 	@rm -rf $(SRCDIR)/documentation/wget-tmp
 	@echo "done."
 
-winhtml: mount-php version.php thumbnails
+localhtml: mount-php version.php thumbnails
 	@sed "s/www/local/" <$(SRCDIR)/documentation/include/version.php >$(SRCDIR)/documentation/include/version1.php
 	@mv $(SRCDIR)/documentation/include/version1.php $(SRCDIR)/documentation/include/version.php
 	@echo -n "Producing html documentation... "
@@ -432,7 +432,7 @@ www-images: thumbnails version.php
 INSTALL: documentation/install.template
 	@sed "s/@@PKGNAME/$(PKGNAME)/" <documentation/install.template >INSTALL
 
-srcdist: INSTALL html lock-images clean distclean 
+srcdist: INSTALL localhtml lock-images clean distclean 
 	@rm -f documentation/MAKE_SRCDIST
 	@cd .. ; tar -c -j -X $(PKGNAME)/NODIST -f $(PKGNAME).tar.bz2 $(PKGNAME)
 	@cd .. ; gpg --default-key 091ad320 --detach-sign --output $(PKGNAME).tar.bz2.gpg --armor $(PKGNAME).tar.bz2 
@@ -499,3 +499,4 @@ macdist:
 	@rm -rf macinst/dvdisaster.app macinst/.dvdisaster.app
 	@sed 's!%srcdir%!$(SRCDIR)!' <macinst/dvdisaster.bundle.template >macinst/dvdisaster.bundle
 	@ige-mac-bundler macinst/dvdisaster.bundle
+	@(cd macinst; zip -r dvdisaster.app.zip dvdisaster.app) 

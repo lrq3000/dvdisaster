@@ -32,12 +32,12 @@ produzieren zwar alle Programme die gleichen Abbilder, wenn als Dateiformat
 ".iso" verwendet wird, aber es ist besser sicherzugehen daß
 auch wirklich ein brauchbares ISO-Abbild erzeugt worden ist. 
 Falls Sie nämlich ein anderes
-Format mit dvdisaster verarbeiten, kann es sein die Fehlerkorrektur-Daten
+Format mit dvdisaster verarbeiten, kann es sein daß die Fehlerkorrektur-Daten
 unbrauchbar werden. Insbesondere können andere Formate 
 wie <b>.nrg nicht verwendet</b> werden.
 <p>
 
-<b>Mögliche Szenarien.</b> In folgenden beiden Situationen müssen ISO-Abbilder
+<b>Mögliche Szenarien.</b> In den folgenden beiden Situationen müssen ISO-Abbilder
 zwischen dvdisaster und einer anderen Software ausgetauscht werden:<p>
 
 <b>a) Fehlerkorrektur-Datei aus dem ISO-Abbild der Brennsoftware erstellen</b><p>

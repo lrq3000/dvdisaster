@@ -1,6 +1,5 @@
-0.72 (rc-1) 03-04-2009
-        Currently working through known (minor) bugs list to prepare
-	the release candidate.
+0.72 (rc-1) 11-04-2009
+        - Documentation and locale cleanup for en, de
 	- added app bundle creation for Mac OS X
 	- Graphical bug: red/green sector markings were incorrect when doing
 	  linear reading with high sector skip numbers. Fixed.
@@ -19,6 +18,8 @@
 	  errors occurred. Fixed.
 	- fixed crash in command line mode when doing multiple 
 	  reading passes.
+
+------ 0.72 released ------
 
 0.71 (devel-28) 08-03-2009
 	- changed SSE2 handling; now only the interesting part of
