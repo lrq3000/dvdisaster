@@ -35,6 +35,15 @@ export GDK_PIXBUF_MODULE_FILE="$bundle_etc/gtk-2.0/gdk-pixbuf.loaders"
 export PANGO_RC_FILE="$bundle_etc/pango/pangorc"
 
 # We need a UTF-8 locale.
+lang=`defaults read .GlobalPreferences AppleLocale 2>/dev/null`
+if test "$?" != "0"; then
+  lang=`defaults read .GlobalPreferences AppleCollationOrder 2>/dev/null | sed 's/_.*//'`
+fi
+if test "$?" == "0"; then
+     export LANG=${lang}.UTF-8
+#    export LANG1="`grep \"\`echo $lang\`_\" /usr/share/locale/locale.alias | \
+#  tail -n1 | sed 's/\./ /' | awk '{print $2}'`.UTF-8"
+fi
 
 if test -f "$bundle_lib/charset.alias"; then
     export CHARSETALIASDIR="$bundle_lib"

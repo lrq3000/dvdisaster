@@ -278,17 +278,20 @@ section("feedback");
   en("Bug reporting");
   ru("Сообщения об ошибках");
 
-# Imprint
+if(strcmp($mode, "local"))
+{
+  # Imprint
 
 section("imprint");
   de("Impressum");
   en("Imprint");
   ru("Выходные данные");
 
-# Privacy notice
+   # Privacy notice
 
 section("privacy");
   de("Datenschutzhinweis");
   en("Privacy policy");
   ru("Privacy policy");
+}
 ?>

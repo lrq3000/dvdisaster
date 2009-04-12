@@ -273,7 +273,8 @@ function news_item($date, $headline, $body)
 function create_navigation()
 {  global $trans_contents;
    global $script_file;
-   
+   global $mode;   
+
    if(!strcmp($script_file, "index.php"))
         $body_width = "57%";
    else $body_width = "77%";

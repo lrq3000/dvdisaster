@@ -447,8 +447,8 @@ void RS01Fix(Method *method)
 	     Stop(_("Failed seeking to sector %lld in image [%s]: %s"),
 		  idx, "FD", strerror(errno));
 
-	   CreateMissingSector(buf, idx, eh->mediumFP, eh->fpSector,
-			       NULL);  //FIXME: add volume label if available
+	   CreateMissingSector(buf, idx, eh->mediumFP, eh->fpSector, NULL);
+
 	   n = LargeWrite(ii->file, buf, 2048);
 	   if(n != 2048)
 	     Stop(_("Failed writing to sector %lld in image [%s]: %s"),

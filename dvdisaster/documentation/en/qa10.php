@@ -56,7 +56,7 @@ try the following:<p>
 
 <b><a name="media">2.2 Which media types are supported?</a></b><p>
 
-dvdisaster supports (re-)writeable CD and DVD media. <br>
+dvdisaster supports (re-)writeable CD, DVD and BD media. <br>
 Media containing multiple sessions or copy protections can <i>not</i> be used.<p>
 
 Usable media by type:<p>
@@ -94,8 +94,16 @@ Remedy: Determine the image size from the ISO/UDF file system or the ECC/RS02 da
 recognition as noted above.</li>
 </ul>
 
+<b>BD-R, BD-RW</b><p>
+
+<ul>
+<li>No limitations are known so far, but very few results
+on the two-layered type (the 50GB variety) have been reported yet.
+</li>
+</ul>
+
 <b>Not usable types</b> (image can not be extracted):<p>
-DVD-ROM (pressed DVDs), CD-Audio and CD-Video.
+BD-ROM (pressed BDs), DVD-ROM (pressed DVDs), CD-Audio and CD-Video.
 
 <div align=right><a href="#top">&uarr;</a></div><p>
 
