@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-11 20:06+0200\n"
+"POT-Creation-Date: 2009-04-14 20:29+0200\n"
 "PO-Revision-Date: 2005-01-01 14:24+0100\n"
 "Last-Translator: Andrea Polverini <polve@polve.com>\n"
 "Language-Team: Italian <>\n"
@@ -30,15 +30,15 @@ msgstr ""
 "# e sarà sovrascritto ogni volta che verrà eseguito dvdisaster\n"
 "\n"
 
-#: closure.c:766 closure.c:772 closure.c:779
+#: closure.c:769 closure.c:777 closure.c:784
 msgid "medium.iso"
 msgstr ""
 
-#: closure.c:767 closure.c:773 closure.c:780
+#: closure.c:770 closure.c:778 closure.c:785
 msgid "medium.ecc"
 msgstr ""
 
-#: closure.c:768 closure.c:774 closure.c:781
+#: closure.c:771 closure.c:779 closure.c:786
 msgid "sector-"
 msgstr ""
 
@@ -74,18 +74,16 @@ msgstr ""
 #: debug.c:112 debug.c:202 debug.c:250 debug.c:341 debug.c:385 debug.c:698
 #: debug.c:798 debug.c:1125 debug.c:1133 debug.c:1240 rs01-common.c:54
 #: rs02-common.c:62 rs02-create.c:336 rs02-create.c:982 rs02-fix.c:387
-#: rs02-verify.c:393 rs03-common.c:81 rs03-create.c:381 rs03-create.c:404
-#: rs03s-create.c:796 rs03s-create.c:826 rs03-verify.c:392
+#: rs02-verify.c:393
 #, c-format
 msgid "Failed seeking to sector %lld in image: %s"
 msgstr ""
 
 #: debug.c:117 debug.c:207 debug.c:255 debug.c:346 debug.c:390 debug.c:536
 #: debug.c:658 debug.c:703 debug.c:1137 debug.c:1244 debug.c:1284
-#: rs02-create.c:359 rs02-create.c:385 rs02-create.c:985 rs03-create.c:384
-#: rs03-create.c:407 rs03s-create.c:803 rs03s-create.c:829 udf.c:1108
-#: udf.c:1166 udf.c:1223 udf.c:1236 udf.c:1241 udf.c:1244 udf.c:1247
-#: udf.c:1250 udf.c:1253 udf.c:1256
+#: rs02-create.c:359 rs02-create.c:385 rs02-create.c:985 udf.c:1108 udf.c:1166
+#: udf.c:1223 udf.c:1236 udf.c:1241 udf.c:1244 udf.c:1247 udf.c:1250
+#: udf.c:1253 udf.c:1256
 #, c-format
 msgid "Failed writing to sector %lld in image: %s"
 msgstr ""
@@ -135,7 +133,6 @@ msgid "Setting byte %d in sector %lld to value %d.\n"
 msgstr "Settaggio del byte %d nel settore %lld al valore %d.\n"
 
 #: debug.c:485 debug.c:524 rs02-create.c:182 rs02-verify.c:685
-#: rs03-verify.c:660
 #, c-format
 msgid "Failed seeking to start of image: %s\n"
 msgstr ""
@@ -166,9 +163,7 @@ msgstr ""
 
 #: debug.c:568 read-linear.c:1398 rs01-fix.c:198 rs01-fix.c:220 rs01-fix.c:236
 #: rs01-fix.c:271 rs02-create.c:104 rs02-create.c:148 rs02-fix.c:241
-#: rs02-fix.c:262 rs02-fix.c:277 rs03-create.c:146 rs03-create.c:190
-#: rs03-fix.c:241 rs03-fix.c:262 rs03-fix.c:277 rs03s-create.c:104
-#: rs03s-create.c:148
+#: rs02-fix.c:262 rs02-fix.c:277
 #, c-format
 msgid "Could not truncate %s: %s\n"
 msgstr "Non posso troncare %s: %s\n"
@@ -241,7 +236,6 @@ msgstr "Contenuto del settore %lld:\n"
 
 #: debug.c:802 debug.c:1129 debug.c:1198 debug.c:1202 debug.c:1280
 #: rs01-common.c:70 rs02-common.c:67 rs02-create.c:199 rs02-fix.c:390
-#: rs03-common.c:86
 #, c-format
 msgid "Failed reading sector %lld in image: %s"
 msgstr ""
@@ -534,22 +528,6 @@ msgstr ""
 
 #: ecc-rs02.c:40
 msgid "Reed-Solomon method with improved tolerance for defective ecc data"
-msgstr ""
-
-#: ecc-rs03.c:39
-msgid "Multithreaded RS codec (RS03)"
-msgstr ""
-
-#: ecc-rs03.c:40
-msgid "Multithreaded Reed-Solomon codec for error correction files and augmented images"
-msgstr ""
-
-#: ecc-rs03s.c:39
-msgid "Single threaded RS codec (RS03)"
-msgstr ""
-
-#: ecc-rs03s.c:40
-msgid "Single threaded Reed-Solomon codec for error correction files and augmented images"
 msgstr ""
 
 #: file.c:39
@@ -881,8 +859,7 @@ msgid "damaged"
 msgstr ""
 
 #: medium-info.c:95 rs02-verify.c:669 rs02-verify.c:870 rs02-verify.c:871
-#: rs02-verify.c:872 rs03-verify.c:644 rs03-verify.c:845 rs03-verify.c:846
-#: rs03-verify.c:847
+#: rs02-verify.c:872
 msgid "complete"
 msgstr ""
 
@@ -1820,7 +1797,7 @@ msgstr ""
 msgid "Sector coloring"
 msgstr ""
 
-#: preferences.c:2664 rs01-verify.c:120 rs02-verify.c:115 rs03-verify.c:115
+#: preferences.c:2664 rs01-verify.c:120 rs02-verify.c:115
 msgid "Good sectors"
 msgstr "Settori buoni"
 
@@ -2071,7 +2048,7 @@ msgstr ""
 #: raw-editor.c:388 read-adaptive.c:999 read-adaptive.c:1070
 #: read-adaptive.c:1359 read-adaptive.c:1554 read-linear.c:431
 #: read-linear.c:691 read-linear.c:996 rs01-fix.c:447 rs01-fix.c:707
-#: rs02-fix.c:751 rs03-fix.c:736
+#: rs02-fix.c:751
 #, c-format
 msgid "Failed seeking to sector %lld in image [%s]: %s"
 msgstr ""
@@ -2414,7 +2391,7 @@ msgstr ""
 msgid "Analysing existing image file"
 msgstr "Analizzo il file immagine esistente"
 
-#: read-adaptive.c:728 rs01-common.c:160 rs02-verify.c:717 rs03-verify.c:692
+#: read-adaptive.c:728 rs01-common.c:160 rs02-verify.c:717
 #, c-format
 msgid "premature end in image (only %d bytes): %s\n"
 msgstr "Fine prematura dell'immagine (solo %d Bytes): %s\n"
@@ -2509,7 +2486,7 @@ msgstr ""
 "Potrebbe non essere possibile recuperare questo errore.\n"
 "La lettura deve procedere ignorando questo errore?"
 
-#: read-adaptive.c:1382 rs01-fix.c:400 rs02-fix.c:437 rs03-fix.c:423
+#: read-adaptive.c:1382 rs01-fix.c:400 rs02-fix.c:437
 #, c-format
 msgid "CRC error in sector %lld\n"
 msgstr "Errore CRC nel settore %lld\n"
@@ -2629,9 +2606,7 @@ msgstr ""
 #: read-linear.c:215 rs01-create.c:651 rs01-fix.c:188 rs01-fix.c:210
 #: rs01-fix.c:256 rs01-fix.c:286 rs01-fix.c:303 rs01-fix.c:356
 #: rs01-verify.c:430 rs01-verify.c:787 rs02-create.c:112 rs02-fix.c:232
-#: rs02-fix.c:253 rs02-fix.c:344 rs02-verify.c:707 rs03-create.c:154
-#: rs03-fix.c:232 rs03-fix.c:253 rs03-fix.c:339 rs03s-create.c:112
-#: rs03-verify.c:682
+#: rs02-fix.c:253 rs02-fix.c:344 rs02-verify.c:707
 #, c-format
 msgid "<span %s>Aborted by user request!</span>"
 msgstr "<span %s>Annullato dall'utente!</span>"
@@ -2692,7 +2667,7 @@ msgstr "Settore %lld: Velocità diminuita a %4.1fx\n"
 msgid "Read position: %3d.%1d%% (%4.1fx)"
 msgstr "Settori processati: %3d.%1d%% (%4.1fx)"
 
-#: read-linear.c:763 rs01-common.c:235 rs02-verify.c:762 rs03-verify.c:737
+#: read-linear.c:763 rs01-common.c:235 rs02-verify.c:762
 #, c-format
 msgid "* CRC error, sector: %lld\n"
 msgstr "* Errore CRC, Settore : %lld\n"
@@ -2832,7 +2807,7 @@ msgid "Already present"
 msgstr "Già presente"
 
 #: read-linear-window.c:277 read-linear-window.c:319 rs01-verify.c:123
-#: rs02-verify.c:118 rs03-verify.c:118
+#: rs02-verify.c:118
 msgid "Sectors with CRC errors"
 msgstr "Settori con errori CRC"
 
@@ -2861,7 +2836,7 @@ msgstr "Velocità"
 msgid "Sector %lld dumped to %s\n"
 msgstr ""
 
-#: rs01-common.c:134 rs02-verify.c:793 rs03-verify.c:768
+#: rs01-common.c:134 rs02-verify.c:793
 #, c-format
 msgid "- testing sectors  : %3d%%"
 msgstr "- Test dei settori  : %3d%%"
@@ -2871,12 +2846,12 @@ msgstr "- Test dei settori  : %3d%%"
 msgid "Scanning image sectors: %3d%%"
 msgstr "Scansione dei settori dell'immagine : %3d%%"
 
-#: rs01-common.c:187 rs02-verify.c:749 rs03-verify.c:724
+#: rs01-common.c:187 rs02-verify.c:749
 #, c-format
 msgid "* missing sector   : %lld\n"
 msgstr "* Settore mancante  : %lld\n"
 
-#: rs01-common.c:188 rs02-verify.c:750 rs03-verify.c:725
+#: rs01-common.c:188 rs02-verify.c:750
 #, c-format
 msgid "* missing sectors  : %lld - %lld\n"
 msgstr "* Settori mancanti  : %lld - %lld\n"
@@ -2902,7 +2877,6 @@ msgid "Redundancy %d out of useful range [8..100]."
 msgstr "Ridondanza %d al di fuori dell'intervallo utilizzabile [8..100]."
 
 #: rs01-create.c:125 rs01-fix.c:77 rs02-create.c:58 rs02-fix.c:53
-#: rs03-create.c:92 rs03-fix.c:53 rs03s-create.c:58
 #, c-format
 msgid "<span %s>Aborted by unrecoverable error.</span>"
 msgstr "<span %s>Interrotto da un errore irrecuperabile.</span>"
@@ -2962,7 +2936,6 @@ msgid ""
 msgstr ""
 
 #: rs01-create.c:509 rs01-create.c:633 rs01-create.c:927 rs02-create.c:955
-#: rs03-create.c:688 rs03s-create.c:786
 #, c-format
 msgid "Ecc generation: %3d.%1d%%"
 msgstr "Generazione Ecc: %3d.%1d%%"
@@ -2985,7 +2958,7 @@ msgstr ""
 "Impossibile scrivere lo header Ecc:\n"
 "%s"
 
-#: rs01-create.c:963 rs02-create.c:1104 rs03-create.c:876 rs03s-create.c:921
+#: rs01-create.c:963 rs02-create.c:1104
 #, c-format
 msgid "Ecc generation: 100.0%%\n"
 msgstr "Generazione Ecc: 100.0%%\n"
@@ -3012,17 +2985,16 @@ msgstr ""
 msgid "Failed seeking in crc area: %s"
 msgstr ""
 
-#: rs01-fix.c:43 rs02-fix.c:424 rs02-verify.c:433 rs03-verify.c:415
+#: rs01-fix.c:43 rs02-fix.c:424 rs02-verify.c:433
 #, c-format
 msgid "problem reading crc data: %s"
 msgstr "Ci sono problemi di lettura nei dati crc: %s"
 
-#: rs01-fix.c:138 rs02-fix.c:169 rs03-fix.c:169
+#: rs01-fix.c:138 rs02-fix.c:169
 msgid "Repairing of image aborted"
 msgstr "Riparazione dell'immagine interrotta"
 
-#: rs01-fix.c:144 rs01-fix.c:159 rs02-fix.c:175 rs02-fix.c:206 rs03-fix.c:175
-#: rs03-fix.c:206
+#: rs01-fix.c:144 rs01-fix.c:159 rs02-fix.c:175 rs02-fix.c:206
 #, c-format
 msgid ""
 "<big>Repairing the image.</big>\n"
@@ -3031,7 +3003,7 @@ msgstr ""
 "<big>Riparazione dell'immagine.</big>\n"
 "<i>%s</i>"
 
-#: rs01-fix.c:145 rs02-fix.c:176 rs03-fix.c:176
+#: rs01-fix.c:145 rs02-fix.c:176
 msgid "Opening files..."
 msgstr "Apertura files..."
 
@@ -3040,7 +3012,7 @@ msgstr "Apertura files..."
 msgid "Error correction file using Method RS01, %d roots, %4.1f%% redundancy."
 msgstr "Correzione di errore file con metodo RS01, %d Radici, %4.1f%% Ridondanza."
 
-#: rs01-fix.c:163 rs02-fix.c:211 rs03-fix.c:211
+#: rs01-fix.c:163 rs02-fix.c:211
 msgid ""
 "\n"
 "Fix mode: Repairable sectors will be fixed in the image.\n"
@@ -3065,7 +3037,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: rs01-fix.c:180 rs02-fix.c:224 rs03-fix.c:224
+#: rs01-fix.c:180 rs02-fix.c:224
 #, c-format
 msgid ""
 "Image file is %lld sectors longer than expected.\n"
@@ -3076,17 +3048,16 @@ msgstr ""
 "Si assume di utilizzare un supporto TAO.\n"
 "%lld Settori saranno tagliati fuori dalla fine dell'immagine.\n"
 
-#: rs01-fix.c:205 rs02-fix.c:248 rs03-fix.c:248
+#: rs01-fix.c:205 rs02-fix.c:248
 msgid "Is it okay to remove the superfluous sectors?"
 msgstr "Tutto OK se rimuovo i settori superflui?"
 
-#: rs01-fix.c:222 rs01-fix.c:238 rs02-fix.c:264 rs02-fix.c:279 rs03-fix.c:264
-#: rs03-fix.c:279
+#: rs01-fix.c:222 rs01-fix.c:238 rs02-fix.c:264 rs02-fix.c:279
 #, c-format
 msgid "Image has been truncated by %lld sectors.\n"
 msgstr "L'immagine è stata troncata di %lld settori.\n"
 
-#: rs01-fix.c:229 rs02-fix.c:271 rs03-fix.c:271
+#: rs01-fix.c:229 rs02-fix.c:271
 msgid ""
 "Add the --truncate option to the program call\n"
 "to have the superfluous sectors removed."
@@ -3181,12 +3152,12 @@ msgstr "Errore di byte inaspettato nel settore %lld, Byte %d\n"
 msgid "Bad error location %d; corrupted .ecc file?\n"
 msgstr "Posizionamento sbagliato dell'errore %d; file .ecc corrotto?\n"
 
-#: rs01-fix.c:696 rs02-fix.c:718 rs03-fix.c:703
+#: rs01-fix.c:696 rs02-fix.c:718
 #, c-format
 msgid "  %3d repaired sectors: "
 msgstr "  %3d Settori riparati: "
 
-#: rs01-fix.c:715 rs02-fix.c:759 rs03-fix.c:743
+#: rs01-fix.c:715 rs02-fix.c:759
 #, c-format
 msgid ""
 "could not write medium sector %lld:\n"
@@ -3195,12 +3166,12 @@ msgstr ""
 "Impossibile scrivere il settore %lld della periferica:\n"
 "%s"
 
-#: rs01-fix.c:741 rs02-fix.c:796 rs03-fix.c:779
+#: rs01-fix.c:741 rs02-fix.c:796
 #, c-format
 msgid "Ecc progress: %3d.%1d%%"
 msgstr "Avanzamento Ecc: %3d.%1d%%"
 
-#: rs01-fix.c:753 rs02-fix.c:810 rs03-fix.c:793
+#: rs01-fix.c:753 rs02-fix.c:810
 #, c-format
 msgid "Ecc progress: 100.0%%\n"
 msgstr "Avanzamento Ecc: 100.0%%\n"
@@ -3210,30 +3181,30 @@ msgstr "Avanzamento Ecc: 100.0%%\n"
 msgid "Repaired sectors: %lld     \n"
 msgstr "Settori riparati: %lld    \n"
 
-#: rs01-fix.c:756 rs02-fix.c:815 rs03-fix.c:798
+#: rs01-fix.c:756 rs02-fix.c:815
 #, c-format
 msgid "Unrepaired sectors: %lld\n"
 msgstr "Settori non riparati: %lld\n"
 
-#: rs01-fix.c:759 rs02-fix.c:818 rs03-fix.c:801
+#: rs01-fix.c:759 rs02-fix.c:818
 #, c-format
 msgid "Image sectors could not be fully restored (%lld repaired; <span %s>%lld unrepaired</span>)"
 msgstr "I settori dell'immagine non possono essere comopletamente recuperati (%lld riparati; <span %s>%lld non riparati</span>)"
 
-#: rs01-fix.c:765 rs02-fix.c:824 rs03-fix.c:808
+#: rs01-fix.c:765 rs02-fix.c:824
 msgid "Good! All sectors are already present."
 msgstr "Bene! Tutti i settori sono già presenti."
 
-#: rs01-fix.c:769 rs02-fix.c:828 rs03-fix.c:813
+#: rs01-fix.c:769 rs02-fix.c:828
 msgid "Good! All sectors are repaired."
 msgstr "Bene! Tutti i settori sono stati riparati."
 
-#: rs01-fix.c:774 rs02-fix.c:833 rs03-fix.c:819
+#: rs01-fix.c:774 rs02-fix.c:833
 #, c-format
 msgid "Erasure counts per ecc block:  avg =  %.1f; worst = %d.\n"
 msgstr "Conteggio cancellature per blocco ecc: Medio = %.1f; Peggiore = %d.\n"
 
-#: rs01-fix.c:779 rs02-fix.c:838 rs03-fix.c:824
+#: rs01-fix.c:779 rs02-fix.c:838
 msgid "Repair results:"
 msgstr "Risultati della riparazione:"
 
@@ -3242,11 +3213,10 @@ msgid "n/a"
 msgstr "Non disponibile"
 
 #: rs01-verify.c:126 rs01-verify.c:147 rs02-verify.c:121 rs02-verify.c:142
-#: rs03-verify.c:121 rs03-verify.c:142
 msgid "Missing sectors"
 msgstr "Settori mancanti"
 
-#: rs01-verify.c:190 rs02-verify.c:179 rs03-verify.c:179
+#: rs01-verify.c:190 rs02-verify.c:179
 msgid "Image file summary"
 msgstr "Sommario file immagine"
 
@@ -3255,7 +3225,6 @@ msgid "No image present."
 msgstr "File immagine non presente."
 
 #: rs01-verify.c:209 rs01-verify.c:299 rs02-verify.c:189 rs02-verify.c:295
-#: rs03-verify.c:189 rs03-verify.c:295
 msgid "Medium sectors:"
 msgstr "Settori del Media:"
 
@@ -3271,7 +3240,7 @@ msgstr "Settori mancanti:"
 msgid "Image checksum:"
 msgstr "Immagine checksum:"
 
-#: rs01-verify.c:245 rs02-verify.c:241 rs03-verify.c:241
+#: rs01-verify.c:245 rs02-verify.c:241
 msgid "Image state"
 msgstr "Stato immagine"
 
@@ -3279,15 +3248,15 @@ msgstr "Stato immagine"
 msgid "Error correction file summary"
 msgstr "Sommario del file di Correzione errore"
 
-#: rs01-verify.c:275 rs02-verify.c:271 rs03-verify.c:271
+#: rs01-verify.c:275 rs02-verify.c:271
 msgid "Created by:"
 msgstr "Creato da:"
 
-#: rs01-verify.c:283 rs02-verify.c:279 rs03-verify.c:279
+#: rs01-verify.c:283 rs02-verify.c:279
 msgid "Method:"
 msgstr "Metodo:"
 
-#: rs01-verify.c:291 rs02-verify.c:287 rs03-verify.c:287
+#: rs01-verify.c:291 rs02-verify.c:287
 msgid "Requires:"
 msgstr "Richiede:"
 
@@ -3299,7 +3268,7 @@ msgstr "Impronta digitale:"
 msgid "Ecc blocks:"
 msgstr "Blocchi Ecc:"
 
-#: rs01-verify.c:331 rs02-verify.c:47 rs02-verify.c:319 rs03-verify.c:319
+#: rs01-verify.c:331 rs02-verify.c:47 rs02-verify.c:319
 msgid "Ecc checksum:"
 msgstr "Ecc checksum:"
 
@@ -3319,7 +3288,7 @@ msgstr "- Controllo il file immagine -"
 msgid "not present\n"
 msgstr "Non presente\n"
 
-#: rs01-verify.c:414 rs02-verify.c:587 rs03-verify.c:571
+#: rs01-verify.c:414 rs02-verify.c:587
 #, c-format
 msgid "present, contains %lld medium sectors.\n"
 msgstr "presente, contiene %lld settori della periferica\n"
@@ -3368,7 +3337,7 @@ msgstr ""
 "- Buona immagine    : Tutti i settori presenti\n"
 "- Immagine md5sum   : %s\n"
 
-#: rs01-verify.c:486 rs02-verify.c:883 rs03-verify.c:858
+#: rs01-verify.c:486 rs02-verify.c:883
 #, c-format
 msgid "<span %s>Good image.</span>"
 msgstr "<span %s>Buona immagine.</span>"
@@ -3387,12 +3356,12 @@ msgstr ""
 msgid "<span %s>Image complete, but contains checksum errors!</span>"
 msgstr "<span %s>Immagine completa, ma contiene errori nel checksum!</span>"
 
-#: rs01-verify.c:502 rs02-verify.c:850 rs03-verify.c:825
+#: rs01-verify.c:502 rs02-verify.c:850
 #, c-format
 msgid "* BAD image        : %lld sectors missing\n"
 msgstr "* Immagine DIFETTOSA: %lld settori mancanti\n"
 
-#: rs01-verify.c:503 rs02-verify.c:854 rs03-verify.c:829
+#: rs01-verify.c:503 rs02-verify.c:854
 #, c-format
 msgid "* BAD image        : %lld sectors missing, %lld CRC errors\n"
 msgstr "* Immagine DIFETTOSA: %lld settori mancanti, %lld errori CRC\n"
@@ -3405,11 +3374,11 @@ msgstr "- Controllo il file ecc -"
 msgid "No error correction file present."
 msgstr "File ecc non presente."
 
-#: rs01-verify.c:567 rs02-verify.c:913 rs03-verify.c:888
+#: rs01-verify.c:567 rs02-verify.c:913
 msgid "created by dvdisaster"
 msgstr "Creato da dvdisaster"
 
-#: rs01-verify.c:584 rs02-verify.c:930 rs03-verify.c:905
+#: rs01-verify.c:584 rs02-verify.c:930
 #, c-format
 msgid "created by dvdisaster-%d.%d\n"
 msgstr "Creato da dvdisaster-%d.%d\n"
@@ -3418,22 +3387,22 @@ msgstr "Creato da dvdisaster-%d.%d\n"
 msgid "created by dvdisaster-0.41.x.\n"
 msgstr "Creato da dvdisaster-0.41.x.\n"
 
-#: rs01-verify.c:599 rs02-verify.c:943 rs03-verify.c:918
+#: rs01-verify.c:599 rs02-verify.c:943
 #, c-format
 msgid "- method           : %4s, %d roots, %4.1f%% redundancy.\n"
 msgstr "- Metodo            : %4s, %d radici, %4.1f%% Ridondanza.\n"
 
-#: rs01-verify.c:603 rs02-verify.c:948 rs03-verify.c:923
+#: rs01-verify.c:603 rs02-verify.c:948
 #, c-format
 msgid "%4s, %d roots, %4.1f%% redundancy"
 msgstr "%4s, %d radici, %4.1f%% ridondanza"
 
-#: rs01-verify.c:608 rs02-verify.c:955 rs03-verify.c:930
+#: rs01-verify.c:608 rs02-verify.c:955
 #, c-format
 msgid "- requires         : dvdisaster-%d.%d (good)\n"
 msgstr "- richiede          : dvdisaster-%d.%d (buono)\n"
 
-#: rs01-verify.c:617 rs02-verify.c:966 rs03-verify.c:941
+#: rs01-verify.c:617 rs02-verify.c:966
 #, c-format
 msgid ""
 "* requires         : dvdisaster-%d.%d (BAD)\n"
@@ -3444,12 +3413,12 @@ msgstr ""
 "* Attenzione        : L'output seguente potrebbe essere non corretto.\n"
 "*                   : Prego visitare http://www.dvdisaster.com per un upgrade\n"
 
-#: rs01-verify.c:630 rs02-verify.c:980 rs03-verify.c:955
+#: rs01-verify.c:630 rs02-verify.c:980
 #, c-format
 msgid "<span %s>Please upgrade your version of dvdisaster!</span>"
 msgstr "<span %s>Vi preghiamo di aggiornare la vostra versione di dvdisaster!</span>"
 
-#: rs01-verify.c:642 rs03-verify.c:962
+#: rs01-verify.c:642
 #, c-format
 msgid "- medium sectors   : %lld (good)\n"
 msgstr "- settori del media : %lld (buoni)\n"
@@ -3459,12 +3428,12 @@ msgstr "- settori del media : %lld (buoni)\n"
 msgid "- medium sectors   : %lld sectors + %d bytes (good)\n"
 msgstr "- settori del media : %lld settori + %d bytes (buoni)\n"
 
-#: rs01-verify.c:657 rs02-verify.c:996 rs03-verify.c:969
+#: rs01-verify.c:657 rs02-verify.c:996
 #, c-format
 msgid "* medium sectors   : %lld (BAD, perhaps TAO/DAO mismatch)\n"
 msgstr "* Settori del Media : %lld (Difettosi, probabile incongruenza TAO/DAO)\n"
 
-#: rs01-verify.c:666 rs02-verify.c:998 rs03-verify.c:971
+#: rs01-verify.c:666 rs02-verify.c:998
 #, c-format
 msgid "* medium sectors   : %lld (BAD)\n"
 msgstr "* Settori del Media : %lld (Difettosi)\n"
@@ -3586,7 +3555,7 @@ msgstr "- Ecc-md5sum        : %s (buono) \n"
 msgid "<span %s>Good error correction file.</span>"
 msgstr "<span %s>File di correzione dell'immagine valido.</span>"
 
-#: rs01-window.c:125 rs02-window.c:87 rs03s-window.c:85 rs03-window.c:85
+#: rs01-window.c:125 rs02-window.c:87
 msgid "<b>2. Creating error correction data:</b>"
 msgstr "<b>2. Creazione dei dati di correzione degli errori:</b>"
 
@@ -3594,34 +3563,32 @@ msgstr "<b>2. Creazione dei dati di correzione degli errori:</b>"
 msgid "Show reading speed curve"
 msgstr "Mostra la curva di velocità di lettura"
 
-#: rs01-window.c:188 rs02-window.c:139 rs03-window.c:137
+#: rs01-window.c:188 rs02-window.c:139
 #, c-format
 msgid "Repaired: %lld"
 msgstr "Riparato: %lld"
 
-#: rs01-window.c:189 rs02-window.c:140 rs03-window.c:138
+#: rs01-window.c:189 rs02-window.c:140
 #, c-format
 msgid "Unrepairable: <span %s>%lld</span>"
 msgstr "Non riparabile: <span %s>%lld</span> "
 
-#: rs01-window.c:190 rs02-window.c:141 rs03-window.c:139
+#: rs01-window.c:190 rs02-window.c:141
 #, c-format
 msgid "Progress: %3d.%1d%%"
 msgstr "Avanzamento: %3d.%1d%%"
 
-#: rs01-window.c:398 rs02-window.c:346 rs03-window.c:344
+#: rs01-window.c:398 rs02-window.c:346
 msgid "Errors/Ecc block"
 msgstr "Errori/Blocchi Ecc"
 
-#: rs01-window.c:430 rs02-window.c:372 rs03-preferences.c:48
+#: rs01-window.c:430 rs02-window.c:372
 #, c-format
 msgid "%4.1f%% redundancy (%d roots)"
 msgstr "%4.1f%% ridondanza (%d radici)"
 
 #: rs01-window.c:447 rs01-window.c:784 rs01-window.c:790 rs01-window.c:791
 #: rs02-window.c:389 rs02-window.c:1143 rs02-window.c:1149 rs02-window.c:1150
-#: rs03-preferences.c:65 rs03-preferences.c:627 rs03-preferences.c:633
-#: rs03-preferences.c:634
 #, c-format
 msgid "%d MB of file cache"
 msgstr ""
@@ -3685,7 +3652,7 @@ msgstr ""
 msgid "Space-delimited redundancy"
 msgstr ""
 
-#: rs01-window.c:698 rs02-window.c:1075 rs03-preferences.c:559
+#: rs01-window.c:698 rs02-window.c:1075
 msgid "Use at most"
 msgstr "Usare almeno"
 
@@ -3702,42 +3669,41 @@ msgid ""
 "<b>Advance notice:</b> When using the same size setting for images of vastly different size, smaller images receive more redundancy than larger ones. This is usually not what you want."
 msgstr ""
 
-#: rs01-window.c:781 rs02-window.c:1140 rs03-preferences.c:624
+#: rs01-window.c:781 rs02-window.c:1140
 msgid "Memory utilization"
 msgstr "Utilizzo Memoria"
 
-#: rs01-window.c:785 rs02-window.c:1144 rs03-preferences.c:628
+#: rs01-window.c:785 rs02-window.c:1144
 msgid "File cache"
 msgstr ""
 
-#: rs01-window.c:797 rs02-window.c:1156 rs03-preferences.c:640
+#: rs01-window.c:797 rs02-window.c:1156
 msgid "Use"
 msgstr "Usare"
 
-#: rs01-window.c:825 rs02-window.c:1184 rs03-preferences.c:668
+#: rs01-window.c:825 rs02-window.c:1184
 msgid ""
 "<b>File cache</b>\n"
 "\n"
 "dvdisaster optimizes access to the image and error correction files by maintaining its own cache. The preset of 32MB is suitable for most systems."
 msgstr ""
 
-#: rs02-common.c:332 rs02-common.c:344 rs02-verify.c:624 rs03-common.c:340
-#: rs03-common.c:352 rs03-verify.c:608
+#: rs02-common.c:332 rs02-common.c:344 rs02-verify.c:624
 #, c-format
 msgid "Failed seeking to ecc header at %lld: %s\n"
 msgstr ""
 
-#: rs02-common.c:336 rs02-common.c:348 rs03-common.c:344 rs03-common.c:356
+#: rs02-common.c:336 rs02-common.c:348
 #, c-format
 msgid "Failed writing ecc header at %lld: %s\n"
 msgstr ""
 
-#: rs02-create.c:107 rs03-create.c:149 rs03s-create.c:107
+#: rs02-create.c:107
 #, c-format
 msgid "<span %s>Aborted by user request!</span> (partial ecc data removed from image)"
 msgstr ""
 
-#: rs02-create.c:139 rs03-create.c:181 rs03s-create.c:139
+#: rs02-create.c:139
 #, c-format
 msgid ""
 "Image \"%s\" already contains error correction information.\n"
@@ -3766,37 +3732,33 @@ msgid ""
 "appended to complete (undamaged) images.\n"
 msgstr ""
 
-#: rs02-create.c:228 rs02-create.c:292 rs02-create.c:301 rs03-create.c:245
-#: rs03-create.c:254 rs03s-create.c:203 rs03s-create.c:212
+#: rs02-create.c:228 rs02-create.c:292 rs02-create.c:301
 #, c-format
 msgid "Preparing image (checksums, adding space): %3d%%"
 msgstr ""
 
-#: rs02-create.c:263 rs02-create.c:273 rs02-fix.c:91 rs03-create.c:217
-#: rs03-create.c:227 rs03-fix.c:91 rs03s-create.c:175 rs03s-create.c:185
+#: rs02-create.c:263 rs02-create.c:273 rs02-fix.c:91
 #, c-format
 msgid "Failed seeking to end of image: %s\n"
 msgstr ""
 
-#: rs02-create.c:267 rs02-create.c:288 rs02-fix.c:104 rs03-create.c:221
-#: rs03-create.c:241 rs03-fix.c:105 rs03s-create.c:179 rs03s-create.c:199
+#: rs02-create.c:267 rs02-create.c:288 rs02-fix.c:104
 #, c-format
 msgid "Failed expanding the image: %s\n"
 msgstr ""
 
-#: rs02-create.c:1025 rs03-create.c:805 rs03s-create.c:852
+#: rs02-create.c:1025
 msgid "Error correction data creation aborted"
 msgstr ""
 
-#: rs02-create.c:1029 rs02-create.c:1049 rs03-create.c:809 rs03-create.c:829
-#: rs03s-create.c:856 rs03s-create.c:876
+#: rs02-create.c:1029 rs02-create.c:1049
 #, c-format
 msgid ""
 "<big>Augmenting the image with error correction data.</big>\n"
 "<i>%s</i>"
 msgstr ""
 
-#: rs02-create.c:1030 rs03-create.c:810 rs03s-create.c:857
+#: rs02-create.c:1030
 msgid "- checking image -"
 msgstr ""
 
@@ -3812,7 +3774,7 @@ msgid ""
 " %lld MB data, %lld MB ecc (%d roots; %4.1f%% redundancy)."
 msgstr ""
 
-#: rs02-create.c:1062 rs03-create.c:842 rs03s-create.c:889
+#: rs02-create.c:1062
 #, c-format
 msgid ""
 "Not enough space on medium left for error correction data.\n"
@@ -3822,22 +3784,21 @@ msgid ""
 "file using the RS01 method.\n"
 msgstr ""
 
-#: rs02-create.c:1073 rs03-create.c:853 rs03s-create.c:900
+#: rs02-create.c:1073
 #, c-format
 msgid ""
 "Using redundancies below 20%%%% may not give\n"
 "the expected data loss protection.\n"
 msgstr ""
 
-#: rs02-create.c:1105 rs02-create.c:1114 rs03-create.c:877 rs03-create.c:889
-#: rs03s-create.c:922 rs03s-create.c:931
+#: rs02-create.c:1105 rs02-create.c:1114
 #, c-format
 msgid ""
 "Image has been augmented with error correction data.\n"
 "New image size is %lld MB (%lld sectors).\n"
 msgstr ""
 
-#: rs02-fix.c:110 rs02-fix.c:118 rs03-fix.c:111 rs03-fix.c:119
+#: rs02-fix.c:110 rs02-fix.c:118
 #, c-format
 msgid "Expanding image: %3d%%"
 msgstr ""
@@ -3847,7 +3808,7 @@ msgstr ""
 msgid "Image contains error correction data: Method RS02, %d roots, %4.1f%% redundancy."
 msgstr ""
 
-#: rs02-fix.c:217 rs03-fix.c:217
+#: rs02-fix.c:217
 #, c-format
 msgid ""
 "The image file is %lld sectors longer as noted in the\n"
@@ -3858,127 +3819,125 @@ msgid ""
 "%s"
 msgstr ""
 
-#: rs02-fix.c:468 rs03-fix.c:453
+#: rs02-fix.c:468
 #, c-format
 msgid "* Ecc block %lld: %3d unrepairable sectors: "
 msgstr "* Blocchi Ecc %lld: %3d settori non riparabili: "
 
-#: rs02-fix.c:687 rs03-fix.c:672
+#: rs02-fix.c:687
 #, c-format
 msgid "-> CRC-predicted error in sector %lld at byte %4d (value %02x '%c', expected %02x '%c')\n"
 msgstr ""
 
-#: rs02-fix.c:690 rs03-fix.c:675
+#: rs02-fix.c:690
 #, c-format
 msgid "-> Non-predicted error in sector %lld at byte %4d (value %02x '%c', expected %02x '%c')\n"
 msgstr ""
 
-#: rs02-fix.c:812 rs03-fix.c:795
+#: rs02-fix.c:812
 #, c-format
 msgid "Repaired sectors: %lld (%lld data, %lld ecc)\n"
 msgstr "Settori riparati: %lld (%lld dati, %lld ecc)\n"
 
-#: rs02-verify.c:45 rs02-verify.c:197 rs02-verify.c:303 rs03-verify.c:45
-#: rs03-verify.c:197 rs03-verify.c:303
+#: rs02-verify.c:45 rs02-verify.c:197 rs02-verify.c:303
 msgid "Data checksum:"
 msgstr ""
 
-#: rs02-verify.c:46 rs02-verify.c:311 rs03-verify.c:311
+#: rs02-verify.c:46 rs02-verify.c:311
 msgid "CRC checksum:"
 msgstr ""
 
-#: rs02-verify.c:205 rs03-verify.c:205
+#: rs02-verify.c:205
 msgid "Ecc headers:"
 msgstr ""
 
-#: rs02-verify.c:213 rs03-verify.c:213
+#: rs02-verify.c:213
 msgid "Data section:"
 msgstr ""
 
-#: rs02-verify.c:221 rs03-verify.c:221
+#: rs02-verify.c:221
 msgid "Crc section:"
 msgstr ""
 
-#: rs02-verify.c:229 rs03-verify.c:229
+#: rs02-verify.c:229
 msgid "Ecc section:"
 msgstr ""
 
-#: rs02-verify.c:252 rs03-verify.c:252
+#: rs02-verify.c:252
 msgid "Error correction data"
 msgstr "Dati di correzione degli errori"
 
-#: rs02-verify.c:503 rs03-verify.c:490
+#: rs02-verify.c:503
 #, c-format
 msgid "- erasure counts   :  avg =  %.1f; worst = %d per ecc block.\n"
 msgstr ""
 
-#: rs02-verify.c:506 rs03-verify.c:493
+#: rs02-verify.c:506
 #, c-format
 msgid "- prognosis        : %lld of %lld sectors recoverable (%d.%d%%)\n"
 msgstr ""
 
-#: rs02-verify.c:512 rs03-verify.c:46 rs03-verify.c:499
+#: rs02-verify.c:512
 msgid "Erasure counts:"
 msgstr ""
 
-#: rs02-verify.c:513 rs03-verify.c:47 rs03-verify.c:500
+#: rs02-verify.c:513
 msgid "Prognosis:"
 msgstr ""
 
-#: rs02-verify.c:516 rs03-verify.c:503
+#: rs02-verify.c:516
 #, c-format
 msgid "<span %s>avg =  %.1f; worst = %d per ecc block.</span>"
 msgstr ""
 
-#: rs02-verify.c:521 rs03-verify.c:508
+#: rs02-verify.c:521
 #, c-format
 msgid "<span %s>%lld of %lld sectors recoverable (%d.%d%%)</span>"
 msgstr ""
 
-#: rs02-verify.c:569 rs03-verify.c:553
+#: rs02-verify.c:569
 msgid "Check aborted"
 msgstr ""
 
-#: rs02-verify.c:583 rs03-verify.c:567
+#: rs02-verify.c:583
 msgid "Checking the image file."
 msgstr "Controllo il file immagine"
 
-#: rs02-verify.c:584 rs03-verify.c:568
+#: rs02-verify.c:584
 msgid "Image contains error correction data."
 msgstr ""
 
-#: rs02-verify.c:607 rs03-verify.c:591
+#: rs02-verify.c:607
 #, c-format
 msgid "<span %s>Image file is %lld sectors shorter than expected.</span>"
 msgstr ""
 
-#: rs02-verify.c:608 rs03-verify.c:592
+#: rs02-verify.c:608
 #, c-format
 msgid "<span %s>Image file is %lld sectors longer than expected.</span>"
 msgstr ""
 
-#: rs02-verify.c:628 rs03-verify.c:612
+#: rs02-verify.c:628
 #, c-format
 msgid "Failed reading ecc header at %lld: %s\n"
 msgstr ""
 
-#: rs02-verify.c:671 rs03-verify.c:646
+#: rs02-verify.c:671
 #, c-format
 msgid "<span %s>%lld ok, %lld CRC errors, %lld missing</span>"
 msgstr "<span %s>%lld ok, %lld errori CRC, %lld mancanti</span>"
 
-#: rs02-verify.c:798 rs02-verify.c:819 rs03-verify.c:773 rs03-verify.c:794
+#: rs02-verify.c:798 rs02-verify.c:819
 #, c-format
 msgid "<span %s>%lld sectors missing; %lld CRC errors</span>"
 msgstr "<span %s>%lld settori mancanti, %lld errori CRC</span>"
 
 #: rs02-verify.c:802 rs02-verify.c:806 rs02-verify.c:823 rs02-verify.c:827
-#: rs03-verify.c:777 rs03-verify.c:781 rs03-verify.c:798 rs03-verify.c:802
 #, c-format
 msgid "<span %s>%lld sectors missing</span>"
 msgstr "<span %s>%lld settori mancanti</span>"
 
-#: rs02-verify.c:841 rs03-verify.c:816
+#: rs02-verify.c:841
 #, c-format
 msgid ""
 "- good image       : all sectors present\n"
@@ -3987,46 +3946,46 @@ msgstr ""
 "- Buona immagine    : Tutti i settori presenti\n"
 "- dati md5sum       : %s\n"
 
-#: rs02-verify.c:847 rs03-verify.c:822
+#: rs02-verify.c:847
 msgid "* suspicious image : contains damaged ecc headers\n"
 msgstr ""
 
-#: rs02-verify.c:852 rs03-verify.c:827
+#: rs02-verify.c:852
 #, c-format
 msgid "* suspicious image : all sectors present, but %lld CRC errors\n"
 msgstr "* Immagine sospetta : tutti i settori presenti, ma ci sono %lld errori CRC\n"
 
-#: rs02-verify.c:858 rs03-verify.c:833
+#: rs02-verify.c:858
 #, c-format
 msgid "  ... ecc headers    : %lld ok, %lld CRC errors, %lld missing\n"
 msgstr ""
 
-#: rs02-verify.c:860 rs03-verify.c:835
+#: rs02-verify.c:860
 #, c-format
 msgid "  ... data section   : %lld sectors missing; %lld CRC errors\n"
 msgstr ""
 
-#: rs02-verify.c:863 rs03-verify.c:838
+#: rs02-verify.c:863
 #, c-format
 msgid "  ... data md5sum    : %s\n"
 msgstr "  ... dati md5sum    : %s\n"
 
-#: rs02-verify.c:864 rs03-verify.c:839
+#: rs02-verify.c:864
 #, c-format
 msgid "  ... crc section    : %lld sectors missing\n"
 msgstr ""
 
-#: rs02-verify.c:865 rs03-verify.c:840
+#: rs02-verify.c:865
 #, c-format
 msgid "  ... ecc section    : %lld sectors missing\n"
 msgstr ""
 
-#: rs02-verify.c:887 rs03-verify.c:862
+#: rs02-verify.c:887
 #, c-format
 msgid "<span %s>Damaged image.</span>"
 msgstr ""
 
-#: rs02-verify.c:894 rs03-verify.c:869
+#: rs02-verify.c:894
 msgid ""
 "\n"
 "Error correction data: "
@@ -4037,22 +3996,22 @@ msgstr ""
 msgid "- medium sectors   : %lld / %lld (good)\n"
 msgstr ""
 
-#: rs02-verify.c:1004 rs03-verify.c:977
+#: rs02-verify.c:1004
 #, c-format
 msgid "<span %s>Image size does not match recorded size.</span>"
 msgstr ""
 
-#: rs02-verify.c:1015 rs03-verify.c:988
+#: rs02-verify.c:1015
 #, c-format
 msgid "- data md5sum      : %s (good)\n"
 msgstr "- dati md5sum       : %s (buona)\n"
 
-#: rs02-verify.c:1016 rs03-verify.c:989
+#: rs02-verify.c:1016
 #, c-format
 msgid "* data md5sum      : %s (BAD)\n"
 msgstr "* dati md5sum       : %s (Difettosa)\n"
 
-#: rs02-verify.c:1027 rs03-verify.c:1005
+#: rs02-verify.c:1027
 #, c-format
 msgid "- data md5sum      : %s\n"
 msgstr "- dati md5sum       : %s\n"
@@ -4082,38 +4041,38 @@ msgstr "* ecc md5sum        : %s (Difettosa)\n"
 msgid "- ecc md5sum       : %s\n"
 msgstr "- Ecc-md5sum        : %s\n"
 
-#: rs02-verify.c:1096 rs03-verify.c:1023
+#: rs02-verify.c:1096
 #, c-format
 msgid "<span %s>Good error correction data.</span>"
 msgstr ""
 
-#: rs02-verify.c:1100 rs03-verify.c:1027
+#: rs02-verify.c:1100
 #, c-format
 msgid "<span %s>Full data recovery is likely.</span>"
 msgstr ""
 
-#: rs02-verify.c:1103 rs03-verify.c:1030
+#: rs02-verify.c:1103
 #, c-format
 msgid "<span %s>Full data recovery is NOT possible.</span>"
 msgstr ""
 
-#: rs02-window.c:78 rs03s-window.c:76 rs03-window.c:76
+#: rs02-window.c:78
 msgid "<b>1. Preparing image:</b>"
 msgstr ""
 
-#: rs02-window.c:704 rs03-preferences.c:312
+#: rs02-window.c:704
 msgid "Maximum image size"
 msgstr ""
 
-#: rs02-window.c:716 rs03-preferences.c:324
+#: rs02-window.c:716
 msgid "Using the smallest possible size from table"
 msgstr ""
 
-#: rs02-window.c:716 rs03-preferences.c:324
+#: rs02-window.c:716
 msgid "Use smallest possible size from following table (in sectors):"
 msgstr ""
 
-#: rs02-window.c:740 rs03-preferences.c:348
+#: rs02-window.c:740
 msgid ""
 "<b>Determine augmented image size from table</b>\n"
 "\n"
@@ -4122,19 +4081,17 @@ msgid ""
 "In order to pick a suitable medium the available media capacities must be known. Default sizes for CD and one/two layered DVD are given in the table. You can edit these sizes according to your needs."
 msgstr ""
 
-#: rs02-window.c:759 rs03-preferences.c:367
+#: rs02-window.c:759
 msgid "CD-R / CD-RW:"
 msgstr ""
 
 #: rs02-window.c:770 rs02-window.c:789 rs02-window.c:830 rs02-window.c:849
 #: rs02-window.c:890 rs02-window.c:909 rs02-window.c:950 rs02-window.c:969
-#: rs02-window.c:1009 rs02-window.c:1028 rs03-preferences.c:378
-#: rs03-preferences.c:397 rs03-preferences.c:438 rs03-preferences.c:457
-#: rs03-preferences.c:498 rs03-preferences.c:517
+#: rs02-window.c:1009 rs02-window.c:1028
 msgid "query medium"
 msgstr ""
 
-#: rs02-window.c:801 rs03-preferences.c:409
+#: rs02-window.c:801
 #, c-format
 msgid ""
 "<b>CD medium size</b>\n"
@@ -4148,11 +4105,11 @@ msgid ""
 "Even if this limit is not reached the augmented image may be a few sectors smaller than specified for technical reasons."
 msgstr ""
 
-#: rs02-window.c:819 rs03-preferences.c:427
+#: rs02-window.c:819
 msgid "DVD 1 layer:"
 msgstr ""
 
-#: rs02-window.c:861 rs03-preferences.c:469
+#: rs02-window.c:861
 #, c-format
 msgid ""
 "<b>Single layer DVD medium size</b>\n"
@@ -4166,11 +4123,11 @@ msgid ""
 "Even if this limit is not reached the augmented image may be a few sectors smaller than specified for technical reasons."
 msgstr ""
 
-#: rs02-window.c:879 rs03-preferences.c:487
+#: rs02-window.c:879
 msgid "DVD 2 layers:"
 msgstr ""
 
-#: rs02-window.c:921 rs03-preferences.c:529
+#: rs02-window.c:921
 #, c-format
 msgid ""
 "<b>Two layered DVD medium size</b>\n"
@@ -4220,11 +4177,11 @@ msgid ""
 "Even if this limit is not reached the augmented image may be a few sectors smaller than specified for technical reasons."
 msgstr ""
 
-#: rs02-window.c:1095 rs03-preferences.c:579
+#: rs02-window.c:1095
 msgid "sectors."
 msgstr ""
 
-#: rs02-window.c:1108 rs03-preferences.c:592
+#: rs02-window.c:1108
 #, c-format
 msgid ""
 "<b>Use at most ... sectors</b>\n"
@@ -4234,43 +4191,6 @@ msgid ""
 "\n"
 "Please note that augmented images will at most triple in size as the highest possible redundancy is 200%%.\n"
 "Even if this limit is not reached the augmented image may be a few sectors smaller than specified for technical reasons."
-msgstr ""
-
-#: rs03-create.c:531
-msgid "Flushing output cache..."
-msgstr ""
-
-#: rs03-create.c:825 rs03s-create.c:872
-#, c-format
-msgid "Encoding with Method RS03: %lld MB data, %lld MB ecc (%d roots; %4.1f%% redundancy)."
-msgstr ""
-
-#: rs03-create.c:833
-#, c-format
-msgid ""
-"Augmenting image with Method RS03 [%d threads]:\n"
-" %lld MB data, %lld MB ecc (%d roots; %4.1f%% redundancy)."
-msgstr ""
-
-#: rs03-create.c:882
-#, c-format
-msgid "Avg performance: %5.2fs (%5.2fMB/s) total\n"
-msgstr ""
-
-#: rs03-fix.c:200
-#, c-format
-msgid "Image contains error correction data: Method RS03, %d roots, %4.1f%% redundancy."
-msgstr ""
-
-#: rs03-preferences.c:487
-msgid "DVD 2 layers"
-msgstr ""
-
-#: rs03s-create.c:880
-#, c-format
-msgid ""
-"Augmenting image with Method RS03s:\n"
-" %lld MB data, %lld MB ecc (%d roots; %4.1f%% redundancy)."
 msgstr ""
 
 #: scsi-darwin.c:159

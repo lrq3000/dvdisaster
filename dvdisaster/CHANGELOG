@@ -1,3 +1,8 @@
+0.72 (rc-2)
+	- fixed lockups in the spiral under Mac OS X
+	- fixed crash when calling dvdisaster on command line without
+	  specifying a file name on Mac OS X
+
 0.72 (rc-1) 11-04-2009
         - Documentation and locale cleanup for en, de
 	- added app bundle creation for Mac OS X

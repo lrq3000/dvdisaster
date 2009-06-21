@@ -11,7 +11,7 @@
 require("../include/dvdisaster.php");
 begin_page();
 
-howto_headline("Поиск ошибок на носителе", "Обзор", "images/scan-icon.png");
+howto_headline("Поиск ошибок на носителях", "Обзор", "images/scan-icon.png");
 ?>
 
 <!--- Insert actual page content below --->

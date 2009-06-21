@@ -54,102 +54,102 @@ section("howtos");
 subsection("howtos60");
   de("Das große Bild");
   en("The big picture");
-  ru("The big picture");
+  ru("Общая картина");
 
 subsubsection("howtos61");
   de("Fehlerkorrektur");
   en("error correction");
-  ru("error correction");
+  ru("исправление ошибок");
 
 subsubsection("howtos62");
   de("richtige Anwendung");
   en("correct usage");
-  ru("correct usage");
+  ru("правильное использование");
 
 subsubsection("howtos63");
   de("falsche Anwendung");
   en("incorrect usage");
-  ru("incorrect usage");
+  ru("неправильное использование");
 
 subsection("howtos10");
   de("Datenträger auf Lesefehler prüfen");
   en("Scanning media for errors");
-  ru("Поиск ошибок на носителе");
+  ru("Поиск ошибок на носителях");
 
 subsubsection("howtos11");
   de("Grundeinstellungen");
   en("Basic settings");
-  ru("Basic settings");
+  ru("Основные настройки");
 
 subsubsection("howtos12");
   de("Prüfung durchführen");
   en("Performing the test");
-  ru("foo");
+  ru("Выполнение проверки");
 
 subsubsection("howtos13");
   de("Ergebnisse bewerten");
   en("Interpreting the results");
-  ru("foo");
+  ru("Объяснение результатов");
 
 subsubsection("howtos14");
   de("Fortgeschrittene Einstellungen");
   en("Advanced settings");
-  ru("Advanced settings");
+  ru("Дополнительные настройки");
 
 subsection("howtos20");
   de("Fehlerkorrektur-Daten als Datei erzeugen");
   en("Putting error correction data on a separate file");
-  ru("Создание данных для исправления ошибок");
+  ru("Размещение данных для исправления ошибок в отдельном файле");
 
 subsubsection("howtos21");
   de("Entscheidungshilfe");
   en("Decision help");
-  ru("Decision help");
+  ru("Помощь в принятии решения");
 
 subsubsection("howtos22");
   de("Grundeinstellungen");
   en("Basic settings for reading");
-  ru("Basic settings for reading");
+  ru("Основные настройки для чтения");
 
 subsubsection("howtos23");
   de("Fehlerkorrektur-Datei erzeugen");
   en("Creating the error correction file");
-  ru("Creating the error correction file");
+  ru("Создание файла для исправления ошибок");
 
 subsubsection("howtos24");
   de("Fehlerkorrektur-Datei archivieren");
   en("Archiving error correction files");
-  ru("Archiving error correction files");
+  ru("Архивация файлов для исправления ошибок");
 
 subsubsection("howtos25");
   de("Fortgeschrittene Einstellungen");
   en("Advanced settings");
-  ru("Advanced settings");
+  ru("Дополнительные параметры");
 
 subsection("howtos30");
   de("Fehlerkorrektur-Daten auf dem Datenträger ablegen");
   en("Putting error correction data on the medium");
-  ru("Putting error correction data on the medium");
+  ru("Размещение данных для исправления ошибок на носителе");
 
 subsubsection("howtos31");
   de("Entscheidungshilfe");
   en("Decision help");
-  ru("Decision help");
+  ru("Помощь в принятии решения");
 
 subsubsection("howtos32");
   de("Grundeinstellungen");
   en("Basic settings");
-  ru("Basic settings");
+  ru("Основные параметры");
 
 subsubsection("howtos33");
   de("Datenträger erzeugen");
   en("Creating the medium");
-  ru("Creating the medium");
+  ru("Создание носителя");
 
 subsubsection("howtos34");
   de("Fortgeschrittene Einstellungen");
   en("Advanced settings");
-  ru("Advanced settings");
+  ru("Дополнительные параметры");
 
 subsection("howtos40");
   de("Datenträger-Abbild rekonstruieren");
@@ -159,17 +159,17 @@ subsection("howtos40");
 subsubsection("howtos41");
   de("Grundeinstellungen");
   en("Basic settings");
-  ru("Basic settings");
+  ru("Основные параметры");
 
 subsubsection("howtos42");
   de("Abbild rekonstruieren");
   en("Recovering the image");
-  ru("Recovering the image");
+  ru("Восстановление образа");
 
 subsubsection("howtos43");
   de("Fortgeschrittene Einstellungen");
   en("Advanced settings");
-  ru("Advanced settings");
+  ru("Дополнительные параметры");
 
 subsection("howtos50");
   de("Informationen über Abbilder und Fehlerkorrektur-Daten anzeigen");
@@ -179,54 +179,62 @@ subsection("howtos50");
 subsubsection("howtos51");
   de("Informationen anzeigen");
   en("Show information");
-  ru("Show information");
+  ru("Показать информацию");
 
 subsubsection("howtos52");
   de("Ausgaben für Fehlerkorrektur-Dateien");
   en("Results for error correction files");
-  ru("Results for error correction files");
+  ru("Результаты для файлов с данными для исправления ошибок");
 
 subsubsection("howtos53");
   de("Ausgaben für erweiterte Abbilder");
   en("Results für augmented images");
-  ru("Results für augmented images");
+  ru("Результаты для дополненных образов");
 
 subsubsection("howtos59");
   de("Beispiele");
   en("Examples");
-  ru("Examples");
+  ru("Примеры");
 
 subsection("howtos90");
   de("Abbild-Kompatibilität überprüfen");
   en("Testing image compatibility");
+  ru("Проверка совместимости образов");
 
 subsubsection("howtos91");
   de("bei Fehlerkorrektur-Dateien");
   en("with error correction files");
+  ru("с файлами для исправления ошибок");
 
 subsubsection("howtos92");
   de("beim Ablegen von Fehlerkorrektur-Daten auf dem Datenträger");
   en("when augmenting images with error correction data");
+  ru("при дополнении образов данными для исправления ошибок");
 
 subsection("howtosa0");
   de("Bedienelemente");
   en("Dialogs and buttons");
+  ru("Диалоги и кнопки");
 
 subsubsection("howtosa1");
   de("Laufwerk auswählen");
   en("Drive selection");
+  ru("Выбор привода");
 
 subsubsection("howtosa2");
   de("Abbild-Datei auswählen");
   en("Image file selection");
+  ru("Выбор файла образа");
 
 subsubsection("howtosa3");
   de("Fehlerkorrektur-Datei auswählen");
   en("Error correction file selection");
+  ru("Выбор файла для исправления ошибок");
 
 subsubsection("howtosa4");
   de("Aktionen beginnen");
   en("Starting actions");
+  ru("Начало действий");
 # Download
 
 section("download");
@@ -292,6 +300,6 @@ section("imprint");
 section("privacy");
   de("Datenschutzhinweis");
   en("Privacy policy");
-  ru("Privacy policy");
+  ru("Политика конфиденциальности");
 }
 ?>

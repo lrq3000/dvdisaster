@@ -20,7 +20,7 @@ howto_headline("Augmenting images with error correction data", "Advanced setting
 for CD, DVD and BD media. Any media should meet these size requirements.
 Some vendors produce slightly higher capacity media. If you have
 such media, insert a blank one into the currently selected drive and click the
-"query medium" button (marked green) beneath the proper medium type.
+"query medium" button (marked green) to the right of the proper medium type.
 dvdisaster will determine the medium size and update the table accordingly.<p>
 <b>Note:</b> The medium size can only be determined in drives which
 are capable of writing the respective media type.

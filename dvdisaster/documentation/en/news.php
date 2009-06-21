@@ -21,10 +21,16 @@ $news_counter = 0;
 
 news_headline("dvdisaster News");
 
+news_item("14.04.2009", "Added: dvdisaster 0.72.rc1 for Mac OS X", "
+  The native version for Mac OS X is still a bit <a href=\"download30.php#mac\">rough 
+  around the edges</a> in the user interface: The underlying GTK+ library port is in an early
+  development stage. But with todays update, dvdisaster is becoming usable on the Mac...
+");
+
 news_item("11.04.2009", "dvdisaster 0.72.rc1 released", "
   The first release candidate for the stable 0.72 branch is available now.
   Among the new features are Blu-Ray media support, raw reading and C2 scans
-  for CD and a native version for Mac OS X.
+  for CD.
   See the <a href=\"download.php\">download page</a> for more information.
 ");
 

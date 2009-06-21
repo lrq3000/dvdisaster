@@ -22,33 +22,33 @@ dvdisaster использует обычный механизм: <tt>./configure
 <pre> </pre>
 
 <a name="mac"></a>
-<h3>Installation of the binary for Mac OS X</h3>
-The ZIP archive contains an application bundle made for Mac OS X 10.5
-on x86 processors. Unpack the archive at the desired place and click
-"dvdisaster.app" to start the program.
-dvdisaster is able to run under Mac OS X 10.4 and with PowerPC processors;
-however in these cases you need to build your own version from the
-source code.<p>
+<h3>Установка двоичных файлов для Mac OS X</h3>
+В ZIP-архиве содержится пакет приложения, сделанный для Mac OS X 10.5
+на процессорах x86. Распакуйте архив в нужное место и нажмите кнопку мыши на
+"dvdisaster.app" для запуска программы.
+dvdisaster может работать под Mac OS X 10.4 и на процессорах PowerPC;
+однако в таком случае вам потребуется собрать свою собственную версию из
+исходных текстов.<p>
 
-<i>Please note that the graphical user interface is still a bit rough around
-the edges.</i> The GTK+ user interface toolkit is still in an early
-development state for Mac OS X. The user interface may be sloppy or
-freeze for brief periods. There may be glitches in the graphical output.
-You can minimize these effects by not tinkering with the dvdisaster window
-while any actions are in progress. Especially avoid resizing the window
-and sending it to the dock.<p>
+<i>Имейте в виду, что графический интерфейс пользователя еще немного 
+шероховат.</i> Набор средств для построения интерфейсов GTK+ еще находится в ранней
+стадии развития для Mac OS X. Интерфейс пользователя может выглядеть неаккуратно или
+замирать на небольшое время. В графическом выводе могут быть сбои.
+Вы можете минимизировать эти эффекты, не трогая окно dvdisaster,
+когда что-либо происходит в окне. В особенности избегайте изменения размеров окна
+и сворачивания его.<p>
 
-During the 0.73 development cycle some workarounds for these effects may
-be implemented; otherwise the plan is to wait for improved versions
-of the GTK+ toolkit.<p>
+Во время цикла разработки версии 0.73 могут быть реализованы некоторые обходные пути
+для этих эффектов; в противном случает планируется подождать улучшенной версии
+GTK+.<p>
 
-There are no plans for developing a dvdisaster version not depending on GTK+
-as this would mean to completely re-write the program for Quartz.
-Similar reasons hold for the Windows version btw ;-)
+Не планируется разработка версии dvdisaster, независимой от GTK+,
+поскольку это означает полное переписывание программы для Quartz.
+Между прочим, аналогичные соображения относятся к версии для Windows ;-)
 <pre> </pre>
 
 <a name="win"> </a>
-<h3>Установка двоичных версий (только Windows)</h3>
+<h3>Установка двоичных версий для Windows</h3>
 
 Для установки Windows-версии, запускайте на выполнение двоичный файл
 (например,  <?php echo ${pkgname}?>-setup.exe) и следуйте диалогу в процессе установки. <p>

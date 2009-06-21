@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if test $# != 1 || ! test -d $1; then
   echo "Usage: distcomp <path to alternate distribution>"

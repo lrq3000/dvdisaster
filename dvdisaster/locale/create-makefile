@@ -13,7 +13,7 @@ for i in ../*.c; do
   cfiles2="$cfiles2 $nopath"
 done
 
-for i in ??.po; do
+for i in *.po; do
   prefix=`echo $i | sed -e 's/.po//'`
   if ! test -e $prefix; then mkdir $prefix; fi
   if ! test -e $prefix/LC_MESSAGES; then mkdir $prefix/LC_MESSAGES; fi

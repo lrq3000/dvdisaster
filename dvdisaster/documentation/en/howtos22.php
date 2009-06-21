@@ -60,7 +60,7 @@ Leave the other settings at the shown values.<p>
 
 <?php begin_screen_shot("\"Read attempts\".","create-prefs-read-attempts.png"); ?>
 <b>"Read attempts".</b> The option "Read and analyse raw sectors" (marked green)
-uses additional information provided by the drive the check to integrity of read
+uses additional information provided by the drive to check the integrity of read
 data. This is recommended as we are interested in creating 
 error correction data from a properly read image.
 On the other hand since error correction data can only be created from fully

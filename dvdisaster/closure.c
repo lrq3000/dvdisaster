@@ -758,6 +758,9 @@ void LocalizedFileDefaults()
    /* Darwin uses / as the current working directory when invoked
       from an app bundle. Not good. */
    char *buf = getcwd(NULL,0);
+   
+   Closure->imageName = NULL;
+
    if(buf && !strcmp(buf,"/"))
    {  free(buf);
       buf = getenv("HOME");
@@ -767,13 +770,15 @@ void LocalizedFileDefaults()
          Closure->eccName     = g_strdup_printf("%s/%s",buf,_("medium.ecc"));
          Closure->dDumpPrefix = g_strdup_printf("%s/%s",buf,_("sector-"));
       }
-      else
-      {
-         Closure->imageName   = g_strdup(_("medium.iso"));
-         Closure->eccName     = g_strdup(_("medium.ecc"));
-         Closure->dDumpPrefix = g_strdup(_("sector-"));
-      }
    }
+
+   if(!Closure->imageName)
+   {
+     Closure->imageName   = g_strdup(_("medium.iso"));
+     Closure->eccName     = g_strdup(_("medium.ecc"));
+     Closure->dDumpPrefix = g_strdup(_("sector-"));
+   }
+
 #else
    /* On all other OS, storing the files in the cwd is a sane default. */
    Closure->imageName   = g_strdup(_("medium.iso"));

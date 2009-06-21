@@ -60,17 +60,17 @@ current release candidate will be declared to be the next stable version.<p>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72-rc1.tar.bz2?download">dvdisaster-0.72-rc1.tar.bz2</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72.rc1.tar.bz2?download">dvdisaster-0.72.rc1.tar.bz2</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72-rc1.tar.bz2.gpg?download">dvdisaster-0.72-rc1.tar.bz2.gpg</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72.rc1.tar.bz2.gpg?download">dvdisaster-0.72.rc1.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Binary for Mac OS X 10.5 / x86:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72.rc1.app.zip?download">dvdisaster-0.72.rc1.app.zip</a>&nbsp;--&nbsp;please read these <a href="download30.php#mac">hints</a> first</td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72.rc1.app.zip.gpg?download">dvdisaster-0.72.rc1.app.zip.gpg</a></td></tr>
     <tr><td align="right">Binary for Windows:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72-rc1-setup.exe?download">dvdisaster-0.72-rc1-setup.exe</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72.rc1-setup.exe?download">dvdisaster-0.72.rc1-setup.exe</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72-rc1-setup.exe.gpg?download">dvdisaster-0.72-rc1-setup.exe.gpg</a></td></tr>
+        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72.rc1-setup.exe.gpg?download">dvdisaster-0.72.rc1-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>

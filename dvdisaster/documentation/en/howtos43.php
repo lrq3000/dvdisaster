@@ -66,7 +66,7 @@ reading process. Recommended values are: 32 for BD, 16 for DVD and 0 for CD (use
 the slider marked green). Perform another reading attempt using this setting.
 You can repeatedly read the medium as long as any pass
 provides a significant number of new sectors.<p>
-<b>Hint:</b> Let the drive cool down during the reading passes. Eject and load
+<b>Hint:</b> Let the drive cool down between the reading passes. Eject and load
 the medium before each pass; sometimes the medium comes to rest in a better
 position and the number of readable sectors improves.
 <p>

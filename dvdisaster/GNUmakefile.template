@@ -4,7 +4,7 @@
 
 # Currently supported locales
 
-PO_LOCALES = cs de it ru sv
+PO_LOCALES = br_PT cs de it ru sv
 MAN_LOCALES = cs de it
 DOC_LOCALES = de en ru
 
@@ -134,7 +134,7 @@ simple-md5sum: md5.c
 # Stuff needed to generate or prepare the documentation
 # TAG: online-doc
 
-.PHONY : images pack-images lock-images mount-php html localhtml thumbnails
+.PHONY : images pack-images lock-images mount-php html localhtml thumbnails thumbails-lazy
 
 documentation/images/email.png:
 	@if test -e THESE_ARE_THE_DEVEL_SOURCES; then \
@@ -211,7 +211,7 @@ mount-php:
 	make version.php
 	make thumbnails
 
-html: mount-php version.php thumbnails
+html: mount-php version.php
 	@echo -n "Producing html documentation... "
 	@if ! test -e $(SRCDIR)/documentation/wget-tmp; then \
 	  mkdir $(SRCDIR)/documentation/wget-tmp; \
@@ -222,7 +222,7 @@ html: mount-php version.php thumbnails
 	@rm -rf $(SRCDIR)/documentation/wget-tmp
 	@echo "done."
 
-localhtml: mount-php version.php thumbnails
+localhtml: mount-php version.php
 	@sed "s/www/local/" <$(SRCDIR)/documentation/include/version.php >$(SRCDIR)/documentation/include/version1.php
 	@mv $(SRCDIR)/documentation/include/version1.php $(SRCDIR)/documentation/include/version.php
 	@echo -n "Producing html documentation... "
@@ -246,10 +246,16 @@ help:
 	@echo
 	@echo "Documentation related:"
 	@echo "mount-php - mount documentation sub directory"
+	@echo "www-images- create package of .php and .png files"
+	@echo "www       - create package of .php files only"
+	@echo "html      - create html version of internet documentation"
+	@echo "localhtml - create html version for local documentation"
+	@echo "thumbnails- unconditionally recreate all thumbnails"
 	@echo 
 	@echo "Package maintenance:"
 	@echo "clean     - remove all easily rebuildable files"
-	@echo "distclean - remove all files which are rebuildable in an development setup"
+	@echo "distclean - remove all files which are rebuildable"
+	@echo "archclean - remove all files which are rebuildable in an development setup"
 	@echo "arch      - distclean and tar the source directory (dirty)"
 	@echo "srcdist   - produce the source distribution tarball (polished)"
 	@echo "macdist   - produce application bundle for Mac OS X"

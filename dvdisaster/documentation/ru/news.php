@@ -21,24 +21,24 @@ $news_counter = 0;
 
 news_headline("Новости dvdisaster");
 
-news_item("11.04.2009", "dvdisaster 0.72.rc1 released", "
-  The first release candidate for the stable 0.72 branch is available now.
-  Among the new features are Blu-Ray media support, raw reading and C2 scans
-  for CD and a native version for Mac OS X.
-  See the <a href=\"download.php\">download page</a> for more information.
+news_item("11.04.2009", "выпущен dvdisaster 0.72.rc1", "
+  Теперь доступен первый кандидат на выпуск из стабильной ветви 0.72.
+  Среди новых возможностей - поддержка носителей Blu-Ray, низкоуровневое чтение и проверки на C2
+  для CD, а также \"родная\" версия для Mac OS X.
+  Дополнительную информацию см. здесь <a href=\"download.php\">download page</a>.
 ");
 
-news_item("08.03.2009", "dvdisaster 0.71.28 released", "
-  This version fixes \"illegal instruction\" crashes on x86 machines
-  which do not support SSE2. More minor fixes towards the release
-  candidate.
+news_item("08.03.2009", "выпущен dvdisaster 0.71.28", "
+  В этой версии исправляются падения из-за \"illegal instruction\" на x86-машинах,
+  которые не поддерживают SSE2. Много незначительных исправлений перед кандидатом
+  на выпуск.
 ");
 
-news_item("18.01.2009", "dvdisaster 0.71.27 released", "
-  The documentation is finally complete. Some crashes and incompatibilities
-  with uncommon media and drives have been fixed. This version includes
-  the last major internal overhaul planned for the 0.71.x series, so if
-  all goes well the next version will be a stable release candidate.
+news_item("18.01.2009", "выпущен dvdisaster 0.71.27", "
+  Эта документация, наконец, завершена. Исправлены некоторые падения и несовместимости
+  с необычными носителями и приводами. В этой версии произведен
+  последний большой внутренний пересмотр, планировавшийся для версий 0.71.x, поэтому, если
+  все будет хорошо, то следующей версией будет стабильный кандидат на выпуск.
 ");
 
 if($news_flash == 0) 

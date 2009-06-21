@@ -1,4 +1,4 @@
-# !env bash
+#!/usr/bin/env bash
 
 cd $1/documentation/wget-tmp
 

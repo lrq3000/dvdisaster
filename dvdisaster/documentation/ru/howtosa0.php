@@ -14,17 +14,40 @@ begin_page();
 
 <!--- Insert actual page content below --->
 
-<h3>Пустая страница</h3>
+<h3>Диалоги и кнопки</h3>
 
-Эта страница еще не написана.
+В этом разделе описываются часто используемые диалоги и кнопки:
+
 <pre> </pre>
 
-
-<font size="-1">
-<i>Почему в этой документации есть пустые страницы?</i><p>
-Нам нужны такие пустые страницы, чтобы гиперссылки на эту тему уже можно
-было вставить в документацию.
-
+<table width="100%">
+<tr>
+<td align="center"><a href="howtosa1.php"><img src="../images/good-cd.png" border="0"></a></td>
+<td><a href="howtosa1.php">Меню выбора привода</a>.</td>
+</tr>
+<tr>
+<tr><td>&nbsp;</td><td></td></tr>
+<td align="center"><a href="howtosa2.php"><img src="../images/good-image.png" border="0"></a></td>
+<td><a href="howtosa2.php">Окно выбора файла образа</a>.</td>
+</tr>
+<tr><td>&nbsp;</td><td></td></tr>
+<tr>
+<td align="center"><a href="howtosa3.php"><img src="../images/ecc.png" border="0"></a></td>
+<td><a href="howtosa3.php">Окно выбора файла для исправления ошибок</a>.</td>
+</tr>
+<tr><td>&nbsp;</td><td></td></tr>
+<tr>
+<td align="center"><a href="howtosa4.php">
+  <img src="images/read-icon.png" border="0">
+  <img src="images/create-icon.png" border="0"><br>
+  <img src="images/scan-icon.png" border="0">
+  <img src="images/fix-icon.png" border="0"><br>
+  <img src="images/compare-icon.png" border="0">
+  <img src="images/stop-icon.png" border="0">
+</a></td>
+<td><a href="howtosa4.php">Кнопки для запуска действий</a>.</td>
+</tr>
+</table>
 
 <!--- do not change below --->
 
