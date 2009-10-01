@@ -627,7 +627,7 @@ static IsoInfo* examine_primary_vd(unsigned char *buf)
    return ii;
 }
 
-static IsoInfo* examine_iso(DeviceHandle *dh)
+static IsoInfo* examine_iso(DeviceHandle *dh, LargeFile *image)
 {  AlignedBuffer *ab = CreateAlignedBuffer(2048);
    unsigned char *buf = ab->buf;
    IsoInfo *ii = NULL;
@@ -638,12 +638,19 @@ static IsoInfo* examine_iso(DeviceHandle *dh)
    Verbose(" Examining the ISO file system...\n");
 
    /*** Iterate over the volume decriptors */
+ 
+   if(image) 
+     if(!LargeSeek(image, 2048*16))
+     {  Verbose(" * Could not seek to sector 16");
+        return NULL;
+     }
 
    for(sector=16; sector<32; sector++)
    {  if(Closure->stopActions) 
         continue;
 
-      status = ReadSectorsFast(dh, buf, sector, 1);
+      if(dh) status = ReadSectorsFast(dh, buf, sector, 1);
+      else   status = !LargeRead(image, buf, 2048);
 
       if(status)
       {  Verbose("  Sector %2d: unreadable\n", sector);
@@ -692,20 +699,27 @@ finished:
  ***/
 
 
-int ExamineUDF(DeviceHandle *dh)
-{
-   Verbose("\nExamineUDF(%s)\n",dh->devinfo);
+IsoInfo* ExamineUDF(DeviceHandle *dh, LargeFile *image)
+{  IsoInfo *ii;
 
-   dh->isoInfo = examine_iso(dh);
+   if(!dh && !image) return NULL;
+
+   if(dh) Verbose("\nExamineUDF(Device: %s)\n", dh->devinfo);
+   if(image) Verbose("\nExamineUDF(File: %s)\n", image->path);
+
+   ii = examine_iso(dh, image);
+
+   if(dh) dh->isoInfo = ii;
 
    Verbose(" Examining the UDF file system...\n");
    Verbose("  not yet implemented.\n\n");
 
    /* Try to find the root header at a fixed offset to the ISO filesystem end. */
 
-   dh->rs02Size = MediumLengthFromRS02(dh, 0);
+   if(dh)
+     dh->rs02Size = MediumLengthFromRS02(dh, 0);
 
-   return TRUE;
+   return ii;
 }
 
 /***

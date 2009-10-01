@@ -50,9 +50,9 @@ void CreateEcc(void)
 void FixEcc(void)
 {  Method *method; 
    
-   /* Error handling is done within EccFileMethod() */
+   /* Error handling is done within EccMethod() */
 
-   method = EccFileMethod(TRUE);
+   method = EccMethod(TRUE);
  
    /* Dispatch to the proper method */
   
@@ -70,7 +70,7 @@ void Verify(void)
      we fall back to the RS01 method for comparing 
      since it is robust against missing files. */
 
-  if(!(method = EccFileMethod(FALSE)))
+  if(!(method = EccMethod(FALSE)))
     if(!(method = FindMethod("RS01")))
       Stop(_("RS01 method not available for comparing files."));
  
@@ -137,7 +137,6 @@ typedef enum
    MODIFIER_SIMULATE_DEFECTS,
    MODIFIER_SPEED_WARNING, 
    MODIFIER_SPINUP_DELAY, 
-   MODIFIER_SPLIT_FILES,
    MODIFIER_TRUNCATE,
    MODIFIER_VERSION,
 } run_mode;
@@ -389,7 +388,6 @@ int main(int argc, char *argv[])
 	{"sim-defects", 1, 0, MODIFIER_SIMULATE_DEFECTS},
 	{"speed-warning", 2, 0, MODIFIER_SPEED_WARNING},
 	{"spinup-delay", 1, 0, MODIFIER_SPINUP_DELAY},
-	{"split-files", 0, 0, MODIFIER_SPLIT_FILES},
 	{"test", 0, 0, 't'},
         {"threads", 1, 0, 'x'},
 	{"truncate", 2, 0, MODIFIER_TRUNCATE},
@@ -600,9 +598,6 @@ int main(int argc, char *argv[])
          case MODIFIER_SPEED_WARNING:
 	   if(optarg) Closure->speedWarning = atoi(optarg);
 	   else Closure->speedWarning=10;
-	   break;
-         case MODIFIER_SPLIT_FILES:
-	   Closure->splitFiles = 1;
 	   break;
          case MODIFIER_CLV_SPEED:
 	   Closure->driveSpeed = atoi(optarg);
@@ -917,8 +912,7 @@ int main(int argc, char *argv[])
 	     "  --read-medium n        - read the whole medium up to n times\n"
 	     "  --read-raw             - performs read in raw mode if possible\n"
 	     "  --speed-warning n      - print warning if speed changes by more than n percent\n"
-	     "  --spinup-delay n       - wait n seconds for drive to spin up\n"
-	     "  --split-files          - split image into files <= 2GB\n\n"));
+	     "  --spinup-delay n       - wait n seconds for drive to spin up\n"));
 
       if(Closure->debugMode)
       { PrintCLI(_("Debugging options (purposefully undocumented and possibly harmful)\n"

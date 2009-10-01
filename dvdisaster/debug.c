@@ -276,6 +276,10 @@ static void random_error2(EccHeader *eh, char *prefix, char *arg)
 
 #ifdef HAVE_RS03
 static void random_error3(EccHeader *eh, char *prefix, char *arg)
+{}  // FIXME
+#endif
+#if 0
+static void random_error3(EccHeader *eh, char *prefix, char *arg)
 {  RS03Layout *lay;
    ImageInfo *ii;
    gint64 si;
@@ -409,7 +413,7 @@ static void random_error3(EccHeader *eh, char *prefix, char *arg)
 #endif
 
 void RandomError(char *prefix, char *arg)
-{  Method *method = EccFileMethod(TRUE);
+{  Method *method = EccMethod(TRUE);
    char buf[5];
 
    if(!strncmp(method->name, "RS01", 4))

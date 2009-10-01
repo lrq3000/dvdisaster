@@ -42,6 +42,10 @@ void register_rs02(void)
    method->fix     = RS02Fix;
    method->verify  = RS02Verify;
 
+   /*** Linkage to rs01-common.c */
+
+   method->recognizeEccImage = RS02Recognize;
+
    /*** Linkage to rs02-window.c */
 
    method->createCreateWindow = CreateRS02EncWindow;

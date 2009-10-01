@@ -27,6 +27,29 @@
 #include "rs01-includes.h"
 
 /***
+ *** Recognize a RS01 error correction file
+ ***/
+
+int RS01Recognize(Method *self, LargeFile *ecc_file)
+{  EccHeader eh;
+   int n;
+
+   LargeSeek(ecc_file, 0);
+   n = LargeRead(ecc_file, &eh, sizeof(EccHeader));
+
+   if(n != sizeof(EccHeader))
+     return FALSE;
+
+   if(strncmp((char*)eh.cookie, "*dvdisaster*", 12))
+     return FALSE;
+
+   if(!strncmp((char*)eh.method, "RS01", 4))
+     return TRUE;
+
+   return FALSE;
+}
+
+/***
  *** Read an image sector from the .iso file.
  ****
  * Two special cases here:

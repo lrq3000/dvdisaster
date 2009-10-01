@@ -125,12 +125,13 @@ static void abort_encoding(ecc_closure *ec, int truncate)
 
 static void remove_old_ecc(ecc_closure *ec)
 {  EccHeader *old_eh;
+   LargeFile *tmp;
 
-   old_eh = FindHeaderInImage(Closure->imageName);
+   tmp = LargeOpen(Closure->imageName, O_RDWR, IMG_PERMS);
+   old_eh = FindRS02HeaderInImage(tmp);
 
    if(old_eh)
    {  gint64 data_sectors = uchar_to_gint64(old_eh->sectors);
-      LargeFile *tmp;
       int answer;
 
       g_free(old_eh);
@@ -143,11 +144,11 @@ static void remove_old_ecc(ecc_closure *ec)
       if(!answer)
 	abort_encoding(ec, FALSE);
 
-      tmp = LargeOpen(Closure->imageName, O_RDWR, IMG_PERMS);
       if(!tmp || !LargeTruncate(tmp, (gint64)(2048*data_sectors)))
 	Stop(_("Could not truncate %s: %s\n"),Closure->imageName,strerror(errno));
-      LargeClose(tmp);
    }
+
+   LargeClose(tmp);
 }
 
 /*

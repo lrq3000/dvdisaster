@@ -124,6 +124,7 @@ void CreateRS01VerifyWindow(Method*, GtkWidget*);
 
 void RS01ReadSector(ImageInfo*, EccHeader*, unsigned char*, gint64);
 void RS01ScanImage(Method*, ImageInfo*, EccInfo*, int);
+int  RS01Recognize(Method*, LargeFile*);
 
 /* rs01-create.c */
 

@@ -39,7 +39,7 @@ void FreeIsoInfo(IsoInfo*);
 EccHeader* FindHeaderInMedium(DeviceHandle*, gint64);
 gint64 MediumLengthFromRS02(DeviceHandle*, gint64);
 
-int ExamineUDF(DeviceHandle*);
+IsoInfo* ExamineUDF(DeviceHandle*, LargeFile*);
 
 /*
  * Structure and functions for creating an .iso image

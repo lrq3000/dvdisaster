@@ -44,6 +44,10 @@ void register_rs01(void)
    method->fix     = RS01Fix;
    method->verify  = RS01Verify;
 
+   /*** Linkage to rs01-common.c */
+
+   method->recognizeEccFile = RS01Recognize;
+
    /*** Linkage to rs01-window.c */
 
    method->createCreateWindow = CreateRS01EWindow;

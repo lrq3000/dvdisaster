@@ -39,19 +39,6 @@ static gboolean delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
  *** The right-side action buttons
  ***/
 
-static void remove_the_00s(char *filename)
-{  char *dot = strrchr(filename, '.');
-
-   if(dot) 
-   {  int pos = dot-filename;
-     
-      if(pos>2 && filename[pos-2] == '0' 
-	       && filename[pos-1] == '0') 
-	memmove(filename+pos-2, filename+pos, 
-		strlen(filename)-pos+1);
-   }
-}
-
 /*
  * Callback for the action buttons
  */
@@ -89,13 +76,6 @@ static void action_cb(GtkWidget *widget, gpointer data)
       if(Closure->autoSuffix)
       {  Closure->eccName = ApplyAutoSuffix(Closure->eccName, "ecc");
 	 gtk_entry_set_text(GTK_ENTRY(Closure->eccEntry), Closure->eccName);
-      }
-
-      /* Transform foo00.[iso|ecc] into foo.[iso|ecc] when in filesplit mode */
-
-      if(Closure->splitFiles)
-      {  remove_the_00s(Closure->imageName);
-	 remove_the_00s(Closure->eccName);
       }
 
       /* Reset warnings which may be temporarily disabled during an action */
@@ -150,7 +130,7 @@ static void action_cb(GtkWidget *widget, gpointer data)
 
       case ACTION_FIX:
 	ClearCrcCache();
-	if(!(method = EccFileMethod(TRUE)))
+	if(!(method = EccMethod(TRUE)))
 	   break;
 
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(Closure->notebook),  method->tabWindowIndex+1);
@@ -172,7 +152,7 @@ static void action_cb(GtkWidget *widget, gpointer data)
 	/* If something is wrong with the .iso or .ecc files
 	   we fall back to the RS01 method for verifying since it is robust
 	   against missing files. */
-	if(!(method = EccFileMethod(FALSE)))
+	if(!(method = EccMethod(FALSE)))
 	  if(!(method = FindMethod("RS01")))
 	     break;
 

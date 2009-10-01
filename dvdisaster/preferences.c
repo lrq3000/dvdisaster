@@ -98,7 +98,6 @@ typedef struct _prefs_context
    GtkWidget *radioISOA, *radioISOB;
    GtkWidget *radioECCA, *radioECCB;
    GtkWidget *suffixA, *suffixB;
-   GtkWidget *splitA, *splitB;
    GtkWidget *radioLinearA, *radioLinearB;
    GtkWidget *radioAdaptiveA, *radioAdaptiveB;
    GtkWidget *minAttemptsScaleA, *minAttemptsScaleB;
@@ -367,7 +366,6 @@ enum
    TOGGLE_SUFFIX,
    TOGGLE_DAO,
    TOGGLE_DSM,
-   TOGGLE_2GB,
    TOGGLE_RANGE,
    TOGGLE_RAW,
    TOGGLE_RAW_20H,
@@ -493,12 +491,6 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 	   if(pc->byteCheckB)
 	      activate_toggle_button(GTK_TOGGLE_BUTTON(pc->byteCheckB), FALSE);
 	}
-	break;
-
-      case TOGGLE_2GB:
-	Closure->splitFiles = state;
-	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->splitA), state);
-	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->splitB), state);
 	break;
 
       case TOGGLE_RAW:
@@ -2535,38 +2527,6 @@ if(Closure->debugMode)  /* hidden until version 0.80 */
 		       _("<b>Automatically add file suffixes</b>\n\n"
 			 "When this switch is set, files will be automatically appended with \".iso\" "
 			 "or \".ecc\" suffixes if no other file name extension is already present."));
-
-      /* 2GB button */
-
-      lwoh = CreateLabelWithOnlineHelp(_("File splitting"), _("Split files into segments &lt;= 2GB"));
-      RegisterPreferencesHelpWindow(lwoh);
-
-      for(i=0; i<2; i++)
-      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
-	 GtkWidget *button = gtk_check_button_new();
-
-	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
-	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
-	 activate_toggle_button(GTK_TOGGLE_BUTTON(button), Closure->splitFiles);
-	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_2GB));
-
-	 if(!i)
-	 {  pc->splitA = button;
-	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
-	 }
-	 else
-	 {  pc->splitB = button;
-	    AddHelpWidget(lwoh, hbox);
-	 }
-      }
-
-      AddHelpParagraph(lwoh, 
-		       _("<b>File splitting</b>\n\n"
-			 "Allows working with file systems which are limited to 2GB per file, e.g. "
-			 "FAT from Windows. Created files are spread over upto 100 segments "
-			 "called \"medium00.iso\", \"medium01.iso\" etc. at the cost of a small "
-			 "performance hit."));
-
 
       /*** Automatic file creation and deletion */
 

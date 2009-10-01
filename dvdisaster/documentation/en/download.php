@@ -37,18 +37,22 @@ into an arbitrary place. Please note the
 please execute the downloaded program and follow the dialog.</li>
 </ul>
 
-<!---
+<?php
+if(!strcmp($have_experimental, "yes"))
+{ ?>
 <b>Alpha (unstable) versions</b> - new and experimental for experienced users!<p>
 
 Testers are welcome for the upcoming dvdisaster release, but should be aware of remaining
 bugs and incompatibilities.
 The current unstable release is 
 <a href="download40.php"><?php echo $cooked_version?></a>.
--->
-
-<pre> </pre>
+<p>
+<?php
+}
+?>
 
 <b>Stable version</b> - recommended for getting started.<p>
+<a name="download"></a>
 
 <table class="download" cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.72</b></td><td align="right">08-Aug-2009</td></tr>
@@ -71,24 +75,24 @@ The current unstable release is
 <?php
   if($show_all == 0) {
 ?>
-    <tr><td colspan="2"><a href="download.php?showall=1">Show older releases in the 0.72 version branch</a></td></tr>
+    <tr><td colspan="2"><a href="download.php?showall=1#download">Show older releases in the 0.72 version branch</a></td></tr>
 <?php
   }
   else {
 ?> 
-   <tr><td colspan="2"><a href="download.php?showall=0">Hide older releases in the 0.72 version branch</a></td></tr>
+   <tr><td colspan="2"><a href="download.php?showall=0#download">Hide older releases in the 0.72 version branch</a></td></tr>
     <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72.tar.bz2?download">dvdisaster-0.72.tar.bz2</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.tar.bz2">dvdisaster-0.72.tar.bz2</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72.tar.bz2.gpg?download">dvdisaster-0.72.tar.bz2.gpg</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.tar.bz2.gpg">dvdisaster-0.72.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Binary for Mac OS X 10.5 / x86:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72.app.zip?download">dvdisaster-0.72.app.zip</a>&nbsp;--&nbsp;please read these <a href="download30.php#mac">hints</a> first</td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.app.zip">dvdisaster-0.72.app.zip</a>&nbsp;--&nbsp;please read these <a href="download30.php#mac">hints</a> first</td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72.app.zip.gpg?download">dvdisaster-0.72.app.zip.gpg</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.app.zip.gpg">dvdisaster-0.72.app.zip.gpg</a></td></tr>
     <tr><td align="right">Binary for Windows:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72-setup.exe?download">dvdisaster-0.72-setup.exe</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72-setup.exe">dvdisaster-0.72-setup.exe</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72-setup.exe.gpg?download">dvdisaster-0.72-setup.exe.gpg</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72-setup.exe.gpg">dvdisaster-0.72-setup.exe.gpg</a></td></tr>
 <?php
   }
 ?>
@@ -135,13 +139,13 @@ and will be addressed in the upcoming 0.73.x releases. (04-Jul-2009)
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.6.tar.bz2?download">dvdisaster-0.70.6.tar.bz2</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.70.6.tar.bz2">dvdisaster-0.70.6.tar.bz2</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.6.tar.bz2.gpg?download">dvdisaster-0.70.6.tar.bz2.gpg</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.70.6.tar.bz2.gpg">dvdisaster-0.70.6.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Binary for Windows:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.6-setup.exe?download">dvdisaster-0.70.6-setup.exe</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.70.6-setup.exe">dvdisaster-0.70.6-setup.exe</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.70.6-setup.exe.gpg?download">dvdisaster-0.70.6-setup.exe.gpg</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.70.6-setup.exe.gpg">dvdisaster-0.70.6-setup.exe.gpg</a></td></tr>
   </table>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>

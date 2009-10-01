@@ -2007,7 +2007,7 @@ gint64 CurrentMediumSize(int get_blank_size)
    }
    else
    {  if(Closure->querySize >= 1)  /* parseUDF or better requested */
-	 ExamineUDF(dh);
+	 ExamineUDF(dh, NULL);
       size = query_size(dh);
    }
 
@@ -2619,7 +2619,7 @@ DeviceHandle* OpenAndQueryDevice(char *device)
    /* Examine medium type */
 
    if(Closure->querySize >= 1)  /* parseUDF or better requested */
-     ExamineUDF(dh);
+     ExamineUDF(dh, NULL);
 
    Verbose("# Calling query_size()\n");
    dh->sectors = query_size(dh);
@@ -2706,7 +2706,7 @@ DeviceHandle* QueryMediumInfo(char *device)
 
    if(dh->subType != UNSUPPORTED)
    {  if(Closure->querySize >= 1)  /* parseUDF or better requested */
-	 ExamineUDF(dh);
+	 ExamineUDF(dh, NULL);
 
       dh->sectors = query_size(dh);
    }

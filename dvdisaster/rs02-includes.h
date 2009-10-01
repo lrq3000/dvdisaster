@@ -158,6 +158,11 @@ void RS02Create(Method*);
 
 void RS02Fix(Method*);
 
+/* rs02-recognize.c */
+
+EccHeader* FindRS02HeaderInImage(LargeFile*);
+int  RS02Recognize(Method*, LargeFile*);
+
 /* rs02-window.c */
 
 void RS02AddFixValues(RS02Widgets*, int, int);

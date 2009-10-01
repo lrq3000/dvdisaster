@@ -160,7 +160,6 @@ typedef struct _GlobalClosure
    int debugCDump;      /* dump as #include file instead of hexdump */
    int verbose;         /* may activate additional messages */
    int screenShotMode;  /* screen shot mode */
-   int splitFiles;      /* limit image files to 2GB */
    int autoSuffix;      /* automatically extend files with suffices .iso/.ecc */
    int querySize;       /* what sources are used for image size queries */
    int readAndCreate;   /* automatically create .ecc file after reading an image */
@@ -317,14 +316,9 @@ extern int exitCode;            /* value to use on exit() */
 #define MAX_FILE_SEGMENTS 100
 
 typedef struct _LargeFile
-{  int fileSegment[MAX_FILE_SEGMENTS];
-   int flags;
-   mode_t mode;
-   int segment;
+{  int fileHandle;
    gint64 offset;
-   char *basename;
-   char *suffix;
-   int namelen;
+   char *path;
    gint64 size;
 } LargeFile;
 
@@ -873,6 +867,8 @@ typedef struct _Method
    void (*create)(struct _Method*);  /* Creates an error correction file */
    void (*fix)(struct _Method*);     /* Fixes a damaged image */
    void (*verify)(struct _Method*);  /* Verifies image with ecc data */
+   int  (*recognizeEccFile)(struct _Method*, LargeFile*);  /* checks whether we can handle this ecc file */
+   int  (*recognizeEccImage)(struct _Method*, LargeFile*); /* checks whether we can handle this augmented image */
    void (*createVerifyWindow)(struct _Method*, GtkWidget*);
    void (*createCreateWindow)(struct _Method*, GtkWidget*);
    void (*createFixWindow)(struct _Method*, GtkWidget*);
@@ -885,7 +881,7 @@ typedef struct _Method
    void (*destroy)(struct _Method*);
    int  tabWindowIndex;              /* our position in the (invisible) notebook */
    void *widgetList;                 /* linkage to window system */
-   EccHeader *lastEh;                /* copy of EccHeader from last EccFileMethod() call */
+   EccHeader *lastEh;                /* copy of EccHeader from last EccMethod() call */
 } Method;
 
 void BindMethods(void);        /* created by configure in method-link.c */
@@ -894,8 +890,7 @@ void CollectMethods(void);
 void RegisterMethod(Method*);
 void ListMethods(void);
 Method* FindMethod(char*);
-EccHeader* FindHeaderInImage(char*);
-Method *EccFileMethod(int);
+Method *EccMethod(int);
 void CallMethodDestructors(void);
 
 /***

@@ -7,6 +7,8 @@
 
 # News
 
+global $have_experimental;
+
 section("news");
   de("Neuigkeiten");
   en("News");
@@ -235,6 +237,7 @@ subsubsection("howtosa4");
   de("Aktionen beginnen");
   en("Starting actions");
   ru("Начало действий");
+
 # Download
 
 section("download");
@@ -257,10 +260,13 @@ subsection("download30");
   en("Installation");
   ru("Установка");
 
-#subsection("download40");
-#  de("Alpha-/Entwicklerversionen");
-#  en("Alpha (unstable) versions");
-#  ru("Альфа (нестабильные) версии");
+if(!strcmp($have_experimental, "yes"))
+{
+subsection("download40");
+  de("Alpha-/Entwicklerversionen");
+  en("Alpha (unstable) versions");
+  ru("Альфа (нестабильные) версии");
+}
 
 # Questions and Answers
 

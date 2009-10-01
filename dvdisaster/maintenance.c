@@ -21,7 +21,7 @@
 
 #include "dvdisaster.h"
 
-#if 1
+#if 0
 void Maintenance1(char *debug_arg)
 {
   printf("\nMaintenance stub called with arg: %s\n\n", debug_arg);
@@ -31,22 +31,10 @@ void Maintenance1(char *debug_arg)
 #else
 
 void Maintenance1(char *debug_arg)
-{  RawBuffer *rb = CreateRawBuffer(MAX_RAW_TRANSFER_SIZE);
-   int i;
+{ gint64 dsectors = atoi(debug_arg);
 
-   for(i=0; i<MAX_RAW_TRANSFER_SIZE; i+=8)
-     strncpy(&rb->rawBuf[0][i], "Raw-Buff", 8);
-   
-   strcpy(rb->rawBuf[0], debug_arg);
-   rb->lba = 250;
-   rb->samplesRead = 1;
-
-   if(Closure->dDumpDir) g_free(Closure->dDumpDir); Closure->dDumpDir = g_strdup("/tmp");
-   if(Closure->dDumpPrefix) g_free(Closure->dDumpPrefix); Closure->dDumpPrefix = g_strdup("raw");
-
-   SaveDefectiveSector(rb, 1);
-
-   exit(0);
+  printf("Calling CalcRS03Layout(%d, %d)\n", dsectors); 
+  CalcRS03Layout(dsectors, 0);
 }
 
 #endif

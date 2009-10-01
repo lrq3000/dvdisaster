@@ -1,6 +1,6 @@
 <?php
 
-# dvdisaster: Homepage layout funtions
+# dvdisaster: Homepage layout functions
 # Copyright (C) 2007-2009 Carsten Gnörlich
 
 require("version.php");
@@ -95,6 +95,8 @@ function lang_link($lang_name, $lang, $spacing)
 
 function begin_page()
 {  global $cooked_version;
+   global $have_experimental;
+   global $stable_version;
    global $trans_to_hoster;
    global $trans_to_internet;
    global $trans_version;
@@ -113,8 +115,10 @@ function begin_page()
    echo "  <tr>\n";
    echo "     <td align=\"left\">\n";
    echo "       <font size=\"+3\"><b>dvdisaster</b></font>\n";
-   echo "       <i>$trans_version $cooked_version</i>\n";
-
+   if(!strcmp($have_experimental, "no"))
+      echo "       <i>$trans_version $cooked_version</i>\n";
+   else
+      echo "       <i>$trans_version $stable_version / $cooked_version</i>\n";
    if(!strcmp($mode, "local"))
    {  echo "  </td>\n";
       echo "  <td align=\"right\">\n";
