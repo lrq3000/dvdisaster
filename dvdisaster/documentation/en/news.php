@@ -21,6 +21,23 @@ $news_counter = 0;
 
 news_headline("dvdisaster News");
 
+news_item("10.08.2009", "Project represention on SourceForge may be outdated", "
+Due to the recent functionality changes on SourceForge we are unable
+to upload the News, Downloads and CVS contents in time. Please refer
+to the respective sections on this site (http://dvdisaster.net) instead.
+");
+
+news_item("08.08.2009", "dvdisaster 0.72.1 released", "
+Pablo Almeida provided a Portuguese translation for the screen text.
+Added workaround to avoid Win XP freezing on certain CD-RW/drive pairs.<p>
+");
+
+news_item("04.07.2009", "dvdisaster 0.72 released", "
+This is the first stable version of the 0.72 branch.
+Igor Gorbounov has completed the russian online documentation.
+Some minor bugs from the first release candidate have been removed.<p>
+");
+
 news_item("14.04.2009", "Added: dvdisaster 0.72.rc1 for Mac OS X", "
   The native version for Mac OS X is still a bit <a href=\"download30.php#mac\">rough 
   around the edges</a> in the user interface: The underlying GTK+ library port is in an early

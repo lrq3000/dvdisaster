@@ -21,6 +21,25 @@ $news_counter = 0;
 
 news_headline("Neues über dvdisaster");
 
+news_item("10.08.2009", "Projektseiten auf SourceForge nicht aktuell", "
+Aufgrund von Änderungen in der Funktionalität von SourceForge
+können die Inhalte der News, Downloads und des CVS nicht zeitnah
+hochgeladen werden. Bitte nutzen Sie stattdessen die entsprechenden
+Rubriken auf diesen Seiten (http://dvdisaster.net).");
+
+news_item("08.08.2009", "dvdisaster 0.72.1 veröffentlicht", "
+Pablo Almeida hat die Bildschirmtexte ins Portugiesische übersetzt.
+Es wurde ein Workaround eingebaut um Win XP vom Einfrieren 
+bei bestimmten CD-RW/Laufwerks-Kominationen abzuhalten.<p>
+");
+
+news_item("04.07.2009", "dvdisaster 0.72 veröffentlicht", "
+Dies ist die erste stabile Version des 0.72er-Zweiges.
+Igor Gorbounov hat die russische online-Dokumentation vervollständigt
+und es wurden noch einige kleine Fehler aus dem ersten 
+Veröffentlichungskandidaten behoben.<p>
+");
+
 news_item("14.04.2009", "Nachgelegt: dvdisaster 0.72.rc1 für Mac OS X", "
 Die native Version für Mac OS X ist im Bereich der
 Benutzeroberfläche <a href=\"download30.php#mac\">noch etwas hakelig</a>,

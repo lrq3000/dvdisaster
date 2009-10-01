@@ -21,6 +21,23 @@ $news_counter = 0;
 
 news_headline("Новости dvdisaster");
 
+news_item("10.08.2009", "Project represention on SourceForge may be outdated", "
+Due to the recent functionality changes on SourceForge we are unable
+to upload the News, Downloads and CVS contents in time. Please refer
+to the respective sections on this site (http://dvdisaster.net) instead.
+");
+
+news_item("08.08.2009", "dvdisaster 0.72.1 released", "
+Pablo Almeida provided a Portuguese translation for the screen text.
+Added workaround to avoid Win XP freezing on certain CD-RW/drive pairs.<p>
+");
+
+news_item("04.07.2009", "выпущен dvdisaster 0.72", "
+Это первая стабильная версия ветки 0.72.
+Игорь Горбунов завершил перевод онлайн-документации на русский язык.
+Устранены некоторые незначительные ошибки в первом кандидате на выпуск.<p>
+");
+
 news_item("11.04.2009", "выпущен dvdisaster 0.72.rc1", "
   Теперь доступен первый кандидат на выпуск из стабильной ветви 0.72.
   Среди новых возможностей - поддержка носителей Blu-Ray, низкоуровневое чтение и проверки на C2
