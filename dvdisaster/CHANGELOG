@@ -2,6 +2,11 @@ Beware: 0.73.x is currently very unstable (and may not even compile).
         Do not use for any production work.
 
 0.73.1
+	- fixed "typical uses" links in welcome screen (Thanks to C. Steigies)
+	- added warning when same files are selected for .iso
+	  and error correction data (Thanks to A. Postkutscher
+	  for suggesting this!)
+	- removed ASPI driver and ASPI/SPTI splitting logic
 	- removed 2GB file splitting
 
 0.72 (pl-1) 08-08-2009

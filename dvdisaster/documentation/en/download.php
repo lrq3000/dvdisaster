@@ -131,6 +131,12 @@ and will be addressed in the upcoming 0.73.x releases. (04-Jul-2009)
 <b>0.72-rc1</b> First release candidate. (11-Apr-2009)
 </td></tr></table><p>
 
+If the links above fail to download 
+please try getting dvdisaster via
+<a href="http://sourceforge.net/projects/dvdisaster/files">SourceForge</a>.
+
+<pre> </pre>
+
 <b>Previous release</b> - upgrading to version 0.72 is recommended.<p>
 
 <table class="download" cellpadding="0" cellspacing="5">

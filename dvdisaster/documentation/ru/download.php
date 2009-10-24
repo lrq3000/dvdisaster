@@ -132,6 +132,12 @@ Added workaround to avoid Win XP freezing on certain CD-RW/drive pairs.(08-Aug-2
 <b>0.72-rc1</b> Первый кандидат на выпуск. (11 апреля 2009)
 </td></tr></table><p>
 
+If the links above fail to download 
+please try getting dvdisaster via
+<a href="http://sourceforge.net/projects/dvdisaster/files">SourceForge</a>.
+
+<pre> </pre>
+
 <b>Предыдущая версия</b> - рекомендуется обновить до версии 0.72.<p>
 
 <table class="download" cellpadding="0" cellspacing="5">

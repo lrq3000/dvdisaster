@@ -132,7 +132,7 @@ void CreateWelcomePage(GtkNotebook *notebook)
 		    "CD and DVD media against data loss.\n"));
 
    AboutTextWithLink(box, _("Please see the manual for [typical uses] of dvdisaster.\n\n"), 
-		     "example.html");
+		     "howtos.html");
 
    AboutText(box, _("<i>New in this Version:</i>"));
 

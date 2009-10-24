@@ -78,6 +78,31 @@ static void action_cb(GtkWidget *widget, gpointer data)
 	 gtk_entry_set_text(GTK_ENTRY(Closure->eccEntry), Closure->eccName);
       }
 
+      /* The ecc file may not be labeled as an .iso image */
+
+      if(Closure->eccName)
+      {  int len = strlen(Closure->eccName);
+
+	if(!strcmp(Closure->eccName, Closure->imageName)) 
+	{  CreateMessage(_("The .iso image and error correction file\n"
+			   "must not be the same file!\n\n"
+			   "If you intended to create or use an .iso image\n"
+			   "which is augmented with error correction data,\n"
+			   "please leave the error correction file name blank."), 
+			 GTK_MESSAGE_ERROR);
+	  return;
+	}
+
+	if(!strcmp(Closure->eccName+len-4, ".iso")) 
+	{  CreateMessage(_("The error correction file type must not be \".iso\".\n\n"
+			   "If you intended to create or use an .iso image\n"
+			   "which is augmented with error correction data,\n"
+			   "please leave the error correction file name blank."), 
+			 GTK_MESSAGE_ERROR);
+	  return;
+	}
+      }
+
       /* Reset warnings which may be temporarily disabled during an action */
 
       Closure->noMissingWarnings = FALSE;

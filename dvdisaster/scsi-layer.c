@@ -2543,14 +2543,7 @@ DeviceHandle* OpenAndQueryDevice(char *device)
 		GetSenseString(dh->sense.sense_key, dh->sense.asc, dh->sense.ascq, FALSE));
    }
 
-#ifdef SYS_LINUX
    PrintLog(_("\nDevice: %s, %s\n"),device, dh->devinfo);
-#endif
-
-#ifdef SYS_MINGW
-   PrintLog(_("\nDevice: %s (%s), %s\n"),
-	    device, dh->aspiUsed ? "ASPI" : "SPTI", dh->devinfo);
-#endif
 
    /* Query the type and fail immediately if incompatible medium is found
       so that the later tests are not derailed by the wrong medium type */

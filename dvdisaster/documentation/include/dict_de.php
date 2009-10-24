@@ -16,6 +16,7 @@ $trans_screen_shot="Bildschirmfoto";
 
 $trans_contents="Inhalt";
 $trans_news="Neuigkeiten";
+$trans_atom_title="Neues von dvdisaster";
 $trans_hosting="Diese Seiten liegen auf";
 
 $trans_fdl="Die unveränderte Wiedergabe und Verteilung dieses gesamten Textes in beliebiger Form ist gestattet, sofern dieser Hinweis erhalten bleibt.";

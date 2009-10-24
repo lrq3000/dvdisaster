@@ -68,7 +68,7 @@ int large_ftruncate(int fd, gint64 size)
  */
 
 static gchar* os_path(char *path_in)
-{  gchar *cp_path = g_locale_from_utf8(path_in, -1, NULL, NULL, NULL);
+{  gchar *cp_path = g_filename_from_utf8(path_in, -1, NULL, NULL, NULL);
 
    if(cp_path == NULL)
    {  errno = EINVAL;

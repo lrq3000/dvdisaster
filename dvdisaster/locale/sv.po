@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-20 19:37+0200\n"
+"POT-Creation-Date: 2009-10-24 15:13+0200\n"
 "PO-Revision-Date: 2006-06-14 23:48+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -29,15 +29,15 @@ msgstr ""
 "# som kommer att skrivas över varje gång dvdisaster körs.\n"
 "\n"
 
-#: closure.c:767 closure.c:775 closure.c:782
+#: closure.c:763 closure.c:771 closure.c:778
 msgid "medium.iso"
 msgstr ""
 
-#: closure.c:768 closure.c:776 closure.c:783
+#: closure.c:764 closure.c:772 closure.c:779
 msgid "medium.ecc"
 msgstr ""
 
-#: closure.c:769 closure.c:777 closure.c:784
+#: closure.c:765 closure.c:773 closure.c:780
 msgid "sector-"
 msgstr ""
 
@@ -340,7 +340,7 @@ msgid ""
 "error correction data for it. Sorry for the bad news.\n"
 msgstr ""
 
-#: dvdisaster.c:39 main-window.c:119
+#: dvdisaster.c:39 main-window.c:144
 #, c-format
 msgid ""
 "\n"
@@ -358,32 +358,32 @@ msgstr "RS01-metoden inte tillgänglig för jämförelser av filer."
 #. TRANSLATORS:
 #. This is a dummy entry which is supposed to translate into "ok".
 #. Please do not return anything else here.
-#: dvdisaster.c:280 dvdisaster.c:292 dvdisaster.c:308
+#: dvdisaster.c:279 dvdisaster.c:291 dvdisaster.c:307
 msgid "test phrase for verifying the locale installation"
 msgstr "ok"
 
-#: dvdisaster.c:470
+#: dvdisaster.c:468
 #, c-format
 msgid "--threads must be 1..%d\n"
 msgstr ""
 
-#: dvdisaster.c:484
+#: dvdisaster.c:482
 msgid "--cache-size must at least be 8MB; 16MB or higher is recommended."
 msgstr ""
 
-#: dvdisaster.c:486
+#: dvdisaster.c:484
 msgid "--cache-size maximum is 8192MB."
 msgstr ""
 
-#: dvdisaster.c:502
+#: dvdisaster.c:500
 msgid "Valid args for --driver: sg"
 msgstr ""
 
-#: dvdisaster.c:504
+#: dvdisaster.c:502
 msgid "--driver is only supported on GNU/Linux"
 msgstr ""
 
-#: dvdisaster.c:609
+#: dvdisaster.c:607
 #, c-format
 msgid ""
 "\n"
@@ -391,12 +391,12 @@ msgid ""
 "\n"
 msgstr ""
 
-#: dvdisaster.c:673
+#: dvdisaster.c:671
 #, c-format
 msgid "?? illegal getopt return value %d\n"
 msgstr "?? ogiltigt getopt-svarsvärde %d\n"
 
-#: dvdisaster.c:707
+#: dvdisaster.c:705
 #, c-format
 msgid ""
 "dvdisaster is not properly installed.\n"
@@ -405,7 +405,7 @@ msgstr ""
 
 #. TRANSLATORS: Program options like -r and --read are not to be translated
 #. to avoid confusion when discussing the program in international forums.
-#: dvdisaster.c:871
+#: dvdisaster.c:865
 msgid ""
 "\n"
 "Common usage examples:\n"
@@ -430,7 +430,7 @@ msgstr ""
 "  dvdisaster -u,--unlink # Ta bort .iso-filer (när andra operationer är färdiga)\n"
 "\n"
 
-#: dvdisaster.c:880
+#: dvdisaster.c:874
 #, c-format
 msgid ""
 "Drive and file specification:\n"
@@ -445,15 +445,7 @@ msgstr ""
 "  -i,--image  avbildsfil - namn på avbildsfil       (standard: medium.iso)\n"
 "  -e,--ecc    ecc-fil    - namn på paritetsfil      (standard: medium.ecc)\n"
 
-#: dvdisaster.c:888
-msgid ""
-"  -l,--list              - list drives available under ASPI manager\n"
-"\n"
-msgstr ""
-"  -l,--list              - lista enheter tillgängliga under ASPI-hanteraren\n"
-"\n"
-
-#: dvdisaster.c:893
+#: dvdisaster.c:883
 #, c-format
 msgid ""
 "Tweaking options (see manual before using!)\n"
@@ -480,7 +472,7 @@ msgid ""
 "  --spinup-delay n       - wait n seconds for drive to spin up\n"
 msgstr ""
 
-#: dvdisaster.c:918
+#: dvdisaster.c:908
 #, c-format
 msgid ""
 "Debugging options (purposefully undocumented and possibly harmful)\n"
@@ -507,7 +499,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: dvdisaster.c:942
+#: dvdisaster.c:932
 msgid ""
 "NOTE: This is the Windows console version of dvdisaster.\n"
 "The version providing a graphical user interface is called\n"
@@ -515,7 +507,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: dvdisaster.c:963
+#: dvdisaster.c:953
 msgid "Optical drive 52X FW 1.02"
 msgstr ""
 
@@ -756,79 +748,98 @@ msgstr ""
 msgid "dvdisaster-%s log\n"
 msgstr "dvdisaster-%s logg\n"
 
-#: main-window.c:221
+#: main-window.c:87
+msgid ""
+"The .iso image and error correction file\n"
+"must not be the same file!\n"
+"\n"
+"If you intended to create or use an .iso image\n"
+"which is augmented with error correction data,\n"
+"please leave the error correction file name blank."
+msgstr ""
+
+#: main-window.c:97
+msgid ""
+"The error correction file type must not be \".iso\".\n"
+"\n"
+"If you intended to create or use an .iso image\n"
+"which is augmented with error correction data,\n"
+"please leave the error correction file name blank."
+msgstr ""
+
+#: main-window.c:246
 msgid "button|Read"
 msgstr "Läs"
 
-#: main-window.c:224
+#: main-window.c:249
 msgid "tooltip|Read Image"
 msgstr "Läs avbild"
 
-#: main-window.c:224
+#: main-window.c:249
 msgid "Reads a CD/DVD image into a file (or tries to complete an existing image file)."
 msgstr "Läser en cd/dvd-avbild till en fil (eller försöker att färdigställa en existerande avbildsfil)."
 
-#: main-window.c:238
+#: main-window.c:263
 msgid "button|Create"
 msgstr "Skapa"
 
-#: main-window.c:241
+#: main-window.c:266
 msgid "tooltip|Create error correction data"
 msgstr ""
 
-#: main-window.c:241
+#: main-window.c:266
 msgid "Creates error correction data. Requires an image file."
 msgstr ""
 
-#: main-window.c:245
+#: main-window.c:270
 msgid "button|Scan"
 msgstr "Sök av"
 
-#: main-window.c:248
+#: main-window.c:273
 msgid "tooltip|Scan medium"
 msgstr "Sök av medium"
 
-#: main-window.c:248
+#: main-window.c:273
 msgid "Scans medium for unreadable sectors."
 msgstr "Söker av medium för oläsbara sektorer."
 
-#: main-window.c:252
+#: main-window.c:277
 msgid "button|Fix"
 msgstr "Rätta till"
 
-#: main-window.c:255
+#: main-window.c:280
 msgid "tooltip|Repair image"
 msgstr "Reparera avbild"
 
-#: main-window.c:255
+#: main-window.c:280
 msgid "Repairs an image. Requires an image file and error correction data."
 msgstr "Reparerar en avbild. Kräver en avbildsfil och felkorrigeringsdata."
 
-#: main-window.c:259
+#: main-window.c:284
 msgid "button|Verify"
 msgstr "Validera"
 
-#: main-window.c:262
+#: main-window.c:287
 msgid "tooltip|Consistency check"
 msgstr ""
 
-#: main-window.c:262
+#: main-window.c:287
 msgid "Tests consistency of error correction data and image file."
 msgstr "Testar konsistensen på felkorrigeringsdata och avbildsfil."
 
-#: main-window.c:266
+#: main-window.c:291
 msgid "button|Stop"
 msgstr "Stopp"
 
-#: main-window.c:269
+#: main-window.c:294
 msgid "tooltip|Abort action"
 msgstr "Avbryt operation"
 
-#: main-window.c:269
+#: main-window.c:294
 msgid "Aborts an ongoing action."
 msgstr "Avbryter en pågående operation."
 
-#: main-window.c:398
+#: main-window.c:423
 #, c-format
 msgid ""
 "<b>dvdisaster is not properly installed</b>\n"
@@ -836,15 +847,15 @@ msgid ""
 "Please execute the installer program (%s) again.\n"
 msgstr ""
 
-#: main-window.c:482
+#: main-window.c:507
 msgid "tooltip|Protocol for current action"
 msgstr "Protokoll för aktuell operation"
 
-#: main-window.c:483
+#: main-window.c:508
 msgid "Displays additional information created during the current or last action."
 msgstr "Visar ytterligare information skapad under aktuella eller senaste operationen."
 
-#: main-window.c:492
+#: main-window.c:517
 msgid "View log"
 msgstr "Visa logg"
 
@@ -953,7 +964,7 @@ msgstr ""
 msgid "Book type:"
 msgstr ""
 
-#: medium-info.c:308 scsi-layer.c:2645
+#: medium-info.c:308 scsi-layer.c:2638
 msgid "Manuf.-ID:"
 msgstr ""
 
@@ -4586,12 +4597,12 @@ msgstr ""
 msgid "Sector %lld, try %d: success\n"
 msgstr ""
 
-#: scsi-layer.c:2541 scsi-layer.c:2694
+#: scsi-layer.c:2541 scsi-layer.c:2687
 #, c-format
 msgid "Device %s: no medium present\n"
 msgstr ""
 
-#: scsi-layer.c:2542 scsi-layer.c:2695
+#: scsi-layer.c:2542 scsi-layer.c:2688
 #, c-format
 msgid ""
 "Device %s does not become ready:\n"
@@ -4599,7 +4610,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: scsi-layer.c:2547
+#: scsi-layer.c:2546
 #, c-format
 msgid ""
 "\n"
@@ -4608,61 +4619,52 @@ msgstr ""
 "\n"
 "Enhet: %s, %s\n"
 
-#: scsi-layer.c:2551
-#, c-format
-msgid ""
-"\n"
-"Device: %s (%s), %s\n"
-msgstr ""
-"\n"
-"Enhet: %s (%s), %s\n"
-
-#: scsi-layer.c:2559
+#: scsi-layer.c:2552
 msgid "Drive failed to report media type."
 msgstr ""
 
-#: scsi-layer.c:2570 scsi-layer.c:2657
+#: scsi-layer.c:2563 scsi-layer.c:2650
 #, c-format
 msgid "This software does not support \"%s\" type media."
 msgstr ""
 
-#: scsi-layer.c:2578
+#: scsi-layer.c:2571
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr ""
 
-#: scsi-layer.c:2601 scsi-layer.c:2610
+#: scsi-layer.c:2594 scsi-layer.c:2603
 msgid "Using READ CD"
 msgstr ""
 
-#: scsi-layer.c:2602
+#: scsi-layer.c:2595
 msgid ", RAW reading"
 msgstr ""
 
-#: scsi-layer.c:2605
+#: scsi-layer.c:2598
 #, c-format
 msgid ", Mode page 1 ERP = %02xh"
 msgstr ""
 
-#: scsi-layer.c:2608
+#: scsi-layer.c:2601
 msgid ", C2 scanning"
 msgstr ""
 
-#: scsi-layer.c:2615
+#: scsi-layer.c:2608
 msgid "Using READ(10).\n"
 msgstr ""
 
-#: scsi-layer.c:2634
+#: scsi-layer.c:2627
 #, c-format
 msgid "Medium: %s, %lld sectors%s"
 msgstr "Medium: %s, %lld sektorer%s"
 
-#: scsi-layer.c:2638
+#: scsi-layer.c:2631
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s created %s"
 msgstr "Medium \"%s\": %s, %lld sektorer%s skapade %s"
 
-#: scsi-layer.c:2664
+#: scsi-layer.c:2657
 msgid "This software does not support encrypted media.\n"
 msgstr ""
 
@@ -4680,42 +4682,7 @@ msgstr ""
 "* Operativsystem stöds inte - inget SCSI-lager tillgängligt.\n"
 "* Inga enheter kan användas.\n"
 
-#: scsi-win32.c:415
-msgid "ASPI manager present, but no CD/DVD drives managed.\n"
-msgstr "ASPI-hanterare är tillgänglig men inga cd/dvd-enheter hanteras.\n"
-
-#: scsi-win32.c:417
-#, c-format
-msgid ""
-"%d SPTI drives, but %d ASPI drives.\n"
-"Drive letter mapping for ASPI drives is probably incorrect.\n"
-msgstr ""
-"%d SPTI-enheter, men %d ASPI-enheter.\n"
-"Mappning av enhetsbokstäver för ASPI-enheter är antagligen felaktig.\n"
-
-#: scsi-win32.c:435
-msgid ""
-"\n"
-"List of ASPI CD/DVD drives:\n"
-msgstr ""
-"\n"
-"Lista av ASPI CD/DVD-enheter:\n"
-
-#: scsi-win32.c:440
-msgid ""
-"\n"
-"To force ASPI usage over SPTI, refer to the drive by the\n"
-"above numbers (use 1:, 2:,... instead of C:, D:,...)\n"
-msgstr ""
-"\n"
-"För att tvinga ASPI-användning över SPTI, referera till enheten efter\n"
-"siffrorna ovan (använd 1:, 2:,... istället för C:, D:,...)\n"
-
-#: scsi-win32.c:445
-msgid "ASPI manager not available or installed.\n"
-msgstr "ASPI-hanterare inte tillgänglig eller installerad.\n"
-
-#: scsi-win32.c:569
+#: scsi-win32.c:161
 #, c-format
 msgid ""
 "\n"
@@ -4724,14 +4691,12 @@ msgstr ""
 "\n"
 "Otillåtet enhetsnamn \"%s\" (använd enheterna \"C:\" ... \"Z:\")"
 
-#: scsi-win32.c:659
+#: scsi-win32.c:245
 #, c-format
 msgid ""
 "\n"
-"Neither SPTI nor ASPI worked opening %s."
+"Could not open device %s."
 msgstr ""
-"\n"
-"Varken SPTI eller ASPI fungerade att öppna %s."
 
 #: show-manual.c:75
 msgid "windowtitle|Choose a browser"
@@ -4853,6 +4818,56 @@ msgstr ""
 #: welcome-window.c:137
 msgid "<i>New in this Version:</i>"
 msgstr ""
+
+#~ msgid ""
+#~ "  -l,--list              - list drives available under ASPI manager\n"
+#~ "\n"
+#~ msgstr ""
+#~ "  -l,--list              - lista enheter tillgängliga under ASPI-hanteraren\n"
+#~ "\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Device: %s (%s), %s\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Enhet: %s (%s), %s\n"
+
+#~ msgid "ASPI manager present, but no CD/DVD drives managed.\n"
+#~ msgstr "ASPI-hanterare är tillgänglig men inga cd/dvd-enheter hanteras.\n"
+
+#~ msgid ""
+#~ "%d SPTI drives, but %d ASPI drives.\n"
+#~ "Drive letter mapping for ASPI drives is probably incorrect.\n"
+#~ msgstr ""
+#~ "%d SPTI-enheter, men %d ASPI-enheter.\n"
+#~ "Mappning av enhetsbokstäver för ASPI-enheter är antagligen felaktig.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "List of ASPI CD/DVD drives:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Lista av ASPI CD/DVD-enheter:\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "To force ASPI usage over SPTI, refer to the drive by the\n"
+#~ "above numbers (use 1:, 2:,... instead of C:, D:,...)\n"
+#~ msgstr ""
+#~ "\n"
+#~ "För att tvinga ASPI-användning över SPTI, referera till enheten efter\n"
+#~ "siffrorna ovan (använd 1:, 2:,... istället för C:, D:,...)\n"
+
+#~ msgid "ASPI manager not available or installed.\n"
+#~ msgstr "ASPI-hanterare inte tillgänglig eller installerad.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Neither SPTI nor ASPI worked opening %s."
+#~ msgstr ""
+#~ "\n"
+#~ "Varken SPTI eller ASPI fungerade att öppna %s."
 
 #~ msgid ""
 #~ "\n"

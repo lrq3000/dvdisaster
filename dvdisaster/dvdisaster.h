@@ -198,14 +198,6 @@ typedef struct _GlobalClosure
    char *errorTitle;    /* Title to show in error dialogs */
    gint32 randomSeed;   /* for the random number generator */
 
-#ifdef SYS_MINGW
-   /*** Hooks into the ASPI library */
-
-   void *aspiLib;
-   unsigned long (*GetASPI32SupportInfo)(void);
-   unsigned long (*SendASPI32Command)(void*);
-#endif
-
    guint32 *crcCache;              /* sectorwise CRC32 for last image read */
    char    *crcImageName;          /* file name of cached image */
    unsigned char md5Cache[16];     /* md5sum of last image read */
@@ -1144,10 +1136,6 @@ typedef struct _AlignedBuffer
 
 AlignedBuffer *CreateAlignedBuffer(int);
 void FreeAlignedBuffer(AlignedBuffer*);
-
-void OpenAspi(void);
-void CloseAspi(void);
-void ListAspiDrives(void);
 
 char* DefaultDevice(void);
 gint64 CurrentImageSize(void);

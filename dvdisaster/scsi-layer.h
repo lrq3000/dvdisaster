@@ -115,9 +115,7 @@ typedef struct _DeviceHandle
    union ccb *ccb;
 #endif
 #ifdef SYS_MINGW
-   HANDLE fd;                 /* Windows file handle for the device (SPTI case) */
-   int aspiUsed;	      /* TRUE is device is accessed via ASPI */
-   int ha,target,lun;         /* ASPI way of describing drives */ 
+   HANDLE fd;                 /* Windows SPTI file handle for the device */
 #endif
 #ifdef SYS_DARWIN
    IOCFPlugInInterface **plugInInterface;
@@ -250,7 +248,6 @@ typedef struct _DeviceHandle
 DeviceHandle* OpenDevice(char*);
 
 #ifdef SYS_MINGW
-DeviceHandle* open_aspi_device(char*, int);
 DeviceHandle* open_spti_device(char*);
 #endif
 

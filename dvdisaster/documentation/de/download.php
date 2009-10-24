@@ -136,6 +136,13 @@ erfolgen. (04-Jul-2009)<p>
 <b>0.72-rc1</b> Erster Kandidat für die stabile Version. (11-Apr-2009)
 </td></tr></table><p>
 
+Falls kein Herunterladen über die obigen Links möglich ist,
+versuchen Sie bitte dvdisaster über
+<a href="http://sourceforge.net/projects/dvdisaster/files">SourceForge</a> 
+zu bekommen.
+
+<pre> </pre>
+
 <b>Vorangegangene Version</b> - eine Aktualisierung auf Version 0.72 wird empfohlen.<p> 
 
 <table class="download" cellpadding="0" cellspacing="5">

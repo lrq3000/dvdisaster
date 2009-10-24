@@ -738,10 +738,6 @@ void InitClosure()
    memset(Closure->bs, '\b', 255);
 
    DefaultLogFile();
-
-#ifdef SYS_MINGW
-   OpenAspi();
-#endif
 }
 
 /*
@@ -901,8 +897,4 @@ void FreeClosure()
      g_free(Closure->readAdaptiveErrorMsg);
 
    g_free(Closure);
-
-#ifdef SYS_MINGW
-   CloseAspi();
-#endif
 }

@@ -99,7 +99,6 @@ typedef enum
    MODE_CMP_IMAGES,
    MODE_DEBUG_MAINT1,
    MODE_ERASE, 
-   MODE_LIST_ASPI,
    MODE_MARKED_IMAGE,
    MODE_MERGE_IMAGES,
    MODE_RANDOM_ERR, 
@@ -425,7 +424,6 @@ int main(int argc, char *argv[])
          case 'j': if(optarg) Closure->sectorSkip = atoi(optarg) & ~0xf;
 	           if(Closure->sectorSkip<0) Closure->sectorSkip = 0;
 		   break;
-	 case 'l': mode = MODE_LIST_ASPI; break;
          case 'm': if(optarg && strlen(optarg) == 4) 
 	           {  g_free(Closure->methodName);
 	              Closure->methodName = g_strdup(optarg); 
@@ -843,10 +841,6 @@ int main(int argc, char *argv[])
 	 break;
 
 #ifdef SYS_MINGW
-      case MODE_LIST_ASPI:
-	 ListAspiDrives();
-	 break;
-
       case MODE_SIGN:
 	 WriteSignature();
 	 exit(0);
@@ -884,11 +878,7 @@ int main(int argc, char *argv[])
 	     "  -e,--ecc    eccfile    - name of parity file      (default: medium.ecc)\n"),
 	     Closure->device);
 
-#ifdef SYS_MINGW
-      PrintCLI(_("  -l,--list              - list drives available under ASPI manager\n\n"));
-#else
       PrintCLI("\n");
-#endif
 
       PrintCLI(_("Tweaking options (see manual before using!)\n"
 	     "  -j,--jump n            - jump n sectors forward after a read error (default: 16)\n"

@@ -16,6 +16,7 @@ $trans_screen_shot="Screen shot";
 
 $trans_contents="Contents";
 $trans_news="News";
+$trans_atom_title="dvdisaster news";
 $trans_hosting="Hosted by";
 
 $trans_fdl="Verbatim copying and distribution of this entire article is permitted in any medium, provided this notice is preserved.";
