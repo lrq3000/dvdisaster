@@ -1,0 +1,91 @@
+\documentclass[12pt,a4paper,twoside]{article}
+%\usepackage{german}   	% Deutsches Wörterbuch usw.
+\usepackage{times}	% Skalierbarer und lesbarer Zeichensatz
+\usepackage{ucs}	% Benötigt für Eingabe von unicode-Zeichensätzen
+\usepackage[utf8x]{inputenc} % Aktiviert Eingabe von unicode-Zeichensätzen
+\usepackage{epsfig}	% Makros zum Einfügen von Grafiken
+\usepackage{anysize}	% Makros zum Einstellen der Seitenränder
+%\usepackage{makeidx}	% Makros zum Erstellen des Indexes
+\usepackage{url}
+
+\marginsize{30mm}{20mm}{20mm}{20mm}  % Seitenränder links, rechts, oben, unten
+\parindent0em		% Keine amerikanische Einrückung am Anfang von Paragraphen
+
+
+\pagestyle{headings}	% leerer Seitenstil (keine Seitennummern usw.)
+%\makeindex		% wird für Erstellung von Stichwortverzeichnissen benötigt
+
+% Ende der Voreinstellungen
+\input{misc}
+
+\begin{document}
+
+\title{The dvdisaster RS03 Reed-Solomon Codec specification}
+\author{Carsten Gnörlich\\carsten@dvdisaster.org}
+\date{Version 1.00}
+\maketitle
+\begin{center}
+{\em first draft}
+\end{center}
+%\warning{5mm}{\LARGE State: Incomplete/Evolving}
+
+\bigskip
+
+\begin{abstract}
+This paper describes the data format of the dvdisaster RS03 Reed-Solomon codec.
+The codec creates Reed-Solomon parity data to protect data stored on optical media.
+Parity data can either be stored in a separate file or be integrated with the .iso
+image on the same medium. While these features were already present in the preceeding
+codecs RS01 and RS02, the new RS03 codec will be fully multi-threadable.
+It can therefore take full advantage of multicore processor systems and is expected
+to become the default codec soon after its introduction in dvdisaster 0.80
+(see \url{http://dvdisaster.org} for an overview of the dvdisaster project). 
+\end{abstract}
+
+\bigskip
+
+{\bf Target audience.} This paper is primarily intended as a working base for the
+dvdisaster developers and, when the final version has been crafted, as an implementation
+guide for third party developers who wish to create and process dvdisaster RS03 data.
+It is {\bf neither intended nor suitable} as end-user documentation; for usage information
+please refer to the online documentation at \url{http://dvdisaster.org}.
+
+\bigskip
+
+{\bf Prerequisites.} This paper assumes profound knowledge of coding theory and the 
+underlying math. The reader is assumed to have a thorough understanding of Reed-Solomon
+codes, both in theory and from an implementation viewpoint. A basic understanding
+of programming in C is also assumed.
+
+\vfill
+\begin{center}
+{\em 
+Copyright 2008-2010 Carsten Gnörlich.
+Verbatim copying and distribution of this entire article is permitted in any medium, 
+provided this notice is preserved.}
+\end{center}
+
+\newpage
+
+% Changelog
+
+\input{changelog}
+
+% History
+
+
+% Reed-Solomon encoding details
+
+\input{rs03-layout}
+
+% Header formats
+
+\appendix
+
+\input{ecc-header}
+
+\input{crc-block}
+
+\input{rs-params}
+
+\end{document}

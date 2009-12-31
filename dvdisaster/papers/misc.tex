@@ -1,0 +1,8 @@
+\newlength{\warnheight}
+\newcommand{\warning}[2]{
+\settoheight{\warnheight}{#2}
+\addtolength{\warnheight}{#1}
+\addtolength{\warnheight}{#1}
+\begin{center}
+ \fbox{\fbox{\hspace{#1}\rule[-#1]{0mm}{\warnheight}#2\hspace{#1}}}
+\end{center}}
