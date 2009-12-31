@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2009 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2010 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -127,6 +127,7 @@ typedef enum
    MODIFIER_INTERNAL_REREADS,
    MODIFIER_QUERY_SIZE,
    MODIFIER_NEW_DS_MARKER,
+   MODIFIER_PREFETCH_SECTORS,
    MODIFIER_RANDOM_SEED,
    MODIFIER_READ_ATTEMPTS,
    MODIFIER_READ_MEDIUM,
@@ -190,6 +191,34 @@ int main(int argc, char *argv[])
          _independent_ of the actual locale! */
 
 #ifdef WITH_NLS_YES
+
+#if 0 //WIN_CONSOLE
+    /* We need to manually set the code page when running
+       in the console */
+
+    if(!g_getenv("OUTPUT_CHARSET"))  /* User may override this */
+    {  gchar *unix_locale = g_win32_getlocale();
+
+      if(!strncmp(unix_locale, "cs", 2))
+	g_setenv("OUTPUT_CHARSET", "CP852", 1);
+
+      if(!strncmp(unix_locale, "de", 2))
+	g_setenv("OUTPUT_CHARSET", "CP850", 1);
+
+      if(!strncmp(unix_locale, "it", 2))
+	g_setenv("OUTPUT_CHARSET", "CP850", 1);
+
+      if(!strncmp(unix_locale, "pt_BR", 4))
+	g_setenv("OUTPUT_CHARSET", "CP850", 1);
+
+      if(!strncmp(unix_locale, "ru", 2))
+	g_setenv("OUTPUT_CHARSET", "CP855", 1);
+
+      if(!strncmp(unix_locale, "sv", 2))
+	g_setenv("OUTPUT_CHARSET", "CP850", 1);
+    }
+#endif /* WIN_CONSOLE */
+
 #ifdef SYS_MINGW
     if(!g_getenv("LANG"))  /* Unix style setting has precedence */
     {  LANGID lang_id;
@@ -235,7 +264,7 @@ int main(int argc, char *argv[])
 #ifdef WIN_CONSOLE
 	       g_setenv("OUTPUT_CHARSET", "CP860", 1);
 #else
-	       g_setenv("OUTPUT_CHARSET", "CP1251", 1);
+	       g_setenv("OUTPUT_CHARSET", "CP1252", 1);
 #endif
 	    }
             break;
@@ -261,6 +290,7 @@ int main(int argc, char *argv[])
     }
 #endif /* SYS_MINGW */
 
+    /* This is necessary, but feels broken */
     setlocale(LC_CTYPE, "");
     setlocale(LC_MESSAGES, "");
     textdomain("dvdisaster");
@@ -350,6 +380,7 @@ int main(int argc, char *argv[])
 	{"device", 0, 0, 'd'},
 	{"driver", 1, 0, MODIFIER_DRIVER },
         {"ecc", 1, 0, 'e'},
+	{"ecc-target", 1, 0, 'o'},
 	{"eject", 0, 0, MODIFIER_EJECT },
 	{"erase", 1, 0, MODE_ERASE },
 	{"fill-unreadable", 1, 0, MODIFIER_FILL_UNREADABLE },
@@ -366,6 +397,7 @@ int main(int argc, char *argv[])
 	{"merge-images", 1, 0, MODE_MERGE_IMAGES },
 	{"method", 2, 0, 'm' },
 	{"new-ds-marker", 0, 0, MODIFIER_NEW_DS_MARKER },
+	{"prefetch-sectors", 1, 0, MODIFIER_PREFETCH_SECTORS },
         {"prefix", 1, 0, 'p'},
 	{"query-size", 1, 0, MODIFIER_QUERY_SIZE },
 	{"random-errors", 1, 0, MODE_RANDOM_ERR },
@@ -398,23 +430,24 @@ int main(int argc, char *argv[])
       };
 
       c = getopt_long(argc, argv, 
-		      "cd:e:fhi:j:lm::n:p:r::s::tuvx:",
+		      "cd:e:fhi:j:lm::n:o:p:r::s::tuvx:",
 		      long_options, &option_index);
 
       if(c == -1) break;
 
       switch(c)
-      {  case 'r': mode = MODE_SEQUENCE; sequence |= 1<<MODE_READ; 
-	           if(optarg) read_range = g_strdup(optarg);
-		   break;
-
-         case 's': mode = MODE_SEQUENCE; sequence |= 1<<MODE_SCAN; 
-	           if(optarg) read_range = g_strdup(optarg); 
-		   break;
-         case 'c': mode = MODE_SEQUENCE; sequence |= 1<<MODE_CREATE; break;
+      {  case 'c': mode = MODE_SEQUENCE; sequence |= 1<<MODE_CREATE; break;
+         case 'd': if(optarg) 
+	           {  g_free(Closure->device);
+	              Closure->device = g_strdup(optarg); 
+	              break;
+                   }
+         case 'e': if(optarg) 
+	           {  g_free(Closure->eccName);
+		      Closure->eccName = g_strdup(optarg);
+		   }
+	           break;
          case 'f': mode = MODE_SEQUENCE; sequence |= 1<<MODE_FIX; break;
-         case 't': mode = MODE_SEQUENCE; sequence |= 1<<MODE_VERIFY; break;
-         case 'u': Closure->unlinkImage = TRUE; break;
          case 'h': mode = MODE_HELP; break;
          case 'i': if(optarg) 
 	           {  g_free(Closure->imageName);
@@ -441,10 +474,11 @@ int main(int argc, char *argv[])
 		      else Closure->mediumSize = (gint64)atoll(optarg);
 		      break;
 		   }
-         case 'e': if(optarg) 
-	           {  g_free(Closure->eccName);
-		      Closure->eccName = g_strdup(optarg);
-		   }
+         case 'o': if(!strcmp(optarg, "file"))
+		     Closure->eccTarget = ECC_FILE;
+	           else if(!strcmp(optarg, "image"))
+		     Closure->eccTarget = ECC_IMAGE;
+	           else Stop(_("-o/--ecc-target expects 'file' or 'image'"));
 	           break;
          case 'p': if(optarg) 
 		   {  g_free(Closure->imageName);
@@ -455,14 +489,17 @@ int main(int argc, char *argv[])
 		      g_sprintf(Closure->imageName,"%s.iso",optarg);
 		   }
 	           break;
-         case 'd': if(optarg) 
-	           {  g_free(Closure->device);
-	              Closure->device = g_strdup(optarg); 
-	              break;
-                   }
-         case 'v': Closure->verbose = TRUE;
-	           break;
+         case 'r': mode = MODE_SEQUENCE; sequence |= 1<<MODE_READ; 
+	           if(optarg) read_range = g_strdup(optarg);
+		   break;
 
+         case 's': mode = MODE_SEQUENCE; sequence |= 1<<MODE_SCAN; 
+	           if(optarg) read_range = g_strdup(optarg); 
+		   break;
+                  case 'v': Closure->verbose = TRUE;
+	           break;
+         case 't': mode = MODE_SEQUENCE; sequence |= 1<<MODE_VERIFY; break;
+         case 'u': Closure->unlinkImage = TRUE; break;
          case 'x': Closure->codecThreads = atoi(optarg);
                    if(Closure->codecThreads < 1 || Closure->codecThreads > MAX_CODEC_THREADS)
                      Stop(_("--threads must be 1..%d\n"), MAX_CODEC_THREADS);
@@ -542,6 +579,13 @@ int main(int argc, char *argv[])
 	 case MODIFIER_NEW_DS_MARKER:
 	    Closure->dsmVersion = 1;
 	    break;
+         case MODIFIER_PREFETCH_SECTORS:
+ 	    Closure->prefetchSectors = atoi(optarg);
+	    if(   Closure->prefetchSectors < 32
+	       || Closure->prefetchSectors > 8096)
+	      Stop(_("--prefetch-sectors must be in range 32...8096"));
+	    break;
+
          case MODIFIER_QUERY_SIZE:
 	        if(!strcmp(optarg, "drive")) Closure->querySize = 0;
 	   else if(!strcmp(optarg, "udf"))   Closure->querySize = 1;
@@ -875,7 +919,8 @@ int main(int argc, char *argv[])
 	     "  -d,--device device     - read from given device   (default: %s)\n"
 	     "  -p,--prefix prefix     - prefix of .iso/.ecc file (default: medium.*  )\n"
 	     "  -i,--image  imagefile  - name of image file       (default: medium.iso)\n"
-	     "  -e,--ecc    eccfile    - name of parity file      (default: medium.ecc)\n"),
+	     "  -e,--ecc    eccfile    - name of parity file      (default: medium.ecc)\n"
+	     "  -o,--ecc-target [file|image] - where to put ecc data in RS03\n"),
 	     Closure->device);
 
       PrintCLI("\n");
@@ -896,6 +941,7 @@ int main(int argc, char *argv[])
 	     "  --fill-unreadable n    - fill unreadable sectors with byte n\n"
 	     "  --ignore-fatal-sense   - continue reading after potentially fatal error conditon\n"
 	     "  --internal-rereads n   - drive may attempt n rereads before reporting an error\n"
+	     "  --prefetch-sectors n   - prefetch n sectors for RS03 encoding (uses ~nMB)\n"
       	     "  --query-size n         - query drive/udf/ecc for image size (default: ecc)\n"   
 	     "  --raw-mode n           - mode for raw reading CD media (20 or 21)\n"
 	     "  --read-attempts n-m    - attempts n upto m reads of a defective sector\n"

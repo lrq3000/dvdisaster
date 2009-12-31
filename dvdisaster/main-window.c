@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2009 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2010 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -54,7 +54,7 @@ static void action_cb(GtkWidget *widget, gpointer data)
       if(action != ACTION_CREATE_CONT)
       {  g_mutex_lock(Closure->logLock);
 	 g_string_truncate(Closure->logString, 0);
-         g_string_printf(Closure->logString, _("dvdisaster-%s log\n"),VERSION);
+         g_string_printf(Closure->logString, _("dvdisaster-%s log\n"), Closure->cookedVersion);
 	 g_mutex_unlock(Closure->logLock);
 	 Closure->logFileStamped = FALSE;
       }

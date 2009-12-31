@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: Russian homepage translation
-# Copyright (C) 2007-2009 Igor Gorbounov
+# Copyright (C) 2007-2010 Igor Gorbounov
 #
 # UTF-8 trigger: äöüß 
 #
@@ -20,6 +20,14 @@ $news_counter = 0;
 # Do not insert plain HTML!
 
 news_headline("Новости dvdisaster");
+
+news_item("XX.01.2010", "Started new development branch 0.79", "
+The first version of the new development branch (0.79.1) has just
+been released. This release is meant for testing new functions;
+it is not recommended for doing productive work. See the
+<a href=\"download40.php\">download page</a> for information on
+what has been changed and how you can participate in testing.
+", 14, "2009-12-31T00:00:00Z", "2009-12-31T00:00:00Z");
 
 news_item("01.10.2009", "Assessment of potential vulnerabilities in the windows version
 of the GTK library", "
@@ -55,26 +63,6 @@ news_item("04.07.2009", "выпущен dvdisaster 0.72", "
 Игорь Горбунов завершил перевод онлайн-документации на русский язык.
 Устранены некоторые незначительные ошибки в первом кандидате на выпуск.<p>
 ", 10, "2009-07-04T00:00:00Z", "2009-07-04T00:00:00Z");
-
-news_item("11.04.2009", "выпущен dvdisaster 0.72.rc1", "
-  Теперь доступен первый кандидат на выпуск из стабильной ветви 0.72.
-  Среди новых возможностей - поддержка носителей Blu-Ray, низкоуровневое чтение и проверки на C2
-  для CD, а также \"родная\" версия для Mac OS X.
-  Дополнительную информацию см. здесь <a href=\"download.php\">download page</a>.
-", 8, "2009-04-11T00:00:00Z", "2009-04-11T00:00:00Z");
-
-news_item("08.03.2009", "выпущен dvdisaster 0.71.28", "
-  В этой версии исправляются падения из-за \"illegal instruction\" на x86-машинах,
-  которые не поддерживают SSE2. Много незначительных исправлений перед кандидатом
-  на выпуск.
-", 7, "2009-03-08T00:00:00Z", "2009-03-08T00:00:00Z");
-
-news_item("18.01.2009", "выпущен dvdisaster 0.71.27", "
-  Эта документация, наконец, завершена. Исправлены некоторые падения и несовместимости
-  с необычными носителями и приводами. В этой версии произведен
-  последний большой внутренний пересмотр, планировавшийся для версий 0.71.x, поэтому, если
-  все будет хорошо, то следующей версией будет стабильный кандидат на выпуск.
-", 6, "2009-01-18T00:00:00Z", "2009-01-18T00:00:00Z");
 
 news_finalize();
 

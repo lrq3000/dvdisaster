@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2009 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2010 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -31,10 +31,24 @@ void Maintenance1(char *debug_arg)
 #else
 
 void Maintenance1(char *debug_arg)
-{ gint64 dsectors = atoi(debug_arg);
+{  GaloisTables *gt = CreateGaloisTables(RS_GENERATOR_POLY);
+   ReedSolomonTables *rt = CreateReedSolomonTables(gt, RS_FIRST_ROOT, RS_PRIM_ELEM, 32);
+   unsigned char data[2048], parity[32*2048];
+   int i;
+		  
+   memset(parity, 0, 32*2048);
+		
+   for(i=0; i<223; i++)
+   {  int shift = (rt->shiftInit + i) % 32;
 
-  printf("Calling CalcRS03Layout(%d, %d)\n", dsectors); 
-  CalcRS03Layout(dsectors, 0);
+      memset(data, i, 2048);
+      EncodeNextLayer(rt, data, parity, 2048, shift);
+   }
+
+   for(i=0; i<32; i++)
+     printf("%02x ", parity[i]);
+   printf("\n");
+
 }
 
 #endif

@@ -206,8 +206,6 @@ mount-php:
 	  echo "* HTML document directory (as specified by configure --phpmountdir).";\
 	  echo "* You need sudo priviledges to execute the command below:";\
 	  echo ;\
-	fi
-	if ! test -e $(PHPMOUNTDIR)/dvdisaster.de.1; then\
 	  if ! test -e $(PHPMOUNTDIR); then sudo mkdir -p $(PHPMOUNTDIR); fi;\
 	  sudo mount -o bind $(SRCDIR)/documentation $(PHPMOUNTDIR) ;\
 	fi
@@ -215,6 +213,10 @@ mount-php:
 	if ! test -e $(SRCDIR)/documentation/de/thumbnails/good-cd.png; \
 	  then make thumbnails; \
 	fi
+	for i in $(DOC_LOCALES); do \
+	  chmod 777 $(SRCDIR)/documentation/$$i/feed $(SRCDIR)/documentation/$$i/feed/atom.xml; \
+	  echo chmod 777 $(SRCDIR)/documentation/$$i/feed $(SRCDIR)/documentation/$$i/feed/atom.xml; \
+	done
 
 html: mount-php version.php
 	@echo -n "Producing html documentation... "

@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2009 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2010 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -1389,7 +1389,8 @@ void UpdateMethodPreferences(void)
    for(i=0; i<Closure->methodList->len; i++)
    {  Method *method = g_ptr_array_index(Closure->methodList, i);
 
-      method->resetPrefsPage(method);
+      if(method->resetPrefsPage)
+	method->resetPrefsPage(method);
    }
 }
 
@@ -2416,8 +2417,11 @@ if(Closure->debugMode)  /* hidden until version 0.80 */
 
 	 for(j=0; j<Closure->methodList->len; j++)
 	 {  Method *method = g_ptr_array_index(Closure->methodList, j);
+	    char *utf;
 
-	    gtk_combo_box_append_text(GTK_COMBO_BOX(chooser), method->menuEntry); 
+	    utf  = g_locale_to_utf8(method->menuEntry, -1, NULL, NULL, NULL);
+	    gtk_combo_box_append_text(GTK_COMBO_BOX(chooser), utf); 
+	    g_free(utf);
 
 	    if(!strncmp(Closure->methodName, method->name, 4))
 	      method_idx = j;
@@ -2439,24 +2443,22 @@ if(Closure->debugMode)  /* hidden until version 0.80 */
       AddHelpParagraph(lwoh, _("<b>Error correction method</b>\n\n"
 			       "dvdisaster creates error correction data which is used to recover "
 			       "unreadable sectors if the disc becomes damaged later on. There are "
-			       "two different ways available for storing the error correction "
+			       "different codecs and ways available for storing the error correction "
 			       "information:\n"));
 
-      AddHelpListItem(lwoh, _("Error correction files (RS01 method)\n"
-			      "Error correction files are the only way of protecting existing media "
-			      "as they can be stored somewhere else. They are kept on a separate "
-			      "medium which must also be protected by dvdisaster, as data loss in "
-			      "an error correction file will render it unusable.\n"));
+      AddHelpListItem(lwoh, _("The RS01 codec\n"
+			      "RS01 is the recommended codec for storing error correction data in separate files.\n"));
 
+      AddHelpListItem(lwoh, _("The RS02 codec\n"
+			      "RS02 is the currently recommended codec for "
+			      "augmenting images with error correction data.\n"));
 
-      AddHelpListItem(lwoh, _("Augmented images (RS02 method)\n"
-			      "The error correction data will be stored along with the user data on the "
-			      "same CD/DVD. This requires the creation of an image file prior to writing the "
-			      "medium. The error correction data will be appended to that image. " 
-			      "Damaged sectors in the error correction "
-			      "information reduce the data recovery capacity, but do not make recovery "
-			      "impossible - a second medium for keeping or protecting the error correction "
-			      "information is not required."));
+      AddHelpListItem(lwoh, _("The RS03 codec (Warning: experimental)\n"
+			      "RS03 can either store error correction data in a separate file "
+			      "or augment the image with it. It provides multithreading "
+			      "to scale with multicore processors and contains some subtle improvements "
+			      "over RS01 and RS02. However it should not be used for productive work "
+			      "unless a stable version is released with dvdisaster V0.80."));
 
 
       /* sub pages for individual method configuration */

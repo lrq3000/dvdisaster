@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2009 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2010 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -22,9 +22,7 @@
 #include "dvdisaster.h"
 
 #include "rs02-includes.h"
-#ifdef HAVE_RS03
-  #include "rs03-includes.h"
-#endif
+#include "rs03-includes.h"
 #include "udf.h"
 
 #include <time.h>
@@ -274,10 +272,8 @@ static void random_error2(EccHeader *eh, char *prefix, char *arg)
 
 /* RS03 ecc images */
 
-#ifdef HAVE_RS03
 static void random_error3(EccHeader *eh, char *prefix, char *arg)
 {}  // FIXME
-#endif
 #if 0
 static void random_error3(EccHeader *eh, char *prefix, char *arg)
 {  RS03Layout *lay;
@@ -292,7 +288,8 @@ static void random_error3(EccHeader *eh, char *prefix, char *arg)
    double eras_scale, blk_scale, hdr_scale;
 
    SRandom(Closure->randomSeed);
-   lay = CalcRS03Layout(uchar_to_gint64(eh->sectors), eh->eccBytes); 
+   lay = CalcRS03Layout(uchar_to_gint64(eh->sectors), eh->eccBytes,
+			Closure->eccTarget); 
 
    n_errors = atoi(arg);
 
@@ -427,12 +424,11 @@ void RandomError(char *prefix, char *arg)
    }
 
    /* FIXME: currently only handles augmented images */
-#ifdef HAVE_RS03
+
    if(!strncmp(method->name, "RS03", 4))
    {  random_error3(method->lastEh, prefix, arg);
       return;
    }
-#endif
 
    strncpy(buf, method->name, 4); buf[4] = 0;
    Stop("Don't know how to handle codec %s\n", buf);
@@ -1296,3 +1292,31 @@ void MergeImages(char *arg, int mode)
    LargeClose(left);
    LargeClose(right);
 }
+
+/*
+ * Print LaTeX'ed table of Galois fields and other matrices
+ */
+
+void LaTeXify(gint32 *table , int rows, int columns)
+{  int x,y;
+
+   printf("\\begin{tabular}{|l||");
+   for(x=0; x<columns; x++)
+      printf("c|");
+   printf("}\n\\hline\n");
+
+   printf("&");
+   for(x=0; x<columns; x++)
+      printf("%c %02x ", x==0?' ':'&', x);
+   printf("\\\\\n\\hline\n\\hline\n");
+
+   for(y=0; y<rows; y++)
+   {  printf("%02x &",16*y);
+      for(x=0; x<columns; x++)
+	 printf("%c %02x ", x==0?' ':'&', *table++);
+      printf("\\\\\n\\hline\n");
+   }
+   
+   printf("\\end{tabular}\n");
+}
+	  

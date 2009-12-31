@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2009 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2010 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -110,6 +110,11 @@
 
 #define MAX_CODEC_THREADS 32             /* not including IO and GUI */
 
+/* Definitions for Closure->eccTarget */
+
+#define ECC_FILE  0
+#define ECC_IMAGE 1
+
 /***
  *** Our global closure (encapsulation of global variables)
  ***/
@@ -139,9 +144,11 @@ typedef struct _GlobalClosure
    gint64 savedBDSize2;
    gint64 mediumSize;   /* Maximum medium size (for augmented images) */
    int cacheMB;         /* Cache setting for the parity codec, in megabytes */
+   int prefetchSectors; /* Prefetch setting per encoder thread */
    int codecThreads;    /* Number of threads to use for RS encoders */
    int sectorSkip;      /* Number of sectors to skip after read error occurs */
    char *redundancy;    /* Error correction code redundancy */
+   int eccTarget;       /* 0=file; 1=augmented image */
    int readRaw;         /* Read CD sectors raw + verify them */
    int rawMode;         /* mode for mode page */
    int minReadAttempts; /* minimum reading attempts */
@@ -344,6 +351,15 @@ typedef struct _EccInfo
 } EccInfo;
 
 /***
+ *** Aligned 64bit data types
+ ***
+ * Needed to prevent 4 byte packing on 32bit systems.
+ */
+
+#define aligned_gint64 gint64 __attribute__((aligned(8)))
+#define aligned_guint64 guint64 __attribute__((aligned(8)))
+
+/***
  *** The .ecc file header
  ***/
 
@@ -356,7 +372,8 @@ typedef struct _EccInfo
 #define MFLAG_DEVEL (1<<0)    /* for methodFlags[3] */
 #define MFLAG_RC    (1<<1)                      
 
-#define MFLAG_DATA_MD5 (1<<0)  /* specific to RS03 */
+#define MFLAG_DATA_MD5 (1<<0)  /* RS03: md5sum for data part available */
+#define MFLAG_ECC_FILE (1<<1)  /* RS03: This is a ecc file */
 
 typedef struct _EccHeader
 {  gint8 cookie[12];           /* "*dvdisaster*" */
@@ -371,14 +388,39 @@ typedef struct _EccHeader
    gint32 creatorVersion;      /* which dvdisaster version created this */
    gint32 neededVersion;       /* oldest version which can decode this file */
    gint32 fpSector;            /* sector used to calculate mediumFP */
-   guint32 selfCRC;            /* CRC32 of EccHeader (currently RS02 only) -- since V0.66 --*/
+   guint32 selfCRC;            /* CRC32 of EccHeader -- since V0.66 --*/
    guint8 crcSum[16];          /* md5sum of crc code section of RS02 .iso file  */
    gint32 inLast;              /* bytes contained in last sector */
-   gint8 padding[3976];        /* pad to 4096 bytes: room for future expansion */
+   aligned_guint64 sectorsPerLayer;    /* layer size for RS03 */
+   gint8 padding[3968];        /* pad to 4096 bytes: room for future expansion */
 
   /* Note: Bytes 2048 and up are currently used by the RS02/RS03 codec
            for a copy of the first ecc blocks CRC sums. */
 } EccHeader;
+
+/***
+ *** The CRC block data structure
+ ***
+ * RS03 uses this data structure in its CRC layer.
+ */
+
+typedef struct _CrcBlock
+{  guint32 crc[256];           /* Checksum for the data sectors */
+   gint8 cookie[12];           /* "*dvdisaster*" */
+   gint8 method[4];            /* e.g. "RS03" */
+   gint8 methodFlags[4];       /* 0-2 for free use by the respective methods; 3 see above */
+   gint32 creatorVersion;      /* which dvdisaster version created this */
+   gint32 neededVersion;       /* oldest version which can decode this file */
+   gint32 fpSector;            /* sector used to calculate mediumFP */
+   guint8 mediumFP[16];        /* fingerprint of FINGERPRINT SECTOR */ 
+   guint8 mediumSum[16];       /* complete md5sum of whole medium */
+   aligned_guint64 dataSectors;/* number of sectors of the payload (e.g. iso file sys) */
+   gint32 inLast;              /* bytes contained in last sector */
+   gint32 dataBytes;           /* data bytes per ecc block */
+   gint32 eccBytes;            /* ecc bytes per ecc block */
+   aligned_guint64 sectorsPerLayer; /* for recalculation of layout */
+   guint32 selfCRC;            /* CRC32 of ourself, zero padded to 2048 bytes */
+} CrcBlock;
 
 /***
  *** forward declarations
@@ -510,6 +552,7 @@ void RedrawCurve(Curve*, int);
  ***/
 
 void HexDump(unsigned char*, int, int);
+void LaTeXify(gint32*, int, int);
 void CopySector(char*);
 void Byteset(char*);
 void Erase(char*);
@@ -538,6 +581,8 @@ enum
 void CreateMissingSector(unsigned char*, gint64, unsigned char*, gint64, char*);
 int CheckForMissingSector(unsigned char*, gint64, unsigned char*, gint64);
 void ExplainMissingSector(unsigned char*, gint64, int, int);
+
+void CreatePaddingSector(unsigned char*, gint64, unsigned char*, gint64);
 
 /***
  *** endian.c
@@ -854,6 +899,7 @@ GtkWidget* CreateToolBar(GtkWidget*);
 
 typedef struct _Method
 {  char name[4];                     /* Method name tag */
+   guint32 properties;               /* see definition above */
    char *description;                /* Fulltext description */
    char *menuEntry;                  /* Text for use in preferences menu */
    void (*create)(struct _Method*);  /* Creates an error correction file */

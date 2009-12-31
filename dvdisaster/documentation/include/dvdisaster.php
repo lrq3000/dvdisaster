@@ -1,7 +1,7 @@
 <?php
 
 # dvdisaster: Homepage layout functions
-# Copyright (C) 2007-2009 Carsten Gnörlich
+# Copyright (C) 2007-2010 Carsten Gnörlich
 
 require("version.php");
 
@@ -457,7 +457,6 @@ function end_page()
    global $news_flash;
    global $news_counter;
    global $script_lang;
-   global $trans_old_version;
 
 # Close the body table
 
@@ -509,6 +508,8 @@ function end_page()
 ?>
 
  </tr>
+
+<!---
  <tr valign="bottom">
    <td bgcolor="#f0f0f0">
 <?php 
@@ -518,8 +519,8 @@ function end_page()
    </td>
    <td></td>
    <td></td>
-
  </tr>
+--->
 </table> <!--- end of main body table --->
 
 <?php

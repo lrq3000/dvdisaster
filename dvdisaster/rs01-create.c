@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2009 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2010 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -336,7 +336,7 @@ void RS01Create(Method *self)
 	version 0.40.7 due to a bug in the version processing code.
 	So ecc files tagged with -devel or -rc status will not work with prior
 	versions. But they are experimental version available only through CVS, 
-	so this issue is not a big as it appears.
+	so this issue is not as big as it appears.
       - Version 0.66 records the inLast value in the ecc file to facilitate
         processing non-image files. Previous versions do not use this field
 	and may round up file length to the next multiple of 2048 when doing

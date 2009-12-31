@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2009 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2010 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -128,6 +128,9 @@ static void remove_old_ecc(ecc_closure *ec)
    LargeFile *tmp;
 
    tmp = LargeOpen(Closure->imageName, O_RDWR, IMG_PERMS);
+   if(!tmp)  
+     return; /* no image file at all */
+
    old_eh = FindRS02HeaderInImage(tmp);
 
    if(old_eh)
@@ -1063,8 +1066,7 @@ void RS02Create(Method *method)
      Stop(_("Not enough space on medium left for error correction data.\n"
 	    "Data portion of image: %lld sect.; maximum possible size: %lld sect.\n"
 	    "If reducing the image size or using a larger medium is\n"
-	    "not an option, please create a separate error correction\n"
-	    "file using the RS01 method.\n"),
+	    "not an option, please create a separate error correction file."),
 	  lay->dataSectors, lay->mediumCapacity);
 
    if(lay->redundancy < 20)

@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2009 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2010 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -491,6 +491,7 @@ void ReadDotfile()
       if(!strcmp(symbol, "dotfile-version")) { Closure->dotFileVersion = atoi(value); continue; }
       if(!strcmp(symbol, "dvd-size1"))       { Closure->dvdSize1 = Closure->savedDVDSize1 = atoll(value); continue; }
       if(!strcmp(symbol, "dvd-size2"))       { Closure->dvdSize2 = Closure->savedDVDSize2 = atoll(value); continue; }
+      if(!strcmp(symbol, "ecc-target"))      { Closure->eccTarget  = atoi(value); continue; }
       if(!strcmp(symbol, "eject"))           { Closure->eject  = atoi(value); continue; }
       if(!strcmp(symbol, "fill-unreadable")) { Closure->fillUnreadable = atoi(value); continue; }
       if(!strcmp(symbol, "ignore-fatal-sense")) { Closure->ignoreFatalSense  = atoi(value); continue; }
@@ -505,6 +506,7 @@ void ReadDotfile()
       if(!strcmp(symbol, "max-read-attempts"))   { Closure->maxReadAttempts = atoi(value); continue; }
       if(!strcmp(symbol, "min-read-attempts"))   { Closure->minReadAttempts = atoi(value); continue; }
       if(!strcmp(symbol, "missing-sector-marker"))  { Closure->dsmVersion  = atoi(value); continue; }
+      if(!strcmp(symbol, "prefetch-sectors")){ Closure->prefetchSectors  = atoi(value); continue; }
       if(!strcmp(symbol, "query-size"))      { Closure->querySize  = atoi(value); continue; }
       if(!strcmp(symbol, "raw-mode"))        { Closure->rawMode = atoi(value); continue; }
       if(!strcmp(symbol, "read-and-create")) { Closure->readAndCreate = atoi(value); continue; }
@@ -588,6 +590,7 @@ static void update_dotfile()
    g_fprintf(dotfile, "dotfile-version:   %d\n", Closure->dotFileVersion);
    g_fprintf(dotfile, "dvd-size1:         %lld\n", (long long int)Closure->dvdSize1);
    g_fprintf(dotfile, "dvd-size2:         %lld\n", (long long int)Closure->dvdSize2);
+   g_fprintf(dotfile, "ecc-target:        %d\n", Closure->eccTarget);
    g_fprintf(dotfile, "eject:             %d\n", Closure->eject);
    g_fprintf(dotfile, "fill-unreadable:   %d\n", Closure->fillUnreadable);
    g_fprintf(dotfile, "ignore-fatal-sense: %d\n", Closure->ignoreFatalSense);
@@ -600,6 +603,7 @@ static void update_dotfile()
    g_fprintf(dotfile, "max-read-attempts: %d\n", Closure->maxReadAttempts);
    g_fprintf(dotfile, "min-read-attempts: %d\n", Closure->minReadAttempts);
    g_fprintf(dotfile, "missing-sector-marker: %d\n", Closure->dsmVersion);
+   g_fprintf(dotfile, "prefetch-sectors:  %d\n", Closure->prefetchSectors);
    g_fprintf(dotfile, "query-size:        %d\n", Closure->querySize);
    g_fprintf(dotfile, "raw-mode:          %d\n", Closure->rawMode);
    g_fprintf(dotfile, "read-and-create:   %d\n", Closure->readAndCreate);
@@ -695,7 +699,9 @@ void InitClosure()
    Closure->methodName  = g_strdup("RS01");
    Closure->dDumpDir    = g_strdup(Closure->homeDir);
    Closure->cacheMB     = 32;
+   Closure->prefetchSectors = 32;
    Closure->codecThreads = 1;
+   Closure->eccTarget = 1;
    Closure->minReadAttempts = 1;
    Closure->maxReadAttempts = 1;
    Closure->rawMode     = 0x20;

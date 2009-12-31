@@ -1,7 +1,19 @@
-Beware: 0.73.x is currently very unstable (and may not even compile).
-        Do not use for any production work.
 
-0.73.1
+	CVS users: I am currently preparing 0.79.1 for release,
+	           but we are not there yet. Some mighty bugs
+		   remain in the current code base, even in
+		   functions which worked in previous releases.
+		   Do not use for any productive work.
+		   You have been warned.		   
+
+0.79.1	
+	- fixed alignment brokeness between 32bit and 64bit systems
+	  in ecc header and crc sectors
+	- added RS03 encoding (GUI)
+	- added RS03 verifying (CLI and GUI)
+	- fixed RS02/RS03 crash when encoding invoked without image file
+	- added commandline RS03 encoding (singlethreaded/multithreaded)
+	- added RS03 decoding and verifying (CLI and GUI)
 	- fixed "typical uses" links in welcome screen (Thanks to C. Steigies)
 	- added warning when same files are selected for .iso
 	  and error correction data (Thanks to A. Postkutscher

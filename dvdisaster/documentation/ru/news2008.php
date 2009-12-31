@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: Russian homepage translation
-# Copyright (C) 2007-2009 Igor Gorbounov
+# Copyright (C) 2007-2010 Igor Gorbounov
 #
 # UTF-8 trigger: äöüß 
 #
@@ -15,7 +15,7 @@ if($news_flash == 0)
 
 $news_counter = 0;
 
-news_headline("News archive from 2007");
+news_headline("News archive from 2008");
 
 news_item("30.03.2008", "выпущен dvdisaster 0.71.26", "
   В этой версии содержится новый диалог с информацией о вставленном 

@@ -19,7 +19,7 @@ fi
 
 # Set the package name and version
 
-PACKAGE dvdisaster 0.73
+PACKAGE dvdisaster 0.79
 
 REL_MICRO=1
 #REL_STATUS=patch
@@ -205,12 +205,6 @@ done
 
 echo "}" >> method-link.c
 echo 
-
-# Temporary fix for missing rs03 sources
-
-if test -e rs03-includes.h; then
-  CFG_HAVE_OPTIONS="$CFG_HAVE_OPTIONS -DHAVE_RS03"
-fi
 
 # Okay, hopefully we've got everything together now.
 
