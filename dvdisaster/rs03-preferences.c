@@ -390,9 +390,10 @@ void ResetRS03PrefsPage(Method *method)
  */
 
 void ReadRS03Preferences(Method *method)
-{  RS03Widgets *wl = (RS03Widgets*)method->widgetList;
-   gint64 value;
-
+{
+#if 0
+   RS03Widgets *wl = (RS03Widgets*)method->widgetList;
+#endif
 }
 
 static gboolean wrapper_fix_cb(GtkWidget *widget, GdkEventExpose *event, gpointer data)

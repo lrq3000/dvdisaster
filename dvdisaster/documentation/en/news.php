@@ -21,13 +21,13 @@ $news_counter = 0;
 
 news_headline("dvdisaster News");
 
-news_item("XX.01.2010", "Started new development branch 0.79", "
+news_item("07.02.2010", "Started new development branch 0.79", "
 The first version of the new development branch (0.79.1) has just
 been released. This release is meant for testing new functions;
 it is not recommended for doing productive work. See the
 <a href=\"download40.php\">download page</a> for information on
 what has been changed and how you can participate in testing.
-", 14, "2009-12-31T00:00:00Z", "2009-12-31T00:00:00Z");
+", 14, "2010-02-07T00:00:00Z", "2010-02-07T00:00:00Z");
 
 news_item("01.10.2009", "Assessment of potential vulnerabilities in the windows version
 of the GTK library", "
@@ -56,7 +56,9 @@ to the respective sections on this site (http://dvdisaster.net) instead.
 news_item("08.08.2009", "dvdisaster 0.72.1 released", "
 Pablo Almeida provided a Portuguese translation for the screen text.
 Added workaround to avoid Win XP freezing on certain CD-RW/drive pairs.<p>
-", 11, "2009-08-08T00:00:00Z", "2009-08-08T00:00:00Z");
+<i>Update: The workaround is not complete. If the problem persists please
+try version 0.79.x.</i>
+", 11, "2009-08-08T00:00:00Z", "2010-02-06T00:00:00Z");
 
 news_item("04.07.2009", "dvdisaster 0.72 released", "
 This is the first stable version of the 0.72 branch.

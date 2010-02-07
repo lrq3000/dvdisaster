@@ -130,10 +130,9 @@ static int try_sector(DeviceHandle *dh, gint64 pos, EccHeader **ehptr, unsigned 
 static void no_rs02_cb(GtkWidget *widget, gpointer data)
 {  int state  = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
   
-  if(state) Closure->querySize = 1;
-  else      Closure->querySize = 2;
+   Closure->examineRS02 = !state;
 
-  UpdatePrefsQuerySize();
+   UpdatePrefsExhaustiveSearch();
 }
 
 static void insert_buttons(GtkDialog *dialog)
@@ -167,7 +166,6 @@ EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
    gint64 header_modulo;
    int read_count = 0;
    int answered_continue = FALSE;
-   int warning_shown = FALSE;
 
    /*** Quick search at fixed offsets relative to ISO filesystem */
 
@@ -244,13 +242,6 @@ EccHeader* FindHeaderInMedium(DeviceHandle *dh, gint64 max_sectors)
 		 
 		    if(answer) goto bail_out;
 		    answered_continue = TRUE;
-		  }
-		  if(!Closure->guiMode && !warning_shown)
-		  {  PrintCLI(_("\nSearching this medium for error correction data may take a long time.\n"
-				"If you are certain that this medium was not augmented with RS02 error correction\n"
-				"data, you might wish to abort this command and re-run with the option\n"
-				"--query-size=udf\n"));
-		    warning_shown = TRUE;
 		  }
 	       }
 	       goto check_next_header;

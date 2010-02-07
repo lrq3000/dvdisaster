@@ -78,10 +78,15 @@ static gboolean expose_cb(GtkWidget *widget, GdkEventExpose *event, gpointer dat
 						  bg->red>>8, bg->green>>8, bg->blue>>8);
 	 AboutText(box, _("- Development frameworks for Windows and OS X updated.\n"
 			  "- Experimental multithreaded codec (RS03).\n\n"
+			  "<span %s>"
 			  "<b>Warning:</b>\n"
 			  "This version is experimental and for testing only.\n"
 			  "It may contain bugs even in functions which worked\n"
-			  "in previous versions."));
+			  "in previous versions.\n\n"
+			  "RS03 has not reached full recovery capacity yet and\n"
+			  "is not recognized by linear and adaptive reading.</span>"),
+		   Closure->redMarkup
+		   );
 
 	 gtk_box_pack_start(GTK_BOX(box), gtk_hseparator_new(), FALSE, FALSE, 10);
 

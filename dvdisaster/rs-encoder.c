@@ -44,7 +44,7 @@ static void encode_next_layer_portable(ReedSolomonTables *rt, unsigned char *dat
    gint32 *rs_gpoly     = rt->gpoly;
    int nroots           = rt->nroots;
    int nroots_aligned   = (nroots+15)&~15;
-   int nroots_aligned32 = (nroots+4)&~3;
+   int nroots_aligned32 = (nroots+3)&~3;
    int nroots_full      = nroots_aligned32>>2;
    int i,j;
 

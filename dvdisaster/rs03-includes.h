@@ -83,6 +83,8 @@ typedef struct
    GtkWidget *cmpEccDataCrc;
    GtkWidget *cmpEccDataCrcVal;
    GtkWidget *cmpEccResult;
+   GtkWidget *cmpEccSynLabel;
+   GtkWidget *cmpEccSyndromes;
 
    /*** Widgets in the Preferences window */
 
@@ -155,7 +157,8 @@ typedef struct _RS03Layout
 #define RS03_READ_CRC     0x02
 #define RS03_READ_ECC     0x04
 
-void RS03ReadSector(LargeFile*, RS03Layout*, unsigned char*, gint64, gint64, int);
+void RS03ReadSectors(LargeFile*, RS03Layout*, unsigned char*, gint64, gint64, gint64, int);
+
 gint64 RS03SectorIndex(RS03Layout*, gint64, gint64);
 RS03Layout *CalcRS03Layout(gint64, EccHeader *, int);
 void WriteRS03Header(LargeFile*, RS03Layout*, EccHeader*);

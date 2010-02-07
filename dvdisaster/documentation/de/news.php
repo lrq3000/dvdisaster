@@ -21,14 +21,15 @@ $news_counter = 0;
 
 news_headline("Neues über dvdisaster");
 
-news_item("XX.01.2010", "Beginn des neuen Entwicklungszweiges 0.79", "
+news_item("07.02.2010", "Beginn des neuen Entwicklungszweiges 0.79", "
 Heute wird mit Version 0.79.1 die erste Version des neuen 
 Entwicklungszweiges veröffentlicht. Diese Version dient hauptsächlich
 zum Ausprobieren neuer Funktionen und wird nicht zum produktiven
-Einsatz empfohlen. Auf der <a href=\"download40.php\">Seite zum Herunterladen</a>
+Einsatz empfohlen.
+Auf der <a href=\"download40.php\">Seite zum Herunterladen</a>
 finden Sie Informationen darüber, was gerade geändert wurde und wie
 Sie beim Testen mithelfen können.
-", 14, "2009-12-31T00:00:00Z", "2009-12-31T00:00:00Z");
+", 14, "2010-02-07T00:00:00Z", "2010-02-07T00:00:00Z");
 
 
 news_item("01.10.2009", "Einschätzung zu potentiellen Sicherheitslücken in der GTK-Bibliothek für Windows", "
@@ -57,9 +58,11 @@ Rubriken auf diesen Seiten (http://dvdisaster.net).
 
 news_item("08.08.2009", "dvdisaster 0.72.1 veröffentlicht", "
 Pablo Almeida hat die Bildschirmtexte ins Portugiesische übersetzt.
-Es wurde ein Workaround eingebaut um Win XP vom Einfrieren 
-bei bestimmten CD-RW/Laufwerks-Kominationen abzuhalten.<p>
-", 11, "2009-08-08T00:00:00Z", "2009-08-08T00:00:00Z");
+Es wurde eine Umgehungslösung eingebaut um Win XP vom Einfrieren 
+bei bestimmten CD-RW/Laufwerks-Kombinationen abzuhalten.<p>
+<i>Aktueller Hinweis: Die Umgehungslösung ist nicht vollständig.
+Falls das Problem immer noch besteht, probieren Sie bitte Version 0.79.x aus.</i>
+", 11, "2009-08-08T00:00:00Z", "2010-02-06T00:00:00Z");
 
 news_item("04.07.2009", "dvdisaster 0.72 veröffentlicht", "
 Dies ist die erste stabile Version des 0.72er-Zweiges.

@@ -23,6 +23,14 @@
 
 #include "rs03-includes.h"
 
+#define EXIT_CODE_SIZE_MISMATCH 1
+#define EXIT_CODE_VERSION_MISMATCH 2
+
+#define EXIT_CODE_UNEXPECTED_EOF 10
+#define EXIT_CODE_MISSING_SECTOR 11
+#define EXIT_CODE_CHECKSUM_ERROR 12
+#define EXIT_CODE_SYNDROME_ERROR 13
+
 /***
  *** Reset the verify output window
  ***/
@@ -48,6 +56,8 @@ void ResetRS03VerifyWindow(Method *self)
    SetLabelText(GTK_LABEL(wl->cmpEccDataCrc), _("Data checksum:"));
    SetLabelText(GTK_LABEL(wl->cmpEccDataCrcVal), "");
    SetLabelText(GTK_LABEL(wl->cmpEccResult), "");
+   SetLabelText(GTK_LABEL(wl->cmpEccSynLabel), "");
+   SetLabelText(GTK_LABEL(wl->cmpEccSyndromes), "");
 
    wl->lastPercent = 0;
 
@@ -301,6 +311,15 @@ void CreateRS03VerifyWindow(Method *self, GtkWidget *parent)
    gtk_table_attach(GTK_TABLE(table2), lab, 1, 2, y1, y2, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
    y1++; y2++;
 
+   lab = wl->cmpEccSynLabel = gtk_label_new(NULL);
+   gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0);
+   SetLabelText(GTK_LABEL(lab), _("Ecc block test:")); 
+   gtk_table_attach(GTK_TABLE(table2), lab, 0, 1, y1, y2, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 2 );
+   lab = wl->cmpEccSyndromes = gtk_label_new(NULL);
+   gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
+   gtk_table_attach(GTK_TABLE(table2), lab, 1, 2, y1, y2, GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
+   y1++; y2++;
+
    lab = wl->cmpImageErasure = gtk_label_new(NULL);
    gtk_misc_set_alignment(GTK_MISC(lab), 0.0, 0.0); 
    gtk_table_attach(GTK_TABLE(table2), lab, 0, 1, y1, y2, GTK_SHRINK | GTK_FILL, GTK_SHRINK, 5, 2 );
@@ -340,10 +359,14 @@ typedef struct
    guint32 *crcBuf;
    gint8   *crcValid;
    unsigned char crcSum[16];
+   unsigned char *eccBlock[256];
+   GaloisTables *gt;
+   ReedSolomonTables *rt;
 } verify_closure;
 
 static void cleanup(gpointer data)
 {  verify_closure *vc = (verify_closure*)data;
+   int i;
 
    Closure->cleanupProc = NULL;
 
@@ -359,7 +382,14 @@ static void cleanup(gpointer data)
    if(vc->map) FreeBitmap(vc->map);
    if(vc->crcBuf) g_free(vc->crcBuf);
    if(vc->crcValid) g_free(vc->crcValid);
-  
+
+   for(i=0; i<255; i++)
+      if(vc->eccBlock[i])
+	 g_free(vc->eccBlock[i]);
+
+   if(vc->gt) FreeGaloisTables(vc->gt);
+   if(vc->rt) FreeReedSolomonTables(vc->rt);
+
    g_free(vc);
 
    if(Closure->guiMode)
@@ -474,9 +504,9 @@ static void read_crc(verify_closure *vc, RS03Layout *lay, gint64 *crc_sig_errors
    }
 }
 
-/*
- * Prognosis for correctability
- */
+/***
+ *** Prognosis for correctability
+ ***/
 
 static int prognosis(verify_closure *vc, gint64 missing, gint64 expected)
 {  int j,eccblock;
@@ -542,9 +572,171 @@ static int prognosis(verify_closure *vc, gint64 missing, gint64 expected)
    else return FALSE;
 }
 
-/*
- * The verify action
- */
+/***
+ *** Error syndrome check
+ ***/
+
+static int check_syndromes(verify_closure *vc)
+{  RS03Layout *lay = vc->lay;
+   LargeFile *eccfile; 
+   gint64 layer_idx[255];
+   gint64 li,ecc_block;
+   gint64 cache_idx = Closure->prefetchSectors;
+   gint64 ecc_good, ecc_bad, ecc_bad_sub;
+   int percent,last_percent = -1;
+   int bad_counted;
+   int layer,i,j;
+
+   if(Closure->guiMode)
+     SetLabelText(GTK_LABEL(vc->wl->cmpHeadline), "<big>%s</big>\n<i>%s</i>",
+		  _("Checking the image and error correction files."),
+		  _("- Checking ecc blocks (deep verify) -"));
+
+   /* Allocate buffers and initialize layer sector addresses */
+
+   for(i=0, li=0; i<GF_FIELDMAX; i++,li+=lay->sectorsPerLayer)
+   {  layer_idx[i] = li;
+      vc->eccBlock[i] = g_try_malloc(2048*Closure->prefetchSectors);
+      if(!vc->eccBlock[i])  /* out of memory */
+      {  int j;
+
+	 for(j=0; j<i; j++)
+	    g_free(vc->eccBlock[j]);
+
+	 if(Closure->guiMode)
+	   SetLabelText(GTK_LABEL(vc->wl->cmpEccSyndromes),
+			_("<span %s>Out of memory; try reducing sector prefetch!</span>"),
+			Closure->redMarkup);
+	 PrintLog(_("* Ecc block test   : out of memory; try reducing sector prefetch!\n"));
+	 return TRUE;
+      }
+   }
+
+   /* Determine source file for ecc data */
+
+   eccfile = lay->target == ECC_FILE ? vc->eccFile : vc->imgFile;
+
+   /* Init Reed-Solomon tables */
+
+   vc->gt = CreateGaloisTables(RS_GENERATOR_POLY);
+   vc->rt = CreateReedSolomonTables(vc->gt, RS_FIRST_ROOT, RS_PRIM_ELEM, lay->nroots);
+
+   /* Check the error syndromes */
+
+   ecc_good = ecc_bad = ecc_bad_sub = 0;
+
+   for(ecc_block=0; ecc_block<lay->sectorsPerLayer; ecc_block++)
+   {  gint64 num_sectors = 0; 
+      unsigned char data[GF_FIELDMAX];
+
+      /* Check for user interruption */
+
+      if(Closure->stopActions)   
+      {  SetLabelText(GTK_LABEL(vc->wl->cmpEccSyndromes), 
+		      _("<span %s>Aborted by user request!</span>"),
+		      Closure->redMarkup); 
+         return TRUE;
+      }
+
+      /* Reload cache? */
+      
+      if(cache_idx == Closure->prefetchSectors)
+      {  
+	 cache_idx = 0;
+	 num_sectors = Closure->prefetchSectors;
+	 if(ecc_block+num_sectors >= lay->sectorsPerLayer)
+	    num_sectors = lay->sectorsPerLayer - ecc_block;
+
+	 for(layer=0; layer<GF_FIELDMAX; layer++)
+	   if(layer < lay->ndata-1)
+	     RS03ReadSectors(vc->imgFile, vc->lay, vc->eccBlock[layer], 
+			    layer, ecc_block, num_sectors, RS03_READ_DATA);
+	   else
+	     RS03ReadSectors(eccfile, vc->lay, vc->eccBlock[layer], 
+			    layer, ecc_block, num_sectors, RS03_READ_CRC | RS03_READ_ECC);
+      }
+
+      /* Calculate the error syndromes.
+	 Note that we are only called when the image does not contain
+	 dead sector markers; therefore we can skip this test. */
+
+      bad_counted = FALSE;
+
+      for(i=0; i<2048; i++) 
+      {  int result;
+
+	 for(j=0; j<GF_FIELDMAX; j++)
+	   data[j] = vc->eccBlock[j][2048*cache_idx+i];
+
+#if 0 //FIXME remove this
+	 if((ecc_block==3 || ecc_block==89) && (i==7 || i== 109)) 
+	 {  data[129]++;
+	    printf("seeded error\n");
+	 }
+#endif
+	 result = TestErrorSyndromes(vc->rt, data);
+
+	 if(result)
+	 {  ecc_bad_sub++;
+	    if(!bad_counted)
+	    {  bad_counted++;
+	       ecc_bad++;
+	    }
+	 }
+      }
+      cache_idx++;
+
+      if(!bad_counted) ecc_good++;
+
+      /* Advance percentage gauge */
+
+      percent = (100*(ecc_block+1))/lay->sectorsPerLayer;
+      if(percent != last_percent)
+      {  last_percent = percent;
+
+	 if(!ecc_bad)
+	 {  if(Closure->guiMode)
+	      SetLabelText(GTK_LABEL(vc->wl->cmpEccSyndromes),
+			   _("%d%% tested"),
+			   percent);
+	    PrintProgress(_("- Ecc block test   : %d%% tested"), percent);
+
+	 }
+	 else
+	 {  if(Closure->guiMode)
+	      SetLabelText(GTK_LABEL(vc->wl->cmpEccSyndromes),
+			   _("<span %s>%lld good, %lld bad; %d%% tested</span>"),
+			   Closure->redMarkup, ecc_good, ecc_bad, percent);
+	    PrintProgress(_("* Ecc block test   : %lld good, %lld bad; %d%% tested")
+			  , ecc_good, ecc_bad, percent);
+	 }
+      }
+   }
+
+   /* Tell user about our findings */
+
+   if(!ecc_bad)
+   {  if(Closure->guiMode)
+       SetLabelText(GTK_LABEL(vc->wl->cmpEccSyndromes),_("pass"));
+      ClearProgress();
+      PrintLog(_("- Ecc block test   : pass\n"));
+   }
+   else
+   {  if(Closure->guiMode)
+       SetLabelText(GTK_LABEL(vc->wl->cmpEccSyndromes),
+		    _("<span %s>%lld good, %lld bad; %lld bad sub blocks</span>"),
+		    Closure->redMarkup, ecc_good, ecc_bad, ecc_bad_sub);
+      PrintLog(_("* Ecc block test   : %lld good, %lld bad; %lld bad sub blocks\n"),
+	       ecc_good, ecc_bad, ecc_bad_sub);
+
+      exitCode = EXIT_CODE_SYNDROME_ERROR;
+   }
+   return ecc_bad;
+}
+
+/***
+ *** The verify action
+ ***/
 
 void RS03Verify(Method *self)
 {  verify_closure *vc = g_malloc0(sizeof(verify_closure));
@@ -569,6 +761,7 @@ void RS03Verify(Method *self)
    char *img_advice = NULL;
    char *ecc_advice = NULL;
    char *version;
+   int syn_error = 0;
    int try_it;
 
    /*** Prepare for early termination */
@@ -644,6 +837,7 @@ void RS03Verify(Method *self)
 
       PrintLog(_("* Warning          : %s\n"), msg);
       g_free(msg);
+      exitCode = EXIT_CODE_SIZE_MISMATCH;
    }
    
    /* Error correction type */
@@ -740,6 +934,8 @@ void RS03Verify(Method *self)
         if(!ecc_advice) 
 	   ecc_advice = g_strdup_printf(_("<span %s>Please upgrade your version of dvdisaster!</span>"), Closure->redMarkup);
      }
+
+     exitCode = EXIT_CODE_VERSION_MISMATCH;
    }
 
    g_free(version);
@@ -785,21 +981,34 @@ void RS03Verify(Method *self)
       SetBit(vc->map, lay->eccHeaderPos+1);
    }
 
-   if(Closure->guiMode)
-   {  if(expected_image_sectors == image_sectors)
-      {  if(lay->target == ECC_FILE)
-	      SetLabelText(GTK_LABEL(wl->cmpImageSectors), _("%lld in image; %lld in ecc file"), 
-			   image_sectors, eccfile_sectors);
-	 else SetLabelText(GTK_LABEL(wl->cmpImageSectors), _("%lld total / %lld data"), 
-			   image_sectors, lay->dataSectors);
+   if(expected_image_sectors == image_sectors)
+   {  if(lay->target == ECC_FILE)
+      {  if(Closure->guiMode)
+	   SetLabelText(GTK_LABEL(wl->cmpImageSectors), _("%lld in image; %lld in ecc file"), 
+			image_sectors, eccfile_sectors);
+	 PrintLog(_("- sectors          : %lld in image; %lld in ecc file\n"), 
+		  image_sectors, eccfile_sectors);
       }
-      else
-      {  SetLabelText(GTK_LABEL(wl->cmpImageSectors), _("<span %s>%lld (%lld expected)</span>"), 
-		      Closure->redMarkup, image_sectors, expected_image_sectors);
-	 if(expected_image_sectors > image_sectors)
-	      img_advice = g_strdup_printf(_("<span %s>Image file is %lld sectors shorter than expected.</span>"), Closure->redMarkup, expected_image_sectors - image_sectors);
-	 else img_advice = g_strdup_printf(_("<span %s>Image file is %lld sectors longer than expected.</span>"), Closure->redMarkup, image_sectors - expected_image_sectors);
+      else 
+      {  if(Closure->guiMode)
+	   SetLabelText(GTK_LABEL(wl->cmpImageSectors), _("%lld total / %lld data"), 
+			image_sectors, lay->dataSectors);
+	 PrintLog(_("- medium sectors   : %lld total / %lld data\n"),
+		  image_sectors, lay->dataSectors);
       }
+   }
+   else
+   {  if(Closure->guiMode)
+        SetLabelText(GTK_LABEL(wl->cmpImageSectors), _("<span %s>%lld (%lld expected)</span>"), 
+		     Closure->redMarkup, image_sectors, expected_image_sectors);
+     if(expected_image_sectors > image_sectors)
+       img_advice = g_strdup_printf(_("<span %s>Image file is %lld sectors shorter than expected.</span>"), Closure->redMarkup, expected_image_sectors - image_sectors);
+     else img_advice = g_strdup_printf(_("<span %s>Image file is %lld sectors longer than expected.</span>"), Closure->redMarkup, image_sectors - expected_image_sectors);
+   }
+   
+   if(Closure->quickVerify)
+   {  PrintLog(_("* quick mode        : image NOT scanned\n"));
+      goto terminate;
    }
 
    /*** Read the CRC portion */ 
@@ -844,7 +1053,9 @@ void RS03Verify(Method *self)
 	 if(s < image_sectors)  /* image may be truncated */
 	 {  int n = LargeRead(image, buf, 2048);
             if(n != 2048)
-	      Stop(_("premature end in image (only %d bytes): %s\n"),n,strerror(errno));
+	    { exitCode = EXIT_CODE_UNEXPECTED_EOF;
+ 	      Stop(_("premature end in image (only %d bytes): %s\n"),n,strerror(errno));
+	    }
 	 }
          else CreateMissingSector(buf, s, eh->mediumFP, eh->fpSector, "padding beyond the image");
       }
@@ -858,10 +1069,9 @@ void RS03Verify(Method *self)
 	 else if(s < (lay->ndata-1)*lay->sectorsPerLayer+eccfile_sectors-2)
 	 {  int n = LargeRead(eccfile, buf, 2048);
             if(n != 2048)
-	      {
-		printf("failing at %lld (es=%lld)\n", s, eccfile_sectors);
+	    { exitCode = EXIT_CODE_UNEXPECTED_EOF;
 	      Stop(_("premature end in ecc file (only %d bytes): %s\n"),n,strerror(errno));
-	      }
+	    }
 	 }
          else   /* ecc file is truncated */
 	 {  CreateMissingSector(buf, s, eh->mediumFP, eh->fpSector, "padding beyond the image");
@@ -898,6 +1108,7 @@ void RS03Verify(Method *self)
 	    else ecc_missing++;
 	 }
 	 defective = TRUE;
+	 exitCode = EXIT_CODE_MISSING_SECTOR;
       }
 
       /* Report dead sectors. Combine subsequent missing sectors into one report. */
@@ -928,7 +1139,9 @@ void RS03Verify(Method *self)
       /* If the image sector is from the data portion and it was readable, 
 	 test its CRC sum */
 
-      if(s < lay->firstCrcPos && !current_missing)
+      if(   !current_missing
+	 && (   (lay->target == ECC_IMAGE && s < lay->firstCrcPos)
+	     || (lay->target == ECC_FILE && s < lay->dataSectors)))
       {  guint32 crc = Crc32(buf, 2048);
 
 	 if(vc->crcValid[crc_idx] && crc != vc->crcBuf[crc_idx])
@@ -936,6 +1149,7 @@ void RS03Verify(Method *self)
 	    data_crc_errors++;
 	    new_crc_errors++;
 	    defective = TRUE;
+	    exitCode = EXIT_CODE_CHECKSUM_ERROR;
 	 }
       }
       crc_idx++;
@@ -944,7 +1158,13 @@ void RS03Verify(Method *self)
 	SetBit(vc->map, s);
 
       if(Closure->guiMode) 
-	    percent = (VERIFY_IMAGE_SEGMENTS*(s+1))/virtual_expected;
+      {   /* data part / spiral animation */
+	  percent = (VERIFY_IMAGE_SEGMENTS*(s+1))/virtual_expected;
+
+	  /* percentage is reset / output differently for ecc file part */
+	  if(lay->target == ECC_FILE && s >= lay->dataSectors) 
+	    percent = (100*(s+1-lay->dataSectors)/(virtual_expected-lay->dataSectors));
+      }  
       else  percent = (100*(s+1))/virtual_expected;
 
       if(last_percent != percent) /* Update sector results */
@@ -958,6 +1178,9 @@ void RS03Verify(Method *self)
 	       {  int image_percent = (VERIFY_IMAGE_SEGMENTS*(s+1))/lay->dataSectors;
 	          
 	          add_verify_values(self, image_percent, new_missing, new_crc_errors); 
+	       }
+	       else
+	       {  SetLabelText(GTK_LABEL(wl->cmpEccSyndromes),"%d%% tested",percent);
 	       }
 	    }
 
@@ -990,6 +1213,9 @@ void RS03Verify(Method *self)
 	   SetLabelText(GTK_LABEL(wl->cmpHeadline), "<big>%s</big>\n<i>%s</i>",
 			_("Checking the image and error correction files."),
 			_("- Checking ecc file -"));
+
+	   SetLabelText(GTK_LABEL(wl->cmpEccSynLabel), _("Error correction file:"));
+	   last_percent = 0; /* restart counting for ecc file */
 	}
       }
    }
@@ -1047,16 +1273,37 @@ void RS03Verify(Method *self)
       if(!ecc_missing)  SetLabelText(GTK_LABEL(wl->cmpEccSection), _("complete"));
      
       SetLabelText(GTK_LABEL(wl->cmpImageMd5Sum), "%s", data_missing ? "-" : data_digest);
+   }
 
+   /*** Test error syndromes */
+
+   if(Closure->guiMode)
+   {  SetLabelText(GTK_LABEL(wl->cmpEccSynLabel), _("Ecc block test:"));
+      SetLabelText(GTK_LABEL(wl->cmpEccSyndromes), "");
+   }
+   if(total_missing + data_crc_errors != 0)
+   { if(Closure->guiMode) 
+        SetLabelText(GTK_LABEL(wl->cmpEccSyndromes),
+		     _("<span %s>Skipped; not useful on known defective image</span>"),
+		     Closure->redMarkup);
+
+     PrintLog(_("* Ecc block test   : skipped; not useful on defective image\n"));
+   }
+   else syn_error = check_syndromes(vc);
+
+   /*** Print image advice */
+
+   if(Closure->guiMode)
+   {
       if(img_advice) 
       {  SetLabelText(GTK_LABEL(wl->cmpImageResult), img_advice);
          g_free(img_advice);
       }
       else 
-	{  if(!total_missing && !data_crc_errors)
-	   SetLabelText(GTK_LABEL(wl->cmpImageErasure),  /* avoid two blank lines */
-			_("<span %s>Good image.</span>"),
-			Closure->greenMarkup);
+      {  if(!total_missing && !data_crc_errors && !syn_error)
+	    SetLabelText(GTK_LABEL(wl->cmpImageErasure),  /* avoid two blank lines */
+			 _("<span %s>Good image.</span>"),
+			 Closure->greenMarkup);
 	 else
            SetLabelText(GTK_LABEL(wl->cmpImageResult),
 			_("<span %s>Damaged image.</span>"),

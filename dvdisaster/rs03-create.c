@@ -260,19 +260,19 @@ static void expand_image(ecc_closure *ec)
    int last_percent, percent, n;
    gint64 sectors,ecc_padding;
    LargeFile *ecc_out;
-   char *failed_read, *progress_msg;
+   char *failed_write, *progress_msg;
 
    /* Output file depends on ecc target */
 
    if(Closure->eccTarget == ECC_FILE)
    {    ecc_out = ei->file;
-	failed_read = "Failed expanding the ecc file: %s\n";
-	progress_msg = "Preparing ecc file: %3d%%";
+        failed_write = _("Failed expanding the ecc file: %s\n");
+	progress_msg = _("Preparing ecc file: %3d%%");
    }
    else
    {    ecc_out = ii->file;
-	failed_read = "Failed expanding the image: %s\n";
-	progress_msg = "Preparing image: %3d%%";
+        failed_write = _("Failed expanding the image: %s\n");
+	progress_msg = _("Preparing image: %3d%%");
    }
 
    /* If the image file does not end at a sector boundary,
@@ -290,7 +290,7 @@ static void expand_image(ecc_closure *ec)
 
       n = LargeWrite(ii->file, zeros, fill);
       if(n != fill)
-	Stop(_(failed_read), strerror(errno));
+	Stop(_(failed_write), strerror(errno));
    }
 
    /* Seek to end of file if augmenting an image */
@@ -304,7 +304,7 @@ static void expand_image(ecc_closure *ec)
    prepare_header(ec);
    n = LargeWrite(ecc_out, ec->eh, 4096);
    if(n != 4096)
-      Stop(_(failed_read), strerror(errno));
+      Stop(_(failed_write), strerror(errno));
 
    /* Padding sectors for the data section */
 
@@ -316,7 +316,7 @@ static void expand_image(ecc_closure *ec)
 
       n = LargeWrite(ecc_out, pad_sector, 2048);
       if(n != 2048)
-	Stop(_(failed_read), strerror(errno));
+	Stop(_(failed_write), strerror(errno));
    }
 
    /* Padding sectors for the CRC section */
@@ -330,7 +330,7 @@ static void expand_image(ecc_closure *ec)
 
       n = LargeWrite(ecc_out, pad_sector, 2048);
       if(n != 2048)
-	Stop(_(failed_read), strerror(errno));
+	Stop(_(failed_write), strerror(errno));
    }
 
    /* Now add the sectors needed for the ecc data */
@@ -349,7 +349,7 @@ static void expand_image(ecc_closure *ec)
 
       n = LargeWrite(ecc_out, dead_sector, 2048);
       if(n != 2048)
-	Stop(_(failed_read), strerror(errno));
+	Stop(_(failed_write), strerror(errno));
 
       percent = (100*sectors) / ecc_padding;
 
@@ -439,22 +439,15 @@ static void read_next_chunk(ecc_closure *ec, guint64 chunk)
 
    for(layer=0; layer<lay->ndata-1; layer++) /* exclude CRC layer */
    {  gint64 offset = 0;
-     int n;
 
       if(Closure->stopActions) /* User hit the Stop button */
 	 abort_encoding(ec, TRUE);
 
       /* Read the next data sectors of this layer.
-	 Note that the last layer is made of CRC sums. */
+	 Note that the last layer is made from CRC sums. */
 
-      s = RS03SectorIndex(lay, layer, ec->ioChunk);
-      if(!LargeSeek(ec->ii->file, (gint64)(2048*s)))
-	Stop(_("Failed seeking to sector %lld in image: %s"),
-	     s, strerror(errno));
-
-      n = LargeRead(ec->ii->file, ec->ioData[layer], 2048*ec->ioLayerSectors);
-      if(n != 2048*ec->ioLayerSectors)
-	Stop(_("Failed reading sector %lld in image: %s"),s,strerror(errno));
+      RS03ReadSectors(ec->ii->file, lay, ec->ioData[layer], 
+		      layer, ec->ioChunk, ec->ioLayerSectors, RS03_READ_DATA);
 
       for(s=0; s<ec->ioLayerSectors; s++)
       {  
@@ -495,7 +488,7 @@ static void read_next_chunk(ecc_closure *ec, guint64 chunk)
       if(ec->ioChunk+ec->ioLayerSectors < lay->sectorsPerLayer)
       {  unsigned char buf[2048];
 
-	 RS03ReadSector(ec->ii->file, lay, buf, layer, ec->ioChunk+ec->ioLayerSectors, RS03_READ_DATA);
+	 RS03ReadSectors(ec->ii->file, lay, buf, layer, ec->ioChunk+ec->ioLayerSectors, 1, RS03_READ_DATA);
 	 ec->ioCrc[(ec->ioLayerSectors-1)*512+layer] = Crc32(buf, 2048);
       }
    } /* all layers from chunk finished */
@@ -915,7 +908,10 @@ static void create_reed_solomon(ecc_closure *ec)
    ec->lock          = g_mutex_new();
    ec->ioCond        = g_cond_new();
    ec->sectorsToEncode = ndata*ec->lay->sectorsPerLayer;
-   ec->writeHandle    = LargeOpen(Closure->imageName, O_RDWR, IMG_PERMS);
+   if(Closure->eccTarget == ECC_FILE)
+      ec->writeHandle   = LargeOpen(Closure->eccName, O_RDWR, IMG_PERMS);
+   else
+      ec->writeHandle   = LargeOpen(Closure->imageName, O_RDWR, IMG_PERMS);
    ec->lastPercent   = -1;
    ec->cpuBound = ec->ioBound = 0;
 
@@ -938,7 +934,7 @@ static void create_reed_solomon(ecc_closure *ec)
       }
    }
    g_mutex_unlock(ec->lock);
-   g_thread_yield(); /* fixme */
+   g_thread_yield(); /* FIXME */
 
    /*** Now we actually become being the IO thread */
    
@@ -997,6 +993,7 @@ void RS03Create(Method *method)
    }
 
    lay = ec->lay = CalcRS03Layout(ii->sectors, 0, Closure->eccTarget);
+   lay->eh = ec->eh;
 
    /*** Announce what we are going to do */
 
@@ -1065,10 +1062,16 @@ void RS03Create(Method *method)
    /*** Summarize */
 
    PrintProgress(_("Ecc generation: 100.0%%\n"));
-   PrintLog(_("Image has been augmented with error correction data.\n"
-	      "New image size is %lld MB (%lld sectors).\n"),
-	    (lay->dataSectors+lay->dataPadding+ecc_sectors)/512,
-	     lay->dataSectors+lay->dataPadding+ecc_sectors);
+   if(Closure->eccTarget == ECC_IMAGE)
+     PrintLog(_("Image has been augmented with error correction data.\n"
+		"New image size is %lld MB (%lld sectors).\n"),
+	      (lay->dataSectors+lay->dataPadding+ecc_sectors)/512,
+	      lay->dataSectors+lay->dataPadding+ecc_sectors);
+   else
+     PrintLog(_("Error correction file \"%s\" created.\n"
+		"Make sure to keep this file on a reliable medium.\n"),
+	      Closure->eccName);
+
    elapsed=g_timer_elapsed(ec->avgTimer, &ignore);
    mbs = ((double)lay->ndata*lay->sectorsPerLayer)/(512.0*elapsed);
    PrintLog(_("Avg performance: %5.2fs (%5.2fMB/s) total\n"), 
@@ -1083,11 +1086,17 @@ void RS03Create(Method *method)
    if(Closure->guiMode)
    {  SetProgress(wl->encPBar2, 100, 100);
 
-      SetLabelText(GTK_LABEL(wl->encFootline), 
-		   _("Image has been augmented with error correction data.\n"
-		     "New image size is %lld MB (%lld sectors).\n"),
-		   (lay->dataSectors + ecc_sectors)/512,
-		   lay->dataSectors+ecc_sectors);
+      if(Closure->eccTarget == ECC_IMAGE)
+	SetLabelText(GTK_LABEL(wl->encFootline),
+		     _("Image has been augmented with error correction data.\n"
+		       "New image size is %lld MB (%lld sectors).\n"),
+		     (lay->dataSectors + ecc_sectors)/512,
+		     lay->dataSectors+ecc_sectors);
+      else
+	SetLabelText(GTK_LABEL(wl->encFootline), 
+		     _("The error correction file has been successfully created.\n"
+		       "Make sure to keep this file on a reliable medium.")); 
+
    }
 
    /*** Clean up */

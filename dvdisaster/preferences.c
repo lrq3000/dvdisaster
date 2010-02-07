@@ -94,9 +94,6 @@ typedef struct _prefs_context
   /* Widgets for changing preferences settings. The are two copies (A and B) 
      of each; one for the standard dialog and one embedded in the online help. */
 
-   GtkWidget *radioDriveA, *radioDriveB;
-   GtkWidget *radioISOA, *radioISOB;
-   GtkWidget *radioECCA, *radioECCB;
    GtkWidget *suffixA, *suffixB;
    GtkWidget *radioLinearA, *radioLinearB;
    GtkWidget *radioAdaptiveA, *radioAdaptiveB;
@@ -114,6 +111,8 @@ typedef struct _prefs_context
    GtkWidget *jumpScaleA, *jumpScaleB;
    GtkWidget *daoButtonA, *daoButtonB;
    GtkWidget *dsmButtonA, *dsmButtonB;
+   GtkWidget *recogRS02A, *recogRS02B;
+   GtkWidget *recogRS03A, *recogRS03B;
    GtkWidget *byteEntryA, *byteEntryB;
    GtkWidget *byteCheckA, *byteCheckB;
    GtkWidget *spinUpA, *spinUpB;
@@ -329,21 +328,15 @@ static void close_cb(GtkWidget *widget, gpointer data)
  *** Setting preferences from external functions 
  ***/
 
-void UpdatePrefsQuerySize(void)
+void UpdatePrefsExhaustiveSearch(void)
 {  prefs_context *pc = (prefs_context*)Closure->prefsContext;
 
    if(Closure->prefsContext)
-     switch(Closure->querySize)
-     {  case 0: activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioDriveA), TRUE); 
-	        activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioDriveB), TRUE); 
-	        break;
-        case 1: activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioISOA), TRUE);
-	        activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioISOB), TRUE);
-	        break;
-        case 2: activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioECCA), TRUE);
-	        activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioECCB), TRUE);
-	        break;
-     }
+   {  activate_toggle_button(GTK_TOGGLE_BUTTON(pc->recogRS02A), Closure->examineRS02); 
+      activate_toggle_button(GTK_TOGGLE_BUTTON(pc->recogRS02B), Closure->examineRS02); 
+      activate_toggle_button(GTK_TOGGLE_BUTTON(pc->recogRS03A), Closure->examineRS03); 
+      activate_toggle_button(GTK_TOGGLE_BUTTON(pc->recogRS03B), Closure->examineRS03); 
+   }
 }
 
 /*
@@ -364,6 +357,8 @@ enum
 {  TOGGLE_READ_CREATE,
    TOGGLE_UNLINK,
    TOGGLE_SUFFIX,
+   TOGGLE_RECOG_RS02,
+   TOGGLE_RECOG_RS03,
    TOGGLE_DAO,
    TOGGLE_DSM,
    TOGGLE_RANGE,
@@ -479,6 +474,18 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 	Closure->noTruncate = state;
 	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->daoButtonA), state);
 	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->daoButtonB), state);
+	break;
+
+      case TOGGLE_RECOG_RS02:
+	Closure->examineRS02 = state;
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->recogRS02A), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->recogRS02B), state);
+	break;
+
+      case TOGGLE_RECOG_RS03:
+	Closure->examineRS03 = state;
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->recogRS03A), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->recogRS03B), state);
 	break;
 
       case TOGGLE_DSM:
@@ -989,44 +996,6 @@ static GtkWidget* non_linear_scale(GtkWidget **hbox_out, non_linear_info *nli,
 }
 
 /*
- * Image size query method selection 
- */
-
-static void imgsize_cb(GtkWidget *widget, gpointer data)
-{  int state  = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-   int selection = GPOINTER_TO_INT(data);
-   prefs_context *pc = (prefs_context*)Closure->prefsContext;
-
-   if(!state)  /* only track changes to activate state */
-     return;
-
-   Closure->querySize = selection;
-
-   switch(selection)
-   {  case 0:
-        if(pc->radioDriveA)
-          activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioDriveA), TRUE); 
-        if(pc->radioDriveB)
-          activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioDriveB), TRUE); 
-	break;
-
-      case 1:
-        if(pc->radioISOA)
-          activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioISOA), TRUE); 
-        if(pc->radioISOB)
-          activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioISOB), TRUE); 
-        break;
-
-      case 2:
-        if(pc->radioECCA)
-          activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioECCA), TRUE); 
-        if(pc->radioECCB)
-          activate_toggle_button(GTK_TOGGLE_BUTTON(pc->radioECCB), TRUE); 
-        break;
-   }
-}
-
-/*
  * Read strategy selection 
  */
 
@@ -1441,80 +1410,6 @@ void CreatePreferencesWindow(void)
 
       vbox = create_page(notebook, _utf("Image"));
 
-      /** Image size */
-
-      frame = gtk_frame_new(_utf("Image size"));
-      gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
-
-      vbox2 = gtk_vbox_new(FALSE, 15);
-      gtk_container_set_border_width(GTK_CONTAINER(vbox2), 10);
-      gtk_container_add(GTK_CONTAINER(frame), vbox2);
-
-      lwoh = CreateLabelWithOnlineHelp(_("Image size determination"), _("Get Image size from: "));
-      RegisterPreferencesHelpWindow(lwoh);
-
-      for(i=0; i<2; i++)
-      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 4);
-	 GtkWidget *radio1, *radio2, *radio3;
-
-	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
-
-	 radio1 = gtk_radio_button_new(NULL);
-	 g_signal_connect(G_OBJECT(radio1), "toggled", G_CALLBACK(imgsize_cb), (gpointer)0);
-	 gtk_box_pack_start(GTK_BOX(hbox), radio1, FALSE, FALSE, 0);
-	 lab = gtk_label_new(_utf("Drive"));
-	 gtk_container_add(GTK_CONTAINER(radio1), lab);
-
-	 radio2 = gtk_radio_button_new_from_widget(GTK_RADIO_BUTTON(radio1));
-	 g_signal_connect(G_OBJECT(radio2), "toggled", G_CALLBACK(imgsize_cb), (gpointer)1);
-	 gtk_box_pack_start(GTK_BOX(hbox), radio2, FALSE, FALSE, 0);
-	 lab = gtk_label_new(_utf("ISO/UDF"));
-	 gtk_container_add(GTK_CONTAINER(radio2), lab);
-
-	 radio3 = gtk_radio_button_new_from_widget(GTK_RADIO_BUTTON(radio2));
-	 g_signal_connect(G_OBJECT(radio3), "toggled", G_CALLBACK(imgsize_cb), (gpointer)2);
-	 gtk_box_pack_start(GTK_BOX(hbox), radio3, FALSE, FALSE, 0);
-	 lab = gtk_label_new(_utf("ECC/RS02"));
-	 gtk_container_add(GTK_CONTAINER(radio3), lab);
-
-	 switch(Closure->querySize)
-	 {  case 0: activate_toggle_button(GTK_TOGGLE_BUTTON(radio1), TRUE); break;
-            case 1: activate_toggle_button(GTK_TOGGLE_BUTTON(radio2), TRUE); break;
-            case 2: activate_toggle_button(GTK_TOGGLE_BUTTON(radio3), TRUE); break;
-	 }
-
-	 if(!i)
-	 {  pc->radioDriveA = radio1;
-	    pc->radioISOA   = radio2;
-	    pc->radioECCA   = radio3;
-	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
-	 }
-	 else  
-	 {  pc->radioDriveB = radio1;
-	    pc->radioISOB   = radio2;
-	    pc->radioECCB   = radio3;
-	    AddHelpWidget(lwoh, hbox);
-	 }
-      }
-
-      AddHelpParagraph(lwoh, 
-		       _("<b>Image size determination</b>\n\n"
-			 "Use <i>ECC/RS02</i> for reading images augmented with error correction data; "
-			 "else pick <i>ISO/UDF</i>.\n\n"
-
-			 "<b>ECC/RS02:</b> The Image size is determined from the error correction data. "
-			 "Reading RS02 augmented images requires this option; otherwise the images "
-			 "may be incomplete. However if the medium does not contain error correction "
-			 "data, the start of the reading operation may be delayed significantly.\n\n"
-
-			 "<b>ISO/UDF:</b> The image size is determined from the ISO/UDF file system.\n"
-			 "Caution: This is only suitable for working with error correction files. "
-			 "Images containing RS02 error correction information may be truncated.\n\n"
-
-			 "<b>Drive:</b> The image size reported by the drive will be used. "
-			 "As this information is typically wrong for DVD-RW/+RW/-RAM media this option "
-			 "is only present for backwards compatibility with older dvdisaster versions."));
-
       /** Reading preferences */
       
       frame = gtk_frame_new(_utf("Image creation"));
@@ -1623,6 +1518,93 @@ void CreatePreferencesWindow(void)
 			 "prevent sectors from being read which are required for a succesful error correction.\n\n"
 			 "These settings are only effective for the current session and will not be saved."));
 
+      /*** Image recognization */
+
+      frame = gtk_frame_new(_utf("Error correction data recognization"));
+      gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
+
+      vbox2 = gtk_vbox_new(FALSE, 15);
+      gtk_container_set_border_width(GTK_CONTAINER(vbox2), 10);
+      gtk_container_add(GTK_CONTAINER(frame), vbox2);
+
+      /* RS02 */
+
+      lwoh = CreateLabelWithOnlineHelp(_("Exhaustive RS02 header search"), _("Perform exhaustive search for RS02 headers"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
+	 GtkWidget *button = gtk_check_button_new();
+
+	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
+	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
+
+	 if(!i) pc->recogRS02A = button;
+	 else   pc->recogRS02B = button;
+
+	 activate_toggle_button(GTK_TOGGLE_BUTTON(button), Closure->examineRS02);
+	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_RECOG_RS02));
+	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	 else   AddHelpWidget(lwoh, hbox);
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Exhaustive RS02 header search</b>\n\n"
+			 "When this setting is off only a quick check "
+			 "for RS02 data is performed. If the medium or "
+			 "image is damaged, the quick test may not suffice "
+			 "to identify the image as being augmented with RS02.\n\n"
+			 "Therefore you should turn this option <b>on</b> "
+			 "if a medium/image contains RS02 data, but is not "
+			 "being recognized as such. Searching for the RS02 "
+			 "information may cause a significant delay at the "
+			 "start of reading and scanning processes.\n\n"
+			 "Leave this option <b>off</b> when you are "
+			 "processing media or images which are not augmented "
+			 "with RS02 data. Otherwise you will waste a lot of "
+			 "time searching for the RS02 signatures and increase "
+			 "wear on the drive."
+			 ));
+
+      /* RS03 */
+
+      lwoh = CreateLabelWithOnlineHelp(_("Recover RS03 signatures"), _("Find and recover RS03 signatures"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
+	 GtkWidget *button = gtk_check_button_new();
+
+	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
+	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
+
+	 if(!i) pc->recogRS03A = button;
+	 else   pc->recogRS03B = button;
+
+	 activate_toggle_button(GTK_TOGGLE_BUTTON(button), Closure->examineRS03);
+	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_RECOG_RS03));
+	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	 else   AddHelpWidget(lwoh, hbox);
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Exhaustive RS03 header search</b>\n\n"
+			 "When this setting is off only a quick check "
+			 "for RS03 data is performed. If the medium or "
+			 "image is damaged, the quick test may not suffice "
+			 "to identify the image as being augmented with RS03.\n\n"
+			 "Therefore you should turn this option <b>on</b> "
+			 "if a medium/image contains RS03 data, but is not "
+			 "being recognized as such. Searching for the RS03 "
+			 "information may cause a significant delay at the "
+			 "start of reading and scanning processes.\n\n"
+			 "Leave this option <b>off</b> when you are "
+			 "processing media or images which are not augmented "
+			 "with RS03 data. Otherwise you will waste a lot of "
+			 "time searching for the RS03 signatures and increase "
+			 "wear on the drive."
+			 ));
+
       /** Image properties */
 
       frame = gtk_frame_new(_utf("Image properties"));
@@ -1667,9 +1649,8 @@ void CreatePreferencesWindow(void)
 			 "(sometimes also called \"SAO / Session at once\") mode for writing single "
 			 "session media."));
 
-      /** Image format */
-if(Closure->debugMode)  /* hidden until version 0.80 */
-{                       /* because of severe compatibility issues */
+      /*** Image format */
+
       frame = gtk_frame_new(_utf("Image format"));
       gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
 
@@ -1713,8 +1694,8 @@ if(Closure->debugMode)  /* hidden until version 0.80 */
 			 "N.b.: dvdisaster >= 0.72 will automatically recognize "
 			 "both tag formats when reading images; setting this value "
 			 "only affects the creation of new images."));
-}
-      /* byte filling */
+
+      /** byte filling */
 
       if(Closure->debugMode)
       {
@@ -1864,7 +1845,7 @@ if(Closure->debugMode)  /* hidden until version 0.80 */
 	 else   pc->radioRawModeOtherB = radio3;
  	 g_signal_connect(G_OBJECT(radio3), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_RAW_OTHER));
 	 gtk_box_pack_start(GTK_BOX(hbox), radio3, FALSE, FALSE, 0);
-	 lab = gtk_label_new(_("other:"));
+	 lab = gtk_label_new(_utf("other:"));
 	 gtk_container_add(GTK_CONTAINER(radio3), lab);
 
 	 entry = gtk_entry_new();

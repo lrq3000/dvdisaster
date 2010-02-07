@@ -50,6 +50,15 @@
 #endif
 
 /***
+ *** Global settings
+ ***/
+
+/* Theretically not needed, but using less causes DMA breakage 
+   on some chipsets. */
+
+#define MIN_TRANSFER_LEN 4  
+
+/***
  *** Define the Sense data structure.
  ***/
 

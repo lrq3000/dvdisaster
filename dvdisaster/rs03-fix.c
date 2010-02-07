@@ -339,7 +339,9 @@ void RS03Fix(Method *self)
    /*** CRC sums for the first ecc block are stored in the last CRC sector.
 	Error handling is done later when this sector is actually used. */
 
-   RS03ReadSector(eccfile, lay, last_crc_sector2, lay->ndata-1, lay->sectorsPerLayer-1, RS03_READ_CRC);
+   RS03ReadSectors(eccfile, lay, 
+		   (unsigned char*)last_crc_sector2, 
+		   lay->ndata-1, lay->sectorsPerLayer-1, 1, RS03_READ_CRC);
 
    /*** Test ecc blocks and attempt error correction */
 
@@ -362,31 +364,22 @@ void RS03Fix(Method *self)
      /* Fill cache with the next batch of cache_size ecc blocks. */
 
      if(cache_sector >= cache_size)
-     {  int offset;
-
+     {  
         if(lay->sectorsPerLayer-s < cache_size)
            cache_size = lay->sectorsPerLayer-s;
 
 	/* Read the data portion */
 
         for(i=0; i<ndata-1; i++)
-        {  offset = 0;
-
-	   for(j=0; j<cache_size; j++) 
-	   {  
-	      RS03ReadSector(ii->file, lay, fc->imgBlock[i]+offset, i, ecc_idx+j, RS03_READ_DATA);
-	      offset += 2048;
-	   }
+        {  
+	   RS03ReadSectors(ii->file, lay, fc->imgBlock[i], i, ecc_idx, 
+			   cache_size, RS03_READ_DATA);
 	}
 
 	/* Read from the CRC layer */
 
-	offset = 0;
-	for(j=0; j<cache_size; j++)
-	{
-	   RS03ReadSector(eccfile, lay, fc->imgBlock[ndata-1]+offset, ndata-1, ecc_idx+j, RS03_READ_CRC);
-	   offset += 2048;
-	}
+	RS03ReadSectors(eccfile, lay, fc->imgBlock[ndata-1], ndata-1, ecc_idx,
+			cache_size, RS03_READ_CRC);
 
 	/* Keep a copy of the last CRC sector for the next pass */
 	memcpy(last_crc_sector1, last_crc_sector2, 2048);
@@ -395,17 +388,14 @@ void RS03Fix(Method *self)
 	/* and finally the ecc portion */
 
         for(i=0; i<nroots; i++)
-        {  offset = 0;
+        {  
+	   RS03ReadSectors(eccfile, lay, fc->imgBlock[i+ndata], i+ndata, ecc_idx,
+			   cache_size, RS03_READ_ECC);
+
+	   /* Remember virtual (= augmented image sectors) in ecc file case */
 
 	   for(j=0; j<cache_size; j++) 
-	   {  
-	      /* Remember virtual (= augmented image sectors) in ecc file case */
 	      fc->eccIdx[i][j] = (i+ndata)*lay->sectorsPerLayer + ecc_idx+j;
-
-	      RS03ReadSector(eccfile, lay, fc->imgBlock[i+ndata]+offset, i+ndata, ecc_idx+j,
-			     RS03_READ_ECC);
-	      offset += 2048;
-	   }
 	}
 
         cache_sector = cache_offset = 0;
@@ -444,7 +434,7 @@ void RS03Fix(Method *self)
      for(i=0; i<lay->ndata; i++)  
      {  int err = CheckForMissingSector(fc->imgBlock[i]+cache_offset, block_idx[i],
 					eh->mediumFP, eh->fpSector);
-	/* FIXME: sector number is wrong for CRC layer in ecc files */
+       /* FIXME: sector number is wrong for CRC layer in ecc files */
        /* FIXME: Auto-replace the padding sectors */
 
         if(err == SECTOR_PRESENT)
@@ -456,7 +446,7 @@ void RS03Fix(Method *self)
 	   damaged_sectors++;
 	}
 
-	if(block_idx[i] < lay->firstCrcPos)     /* only data sectors have CRCs */
+	if(i < ndata-1)     /* only data sectors have CRCs */
 	{  guint32 crc = Crc32(fc->imgBlock[i]+cache_offset, 2048);
 
 	   if(crc_valid && !erasure_map[i] && crc != crc_buf[crc_idx])
@@ -470,7 +460,7 @@ void RS03Fix(Method *self)
 	   data_count++;
 	   crc_idx++;
 	}
-	else if(block_idx[i] >= lay->firstCrcPos) crc_count++;
+	else crc_count++;
      }
 
      /* Check the ecc sectors */
@@ -798,7 +788,7 @@ void RS03Fix(Method *self)
 	      if we were processing an augmented image. */
 
 	   if(   lay->target == ECC_FILE
-	      && sec >= lay->firstCrcPos)
+	      && sec >= lay->firstCrcPos)  //FIXME: correctness?
 	   {  gint64 first_crc_pos = (lay->ndata-1)*lay->sectorsPerLayer;
 
 	      if(sec >= first_crc_pos)
@@ -901,9 +891,9 @@ skip:
    Verbose("%lld of %lld ecc blocks damaged (%lld / %lld sectors)\n",
 	   damaged_eccblocks, 2048*lay->sectorsPerLayer,
 	   damaged_eccsecs, lay->sectorsPerLayer);
-   if(data_count != lay->firstCrcPos)
+   if(data_count != (ndata-1)*lay->sectorsPerLayer)
         g_printf("ONLY %lld of %lld data sectors processed\n", 
-		 (long long int)data_count, (long long int)lay->firstCrcPos);
+		 (long long int)data_count, (long long int)(ndata-1)*lay->sectorsPerLayer);
    else Verbose("all data sectors processed\n");
 
    if(crc_count != lay->sectorsPerLayer)

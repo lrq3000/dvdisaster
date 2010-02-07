@@ -119,6 +119,9 @@ Most important changes in this version:<p>
 
 <b>0.72 pl1</b> Pablo Almeida provided Portuguese translations of the screen texts.
 Added workaround to avoid Win XP freezing on certain CD-RW/drive pairs.(08-Aug-2009)<p>
+<i>Update: The workaround has been found to be ineffective in some cases. A
+better workaround is included in <a href="download40.php">version 0.79.x</a>;
+unfortunately it can not be easily backported into the stable version.</i> (06-Feb-2010)<p>
 
 <b>0.72</b> This is the first stable version of the 0.72 branch.
 Igor Gorbounov has completed the russian online documentation.

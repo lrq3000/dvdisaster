@@ -47,6 +47,9 @@ int RS03RecognizeFile(Method *self, LargeFile *ecc_file)
       self->lastEh = g_malloc(sizeof(EccHeader));
       memcpy(self->lastEh, &eh, sizeof(EccHeader));
 
+#ifdef HAVE_BIG_ENDIAN
+      SwapEccHeaderBytes(self->lastEh);
+#endif
       return TRUE;
    }
 
@@ -57,6 +60,7 @@ int RS03RecognizeFile(Method *self, LargeFile *ecc_file)
  *** Recognize RS03 error correction data in the image
  ***/
 
+#if 0
 static int read_fingerprint(LargeFile *file, unsigned char *fingerprint, gint64 sector)
 {  struct MD5Context md5ctxt;
    unsigned char buf[2048];
@@ -78,6 +82,7 @@ static int read_fingerprint(LargeFile *file, unsigned char *fingerprint, gint64 
 
    return TRUE;
 }
+#endif
 
 EccHeader* ValidHeader(unsigned char *buf, gint64 hdr_pos)
 {  EccHeader *eh = (EccHeader*)buf;
@@ -212,6 +217,11 @@ int RS03RecognizeImage(Method *self, LargeFile *ecc_file)
       return TRUE;
    }
 
+   /* No exhaustive search unless explicitly okayed by user */
+
+   if(!Closure->examineRS03)
+     return FALSE;
+
    /* Ugly case. Experimentally try the RS-Code. */
 
    Verbose("RS03RecognizeImage(): No EH\n");
@@ -277,6 +287,7 @@ int RS03RecognizeImage(Method *self, LargeFile *ecc_file)
 	    if(self->lastEh) g_free(self->lastEh);
 	    self->lastEh = g_malloc(sizeof(EccHeader));
 	    ReconstructRS03Header(self->lastEh, cb);
+	    //FIXME: endianess okay?
 	    free_recognize_context(rc);
 	    return TRUE;
 	 }

@@ -275,6 +275,7 @@ void PrintProgress(char *format, ...)
    {  n = 255;
       msg[255] = 0;
    }
+   Closure->progressLength = n;
 
    if(strchr(msg, '\n'))
       g_fprintf(stderr, "%s", msg);
@@ -287,6 +288,21 @@ void PrintProgress(char *format, ...)
    }
 
    fflush(stderr);   /* at least needed for Windows */
+}
+
+/*
+ * Clear last progress string
+ */
+
+void ClearProgress(void)
+{  static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+   int n = Closure->progressLength;
+
+   Closure->bs[n] = Closure->sp[n] = 0;
+   g_fprintf(stderr, "%s%s", Closure->sp, Closure->bs);
+   Closure->bs[n] = '\b';
+   Closure->sp[n] = ' ';
+   g_static_mutex_unlock(&mutex);
 }
 
 /*
@@ -758,6 +774,8 @@ void SetLabelText(GtkLabel *label, char *format, ...)
    va_start(argp, format);
    if(format)
    {  char *tmp  = g_strdup_vprintf(format, argp);
+
+      if(!tmp) tmp=g_strdup_printf("SetLabelText(%s) failed",format);
       li->text = g_locale_to_utf8(tmp, -1, NULL, NULL, NULL);
       g_free(tmp);
    }

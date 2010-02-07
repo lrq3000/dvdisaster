@@ -22,8 +22,10 @@ $show_all=$_GET["showall"];
 
 <b>Предупреждение:</b> This version is still evolving and some parts
 are not yet implemented. It may contain severe bugs and fail in non-obvious
-ways, even in functions which worked in previous versions. Do not use it
-for productive work; that's what the <a href="download.php">stable version 0.72</a>
+ways, even in functions which worked in previous versions.
+Do not process important data with this version and do not keep images and
+error correction data for archival purposes;
+that's what the <a href="download.php">stable version 0.72</a>
 is for.
 
 <hr>
@@ -115,15 +117,22 @@ for the graphical user interface. <i>[not yet started]</i></li>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
-<b>0.79.1</b>(XX-Jan-2010)<br>
+<b>0.79.1</b>(07-Feb-2010)<br>
 <b>All platforms:</b> This release contains major internal changes compared
-to 0.72.x. Please use it carefully. A reference implementation
-of the RS03 codec is
+to 0.72.x. Please use it carefully.
+<ul>
+<li>The SCSI layer contains a workaround for buggy chipsets found in recent
+drives. Starting a read or scan operation would case a system freeze with
+such drives. The problem seems to be especially visible under Windows XP, 
+but other OS might expose similar failures. 
+Please test if these drives are working
+now, and also report if some drives stopped working which were okay previously.</li> 
+<li>A reference implementation of the RS03 codec is
 included. This version is only supplied so that interested people can
 compare it against its <a href="download50.php">specification</a>.
 Take care and do not use it for productive work. The final version will
-be released with version 0.80.
-<br>
+be released with version 0.80.</li>
+</ul>
 <b>Windows:</b> All components of the development environment and the
 supplied libraries have been updated. Please test whether the graphical
 user interface and localization still work as expected.

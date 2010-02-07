@@ -1,12 +1,27 @@
 
-	CVS users: I am currently preparing 0.79.1 for release,
-	           but we are not there yet. Some mighty bugs
-		   remain in the current code base, even in
-		   functions which worked in previous releases.
-		   Do not use for any productive work.
-		   You have been warned.		   
+0.79.1 07-02-2010	
+       A word of caution: This version is still evolving and some parts
+       are not yet implemented. It may contain severe bugs and fail in 
+       non-obvious ways, even in functions which worked in previous versions. 
+       Do not process important data with this version and do
+       not keep images and error correction data for archival purposes;
+       that's what the stable version 0.72 is for.
 
-0.79.1	
+	Semantic Changes
+	- query-size option replaced with -a/--assume option.
+	  command line default is now NOT to do exhaustive search
+	  for RS02 information; add -a RS02 to enable it
+	  (old behaviour: exhaustive check was on; required
+	   --query-size=udf to disable it)
+	- same changes in the preferences dialogues: 
+	  "Image size" field replaced with 
+	  "Error correction data recognization" options.
+
+	Changes
+	- added MIN_TRANSFER_LEN and length sanity check as workaround 
+	  for buggy drive chipsets (thanks to R.G. for reporting this
+	  and helping with debugging output)
+	- added -tq command line option as suggested by Mikhail Arefiev
 	- fixed alignment brokeness between 32bit and 64bit systems
 	  in ecc header and crc sectors
 	- added RS03 encoding (GUI)

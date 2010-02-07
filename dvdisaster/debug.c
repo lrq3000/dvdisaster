@@ -273,23 +273,23 @@ static void random_error2(EccHeader *eh, char *prefix, char *arg)
 /* RS03 ecc images */
 
 static void random_error3(EccHeader *eh, char *prefix, char *arg)
-{}  // FIXME
-#if 0
-static void random_error3(EccHeader *eh, char *prefix, char *arg)
 {  RS03Layout *lay;
    ImageInfo *ii;
+   LargeFile *eccfile = NULL;
    gint64 si;
-   guint64 hpos;
-   guint64 end;
-   guint64 header[42];
    int block_sel[255];
    int i,percent,last_percent = 0;
-   int hidx,n_errors,erase_max = 0;
-   double eras_scale, blk_scale, hdr_scale;
+   int n_errors,erase_max = 0;
+   double eras_scale, blk_scale;
 
    SRandom(Closure->randomSeed);
-   lay = CalcRS03Layout(uchar_to_gint64(eh->sectors), eh->eccBytes,
-			Closure->eccTarget); 
+
+
+   /*** Calculate the layout */
+
+   if(eh->methodFlags[0] & MFLAG_ECC_FILE)
+        lay = CalcRS03Layout(uchar_to_gint64(eh->sectors), eh, ECC_FILE); 
+   else lay = CalcRS03Layout(uchar_to_gint64(eh->sectors), eh, ECC_IMAGE); 
 
    n_errors = atoi(arg);
 
@@ -303,50 +303,21 @@ static void random_error3(EccHeader *eh, char *prefix, char *arg)
 
    eras_scale = (n_errors+1)/((double)MY_RAND_MAX+1.0);
    blk_scale  = (double)255.0/((double)MY_RAND_MAX+1.0);
-
    /*** Open the image file */
 
    ii = OpenImageFile(NULL, WRITEABLE_IMAGE);
-
-   PrintLog(_("\nGenerating random correctable erasures (for %d roots, max erasures = %d).\n"), eh->eccBytes, n_errors);
-
-   /*** Randomly delete some ecc headers */
-
-   header[0] = lay->firstEccHeader;
-   hidx = 1;
-
-   hpos = (lay->lastCrcSector + lay->headerModulo - 1) / lay->headerModulo;
-   hpos *= lay->headerModulo;
    
-   end = lay->eccSectors+lay->dataSectors;
+   if(lay->target == ECC_FILE)
+   {  eccfile = LargeOpen(Closure->eccName, O_RDWR, IMG_PERMS);
 
-   while(hpos < end)  /* Calculate positions of all headers */
-   { 
-      header[hidx++] = hpos;
-      hpos += lay->headerModulo;
-
+     if(!eccfile)
+       Stop(_("Could not open %s: %s"),Closure->eccName, strerror(errno));
    }
 
-   /* Pick one header to remain intact.
-      Currently this must be one of the repeated headers */
-
-   hdr_scale = (double)(hidx-1)/((double)MY_RAND_MAX+1.0);
-   header[(int)(hdr_scale*(double)Random())+1] = 0;
-
-   for(i=0; i<hidx; i++)
-   {  gint64 s = header[i];
-      if(s>0)
-      {  unsigned char missing[2048];
-      
-	 if(!LargeSeek(ii->file, (gint64)(2048*s)))
-	    Stop(_("Failed seeking to sector %lld in image: %s"), s, strerror(errno));
-
-	 CreateMissingSector(missing, s, ii->mediumFP, FINGERPRINT_SECTOR, NULL); 
-
-         if(LargeWrite(ii->file, missing, 2048) != 2048)
-	    Stop(_("Failed writing to sector %lld in image: %s"), s, strerror(errno));
-      }
-   }
+   if(lay->target == ECC_FILE)
+         PrintLog(_("\nRS03 error correction file with %d roots.\n"), eh->eccBytes);
+   else  PrintLog(_("\nRS03 augmented image with %d roots.\n"), eh->eccBytes);
+   PrintLog(_("Generating at most %d random correctable erasures.\n"), n_errors);
 
    /*** Randomly delete the blocks */
 
@@ -376,18 +347,35 @@ static void random_error3(EccHeader *eh, char *prefix, char *arg)
 
       for(i=0; i<255; i++)
       {  if(block_sel[i])
-	 {  unsigned char missing[2048];
+	 {  LargeFile *file = ii->file;
+	    unsigned char missing[2048];
 	    gint64 s;
 
 	    s = RS03SectorIndex(lay, i, si);
-	    if(s<0) continue; /* non-existing padding sector */
 
-            if(!LargeSeek(ii->file, (gint64)(2048*s)))
+	    if(s == 16)  /* FIXME: not implemented */
+	       continue;
+
+	    if(s == lay->eccHeaderPos || s == lay->eccHeaderPos+1)
+	      continue; /* FIXME: not implemented */
+
+	    /* Do not write out the virtual padding sectors
+	       in ecc file case */
+
+	    if(lay->target == ECC_FILE
+	       && i<=lay->ndata-1
+	       && s>=lay->dataSectors)
+	      continue;
+	    
+	    if(lay->target == ECC_FILE && i>=lay->ndata-1)
+	      file = eccfile;
+
+            if(!LargeSeek(file, (gint64)(2048*s)))
 	       Stop(_("Failed seeking to sector %lld in image: %s"), s, strerror(errno));
 
 	    CreateMissingSector(missing, s, ii->mediumFP, FINGERPRINT_SECTOR, NULL); 
 
-	    if(LargeWrite(ii->file, missing, 2048) != 2048)
+	    if(LargeWrite(file, missing, 2048) != 2048)
 	       Stop(_("Failed writing to sector %lld in image: %s"), s, strerror(errno));
 	  }
       }
@@ -404,10 +392,11 @@ static void random_error3(EccHeader *eh, char *prefix, char *arg)
 	"Otherwise you'll accumulate >= %d erasures/ECC block and the image will be lost.\n"), 
 	n_errors);
 
+   if(eccfile)
+     LargeClose(eccfile);
    FreeImageInfo(ii);
    g_free(lay);
 }
-#endif
 
 void RandomError(char *prefix, char *arg)
 {  Method *method = EccMethod(TRUE);

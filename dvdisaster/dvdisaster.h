@@ -166,9 +166,11 @@ typedef struct _GlobalClosure
    int debugMode;       /* may activate additional features */
    int debugCDump;      /* dump as #include file instead of hexdump */
    int verbose;         /* may activate additional messages */
+   int quickVerify;     /* do only non time-consuming verify actions */
    int screenShotMode;  /* screen shot mode */
    int autoSuffix;      /* automatically extend files with suffices .iso/.ecc */
-   int querySize;       /* what sources are used for image size queries */
+   int examineRS02;     /* perform deep search for RS02 structures */
+   int examineRS03;     /* perform deep search for RS03 structures */
    int readAndCreate;   /* automatically create .ecc file after reading an image */
    int enableCurveSwitch; /* TRUE in readAndCreateMode after reading is complete */
    int welcomeMessage;  /* just print dvdisaster logo if FALSE */
@@ -198,6 +200,8 @@ typedef struct _GlobalClosure
    char *browser;       /* Name of preferred WEB browser */
 
    char bs[256];        /* A string of 255 backspace characters */
+   char sp[256];        /* A string of 255 space characters */
+   int progressLength;  /* Length of last progress msg printed */
 
    GThread *mainThread; /* Thread of the main() routine */
    void (*cleanupProc)(gpointer);  /* Procedure to cleanup running threads after an error condition */
@@ -592,6 +596,7 @@ guint32 SwapBytes32(guint32);
 guint64 SwapBytes64(guint64);
 void    SwapEccHeaderBytes(EccHeader*);
 void    SwapDefectiveHeaderBytes(struct _DefectiveSectorHeader*);
+void    SwapCrcBlockBytes(CrcBlock*);
 
 /***
  *** file.c
@@ -666,7 +671,8 @@ typedef struct _ReedSolomonTables
    gint32 ndata;         /* data bytes per ecc block */
    gint32 shiftInit;     /* starting value for iteratively processing parity */
 
-   guint8 *bLut[GF_FIELDSIZE];  /* experimental 8bit lookup table */
+   guint8 *bLut[GF_FIELDSIZE];   /* 8bit encoder lookup table */
+   guint8 *synLut;       /* Syndrome calculation speedup */
 } ReedSolomonTables;
 
 GaloisTables* CreateGaloisTables(gint32);
@@ -948,6 +954,7 @@ void PrintLog(char*, ...);
 void Verbose(char*, ...);
 void PrintTimeToLog(GTimer*, char*, ...);
 void PrintProgress(char*, ...);
+void ClearProgress(void);
 void PrintCLIorLabel(GtkLabel*, char*, ...);
 
 void LogWarning(char*, ...);
@@ -985,7 +992,7 @@ void UpdateMethodPreferences(void);
 void HidePreferences(void);
 void FreePreferences(void*);
 
-void UpdatePrefsQuerySize(void);
+void UpdatePrefsExhaustiveSearch(void);
 void RegisterPreferencesHelpWindow(LabelWithOnlineHelp*);
 
 /***
@@ -1188,6 +1195,12 @@ gint64 CurrentImageSize(void);
 gint64 CurrentImageCapacity(void);
 
 int SendReadCDB(char*, unsigned char*, unsigned char*, int, int);
+
+/***
+ *** rs-decoder.c
+ ***/
+
+int TestErrorSyndromes(ReedSolomonTables*, unsigned char*);
 
 /***
  *** rs-encoder.c and friends

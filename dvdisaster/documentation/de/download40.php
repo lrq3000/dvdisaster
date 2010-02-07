@@ -25,7 +25,9 @@ entstehen.<p>
 Entwicklungsvorgang und einige Teile sind noch nicht fertig. Sie kann
 Programmfehler enthalten und nicht offensichtliche Fehlfunktionen haben,
 auch in Teilen die in älteren Versionen bereits funktionierten.
-Verwenden Sie diese Version nicht für produktives Arbeiten; dafür
+Bearbeiten Sie mit dieser Version keine wichtigen Daten und
+verwenden Sie die erzeugten Abbilder und Fehlerkorrektur-Daten
+nicht für Archivierungszwecke; dafür
 ist die <a href="download.php">stabile Version 0.72</a> gedacht.
 
 <hr>
@@ -70,7 +72,7 @@ Die Alpha-Versionen verwenden das gleiche Paketformat wie die normalen
 Versionen.<p>
 
 <table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.79</b></td><td align="right">XX-Jan-2010</td></tr>
+<tr><td><b>dvdisaster-0.79</b></td><td align="right">07-Feb-2010</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
@@ -121,15 +123,25 @@ Versionen.<p>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
 
-<b>0.79.1</b> (XX-Jan-2010)<br>
+<b>0.79.1</b> (07-Feb-2010)<br>
 <b>Alle Plattformen:</b> Diese Version enthält umfangreiche Änderungen an
 den inneren Strukturen im Vergleich zu Version 0.72.x. Bitte verwenden Sie sie
-mit Vorsicht. Außerdem ist eine Referenz-Implementierung
-des RS03-Kodierers enthalten.
+mit Vorsicht. 
+<ul>
+<li>Die SCSI-Schicht enthält eine Umgehungslösung für fehlerhafte Chipsätze,
+die in neueren Laufwerken verbaut sein können. Das Ausführen einer Lese- oder
+"Prüfen"-Operation kann bei diesen Laufwerken dazu führen daß das System
+einfriert. Das Problem ist besonders ausgeprägt bei Windows XP, kann aber
+auch bei anderen Betriebssystemen auftreten. Bitte testen Sie ob die
+betroffenen Laufwerke nun korrekt arbeiten, und ob keine Fehlfunktionen
+bei Laufwerken auftreten, deren Verhalten vorher in Ordnung war.</li> 
+<li>Eine Referenz-Implementierung
+des RS03-Kodierers ist enthalten.
 Diese Version dient hauptsächlich dazu, daß interessierte Personen den
 Kodierer mit seiner <a href="download50.php">Spezifikation</a> vergleichen
 können. Seien Sie vorsichtig und verwenden Sie ihn nicht für produktives
-Arbeiten. Die endgültige Version wird mit dvdisaster 0.80 veröffentlicht.<br>
+Arbeiten. Die endgültige Version wird mit dvdisaster 0.80 veröffentlicht.</li>
+</ul>
 <b>Windows:</b> Die gesamte Entwicklungsumgebung einschließlich der mitgelieferten
 Programmbibliotheken wurde erneuert. Bitte probieren Sie aus ob die
 graphische Benutzeroberfläche und die Übersetzungen der Bildschirmtexte

@@ -1,4 +1,4 @@
-.TH DVDISASTER 1 "2009-12-04" "0.80" "Schutz f\[:u]r CD/DVD Medien"
+.TH DVDISASTER 1 "2010-02-07" "0.80" "Schutz f\[:u]r CD/DVD Medien"
 
 .SH NAME
 DVDISASTER \- Schutz f\[:u]r CD/DVD Medien gegen Datenverlust durch Alterung
@@ -6,7 +6,7 @@ oder Kratzer
 
 .SH SYNTAX
 .B dvdisaster
-.RB [\| \-r \||\| \-c \||\| \-f \||\| \-s \||\| \-t \||\| \-u \|]
+.RB [\| \-r \||\| \-c \||\| \-f \||\| \-s \||\| \-t[q] \||\| \-u \|]
 .RB [\| \-d
 .IR device \|]
 .RB [\| \-p
@@ -17,6 +17,8 @@ oder Kratzer
 .IR eccfile \|]
 .RB [\| \-o
 .IR file|image \|]
+.RB [\| \-a
+.IR codec-list \|]
 .RB [\| \-j
 .IR n \|]
 .RB [\| -n
@@ -24,11 +26,17 @@ oder Kratzer
 .RB [\| -m
 .IR n \|]
 .RB [\| -v \|]
+.RB [\| -x
+.IR n \|]
 .RB [\| \-\-adaptive-read \|]
 .RB [\| \-\-auto-suffix \|]
 .RB [\| \-\-cache-size
 .IR n \|]
 .RB [\| \-\-dao \|]
+.RB [\| \-\-defective-dump \|
+.IR d \|]
+.RB [\| \-\-driver \|
+.IR d \|]
 .RB [\| \-\-eject \|]
 .RB [\| \-\-fill-unreadable
 .IR n \|]
@@ -36,8 +44,6 @@ oder Kratzer
 .RB [\| \-\-internal-rereads
 .IR n \|]
 .RB [\| \-\-prefetch-sectors
-.IR n \|]
-.RB [\| \-\-query-size
 .IR n \|]
 .RB [\| \-\-raw-mode
 .IR n \|]
@@ -48,9 +54,8 @@ oder Kratzer
 .RB [\| \-\-read-raw \|]
 .RB [\| \-\-speed-warning
 .IR n \|]
-.RB [\| \-\-spinup\-dalay
+.RB [\| \-\-spinup\-delay
 .IR n \|]
-.RB [\| \-\-split\-files \|]
 
 .SH BESCHREIBUNG
 .B DVDISASTER
@@ -125,8 +130,10 @@ Versucht das Abbild mit Hilfe der Fehlerkorrektur-Daten zu reparieren.
 .B \-s, \-\-scan
 Untersucht den Datentr\[:a]ger auf Lesefehler.
 .TP
-.B \-t, \-\-test
+.B \-t, \-\-test, \-tq, \-test=q
 Pr\[:u]ft die Struktur der .iso und .ecc - Dateien.
+Bei Angabe der "q"-Option werden nur die Informationen ausgegeben,
+die ohne vollständiges Lesen der Dateien ermittelt werden k\[:o]nnen.
 .TP
 .B \-u, \-\-unlink
 L\[:o]scht .iso - Dateien nach Beenden der vorherigen Aktionen.
@@ -153,6 +160,17 @@ Abbilder erzeugt werden sollen (Standard: erweiterte Abbilder).
 
 Feineinstellung (Beachten Sie die Hinweise in der Dokumentation!):
 .TP
+.B \-a, \-\-assume codec1,codec2,...
+Nimmt an daß das Abbild mit einem der angegebenen Kodierer erweitert
+wurde. Dies bewirkt eine erschöpfende Suche nach den Datenstrukturen
+der Kodierer und ist hilfreich, um in beschädigten Datenträgern enthaltene
+Fehlerkorrektur-Daten wiederzufinden. Wenn das Abbild allerdings keine
+der angegebenen Fehlerkorrektur-Daten enthält, verschwendet diese Option
+eine große Menge Rechenzeit und Ein-/Ausgabeoperationen.
+.RS
+M\[:o]gliche Werte sind RS02 und RS03.
+.RE
+.TP
 .B \-j, \-\-jump n
 \[:u]berspringe n Sektoren nach einem Lesefehler (Standard: 16).
 .TP
@@ -168,6 +186,12 @@ M\[:o]gliche Werte sind RS01 und RS02.
 .B \-v, \-\-verbose n%
 mehr erl\[:a]uternde Ausgaben
 .TP
+.B \-x, \-\-threads n
+Verwende n Kontrollfäden für den RS03-Kodierer/Dekodierer. Empfohlen
+sind 2 bzw. 4 Kontrollfäden für 2- bzw. 4-Kern-Prozessoren. Lassen Sie
+auf größeren Systemen einen Kontrollfaden für Verwaltungszwecke frei,
+d.h. benutzen Sie 7 Kontrollfäden auf einem 8-Kern-System.
+.TP
 .B \-\-adaptive-read
 verwende optimierte Lesestrategie f\[:u]r defekte Datentr\[:a]ger.
 .TP
@@ -179,6 +203,16 @@ Zwischenspeicher in MB bei .ecc-Datei-Erzeugung - (Standard: 32MB).
 .TP
 .B \-\-dao
 unterstelle DAO; Abbild am Ende nicht k\[:u]rzen.
+.TP
+.B \-\-defective-dump d
+Gibt das Unterverzeichnis zum Sammeln von unvollständigen
+Roh-Sektoren an.
+.TP
+.B \-\-driver d  (nur für Linux)
+dvdisaster verwendet unter Linux normalerweise den Treiber für optische
+Laufwerke. Einige sehr alte SCSI-Kontroller erzeugen dabei Systemabstürze. 
+Probieren Sie in diesem Fall mit
+\-\-driver=sg das Laufwerk über den alternativen SCSI-Treiber anzusteuern.
 .TP
 .B \-\-eject
 Datentr\[:a]ger nach erfolgreichem Lesen auswerfen.
@@ -203,13 +237,6 @@ die Standardeinstellungen des Laufwerks zu verwenden.
 n Sektoren für die RS03-(De)kodierung im Voraus laden (Standard: 32)
 .RS
 Ein Wert von n verbraucht ungefähr n MB Arbeitsspeicher.
-.RE
-.TP
-.B \-\-query-size n
-Ermittelt die Abbildgr\[:o]sse durch das Laufwerk oder das Dateisystem auf dem Datentr\[:a]ger
-(Standard: ecc)
-.RS
-M\[:o]gliche Werte: drive udf ecc 
 .RE
 .TP
 .B \-\-raw-mode n
@@ -237,9 +264,6 @@ warnt bei Geschwindigkeits\[:a]nderung um mehr als n Prozent.
 .TP
 .B \-\-spinup-delay n
 gibt dem Laufwerk n Sekunden Zeit zum Hochlaufen.
-.TP
-.B \-\-split-files
-Abbild in mehrere Dateien <= 2GB aufteilen.
 .PP
 
 .SH SIEHE AUCH

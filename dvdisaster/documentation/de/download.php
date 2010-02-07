@@ -121,8 +121,9 @@ Grundlegende Neuerungen in dieser Version:<p>
 <b>Patches</b> (kleine Änderungen nach Version 0.72; die obigen Dateien wurden erneuert):<p>
 
 <b>0.72 pl1</b> Pablo Almeida hat die Bildschirmtexte ins Portugiesische übersetzt.
-Es wurde ein Workaround eingebaut um das Einfrieren von Windows XP bei bestimmten Kombinationen
-von CD-RW-Rohlingen und Laufwerken zu verhindern. (08-Aug-2009)<p>
+Es wurde eine Umgehungslösung eingebaut um das Einfrieren von Windows XP bei bestimmten Kombinationen
+von CD-RW-Rohlingen und Laufwerken zu verhindern. (08-Aug-2009)<br>
+<i>Hinweis: Die Umgehungslösung hat sich als nicht immer wirksam herausgestellt. Eine bessere Lösung ist in <a href="download40.php">Version 0.79.x</a> enthalten; diese läßt sich leider nicht so einfach in die stabile Version zurückportieren.</i> (06-Feb-2010)<p>
 
 <b>0.72</b> Dies ist die erste stabile Version des 0.72er-Zweiges.
 Igor Gorbounov hat die russische online-Dokumentation vervollständigt

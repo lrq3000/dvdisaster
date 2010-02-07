@@ -23,67 +23,84 @@
 
 #include "rs03-includes.h"
 
+
 /***
- *** Read an image sector from the .iso file.
+ *** Read one or more image sectors from the .iso file.
  ***/
 
-void RS03ReadSector(LargeFile *file, RS03Layout *lay, unsigned char *buf, 
-		    gint64 layer, gint64 n, int flags)
-{  gint64 sector=0;
+void RS03ReadSectors(LargeFile *file, RS03Layout *lay, unsigned char *buf, 
+		     gint64 layer, gint64 layer_sector, gint64 how_many, int flags)
+{  gint64 start_sector=0;
+   gint64 stop_sector=0;
+   gint64 byte_size = how_many * 2048;
+   gint64 n;
 
    if(layer < 0 || layer > 255) 
-      Stop("RS03ReadSector: layer %lld out of range 0 .. 255\n", layer);
-   if(n < 0 || n >= lay->sectorsPerLayer) 
-      Stop("RS03ReadSector: offset %lld out of range 0 .. %lld)\n", n, lay->sectorsPerLayer-1);
+      Stop("RS03ReadSectors: layer %lld out of range 0 .. 255\n", layer);
+   if(layer_sector < 0 || layer_sector >= lay->sectorsPerLayer) 
+      Stop("RS03ReadSectors: offset %lld out of range 0 .. %lld)\n",
+	   layer_sector, lay->sectorsPerLayer-1);
 
    /* Read out of the data layer */
 
    if(layer < lay->ndata-1)
    {  if(!(flags & RS03_READ_DATA))
-	 Stop("RS03ReadSector: trying to read data layer, but flag not set\n");
+	 Stop("RS03ReadSectors: trying to read data layer, but flag not set\n");
       
-      sector = layer*lay->sectorsPerLayer + n;
-      
-      /* Padding sectors are virtual in ecc file case */
+      start_sector = layer*lay->sectorsPerLayer + layer_sector;
+      stop_sector  = start_sector + how_many - 1;
 
-      if(lay->target == ECC_FILE && sector >= lay->dataSectors)
-      {  CreatePaddingSector(buf, sector, lay->eh->mediumFP, FINGERPRINT_SECTOR);
-	 return;
+      if(stop_sector >= (layer+1)*lay->sectorsPerLayer)
+	Stop("RS03ReadSectors: range %lld..%lld crosses layer boundary\n",
+	     start_sector, stop_sector);
+
+      /* Padding sectors are virtual in ecc file case.
+         Create them in memory; shorten read range accordingly */
+
+      if(lay->target == ECC_FILE)
+      {  unsigned char *bufptr = buf;
+
+	 for(n=start_sector; n<=stop_sector; n++)
+	 {  
+	    if(n>=lay->dataSectors)
+	    {  CreatePaddingSector(bufptr, n, lay->eh->mediumFP, FINGERPRINT_SECTOR);
+	       byte_size -= 2048;
+	    }
+	    bufptr += 2048;
+	 }
       }
-
-      goto read_sector;
    }
 
    /* Read out of the crc layer */
 
    if(layer == lay->ndata-1)
    {  if(!(flags & RS03_READ_CRC))
-	 Stop("RS03ReadSector: trying to read crc layer, but flag not set\n");
-      
-      sector = lay->firstCrcPos + n;
-      goto read_sector;
+	 Stop("RS03ReadSectors: trying to read crc layer, but flag not set\n");
+
+      start_sector = lay->firstCrcPos + layer_sector;
+      stop_sector  = start_sector + how_many - 1;
    }
 
    /*** Read out of the ecc layers */
 
    if(layer >= lay->ndata)
    {  if(!(flags & RS03_READ_ECC))
-	 Stop("RS03ReadSector: trying to read ecc layer, but flag not set\n");
+	 Stop("RS03ReadSectors: trying to read ecc layer, but flag not set\n");
 
-      sector = lay->firstEccPos + (layer-lay->ndata)*lay->sectorsPerLayer + n;
+      start_sector = lay->firstEccPos + (layer-lay->ndata)*lay->sectorsPerLayer + layer_sector;
+      stop_sector  = start_sector + how_many - 1;
    }
 
-  /* Read the real sector */
+   /* All sectors are consecutively readable in image case */
 
-read_sector:
+   if(!LargeSeek(file, (gint64)(2048*start_sector)))
+      Stop(_("Failed seeking to sector %lld in image: %s"),
+	   start_sector, strerror(errno));
 
-  if(!LargeSeek(file, (gint64)(2048*sector)))
-    Stop(_("Failed seeking to sector %lld in image: %s"),
-	 sector, strerror(errno));
-
-  n = LargeRead(file, buf, 2048);
-  if(n != 2048)
-    Stop(_("Failed reading sector %lld in image: %s"),sector,strerror(errno));
+   n = LargeRead(file, buf, byte_size);
+   if(n != byte_size)
+      Stop(_("Failed reading sector %lld in image: %s"),
+	   start_sector, strerror(errno));
 }
 
 /***
@@ -157,7 +174,7 @@ RS03Layout *CalcRS03Layout(gint64 data_sectors, EccHeader *eh, int target)
 	 if(!LargeStat(Closure->imageName, &filesize))
 	    Stop(_("Image file %s not present."),Closure->imageName);
 
-	 CalcSectors(filesize, &lay->dataSectors, &lay->inLast);
+	 CalcSectors(filesize, (gint64*)&lay->dataSectors, &lay->inLast);
 
 	 /* Calculate wanted redundancy from Closure->redundancy */
 

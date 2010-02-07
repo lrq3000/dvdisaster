@@ -970,8 +970,7 @@ void RS01Create(Method *self)
 
       SetLabelText(GTK_LABEL(wl->encFootline), 
 		   _("The error correction file has been successfully created.\n"
-		     "Make sure to keep this file on a reliable medium."),
-		   Closure->eccName); 
+		     "Make sure to keep this file on a reliable medium.")); 
    }
 
    /*** If the --unlink option or respective GUI switch is set, 
