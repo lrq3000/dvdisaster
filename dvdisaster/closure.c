@@ -482,6 +482,7 @@ void ReadDotfile()
       if(!strcmp(symbol, "cache-size"))      { Closure->cacheMB     = atoi(value); continue; }
       if(!strcmp(symbol, "cd-size"))         { Closure->cdSize = Closure->savedCDSize = atoll(value); continue; }
       if(!strcmp(symbol, "codec-threads"))   { Closure->codecThreads = atoi(value); continue; }
+      if(!strcmp(symbol, "confirm-deletion")){ Closure->confirmDeletion = atoi(value); continue; }
       if(!strcmp(symbol, "dao"))             { Closure->noTruncate  = atoi(value); continue; }
       if(!strcmp(symbol, "defective-dump"))  { Closure->defectiveDump = atoi(value); continue; }
       if(!strcmp(symbol, "defective-dir"))   { if(Closure->dDumpDir) g_free(Closure->dDumpDir);
@@ -584,6 +585,7 @@ static void update_dotfile()
    g_fprintf(dotfile, "cache-size:        %d\n", Closure->cacheMB);
    g_fprintf(dotfile, "cd-size:           %lld\n", (long long int)Closure->cdSize);
    g_fprintf(dotfile, "codec-threads:     %d\n", Closure->codecThreads);
+   g_fprintf(dotfile, "confirm-deletion:  %d\n", Closure->confirmDeletion);
    g_fprintf(dotfile, "dao:               %d\n", Closure->noTruncate);
    g_fprintf(dotfile, "defective-dump:    %d\n", Closure->defectiveDump);
    g_fprintf(dotfile, "defective-dir:     %s\n", Closure->dDumpDir);
@@ -712,7 +714,7 @@ void InitClosure()
    Closure->spinupDelay = 5;
    Closure->fillUnreadable = -1;
    Closure->welcomeMessage = 1;
-   //   Closure->dsmVersion = 1;
+   Closure->dsmVersion = 1;
 
    /* default sizes for typical CD and DVD media */
 

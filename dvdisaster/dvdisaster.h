@@ -162,6 +162,7 @@ typedef struct _GlobalClosure
    int noTruncate;      /* do not truncate image at the end */
    int dsmVersion;      /* 1 means new style dead sector marker */
    int unlinkImage;     /* delete image after ecc file creation */
+   int confirmDeletion; /* do not ask whether files should be deleted */
    int driveSpeed;      /* currently unused */
    int debugMode;       /* may activate additional features */
    int debugCDump;      /* dump as #include file instead of hexdump */
@@ -584,6 +585,7 @@ enum
 
 void CreateMissingSector(unsigned char*, gint64, unsigned char*, gint64, char*);
 int CheckForMissingSector(unsigned char*, gint64, unsigned char*, gint64);
+int CheckForMissingSectors(unsigned char*, gint64, unsigned char*, gint64, int, gint64*);
 void ExplainMissingSector(unsigned char*, gint64, int, int);
 
 void CreatePaddingSector(unsigned char*, gint64, unsigned char*, gint64);
@@ -983,6 +985,9 @@ void TimedInsensitive(GtkWidget*, int);
 int GetLabelWidth(GtkLabel*, char*, ...);
 void LockLabelSize(GtkLabel*, char*, ...);
 
+int ConfirmImageDeletion(char *);
+int ConfirmEccDeletion(char *);
+
 /***
  *** preferences.c
  ***/
@@ -993,6 +998,7 @@ void HidePreferences(void);
 void FreePreferences(void*);
 
 void UpdatePrefsExhaustiveSearch(void);
+void UpdatePrefsConfirmDeletion(void);
 void RegisterPreferencesHelpWindow(LabelWithOnlineHelp*);
 
 /***

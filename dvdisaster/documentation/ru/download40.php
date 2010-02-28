@@ -58,7 +58,7 @@ MacOS:
 
 <ul>
 <li> Update the GTK+ toolkit and provide more workarounds
-for the graphical user interface. <i>[not yet started]</i></li>
+for the graphical user interface. <i>[in progress]</i></li>
 </ul>
 <hr>
 
@@ -68,48 +68,46 @@ for the graphical user interface. <i>[not yet started]</i></li>
 Для альфа-версий используется такой же формат пакетов, как и для нормальных версий.<p>
 
 <table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.79</b></td><td align="right">4 июля 2010</td></tr>
+<tr><td><b>dvdisaster-0.79</b></td><td align="right">28 Feb 2010</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Исходные тексты для всех операционных систем:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.1.tar.bz2">dvdisaster-0.79.1.tar.bz2</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.2.tar.bz2">dvdisaster-0.79.2.tar.bz2</a></td></tr>
     <tr><td align="right">Цифровая подпись:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.1.tar.bz2.gpg">dvdisaster-0.79.1.tar.bz2.gpg</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.2.tar.bz2.gpg">dvdisaster-0.79.2.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Двоичная версия для Mac OS X 10.5 / x86:&nbsp;</td>
-        <td>not provided with this release<!---<a href="http://dvdisaster.net/downloads/dvdisaster-0.79.1.app.zip">dvdisaster-0.79.1.app.zip</a>&nbsp;--&nbsp;сначала прочитайте эти <a href="download30.php#mac">советы</a>---></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.2.app.zip">dvdisaster-0.79.2.app.zip</a>&nbsp;--&nbsp;сначала прочитайте эти <a href="download30.php#mac">советы</a></td></tr>
     <tr><td align="right">Цифровая подпись:&nbsp;</td>
-        <td><!---<a href="http://dvdisaster.net/downloads/dvdisaster-0.79.1.app.zip.gpg">dvdisaster-0.79.1.app.zip.gpg</a>---></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.2.app.zip.gpg">dvdisaster-0.79.2.app.zip.gpg</a></td></tr>
     <tr><td align="right">Двоичная версия для Windows:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.1-setup.exe">dvdisaster-0.79.1-setup.exe</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.2-setup.exe">dvdisaster-0.79.2-setup.exe</a></td></tr>
     <tr><td align="right">Цифровая подпись:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.1-setup.exe.gpg">dvdisaster-0.79.1-setup.exe.gpg</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.2-setup.exe.gpg">dvdisaster-0.79.2-setup.exe.gpg</a></td></tr>
     <tr><td colspan="2"> </td></tr>
 <?php
   if($show_all == 0) {
 ?>
-<!---
     <tr><td colspan="2"><a href="download40.php?showall=1#download">Show older releases in the 0.79 version branch</a></td></tr>
---->
 <?php
   }
   else {
 ?> 
-<!---
     <tr><td colspan="2"><a href="download40.php?showall=0#download">Hide older releases in the 0.79 version branch</a></td></tr>
     <tr><td align="right">&nbsp;&nbsp;Исходные тексты для всех операционных систем:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.0.tar.bz2">dvdisaster-0.79.0.tar.bz2</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.1.tar.bz2">dvdisaster-0.79.1.tar.bz2</a></td></tr>
     <tr><td align="right">Цифровая подпись:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.0.tar.bz2.gpg">dvdisaster-0.79.0.tar.bz2.gpg</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.1.tar.bz2.gpg">dvdisaster-0.79.1.tar.bz2.gpg</a></td></tr>
+<!---
     <tr><td align="right">Двоичная версия для Mac OS X 10.5 / x86:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.0.app.zip">dvdisaster-0.79.0.app.zip</a>&nbsp;--&nbsp;сначала прочитайте эти <a href="download30.php#mac">советы</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.1.app.zip">dvdisaster-0.79.1.app.zip</a>&nbsp;--&nbsp;сначала прочитайте эти <a href="download30.php#mac">советы</a></td></tr>
     <tr><td align="right">Цифровая подпись:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.0.app.zip.gpg">dvdisaster-0.79.0.app.zip.gpg</a></td></tr>
-    <tr><td align="right">Двоичная версия для Windows:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.0-setup.exe">dvdisaster-0.79.0-setup.exe</a></td></tr>
-    <tr><td align="right">Цифровая подпись:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.0-setup.exe.gpg">dvdisaster-0.79.0-setup.exe.gpg</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.1.app.zip.gpg">dvdisaster-0.79.1.app.zip.gpg</a></td></tr>
 --->
+    <tr><td align="right">Двоичная версия для Windows:&nbsp;</td>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.1-setup.exe">dvdisaster-0.79.1-setup.exe</a></td></tr>
+    <tr><td align="right">Цифровая подпись:&nbsp;</td>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.1-setup.exe.gpg">dvdisaster-0.79.1-setup.exe.gpg</a></td></tr>
 <?php
   }
 ?>
@@ -117,9 +115,23 @@ for the graphical user interface. <i>[not yet started]</i></li>
 </td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
-<b>0.79.1</b>(07-Feb-2010)<br>
-<b>All platforms:</b> This release contains major internal changes compared
-to 0.72.x. Please use it carefully.
+
+<b>All platforms:</b> These releases contain major internal changes compared
+to 0.72.x. Please use them carefully.<p>
+
+<b>0.79.2</b> (28-Feb-2010)<br>
+<ul>
+<li>A binary package for Mac OS X is available now. The Mac OS X
+development environment has been updated; this removed some glitches
+in the graphical user interface.
+</li>
+<li>
+Development of the RS03 codec makes progress, but is far from being
+finished yet.
+</li>
+</ul>
+
+<b>0.79.1</b> (07-Feb-2010)<br>
 <ul>
 <li>The SCSI layer contains a workaround for buggy chipsets found in recent
 drives. Starting a read or scan operation would case a system freeze with

@@ -21,7 +21,7 @@ fi
 
 PACKAGE dvdisaster 0.79
 
-REL_MICRO=1
+REL_MICRO=2
 #REL_STATUS=patch
 REL_STATUS=devel
 #REL_STATUS=rc
@@ -112,6 +112,7 @@ CFG_CFLAGS=$SAVE_CFLAGS
 
 echo
 CHECK_ENDIAN
+CHECK_BITNESS
 CHECK_SSE2
 
 # Look for required tools

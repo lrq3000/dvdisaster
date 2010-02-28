@@ -21,6 +21,13 @@ $news_counter = 0;
 
 news_headline("Новости dvdisaster");
 
+news_item("28.02.2010", "dvdisaster 0.79.2 released", "
+ Mac OS X binaries are available again as the Mac OS X development environment 
+ has been updated for this version.
+ RS03 codec development progresses,
+but is still far from being finished.
+", 15, "2010-02-28T00:00:00Z", "2010-02-28T00:00:00Z");
+
 news_item("07.02.2010", "Started new development branch 0.79", "
 The first version of the new development branch (0.79.1) has just
 been released. This release is meant for testing new functions;

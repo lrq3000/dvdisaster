@@ -21,6 +21,13 @@ $news_counter = 0;
 
 news_headline("Neues über dvdisaster");
 
+news_item("28.02.2010", "dvdisaster 0.79.2 veröffentlicht", "
+Binärpakete sind wieder für Mac OS X verfügbar nachdem die
+Entwicklungsumgebung auch für Mac OS X aktualisiert wurde.
+ Die Entwicklung
+von RS03 geht weiter, ist aber noch längst nicht abgeschlossen.
+", 15, "2010-02-28T00:00:00Z", "2010-02-28T00:00:00Z");
+
 news_item("07.02.2010", "Beginn des neuen Entwicklungszweiges 0.79", "
 Heute wird mit Version 0.79.1 die erste Version des neuen 
 Entwicklungszweiges veröffentlicht. Diese Version dient hauptsächlich

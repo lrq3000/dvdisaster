@@ -143,8 +143,10 @@ void DrawSpiralSegment(Spiral *spiral, GdkColor *color, int segment)
 {  double a;
    double scale_i,scale_o,ring_expand;
    GdkPoint points[4];
+#if 0
 #ifdef SYS_DARWIN
    GdkRegion *region;
+#endif
 #endif
 
    if(segment<0 || segment>=spiral->segmentClipping)
@@ -178,6 +180,7 @@ void DrawSpiralSegment(Spiral *spiral, GdkColor *color, int segment)
    gdk_gc_set_rgb_fg_color(Closure->drawGC, spiral->outline);
    gdk_draw_polygon(spiral->drawable, Closure->drawGC, FALSE, points, 4);
 
+#if 0
    /* Work around GUI lock up on Mac OS X port of GTK+ 
       FIXME: Remove when GTK+ behaviour improves. */
 
@@ -185,6 +188,7 @@ void DrawSpiralSegment(Spiral *spiral, GdkColor *color, int segment)
    region = gdk_region_polygon(points, 4, GDK_EVEN_ODD_RULE);
    gdk_window_invalidate_region(GDK_WINDOW(spiral->drawable), region, FALSE);
 #endif
+#endif 
 }
 
 /*

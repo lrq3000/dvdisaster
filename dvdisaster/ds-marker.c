@@ -195,6 +195,26 @@ int CheckForMissingSector(unsigned char *buf, gint64 sector,
    return SECTOR_MISSING;
 }
 
+int CheckForMissingSectors(unsigned char *buf, gint64 sector, 
+			   unsigned char *fingerprint, gint64 fingerprint_sector,
+			   int n_sectors, gint64 *first_defect)
+{  int i,result;
+
+   for(i=0; i<n_sectors; i++)
+   {  result = CheckForMissingSector(buf, sector, fingerprint, fingerprint_sector);
+
+      if(result != SECTOR_PRESENT)
+      {  *first_defect = sector;
+	 return result;
+      }
+
+      buf += 2048;
+      sector++;
+   }
+
+   return SECTOR_PRESENT;
+}
+
 /***
  *** Dialogue for indicating problem with the missing sector
  ***/

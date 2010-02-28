@@ -43,6 +43,7 @@ oder Kratzer
 .RB [\| \-\-ignore-fatal-sense \|]
 .RB [\| \-\-internal-rereads
 .IR n \|]
+.RB [\| \-\-old-ds-marker \|]
 .RB [\| \-\-prefetch-sectors
 .IR n \|]
 .RB [\| \-\-raw-mode
@@ -231,6 +232,19 @@ zu lesen. Es ist typischerweise g\[:u]nstiger diesen Wert auf 0 oder 1 zu setzen
 und die Anzahl der Leseversuche \[:u]ber den Parameter --read-attempts zu steuern.
 Viele Laufwerke ignorieren diese Einstellung ohnehin. Benutzen Sie den Wert -1 um 
 die Standardeinstellungen des Laufwerks zu verwenden.
+.RE
+.TP
+.B \-\-old-ds-marker
+Markiert fehlende Sektoren in einer Weise, die mit dvdisaster
+0.70 oder noch früheren Versionen kompatibel ist.
+.RS
+Das voreingestellte Markierungsverfahren ist ab dvdisaster
+0.72 die bessere Wahl. Allerdings können Sie mit diesem Verfahren
+markierte Abbilder nicht mit früheren dvdisaster-Versionen verwenden,
+da diese keine fehlenden Sektoren in den Abbildern erkennen würden.
+
+Bearbeiten Sie ein Abbild nicht mit wechselnden Einstellungen für
+diese Option.
 .RE
 .TP
 .B \-\-prefetch-sectors n

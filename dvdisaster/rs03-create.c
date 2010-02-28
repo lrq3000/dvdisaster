@@ -76,6 +76,7 @@ typedef struct
    GThread *thread[MAX_CODEC_THREADS];
    char *msg;
    int earlyTermination;
+   int abortImmediately;
 
    LargeFile *writeHandle;  /* additional image file handle for writing */ 
    int progress;            /* for the status gauge / message */
@@ -89,6 +90,25 @@ static void ecc_cleanup(gpointer data)
    int i;
 
    Closure->cleanupProc = NULL;
+
+   /* Wait for workers to finish if we aborted
+      prematurely */
+
+   if(ec->abortImmediately)
+   {  
+      /* Nudge workers to wake up and abort */
+
+      g_mutex_lock(ec->lock);
+      g_cond_broadcast(ec->ioCond);
+      g_mutex_unlock(ec->lock);
+
+      /* Wait for all worker to exit */
+
+      for(i=0; i<Closure->codecThreads; i++)
+      {  g_thread_join(ec->thread[i]);
+	 fflush(stdout);
+      }
+   }
 
    if(Closure->guiMode)
    {  if(ec->earlyTermination)
@@ -109,6 +129,7 @@ static void ecc_cleanup(gpointer data)
    if(ec->lock) g_mutex_free(ec->lock);
    if(ec->ioCond) g_cond_free(ec->ioCond);
    if(ec->ii) FreeImageInfo(ec->ii);
+   if(ec->ei) FreeEccInfo(ec->ei);
    if(ec->eh) g_free(ec->eh);
    if(ec->rt) FreeReedSolomonTables(ec->rt);
    if(ec->gt) FreeGaloisTables(ec->gt);
@@ -150,7 +171,9 @@ static void abort_encoding(ecc_closure *ec, int truncate)
 {  RS03Widgets *wl = ec->wl;
 
    if(truncate && ec->lay)
-   {  if(!LargeTruncate(ec->ii->file, (gint64)(2048*ec->lay->dataSectors)))
+   {  if(Closure->eccTarget == ECC_FILE)
+	 LargeUnlink(Closure->eccName);
+      else if(!LargeTruncate(ec->ii->file, (gint64)(2048*ec->lay->dataSectors)))
 	Stop(_("Could not truncate %s: %s\n"),Closure->imageName,strerror(errno));
 
       SetLabelText(GTK_LABEL(wl->encFootline), 
@@ -176,11 +199,23 @@ static void abort_encoding(ecc_closure *ec, int truncate)
 static void remove_old_ecc(ecc_closure *ec)
 {  EccHeader *old_eh;
    LargeFile *tmp;
+   gint64 ignore;
 
    /* Handle error correction file case first */
 
    if(Closure->eccTarget == ECC_FILE)
-   {  LargeUnlink(Closure->eccName); /* remove ecc file if it exists */
+   {  if(LargeStat(Closure->eccName, &ignore))
+      {  
+	 if(ConfirmEccDeletion(Closure->eccName))
+	    LargeUnlink(Closure->eccName);
+	 else
+	 {  SetLabelText(GTK_LABEL(ec->wl->encFootline),
+			 _("<span %s>Aborted to keep existing ecc file.</span>"),
+			 Closure->redMarkup); 
+	    ec->earlyTermination = FALSE;
+	    ecc_cleanup((gpointer)ec);
+	 }
+      }
       return;
    }
 
@@ -439,15 +474,47 @@ static void read_next_chunk(ecc_closure *ec, guint64 chunk)
 
    for(layer=0; layer<lay->ndata-1; layer++) /* exclude CRC layer */
    {  gint64 offset = 0;
+      gint64 first_sec = layer*lay->sectorsPerLayer+ec->ioChunk;
+      gint64 error_sec;
+      int err;
 
       if(Closure->stopActions) /* User hit the Stop button */
+      {  ec->abortImmediately = TRUE;
 	 abort_encoding(ec, TRUE);
-
+      }
       /* Read the next data sectors of this layer.
 	 Note that the last layer is made from CRC sums. */
 
       RS03ReadSectors(ec->ii->file, lay, ec->ioData[layer], 
 		      layer, ec->ioChunk, ec->ioLayerSectors, RS03_READ_DATA);
+
+      err = CheckForMissingSectors(ec->ioData[layer], first_sec, 
+				   lay->eh->mediumFP, lay->eh->fpSector, 
+				   ec->ioLayerSectors, &error_sec);
+      if(err != SECTOR_PRESENT)
+      {   /* Remove partial ecc data */
+	  if(Closure->eccTarget == ECC_FILE)
+	  {  LargeClose(ec->writeHandle);
+	     ec->writeHandle = NULL;
+	     LargeUnlink(Closure->eccName);
+	  }
+	  else
+	  {  LargeTruncate(ec->writeHandle, (gint64)(2048*ec->ii->sectors));
+	  }
+
+	  ec->abortImmediately = TRUE;
+
+	  Stop(_("Incomplete image\n\n"
+		 "The image contains missing sectors,\n"
+		 "e.g. sector %lld.\n%s"
+		 "Error correction data works like a backup; it must\n"
+		 "be created when the image is still fully readable.\n"
+		 "Exiting and removing partial error correction data."),
+	       error_sec,
+	       err == SECTOR_MISSING ? "\n" :
+	       _("\nThis image was probably mastered from defective source(s).\n"
+		 "Perform a \"Verify\" action for more information.\n\n"));
+      }
 
       for(s=0; s<ec->ioLayerSectors; s++)
       {  
@@ -511,10 +578,15 @@ static void flush_crc(ecc_closure *ec, LargeFile *file_out)
    verbose("IO: writing CRC layer\n");
    crc_sect = 2048*(ec->ioChunk+lay->firstCrcPos);
    if(!LargeSeek(file_out, crc_sect))
+   {  ec->abortImmediately = TRUE;
+
       Stop(_("Failed seeking to sector %lld in image: %s"), crc_sect, strerror(errno));
+   }
    for(i=0; i<ec->ioLayerSectors; i++)
       if(LargeWrite(file_out, ec->ioCrc+512*i, 2048) != 2048)
+      {  ec->abortImmediately = TRUE;
 	 Stop(_("Failed writing to sector %lld in image: %s"), crc_sect, strerror(errno));
+      }
 }
 
 static void flush_parity(ecc_closure *ec, LargeFile *file_out)
@@ -534,10 +606,13 @@ static void flush_parity(ecc_closure *ec, LargeFile *file_out)
       {  gint64 s = RS03SectorIndex(lay, k+lay->ndata, ec->flushChunk+i);
 	
 	 if(!LargeSeek(file_out, 2048*s))
+	 {  ec->abortImmediately = TRUE;
 	    Stop(_("Failed seeking to sector %lld in image: %s"), s, strerror(errno));
-
+	 }
 	 if(LargeWrite(file_out, ec->slice[k]+idx, 2048) != 2048)
+	 {  ec->abortImmediately = TRUE;
 	    Stop(_("Failed writing to sector %lld in image: %s"), s, strerror(errno));
+	 }
       }
    }
    verbose("IO: parity written.\n");
@@ -748,7 +823,9 @@ static gpointer encoder_thread(ecc_closure *ec)
       int layer_index;
 
       g_mutex_lock(ec->lock);
-      while(ec->sectorsToEncode && ec->nextBufferIndex >= ec->encoderLayerSectors)
+      while(   ec->sectorsToEncode 
+	    && !ec->abortImmediately
+	    && ec->nextBufferIndex >= ec->encoderLayerSectors)
       {  verbose("ENC: encoder %d waiting for work\n", my_number);
  	 g_cond_wait(ec->ioCond, ec->lock);
       }
@@ -760,7 +837,7 @@ static gpointer encoder_thread(ecc_closure *ec)
 
       /* Termination criterion */
 
-      if(!ec->sectorsToEncode)  
+      if(!ec->sectorsToEncode || ec->abortImmediately)  
       {  g_mutex_unlock(ec->lock);
 	 verbose("ENC: encoder %d exiting\n", my_number);
 	 return NULL;
@@ -802,10 +879,13 @@ static gpointer encoder_thread(ecc_closure *ec)
 	 buffer. */
 
       g_mutex_lock(ec->lock);
-      while(!ec->slicesFree)
+      while(!ec->slicesFree && !ec->abortImmediately)
       {  g_cond_wait(ec->ioCond, ec->lock);
       }
       g_mutex_unlock(ec->lock);
+
+      if(ec->abortImmediately)
+	 return NULL;
 
       idx = 2048*layer_offset;
       par_ptr = ec->parity + 2048*nroots_aligned*layer_offset;
@@ -930,6 +1010,7 @@ static void create_reed_solomon(ecc_closure *ec)
       ec->thread[i] =  g_thread_create((GThreadFunc)encoder_thread, (gpointer)ec, TRUE, &err);
       if(!ec->thread[i])
       {  g_mutex_unlock(ec->lock);
+	 ec->abortImmediately = TRUE;
          Stop("Could not create encoder thread: %s", err->message);
       }
    }

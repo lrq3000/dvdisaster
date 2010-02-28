@@ -216,10 +216,23 @@ void RS01Create(Method *self)
 
    /*** Test the image file and create the CRC sums */
 
-   /* Explicitly unlinking the ecc file removes superflous segments
-      in FAT mode if the ecc file already existed. */
+   /* Get rid of old ecc file (if any exists) */
 
-   LargeUnlink(Closure->eccName); 
+   if(LargeStat(Closure->eccName, &n))
+   {  
+      if(ConfirmEccDeletion(Closure->eccName))
+	 LargeUnlink(Closure->eccName);
+      else
+      {  SetLabelText(GTK_LABEL(ec->wl->encFootline),
+		      _("<span %s>Aborted to keep existing ecc file.</span>"),
+		      Closure->redMarkup); 
+	 ec->earlyTermination = FALSE;
+	 goto terminate;
+      }
+   }
+
+   /* Open new ecc file */
+
    ei = ec->ei = OpenEccFile(WRITEABLE_ECC);
    ii = ec->ii = OpenImageFile(NULL, READABLE_IMAGE);
 

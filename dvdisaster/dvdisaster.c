@@ -125,7 +125,7 @@ typedef enum
    MODIFIER_FILL_UNREADABLE,
    MODIFIER_IGNORE_FATAL_SENSE,
    MODIFIER_INTERNAL_REREADS,
-   MODIFIER_NEW_DS_MARKER,
+   MODIFIER_OLD_DS_MARKER,
    MODIFIER_PREFETCH_SECTORS,
    MODIFIER_RANDOM_SEED,
    MODIFIER_READ_ATTEMPTS,
@@ -396,7 +396,7 @@ int main(int argc, char *argv[])
 	{"marked-image", 1, 0, MODE_MARKED_IMAGE },
 	{"merge-images", 1, 0, MODE_MERGE_IMAGES },
 	{"method", 2, 0, 'm' },
-	{"new-ds-marker", 0, 0, MODIFIER_NEW_DS_MARKER },
+	{"old-ds-marker", 0, 0, MODIFIER_OLD_DS_MARKER },
 	{"prefetch-sectors", 1, 0, MODIFIER_PREFETCH_SECTORS },
         {"prefix", 1, 0, 'p'},
 	{"random-errors", 1, 0, MODE_RANDOM_ERR },
@@ -583,8 +583,8 @@ int main(int argc, char *argv[])
 	    }
 	 }
 	   break;
-	 case MODIFIER_NEW_DS_MARKER:
-	    Closure->dsmVersion = 1;
+	 case MODIFIER_OLD_DS_MARKER:
+	    Closure->dsmVersion = 0;
 	    break;
          case MODIFIER_PREFETCH_SECTORS:
  	    Closure->prefetchSectors = atoi(optarg);
@@ -921,8 +921,8 @@ int main(int argc, char *argv[])
 	     "  -p,--prefix prefix     - prefix of .iso/.ecc file (default: medium.*  )\n"
 	     "  -i,--image  imagefile  - name of image file       (default: medium.iso)\n"
 	     "  -e,--ecc    eccfile    - name of parity file      (default: medium.ecc)\n"
-	     "  -o,--ecc-target [file|image] - where to put ecc data in RS03\n"),
-	     Closure->device);
+	     "  -o,--ecc-target [file image] - where to put ecc data in RS03\n"),
+	       Closure->device);
 
       PrintCLI("\n");
 
@@ -946,6 +946,7 @@ int main(int argc, char *argv[])
       PrintCLI(_("  --fill-unreadable n    - fill unreadable sectors with byte n\n"));
       PrintCLI(_("  --ignore-fatal-sense   - continue reading after potentially fatal error conditon\n"));
       PrintCLI(_("  --internal-rereads n   - drive may attempt n rereads before reporting an error\n"));
+      PrintCLI(_("  --old-ds-marker        - mark missing sectors compatible with dvdisaster <= 0.70\n"));
       PrintCLI(_("  --prefetch-sectors n   - prefetch n sectors for RS03 encoding (uses ~nMB)\n"));
       PrintCLI(_("  --raw-mode n           - mode for raw reading CD media (20 or 21)\n"));
       PrintCLI(_("  --read-attempts n-m    - attempts n upto m reads of a defective sector\n"));

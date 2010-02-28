@@ -357,9 +357,13 @@ enum
    PREF_ECC_SIZE = 2
 };
 
+#ifdef HAVE_32BIT
+static int cache_size[] = { 8, 16, 32, 64, 96, 128, 192, 256, 384, 512, 768, 
+			    1024, 1536 };
+#else
 static int cache_size[] = { 8, 16, 32, 64, 96, 128, 192, 256, 384, 512, 768, 
 			    1024, 1536, 2048, 2560, 3072, 4096, 5120, 6144, 7168, 8192 };
-//			    11264, 15360, 23552, 31744, 48128, 64512 };
+#endif
 
 static gchar* format_cb(GtkScale *scale, gdouble value, gpointer data)
 {  int nroots = value;

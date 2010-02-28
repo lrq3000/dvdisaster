@@ -125,6 +125,7 @@ typedef struct _prefs_context
    GtkWidget *ejectA, *ejectB;
    GtkWidget *readAndCreateButtonA, *readAndCreateButtonB;
    GtkWidget *unlinkImageButtonA, *unlinkImageButtonB;
+   GtkWidget *confirmDeletionA, *confirmDeletionB;
    GtkWidget *mainNotebook;
    GtkWidget *methodChooserA,*methodChooserB;
    GtkWidget *methodNotebook;
@@ -339,6 +340,15 @@ void UpdatePrefsExhaustiveSearch(void)
    }
 }
 
+void UpdatePrefsConfirmDeletion(void)
+{  prefs_context *pc = (prefs_context*)Closure->prefsContext;
+
+   if(Closure->prefsContext)
+   {  activate_toggle_button(GTK_TOGGLE_BUTTON(pc->confirmDeletionA), Closure->confirmDeletion); 
+      activate_toggle_button(GTK_TOGGLE_BUTTON(pc->confirmDeletionB), Closure->confirmDeletion); 
+   }
+}
+
 /*
  * Register a preferences help window 
  */
@@ -372,6 +382,7 @@ enum
    TOGGLE_EJECT,
    TOGGLE_VERBOSE,
    TOGGLE_LOGFILE,
+   TOGGLE_CONFIRM_DELETION,
 
    SPIN_DELAY,
    SPIN_INTERNAL_ATTEMPTS,
@@ -444,6 +455,12 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 	Closure->unlinkImage = state;
 	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->unlinkImageButtonA), state);
 	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->unlinkImageButtonB), state);
+	break;
+
+      case TOGGLE_CONFIRM_DELETION:
+	Closure->confirmDeletion = state;
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->confirmDeletionA), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->confirmDeletionB), state);
 	break;
 
       case TOGGLE_SUFFIX:
@@ -2578,6 +2595,45 @@ void CreatePreferencesWindow(void)
 		       _("<b>Automatic image file removal</b>\n\n"
 			 "If this switch is set the image file will be deleted following the successful "
 			 "generation of the respective error correction file."));
+
+      /*** Deletion confirmation */
+
+      frame = gtk_frame_new(_utf("Confirm file overwriting"));
+      gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
+
+      vbox2 = gtk_vbox_new(FALSE, 15);
+      gtk_container_set_border_width(GTK_CONTAINER(vbox2), 10);
+      gtk_container_add(GTK_CONTAINER(frame), vbox2);
+
+      /* automatic creation */
+
+      lwoh = CreateLabelWithOnlineHelp(_("Confirm file overwriting"), _("Ask before overwriting image and ecc files"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
+	 GtkWidget *button = gtk_check_button_new();
+
+	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
+      	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
+	 activate_toggle_button(GTK_TOGGLE_BUTTON(button), Closure->confirmDeletion);
+	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_CONFIRM_DELETION));
+
+	 if(!i)
+	 {  pc->confirmDeletionA = button;
+	    gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	 }
+	 else
+	 {  pc->confirmDeletionB = button;
+	    AddHelpWidget(lwoh, hbox);
+	 }
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Ask before overwriting image and ecc files</b>\n\n"
+			 "dvdisaster will ask you for confirmation "
+			 "when it is going to overwrite an existing image "
+			 "or error correction file if this option is checked."));
 
       /*** GUI page */
 

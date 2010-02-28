@@ -42,6 +42,7 @@ DVDISASTER \- data loss/scratch/aging protection for CD/DVD media
 .RB [\| \-\-ignore-fatal-sense \|]
 .RB [\| \-\-internal-rereads
 .IR n \|]
+.RB [\| \-\-old-ds-marker \|]
 .RB [\| \-\-prefetch-sectors
 .IR n \|]
 .RB [\| \-\-raw-mode
@@ -220,6 +221,18 @@ The drive firmware usually retries unreadable sectors a few times before
 giving up and returning a read error. It is more efficient to set this to 0 or 1
 and manage read attempts through the --read-attempts parameter. Most drives ignore
 this setting anyways. Use -1 to leave the drive at its default setting.
+.RE
+.TP
+.B \-\-old-ds-marker
+Marks missing sectors in a manner which is compatible with
+dvdisaster 0.70 or older.
+.RS
+The default marking method is recommended for dvdisaster 0.72 and later
+versions. However images marked with the current method can not
+be processed with older dvdisaster versions as missing sectors
+would not be recognized in the image. 
+
+Do not process the same image with different settings for this option.
 .RE
 .TP
 .B \-\-prefetch-sectors n

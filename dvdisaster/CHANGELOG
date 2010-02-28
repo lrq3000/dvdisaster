@@ -1,3 +1,16 @@
+0.79.2  28-02-2010
+	Semantic Changes
+	The new missing sector marking method is now the default.
+	When interchanging images with dvdisaster 0.70 or older,
+	use --old-ds-marker or the respective setting under
+	Image/Image format in the preferences setting.
+	
+	Changes
+	- RS03 encoding will check for defective sectors now
+	- fixed crash when aborting RS03 encoding
+	- made the new missing sector marking method the default
+	- confirmation dialogues for overwriting images and ecc files
+	  are now configurable via preferences
 
 0.79.1 07-02-2010	
        A word of caution: This version is still evolving and some parts

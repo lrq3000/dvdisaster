@@ -1113,3 +1113,69 @@ void LockLabelSize(GtkLabel *label, char *format, ...)
 
    g_free(text);
 }
+
+/***
+ *** Safety requesters before overwriting stuff
+ ***/
+
+static void dont_ask_again_cb(GtkWidget *widget, gpointer data)
+{  int state  = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+  
+   Closure->confirmDeletion = !state;
+
+   UpdatePrefsConfirmDeletion();
+}
+
+static void insert_button(GtkDialog *dialog)
+{  GtkWidget *check,*align;
+
+   align = gtk_alignment_new(0.5, 0.5, 0.0, 0.0);
+   gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), align, FALSE, FALSE, 0);
+
+   check = gtk_check_button_new_with_label(_utf("Do not ask again"));
+   gtk_container_add(GTK_CONTAINER(align), check);
+   gtk_container_set_border_width(GTK_CONTAINER(align), 10);
+   g_signal_connect(G_OBJECT(check), "toggled", G_CALLBACK(dont_ask_again_cb), NULL);
+
+   gtk_widget_show(align);
+   gtk_widget_show(check);
+   ReverseCancelOK(GTK_DIALOG(dialog));
+} 
+
+int ConfirmImageDeletion(char *file)
+{  int answer;
+
+   if(!Closure->guiMode)  /* Always delete it in command line mode */
+      return TRUE;
+
+   if(!Closure->confirmDeletion) /* I told you so... */
+      return TRUE;
+
+   answer = ModalDialog(GTK_MESSAGE_QUESTION, GTK_BUTTONS_OK_CANCEL,
+			insert_button,
+			_("Image file already exists and does not match the medium:\n\n"
+			  "%s\n\n"
+			  "The existing image file will be deleted."),
+			file);
+
+   return answer == GTK_RESPONSE_OK;
+}
+
+int ConfirmEccDeletion(char *file)
+{  int answer;
+
+   if(!Closure->guiMode)  /* Always delete it in command line mode */
+      return TRUE;
+
+   if(!Closure->confirmDeletion) /* I told you so... */
+      return TRUE;
+
+   answer = ModalDialog(GTK_MESSAGE_QUESTION, GTK_BUTTONS_OK_CANCEL,
+			insert_button,
+			_("The error correction file is already present:\n\n"
+			  "%s\n\n"
+			  "Overwrite it?"),
+			file);
+
+   return answer == GTK_RESPONSE_OK;
+}

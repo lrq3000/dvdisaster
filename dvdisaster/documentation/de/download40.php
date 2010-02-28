@@ -60,7 +60,7 @@ MacOS:
 
 <ul>
 <li> Aktualisierung des GTK+-Toolkits und weitere Workarounds für die
-Benutzeroberfläche. <i>[noch nicht angefangen]</i></li>
+Benutzeroberfläche. <i>[in Bearbeitung]</i></li>
 </ul>
 
 <hr>
@@ -72,49 +72,47 @@ Die Alpha-Versionen verwenden das gleiche Paketformat wie die normalen
 Versionen.<p>
 
 <table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.79</b></td><td align="right">07-Feb-2010</td></tr>
+<tr><td><b>dvdisaster-0.79</b></td><td align="right">28-Feb-2010</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Quellkode für alle Betriebssysteme:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.1.tar.bz2">dvdisaster-0.79.1.tar.bz2</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.2.tar.bz2">dvdisaster-0.79.2.tar.bz2</a></td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.1.tar.bz2.gpg">dvdisaster-0.79.1.tar.bz2.gpg</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.2.tar.bz2.gpg">dvdisaster-0.79.2.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">Binärversion für Mac OS X 10.5 / x86:&nbsp;</td>
-        <td>keine für diese Version <!---<a href="http://dvdisaster.net/downloads/dvdisaster-0.79.1.app.zip">dvdisaster-0.79.1.app.zip</a>&nbsp;--&nbsp;bitte erst den <a href="download30.php#mac">Hinweis</a> lesen---></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.2.app.zip">dvdisaster-0.79.2.app.zip</a>&nbsp;--&nbsp;bitte erst den <a href="download30.php#mac">Hinweis</a> lesen</td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><!---<a href="http://dvdisaster.net/downloads/dvdisaster-0.79.1.app.zip.gpg">dvdisaster-0.79.1.app.zip.gpg</a></td>---></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.2.app.zip.gpg">dvdisaster-0.79.2.app.zip.gpg</a></td></tr>
     <tr><td align="right">Binärversion für Windows:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.1-setup.exe">dvdisaster-0.79.1-setup.exe</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.2-setup.exe">dvdisaster-0.79.2-setup.exe</a></td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.1-setup.exe.gpg">dvdisaster-0.79.1-setup.exe.gpg</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.2-setup.exe.gpg">dvdisaster-0.79.2-setup.exe.gpg</a></td></tr>
     <tr><td colspan="2"> </td></tr>
 <?php
   if($show_all == 0) {
 ?>
-<!---
     <tr><td colspan="2"><a href="download40.php?showall=1#download">Ältere Veröffentlichungen des 0.79er-Versionszweiges anzeigen</a></td></tr>
---->
 <?php
   }
   else {
 ?> 
-<!---
    <tr><td colspan="2"><a href="download40.php?showall=0#download">Ältere Veröffentlichungen des 0.79er-Versionszweiges verbergen</a></td></tr>
    <tr><td colspan="2"> </td></tr>
     <tr><td align="right">&nbsp;&nbsp;Quellkode für alle Betriebssysteme:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.0.tar.bz2">dvdisaster-0.79.0.tar.bz2</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.1.tar.bz2">dvdisaster-0.79.1.tar.bz2</a></td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.0.tar.bz2.gpg">dvdisaster-0.79.0.tar.bz2.gpg</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.1.tar.bz2.gpg">dvdisaster-0.79.1.tar.bz2.gpg</a></td></tr>
+<!---
     <tr><td align="right">Binärversion für Mac OS X 10.5 / x86:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.0.app.zip">dvdisaster-0.79.0.app.zip</a>&nbsp;--&nbsp;bitte erst den <a href="download30.php#mac">Hinweis</a> lesen</td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.1.app.zip">dvdisaster-0.79.1.app.zip</a>&nbsp;--&nbsp;bitte erst den <a href="download30.php#mac">Hinweis</a> lesen</td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.0.app.zip.gpg">dvdisaster-0.79.0.app.zip.gpg</a></td></tr>
-    <tr><td align="right">Binärversion für Windows:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.0-setup.exe">dvdisaster-0.79.0-setup.exe</a></td></tr>
-    <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.0-setup.exe.gpg">dvdisaster-0.79.0-setup.exe.gpg</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.1.app.zip.gpg">dvdisaster-0.79.1.app.zip.gpg</a></td></tr>
 --->
+    <tr><td align="right">Binärversion für Windows:&nbsp;</td>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.1-setup.exe">dvdisaster-0.79.1-setup.exe</a></td></tr>
+    <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.79.1-setup.exe.gpg">dvdisaster-0.79.1-setup.exe.gpg</a></td></tr>
 <?php
   }
 ?>
@@ -123,10 +121,23 @@ Versionen.<p>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
 
-<b>0.79.1</b> (07-Feb-2010)<br>
-<b>Alle Plattformen:</b> Diese Version enthält umfangreiche Änderungen an
+<b>Alle Plattformen:</b> Diese Versionen enthalten umfangreiche Änderungen an
 den inneren Strukturen im Vergleich zu Version 0.72.x. Bitte verwenden Sie sie
-mit Vorsicht. 
+mit Vorsicht.<p>
+
+<b>0.79.2</b> (28-Feb-2010)<br>
+<ul>
+<li>Für Mac OS X ist wieder ein Binärpaket verfügbar. Die Entwicklungsumgebung
+wurde auf einen aktuellen Stand gebracht; dies hat einige Probleme mit der
+graphischen Darstellung behoben.
+</li>
+<li>
+Die Entwicklung von RS03 schreitet weiter voran,
+ist aber noch längst nicht abgeschlossen. 
+</li>
+</ul>
+
+<b>0.79.1</b> (07-Feb-2010)<br>
 <ul>
 <li>Die SCSI-Schicht enthält eine Umgehungslösung für fehlerhafte Chipsätze,
 die in neueren Laufwerken verbaut sein können. Das Ausführen einer Lese- oder

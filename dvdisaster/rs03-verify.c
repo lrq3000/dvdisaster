@@ -608,7 +608,7 @@ static int check_syndromes(verify_closure *vc)
 			_("<span %s>Out of memory; try reducing sector prefetch!</span>"),
 			Closure->redMarkup);
 	 PrintLog(_("* Ecc block test   : out of memory; try reducing sector prefetch!\n"));
-	 return TRUE;
+	 return 0;
       }
    }
 
@@ -635,7 +635,7 @@ static int check_syndromes(verify_closure *vc)
       {  SetLabelText(GTK_LABEL(vc->wl->cmpEccSyndromes), 
 		      _("<span %s>Aborted by user request!</span>"),
 		      Closure->redMarkup); 
-         return TRUE;
+         return 0;
       }
 
       /* Reload cache? */
@@ -1281,7 +1281,7 @@ void RS03Verify(Method *self)
    {  SetLabelText(GTK_LABEL(wl->cmpEccSynLabel), _("Ecc block test:"));
       SetLabelText(GTK_LABEL(wl->cmpEccSyndromes), "");
    }
-   if(total_missing + data_crc_errors != 0)
+   if(0&&total_missing + data_crc_errors != 0)
    { if(Closure->guiMode) 
         SetLabelText(GTK_LABEL(wl->cmpEccSyndromes),
 		     _("<span %s>Skipped; not useful on known defective image</span>"),
