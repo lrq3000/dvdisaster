@@ -787,6 +787,7 @@ static gpointer io_thread(ecc_closure *ec)
 static gpointer encoder_thread(ecc_closure *ec)
 {  GThread *self;
    unsigned char *par_ptr;
+   int cl_size;
    int my_number=-1;
    int nroots = ec->lay->nroots;
    int ndata  = ec->lay->ndata;
@@ -806,6 +807,12 @@ static gpointer encoder_thread(ecc_closure *ec)
      if(ec->thread[i] == self)
        my_number = i;
    g_mutex_unlock(ec->lock);
+
+   /*** Pre-calculate some values */
+
+   cl_size = Closure->clSize;
+   if(2048%cl_size != 0)
+     cl_size = 64;
 
    /*** The encoder is repeatedly called on 2K chunks.
 	Pre-calculate the shift register state value at the beginning
@@ -890,11 +897,31 @@ static gpointer encoder_thread(ecc_closure *ec)
       idx = 2048*layer_offset;
       par_ptr = ec->parity + 2048*nroots_aligned*layer_offset;
 
-      for(j=2048*enc_size; j>0; j--, idx++)
-      {  unsigned char *par = par_ptr;
+      /* Step through the encoded data in cl_size chunks.
+	 If we have enough L1/L2 cache for nroots*cl_size
+	 cache lines, we can buffer all reads and writes
+	 in the processor cache and get a nice speedup.
+	 Even if we don't have enough cache for reads,
+	 aligning the writes to cl_size should do something. */
+
+      for(j=2048*enc_size/cl_size; j>0; j--)
+      {  
 	 for(k=0; k<nroots; k++)
-	   ec->slice[k][idx] = *par++;
-	 par_ptr += nroots_aligned;
+	 {  unsigned char *par = par_ptr+k;
+	    unsigned char *slice = &ec->slice[k][idx];
+
+	    /* Collect sufficient roots for a particular slice
+	       so that one cache line is filled as writing less
+	       than one cache line is very expensive. */
+
+	    for(i=cl_size; i>0; i--)
+	    {  *slice++ = *par;
+	       par += nroots_aligned;
+	    }
+	 }
+
+	 idx+=cl_size;
+	 par_ptr += cl_size*nroots_aligned;
       }
 
       g_mutex_lock(ec->lock);

@@ -137,7 +137,7 @@ static void cleanup(gpointer data)
    memset(rc, sizeof(read_closure), 0xff); 
    g_free(rc);
 
-   if(Closure->readAndCreate && Closure->guiMode && !strncmp(Closure->methodName, "RS01", 4)
+   if(Closure->readAndCreate && Closure->guiMode && !strncmp(Closure->methodName, "RS01", 4) // FIXME for RS03
       && !scan_mode && !aborted)
    {  if(!full_read)
       {  ModalDialog(GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, NULL,
@@ -197,33 +197,63 @@ static void register_reader(read_closure *rc)
  */
 
 static void check_for_ecc_data(read_closure *rc)
-{
+{  
    Closure->eccType = ECC_NONE;
 
-   /* Compare the fingerprint sectors */
-   rc->ei = OpenEccFile(READABLE_ECC | PRINT_MODE);
+   memcpy(rc->eccMethodName, "NONE", 5);
 
-   if(rc->ei) /* ECC file */
+   /* Open the ecc file and see if some codec
+      feels responsible for it */
+
+   rc->ei = OpenEccFile(READABLE_ECC | PRINT_MODE);
+   if(rc->ei)
+   {  int i;
+
+      for(i=0; i<Closure->methodList->len; i++)  
+      {  Method *method = g_ptr_array_index(Closure->methodList, i);
+
+         if(   method->recognizeEccFile
+	    && method->recognizeEccFile(method, rc->ei->file))
+	 {  rc->eccMethod = method;
+	    strncpy(rc->eccMethodName, method->name, 4);
+	    rc->dataSectors = uchar_to_gint64(rc->ei->eh->sectors);
+	    rc->eccFile = TRUE;
+	    Closure->eccType = ECC_RS01;  /* fixme: delete */
+	 }
+      }
+   }
+
+   /* Compare the fingerprint sectors */
+
+   if(rc->ei) /* ECC file present */
    {  guint8 fingerprint[16];
       int fp_read;
 
       fp_read = GetMediumFingerprint(rc->dh, fingerprint, rc->ei->eh->fpSector);
 
-      if(fp_read && !memcmp(fingerprint, rc->ei->eh->mediumFP, 16))
-      {  rc->dataSectors = uchar_to_gint64(rc->ei->eh->sectors);
-	 Closure->eccType = ECC_RS01;
-      }
-      else
+      if(!fp_read || memcmp(fingerprint, rc->ei->eh->mediumFP, 16))
       {  FreeEccInfo(rc->ei);
 	 rc->ei = NULL;
+	 rc->eccMethod = NULL;
+	 memcpy(rc->eccMethodName, "NONE", 5);
+	 rc->eccFile = FALSE;
       }
    }
-   
-   /* maybe we have an augmented image */
+
+   /* If no ecc file is found, see if we have an augmented image.
+      FIXME: There is no appropriate method in the codec! */
+
    if(rc->dh->rs02Header)  /* see if we have RS02 type ecc */
-   {  rc->dataSectors = uchar_to_gint64(rc->dh->rs02Header->sectors);
-      Closure->eccType = ECC_RS02;
+   {  rc->eccMethod = FindMethod("RS02");
+      strncpy(rc->eccMethodName, "RS02", 4);
+      rc->dataSectors = uchar_to_gint64(rc->dh->rs02Header->sectors);
+      Closure->eccType = ECC_RS02;  /* fixme: remove */
+      rc->eccMethod->lastEh = g_malloc(sizeof(EccHeader));
+      memcpy(rc->eccMethod->lastEh, rc->dh->rs02Header, sizeof(EccHeader));
    }
+
+   // fixme: delete
+   printf("eccName %s, file = %d\n", rc->eccMethodName, rc->eccFile);
 }
 
 /*
@@ -445,16 +475,28 @@ static void prepare_crc_cache(read_closure *rc)
          so we keep them in the CrcBuf struct which deals with lost
          sectors internally. */
 
-   if(Closure->eccType != ECC_NONE)
+   if(rc->eccMethod)
    {  
-      PrintCLI("%s ...",_("Reading CRC information from ecc data"));
+      PrintCLI("%s (%s) ... ",_("Reading CRC information from ecc data"),
+	                      rc->eccMethodName);
       if(Closure->guiMode)
 	 SetLabelText(GTK_LABEL(Closure->readLinearHeadline),
 		      "<big>%s</big>\n<i>%s</i>", 
 		      _("Reading CRC information from ecc data"),
 		      rc->dh->mediumDescr);
 
-      switch(Closure->eccType)
+      if(rc->eccMethod->getCrcBuf)
+	   rc->crcBuf = rc->eccMethod->getCrcBuf(rc->eccMethod, 
+						 rc->eccFile ? rc->ei->file : rc->dh);
+      else rc->crcBuf = NULL;
+
+      if(rc->eccMethod->resetCksums)
+      {  rc->doMD5sums = TRUE;
+	 rc->eccMethod->resetCksums(rc->eccMethod);
+      }
+
+#if 0
+      switch(Closure->eccType)  /* FIXME: remove this */
       {  case ECC_RS01:
 	    rc->crcBuf = GetCRCFromRS01(rc->ei);
 	    rc->doMD5sums = TRUE;
@@ -465,7 +507,7 @@ static void prepare_crc_cache(read_closure *rc)
 	 {  EccHeader *eh = rc->dh->rs02Header;
 	       
 	    rc->lay = CalcRS02Layout(uchar_to_gint64(eh->sectors), eh->eccBytes);
-	    rc->crcBuf = GetCRCFromRS02(rc->lay, rc->dh, rc->readerImage);
+	    rc->crcBuf = GetCRCFromRS02_obsolete(rc->lay, rc->dh, rc->readerImage);
 	    rc->doMD5sums = TRUE;
 	    MD5Init(&rc->dataCtxt);
 	    MD5Init(&rc->crcCtxt);
@@ -477,6 +519,7 @@ static void prepare_crc_cache(read_closure *rc)
 	    rc->crcBuf = NULL;
 	    break;
       }
+#endif
 
       if(Closure->guiMode)
 	 SetLabelText(GTK_LABEL(Closure->readLinearHeadline),
@@ -676,59 +719,38 @@ static gpointer worker_thread(read_closure *rc)
 	 }
       }
 
+#if 0  // fixme: remove
       /* Create the full-image md5sum */
 
       if(rc->doMD5sums)
 	 MD5Update(&rc->md5ctxt, rc->alignedBuf[rc->writePtr]->buf, 2048*nsectors);
+#endif
 
       /* Do on-the-fly CRC / md5sum testing. This is the only action carried out
          in scan mode, but also done while reading. */         
 
-      if(Closure->eccType && rc->bufState[rc->writePtr] != BUF_DEAD)
+      if(rc->eccMethod && rc->bufState[rc->writePtr] != BUF_DEAD)
       {
 	for(i=0; i<nsectors; i++)
 	{  unsigned char *buf = rc->alignedBuf[rc->writePtr]->buf+2048*i;
 	   gint64 sector = s+i;
 
+	   /* Have the codec update its internal checksums */
+
+	   if(rc->doMD5sums)
+	      rc->eccMethod->updateCksums(rc->eccMethod, sector, buf);
+
 	   switch(Closure->eccType)
 	   {  case ECC_RS02:
-		 /* md5sum the data portion */
-		 if(rc->doMD5sums && sector < rc->lay->dataSectors)
-		 {  if(sector < rc->lay->dataSectors - 1)
-		         MD5Update(&rc->dataCtxt, buf, 2048);
-		    else MD5Update(&rc->dataCtxt, buf, rc->dh->rs02Header->inLast);
-		 }
-
-		 /* md5sum the crc portion */
-		 if(rc->doMD5sums && sector >= rc->lay->dataSectors+2 && sector < rc->lay->protectedSectors)
-		    MD5Update(&rc->crcCtxt, buf, 2048);
-
-		 /* md5sum the ecc layers */
-		 if(rc->doMD5sums && sector >= rc->lay->protectedSectors)
-		 {  gint64 layer, n;
-
-		    RS02SliceIndex(rc->lay, sector, &layer, &n);
-		    if(layer != -1)  /* not an ecc header? */
-		    {  if(n < rc->lay->sectorsPerLayer-1)  /* not at layer end? */
-			  MD5Update(&rc->eccCtxt, buf, 2048);
-		       else  /* layer end; update meta md5 and skip to next layer */
-		       {  guint8 sum[16];
-			  MD5Update(&rc->eccCtxt, buf, 2048);
-			  MD5Final(sum, &rc->eccCtxt);
-			  MD5Update(&rc->metaCtxt, sum, 16);
-			  MD5Init(&rc->eccCtxt);
-		       }
-		    }
-		    /* maybe add ...else { check ecc header } */ 
-		 }
-
+		 /* nothing left here! */
 		 /* fall through! */
 
 	      case ECC_RS01:
 		 if(sector < rc->dataSectors) /* FIXME: not okay for RS03 */
 		 {  if(   rc->crcBuf
 		       && CheckAgainstCrcBuffer(rc->crcBuf, sector, buf) == CRC_BAD)
-		    {  PrintCLI(_("* CRC error, sector: %lld\n"), (long long int)s+i);
+		    {  ClearProgress();
+		       PrintCLI(_("* CRC error, sector: %lld\n"), (long long int)s+i);
 		       Closure->crcErrors++;
 		       if(rc->readMap)  /* trigger re-read FIXME*/
 			  ClearBit(rc->readMap, sector);
@@ -772,13 +794,10 @@ static void insert_buttons(GtkDialog *dialog)
 void ReadMediumLinear(gpointer data)
 {  read_closure *rc = g_malloc0(sizeof(read_closure));
    unsigned char fp[16];
-   guint8 data_md5[16];
-   guint8 crc_md5[16];
-   guint8 meta_md5[16];
    char *md5_failure = NULL;
    GError *err = NULL;
    int nsectors; 
-   char *t;
+   char *t = NULL;
    int status,n;
    int tao_tail;
    int i;
@@ -1254,47 +1273,48 @@ step_counter:
    /*** Finalize on-the-fly checksum calculation */
 
    if(rc->doMD5sums)
-        MD5Final(Closure->md5Cache, &rc->md5ctxt);
+        md5_failure = rc->eccMethod->finalizeCksums(rc->eccMethod);
    else ClearCrcCache();  /* deferred until here to avoid race condition */
 
-   if(rc->doMD5sums && Closure->eccType == ECC_RS02)
-   {  MD5Final(data_md5, &rc->dataCtxt);
-      MD5Final(crc_md5, &rc->crcCtxt);
-      MD5Final(meta_md5, &rc->metaCtxt);
-
-      if(memcmp(meta_md5, rc->dh->rs02Header->eccSum, 16))
-      {    md5_failure = g_strdup(_("but wrong ecc md5sum"));
-	   Verbose("BAD ECC md5sum\n");
-      }
-      else Verbose("GOOD ECC md5sum\n");
-
-      if(memcmp(crc_md5, rc->dh->rs02Header->crcSum, 16))
-      {    if(md5_failure) g_free(md5_failure);
-	   md5_failure = g_strdup(_("but wrong crc md5sum"));
-	   Verbose("BAD CRC md5sum\n");
-      }
-      else Verbose("GOOD CRC md5sum\n");
-
-      if(memcmp(data_md5, rc->dh->rs02Header->mediumSum, 16))
-      {    if(md5_failure) g_free(md5_failure);
-	   md5_failure = g_strdup(_("but wrong data md5sum"));
-	   Verbose("BAD Data md5sum\n");
-      }
-      else Verbose("GOOD Data md5sum\n");
-   }
-
    Verbose("CRC %s.\n", Closure->crcCache ? "cached" : "NOT created.");
-   Verbose("md5sum %s.\n", rc->doMD5sums ? "cached" : "NOT created.");
 
    /*** Print summary */
 
+   t = NULL;
    if(rc->rereading)
    {  if(!Closure->readErrors) t = g_strdup_printf(_("%lld sectors read.     "),rc->readOK);
       else                     t = g_strdup_printf(_("%lld sectors read; %lld unreadable sectors."),rc->readOK,Closure->readErrors);
    }
-   else
+   else  /* not rereading */
    {  if(!Closure->readErrors && !Closure->crcErrors) 
-      {  
+      {  /* No sector errors. Check size... */
+	 if(rc->eccFile)
+	 {  if(rc->dh->sectors != rc->ei->sectors)
+	       t = g_strdup_printf(_("All sectors successfully read, but wrong image length (%lld sectors difference)"), rc->dh->sectors - rc->ei->sectors);
+	 }
+	 /* and internal checksums. */
+	 if(   rc->readOK == rc->sectors  /* no user limited range */  
+	    && rc->pass == 1              /* md5sum invalid after first pass */
+	    && md5_failure && !t)
+	 {  t = md5_failure;
+	    md5_failure = NULL;
+	 }
+	 else 
+	    if(!t) t = g_strdup_printf(_("All sectors successfully read. Checksums match."));
+
+	 if(!t) 
+	    t = g_strdup_printf(_("All sectors successfully read."));
+      }
+      else /* we have unreadable or damaged sectors */
+      {  if(Closure->readErrors && !Closure->crcErrors)
+	      t = g_strdup_printf(_("%lld unreadable sectors."),Closure->readErrors);
+         else if(!Closure->readErrors && Closure->crcErrors)
+	      t = g_strdup_printf(_("%lld CRC errors."),Closure->crcErrors);
+	 else t = g_strdup_printf(_("%lld CRC errors, %lld unreadable sectors."),Closure->crcErrors, Closure->readErrors);
+      }
+   }
+
+#if 0
 	 switch(Closure->eccType)
 	 {  case ECC_RS01:
 	       if(rc->dh->sectors != rc->ei->sectors)
@@ -1317,15 +1337,8 @@ step_counter:
 	       t = g_strdup_printf(_("All sectors successfully read."));
 	       break;
 	 }
-      }
-      else 
-      {  if(Closure->readErrors && !Closure->crcErrors)
-	      t = g_strdup_printf(_("%lld unreadable sectors."),Closure->readErrors);
-         else if(!Closure->readErrors && Closure->crcErrors)
-	      t = g_strdup_printf(_("%lld CRC errors."),Closure->crcErrors);
-	 else t = g_strdup_printf(_("%lld CRC errors, %lld unreadable sectors."),Closure->crcErrors, Closure->readErrors);
-      }
-   }
+#endif
+
    PrintLog("\n%s\n",t);
    if(Closure->guiMode)
    {  if(rc->scanMode) SwitchAndSetFootline(Closure->readLinearNotebook, 1, Closure->readLinearFootline, 
@@ -1333,7 +1346,8 @@ step_counter:
       else             SwitchAndSetFootline(Closure->readLinearNotebook, 1, Closure->readLinearFootline, 
 					 "%s%s",_("Reading finished: "),t);
    }
-   g_free(t);
+   if(t) g_free(t);
+   if(md5_failure) g_free(md5_failure);
 
    PrintTimeToLog(rc->readTimer, "for reading/scanning.\n");
 

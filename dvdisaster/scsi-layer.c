@@ -2262,9 +2262,11 @@ static int read_cd_sector(DeviceHandle *dh, unsigned char *buf, int lba, int nse
    ret = SendPacket(dh, cmd, 12, buf, 2048*nsectors, sense, DATA_READ);
 
 #if 0
-   if(lba==16000)  /* fixme */
-   {  buf[240]^=255;
-   }
+#define BORK 51214
+   if(lba<=BORK && BORK<lba+nsectors)  /* fixme */
+     {  int offset = 2048*(BORK-lba);
+      buf[offset+240]^=255;
+  }
 #endif
 
    if(ret<0) RememberSense(sense->sense_key, sense->asc, sense->ascq);

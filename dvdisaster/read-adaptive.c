@@ -671,11 +671,11 @@ static void load_crc_buf(read_closure *rc)
    switch(rc->readMode)
    {  case ECC_IN_FILE:
 	 SetAdaptiveReadSubtitle(_utf("Loading CRC data."));
-	 rc->crcBuf = GetCRCFromRS01(rc->ei);
+	 rc->crcBuf = GetCRCFromRS01_obsolete(rc->ei);
 	 break;
       case ECC_IN_IMAGE:
 	 SetAdaptiveReadSubtitle(_utf("Loading CRC data."));
-	 rc->crcBuf = GetCRCFromRS02(rc->lay, rc->dh, rc->image);
+	 rc->crcBuf = GetCRCFromRS02_obsolete(rc->lay, rc->dh, rc->image);
 	 break;
       default:
 	 rc->crcBuf = NULL;

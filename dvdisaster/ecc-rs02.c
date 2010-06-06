@@ -33,6 +33,8 @@ static void destroy(Method*);
 void register_rs02(void)
 {  Method *method = g_malloc0(sizeof(Method));
 
+   method->ckSumClosure = g_malloc(sizeof(RS02CksumClosure));
+
    /*** Standard infomation and methods */ 
 
    strncpy(method->name, "RS02", 4);
@@ -42,9 +44,13 @@ void register_rs02(void)
    method->fix     = RS02Fix;
    method->verify  = RS02Verify;
 
-   /*** Linkage to rs01-common.c */
+   /*** Linkage to rs02-common.c */
 
    method->recognizeEccImage = RS02Recognize;
+   method->getCrcBuf         = RS02GetCrcBuf;
+   method->resetCksums       = RS02ResetCksums;
+   method->updateCksums      = RS02UpdateCksums;
+   method->finalizeCksums    = RS02FinalizeCksums;
 
    /*** Linkage to rs02-window.c */
 
@@ -58,7 +64,7 @@ void register_rs02(void)
    method->resetPrefsPage    = ResetRS02PrefsPage;
    method->readPreferences   = ReadRS02Preferences;
 
-   /*** Linkage to rs01-verify.c */
+   /*** Linkage to rs02-verify.c */
 
    method->createVerifyWindow = CreateRS02VerifyWindow;
    method->resetVerifyWindow  = ResetRS02VerifyWindow;
@@ -72,6 +78,11 @@ void register_rs02(void)
 
 static void destroy(Method *method)
 {  RS02Widgets *wl = (RS02Widgets*)method->widgetList;
+   RS02CksumClosure *csc = (RS02CksumClosure*)method->ckSumClosure;
+
+   if(csc->lay)
+      g_free(csc->lay);
+   g_free(method->ckSumClosure);
 
    if(wl)
    {  if(wl->fixCurve) FreeCurve(wl->fixCurve);

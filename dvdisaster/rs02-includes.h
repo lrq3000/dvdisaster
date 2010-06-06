@@ -102,6 +102,19 @@ typedef struct
    int    percent, lastPercent;
 } RS02Widgets;
 
+/*
+ * local working closure for internal checksums
+ */
+
+typedef struct
+{  struct _RS02Layout *lay;     /* Codec data layout */
+   struct MD5Context md5ctxt;   /* Complete image checksum (currently unused) */
+   struct MD5Context dataCtxt;  /* md5sum of original iso image portion */
+   struct MD5Context crcCtxt;
+   struct MD5Context eccCtxt;
+   struct MD5Context metaCtxt;
+} RS02CksumClosure;
+
 /* 
  * These are exported via the Method struct 
  */
@@ -142,6 +155,11 @@ typedef struct _RS02Layout
    int nroots,ndata;             /* RS encoding specification */
    double redundancy;            /* resulting redundancy */
 } RS02Layout;
+
+CrcBuf *RS02GetCrcBuf(Method*, void*);
+void RS02ResetCksums(Method*);
+void RS02UpdateCksums(Method*, gint64, unsigned char*);
+char* RS02FinalizeCksums(Method*);
 
 void RS02ReadSector(ImageInfo*, RS02Layout*, unsigned char*, gint64);
 gint64 RS02EccSectorIndex(RS02Layout*, gint64, gint64);

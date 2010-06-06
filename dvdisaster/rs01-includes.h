@@ -96,6 +96,14 @@ typedef struct
    int    percent, lastPercent;
 } RS01Widgets;
 
+/*
+ * local working closure for internal checksums
+ */
+
+typedef struct
+{  struct MD5Context md5ctxt;   /* Complete image checksum */
+} RS01CksumClosure;
+
 /* 
  * These are exported via the Method struct 
  */
@@ -122,6 +130,10 @@ void CreateRS01VerifyWindow(Method*, GtkWidget*);
 
 /* rs01-common.c */
 
+CrcBuf *RS01GetCrcBuf(Method*, void*);
+void RS01ResetCksums(Method*);
+void RS01UpdateCksums(Method*, gint64, unsigned char*);
+char* RS01FinalizeCksums(Method*);
 void RS01ReadSector(ImageInfo*, EccHeader*, unsigned char*, gint64);
 void RS01ScanImage(Method*, ImageInfo*, EccInfo*, int);
 int  RS01Recognize(Method*, LargeFile*);

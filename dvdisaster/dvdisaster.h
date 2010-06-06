@@ -188,6 +188,8 @@ typedef struct _GlobalClosure
    int pauseEject;      /* Eject medium during pause */
    int ignoreFatalSense;/* Continue reading after potential fatal sense errors */
    int useSSE2;         /* TRUE means to use SSE2 version of the codec. */
+   int useAltiVec;      /* TRUE means to use AltiVec version of the codec. */
+   int clSize;          /* Bytesize of cache line */
    int useSGioctl;      /* Use the generic SCSI ioctl instead of CDROM one on Liux */
   
    char *homeDir;       /* path to users home dir */
@@ -466,6 +468,12 @@ void FreeBitmap(Bitmap*);
 int buildCount;
 
 /***
+ *** cacheprobe.h
+ ***/
+
+int ProbeCacheLineSize();
+
+/***
  *** closure.c
  ***/
 
@@ -492,7 +500,7 @@ guint32 EDCCrc32(unsigned char*, int);
 
 typedef struct _CrcBuf
 {  guint32 *crcbuf;
-   gint64 size;
+   guint64 size;
    Bitmap *valid;
 } CrcBuf;
 
@@ -502,8 +510,9 @@ enum
    CRC_GOOD
 };
 
-CrcBuf *GetCRCFromRS01(EccInfo*);
-CrcBuf *GetCRCFromRS02(void*, void*, LargeFile*);
+CrcBuf *CreateCrcBuf(guint64);
+CrcBuf *GetCRCFromRS01_obsolete(EccInfo*);
+CrcBuf *GetCRCFromRS02_obsolete(void*, void*, LargeFile*);
 void FreeCrcBuf(CrcBuf*);
 
 int CheckAgainstCrcBuffer(CrcBuf*, gint64, unsigned char*);
@@ -915,6 +924,11 @@ typedef struct _Method
    void (*verify)(struct _Method*);  /* Verifies image with ecc data */
    int  (*recognizeEccFile)(struct _Method*, LargeFile*);  /* checks whether we can handle this ecc file */
    int  (*recognizeEccImage)(struct _Method*, LargeFile*); /* checks whether we can handle this augmented image */
+   CrcBuf* (*getCrcBuf)(struct _Method*, void*);         /* read and cache CRC info from ecc data */
+   void (*resetCksums)(struct _Method*);                 /* Methods for building internal */
+   void (*updateCksums)(struct _Method*, gint64, unsigned char*);/* checksum while reading an image */
+   char* (*finalizeCksums)(struct _Method*);
+   void *ckSumClosure;                                   /* working closure for above */
    void (*createVerifyWindow)(struct _Method*, GtkWidget*);
    void (*createCreateWindow)(struct _Method*, GtkWidget*);
    void (*createFixWindow)(struct _Method*, GtkWidget*);
@@ -1055,7 +1069,7 @@ void ReadDefectiveSectorFile(DefectiveSectorHeader *, struct _RawBuffer*, char*)
  ***/
 
 enum
-{ ECC_NONE, ECC_RS01, ECC_RS02
+   { ECC_NONE, ECC_RS01, ECC_RS02  //FIXME: obsolete
 };
 
 void ReadMediumLinear(gpointer);
@@ -1214,6 +1228,7 @@ int TestErrorSyndromes(ReedSolomonTables*, unsigned char*);
 
 void EncodeNextLayer(ReedSolomonTables*, unsigned char*, unsigned char*, guint64, int);
 int ProbeSSE2(void);
+int ProbeAltiVec(void);
 
 /***
  *** show-manual.c

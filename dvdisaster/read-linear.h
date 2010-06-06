@@ -36,6 +36,9 @@ typedef struct
    struct _DeviceHandle *dh;
    EccInfo *ei;
    GThread *worker;
+   Method *eccMethod;           /* Method for ecc data */
+   char eccMethodName[5];       /* FourCC code of error correction method */
+   int eccFile;                 /* TRUE if ecc files are used */
    struct MD5Context md5ctxt;   /* Complete image checksum (RS01) */
    struct MD5Context dataCtxt;  /* Image section checksums (RS02) */
    struct MD5Context crcCtxt;   /* Image section checksums (RS02) */

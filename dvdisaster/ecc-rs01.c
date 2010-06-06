@@ -35,6 +35,8 @@ static void destroy(Method*);
 void register_rs01(void)
 {  Method *method = g_malloc0(sizeof(Method));
 
+   method->ckSumClosure = g_malloc(sizeof(RS01CksumClosure));
+
    /*** Standard infomation and methods */ 
 
    strncpy(method->name, "RS01", 4);
@@ -47,6 +49,10 @@ void register_rs01(void)
    /*** Linkage to rs01-common.c */
 
    method->recognizeEccFile = RS01Recognize;
+   method->getCrcBuf        = RS01GetCrcBuf;
+   method->resetCksums      = RS01ResetCksums;
+   method->updateCksums     = RS01UpdateCksums;
+   method->finalizeCksums   = RS01FinalizeCksums;
 
    /*** Linkage to rs01-window.c */
 
@@ -73,6 +79,8 @@ void register_rs01(void)
 
 static void destroy(Method *method)
 {  RS01Widgets *wl = (RS01Widgets*)method->widgetList;
+
+   g_free(method->ckSumClosure);
 
    if(wl)
    {  if(wl->fixCurve) FreeCurve(wl->fixCurve);

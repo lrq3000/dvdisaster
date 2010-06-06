@@ -1,3 +1,9 @@
+0.79.3
+	- Michael Klein provided Alitivec optimization for
+	  the RS03 encoder and valuable hints for general
+	  RS03 encoding speedup
+	- reworked configure for current NetBSD release
+
 0.79.2  28-02-2010
 	Semantic Changes
 	The new missing sector marking method is now the default.

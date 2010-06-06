@@ -25,10 +25,24 @@
 #include "rs02-includes.h"
 
 /***
+ *** Create an uninitialized CRC buffer
+ ***/
+
+CrcBuf *CreateCrcBuf(guint64 sectors)
+{  CrcBuf *cb = g_malloc(sizeof(CrcBuf));
+
+   cb->crcbuf = g_malloc(sectors * sizeof(guint32));
+   cb->size   = sectors;
+   cb->valid  = CreateBitmap0(sectors);
+
+   return cb;
+}
+
+/***
  *** Load crc buffer from RS01 error correction file
  ***/
 
-CrcBuf *GetCRCFromRS01(EccInfo *ei)
+CrcBuf *GetCRCFromRS01_obsolete(EccInfo *ei)   /* FIXME: obsolete */
 {  CrcBuf *cb = g_malloc(sizeof(CrcBuf));
    guint32 *buf;
    gint64 crc_sectors,crc_remainder;
@@ -77,7 +91,7 @@ CrcBuf *GetCRCFromRS01(EccInfo *ei)
  * nonpublic structs.
  */
 
-CrcBuf *GetCRCFromRS02(void *layv, void *dhv, LargeFile *image)
+CrcBuf *GetCRCFromRS02_obsolete(void *layv, void *dhv, LargeFile *image)
 {  RS02Layout *lay = (RS02Layout*)layv;
    DeviceHandle *dh = (DeviceHandle*)dhv;
    AlignedBuffer *ab = CreateAlignedBuffer(2048);

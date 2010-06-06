@@ -22,6 +22,182 @@
 #include "dvdisaster.h"
 
 #include "rs02-includes.h"
+#include "scsi-layer.h"
+
+/***
+ *** Read and buffer CRC information from RS01 file 
+ ***/
+
+CrcBuf *RS02GetCrcBuf(Method *self, void *medium)
+{  RS02CksumClosure *csc = (RS02CksumClosure*)self->ckSumClosure;
+   DeviceHandle *dh = (DeviceHandle*)medium;
+   AlignedBuffer *ab = CreateAlignedBuffer(2048);
+   RS02Layout *lay;
+   CrcBuf *cb;
+   gint64 block_idx[256];
+   guint32 *buf;
+   gint64 image_sectors,crc_sector;
+   gint64 s,i;
+   int crc_idx, crc_valid = FALSE;
+
+   if(csc->lay) g_free(csc->lay);
+   lay = csc->lay = CalcRS02Layout(uchar_to_gint64(self->lastEh->sectors), self->lastEh->eccBytes);
+
+   image_sectors = lay->eccSectors+lay->dataSectors;
+   cb = CreateCrcBuf(image_sectors);
+   buf = cb->crcbuf;
+
+   /* Initialize ecc block index pointers.
+      The first CRC set (of lay->ndata checksums) relates to
+      ecc block lay->firstCrcLayerIndex + 1. */
+
+   for(s=0, i=0; i<lay->ndata; s+=lay->sectorsPerLayer, i++)
+     block_idx[i] = s + lay->firstCrcLayerIndex + 1;
+
+   crc_idx = 512;                   /* force crc buffer reload */
+   crc_sector = lay->dataSectors+2; /* first crc data sector on medium */
+
+   /* Cycle through the ecc blocks and descramble CRC sums in
+      ascending sector numbers. */
+
+   for(s=0; s<lay->sectorsPerLayer; s++)
+   {  gint64 si = (s + lay->firstCrcLayerIndex + 1) % lay->sectorsPerLayer;
+
+      /* Wrap the block_idx[] ptrs at si == 0 */
+
+      if(!si)
+      {  gint64 bs;
+
+         for(bs=0, i=0; i<lay->ndata; bs+=lay->sectorsPerLayer, i++)
+	   block_idx[i] = bs;
+      }
+
+      /* Go through all data sectors of current ecc block */
+
+      for(i=0; i<lay->ndata; i++)
+      {  gint64 bidx = block_idx[i];
+
+	 if(bidx < lay->dataSectors)  /* only data sectors have CRCs */
+	 {  
+	    /* Refill crc cache if needed */
+	    
+	    if(crc_idx >= 512)
+	    {   crc_valid = !ReadSectorsFast(dh, ab->buf, crc_sector++, 1);
+		crc_idx = 0;
+	    }
+
+	    /* Sort crc into appropriate place */
+
+	    if(crc_valid)
+	    {  cb->crcbuf[bidx] = ((guint32*)ab->buf)[crc_idx];
+	       SetBit(cb->valid, bidx);
+	    }
+	    crc_idx++;
+	    block_idx[i]++;
+	 }
+      }
+   }
+
+   FreeAlignedBuffer(ab);
+
+   return cb;
+}
+
+/***
+ *** Internal checksum handling.
+ ***/
+
+void RS02ResetCksums(Method *self)
+{  RS02CksumClosure *csc = (RS02CksumClosure*)self->ckSumClosure;
+
+   MD5Init(&csc->md5ctxt);
+   MD5Init(&csc->dataCtxt);
+   MD5Init(&csc->crcCtxt);
+   MD5Init(&csc->eccCtxt);
+   MD5Init(&csc->metaCtxt);
+}
+
+//#define BORK 35071  //FIXME
+void RS02UpdateCksums(Method *self, gint64 sector, unsigned char *buf)
+{  RS02CksumClosure *csc = (RS02CksumClosure*)self->ckSumClosure;
+
+   /* md5sum over full image */
+   //if(sector == BORK) buf[42]++; //FIXME
+
+   MD5Update(&csc->md5ctxt, buf, 2048);
+
+   /* md5sum the data portion */
+
+   if(sector < csc->lay->dataSectors)
+   {  if(sector < csc->lay->dataSectors - 1)
+	   MD5Update(&csc->dataCtxt, buf, 2048);
+      else MD5Update(&csc->dataCtxt, buf, self->lastEh->inLast);
+   }
+
+   /* md5sum the crc portion */
+   if(sector >= csc->lay->dataSectors+2 && sector < csc->lay->protectedSectors)
+      MD5Update(&csc->crcCtxt, buf, 2048);
+
+   /* md5sum the ecc layers */
+   if(sector >= csc->lay->protectedSectors)
+   {  gint64 layer, n;
+
+      RS02SliceIndex(csc->lay, sector, &layer, &n);
+      if(layer != -1)  /* not an ecc header? */
+      {  if(n < csc->lay->sectorsPerLayer-1)  /* not at layer end? */
+	    MD5Update(&csc->eccCtxt, buf, 2048);
+	 else  /* layer end; update meta md5 and skip to next layer */
+	 {  guint8 sum[16];
+	    MD5Update(&csc->eccCtxt, buf, 2048);
+	    MD5Final(sum, &csc->eccCtxt);
+	    MD5Update(&csc->metaCtxt, sum, 16);
+	    MD5Init(&csc->eccCtxt);
+	 }
+      }
+      /* maybe add ...else { check ecc header } */ 
+   }
+   //if(sector == BORK) buf[42]--;  //FIXME
+}
+
+char* RS02FinalizeCksums(Method *self)
+{  RS02CksumClosure *csc = (RS02CksumClosure*)self->ckSumClosure;
+   guint8 image_fp[16];
+   guint8 data_md5[16],crc_md5[16],meta_md5[16];
+
+   MD5Final(image_fp, &csc->md5ctxt);
+   MD5Final(data_md5, &csc->dataCtxt);
+   MD5Final(crc_md5,  &csc->crcCtxt);
+   MD5Final(meta_md5, &csc->metaCtxt);
+
+   /* Data (payload) checksum */
+   
+   if(memcmp(data_md5, self->lastEh->mediumSum, 16))
+   {  Verbose("BAD Data md5sum\n");
+      return g_strdup(_("All sectors successfully read, but wrong data md5sum."));
+   }
+   else Verbose("GOOD Data md5sum\n");
+
+   /* Crc layer checksum */
+
+   if(memcmp(crc_md5, self->lastEh->crcSum, 16))
+   {  Verbose("BAD CRC md5sum\n");
+      return g_strdup(_("All sectors successfully read, but wrong crc md5sum."));
+   }
+   else Verbose("GOOD CRC md5sum\n");
+
+   /* Ecc meta checksum */
+
+   if(memcmp(meta_md5, self->lastEh->eccSum, 16))
+   {  Verbose("BAD ECC md5sum\n");
+      return g_strdup(_("All sectors successfully read, but wrong ecc md5sum."));
+      
+   }
+   else Verbose("GOOD ECC md5sum\n");
+
+   /* All checksums match */
+
+   return NULL;
+}
 
 /***
  *** Read an image sector from the .iso file.

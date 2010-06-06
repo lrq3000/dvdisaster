@@ -44,14 +44,104 @@ int RS01Recognize(Method *self, LargeFile *ecc_file)
      return FALSE;
 
    if(!strncmp((char*)eh.method, "RS01", 4))
-     return TRUE;
+   {  if(self->lastEh) g_free(self->lastEh);
+      self->lastEh = g_malloc(sizeof(EccHeader));
+      memcpy(self->lastEh, &eh, sizeof(EccHeader));
+
+#ifdef HAVE_BIG_ENDIAN
+      SwapEccHeaderBytes(self->lastEh);
+#endif
+      return TRUE;
+   }
 
    return FALSE;
 }
 
 /***
+ *** Read and buffer CRC information from RS01 file 
+ ***/
+
+CrcBuf *RS01GetCrcBuf(Method *self, void *medium)
+{  LargeFile *file = (LargeFile*)medium;
+   CrcBuf *cb;
+   guint32 *buf;
+   guint64 image_sectors;
+   guint64 crc_sectors,crc_remainder;
+   guint64 i,j,sec_idx;
+
+   if(!self->lastEh)
+      Stop("Internal error in GetCRCFromRS01: lastEh NULL");
+
+   image_sectors = uchar_to_gint64(self->lastEh->sectors);
+   cb = CreateCrcBuf(image_sectors);
+   buf = cb->crcbuf;
+
+   /* Seek to beginning of CRC sums */
+
+   if(!LargeSeek(file, (gint64)sizeof(EccHeader)))
+      Stop(_("Failed skipping the ecc header: %s"),strerror(errno));
+
+   /* Read crc sums. A sector of 2048 bytes contains 512 CRC sums. */
+
+   crc_sectors = image_sectors / 512;
+   sec_idx = 0;
+
+   for(i=0; i<crc_sectors; i++)
+   {  if(LargeRead(file, buf, 2048) != 2048)
+	 Stop(_("Error reading CRC information: %s"),strerror(errno));
+      buf += 512;
+
+      for(j=0; j<512; j++, sec_idx++)
+	 SetBit(cb->valid, sec_idx);
+   }
+
+   crc_remainder = sizeof(guint32)*(image_sectors % 512);
+   if(crc_remainder)
+   {  if(LargeRead(file, buf, crc_remainder) != crc_remainder)
+	 Stop(_("Error reading CRC information: %s"),strerror(errno));
+
+      for( ; sec_idx<image_sectors; sec_idx++)
+	 SetBit(cb->valid, sec_idx);
+   }
+
+   return cb;
+}
+
+/***
+ *** Internal checksum handling.
+ ***
+ * Not overly complicated as we just have a global md5sum.
+ */
+
+void RS01ResetCksums(Method *self)
+{  RS01CksumClosure *csc = (RS01CksumClosure*)self->ckSumClosure;
+
+   MD5Init(&csc->md5ctxt);
+}
+
+void RS01UpdateCksums(Method *self, gint64 sector, unsigned char *buf)
+{  RS01CksumClosure *csc = (RS01CksumClosure*)self->ckSumClosure;
+
+   MD5Update(&csc->md5ctxt, buf, 2048);
+}
+
+char* RS01FinalizeCksums(Method *self)
+{  RS01CksumClosure *csc = (RS01CksumClosure*)self->ckSumClosure;
+   guint8 image_fp[16];
+   int good_fp;
+
+   MD5Final(image_fp, &csc->md5ctxt);
+
+   good_fp = !(memcmp(image_fp, self->lastEh->mediumSum ,16));
+   
+   if(good_fp)
+        return NULL;
+   else return g_strdup_printf(_("All sectors successfully read, but wrong image checksum."));
+}
+
+/***
  *** Read an image sector from the .iso file.
- ****
+ ***
  * Two special cases here:
  * - Missing sectors (beyond the range recorded in eh->sectors) will be padded with zeros,
  *   since we need a multiple of ndata sectors for the parity generation. 

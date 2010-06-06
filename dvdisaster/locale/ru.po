@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.70.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-27 19:02+0100\n"
+"POT-Creation-Date: 2010-06-06 20:05+0200\n"
 "PO-Revision-Date: 2009-07-23 08:11+0300\n"
 "Last-Translator: Igor Gorbounov <igor.gorbounov@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -43,12 +43,14 @@ msgstr "medium.ecc"
 msgid "sector-"
 msgstr "сектор-"
 
-#: crcbuf.c:45 rs01-common.c:144 rs01-create.c:256 rs01-verify.c:781
+#: crcbuf.c:59 rs01-common.c:82 rs01-common.c:234 rs01-create.c:256
+#: rs01-verify.c:781
 #, c-format
 msgid "Failed skipping the ecc header: %s"
 msgstr "Не удалось пропустить ecc-заголовок: %s"
 
-#: crcbuf.c:54 crcbuf.c:64 rs01-common.c:252
+#: crcbuf.c:68 crcbuf.c:78 rs01-common.c:91 rs01-common.c:101
+#: rs01-common.c:342
 #, c-format
 msgid "Error reading CRC information: %s"
 msgstr "Ошибка при чтении CRC-информации: %s "
@@ -75,7 +77,7 @@ msgstr ""
 "Генерирование случайных исправимых стертых мест (для %d корней, макс. стертых мест = %d).\n"
 
 #: debug.c:110 debug.c:200 debug.c:248 debug.c:374 debug.c:687 debug.c:787
-#: debug.c:1114 debug.c:1122 debug.c:1229 rs01-common.c:77 rs02-common.c:62
+#: debug.c:1114 debug.c:1122 debug.c:1229 rs01-common.c:167 rs02-common.c:238
 #: rs02-create.c:340 rs02-create.c:986 rs02-fix.c:387 rs02-verify.c:393
 #: rs03-common.c:97 rs03-create.c:583 rs03-create.c:610 rs03-recognize.c:263
 #: rs03s-create.c:85 rs03s-create.c:982 rs03s-create.c:1008 rs03-verify.c:425
@@ -192,7 +194,7 @@ msgstr "Новая длина должна быть в диапазоне [0..%l
 msgid "Truncating image to %lld sectors.\n"
 msgstr "Усечение образа до %lld секторов.\n"
 
-#: debug.c:557 read-linear.c:1361 rs01-fix.c:198 rs01-fix.c:220 rs01-fix.c:236
+#: debug.c:557 read-linear.c:1375 rs01-fix.c:198 rs01-fix.c:220 rs01-fix.c:236
 #: rs01-fix.c:271 rs02-create.c:104 rs02-create.c:151 rs02-fix.c:241
 #: rs02-fix.c:262 rs02-fix.c:277 rs03-create.c:177 rs03-create.c:245
 #: rs03-fix.c:269 rs03-fix.c:290 rs03-fix.c:305 rs03s-create.c:171
@@ -203,8 +205,8 @@ msgstr "Не удалось усечь %s: %s\n"
 
 #: debug.c:583 debug.c:1094 debug.c:1102 debug.c:1159 debug.c:1164 file.c:59
 #: file.c:128 file.c:148 raw-editor.c:362 read-adaptive.c:1164
-#: read-adaptive.c:1196 read-linear.c:277 read-linear.c:279 read-linear.c:310
-#: read-linear.c:312
+#: read-adaptive.c:1196 read-linear.c:307 read-linear.c:309 read-linear.c:340
+#: read-linear.c:342
 #, c-format
 msgid ""
 "Can't open %s:\n"
@@ -270,7 +272,7 @@ msgstr ""
 "\n"
 
 #: debug.c:791 debug.c:1118 debug.c:1187 debug.c:1191 debug.c:1269
-#: rs01-common.c:93 rs02-common.c:67 rs02-create.c:203 rs02-fix.c:390
+#: rs01-common.c:183 rs02-common.c:243 rs02-create.c:203 rs02-fix.c:390
 #: rs03-common.c:102 rs03-recognize.c:268 rs03s-create.c:90
 #, c-format
 msgid "Failed reading sector %lld in image: %s"
@@ -487,7 +489,7 @@ msgstr ""
 
 #. TRANSLATORS: Program options like -r and --read are not to be translated
 #. to avoid confusion when discussing the program in international forums.
-#: dvdisaster.c:910
+#: dvdisaster.c:912
 msgid ""
 "\n"
 "Common usage examples:\n"
@@ -511,7 +513,7 @@ msgstr ""
 "  dvdisaster -u,--unlink # Удалить файлы .iso (по завершении других действий)\n"
 "\n"
 
-#: dvdisaster.c:919
+#: dvdisaster.c:921
 #, c-format
 msgid ""
 "Drive and file specification:\n"
@@ -522,23 +524,23 @@ msgid ""
 "  -o,--ecc-target [file image] - where to put ecc data in RS03\n"
 msgstr ""
 
-#: dvdisaster.c:929
+#: dvdisaster.c:931
 msgid "Tweaking options (see manual before using!)\n"
 msgstr "Параметры тонкой настройки (перед применением см. руководство!)\n"
 
-#: dvdisaster.c:930
+#: dvdisaster.c:932
 msgid "  -a,--assume x,y,...    - assume image is augmented with codec(s) x,y,...\n"
 msgstr ""
 
-#: dvdisaster.c:931
+#: dvdisaster.c:933
 msgid "  -j,--jump n            - jump n sectors forward after a read error (default: 16)\n"
 msgstr "  -j,--jump n            - переход на n секторов вперед после ошибки чтения (по умолчанию: 16)\n"
 
-#: dvdisaster.c:932
+#: dvdisaster.c:934
 msgid "  -m n                   - list/select error correction methods (default: RS01)\n"
 msgstr "  -m n                   - просмотреть/выбрать методы исправления ошибок (по умолчанию: RS01)\n"
 
-#: dvdisaster.c:933
+#: dvdisaster.c:935
 #, c-format
 msgid ""
 "  -n,--redundancy n%%     - error correction file redundancy (in percent), or\n"
@@ -547,168 +549,168 @@ msgstr ""
 "  -n,--redundancy n%%     - избыточность файла исправления ошибок (в процентах) или\n"
 "                           максимальный размер образа для исправления ошибок (в секторах)\n"
 
-#: dvdisaster.c:935
+#: dvdisaster.c:937
 msgid "  -v,--verbose           - more diagnostic messages\n"
 msgstr "  -v,--verbose           - больше диагностических сообщений\n"
 
-#: dvdisaster.c:936
+#: dvdisaster.c:938
 msgid "  -x,--threads n         - use n threads for en-/decoding (if supported by codec)\n"
 msgstr ""
 
-#: dvdisaster.c:937
+#: dvdisaster.c:939
 msgid "  --adaptive-read        - use optimized strategy for reading damaged media\n"
 msgstr "  --adaptive-read        - использование оптимизированной стратегии чтения поврежденных носителей\n"
 
-#: dvdisaster.c:938
+#: dvdisaster.c:940
 msgid "  --auto-suffix          - automatically add .iso and .ecc file suffixes\n"
 msgstr "  --auto-suffix          - автоматически добавлять расширения имени файла .iso и .ecc\n"
 
-#: dvdisaster.c:939
+#: dvdisaster.c:941
 msgid "  --cache-size n         - image cache size in MB during -c mode (default: 32MB)\n"
 msgstr "  --cache-size n         - размер буфера образа в МБ в режиме -c (по умолчанию: 32МБ)\n"
 
-#: dvdisaster.c:940
+#: dvdisaster.c:942
 msgid "  --dao                  - assume DAO disc; do not trim image end\n"
 msgstr "  --dao                  - считать, что диск в режиме DAO; не отрезать конец образа\n"
 
-#: dvdisaster.c:941
+#: dvdisaster.c:943
 msgid "  --defective-dump d     - directory for saving incomplete raw sectors\n"
 msgstr "  --defective-dump d     - каталог для сохранения незавершенных необработанных секторов\n"
 
-#: dvdisaster.c:943
+#: dvdisaster.c:945
 msgid "  --driver=sg            - use alternative sg driver (see man page!)\n"
 msgstr ""
 
-#: dvdisaster.c:945
+#: dvdisaster.c:947
 msgid "  --eject                - eject medium after successful read\n"
 msgstr "  --eject                - извлекать носитель после успешного чтения\n"
 
-#: dvdisaster.c:946
+#: dvdisaster.c:948
 msgid "  --fill-unreadable n    - fill unreadable sectors with byte n\n"
 msgstr "  --fill-unreadable n    - заполнять нечитаемые сектора байтом n\n"
 
-#: dvdisaster.c:947
+#: dvdisaster.c:949
 msgid "  --ignore-fatal-sense   - continue reading after potentially fatal error conditon\n"
 msgstr "  --ignore-fatal-sense   - продолжать чтение после возможной критической ошибки\n"
 
-#: dvdisaster.c:948
+#: dvdisaster.c:950
 msgid "  --internal-rereads n   - drive may attempt n rereads before reporting an error\n"
 msgstr "  --internal-rereads n   - привод может делать n повторных чтений перед сообщением об ошибке\n"
 
-#: dvdisaster.c:949
+#: dvdisaster.c:951
 msgid "  --old-ds-marker        - mark missing sectors compatible with dvdisaster <= 0.70\n"
 msgstr ""
 
-#: dvdisaster.c:950
+#: dvdisaster.c:952
 msgid "  --prefetch-sectors n   - prefetch n sectors for RS03 encoding (uses ~nMB)\n"
 msgstr ""
 
-#: dvdisaster.c:951
+#: dvdisaster.c:953
 msgid "  --raw-mode n           - mode for raw reading CD media (20 or 21)\n"
 msgstr "  --raw-mode n           - режим для низкоуровневого чтения CD-носителей (20 или 21)\n"
 
-#: dvdisaster.c:952
+#: dvdisaster.c:954
 msgid "  --read-attempts n-m    - attempts n upto m reads of a defective sector\n"
 msgstr "  --read-attempts n-m    - делается от n до m попыток чтения поврежденного сектора\n"
 
-#: dvdisaster.c:953
+#: dvdisaster.c:955
 msgid "  --read-medium n        - read the whole medium up to n times\n"
 msgstr "  --read-medium n        - читать весь носитель до n раз\n"
 
-#: dvdisaster.c:954
+#: dvdisaster.c:956
 msgid "  --read-raw             - performs read in raw mode if possible\n"
 msgstr "  --read-raw             - выполнять чтение в низкоуровневом режиме, если это возможно\n"
 
-#: dvdisaster.c:955
+#: dvdisaster.c:957
 msgid "  --speed-warning n      - print warning if speed changes by more than n percent\n"
 msgstr "  --speed-warning n      - выводить предупреждение, если скорость изменяется больше, чем на n процентов\n"
 
-#: dvdisaster.c:956
+#: dvdisaster.c:958
 msgid "  --spinup-delay n       - wait n seconds for drive to spin up\n"
 msgstr "  --spinup-delay n       - выждать n секунд, пока привод не раскрутится\n"
 
-#: dvdisaster.c:960
+#: dvdisaster.c:962
 msgid "Debugging options (purposefully undocumented and possibly harmful)\n"
 msgstr "Параметры отладки (намеренно недокументированные и, возможно, опасные)\n"
 
-#: dvdisaster.c:961
+#: dvdisaster.c:963
 msgid "  --debug           - enables the following options\n"
 msgstr "  --debug           - включает следующие параметры\n"
 
-#: dvdisaster.c:962
+#: dvdisaster.c:964
 msgid "  --byteset s,i,b   - set byte i in sector s to b\n"
 msgstr "  --byteset s,i,b   - установить байт i в секторе s в значение b\n"
 
-#: dvdisaster.c:963
+#: dvdisaster.c:965
 msgid "  --cdump           - creates C #include file dumps instead of hexdumps\n"
 msgstr "  --cdump           - создает дампы в виде C #include-файлов вместо шестнадцатеричных дампов\n"
 
-#: dvdisaster.c:964
+#: dvdisaster.c:966
 msgid "  --compare-images a,b  - compare sectors in images a and b\n"
 msgstr "  --compare-images a,b  - сравнить сектора в образах a и b\n"
 
-#: dvdisaster.c:965
+#: dvdisaster.c:967
 msgid "  --copy-sector a,n,b,m - copy sector n from image a to sector m in image b\n"
 msgstr "  --copy-sector a,n,b,m - скопировать сектор n из образа a в сектор m образа b\n"
 
-#: dvdisaster.c:966
+#: dvdisaster.c:968
 msgid "  --erase sector    - erase the given sector\n"
 msgstr "  --erase sector    - стереть данный сектор\n"
 
-#: dvdisaster.c:967
+#: dvdisaster.c:969
 msgid "  --erase n-m       - erase sectors n - m, inclusively\n"
 msgstr "  --erase n-m       - стереть секторы n - m включительно\n"
 
-#: dvdisaster.c:968
+#: dvdisaster.c:970
 msgid "  --marked-image n  - create image with n marked random sectors\n"
 msgstr "  --marked-image n  - создать образ с n помеченными случайными секторами\n"
 
-#: dvdisaster.c:969
+#: dvdisaster.c:971
 msgid "  --merge-images a,b  merge image a with b (a receives sectors from b)\n"
 msgstr "  --merge-images a,b  объединить образ a с образом b (a получает секторы из b)\n"
 
-#: dvdisaster.c:970
+#: dvdisaster.c:972
 msgid "  --random-errors r,e seed image with (correctable) random errors\n"
 msgstr "  --random-errors r,e заполнить образ (исправимыми) случайными ошибками\n"
 
-#: dvdisaster.c:971
+#: dvdisaster.c:973
 msgid "  --random-image n  - create image with n sectors of random numbers\n"
 msgstr "  --random-image n  - создать образ с n секторами со случайными номерами\n"
 
-#: dvdisaster.c:972
+#: dvdisaster.c:974
 msgid "  --random-seed n   - random seed for built-in random number generator\n"
 msgstr "  --random-seed n   - начальное значение для встроенного генератора случайных чисел\n"
 
-#: dvdisaster.c:973
+#: dvdisaster.c:975
 msgid "  --raw-sector n    - shows hexdump of the given raw sector from medium in drive\n"
 msgstr "  --raw-sector n    - показывает шестнадцатиричный дамп данного необработанного сектора с носителя в приводе\n"
 
-#: dvdisaster.c:974
+#: dvdisaster.c:976
 msgid "  --read-sector n   - shows hexdump of the given sector from medium in drive\n"
 msgstr "  --read-sector n   - показывает шестнадцатиричный дамп данного сектора с носителя в приводе\n"
 
-#: dvdisaster.c:975
+#: dvdisaster.c:977
 msgid "  --screen-shot     - useful for generating screen shots\n"
 msgstr "  --screen-shot     - useful for generating screen shots\n"
 
-#: dvdisaster.c:976
+#: dvdisaster.c:978
 msgid "  --send-cdb arg    - executes given cdb at drive; kills system if used wrong\n"
 msgstr "  --send-cdb arg    - выполнить cdb на приводе; при ошибке система снимается\n"
 
-#: dvdisaster.c:977
+#: dvdisaster.c:979
 msgid "  --show-sector n   - shows hexdump of the given sector in an image file\n"
 msgstr "  --show-sector n   - показывает содержимое данного сектора в шестнадцатеричном виде\n"
 
-#: dvdisaster.c:978
+#: dvdisaster.c:980
 #, c-format
 msgid "  --sim-defects n   - simulate n%% defective sectors on medium\n"
 msgstr "  --sim-defects n   - смоделировать n%% поврежденных секторов на носителе\n"
 
-#: dvdisaster.c:979
+#: dvdisaster.c:981
 msgid "  --truncate n      - truncates image to n sectors\n"
 msgstr "  --truncate n      - обрезает образ до n секторов\n"
 
-#: dvdisaster.c:980
+#: dvdisaster.c:982
 msgid ""
 "  --zero-unreadable - replace the \"unreadable sector\" markers with zeros\n"
 "\n"
@@ -716,7 +718,7 @@ msgstr ""
 "  --zero-unreadable - заменить маркеры \"нечитаемый сектор\" нулями\n"
 "\n"
 
-#: dvdisaster.c:984
+#: dvdisaster.c:986
 msgid ""
 "NOTE: This is the Windows console version of dvdisaster.\n"
 "The version providing a graphical user interface is called\n"
@@ -728,23 +730,23 @@ msgstr ""
 "(также содержится в этом установочном пакете).\n"
 "\n"
 
-#: dvdisaster.c:1005
+#: dvdisaster.c:1007
 msgid "Optical drive 52X FW 1.02"
 msgstr "Оптический привод 52X FW 1.02"
 
-#: ecc-rs01.c:41
+#: ecc-rs01.c:43
 msgid "Error correction file (RS01)"
 msgstr "Файл для исправления ошибок (RS01)"
 
-#: ecc-rs01.c:42
+#: ecc-rs01.c:44
 msgid "Classic Reed-Solomon method based on polynomial arithmetic"
 msgstr "Классический метод Рида-Соломона, основанный на полиномах"
 
-#: ecc-rs02.c:39
+#: ecc-rs02.c:41
 msgid "Augmented image (RS02)"
 msgstr "Расширенный образ (RS02)"
 
-#: ecc-rs02.c:40
+#: ecc-rs02.c:42
 msgid "Reed-Solomon method with improved tolerance for defective ecc data"
 msgstr "Метод Рида-Соломона с повышенной устойчивостью к поврежденным ecc-данным"
 
@@ -1214,7 +1216,7 @@ msgstr "Тип носителя:"
 msgid "Book type:"
 msgstr "Формат (book type):"
 
-#: medium-info.c:308 scsi-layer.c:2662
+#: medium-info.c:308 scsi-layer.c:2664
 msgid "Manuf.-ID:"
 msgstr "Изгот.-ID:"
 
@@ -2521,8 +2523,8 @@ msgid "Raw sector does not belong to the selected image!"
 msgstr "Сектор не принадлежит выбранному образу!"
 
 #: raw-editor.c:388 read-adaptive.c:997 read-adaptive.c:1068
-#: read-adaptive.c:1357 read-adaptive.c:1552 read-linear.c:399
-#: read-linear.c:659 read-linear.c:959 rs01-fix.c:447 rs01-fix.c:707
+#: read-adaptive.c:1357 read-adaptive.c:1552 read-linear.c:429
+#: read-linear.c:702 read-linear.c:978 rs01-fix.c:447 rs01-fix.c:707
 #: rs02-fix.c:751 rs03-fix.c:778
 #, c-format
 msgid "Failed seeking to sector %lld in image [%s]: %s"
@@ -2530,7 +2532,7 @@ msgstr "Не удалось перейти к сектору %lld образа [
 
 #: raw-editor.c:395 read-adaptive.c:1011 read-adaptive.c:1074
 #: read-adaptive.c:1389 read-adaptive.c:1402 read-adaptive.c:1560
-#: read-linear.c:408 read-linear.c:666 rs01-fix.c:454
+#: read-linear.c:438 read-linear.c:709 rs01-fix.c:454
 #, c-format
 msgid "Failed writing to sector %lld in image [%s]: %s"
 msgstr "Не удалось записать в сектор %lld образа [%s]: %s"
@@ -2828,7 +2830,7 @@ msgstr ""
 "Отпечатки носителя и ecc-файла не совпадают.\n"
 "Носитель и ecc-файл не относятся друг к другу.\n"
 
-#: read-adaptive.c:618 read-linear.c:341
+#: read-adaptive.c:618 read-linear.c:371
 msgid "Image file does not match the CD/DVD."
 msgstr "Файл образа не подходит к CD/DVD."
 
@@ -2853,7 +2855,7 @@ msgstr "Загрузка CRC данных."
 msgid "Analysing existing image file"
 msgstr "Анализ существующего файла образа"
 
-#: read-adaptive.c:726 rs01-common.c:183 rs02-verify.c:727 rs03-verify.c:1057
+#: read-adaptive.c:726 rs01-common.c:273 rs02-verify.c:727 rs03-verify.c:1057
 #, c-format
 msgid "premature end in image (only %d bytes): %s\n"
 msgstr "преждевременный конец образа (только %d байт): %s\n"
@@ -2877,15 +2879,15 @@ msgstr "Анализ существующего файла образа: %lld м
 msgid "Analysing existing image file: %lld readable, %lld still missing.\n"
 msgstr "Анализ существующего файла образа: %lld можно прочитать, %lld еще отсутствуют.\n"
 
-#: read-adaptive.c:947 read-linear.c:767
+#: read-adaptive.c:947 read-linear.c:789
 msgid "Ignore once"
 msgstr "Игнорировать один раз"
 
-#: read-adaptive.c:948 read-linear.c:768
+#: read-adaptive.c:948 read-linear.c:790
 msgid "Ignore always"
 msgstr "Игнорировать всегда"
 
-#: read-adaptive.c:949 read-linear.c:769
+#: read-adaptive.c:949 read-linear.c:791
 msgid "Abort"
 msgstr "Прервать"
 
@@ -2906,16 +2908,16 @@ msgstr "Подготовка к чтению образа носителя."
 msgid "Medium: not yet determined"
 msgstr "Носитель: еще не определен"
 
-#: read-adaptive.c:1166 read-linear.c:281
+#: read-adaptive.c:1166 read-linear.c:311
 #, c-format
 msgid "Creating new %s image.\n"
 msgstr "Создание нового %s образа.\n"
 
-#: read-adaptive.c:1170 read-linear.c:274
+#: read-adaptive.c:1170 read-linear.c:304
 msgid "Reading new medium image."
 msgstr "Чтение нового образа носителя."
 
-#: read-adaptive.c:1190 read-linear.c:302
+#: read-adaptive.c:1190 read-linear.c:332
 msgid "Completing existing medium image."
 msgstr "Завершение существующего образа носителя."
 
@@ -2927,7 +2929,7 @@ msgstr ""
 "\n"
 "Достаточно данных для восстановления образа.\n"
 
-#: read-adaptive.c:1320 read-linear.c:1021
+#: read-adaptive.c:1320 read-linear.c:1040
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -2938,7 +2940,7 @@ msgstr ""
 "Не удается продолжить после приведенной выше ошибки.\n"
 "Используйте параметр --ignore-fatal-sense, чтобы не принимать во внимание."
 
-#: read-adaptive.c:1325 read-linear.c:1026
+#: read-adaptive.c:1325 read-linear.c:1045
 #, c-format
 msgid ""
 "Sector %lld: %s\n"
@@ -2961,7 +2963,7 @@ msgstr "CRC-ошибка в секторе %lld\n"
 msgid "Sectors %lld-%lld: %s\n"
 msgstr "Сектора %lld-%lld: %s\n"
 
-#: read-adaptive.c:1544 read-linear.c:1207 scsi-layer.c:1743
+#: read-adaptive.c:1544 read-linear.c:1226 scsi-layer.c:1743
 #, c-format
 msgid "Sector %lld: %s\n"
 msgstr "Сектор %lld: %s\n"
@@ -3053,92 +3055,92 @@ msgstr ""
 msgid "Scanning aborted"
 msgstr "Проверка прервана"
 
-#: read-linear.c:182 read-linear.c:247
+#: read-linear.c:182 read-linear.c:277
 msgid "Scanning medium for read errors."
 msgstr "Просмотр носителя на наличие ошибок чтения."
 
-#: read-linear.c:254
+#: read-linear.c:284
 msgid "Reading CRC information from ecc file"
 msgstr "Чтение CRC-информации из ecc-файла"
 
-#: read-linear.c:286
+#: read-linear.c:316
 msgid "Reading CRC information"
 msgstr "Чтение CRC-информации"
 
-#: read-linear.c:348
+#: read-linear.c:378
 #, c-format
 msgid "<span %s>Reading aborted.</span> Please select a different image file."
 msgstr "<span %s>Чтение прервано.</span> Выберите другой файл образа."
 
-#: read-linear.c:367
+#: read-linear.c:397
 #, c-format
 msgid "Completing image %s. Continuing with sector %lld.\n"
 msgstr "Завершение образа %s. Продолжение с сектора %lld.\n"
 
-#: read-linear.c:373
+#: read-linear.c:403
 #, c-format
 msgid "Completing image %s. Only missing sectors will be read.\n"
 msgstr "Завершение образа %s. Будут прочитаны только недостающие сектора.\n"
 
-#: read-linear.c:450 read-linear.c:454
+#: read-linear.c:480 read-linear.c:485
 msgid "Reading CRC information from ecc data"
 msgstr "Чтение CRC-информации из ecc-данных"
 
-#: read-linear.c:484
+#: read-linear.c:527
 msgid "done.\n"
 msgstr "готово.\n"
 
-#: read-linear.c:496 scsi-layer.c:2063
+#: read-linear.c:539 scsi-layer.c:2063
 #, c-format
 msgid "Waiting %d seconds for drive to spin up...\n"
 msgstr "Задержка на %d секунд для раскручивания привода...\n"
 
-#: read-linear.c:518 read-linear-window.c:101
+#: read-linear.c:561 read-linear-window.c:101
 #, c-format
 msgid "Unreadable / skipped sectors: %lld"
 msgstr "Нечитаемые / пропущенные сектора: %lld"
 
-#: read-linear.c:598
+#: read-linear.c:641
 #, c-format
 msgid "Sector %lld: Speed increased to %4.1fx\n"
 msgstr "Сектор %lld: Скорость увеличена до %4.1fx\n"
 
-#: read-linear.c:601
+#: read-linear.c:644
 #, c-format
 msgid "Sector %lld: Speed dropped to %4.1fx\n"
 msgstr "Сектор %lld: Скорость снижена до %4.1fx\n"
 
-#: read-linear.c:606
+#: read-linear.c:649
 #, c-format
 msgid "Read position: %3d.%1d%% (%4.1fx)"
 msgstr "Положение чтения: %3d.%1d%% (%4.1fx)"
 
-#: read-linear.c:731 rs01-common.c:258 rs02-verify.c:772 rs03-verify.c:1148
+#: read-linear.c:753 rs01-common.c:348 rs02-verify.c:772 rs03-verify.c:1148
 #, c-format
 msgid "* CRC error, sector: %lld\n"
 msgstr "* CRC-ошибка, сектор: %lld\n"
 
-#: read-linear.c:915 read-linear.c:1036
+#: read-linear.c:934 read-linear.c:1055
 #, c-format
 msgid "<span %s>Aborted by user request!</span> %lld sectors read, %lld sectors unreadable/skipped so far."
 msgstr "<span %s>Прервано пользователем!</span> %lld секторов прочитано, %lld секторов не читаются или пропущены."
 
-#: read-linear.c:971
+#: read-linear.c:990
 #, c-format
 msgid "unexpected read error in image for sector %lld"
 msgstr "неожиданная ошибка чтения образа в секторе %lld"
 
-#: read-linear.c:1051
+#: read-linear.c:1070
 #, c-format
 msgid "Sector %lld: %3d C2 errors.%s\n"
 msgstr "Сектор %lld: %3d ошибок C2.%s\n"
 
-#: read-linear.c:1179
+#: read-linear.c:1198
 #, c-format
 msgid "Sector %lld: %s Skipping %d sectors.\n"
 msgstr "Сектор %lld: %s Пропуск %d секторов.\n"
 
-#: read-linear.c:1239
+#: read-linear.c:1258
 #, c-format
 msgid ""
 "<big>Trying to complete image, reading pass %d of %d.</big>\n"
@@ -3147,7 +3149,7 @@ msgstr ""
 "<big>Попытка завершить образ, проход чтения %d из %d.</big>\n"
 "%s"
 
-#: read-linear.c:1241
+#: read-linear.c:1260
 #, c-format
 msgid ""
 "\n"
@@ -3156,74 +3158,62 @@ msgstr ""
 "\n"
 "Попытка завершить образ, проход чтения %d из %d.\n"
 
-#: read-linear.c:1266
-msgid "but wrong ecc md5sum"
-msgstr "но неправильная md5sum для ecc"
-
-#: read-linear.c:1273
-msgid "but wrong crc md5sum"
-msgstr "но неправильная md5sum для crc"
-
-#: read-linear.c:1280
-msgid "but wrong data md5sum"
-msgstr "но неправильная md5sum для данных"
-
-#: read-linear.c:1292
+#: read-linear.c:1285
 #, c-format
 msgid "%lld sectors read.     "
 msgstr "%lld секторов прочитано.     "
 
-#: read-linear.c:1293
+#: read-linear.c:1286
 #, c-format
 msgid "%lld sectors read; %lld unreadable sectors."
 msgstr "%lld секторов прочитано; %lld нечитаемых секторов."
 
-#: read-linear.c:1301
+#: read-linear.c:1293 read-linear.c:1321
 #, c-format
 msgid "All sectors successfully read, but wrong image length (%lld sectors difference)"
 msgstr "Все сектора успешно прочитаны, но размер образа неправильный (разница на %lld секторов)"
 
-#: read-linear.c:1305
-msgid "All sectors successfully read, but wrong image checksum."
-msgstr "Все сектора успешно прочитаны, но неправильная контрольная сумма образа."
-
-#: read-linear.c:1306 read-linear.c:1310
+#: read-linear.c:1303 read-linear.c:1326 read-linear.c:1330
 msgid "All sectors successfully read. Checksums match."
 msgstr "Все сектора успешно прочитаны. Контрольные суммы совпадают."
 
-#: read-linear.c:1312
-#, c-format
-msgid "All sectors successfully read, %s!"
-msgstr "Все сектора успешно прочитаны,·%s!"
-
-#: read-linear.c:1317
+#: read-linear.c:1306 read-linear.c:1337
 msgid "All sectors successfully read."
 msgstr "Все сектора успешно прочитаны."
 
-#: read-linear.c:1323
+#: read-linear.c:1310
 #, c-format
 msgid "%lld unreadable sectors."
 msgstr "%lld нечитаемых секторов."
 
-#: read-linear.c:1325
+#: read-linear.c:1312
 #, c-format
 msgid "%lld CRC errors."
 msgstr "%lld CRC-ошибок."
 
-#: read-linear.c:1326
+#: read-linear.c:1313
 #, c-format
 msgid "%lld CRC errors, %lld unreadable sectors."
 msgstr "%lld CRC-ошибок, %lld нечитаемых секторов."
 
+#: read-linear.c:1325 rs01-common.c:139
+msgid "All sectors successfully read, but wrong image checksum."
+msgstr "Все сектора успешно прочитаны, но неправильная контрольная сумма образа."
+
 #: read-linear.c:1332
+#, c-format
+msgid "All sectors successfully read, %s!"
+msgstr "Все сектора успешно прочитаны,·%s!"
+
+#: read-linear.c:1345
 msgid "Scanning finished: "
 msgstr "Проверка завершена: "
 
-#: read-linear.c:1334
+#: read-linear.c:1347
 msgid "Reading finished: "
 msgstr "Чтение завершено: "
 
-#: read-linear.c:1345
+#: read-linear.c:1359
 #, c-format
 msgid ""
 "%d sectors missing at the end of the disc.\n"
@@ -3234,7 +3224,7 @@ msgstr ""
 "Это нормально, если CD записан в режиме TAO (track at once).\n"
 "Образ будет соответственно укорочен. Подробнее см. в руководстве.\n"
 
-#: read-linear.c:1351
+#: read-linear.c:1365
 #, c-format
 msgid ""
 "%d sectors missing at the end of the disc.\n"
@@ -3286,27 +3276,27 @@ msgstr "Скорость"
 msgid "Sector %lld dumped to %s\n"
 msgstr "Сектор %lld помещен в %s\n"
 
-#: rs01-common.c:157 rs02-verify.c:803 rs03-verify.c:1171
+#: rs01-common.c:247 rs02-verify.c:803 rs03-verify.c:1171
 #, c-format
 msgid "- testing sectors  : %3d%%"
 msgstr "- проверка секторов  : %3d%%"
 
-#: rs01-common.c:158
+#: rs01-common.c:248
 #, c-format
 msgid "Scanning image sectors: %3d%%"
 msgstr "Просмотр секторов образа: %3d%%"
 
-#: rs01-common.c:210 rs02-verify.c:759
+#: rs01-common.c:300 rs02-verify.c:759
 #, c-format
 msgid "* missing sector   : %lld\n"
 msgstr "* недостающий сектор   : %lld\n"
 
-#: rs01-common.c:211 rs02-verify.c:760
+#: rs01-common.c:301 rs02-verify.c:760
 #, c-format
 msgid "* missing sectors  : %lld - %lld\n"
 msgstr "* недостающие сектора  : %lld - %lld\n"
 
-#: rs01-common.c:229 rs01-common.c:296 rs01-create.c:273
+#: rs01-common.c:319 rs01-common.c:386 rs01-create.c:273
 #, c-format
 msgid "Error writing CRC information: %s"
 msgstr "Ошибка записи CRC-информации: %s"
@@ -3341,7 +3331,7 @@ msgstr "Создание файла для исправления ошибок �
 msgid "Encoding with Method RS01: %d roots, %4.1f%% redundancy."
 msgstr "Кодирование по методу RS01: %d корней, избыточность %4.1f%%."
 
-#: rs01-create.c:215 rs03-create.c:1092
+#: rs01-create.c:215 rs03-create.c:1119
 #, c-format
 msgid ""
 "<big>Creating the error correction file.</big>\n"
@@ -3395,7 +3385,7 @@ msgstr ""
 "Попробуйте уменьшить его.\n"
 
 #: rs01-create.c:522 rs01-create.c:646 rs01-create.c:940 rs02-create.c:959
-#: rs03-create.c:921 rs03s-create.c:972
+#: rs03-create.c:948 rs03s-create.c:972
 #, c-format
 msgid "Ecc generation: %3d.%1d%%"
 msgstr "Генерация ecc: %3d.%1d%%"
@@ -3428,12 +3418,12 @@ msgstr ""
 "Не удается записать заголовок ecc:\n"
 "%s"
 
-#: rs01-create.c:976 rs02-create.c:1107 rs03-create.c:1145 rs03s-create.c:1124
+#: rs01-create.c:976 rs02-create.c:1107 rs03-create.c:1172 rs03s-create.c:1124
 #, c-format
 msgid "Ecc generation: 100.0%%\n"
 msgstr "Генерация ecc: 100.0%%\n"
 
-#: rs01-create.c:977 rs03-create.c:1152
+#: rs01-create.c:977 rs03-create.c:1179
 #, c-format
 msgid ""
 "Error correction file \"%s\" created.\n"
@@ -3442,7 +3432,7 @@ msgstr ""
 "Создан файл для исправления ошибок \"%s\".\n"
 "Убедитесь, что этот файл находится на надежном носителе.\n"
 
-#: rs01-create.c:985 rs03-create.c:1178
+#: rs01-create.c:985 rs03-create.c:1205
 msgid ""
 "The error correction file has been successfully created.\n"
 "Make sure to keep this file on a reliable medium."
@@ -4190,12 +4180,24 @@ msgstr ""
 "\n"
 "dvdisaster оптимизирует доступ к образам и файлам для исправления ошибок с помощью собственного буфера. Предустановленное значение в 32 МБ подходит для большинства систем."
 
-#: rs02-common.c:332 rs02-common.c:344 rs02-verify.c:629 rs03-common.c:318
+#: rs02-common.c:176
+msgid "All sectors successfully read, but wrong data md5sum."
+msgstr ""
+
+#: rs02-common.c:184
+msgid "All sectors successfully read, but wrong crc md5sum."
+msgstr ""
+
+#: rs02-common.c:192
+msgid "All sectors successfully read, but wrong ecc md5sum."
+msgstr ""
+
+#: rs02-common.c:508 rs02-common.c:520 rs02-verify.c:629 rs03-common.c:318
 #, c-format
 msgid "Failed seeking to ecc header at %lld: %s\n"
 msgstr "Не удалось перейти к ecc-заголовку в %lld: %s\n"
 
-#: rs02-common.c:336 rs02-common.c:348 rs03-common.c:322
+#: rs02-common.c:512 rs02-common.c:524 rs03-common.c:322
 #, c-format
 msgid "Failed writing ecc header at %lld: %s\n"
 msgstr "Не удалось записать ecc-заголовок в %lld: %s\n"
@@ -4266,11 +4268,11 @@ msgstr "Не удалось перейти к концу образа: %s\n"
 msgid "Failed expanding the image: %s\n"
 msgstr "Не удалось увеличить образ: %s\n"
 
-#: rs02-create.c:1029 rs03-create.c:1055 rs03s-create.c:1037
+#: rs02-create.c:1029 rs03-create.c:1082 rs03s-create.c:1037
 msgid "Error correction data creation aborted"
 msgstr "Создание данных для исправления ошибок прервано"
 
-#: rs02-create.c:1033 rs02-create.c:1053 rs03-create.c:1059 rs03-create.c:1088
+#: rs02-create.c:1033 rs02-create.c:1053 rs03-create.c:1086 rs03-create.c:1115
 #: rs03s-create.c:1041 rs03s-create.c:1070
 #, c-format
 msgid ""
@@ -4280,7 +4282,7 @@ msgstr ""
 "<big>Присоединение к образу данных для исправления ошибок.</big>\n"
 "<i>%s</i>"
 
-#: rs02-create.c:1034 rs03-create.c:1060 rs03s-create.c:1042
+#: rs02-create.c:1034 rs03-create.c:1087 rs03s-create.c:1042
 msgid "- checking image -"
 msgstr "- проверка образа -"
 
@@ -4307,7 +4309,7 @@ msgid ""
 "not an option, please create a separate error correction file."
 msgstr ""
 
-#: rs02-create.c:1076 rs03-create.c:1124 rs03s-create.c:1101
+#: rs02-create.c:1076 rs03-create.c:1151 rs03s-create.c:1101
 #, c-format
 msgid ""
 "Using redundancies below 20%%%% may not give\n"
@@ -4316,7 +4318,7 @@ msgstr ""
 "Применение избыточности менее 20%%%% может не дать\n"
 "ожидаемой защиты от потери данных.\n"
 
-#: rs02-create.c:1108 rs02-create.c:1117 rs03-create.c:1147 rs03-create.c:1172
+#: rs02-create.c:1108 rs02-create.c:1117 rs03-create.c:1174 rs03-create.c:1199
 #, c-format
 msgid ""
 "Image has been augmented with error correction data.\n"
@@ -4840,42 +4842,42 @@ msgstr ""
 msgid "I/O bound"
 msgstr ""
 
-#: rs03-create.c:915
+#: rs03-create.c:942
 #, c-format
 msgid "%5.2fMB/s current"
 msgstr ""
 
-#: rs03-create.c:959
+#: rs03-create.c:986
 #, c-format
 msgid "%d threads with 128bit intrinsics"
 msgstr ""
 
-#: rs03-create.c:962 rs03-preferences.c:290 rs03-preferences.c:805
+#: rs03-create.c:989 rs03-preferences.c:290 rs03-preferences.c:805
 #: rs03-preferences.c:811 rs03-preferences.c:812
 #, c-format
 msgid "%d threads"
 msgstr ""
 
-#: rs03-create.c:1083 rs03s-create.c:1066
+#: rs03-create.c:1110 rs03s-create.c:1066
 #, c-format
 msgid "Encoding with Method RS03: %lld MB data, %lld MB ecc (%d roots; %4.1f%% redundancy)."
 msgstr "Кодирование методом RS03: %lld МБ данные, %lld МБ ecc (%d корней; избыточность %4.1f%%)."
 
-#: rs03-create.c:1098
+#: rs03-create.c:1125
 #, c-format
 msgid ""
 "Augmenting image with Method RS03 [%d threads]:\n"
 "%lld MB data, %lld MB ecc (%d roots; %4.1f%% redundancy)."
 msgstr ""
 
-#: rs03-create.c:1103
+#: rs03-create.c:1130
 #, c-format
 msgid ""
 "Creating the error correction file with Method RS03 [%d threads]:\n"
 "%lld MB data, %lld MB ecc (%d roots; %4.1f%% redundancy)."
 msgstr ""
 
-#: rs03-create.c:1114 rs03s-create.c:1091
+#: rs03-create.c:1141 rs03s-create.c:1091
 #, c-format
 msgid ""
 "Not enough space on medium left for error correction data.\n"
@@ -4884,17 +4886,17 @@ msgid ""
 "an option, please create a separate error correction file."
 msgstr ""
 
-#: rs03-create.c:1158
+#: rs03-create.c:1185
 #, c-format
 msgid "Avg performance: %5.2fs (%5.2fMB/s) total\n"
 msgstr "Ср. производительность: %5.2fs (%5.2fМБ/с) в сумме\n"
 
-#: rs03-create.c:1161
+#: rs03-create.c:1188
 #, c-format
 msgid "%5.2fMB/s average"
 msgstr ""
 
-#: rs03-create.c:1163
+#: rs03-create.c:1190
 #, c-format
 msgid "%d times CPU bound; %d times I/O bound"
 msgstr ""
@@ -5567,32 +5569,32 @@ msgstr ""
 msgid "Waiting 10 seconds for drive: %d\n"
 msgstr "Выжидание 10 секунд для привода: %d\n"
 
-#: scsi-layer.c:2468
+#: scsi-layer.c:2470
 #, c-format
 msgid "Sectors %lld - %lld: %s\n"
 msgstr "Сектора %lld - %lld: %s\n"
 
-#: scsi-layer.c:2482
+#: scsi-layer.c:2484
 #, c-format
 msgid "Sector %lld, try %d: %s Sector returned: %d.\n"
 msgstr "Сектор %lld, попытка %d: %s Возвращен сектор: %d.\n"
 
-#: scsi-layer.c:2488
+#: scsi-layer.c:2490
 #, c-format
 msgid "Sector %lld, try %d: %s\n"
 msgstr "Сектор %lld, попытка %d: %s\n"
 
-#: scsi-layer.c:2499
+#: scsi-layer.c:2501
 #, c-format
 msgid "Sector %lld, try %d: success\n"
 msgstr "Сектор %lld, попытка %d: успешно\n"
 
-#: scsi-layer.c:2566 scsi-layer.c:2711
+#: scsi-layer.c:2568 scsi-layer.c:2713
 #, c-format
 msgid "Device %s: no medium present\n"
 msgstr "Устройство %s: нет носителя\n"
 
-#: scsi-layer.c:2567 scsi-layer.c:2712
+#: scsi-layer.c:2569 scsi-layer.c:2714
 #, c-format
 msgid ""
 "Device %s does not become ready:\n"
@@ -5603,7 +5605,7 @@ msgstr ""
 "%s\n"
 "\n"
 
-#: scsi-layer.c:2571
+#: scsi-layer.c:2573
 #, c-format
 msgid ""
 "\n"
@@ -5612,52 +5614,52 @@ msgstr ""
 "\n"
 "Устройство: %s, %s\n"
 
-#: scsi-layer.c:2577
+#: scsi-layer.c:2579
 msgid "Drive failed to report media type."
 msgstr "Не удалось получить от привода сообщение о типе носителя."
 
-#: scsi-layer.c:2588 scsi-layer.c:2674
+#: scsi-layer.c:2590 scsi-layer.c:2676
 #, c-format
 msgid "This software does not support \"%s\" type media."
 msgstr "Эта программа не поддерживает \"%s\" тип носителя."
 
-#: scsi-layer.c:2596
+#: scsi-layer.c:2598
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr "Эта программа не поддерживает многосессионные (%d сессиий) носители."
 
-#: scsi-layer.c:2619 scsi-layer.c:2628
+#: scsi-layer.c:2621 scsi-layer.c:2630
 msgid "Using READ CD"
 msgstr "Используется READ CD"
 
-#: scsi-layer.c:2620
+#: scsi-layer.c:2622
 msgid ", RAW reading"
 msgstr ", чтение \"RAW\""
 
-#: scsi-layer.c:2623
+#: scsi-layer.c:2625
 #, c-format
 msgid ", Mode page 1 ERP = %02xh"
 msgstr ", Mode page 1 ERP = %02xh"
 
-#: scsi-layer.c:2626
+#: scsi-layer.c:2628
 msgid ", C2 scanning"
 msgstr ", поиск ошибок C2"
 
-#: scsi-layer.c:2633
+#: scsi-layer.c:2635
 msgid "Using READ(10).\n"
 msgstr "Используется READ(10).\n"
 
-#: scsi-layer.c:2651
+#: scsi-layer.c:2653
 #, c-format
 msgid "Medium: %s, %lld sectors%s"
 msgstr "Носитель: %s, %lld секторов%s"
 
-#: scsi-layer.c:2655
+#: scsi-layer.c:2657
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s created %s"
 msgstr "Носитель \"%s\": %s, %lld секторов%s создан %s"
 
-#: scsi-layer.c:2681
+#: scsi-layer.c:2683
 msgid "This software does not support encrypted media.\n"
 msgstr "Эта программа не поддерживает шифрованные носители.\n"
 
@@ -5820,6 +5822,15 @@ msgstr ""
 #: welcome-window.c:143
 msgid "<i>New in this Version:</i>"
 msgstr "<i>Новое в этой версии:</i>"
+
+#~ msgid "but wrong ecc md5sum"
+#~ msgstr "но неправильная md5sum для ecc"
+
+#~ msgid "but wrong crc md5sum"
+#~ msgstr "но неправильная md5sum для crc"
+
+#~ msgid "but wrong data md5sum"
+#~ msgstr "но неправильная md5sum для данных"
 
 #~ msgid ""
 #~ "Image file already exists and does not match the CD/DVD.\n"

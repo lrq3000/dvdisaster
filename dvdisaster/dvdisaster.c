@@ -755,6 +755,8 @@ int main(int argc, char *argv[])
    /*** CPU type detection. */
 
    Closure->useSSE2 = ProbeSSE2();
+   Closure->useAltiVec = ProbeAltiVec();
+   Closure->clSize = ProbeCacheLineSize();
 
    /*** Parse the sector ranges for --read and --scan */
 
