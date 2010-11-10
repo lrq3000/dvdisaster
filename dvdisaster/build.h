@@ -1,2 +1,2 @@
-#define BUILD 23
-#define BDATE "13.08.09 (Donnerstag, 17:45)"
+#define BUILD 103
+#define BDATE "07.11.10 (Sonntag, 20:18)"

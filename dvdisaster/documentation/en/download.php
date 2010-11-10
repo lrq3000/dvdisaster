@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: English homepage translation
-# Copyright (C) 2004-2009 Carsten Gnörlich
+# Copyright (C) 2004-2010 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -51,10 +51,32 @@ The current unstable release is
 <b>Stable version</b> - recommended for getting started.<p>
 
 <table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.72</b></td><td align="right">08-Aug-2009</td></tr>
+<tr><td><b>dvdisaster-0.72</b></td><td align="right">31-Oct-2010</td></tr>
 <tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
 <tr><td colspan="2">
   <table>
+    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.2.tar.bz2">dvdisaster-0.72.2.tar.bz2</a></td></tr>
+    <tr><td align="right">Digital signature:&nbsp;</td>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.2.tar.bz2.gpg">dvdisaster-0.72.2.tar.bz2.gpg</a></td></tr>
+    <tr><td align="right">Binary for Mac OS X 10.5 / x86:&nbsp;</td>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.2.app.zip">dvdisaster-0.72.2.app.zip</a>&nbsp;--&nbsp;please read these <a href="download30.php#mac">hints</a> first</td></tr>
+    <tr><td align="right">Digital signature:&nbsp;</td>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.2.app.zip.gpg">dvdisaster-0.72.2.app.zip.gpg</a></td></tr>
+    <tr><td align="right">Binary for Windows:&nbsp;</td>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.2-setup.exe">dvdisaster-0.72.2-setup.exe</a></td></tr>
+    <tr><td align="right">Digital signature:&nbsp;</td>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.2-setup.exe.gpg">dvdisaster-0.72.2-setup.exe.gpg</a></td></tr>
+    <tr><td colspan="2"> </td></tr>
+<?php
+  if($show_all == 0) {
+?>
+    <tr><td colspan="2"><a href="download.php?showall=1">Show older releases in the 0.72 version branch</a></td></tr>
+<?php
+  }
+  else {
+?> 
+   <tr><td colspan="2"><a href="download.php?showall=0">Hide older releases in the 0.72 version branch</a></td></tr>
     <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.1.tar.bz2">dvdisaster-0.72.1.tar.bz2</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
@@ -68,15 +90,6 @@ The current unstable release is
     <tr><td align="right">Digital signature:&nbsp;</td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.1-setup.exe.gpg">dvdisaster-0.72.1-setup.exe.gpg</a></td></tr>
     <tr><td colspan="2"> </td></tr>
-<?php
-  if($show_all == 0) {
-?>
-    <tr><td colspan="2"><a href="download.php?showall=1">Show older releases in the 0.72 version branch</a></td></tr>
-<?php
-  }
-  else {
-?> 
-   <tr><td colspan="2"><a href="download.php?showall=0">Hide older releases in the 0.72 version branch</a></td></tr>
     <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
         <td><a href="http://prdownloads.sourceforge.net/dvdisaster/dvdisaster-0.72.tar.bz2?download">dvdisaster-0.72.tar.bz2</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
@@ -112,6 +125,11 @@ Most important changes in this version:<p>
 </ul>
 
 <b>Patches</b> (small changes after version 0.72; files above have been updated):<p>
+
+<b>0.72 pl2</b> 
+This version introduces a workaround which prevents parallel SCSI
+adapters from freezing under Linux. 
+Improved compatibility with the new version branch 0.79.x. (31-Oct-2010)<p>
 
 <b>0.72 pl1</b> Pablo Almeida provided Portuguese translations of the screen texts.
 Added workaround to avoid Win XP freezing on certain CD-RW/drive pairs.(08-Aug-2009)<p>
