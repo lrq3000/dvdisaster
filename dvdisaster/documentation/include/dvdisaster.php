@@ -1,7 +1,7 @@
 <?php
 
 # dvdisaster: Homepage layout functions
-# Copyright (C) 2007-2010 Carsten Gnörlich
+# Copyright (C) 2007-2011 Carsten Gnörlich
 
 require("version.php");
 
@@ -449,11 +449,9 @@ echo "  <td valign=\"top\" width=\"$body_width\" rowspan=\"2\">\n";
 function end_page()
 {  global $script_file;
    global $trans_copyright;
-   global $trans_modified;
    global $trans_news;
    global $trans_fdl;
    global $trans_hosting;
-   global $modified_source;
    global $news_flash;
    global $news_counter;
    global $script_lang;

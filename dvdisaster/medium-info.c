@@ -66,14 +66,16 @@ static void print_defaults(medium_info *mi)
 }
 
 static void query_medium(medium_info *mi)
-{  DeviceHandle *dh;
+{  Image *image;
+   DeviceHandle *dh;
    char *disc_status;
    char *sess_status;
 
    print_defaults(mi);
 
-   dh = QueryMediumInfo(Closure->device);
-   if(!dh) return;
+   image = OpenImageFromDevice(Closure->device);
+   if(!image) return;
+   dh = image->dh;
 
    /* Medium properties */
 
@@ -109,30 +111,31 @@ static void query_medium(medium_info *mi)
 
    /* Filesystem properties */
 
-   if(dh->isoInfo)
-   {  SetLabelText(GTK_LABEL(mi->isoLabel), "%s", dh->isoInfo->volumeLabel);
+   if(image->isoInfo)
+   {  SetLabelText(GTK_LABEL(mi->isoLabel), "%s", image->isoInfo->volumeLabel);
       SetLabelText(GTK_LABEL(mi->isoSize), _("%d sectors (%lld MB)"),
-		   dh->isoInfo->volumeSize, (gint64)dh->isoInfo->volumeSize>>9);
-      SetLabelText(GTK_LABEL(mi->isoTime), "%s", dh->isoInfo->creationDate);
+		   image->isoInfo->volumeSize, (gint64)image->isoInfo->volumeSize>>9);
+      SetLabelText(GTK_LABEL(mi->isoTime), "%s", image->isoInfo->creationDate);
    }
 
-   /* Augmented image properties */
+   /* Augmented image properties
+      fixme: verify RS03 correctness */
 
-   if(dh->rs02Header)
-   {  EccHeader *eh = dh->rs02Header;
+   if(image->eccHeader)
+   {  EccHeader *eh = image->eccHeader;
       int major = eh->creatorVersion/10000; 
       int minor = (eh->creatorVersion%10000)/100;
       int pl    = eh->creatorVersion%100;
       char method[5];
       char *format = "%d.%d";
  
-      memcpy(method, dh->rs02Header->method, 4);
+      memcpy(method, eh->method, 4);
       method[4] = 0;
       SetLabelText(GTK_LABEL(mi->eccState), _("%s, %d roots, %4.1f%% redundancy."), 
 		   method, eh->eccBytes,
 		    ((double)eh->eccBytes*100.0)/(double)eh->dataBytes);
       SetLabelText(GTK_LABEL(mi->eccSize), _("%lld sectors (%lld MB)"),
-		   dh->rs02Size, dh->rs02Size>>9);
+		   image->expectedSectors, image->expectedSectors>>9);
 
 
       if(eh->creatorVersion%100)        
@@ -148,7 +151,7 @@ static void query_medium(medium_info *mi)
 
    /* Clean up */
 
-   CloseDevice(dh); 
+   CloseImage(image);
 }
 
 /***

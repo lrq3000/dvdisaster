@@ -65,6 +65,7 @@ typedef struct
    Spiral    *cmpSpiral;
    PangoLayout *cmpLayout;
 
+   GtkWidget *cmpImageNotebook;
    GtkWidget *cmpImageSectors;
    GtkWidget *cmpImageMd5Sum;
    GtkWidget *cmpDataSection;
@@ -110,6 +111,15 @@ typedef struct
    int    dataBytes;
    int    percent, lastPercent;
 } RS03Widgets;
+
+/*
+ * local working closure for internal checksums
+ */
+
+typedef struct
+{  struct _RS03Layout *lay;     /* Codec data layout */
+   guint64 signatureErrors;     /* number of Checksum with invalid sigs */
+} RS03CksumClosure;
 
 /* 
  * These are exported via the Method struct 
@@ -157,26 +167,27 @@ typedef struct _RS03Layout
 #define RS03_READ_CRC     0x02
 #define RS03_READ_ECC     0x04
 
+CrcBuf *RS03GetCrcBuf(Image *image);
 void RS03ReadSectors(LargeFile*, RS03Layout*, unsigned char*, gint64, gint64, gint64, int);
 
 gint64 RS03SectorIndex(RS03Layout*, gint64, gint64);
-RS03Layout *CalcRS03Layout(gint64, EccHeader *, int);
+RS03Layout *CalcRS03Layout(gint64, EccHeader*, int);
+guint64 RS03ExpectedImageSize(EccHeader*);
 void WriteRS03Header(LargeFile*, RS03Layout*, EccHeader*);
 void ReconstructRS03Header(EccHeader*, CrcBlock*);
 
 /* rs03-create.c */
 
-void RS03Create(Method*);
+void RS03Create(void);
 
 /* rs03-fix.c */
 
-void RS03Fix(Method*);
+void RS03Fix(Image*);
 
 /* rs03-recognize.c */
 
-int  RS03RecognizeFile(Method*, LargeFile*);
-EccHeader* FindRS03HeaderInImage(LargeFile*);
-int  RS03RecognizeImage(Method*, LargeFile*);
+int  RS03RecognizeFile(LargeFile*, EccHeader**);
+int  RS03RecognizeImage(Image*);
 
 /* rs03-window.c */
 
@@ -188,11 +199,11 @@ void RS03UpdateFixResults(RS03Widgets*, gint64, gint64);
 
 #define VERIFY_IMAGE_SEGMENTS 1000
 
-void RS03Verify(Method*);
+void RS03Verify(Image*);
 
 /* temporary single threaded versions */
 
-void RS03SCreate(Method*);
+void RS03SCreate(void);
 void CreateRS03SEncWindow(Method*, GtkWidget*);
 void ResetRS03SEncWindow(Method*);
 

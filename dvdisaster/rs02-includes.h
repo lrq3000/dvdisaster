@@ -156,30 +156,30 @@ typedef struct _RS02Layout
    double redundancy;            /* resulting redundancy */
 } RS02Layout;
 
-CrcBuf *RS02GetCrcBuf(Method*, void*);
-void RS02ResetCksums(Method*);
-void RS02UpdateCksums(Method*, gint64, unsigned char*);
-char* RS02FinalizeCksums(Method*);
+CrcBuf *RS02GetCrcBuf(Image*);
+void RS02ResetCksums(Image*);
+void RS02UpdateCksums(Image*, gint64, unsigned char*);
+char* RS02FinalizeCksums(Image*);
 
-void RS02ReadSector(ImageInfo*, RS02Layout*, unsigned char*, gint64);
+void RS02ReadSector(Image*, RS02Layout*, unsigned char*, gint64);
 gint64 RS02EccSectorIndex(RS02Layout*, gint64, gint64);
 gint64 RS02SectorIndex(RS02Layout*, gint64, gint64);
 void RS02SliceIndex(RS02Layout*, gint64, gint64*, gint64*);
 RS02Layout *CalcRS02Layout(gint64, int);
+guint64 RS02ExpectedImageSize(EccHeader*);
 void WriteRS02Headers(LargeFile*, RS02Layout*, EccHeader*);
 
 /* rs02-create.c */
 
-void RS02Create(Method*);
+void RS02Create(void);
 
 /* rs02-fix.c */
 
-void RS02Fix(Method*);
+void RS02Fix(Image*);
 
 /* rs02-recognize.c */
 
-EccHeader* FindRS02HeaderInImage(LargeFile*);
-int  RS02Recognize(Method*, LargeFile*);
+int  RS02Recognize(Image*);
 
 /* rs02-window.c */
 
@@ -191,6 +191,6 @@ void RS02UpdateFixResults(RS02Widgets*, gint64, gint64);
 
 #define VERIFY_IMAGE_SEGMENTS 1000
 
-void RS02Verify(Method*);
+void RS02Verify(Image*);
 
 #endif

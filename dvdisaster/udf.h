@@ -35,11 +35,7 @@ typedef struct _IsoInfo
 } IsoInfo;
 
 void FreeIsoInfo(IsoInfo*);
-
-EccHeader* FindHeaderInMedium(DeviceHandle*, gint64);
-gint64 MediumLengthFromRS02(DeviceHandle*, gint64);
-
-IsoInfo* ExamineUDF(DeviceHandle*, LargeFile*);
+void ExamineUDF(Image*);
 
 /*
  * Structure and functions for creating an .iso image

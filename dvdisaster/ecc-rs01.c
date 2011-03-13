@@ -35,7 +35,7 @@ static void destroy(Method*);
 void register_rs01(void)
 {  Method *method = g_malloc0(sizeof(Method));
 
-   method->ckSumClosure = g_malloc(sizeof(RS01CksumClosure));
+   method->ckSumClosure = g_malloc0(sizeof(RS01CksumClosure));
 
    /*** Standard infomation and methods */ 
 
@@ -48,11 +48,12 @@ void register_rs01(void)
 
    /*** Linkage to rs01-common.c */
 
-   method->recognizeEccFile = RS01Recognize;
-   method->getCrcBuf        = RS01GetCrcBuf;
-   method->resetCksums      = RS01ResetCksums;
-   method->updateCksums     = RS01UpdateCksums;
-   method->finalizeCksums   = RS01FinalizeCksums;
+   method->recognizeEccFile  = RS01Recognize;
+   method->getCrcBuf         = RS01GetCrcBuf;
+   method->resetCksums       = RS01ResetCksums;
+   method->updateCksums      = RS01UpdateCksums;
+   method->finalizeCksums    = RS01FinalizeCksums;
+   method->expectedImageSize = RS01ExpectedImageSize;
 
    /*** Linkage to rs01-window.c */
 

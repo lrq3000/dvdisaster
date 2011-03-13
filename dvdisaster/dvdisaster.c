@@ -27,59 +27,6 @@
 #endif
 
 /*
- * Create the error correction file
- */
-
-void CreateEcc(void)
-{  Method *method = FindMethod(Closure->methodName); 
-
-   /*** GUI mode does its own FindMethod() before calling us
-	so the following Stop() will never execute in GUI mode */
-
-   if(!method) Stop(_("\nMethod %s not available.\n"
-		      "Use -m without parameters for a method list.\n"), 
-	            Closure->methodName);
-
-   method->create(method);
-}
-
-/*
- * Fix the medium with ecc information
- */
-
-void FixEcc(void)
-{  Method *method; 
-   
-   /* Error handling is done within EccMethod() */
-
-   method = EccMethod(TRUE);
- 
-   /* Dispatch to the proper method */
-  
-   method->fix(method);
-}
-
-/*
- * Verifiy the image against ecc data 
- */
-
-void Verify(void)
-{  Method *method; 
-   
-  /* If something is wrong with the .iso or .ecc files
-     we fall back to the RS01 method for comparing 
-     since it is robust against missing files. */
-
-  if(!(method = EccMethod(FALSE)))
-    if(!(method = FindMethod("RS01")))
-      Stop(_("RS01 method not available for comparing files."));
- 
-   /* Dispatch to the proper method */
-
-  method->verify(method);
-}
-
-/*
  * The all-famous main() loop 
  */
 
@@ -476,7 +423,15 @@ int main(int argc, char *argv[])
 			   Closure->mediumSize = DVD_SL_SIZE;
 		      else if(!strcmp(optarg, "DVD9") || !strcmp(optarg, "dvd9"))
 			   Closure->mediumSize = DVD_DL_SIZE;
-		      else Closure->mediumSize = (gint64)atoll(optarg);
+		      else if(!strcmp(optarg, "BD") || !strcmp(optarg, "bd"))
+			   Closure->mediumSize = BD_SL_SIZE;
+		      else if(!strcmp(optarg, "BD2") || !strcmp(optarg, "bd2"))
+			   Closure->mediumSize = BD_DL_SIZE;
+		      else 
+		      {  int len = strlen(optarg);
+			 if(strchr("0123456789", optarg[len-1]))
+			    Closure->mediumSize = (gint64)atoll(optarg);
+		      }
 		      break;
 		   }
          case 'o': if(!strcmp(optarg, "file"))
@@ -536,12 +491,15 @@ int main(int argc, char *argv[])
          case MODIFIER_EJECT: 
 	   Closure->eject = 1; 
 	   break;
-	 case MODIFIER_DRIVER: /* currently undocumented feature */
+	 case MODIFIER_DRIVER:
 #if defined(SYS_LINUX)
 	   if(optarg && !strcmp(optarg,"sg"))
-	      Closure->useSGioctl = TRUE;
+	      Closure->useSCSIDriver = DRIVER_SG;
+	   else 
+	   if(optarg && !strcmp(optarg,"cdrom"))
+	      Closure->useSCSIDriver = DRIVER_CDROM;
 	   else
-	      Stop(_("Valid args for --driver: sg"));
+	      Stop(_("Valid args for --driver: sg,cdrom"));
 #else
 	   Stop(_("--driver is only supported on GNU/Linux"));
 #endif
@@ -784,10 +742,16 @@ int main(int argc, char *argv[])
       Closure->imageName = ApplyAutoSuffix(Closure->imageName, "iso");
    }
 
-   /*** Determine the default device (OS dependent!) if none
-        has been specified on the command line. */
+   /*** Determine the default device (OS dependent!) if 
+	- none has been specified on the command line
+        - and one if actually required in command line mode.
 
-   if(!Closure->device)
+	GUI mode will unconditionally query devices later anyways
+	in order to build the menu so we don't have to care about
+	that now. */
+
+   if(!Closure->device && mode == MODE_SEQUENCE 
+      && (sequence & (1<<MODE_READ | 1<<MODE_SCAN))) 
    {  Closure->device = DefaultDevice();
       devices_queried = TRUE;
    }
@@ -818,13 +782,58 @@ int main(int argc, char *argv[])
 	}
 
 	if(sequence & 1<<MODE_CREATE)
-	  CreateEcc();
+	{  Method *method = FindMethod(Closure->methodName); 
+
+	   if(!method) Stop(_("\nMethod %s not available.\n"
+			      "Use -m without parameters for a method list.\n"), 
+			    Closure->methodName);
+
+	   method->create();
+	}
 
 	if(sequence & 1<<MODE_FIX)
-	  FixEcc();
+	{  Method *method = NULL;
+	   Image *image;
+
+	   PrintLog(_("\nOpening %s"), Closure->imageName);
+	   image = OpenImageFromFile(Closure->imageName, O_RDWR, IMG_PERMS);
+	   if(!image)
+	   {  PrintLog(": %s.\n", strerror(errno));
+	   }
+	   else 
+	   {  if(image->inLast == 2048)
+	           PrintLog(_(": %lld medium sectors.\n"), image->sectorSize);
+	      else PrintLog(_(": %lld medium sectors and %d bytes.\n"), 
+		   image->sectorSize-1, image->inLast);
+	   }
+	   image = OpenEccFileForImage(image, Closure->eccName, O_RDONLY, IMG_PERMS);
+	   ReportImageEccInconsistencies(image);
+
+	   /* Determine method. Ecc files win over augmented ecc. */
+
+	   if(image && image->eccFileMethod) method = image->eccFileMethod;
+	   else if(image && image->eccMethod) method = image->eccMethod;
+	   else Stop("Internal error: No suitable method for repairing image.");
+
+	   method->fix(image);
+	}
 
 	if(sequence & 1<<MODE_VERIFY)
-	  Verify();
+	{  Method *method;
+	   Image *image;
+	   image = OpenImageFromFile(Closure->imageName, O_RDONLY, IMG_PERMS);
+	   if(!image || !image->eccMethod)
+	     image = OpenEccFileForImage(image, Closure->eccName, O_RDONLY, IMG_PERMS);
+
+	   /* Determine method. Ecc files win over augmented ecc. */
+
+	   if(image && image->eccFileMethod) method = image->eccFileMethod;
+	   else if(image && image->eccMethod) method = image->eccMethod;
+	   else if(!(method = FindMethod("RS01")))
+	           Stop(_("RS01 method not available for comparing files."));
+	     
+	   method->verify(image);
+	}
 	break;
 
       case MODE_BYTESET:
@@ -848,14 +857,17 @@ int main(int argc, char *argv[])
 	 break;
 
       case MODE_SEND_CDB:
+         if(!Closure->device) Closure->device = DefaultDevice();
 	 SendCDB(debug_arg);
 	 break;
 
       case MODE_RAW_SECTOR:
+         if(!Closure->device) Closure->device = DefaultDevice();
 	 RawSector(debug_arg);
 	 break;
 
       case MODE_READ_SECTOR:
+         if(!Closure->device) Closure->device = DefaultDevice();
 	 ReadSector(debug_arg);
 	 break;
 
@@ -864,7 +876,7 @@ int main(int argc, char *argv[])
 	 break;
 
       case MODE_RANDOM_ERR:
-	 RandomError(Closure->imageName, debug_arg);
+	 RandomError(debug_arg);
 	 break;
 
       case MODE_MARKED_IMAGE:
@@ -880,7 +892,7 @@ int main(int argc, char *argv[])
 	 break;
 
       case MODE_TRUNCATE:
-	 TruncateImage(debug_arg);
+	 TruncateImageFile(debug_arg);
 	 break;
 
       case MODE_ZERO_UNREADABLE:
@@ -932,8 +944,8 @@ int main(int argc, char *argv[])
       PrintCLI(_("  -a,--assume x,y,...    - assume image is augmented with codec(s) x,y,...\n"));
       PrintCLI(_("  -j,--jump n            - jump n sectors forward after a read error (default: 16)\n"));
       PrintCLI(_("  -m n                   - list/select error correction methods (default: RS01)\n"));
-      PrintCLI(_("  -n,--redundancy n%%     - error correction file redundancy (in percent), or\n"
-		 "                           maximum error correction image size (in sectors)\n"));
+      PrintCLI(_("  -n,--redundancy n%%     - error correction data redundancy\n"
+		 "                           allowed values depend on codec (see manual)\n"));
       PrintCLI(_("  -v,--verbose           - more diagnostic messages\n"));
       PrintCLI(_("  -x,--threads n         - use n threads for en-/decoding (if supported by codec)\n"));
       PrintCLI(_("  --adaptive-read        - use optimized strategy for reading damaged media\n"));
@@ -942,7 +954,7 @@ int main(int argc, char *argv[])
       PrintCLI(_("  --dao                  - assume DAO disc; do not trim image end\n"));
       PrintCLI(_("  --defective-dump d     - directory for saving incomplete raw sectors\n"));
 #ifdef SYS_LINUX
-      PrintCLI(_("  --driver=sg            - use alternative sg driver (see man page!)\n"));
+      PrintCLI(_("  --driver=sg/cdrom      - use sg(default) or alternative cdrom driver (see man page!)\n"));
 #endif
       PrintCLI(_("  --eject                - eject medium after successful read\n"));
       PrintCLI(_("  --fill-unreadable n    - fill unreadable sectors with byte n\n"));

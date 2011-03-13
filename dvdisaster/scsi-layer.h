@@ -77,7 +77,7 @@
 #define MAX_CDB_SIZE SCSI_MAX_CDBLEN
 #endif
 
-#if defined(SYS_UNKNOWN) || defined(SYS_MINGW) || defined(SYS_NETBSD) || defined(SYS_SOLARIS) || defined(SYS_DARWIN)
+#if defined(SYS_UNKNOWN) || defined(SYS_MINGW) || defined(SYS_NETBSD) || defined(SYS_DARWIN)
 #define MAX_CDB_SIZE 16   /* longest possible SCSI command */
 #endif
 
@@ -116,7 +116,7 @@ typedef struct _DeviceHandle
 {  /*
     * OS-specific data for device access
     */
-#if defined(SYS_LINUX) || defined(SYS_NETBSD) || defined(SYS_SOLARIS)
+#if defined(SYS_LINUX) || defined(SYS_NETBSD)
    int fd;                    /* device file descriptor */
 #endif
 #ifdef SYS_FREEBSD
@@ -185,10 +185,6 @@ typedef struct _DeviceHandle
    int rewriteable;
    char *mediumDescr;         /* textual description of medium */
 
-   guint8 mediumFP[16];       /* Medium fingerprint */
-   gint64 fpSector;           /* Sector used for calculating the fingerprint */
-   int fpState;               /* 0=unknown; 1=unreadable; 2=present */
-
    /*
     * size alternatives from different sources 
     */
@@ -196,14 +192,6 @@ typedef struct _DeviceHandle
    gint64 readCapacity;       /* value returned by READ CAPACITY */
    gint64 userAreaSize;       /* size of user area according to DVD Info struct */
    gint64 blankCapacity;      /* blank capacity (maybe 0 if query failed) */
-   gint64 rs02Size;           /* size reported in RS02 header */
-
-   /*
-    * file system(s) found on medium
-    */
-   
-   EccHeader *rs02Header;     /* copy of RS02 header */
-   struct _IsoInfo *isoInfo;  /* Information gathered from ISO filesystem */
 
    /*
     * debugging stuff
@@ -273,10 +261,8 @@ enum
    MODE_PAGE_SET
 };
 
-DeviceHandle* OpenAndQueryDevice(char*);
-DeviceHandle* QueryMediumInfo(char*);
+
 gint64 CurrentMediumSize(int);
-int  GetMediumFingerprint(DeviceHandle*, guint8*, gint64);
 void CloseDevice(DeviceHandle*);
 
 int InquireDevice(DeviceHandle*, int); 

@@ -121,7 +121,7 @@ void gint64_to_uchar(unsigned char *out, gint64 in)
  * and the remaining bytes in the last sector for a given medium size.
  */
 
-void CalcSectors(gint64 size, gint64 *sectors, int *in_last)
+void CalcSectors(guint64 size, guint64 *sectors, int *in_last)
 {
    *sectors = size/2048;
    *in_last = size & 0x7ff; 
@@ -208,7 +208,8 @@ static void print_greetings(FILE *where)
       legislature. If in doubt, just translate the following like "This is free
       software; please refer to the conditions of the GNU GENERAL PUBLIC LICENSE
       in the source code." Avoid making any legal statements by your own.*/
-   g_fprintf(where, _("This software comes with  ABSOLUTELY NO WARRANTY.  This\n"
+   g_fprintf(where, "%s",
+	            _("This software comes with  ABSOLUTELY NO WARRANTY.  This\n"
 		      "is free software and you are welcome to redistribute it\n"
 		      "under the conditions of the GNU GENERAL PUBLIC LICENSE.\n"  
 		      "See the file \"COPYING\" for further information.\n"));
@@ -390,7 +391,7 @@ void PrintTimeToLog(GTimer *timer, char *format, ...)
       log_window_append(tmp2);
    }
    else
-   {  g_fprintf(stderr, tmp2);
+   {  g_fprintf(stderr, "%s", tmp2);
 
       fflush(stderr);   /* at least needed for Windows */
    }
@@ -514,7 +515,7 @@ void Stop(char *format, ...)
    }
 
    if(!Closure->guiMode) 
-   {  g_fprintf(stderr, _("\n*\n* dvdisaster - can not continue:\n*\n"));
+   {  g_fprintf(stderr, "%s", _("\n*\n* dvdisaster - can not continue:\n*\n"));
       va_start(argp, format);
       g_vfprintf(stderr, format, argp);
       va_end(argp);
@@ -848,7 +849,7 @@ static gboolean modal_idle_func(gpointer data)
 				   GTK_DIALOG_DESTROY_WITH_PARENT,
 				   mi->message_type,
 				   mi->button_type,
-				   mi->msg);
+				   "%s", mi->msg);
    gtk_label_set_line_wrap(GTK_LABEL(((struct _GtkMessageDialog*)dialog)->label), FALSE);
 
    if(mi->button_fn)

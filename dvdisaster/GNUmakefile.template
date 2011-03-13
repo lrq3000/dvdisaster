@@ -197,10 +197,6 @@ version.php:
 	@echo "\$$cooked_version=\""$(CFG_FULL_VERSION)"\";" >>$(SRCDIR)/documentation/include/version.php
 	@echo "\$$have_experimental=\""$(CFG_HAVE_EXPERIMENTAL)"\";" >>$(SRCDIR)/documentation/include/version.php
 	@echo "\$$stable_version=\""$(CFG_STABLE_VERSION)"\";" >>$(SRCDIR)/documentation/include/version.php
-	@if test -e help-dialogs.h && grep UNMODIFIED help-dialogs.h >/dev/null; \
-	then echo "\$$modified_source=0;" >>$(SRCDIR)/documentation/include/version.php; \
-	else echo "\$$modified_source=1;" >>$(SRCDIR)/documentation/include/version.php; \
-	fi
 	@echo "\$$mode=\"www\";" >>$(SRCDIR)/documentation/include/version.php
 	@echo "?>" >>$(SRCDIR)/documentation/include/version.php
 
@@ -433,6 +429,9 @@ clean:
 	fi
 	@if test -e $(SRCDIR)/papers; then \
 	  $(MAKE) --no-print-directory -C papers clean; \
+	fi
+	@if test -e $(SRCDIR)/regtest; then \
+	  $(MAKE) --no-print-directory -C regtest clean; \
 	fi
 
 BUILD=`grep BUILD $(SRCDIR)/build.h | cut -d ' ' -f 3`

@@ -197,7 +197,7 @@ static void get_base_dirs()
         but tricky when app bundles are used. In that case we
         use GTK_PATH to find out our location. */
 
-#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_NETBSD) || defined(SYS_UNKNOWN) || defined(SYS_SOLARIS)
+#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_NETBSD) || defined(SYS_UNKNOWN)
    if(DirStat(BINDIR))
      Closure->binDir = g_strdup(BINDIR);
 
@@ -431,12 +431,12 @@ void ReadDotfile()
    while(TRUE)
    {  int n;
       char symbol[41];
-      char *value;
+      char *value, *ignore;
 
       /* Get first MAX_LINE_LEN bytes of line, discard the rest */
      
       line[MAX_LINE_LEN-1] = 1;
-      fgets(line, MAX_LINE_LEN, dotfile);
+      ignore = fgets(line, MAX_LINE_LEN, dotfile);
       if(!line[MAX_LINE_LEN-1])  /* line longer than buffer */
 	while(!feof(dotfile) && fgetc(dotfile) != '\n')
 	  ;
@@ -714,6 +714,7 @@ void InitClosure()
    Closure->spinupDelay = 5;
    Closure->fillUnreadable = -1;
    Closure->welcomeMessage = 1;
+   Closure->useSCSIDriver = DRIVER_SG;
    Closure->dsmVersion = 1;
 
    /* default sizes for typical CD and DVD media */

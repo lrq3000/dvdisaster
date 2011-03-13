@@ -33,10 +33,49 @@ int ProbeCacheLineSize()
    if(cl_size < 16)
      cl_size = 64;
 
+   return cl_size;
+}
+#endif
+
+#ifdef SYS_NETBSD
+#include <param.h>
+
+int ProbeCacheLineSize()
+{  int cl_size = CACHE_LINE_SIZE;
+
+  /* NetBSD seems to have no obvious way to determine this info;
+     use appropriate value for Intel as a default. */
+
+   if(cl_size < 16)
+     cl_size = 64;
+
 printf("Cache line size: %d\n", cl_size);
    return cl_size;
 }
 #endif
+
+
+
+#ifdef SYS_DARWIN
+
+#include <sys/sysctl.h>
+
+int ProbeCacheLineSize()
+{  int mib[2], cl_size;
+   size_t len;
+
+   mib[0] = CTL_HW;
+   mib[1] = HW_CACHELINE;
+   len = sizeof(cl_size);
+
+   if (sysctl(mib, 2, &cl_size, &len, NULL, 0) || (cl_size < 16))
+     cl_size = 64;
+
+printf("Cache line size: %d\n", cl_size);
+   return cl_size;
+}
+#endif
+
 
 #ifdef SYS_UNKNOWN
 int ProbeCacheLineSize()

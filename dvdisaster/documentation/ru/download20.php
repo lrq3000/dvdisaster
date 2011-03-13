@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: Russian homepage translation
-# Copyright (C) 2007-2010 Igor Gorbounov
+# Copyright (C) 2007-2011 Igor Gorbounov
 #
 # UTF-8 trigger: äöüß 
 #
@@ -34,6 +34,14 @@ sub   1024g/091AD320 2003-08-22
 Пишите на <img src="../images/email.png" align="top"> и вы получите
 отпечаток ключа непосредственно от разработчиков. 
 В тему письма вставьте строку "GPG finger print".
+
+<h3>MD5 checksum</h3>
+
+Contrary to the digital signature, MD5 checksums are cryptographically weak:
+It is possible to create a manipulated package which still has the same
+checksum as the original. However MD5 checksums are sufficient for a quick
+check whether the download has finished completely and without transmission
+errors.
 
 <!--- do not change below --->
 

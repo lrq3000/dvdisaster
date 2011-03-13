@@ -110,6 +110,12 @@
 
 #define MAX_CODEC_THREADS 32             /* not including IO and GUI */
 
+/* SCSI driver selection on Linux */
+
+#define DRIVER_NONE 0
+#define DRIVER_CDROM 1
+#define DRIVER_SG 3
+
 /* Definitions for Closure->eccTarget */
 
 #define ECC_FILE  0
@@ -190,7 +196,7 @@ typedef struct _GlobalClosure
    int useSSE2;         /* TRUE means to use SSE2 version of the codec. */
    int useAltiVec;      /* TRUE means to use AltiVec version of the codec. */
    int clSize;          /* Bytesize of cache line */
-   int useSGioctl;      /* Use the generic SCSI ioctl instead of CDROM one on Liux */
+   int useSCSIDriver;   /* Whether to use generic or sg driver on Linux */
   
    char *homeDir;       /* path to users home dir */
    char *dotFile;       /* path to .dvdisaster file */
@@ -301,6 +307,7 @@ typedef struct _GlobalClosure
    GtkWidget *readLinearFootlineBox;
    gint64 crcErrors, readErrors;  /* these are passed between threads and must therefore be global */
    int    eccType;                /* type of ecc data provided while reading/scanning */
+
    /*** Widgets for the adaptive reading action */
 
    GtkWidget *readAdaptiveHeadline;
@@ -435,14 +442,7 @@ typedef struct _CrcBlock
 
 struct _RawBuffer *rawbuffer_forward;
 struct _DefectiveSectorHeader *dsh_forward;
-
-/***
- *** dvdisaster.c
- ***/
-
-void CreateEcc(void);
-void FixEcc(void);
-void Verify(void);
+struct _DeviceHandle *dh_forward;
 
 /***
  *** bitmap.c
@@ -571,14 +571,14 @@ void CopySector(char*);
 void Byteset(char*);
 void Erase(char*);
 void MergeImages(char*, int);
-void RandomError(char*, char*);
+void RandomError(char*);
 void RandomImage(char*, char*, int);
 void RawSector(char*);
 void ReadSector(char*);
 void SendCDB(char*);
 void ShowSector(char*);
 Bitmap* SimulateDefects(gint64);
-void TruncateImage(char*);
+void TruncateImageFile(char*);
 void ZeroUnreadable(void);
 
 /***
@@ -592,12 +592,12 @@ enum
    SECTOR_MISSING_WRONG_FP
 };
 
-void CreateMissingSector(unsigned char*, gint64, unsigned char*, gint64, char*);
-int CheckForMissingSector(unsigned char*, gint64, unsigned char*, gint64);
-int CheckForMissingSectors(unsigned char*, gint64, unsigned char*, gint64, int, gint64*);
-void ExplainMissingSector(unsigned char*, gint64, int, int);
+void CreateMissingSector(unsigned char*, guint64, unsigned char*, guint64, char*);
+int CheckForMissingSector(unsigned char*, guint64, unsigned char*, guint64);
+int CheckForMissingSectors(unsigned char*, guint64, unsigned char*, guint64, int, guint64*);
+void ExplainMissingSector(unsigned char*, guint64, int, int);
 
-void CreatePaddingSector(unsigned char*, gint64, unsigned char*, gint64);
+void CreatePaddingSector(unsigned char*, guint64, unsigned char*, guint64);
 
 /***
  *** endian.c
@@ -751,6 +751,63 @@ int AckHeuristic(struct _RawBuffer*);
  ***/
 
 void CreateIconFactory();
+
+/***
+ *** image.c
+ ***/
+
+enum {IMAGE_NONE, IMAGE_FILE, IMAGE_MEDIUM};
+enum {FP_UNKNOWN, FP_UNREADABLE, FP_PRESENT};
+
+typedef struct _Image
+{  int type;  /* file or medium */
+
+   /* physical storage handles */
+  
+   LargeFile *file;
+   struct _DeviceHandle *dh;
+
+   /*
+    * info on file system(s) found on medium
+    */
+
+   struct _IsoInfo *isoInfo;  /* Information gathered from ISO filesystem */
+   struct _Method *eccMethod; /* Method used for augmenting the image */
+   EccHeader *eccHeader;      /* copy of ecc header in augmented image */
+   guint64 expectedSectors;   /* Image size according to codec (including augmented parts) */
+
+   guint64 sectorSize;        /* mostly of interest for file based images */
+   int inLast;                /* files may have incomplete last sector */
+   guint64 sectorsMissing;    /* number of missing sectors */
+   guint64 crcErrors;         /* number of sectors with crc errors */
+   guint8 mediumSum[16];      /* complete md5sum of whole medium */
+
+   /*
+    * image fingerprint caching
+    */
+
+   guint8 imageFP[16];        /* Image fingerprint */
+   guint64 fpSector;          /* Sector used for calculating the fingerprint */
+   int fpState;               /* 0=unknown; 1=unreadable; 2=present */
+
+   /*
+    * optionally attached ecc file
+    */
+
+   LargeFile *eccFile;        /* ecc file */
+   struct _Method *eccFileMethod;     /* method associated with it */
+   EccHeader *eccFileHeader;  /* copy of ecc header in ecc file */
+} Image;
+
+Image* OpenImageFromFile(char*, int, mode_t);
+Image* OpenImageFromDevice(char*);   /* really in scsi-layer.h */
+Image* OpenEccFileForImage(Image*, char*, int, mode_t);
+void ReportImageEccInconsistencies(Image*);
+int GetImageFingerprint(Image*, guint8*, guint64);
+void ExamineECC(Image*);
+int ImageReadSectors(Image*, void*, guint64, int);
+int TruncateImage(Image*, guint64);
+void CloseImage(Image*);
 
 /***
  *** large-io.c
@@ -919,15 +976,16 @@ typedef struct _Method
    guint32 properties;               /* see definition above */
    char *description;                /* Fulltext description */
    char *menuEntry;                  /* Text for use in preferences menu */
-   void (*create)(struct _Method*);  /* Creates an error correction file */
-   void (*fix)(struct _Method*);     /* Fixes a damaged image */
-   void (*verify)(struct _Method*);  /* Verifies image with ecc data */
-   int  (*recognizeEccFile)(struct _Method*, LargeFile*);  /* checks whether we can handle this ecc file */
-   int  (*recognizeEccImage)(struct _Method*, LargeFile*); /* checks whether we can handle this augmented image */
-   CrcBuf* (*getCrcBuf)(struct _Method*, void*);         /* read and cache CRC info from ecc data */
-   void (*resetCksums)(struct _Method*);                 /* Methods for building internal */
-   void (*updateCksums)(struct _Method*, gint64, unsigned char*);/* checksum while reading an image */
-   char* (*finalizeCksums)(struct _Method*);
+   void (*create)(void);             /* Creates an error correction file */
+   void (*fix)(Image*);              /* Fixes a damaged image */
+   void (*verify)(Image*);           /* Verifies image with ecc data */
+   int  (*recognizeEccFile)(LargeFile*, EccHeader**); /* checks whether we can handle this ecc file */
+   int  (*recognizeEccImage)(Image*); /* checks whether we can handle this augmented image */
+   guint64 (*expectedImageSize)(EccHeader*);/* calculates expected image size (incl. augmented data) */
+   CrcBuf* (*getCrcBuf)(Image*);      /* read and cache CRC info from ecc data */
+   void (*resetCksums)(Image*);       /* Methods for building internal */
+   void (*updateCksums)(Image*, gint64, unsigned char*);/* checksum while reading an image */
+   char* (*finalizeCksums)(Image*);
    void *ckSumClosure;                                   /* working closure for above */
    void (*createVerifyWindow)(struct _Method*, GtkWidget*);
    void (*createCreateWindow)(struct _Method*, GtkWidget*);
@@ -941,7 +999,6 @@ typedef struct _Method
    void (*destroy)(struct _Method*);
    int  tabWindowIndex;              /* our position in the (invisible) notebook */
    void *widgetList;                 /* linkage to window system */
-   EccHeader *lastEh;                /* copy of EccHeader from last EccMethod() call */
 } Method;
 
 void BindMethods(void);        /* created by configure in method-link.c */
@@ -950,7 +1007,6 @@ void CollectMethods(void);
 void RegisterMethod(Method*);
 void ListMethods(void);
 Method* FindMethod(char*);
-Method *EccMethod(int);
 void CallMethodDestructors(void);
 
 /***
@@ -963,7 +1019,7 @@ char* sgettext_utf8(char*);
 gint64 uchar_to_gint64(unsigned char*);
 void gint64_to_uchar(unsigned char*, gint64);
 
-void CalcSectors(gint64, gint64*, int*);
+void CalcSectors(guint64, guint64*, int*);
 
 void PrintCLI(char*, ...);
 void PrintLog(char*, ...);

@@ -130,8 +130,9 @@ static void expand_image(ImageInfo *ii, gint64 new_size)
  *** Test and fix the current image.
  ***/
 
-void RS03Fix(Method *self)
-{  RS03Widgets *wl = (RS03Widgets*)self->widgetList;
+void RS03Fix(Image *image)
+{  Method *self = FindMethod("RS03");
+   RS03Widgets *wl = (RS03Widgets*)self->widgetList;
    RS03Layout *lay;
    fix_closure *fc = g_malloc0(sizeof(fix_closure)); 
    ImageInfo *ii = NULL;
@@ -174,7 +175,9 @@ void RS03Fix(Method *self)
    fc->earlyTermination = TRUE;
    RegisterCleanup(_("Repairing of image aborted"), fix_cleanup, fc);
 
-   eh  = self->lastEh;  /* will always be present */
+   if(image->eccFileHeader)
+        eh = image->eccFileHeader;
+   else eh = image->eccHeader;
 
    /*** Open the image file */
 

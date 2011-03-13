@@ -75,8 +75,6 @@ void CallMethodDestructors(void)
       method->destroy(method);
       if(method->menuEntry) g_free(method->menuEntry);
       if(method->description) g_free(method->description);
-      if(method->lastEh)
-	g_free(method->lastEh);
    }
 }
 
@@ -98,82 +96,6 @@ Method *FindMethod(char *name)
         return method;
    }
 
-   return NULL;
-}
-
-/*
- * Find method for a given ecc file (like in RS01)
- * or augmented image (like in the RS02 image format).
- * Since locating the header is expensive in the RS02 case,
- * it is cached in the corresponding Method struct.
- */
-
-Method *EccMethod(int process_error)
-{  LargeFile *ecc_file = NULL;
-   LargeFile *image = NULL;
-
-   /* First see if an ecc file is available */
-
-   if((ecc_file = LargeOpen(Closure->eccName, O_RDONLY, 0)))
-   {  int i;
-
-      for(i=0; i<Closure->methodList->len; i++)  
-      {  Method *method = g_ptr_array_index(Closure->methodList, i);
-
-         if(   method->recognizeEccFile
-	    && method->recognizeEccFile(method, ecc_file))
-	 {  LargeClose(ecc_file);
-	    return method;
-	 }
-      }
-
-      LargeClose(ecc_file);
-      if(process_error)
-      {  if(Closure->guiMode)
-	      CreateMessage(_("\nError correction file type unknown.\n"), GTK_MESSAGE_ERROR);
-         else Stop(_("\nError correction file type unknown.\n"));
-      }
-
-      return NULL;
-   }
-
-   /* No ecc file, see if the image contains hidden ecc information */
-
-   if((image = LargeOpen(Closure->imageName, O_RDONLY, 0)))
-   {  int i;
-
-      for(i=0; i<Closure->methodList->len; i++)  
-      {  Method *method = g_ptr_array_index(Closure->methodList, i);
-#if 0
-      char buf[5];
-      strncpy(buf,method->name,4);
-      buf[4]=0;
-      printf("trying %s\n", buf);
-#endif
-         if(   method->recognizeEccImage
-	    && method->recognizeEccImage(method, image))
-	 {  LargeClose(image);
-	    return method;
-	 }
-      }
-
-      LargeClose(image);
-      if(process_error)
-      {  if(Closure->guiMode)
-	      CreateMessage(_("\nNo error correction data recognized in image.\n"), GTK_MESSAGE_ERROR);
-         else Stop(_("\nNo error correction data recognized in image.\n"));
-      }
-
-      return NULL;
-   }
-
-   /* Neither ecc file nor augmented image */
-
-   if(process_error)
-   {  if(Closure->guiMode)
-           CreateMessage(_("Image file %s not present.\n"), GTK_MESSAGE_ERROR, Closure->imageName, strerror(errno));
-      else Stop(_("Image file %s not present.\n"), Closure->imageName, strerror(errno));
-   }
    return NULL;
 }
 

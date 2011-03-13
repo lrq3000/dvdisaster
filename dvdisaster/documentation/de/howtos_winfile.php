@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: German homepage translation
-# Copyright (C) 2004-2010 Carsten Gnörlich
+# Copyright (C) 2004-2011 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 ?>

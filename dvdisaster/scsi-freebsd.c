@@ -142,14 +142,10 @@ void CloseDevice(DeviceHandle *dh)
     cam_close_device(dh->camdev);
   if(dh->device)
     g_free(dh->device);
-  if(dh->rs02Header)
-    g_free(dh->rs02Header);
   if(dh->typeDescr) 
     g_free(dh->typeDescr);
   if(dh->mediumDescr) 
     g_free(dh->mediumDescr);
-  if(dh->isoInfo)
-    FreeIsoInfo(dh->isoInfo);
   if(dh->defects)
     FreeBitmap(dh->defects);
   g_free(dh);

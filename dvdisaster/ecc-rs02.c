@@ -33,7 +33,7 @@ static void destroy(Method*);
 void register_rs02(void)
 {  Method *method = g_malloc0(sizeof(Method));
 
-   method->ckSumClosure = g_malloc(sizeof(RS02CksumClosure));
+   method->ckSumClosure = g_malloc0(sizeof(RS02CksumClosure));
 
    /*** Standard infomation and methods */ 
 
@@ -51,6 +51,7 @@ void register_rs02(void)
    method->resetCksums       = RS02ResetCksums;
    method->updateCksums      = RS02UpdateCksums;
    method->finalizeCksums    = RS02FinalizeCksums;
+   method->expectedImageSize = RS02ExpectedImageSize;
 
    /*** Linkage to rs02-window.c */
 

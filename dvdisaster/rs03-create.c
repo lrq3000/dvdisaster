@@ -36,6 +36,7 @@
 
 typedef struct
 {  Method *self;
+   Image *image;
    RS03Widgets *wl;
    RS03Layout *lay;
    ImageInfo *ii;
@@ -126,6 +127,7 @@ static void ecc_cleanup(gpointer data)
 
    /*** Clean up */
 
+   if(ec->image) CloseImage(ec->image);
    if(ec->lock) g_mutex_free(ec->lock);
    if(ec->ioCond) g_cond_free(ec->ioCond);
    if(ec->ii) FreeImageInfo(ec->ii);
@@ -197,9 +199,7 @@ static void abort_encoding(ecc_closure *ec, int truncate)
  */
 
 static void remove_old_ecc(ecc_closure *ec)
-{  EccHeader *old_eh;
-   LargeFile *tmp;
-   gint64 ignore;
+{  gint64 ignore;
 
    /* Handle error correction file case first */
 
@@ -221,17 +221,9 @@ static void remove_old_ecc(ecc_closure *ec)
 
    /* Augmented image case */
 
-   tmp = LargeOpen(Closure->imageName, O_RDWR, IMG_PERMS);
-   if(!tmp)  
-     return; /* no image file at all */
-
-   old_eh = FindRS03HeaderInImage(tmp);
-
-   if(old_eh)
-   {  gint64 data_sectors = uchar_to_gint64(old_eh->sectors);
+   if(ec->image->eccHeader)
+   {  gint64 data_sectors = uchar_to_gint64(ec->image->eccHeader->sectors);
       int answer;
-
-      g_free(old_eh);
 
       answer = ModalWarning(GTK_MESSAGE_WARNING, GTK_BUTTONS_OK_CANCEL, NULL,
 			    _("Image \"%s\" already contains error correction information.\n"
@@ -241,11 +233,9 @@ static void remove_old_ecc(ecc_closure *ec)
       if(!answer)
 	abort_encoding(ec, FALSE);
 
-      if(!tmp || !LargeTruncate(tmp, (gint64)(2048*data_sectors)))
+      if(!LargeTruncate(ec->image->file, (gint64)(2048*data_sectors)))  // fixme
 	Stop(_("Could not truncate %s: %s\n"),Closure->imageName,strerror(errno));
    }
-
-   LargeClose(tmp);
 }
 
 /*
@@ -594,9 +584,7 @@ static void flush_parity(ecc_closure *ec, LargeFile *file_out)
    gint64 i;
    int k;
 
-   /* Write out the created parity.
-      Note: ecc sectors are interleaved with headers and thus can
-            not be written out using a streaming write. */
+   /* Write out the created parity. */
 
    verbose("IO: writing parity...\n");
    for(k=0; k<lay->nroots; k++)
@@ -1062,8 +1050,10 @@ static void create_reed_solomon(ecc_closure *ec)
  *** Append the parity information to the image
  ***/
 
-void RS03Create(Method *method)
-{  RS03Widgets *wl = (RS03Widgets*)method->widgetList;
+void RS03Create(void)
+{  Method *method = FindMethod("RS03");
+   Image *image = NULL;
+   RS03Widgets *wl = (RS03Widgets*)method->widgetList;
    RS03Layout *lay;
    ecc_closure *ec = g_malloc0(sizeof(ecc_closure));
    ImageInfo *ii;
@@ -1074,6 +1064,7 @@ void RS03Create(Method *method)
 
    /*** Register the cleanup procedure for GUI mode */
 
+   ec->image = image;
    ec->self = method;
    ec->wl = wl;
    ec->eh = g_malloc0(sizeof(EccHeader));

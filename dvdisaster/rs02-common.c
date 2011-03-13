@@ -25,12 +25,11 @@
 #include "scsi-layer.h"
 
 /***
- *** Read and buffer CRC information from RS01 file 
+ *** Read and buffer CRC information from RS02 file 
  ***/
 
-CrcBuf *RS02GetCrcBuf(Method *self, void *medium)
-{  RS02CksumClosure *csc = (RS02CksumClosure*)self->ckSumClosure;
-   DeviceHandle *dh = (DeviceHandle*)medium;
+CrcBuf *RS02GetCrcBuf(Image *image)
+{  RS02CksumClosure *csc;
    AlignedBuffer *ab = CreateAlignedBuffer(2048);
    RS02Layout *lay;
    CrcBuf *cb;
@@ -40,8 +39,9 @@ CrcBuf *RS02GetCrcBuf(Method *self, void *medium)
    gint64 s,i;
    int crc_idx, crc_valid = FALSE;
 
+   csc = (RS02CksumClosure*)image->eccMethod->ckSumClosure;
    if(csc->lay) g_free(csc->lay);
-   lay = csc->lay = CalcRS02Layout(uchar_to_gint64(self->lastEh->sectors), self->lastEh->eccBytes);
+   lay = csc->lay = CalcRS02Layout(uchar_to_gint64(image->eccHeader->sectors), image->eccHeader->eccBytes);
 
    image_sectors = lay->eccSectors+lay->dataSectors;
    cb = CreateCrcBuf(image_sectors);
@@ -82,7 +82,7 @@ CrcBuf *RS02GetCrcBuf(Method *self, void *medium)
 	    /* Refill crc cache if needed */
 	    
 	    if(crc_idx >= 512)
-	    {   crc_valid = !ReadSectorsFast(dh, ab->buf, crc_sector++, 1);
+	    {   crc_valid = ImageReadSectors(image, ab->buf, crc_sector++, 1);
 		crc_idx = 0;
 	    }
 
@@ -107,8 +107,8 @@ CrcBuf *RS02GetCrcBuf(Method *self, void *medium)
  *** Internal checksum handling.
  ***/
 
-void RS02ResetCksums(Method *self)
-{  RS02CksumClosure *csc = (RS02CksumClosure*)self->ckSumClosure;
+void RS02ResetCksums(Image *image)
+{  RS02CksumClosure *csc = (RS02CksumClosure*)image->eccMethod->ckSumClosure;
 
    MD5Init(&csc->md5ctxt);
    MD5Init(&csc->dataCtxt);
@@ -118,8 +118,8 @@ void RS02ResetCksums(Method *self)
 }
 
 //#define BORK 35071  //FIXME
-void RS02UpdateCksums(Method *self, gint64 sector, unsigned char *buf)
-{  RS02CksumClosure *csc = (RS02CksumClosure*)self->ckSumClosure;
+void RS02UpdateCksums(Image *image, gint64 sector, unsigned char *buf)
+{  RS02CksumClosure *csc = (RS02CksumClosure*)image->eccMethod->ckSumClosure;
 
    /* md5sum over full image */
    //if(sector == BORK) buf[42]++; //FIXME
@@ -131,7 +131,7 @@ void RS02UpdateCksums(Method *self, gint64 sector, unsigned char *buf)
    if(sector < csc->lay->dataSectors)
    {  if(sector < csc->lay->dataSectors - 1)
 	   MD5Update(&csc->dataCtxt, buf, 2048);
-      else MD5Update(&csc->dataCtxt, buf, self->lastEh->inLast);
+      else MD5Update(&csc->dataCtxt, buf, image->eccHeader->inLast);
    }
 
    /* md5sum the crc portion */
@@ -159,8 +159,8 @@ void RS02UpdateCksums(Method *self, gint64 sector, unsigned char *buf)
    //if(sector == BORK) buf[42]--;  //FIXME
 }
 
-char* RS02FinalizeCksums(Method *self)
-{  RS02CksumClosure *csc = (RS02CksumClosure*)self->ckSumClosure;
+char* RS02FinalizeCksums(Image *image)
+{  RS02CksumClosure *csc = (RS02CksumClosure*)image->eccMethod->ckSumClosure;
    guint8 image_fp[16];
    guint8 data_md5[16],crc_md5[16],meta_md5[16];
 
@@ -171,7 +171,7 @@ char* RS02FinalizeCksums(Method *self)
 
    /* Data (payload) checksum */
    
-   if(memcmp(data_md5, self->lastEh->mediumSum, 16))
+   if(memcmp(data_md5, image->eccHeader->mediumSum, 16))
    {  Verbose("BAD Data md5sum\n");
       return g_strdup(_("All sectors successfully read, but wrong data md5sum."));
    }
@@ -179,7 +179,7 @@ char* RS02FinalizeCksums(Method *self)
 
    /* Crc layer checksum */
 
-   if(memcmp(crc_md5, self->lastEh->crcSum, 16))
+   if(memcmp(crc_md5, image->eccHeader->crcSum, 16))
    {  Verbose("BAD CRC md5sum\n");
       return g_strdup(_("All sectors successfully read, but wrong crc md5sum."));
    }
@@ -187,7 +187,7 @@ char* RS02FinalizeCksums(Method *self)
 
    /* Ecc meta checksum */
 
-   if(memcmp(meta_md5, self->lastEh->eccSum, 16))
+   if(memcmp(meta_md5, image->eccHeader->eccSum, 16))
    {  Verbose("BAD ECC md5sum\n");
       return g_strdup(_("All sectors successfully read, but wrong ecc md5sum."));
       
@@ -205,7 +205,7 @@ char* RS02FinalizeCksums(Method *self)
  * Reading sectors beyond lay->protectedSectors always returns a zero padding sector.
  */
 
-void RS02ReadSector(ImageInfo *ii, RS02Layout *lay, unsigned char *buf, gint64 s)
+void RS02ReadSector(Image *image, RS02Layout *lay, unsigned char *buf, gint64 s)
 {  int n;
 
   /* Padding sector for ecc calculation */  
@@ -227,18 +227,18 @@ void RS02ReadSector(ImageInfo *ii, RS02Layout *lay, unsigned char *buf, gint64 s
 
   /* Reading beyond the image returns dead sectors */
 
-  if(s >= ii->sectors)
+  if(s >= image->sectorSize)
   {  CreateMissingSector(buf, s, NULL, 0, NULL);
      return;
   }
 
   /* Read a real sector */
 
-  if(!LargeSeek(ii->file, (gint64)(2048*s)))
+  if(!LargeSeek(image->file, (gint64)(2048*s)))
     Stop(_("Failed seeking to sector %lld in image: %s"),
 	 s, strerror(errno));
 
-  n = LargeRead(ii->file, buf, 2048);
+  n = LargeRead(image->file, buf, 2048);
   if(n != 2048)
     Stop(_("Failed reading sector %lld in image: %s"),s,strerror(errno));
 }
@@ -417,6 +417,39 @@ RS02Layout *CalcRS02Layout(gint64 data_sectors, int requested_roots)
    lay->crcSectors       = (sizeof(guint32)*lay->dataSectors+2047)/2048;
    lay->protectedSectors = lay->dataSectors + 2 + lay->crcSectors; /* two sectors for header */
 
+   /* See if user wants to pick a certain redundancy */
+
+   if(!Closure->guiMode && !requested_roots && Closure->redundancy)
+   {  int len = strlen(Closure->redundancy);
+
+      switch(Closure->redundancy[len-1])
+      {  case 'r':   /* pick number of roots */
+	 {  char buf[len];
+ 
+            strncpy(buf, Closure->redundancy, len-1);
+	    requested_roots = atoi(buf);
+	    break;
+	 }
+	 case '%':  /* pick redundancy directly */
+	 {  char buf[len];
+	    int percent;
+ 
+            strncpy(buf, Closure->redundancy, len-1);
+	    percent = atoi(buf);
+
+	    for(requested_roots = 7; requested_roots < 171; requested_roots++)
+	    {  double redundancy = ((double)requested_roots*100.0)/((double)(GF_FIELDMAX-requested_roots));
+	       if(redundancy >= percent)
+		  break;
+	    }
+	    if(requested_roots >170)
+	       requested_roots = 0;
+	       
+	    break;
+	 }
+      }
+   }
+
    /* Calculate starting value for the redundancy */
 
    if(requested_roots > 0)
@@ -492,6 +525,24 @@ RS02Layout *CalcRS02Layout(gint64 data_sectors, int requested_roots)
    Verbose("\n");
 
    return lay;
+}
+
+/*
+ * Determine expected size of image.
+ */
+
+guint64 RS02ExpectedImageSize(EccHeader *eh)
+{  RS02Layout *lay;
+   guint64 size;
+
+   if(!eh) return 0;
+
+   lay  = CalcRS02Layout(uchar_to_gint64(eh->sectors), eh->eccBytes);
+   size = lay->eccSectors+lay->dataSectors;
+
+   g_free(lay);
+
+   return size;
 }
 
 /***

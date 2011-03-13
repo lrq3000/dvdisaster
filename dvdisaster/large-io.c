@@ -295,8 +295,14 @@ int LargeClose(LargeFile *lf)
  */
 
 int LargeTruncate(LargeFile *lf, gint64 length)
-{
-   return large_ftruncate(lf->fileHandle, length) == 0;
+{  int result;
+
+   result = (large_ftruncate(lf->fileHandle, length) == 0);
+
+   if(result)
+     lf->size = length;
+
+   return result;
 }
 
 /*

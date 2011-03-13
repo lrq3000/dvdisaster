@@ -478,12 +478,29 @@ GtkWidget* ShowTextfile(char *title, char *explanation, char *file,
 	 size = strlen(buf);
       }
       else
-      {  FILE *file = portable_fopen(path, "rb");
+      {  FILE *fptr = portable_fopen(path, "rb");
+	 size_t bytes_read;
 
-	 buf = g_malloc(size);
-	 fread(buf, size, 1, file);
-	 fclose(file);
-	 g_free(path);
+	 if(!fptr)
+	 {  char *trans = _utf("File\n%s\nnot accessible");
+
+	    buf = g_strdup_printf(trans, file);
+	    size = strlen(buf);
+	 }
+	 else
+	 {  buf = g_malloc(size);
+	    bytes_read = fread(buf, 1, size, fptr);
+	    fclose(fptr);
+	    g_free(path);
+
+	    if(bytes_read < size)
+	    {  char *trans = _utf("\n<- Error: Text file truncated here");
+
+ 	       size = bytes_read + strlen(trans);
+	       buf = realloc(buf, size+1);
+	       strcpy(&buf[bytes_read], trans);
+	    }
+	 }
       }
    }
    else 

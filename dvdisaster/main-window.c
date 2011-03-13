@@ -45,7 +45,7 @@ static gboolean delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
 
 static void action_cb(GtkWidget *widget, gpointer data)
 {  gint action = GPOINTER_TO_INT(data);
-   Method *method; 
+   Method *method = NULL; 
 
    if(action != ACTION_STOP)
    {  
@@ -150,18 +150,29 @@ static void action_cb(GtkWidget *widget, gpointer data)
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(Closure->notebook), method->tabWindowIndex);
 	method->resetCreateWindow(method);
 	AllowActions(FALSE);
-	CreateGThread((GThreadFunc)CreateEcc, (gpointer)NULL);
+	CreateGThread((GThreadFunc)method->create, (gpointer)method);
         break;
 
       case ACTION_FIX:
+      { Image *image;
+
 	ClearCrcCache();
-	if(!(method = EccMethod(TRUE)))
-	   break;
+
+	image = OpenImageFromFile(Closure->imageName, O_RDWR, IMG_PERMS);
+	image = OpenEccFileForImage(image, Closure->eccName, O_RDWR, IMG_PERMS);
+	ReportImageEccInconsistencies(image); /* aborts if no method found */
+
+	/* Determine method. Ecc files win over augmented ecc. */
+
+	if(image && image->eccFileMethod) method = image->eccFileMethod;
+	else if(image && image->eccMethod) method = image->eccMethod;
+	else Stop("Internal error: No suitable method for repairing image.");
 
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(Closure->notebook),  method->tabWindowIndex+1);
 	method->resetFixWindow(method);
 	AllowActions(FALSE);
-	CreateGThread((GThreadFunc)method->fix, (gpointer)method);
+	CreateGThread((GThreadFunc)method->fix, (gpointer)image);
+      }
         break;
 
       case ACTION_SCAN:
@@ -177,15 +188,24 @@ static void action_cb(GtkWidget *widget, gpointer data)
 	/* If something is wrong with the .iso or .ecc files
 	   we fall back to the RS01 method for verifying since it is robust
 	   against missing files. */
-	if(!(method = EccMethod(FALSE)))
-	  if(!(method = FindMethod("RS01")))
-	     break;
+      { Image *image;
+
+	image = OpenImageFromFile(Closure->imageName, O_RDONLY, IMG_PERMS);
+	image = OpenEccFileForImage(image, Closure->eccName, O_RDONLY, IMG_PERMS);
+
+	/* Determine method. Ecc files win over augmented ecc. */
+
+	if(image && image->eccFileMethod) method = image->eccFileMethod;
+	else if(image && image->eccMethod) method = image->eccMethod;
+	else if(!(method = FindMethod("RS01")))
+	       Stop(_("RS01 method not available for comparing files."));
 
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(Closure->notebook), method->tabWindowIndex+2);
 	method->resetVerifyWindow(method);
 	AllowActions(FALSE);
-	CreateGThread((GThreadFunc)method->verify, (gpointer)method);
+	CreateGThread((GThreadFunc)method->verify, (gpointer)image);
         break;
+      }
    }
 }
 

@@ -130,21 +130,22 @@ void CreateRS01VerifyWindow(Method*, GtkWidget*);
 
 /* rs01-common.c */
 
-CrcBuf *RS01GetCrcBuf(Method*, void*);
-void RS01ResetCksums(Method*);
-void RS01UpdateCksums(Method*, gint64, unsigned char*);
-char* RS01FinalizeCksums(Method*);
-void RS01ReadSector(ImageInfo*, EccHeader*, unsigned char*, gint64);
-void RS01ScanImage(Method*, ImageInfo*, EccInfo*, int);
-int  RS01Recognize(Method*, LargeFile*);
+CrcBuf *RS01GetCrcBuf(Image*);
+void RS01ResetCksums(Image*);
+void RS01UpdateCksums(Image*, gint64, unsigned char*);
+char* RS01FinalizeCksums(Image*);
+void RS01ReadSector(Image*, unsigned char*, gint64);
+void RS01ScanImage(Method*, Image*, struct MD5Context*, int);
+int  RS01Recognize(LargeFile*, EccHeader**);
+guint64 RS01ExpectedImageSize(EccHeader*);
 
 /* rs01-create.c */
 
-void RS01Create(Method*);
+void RS01Create(void);
 
 /* rs01-fix.c */
 
-void RS01Fix(Method*);
+void RS01Fix(Image*);
 
 /* rs01-window.c */
 
@@ -156,7 +157,7 @@ void RS01UpdateFixResults(RS01Widgets*, gint64, gint64);
 
 #define VERIFY_IMAGE_SEGMENTS 1000
 
-void RS01Verify(Method*);
+void RS01Verify(Image*);
 void RS01AddVerifyValues(Method*, int, gint64, gint64, gint64, gint64);
 
 #endif

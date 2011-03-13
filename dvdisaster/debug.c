@@ -37,9 +37,8 @@
 
 /* RS01-style files */
 
-static void random_error1(char *prefix, char *arg)
-{  ImageInfo *ii;
-   gint64 block_idx[255];
+static void random_error1(Image *image, char *arg)
+{  gint64 block_idx[255];
    gint64 s,si;
    int block_sel[255];
    int i,percent,last_percent = 0;
@@ -65,13 +64,9 @@ static void random_error1(char *prefix, char *arg)
    blk_scale = (double)n_data/((double)MY_RAND_MAX+1.0);
 
 
-   /*** Open the image file */
-
-   ii = OpenImageFile(NULL, WRITEABLE_IMAGE);
-
    /*** Setup block pointers */
 
-   s = (ii->sectors+n_data-1)/n_data;
+   s = (image->sectorSize+n_data-1)/n_data;
 
    for(si=0, i=0; i<n_data; si+=s, i++)
      block_idx[i] = si;
@@ -104,14 +99,18 @@ static void random_error1(char *prefix, char *arg)
 
       for(i=0; i<n_data; i++)
       {  unsigned char missing[2048];
+ 	int write_size = 2048;
 	 
-	 if(block_sel[i] && block_idx[i]<ii->sectors)
-	 {  if(!LargeSeek(ii->file, (gint64)(2048*block_idx[i])))
+	 if(block_sel[i] && block_idx[i]<image->sectorSize)
+	 {  if(!LargeSeek(image->file, (gint64)(2048*block_idx[i])))
 	       Stop(_("Failed seeking to sector %lld in image: %s"),block_idx[i],strerror(errno));
 
-	    CreateMissingSector(missing, block_idx[i], ii->mediumFP, FINGERPRINT_SECTOR, NULL); 
+	    CreateMissingSector(missing, block_idx[i], image->imageFP, FINGERPRINT_SECTOR, NULL); 
 
-	    if(LargeWrite(ii->file, missing, 2048) != 2048)
+	    if(block_idx[i] == image->sectorSize - 1 && image->inLast < 2048)
+	      write_size = image->inLast;
+
+	    if(LargeWrite(image->file, missing, write_size) != write_size)
 	       Stop(_("Failed writing to sector %lld in image: %s"),block_idx[i],strerror(errno));
 	 }
 	 
@@ -129,8 +128,6 @@ static void random_error1(char *prefix, char *arg)
 	"Recover the image using the --fix option before doing another --random-errors run.\n"
 	"Otherwise you'll accumulate >= %d erasures/ECC block and the image will be lost.\n"), 
 	n_errors);
-
-   FreeImageInfo(ii);
 }
 
 /* RS02 ecc images */
@@ -398,15 +395,24 @@ static void random_error3(EccHeader *eh, char *prefix, char *arg)
    g_free(lay);
 }
 
-void RandomError(char *prefix, char *arg)
-{  Method *method = EccMethod(TRUE);
-   char buf[5];
+void RandomError(char *arg)
+{  Image *image;
+   Method *method;
+
+   image = OpenImageFromFile(Closure->imageName, O_RDWR, IMG_PERMS);
+   image = OpenEccFileForImage(image, Closure->eccName, O_RDONLY, IMG_PERMS);
+   ReportImageEccInconsistencies(image);
+
+   /* Determine method. Ecc files win over augmented ecc. */
+
+   if(image && image->eccFileMethod) method = image->eccFileMethod;
+   else if(image && image->eccMethod) method = image->eccMethod;
+   else Stop("Internal error: No ecc method identified.");
 
    if(!strncmp(method->name, "RS01", 4))
-   {  random_error1(prefix, arg);
-      return;
-   }
+     random_error1(image, arg);
 
+#if 0
    if(!strncmp(method->name, "RS02", 4))
    {  random_error2(method->lastEh, prefix, arg);
       return;
@@ -421,6 +427,9 @@ void RandomError(char *prefix, char *arg)
 
    strncpy(buf, method->name, 4); buf[4] = 0;
    Stop("Don't know how to handle codec %s\n", buf);
+#endif
+
+   CloseImage(image);
 }
 
 /*
@@ -534,7 +543,7 @@ void Erase(char *arg)
  * Debugging function for truncating images
  */
 
-void TruncateImage(char *arg)
+void TruncateImageFile(char *arg)
 {  ImageInfo *ii;
    gint64 end;
 
@@ -808,34 +817,34 @@ void ShowSector(char *arg)
 
 void ReadSector(char *arg)
 {  AlignedBuffer *ab = CreateAlignedBuffer(2048);
-   DeviceHandle *dh;
+   Image *image;
    gint64 sector;
    int status;
 
    /*** Open the device */
 
-   dh = OpenAndQueryDevice(Closure->device);
+   image = OpenImageFromDevice(Closure->device);
 
    /*** Determine sector to show */
 
    sector =  atoi(arg);
 
-   if(sector < 0 || sector >= dh->sectors)
-   {  CloseDevice(dh);
+   if(sector < 0 || sector >= image->dh->sectors)
+   {  CloseImage(image);
       FreeAlignedBuffer(ab);
-      Stop(_("Sector must be in range [0..%lld]\n"),dh->sectors-1);
+      Stop(_("Sector must be in range [0..%lld]\n"),image->dh->sectors-1);
    }
 
    PrintLog(_("Contents of sector %lld:\n\n"),sector);
 
    /*** Read it. */
 
-   status = ReadSectors(dh, ab->buf, sector, 1); 
+   status = ReadSectors(image->dh, ab->buf, sector, 1); 
 
    /*** Print results */
    
    if(status)
-   {  CloseDevice(dh);
+   {  CloseImage(image);
       FreeAlignedBuffer(ab);
       Stop(_("Failed reading sector %lld: %s"),sector,strerror(errno));
    }
@@ -847,7 +856,7 @@ void ReadSector(char *arg)
       g_printf("CRC32 = %04x\n", Crc32(ab->buf, 2048));
    }
 
-   CloseDevice(dh);
+   CloseImage(image);
    FreeAlignedBuffer(ab);
 }
 
@@ -859,20 +868,20 @@ void RawSector(char *arg)
 {  AlignedBuffer *ab = CreateAlignedBuffer(4096);
    Sense *sense;
    unsigned char cdb[MAX_CDB_SIZE];
-   DeviceHandle *dh;
+   Image *image;
    gint64 lba;
    int length=0,status;
    int offset=16;
 
    /*** Open the device */
 
-   dh = OpenAndQueryDevice(Closure->device);
-   sense = &dh->sense;
+   image = OpenImageFromDevice(Closure->device);
+   sense = &image->dh->sense;
 
    /*** Only CD can be read in raw mode */
 
-   if(dh->mainType != CD)
-   {  CloseDevice(dh);
+   if(image->dh->mainType != CD)
+   {  CloseImage(image);
       FreeAlignedBuffer(ab);
       Stop(_("Raw reading only possible on CD media\n"));
    }
@@ -881,10 +890,10 @@ void RawSector(char *arg)
 
    lba =  atoi(arg);
 
-   if(lba < 0 || lba >= dh->sectors)
-   {  CloseDevice(dh);
+   if(lba < 0 || lba >= image->dh->sectors)
+   {  CloseImage(image);
       FreeAlignedBuffer(ab);
-      Stop(_("Sector must be in range [0..%lld]\n"),dh->sectors-1);
+      Stop(_("Sector must be in range [0..%lld]\n"),image->dh->sectors-1);
    }
 
    PrintLog(_("Contents of sector %lld:\n\n"),lba);
@@ -893,7 +902,7 @@ void RawSector(char *arg)
 
    memset(cdb, 0, MAX_CDB_SIZE);
    cdb[0]  = 0xbe;         /* READ CD */
-   switch(dh->subType)     /* Expected sector type */
+   switch(image->dh->subType)     /* Expected sector type */
    {  case DATA1:          /* data mode 1 */ 
         cdb[1] = 2<<2; 
 #if 1
@@ -926,11 +935,11 @@ void RawSector(char *arg)
    cdb[11] = 0;        /* no special wishes for the control byte */
 
    CreateMissingSector(ab->buf, lba, NULL, 0, NULL); 
-   status = SendPacket(dh, cdb, 12, ab->buf, length, sense, DATA_READ);
+   status = SendPacket(image->dh, cdb, 12, ab->buf, length, sense, DATA_READ);
 
    if(status<0)  /* Read failed */
    {  RememberSense(sense->sense_key, sense->asc, sense->ascq);
-      CloseDevice(dh);
+      CloseImage(image);
       FreeAlignedBuffer(ab);
       Stop("Sector read failed: %s\n", GetLastSenseString(FALSE));
    }

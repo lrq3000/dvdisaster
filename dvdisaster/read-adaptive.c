@@ -36,7 +36,8 @@
 enum { IMAGE_ONLY, ECC_IN_FILE, ECC_IN_IMAGE };
 
 typedef struct
-{  DeviceHandle *dh;            /* device we are reading from */
+{  Image *medium;               /* Image we are reading from */
+   DeviceHandle *dh;            /* device we are reading from */
    gint64 sectors;              /* sectors in medium (maybe cooked value from file system) */
    LargeFile *image;            /* image file */
    int readMode;                /* see above enum for choices */
@@ -148,7 +149,8 @@ bail_out:
    if(rc->image)   
      if(!LargeClose(rc->image))
        Stop(_("Error closing image file:\n%s"), strerror(errno));
-   if(rc->dh)      CloseDevice(rc->dh);
+
+   if(rc->medium) CloseImage(rc->medium);
  
    if(rc->ei) FreeEccInfo(rc->ei);
 
@@ -382,18 +384,19 @@ static void open_and_determine_mode(read_closure *rc)
  
    /* open the device */
 
-   rc->dh = OpenAndQueryDevice(Closure->device);
+   rc->medium = OpenImageFromDevice(Closure->device);
+   rc->dh = rc->medium->dh;
    rc->readMode = IMAGE_ONLY;
 
    /* save some useful information for the missing sector marker */
 
-   if(GetMediumFingerprint(rc->dh, fp, FINGERPRINT_SECTOR))
+   if(GetImageFingerprint(rc->medium, fp, FINGERPRINT_SECTOR))
    {  rc->fingerprint = g_malloc(16);
       memcpy(rc->fingerprint, fp, 16);
    }
 
-   if(rc->dh->isoInfo && rc->dh->isoInfo->volumeLabel[0])
-      rc->volumeLabel = g_strdup(rc->dh->isoInfo->volumeLabel);
+   if(rc->medium->isoInfo && rc->medium->isoInfo->volumeLabel[0])
+      rc->volumeLabel = g_strdup(rc->medium->isoInfo->volumeLabel);
 
    /* See if we have ecc information available. 
       Prefer the error correction file over augmented images if both are available. */
@@ -409,9 +412,10 @@ static void open_and_determine_mode(read_closure *rc)
 
       SetAdaptiveReadMinimumPercentage((1000*(rc->eh->dataBytes-rc->eh->eccBytes))/rc->eh->dataBytes);
    }
-   else if(rc->dh->rs02Header)  /* see if we have RS02 type ecc */
+   else   /* see if we have RS02 type ecc */
+   if(rc->medium->eccHeader && !strncmp((char*)rc->medium->eccHeader->method,"RS02",4))
    {  rc->readMode = ECC_IN_IMAGE;
-      rc->eh  = rc->dh->rs02Header;
+      rc->eh  = rc->medium->eccHeader;
       rc->lay = CalcRS02Layout(uchar_to_gint64(rc->eh->sectors), rc->eh->eccBytes);
  
       SetAdaptiveReadMinimumPercentage((1000*rc->lay->ndata)/255);
@@ -555,7 +559,7 @@ static void check_ecc_fingerprint(read_closure *rc)
 {  guint8 digest[16];
    int fp_read;
 
-   fp_read = GetMediumFingerprint(rc->dh, digest, rc->eh->fpSector);
+   fp_read = GetImageFingerprint(rc->medium, digest, rc->eh->fpSector);
 
    if(!fp_read) /* Not readable. Bad luck. */
    {  int answer;
@@ -605,7 +609,7 @@ int check_image_fingerprint(read_closure *rc)
    MD5Update(&md5ctxt, rc->buf, 2048);
    MD5Final(image_fp, &md5ctxt);
 
-   fp_read = GetMediumFingerprint(rc->dh, medium_fp, fingerprint_sector);
+   fp_read = GetImageFingerprint(rc->medium, medium_fp, fingerprint_sector);
 
    if(n != 2048 || !fp_read || (CheckForMissingSector(rc->buf, fingerprint_sector, NULL, 0) != SECTOR_PRESENT))
      return 0; /* can't tell, assume okay */
@@ -1027,7 +1031,7 @@ void fill_gap(read_closure *rc)
      {  int seq = (j/2000)%10;
 
 	if(!Closure->guiMode)
-        {  g_printf(anim[seq]);
+	{  g_printf("%s", anim[seq]);
 	   fflush(stdout);   /* at least needed for Windows */
 	}
      }

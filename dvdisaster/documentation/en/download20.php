@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: English homepage translation
-# Copyright (C) 2004-2010 Carsten Gnörlich
+# Copyright (C) 2004-2011 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -34,6 +34,14 @@ sub   1024g/091AD320 2003-08-22
 Feel free to send an email to <img src="../images/email.png" align="top"> to obtain 
 the fingerprint directly from the developers. 
 Please include "GPG finger print" in the subject line.
+
+<h3>MD5 checksum</h3>
+
+Contrary to the digital signature, MD5 checksums are cryptographically weak:
+It is possible to create a manipulated package which still has the same
+checksum as the original. However MD5 checksums are sufficient for a quick
+check whether the download has finished completely and without transmission
+errors.
 
 <!--- do not change below --->
 

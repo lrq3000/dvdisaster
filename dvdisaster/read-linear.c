@@ -112,7 +112,8 @@ static void cleanup(gpointer data)
    if(rc->writerImage)   
      if(!LargeClose(rc->writerImage))
        Stop(_("Error closing image file:\n%s"), strerror(errno));
-   if(rc->dh)      CloseDevice(rc->dh);
+
+   if(rc->image)   CloseImage(rc->image);
    if(rc->ei)      FreeEccInfo(rc->ei);
 
    if(rc->mutex)    g_mutex_free(rc->mutex);
@@ -197,7 +198,8 @@ static void register_reader(read_closure *rc)
  */
 
 static void check_for_ecc_data(read_closure *rc)
-{  
+{  EccHeader *eh;
+
    Closure->eccType = ECC_NONE;
 
    memcpy(rc->eccMethodName, "NONE", 5);
@@ -213,12 +215,13 @@ static void check_for_ecc_data(read_closure *rc)
       {  Method *method = g_ptr_array_index(Closure->methodList, i);
 
          if(   method->recognizeEccFile
-	    && method->recognizeEccFile(method, rc->ei->file))
+	    && method->recognizeEccFile(rc->ei->file, &eh))
 	 {  rc->eccMethod = method;
 	    strncpy(rc->eccMethodName, method->name, 4);
 	    rc->dataSectors = uchar_to_gint64(rc->ei->eh->sectors);
 	    rc->eccFile = TRUE;
 	    Closure->eccType = ECC_RS01;  /* fixme: delete */
+	    g_free(eh); /* fixme */
 	 }
       }
    }
@@ -229,7 +232,7 @@ static void check_for_ecc_data(read_closure *rc)
    {  guint8 fingerprint[16];
       int fp_read;
 
-      fp_read = GetMediumFingerprint(rc->dh, fingerprint, rc->ei->eh->fpSector);
+      fp_read = GetImageFingerprint(rc->image, fingerprint, rc->ei->eh->fpSector);
 
       if(!fp_read || memcmp(fingerprint, rc->ei->eh->mediumFP, 16))
       {  FreeEccInfo(rc->ei);
@@ -243,13 +246,15 @@ static void check_for_ecc_data(read_closure *rc)
    /* If no ecc file is found, see if we have an augmented image.
       FIXME: There is no appropriate method in the codec! */
 
-   if(rc->dh->rs02Header)  /* see if we have RS02 type ecc */
+   if(rc->image->eccHeader && !strncmp((char*)rc->image->eccHeader,"RS02",4))  /* see if we have RS02 type ecc */
    {  rc->eccMethod = FindMethod("RS02");
       strncpy(rc->eccMethodName, "RS02", 4);
-      rc->dataSectors = uchar_to_gint64(rc->dh->rs02Header->sectors);
+      rc->dataSectors = uchar_to_gint64(rc->image->eccHeader->sectors);
       Closure->eccType = ECC_RS02;  /* fixme: remove */
+      /*
       rc->eccMethod->lastEh = g_malloc(sizeof(EccHeader));
-      memcpy(rc->eccMethod->lastEh, rc->dh->rs02Header, sizeof(EccHeader));
+      memcpy(rc->eccMethod->lastEh, rc->image->rs02Header, sizeof(EccHeader));
+      */
    }
 
    // fixme: delete
@@ -357,7 +362,7 @@ reopen_image:
       MD5Update(&md5ctxt, buf, 2048);
       MD5Final(image_fp, &md5ctxt);
 
-      fp_read = GetMediumFingerprint(rc->dh, medium_fp, FINGERPRINT_SECTOR);
+      fp_read = GetImageFingerprint(rc->image, medium_fp, FINGERPRINT_SECTOR);
 	 
       if(n != 2048 || !fp_read || (CheckForMissingSector(buf, FINGERPRINT_SECTOR, NULL, 0) != SECTOR_PRESENT))
 	 unknown_fingerprint = TRUE;
@@ -486,40 +491,14 @@ static void prepare_crc_cache(read_closure *rc)
 		      rc->dh->mediumDescr);
 
       if(rc->eccMethod->getCrcBuf)
-	   rc->crcBuf = rc->eccMethod->getCrcBuf(rc->eccMethod, 
-						 rc->eccFile ? rc->ei->file : rc->dh);
+	rc->crcBuf = rc->eccMethod->getCrcBuf(rc->image);
+
       else rc->crcBuf = NULL;
 
       if(rc->eccMethod->resetCksums)
       {  rc->doMD5sums = TRUE;
-	 rc->eccMethod->resetCksums(rc->eccMethod);
+	 rc->eccMethod->resetCksums(rc->image);
       }
-
-#if 0
-      switch(Closure->eccType)  /* FIXME: remove this */
-      {  case ECC_RS01:
-	    rc->crcBuf = GetCRCFromRS01(rc->ei);
-	    rc->doMD5sums = TRUE;
-	    MD5Init(&rc->md5ctxt);
-	    break;
-
-	 case ECC_RS02:
-	 {  EccHeader *eh = rc->dh->rs02Header;
-	       
-	    rc->lay = CalcRS02Layout(uchar_to_gint64(eh->sectors), eh->eccBytes);
-	    rc->crcBuf = GetCRCFromRS02_obsolete(rc->lay, rc->dh, rc->readerImage);
-	    rc->doMD5sums = TRUE;
-	    MD5Init(&rc->dataCtxt);
-	    MD5Init(&rc->crcCtxt);
-	    MD5Init(&rc->eccCtxt);
-	    MD5Init(&rc->metaCtxt);
-	    break;
-	 }
-	 default:
-	    rc->crcBuf = NULL;
-	    break;
-      }
-#endif
 
       if(Closure->guiMode)
 	 SetLabelText(GTK_LABEL(Closure->readLinearHeadline),
@@ -738,7 +717,7 @@ static gpointer worker_thread(read_closure *rc)
 	   /* Have the codec update its internal checksums */
 
 	   if(rc->doMD5sums)
-	      rc->eccMethod->updateCksums(rc->eccMethod, sector, buf);
+	      rc->eccMethod->updateCksums(rc->image, sector, buf);
 
 	   switch(Closure->eccType)
 	   {  case ECC_RS02:
@@ -746,6 +725,8 @@ static gpointer worker_thread(read_closure *rc)
 		 /* fall through! */
 
 	      case ECC_RS01:
+		 /* rewrite this without the switch(); do dataSector boundary
+		    check in a generic way */
 		 if(sector < rc->dataSectors) /* FIXME: not okay for RS03 */
 		 {  if(   rc->crcBuf
 		       && CheckAgainstCrcBuffer(rc->crcBuf, sector, buf) == CRC_BAD)
@@ -828,18 +809,19 @@ void ReadMediumLinear(gpointer data)
 
    /*** Open Device and query medium properties */
 
-   rc->dh = OpenAndQueryDevice(Closure->device);
+   rc->image = OpenImageFromDevice(Closure->device);
+   rc->dh = rc->image->dh;
    rc->sectors = rc->dh->sectors;
    Closure->readErrors = Closure->crcErrors = rc->readOK = 0;
 
    /*** Save some useful information for the missing sector marker */
 
-   if(GetMediumFingerprint(rc->dh, fp, FINGERPRINT_SECTOR))
+   if(GetImageFingerprint(rc->image, fp, FINGERPRINT_SECTOR))
    {  rc->fingerprint = g_malloc(16);
       memcpy(rc->fingerprint, fp, 16);
    }
-   if(rc->dh->isoInfo && rc->dh->isoInfo->volumeLabel[0])
-      rc->volumeLabel = g_strdup(rc->dh->isoInfo->volumeLabel);
+   if(rc->image->isoInfo && rc->image->isoInfo->volumeLabel[0])
+      rc->volumeLabel = g_strdup(rc->image->isoInfo->volumeLabel);
 
    /*** See if we have an ecc file which belongs to the medium */
 
@@ -1273,7 +1255,7 @@ step_counter:
    /*** Finalize on-the-fly checksum calculation */
 
    if(rc->doMD5sums)
-        md5_failure = rc->eccMethod->finalizeCksums(rc->eccMethod);
+        md5_failure = rc->eccMethod->finalizeCksums(rc->image);
    else ClearCrcCache();  /* deferred until here to avoid race condition */
 
    Verbose("CRC %s.\n", Closure->crcCache ? "cached" : "NOT created.");
@@ -1300,10 +1282,10 @@ step_counter:
 	    md5_failure = NULL;
 	 }
 	 else 
-	    if(!t) t = g_strdup_printf(_("All sectors successfully read. Checksums match."));
+	    if(!t) t = g_strdup(_("All sectors successfully read. Checksums match."));
 
 	 if(!t) 
-	    t = g_strdup_printf(_("All sectors successfully read."));
+	    t = g_strdup(_("All sectors successfully read."));
       }
       else /* we have unreadable or damaged sectors */
       {  if(Closure->readErrors && !Closure->crcErrors)

@@ -25,6 +25,138 @@
 
 
 /***
+ *** Read and buffer CRC information from RS03 file 
+ ***/
+
+CrcBuf *RS03GetCrcBuf(Image *image)
+{  RS03CksumClosure *csc;
+   CrcBuf *cb;
+   RS03Layout *lay;
+   EccHeader *eh;
+   LargeFile *file;
+   gint64 block_idx[256];
+   guint32 crc_buf[512];
+   gint64 crc_sector,s;
+   int i,crc_idx;
+   int crc_valid = 1;
+
+   /* Allocate buffer for ascending sector order CRCs */
+
+   if(image->eccFileHeader)
+   {  eh = image->eccFileHeader;
+      csc = (RS03CksumClosure*)image->eccFileMethod->ckSumClosure;
+
+      lay = CalcRS03Layout(uchar_to_gint64(eh->sectors), eh, ECC_FILE); 
+      cb = CreateCrcBuf((lay->ndata-1)*lay->sectorsPerLayer);
+   }
+   else 
+   {  eh = image->eccHeader;
+      csc = (RS03CksumClosure*)image->eccMethod->ckSumClosure;
+      lay = CalcRS03Layout(uchar_to_gint64(eh->sectors), eh, ECC_IMAGE); 
+      cb = CreateCrcBuf((lay->ndata-1)*lay->sectorsPerLayer);
+   }
+
+   csc->signatureErrors=0;
+   if(csc->lay) g_free(csc->lay);
+   csc->lay = lay;
+
+   /* First sector containing crc data */
+
+   file = lay->target == ECC_FILE ? image->eccFile : image->file;
+
+   if(!LargeSeek(file, 2048*(lay->firstCrcPos)))
+   { if(lay->target == ECC_FILE)
+	  Stop(_("Failed seeking to sector %lld in ecc file: %s"), 
+	       lay->firstCrcPos, strerror(errno));
+     else Stop(_("Failed seeking to sector %lld in image: %s"), 
+	       lay->firstCrcPos, strerror(errno));
+   }
+
+   crc_sector = lay->firstCrcPos;
+
+   /* Initialize ecc block index pointers.
+      Note that CRC blocks are shifted by one 
+      (each ECC block contains the CRC for the next ECC block) */
+
+   for(s=0, i=0; i<lay->ndata; s+=lay->sectorsPerLayer, i++)
+     block_idx[i] = s+1;
+
+   crc_idx = 512;  /* force crc buffer reload */
+
+   /* Cycle through the ecc blocks.
+      Each ecc block contains the CRCs for the following ecc block;
+      these are rearranged in ascending sector order. */
+
+   for(s=0; s<lay->sectorsPerLayer; s++)
+   {  int err;
+
+      /* Get CRC sector for current ecc block */
+
+      if(LargeRead(file, crc_buf, 2048) != 2048)
+	 Stop(_("problem reading crc data: %s"), strerror(errno));
+
+      err = CheckForMissingSector((unsigned char*)crc_buf, crc_sector, eh->mediumFP, eh->fpSector);
+      if(err != SECTOR_PRESENT)
+	 ExplainMissingSector((unsigned char*)crc_buf, crc_sector, err, TRUE);
+
+      crc_sector++;
+      crc_valid = (err == SECTOR_PRESENT);
+
+      /* Check the CrcBlock data structure */
+
+      if(crc_valid)
+      {  CrcBlock *cb = (CrcBlock*)crc_buf;
+
+	 if(  memcmp(cb->cookie, "*dvdisaster*", 12)
+	    ||memcmp(cb->method, "RS03", 4))
+	 {  crc_valid = FALSE;
+	    csc->signatureErrors++;
+         }
+	 else
+         {  guint32 recorded_crc = cb->selfCRC;
+            guint32 real_crc;
+
+#ifdef HAVE_BIG_ENDIAN
+            cb->selfCRC = 0x47504c00;
+#else
+            cb->selfCRC = 0x4c5047;
+#endif
+
+            real_crc = Crc32((unsigned char*)cb, 2048);
+
+            if(real_crc != recorded_crc)
+            {  crc_valid = FALSE;
+	       csc->signatureErrors++;
+            }
+         }
+      }
+
+      /* Go through all data sectors of current ecc block;
+	 distribute the CRC values */
+
+      for(i=0; i<lay->ndata-1; i++)
+      {
+	 /* CRC sums for the first ecc block are contained in the last
+	    CRC sector. Wrap the block_idx accordingly. */
+      
+	 if(s == lay->sectorsPerLayer-1)
+	    block_idx[i] = i*lay->sectorsPerLayer;
+
+	 /* Sort crc into appropriate place if CRC block is valid*/
+
+	 if(crc_valid)
+	 {  cb->crcbuf[block_idx[i]] = crc_buf[i];
+	    SetBit(cb->valid,block_idx[i]);
+	 }
+
+	 block_idx[i]++;
+      }
+   }
+
+   return cb;
+}
+
+/***
  *** Read one or more image sectors from the .iso file.
  ***/
 
@@ -33,6 +165,8 @@ void RS03ReadSectors(LargeFile *file, RS03Layout *lay, unsigned char *buf,
 {  gint64 start_sector=0;
    gint64 stop_sector=0;
    gint64 byte_size = how_many * 2048;
+   gint64 file_sector_size;
+   int in_last;
    gint64 n;
 
    if(layer < 0 || layer > 255) 
@@ -40,6 +174,21 @@ void RS03ReadSectors(LargeFile *file, RS03Layout *lay, unsigned char *buf,
    if(layer_sector < 0 || layer_sector >= lay->sectorsPerLayer) 
       Stop("RS03ReadSectors: offset %lld out of range 0 .. %lld)\n",
 	   layer_sector, lay->sectorsPerLayer-1);
+
+   /* "Image" file size may not be a multiple of 2048 */
+   
+   in_last = file->size % 2048;
+   file_sector_size = file->size/2048;
+   if(in_last) file_sector_size++;
+
+   /* Ignore trailing garbage in the image file */
+
+   if(lay->target == ECC_FILE)
+   {  if(file_sector_size > lay->dataSectors)
+      {  file_sector_size = lay->dataSectors;
+	 in_last = lay->eh->inLast;
+      }
+   }
 
    /* Read out of the data layer */
 
@@ -53,22 +202,6 @@ void RS03ReadSectors(LargeFile *file, RS03Layout *lay, unsigned char *buf,
       if(stop_sector >= (layer+1)*lay->sectorsPerLayer)
 	Stop("RS03ReadSectors: range %lld..%lld crosses layer boundary\n",
 	     start_sector, stop_sector);
-
-      /* Padding sectors are virtual in ecc file case.
-         Create them in memory; shorten read range accordingly */
-
-      if(lay->target == ECC_FILE)
-      {  unsigned char *bufptr = buf;
-
-	 for(n=start_sector; n<=stop_sector; n++)
-	 {  
-	    if(n>=lay->dataSectors)
-	    {  CreatePaddingSector(bufptr, n, lay->eh->mediumFP, FINGERPRINT_SECTOR);
-	       byte_size -= 2048;
-	    }
-	    bufptr += 2048;
-	 }
-      }
    }
 
    /* Read out of the crc layer */
@@ -89,6 +222,57 @@ void RS03ReadSectors(LargeFile *file, RS03Layout *lay, unsigned char *buf,
 
       start_sector = lay->firstEccPos + (layer-lay->ndata)*lay->sectorsPerLayer + layer_sector;
       stop_sector  = start_sector + how_many - 1;
+   }
+
+
+   /* Reading beyond the image returns 
+      - dead sectors if the image was truncated
+      - padding sectors if the real end of the image is exceeded.
+      Create them in memory; shorten read range accordingly */
+
+   if(stop_sector >= file_sector_size)
+   {  unsigned char *bufptr = buf;
+      gint64 expected_sectors;
+      char *volume_label = NULL;
+
+      if(lay->target == ECC_FILE)
+	 expected_sectors = lay->dataSectors;
+      else 
+	 expected_sectors = lay->totalSectors;
+
+#if 0  //FIXME
+      if(rc->image->isoInfo && rc->image->isoInfo->volumeLabel[0])
+      rc->volumeLabel = g_strdup(rc->image->isoInfo->volumeLabel);
+#endif
+
+      for(n=start_sector; n<=stop_sector; n++)
+      {  
+	 if(n>=file_sector_size)
+	 {  if(n>=expected_sectors)
+	    {  CreatePaddingSector(bufptr, n, lay->eh->mediumFP, FINGERPRINT_SECTOR);
+	    }
+	    else
+	    {  CreateMissingSector(bufptr, n, lay->eh->mediumFP, FINGERPRINT_SECTOR, volume_label);
+	    }
+	    byte_size -= 2048;
+	 }
+	 bufptr += 2048;
+      }
+   }
+
+   if(byte_size<=0)
+      return;
+
+   /* Image with ecc files may have an incomplete last sector.
+      Deal with it appropriately. */
+
+   if(lay->target == ECC_FILE && in_last)
+   {  if(start_sector <= file_sector_size-1
+	 && file_sector_size-1 <= stop_sector)
+      {  
+	 memset(buf, 0, byte_size);
+	 byte_size = byte_size - 2048 + in_last;
+      }
    }
 
    /* All sectors are consecutively readable in image case */
@@ -229,7 +413,7 @@ RS03Layout *CalcRS03Layout(gint64 data_sectors, EccHeader *eh, int target)
       lay->ndata = GF_FIELDMAX - n_roots;
 
       lay->sectorsPerLayer = (lay->dataSectors + lay->ndata - 2)/(lay->ndata-1);
-      lay->totalSectors = 2 + (lay->nroots+1)*lay->sectorsPerLayer;
+      lay->totalSectors = lay->dataSectors + 2 + (lay->nroots+1)*lay->sectorsPerLayer;
 
       lay->mediumCapacity   = 0;  /* unused for ecc files */
       lay->eccHeaderPos     = 0;
@@ -306,6 +490,25 @@ RS03Layout *CalcRS03Layout(gint64 data_sectors, EccHeader *eh, int target)
 
    return lay;
 }
+
+/*
+ * Determine expected size of image.
+ * In case of ecc files, only the iso image size is reported.
+ */
+
+guint64 RS03ExpectedImageSize(EccHeader *eh)
+{  guint64 size = 0;
+
+   if(!eh) return 0;
+
+   if(eh->methodFlags[0] & MFLAG_ECC_FILE)
+     size = uchar_to_gint64(eh->sectors); /* ecc file */
+   else
+     size = 255*eh->sectorsPerLayer;      /* augmented image */
+
+   return size;
+}
+
 
 /***
  *** Write the RS03 header into the image.

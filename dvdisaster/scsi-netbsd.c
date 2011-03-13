@@ -129,14 +129,10 @@ void CloseDevice(DeviceHandle *dh)
     close(dh->fd);
   if(dh->device)
     g_free(dh->device);
-  if(dh->rs02Header)
-    g_free(dh->rs02Header);
   if(dh->typeDescr) 
     g_free(dh->typeDescr);
   if(dh->mediumDescr) 
     g_free(dh->mediumDescr);
-  if(dh->isoInfo)
-    FreeIsoInfo(dh->isoInfo);
   if(dh->defects)
     FreeBitmap(dh->defects);
   g_free(dh);
@@ -162,6 +158,9 @@ int SendPacket(DeviceHandle *dh, unsigned char *cmd, int cdb_size, unsigned char
 	break;
       case DATA_WRITE:
         sc.flags = SCCMD_WRITE;
+	break;
+      case DATA_NONE:
+	sc.flags = 0;
 	break;
       default:
 	Stop("illegal data_mode: %d", data_mode);

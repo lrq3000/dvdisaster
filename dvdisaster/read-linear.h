@@ -33,6 +33,7 @@
 typedef struct
 {  LargeFile *readerImage;  /* we need two file handles to prevent LargeSeek() */
    LargeFile *writerImage;  /* race conditions between the reader and writer */
+   Image *image;
    struct _DeviceHandle *dh;
    EccInfo *ei;
    GThread *worker;

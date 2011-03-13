@@ -28,31 +28,31 @@
  *** Recognize a RS03 error correction file
  ***/
 
-int RS03RecognizeFile(Method *self, LargeFile *ecc_file)
-{  EccHeader eh;
-   int n;
+int RS03RecognizeFile(LargeFile *ecc_file, EccHeader **eh)
+{  int n;
+
+   *eh = g_malloc(sizeof(EccHeader));
 
    LargeSeek(ecc_file, 0);
-   n = LargeRead(ecc_file, &eh, sizeof(EccHeader));
+   n = LargeRead(ecc_file, *eh, sizeof(EccHeader));
 
    if(n != sizeof(EccHeader))
+   {  g_free(*eh);
+      return FALSE;
+   }
+
+   if(strncmp((char*)(*eh)->cookie, "*dvdisaster*", 12))
      return FALSE;
 
-   if(strncmp((char*)eh.cookie, "*dvdisaster*", 12))
-     return FALSE;
-
-   if(!strncmp((char*)eh.method, "RS03", 4))
+   if(!strncmp((char*)(*eh)->method, "RS03", 4))
    {
-      if(self->lastEh) g_free(self->lastEh);
-      self->lastEh = g_malloc(sizeof(EccHeader));
-      memcpy(self->lastEh, &eh, sizeof(EccHeader));
-
 #ifdef HAVE_BIG_ENDIAN
-      SwapEccHeaderBytes(self->lastEh);
+      SwapEccHeaderBytes(*eh);
 #endif
       return TRUE;
    }
 
+   g_free(*eh);
    return FALSE;
 }
 
@@ -140,43 +140,48 @@ EccHeader* ValidHeader(unsigned char *buf, gint64 hdr_pos)
    return eh;
 }
 
-EccHeader* FindRS03HeaderInImage(LargeFile *file)
+EccHeader* FindRS03HeaderInImage(Image *image)
 {  EccHeader *eh = NULL;
+   gint64 hdr_pos;
    IsoInfo *ii; 
-   gint64 hdr_pos; 
    unsigned char buf[4096];
 
-   Verbose("FindRS03HeaderInImage(%s)\n", file->path);
+   switch(image->type)
+   { case IMAGE_FILE:
+       Verbose("FindRS03HeaderInImage: file %s\n", image->file->path);
+       break;
+
+     case IMAGE_MEDIUM:
+       Verbose("FindRS03HeaderInImage: medium %s\n", image->dh->device);
+       break;
+
+     default:
+       Verbose("FindRS03HeaderInImage: unknown type %d\n", image->type);
+       break;
+   }
 
    /*** Try to find the header behind the ISO image */
 
-   ii = ExamineUDF(NULL, file);
+   ii = image->isoInfo;
    if(!ii) Verbose(" . NO ISO structures found!\n");
 
    if(ii)
    {  hdr_pos = ii->volumeSize;
-      if(LargeSeek(file, 2048*hdr_pos))
-      {  int n = LargeRead(file, buf, sizeof(EccHeader));
 
-         if(n == sizeof(EccHeader))
-	 {  eh = ValidHeader(buf, hdr_pos);
-	    if(eh) 
-	    { Verbose("FindRS03HeaderInImage(): Header found at pos +0\n"); 
-	      return eh;
-	    }
+      if(ImageReadSectors(image, buf, hdr_pos, 2) == 2)
+      {  eh = ValidHeader(buf, hdr_pos);
+	 if(eh) 
+	 { Verbose("FindRS03HeaderInImage(): Header found at pos +0\n"); 
+	   return eh;
 	 }
       }
 
       hdr_pos = ii->volumeSize - 150;
-      if(LargeSeek(file, 2048*hdr_pos))
-      {  int n = LargeRead(file, buf, sizeof(EccHeader));
-
-         if(n == sizeof(EccHeader))
-	 {  eh = ValidHeader(buf, hdr_pos);
-	    if(eh) 
-	    { Verbose("FindRS03HeaderInImage(): Header found at pos -150\n"); 
-	      return eh;
-	    }
+      if(ImageReadSectors(image, buf, hdr_pos, 2) == 2)
+      {  eh = ValidHeader(buf, hdr_pos);
+	 if(eh) 
+	 { Verbose("FindRS03HeaderInImage(): Header found at pos -150\n"); 
+	   return eh;
 	 }
       }
    }
@@ -199,21 +204,34 @@ static void free_recognize_context(recognize_context *rc)
    g_free(rc);
 }
    
-int RS03RecognizeImage(Method *self, LargeFile *ecc_file)
+int RS03RecognizeImage(Image *image)
 {  recognize_context *rc = g_malloc0(sizeof(recognize_context));
-   EccHeader *eh;
+   LargeFile *ecc_file = image->file;
    gint64 file_size;
    gint64 layer_size;
    int ecc_block,ndata,nroots;
    int i;
 
+   switch(image->type)
+   { case IMAGE_FILE:
+       Verbose("RS03Recognize: file %s\n", image->file->path);
+       break;
+
+     case IMAGE_MEDIUM:
+       Verbose("RS03Recognize: medium %s\n", image->dh->device);
+       break;
+
+     default:
+       Verbose("RS03Recognize: unknown type %d\n", image->type);
+       break;
+   }
+
    /* Easy shot: Locate the ecc header in the image */
 
-   eh = FindRS03HeaderInImage(ecc_file); 
+   image->eccHeader = FindRS03HeaderInImage(image); 
   
-   if(eh)
-   {  if(self->lastEh) g_free(self->lastEh);
-      self->lastEh = eh;
+   if(image->eccHeader) 
+   {  //printf("quick resolved\n");   // FIXME
       return TRUE;
    }
 
@@ -284,9 +302,8 @@ int RS03RecognizeImage(Method *self, LargeFile *ecc_file)
 	    nroots = 255-ndata-1;
 	    Verbose(".. Success: rediscovered format with %d roots\n", nroots); 
 
-	    if(self->lastEh) g_free(self->lastEh);
-	    self->lastEh = g_malloc(sizeof(EccHeader));
-	    ReconstructRS03Header(self->lastEh, cb);
+	    image->eccHeader = g_malloc(sizeof(EccHeader));
+	    ReconstructRS03Header(image->eccHeader, cb);
 	    //FIXME: endianess okay?
 	    free_recognize_context(rc);
 	    return TRUE;

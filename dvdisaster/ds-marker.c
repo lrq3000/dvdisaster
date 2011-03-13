@@ -28,8 +28,8 @@
  *** Create an unique marker for missing sectors
  ***/
 
-void CreateMissingSector(unsigned char *out, gint64 sector, 
-			 unsigned char *fingerprint, gint64 fingerprint_sector,
+void CreateMissingSector(unsigned char *out, guint64 sector, 
+			 unsigned char *fingerprint, guint64 fingerprint_sector,
 			 char *volume_label)
 {  char *buf = (char*)out;
    char *end_marker;
@@ -79,8 +79,8 @@ void CreateMissingSector(unsigned char *out, gint64 sector,
  *** Create an unique padding sector
  ***/
 
-void CreatePaddingSector(unsigned char *out, gint64 sector, 
-			 unsigned char *fingerprint, gint64 fingerprint_sector)
+void CreatePaddingSector(unsigned char *out, guint64 sector, 
+			 unsigned char *fingerprint, guint64 fingerprint_sector)
 {  char *buf = (char*)out;
    char *end_marker;
    int end_length; 
@@ -111,7 +111,7 @@ void CreatePaddingSector(unsigned char *out, gint64 sector,
  *** helper function
  ***/
 
-static int get_recorded_number(unsigned char *buf, gint64 *number)
+static int get_recorded_number(unsigned char *buf, guint64 *number)
 {
    if(!strcmp((char*)buf+0x140, "Dead sector number"))
    {  *number = strtoll((char*)buf+0x160, NULL, 10);
@@ -137,11 +137,11 @@ static char *get_volume_label(unsigned char *buf)
  *** Check whether this is a missing sector
  ***/
 
-int CheckForMissingSector(unsigned char *buf, gint64 sector, 
-			  unsigned char *fingerprint, gint64 fingerprint_sector)
+int CheckForMissingSector(unsigned char *buf, guint64 sector, 
+			  unsigned char *fingerprint, guint64 fingerprint_sector)
 {  static char pattern[2048];
    static char last_pattern = 0;
-   gint64 recorded_number;
+   guint64 recorded_number;
 
    /* Bytefill used as missing sector marker? */
    
@@ -195,9 +195,9 @@ int CheckForMissingSector(unsigned char *buf, gint64 sector,
    return SECTOR_MISSING;
 }
 
-int CheckForMissingSectors(unsigned char *buf, gint64 sector, 
-			   unsigned char *fingerprint, gint64 fingerprint_sector,
-			   int n_sectors, gint64 *first_defect)
+int CheckForMissingSectors(unsigned char *buf, guint64 sector, 
+			   unsigned char *fingerprint, guint64 fingerprint_sector,
+			   int n_sectors, guint64 *first_defect)
 {  int i,result;
 
    for(i=0; i<n_sectors; i++)
@@ -226,9 +226,9 @@ static void insert_buttons(GtkDialog *dialog)
 			  _utf("Continue reporting"), 0, NULL);
 }
 
-void ExplainMissingSector(unsigned char *buf, gint64 sector, int error, int image)
+void ExplainMissingSector(unsigned char *buf, guint64 sector, int error, int image)
 {  int answer;
-   gint64 recorded_number;
+   guint64 recorded_number;
    char *vol_label, *label_msg;
 
    if(Closure->noMissingWarnings)

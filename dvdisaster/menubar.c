@@ -403,12 +403,13 @@ void set_path(GtkWidget *entry, char *path)
    }
    else
    {  char buf[PATH_MAX + strlen(path) + 2];
+      char *ignore;
 
 #ifdef SYS_MINGW
-      getcwd(buf, PATH_MAX);
+      ignore = getcwd(buf, PATH_MAX);
       strcat(buf,"\\");
 #else
-      getcwd(buf, PATH_MAX);
+      ignore = getcwd(buf, PATH_MAX);
       strcat(buf,"/");
 #endif
       strcat(buf,path);

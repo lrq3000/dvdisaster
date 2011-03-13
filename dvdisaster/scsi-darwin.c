@@ -252,14 +252,10 @@ void CloseDevice(DeviceHandle *dh)
     g_free(dh->range);
   }
 
-  if(dh->rs02Header)
-    g_free(dh->rs02Header);
   if(dh->typeDescr) 
     g_free(dh->typeDescr);
   if(dh->mediumDescr) 
     g_free(dh->mediumDescr);
-  if(dh->isoInfo)
-    FreeIsoInfo(dh->isoInfo);
   if(dh->defects)
     FreeBitmap(dh->defects);
 
@@ -283,6 +279,7 @@ int SendPacket(DeviceHandle *dh, unsigned char *cmd, int cdb_size, unsigned char
     break;
   case DATA_NONE:
     flags = kSCSIDataTransfer_NoDataTransfer;
+    break;
   default:
     Stop("illegal data_mode: %d",data_mode);
   }

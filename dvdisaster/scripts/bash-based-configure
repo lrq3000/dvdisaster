@@ -142,19 +142,6 @@ case "$cfg_uname" in
 	}
 	;;
 
-  SunOS*) cfg_system=solaris
-        CFG_SYS_OPTIONS="-DSYS_SOLARIS"
-        CFG_EXE_SUFFIX=""
-	# Even a Sparc V9 is a tight fit for us...
-	if test `uname -m` == "sun4u"; then
-	   CFG_SYS_CFLAGS="-mcpu=v9"
-	fi
-
-	function add_linker_flags()
-	{  lflags_return="-L$1 $2"
-	}
-	;;
-
   *) cfg_system=unknown-system
         CFG_SYS_OPTIONS="-DSYS_UNKNOWN"
         CFG_EXE_SUFFIX=""
@@ -1377,18 +1364,7 @@ function REQUIRE_GTK2()
 
    echo -n " pkg-config... "
    if pkg-config --cflags gtk+-2.0 >>config.tmp 2>&1 && pkg-config $threads --libs gtk+-2.0 >>config.tmp 2>&1 ; then
-	if test $cfg_system == "solaris"; then
-	   CFG_GTK2_LIBS=`pkg-config $threads --libs gtk+-2.0`
-	   if (echo $CFG_GTK2_LIBS | grep "mt") > /dev/null 2>&1; then
-	     echo "broken, Solaris fix will be applied"
-	     broken_solaris="yes"
-	   else
-	     broken_solaris="no"
-             echo "works"
-	   fi
-	else
-          echo "works"
-	fi
+        echo "works"
 	rm config.tmp
    else 
 	echo "failed"
@@ -1419,10 +1395,6 @@ EOF
 
    CFG_GTK2_CFLAGS=`pkg-config --cflags gtk+-2.0`
    CFG_GTK2_LIBS=`pkg-config $threads --libs gtk+-2.0`
-
-   if test "$broken_solaris" == "yes"; then
-	CFG_GTK2_LIBS=`echo $CFG_GTK2_LIBS | sed -e 's/-mt//'`
-   fi
 
    CFG_GTK2_BINDIR=`which pkg-config`
    CFG_GTK2_BINDIR=`echo $CFG_GTK2_BINDIR | sed -e 's/.exe//' | sed -e 's/\/pkg-config//'`

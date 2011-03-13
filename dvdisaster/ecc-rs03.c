@@ -33,6 +33,8 @@ static void destroy(Method*);
 void register_rs03(void)
 {  Method *method = g_malloc0(sizeof(Method));
 
+   method->ckSumClosure = g_malloc0(sizeof(RS03CksumClosure));
+
    /*** Standard infomation and methods */ 
 
    strncpy(method->name, "RS03", 4);
@@ -42,9 +44,14 @@ void register_rs03(void)
    method->fix     = RS03Fix;
    method->verify  = RS03Verify;
 
+   /*** Linkage to rs03-common.c */
+
+   method->expectedImageSize = RS03ExpectedImageSize;
+   method->getCrcBuf         = RS03GetCrcBuf;
+
    /*** Linkage to rs03-recognize.c */
 
-   method->recognizeEccFile = RS03RecognizeFile;
+   method->recognizeEccFile  = RS03RecognizeFile;
    method->recognizeEccImage = RS03RecognizeImage;
 
    /*** Linkage to rs03-window.c */
@@ -73,6 +80,11 @@ void register_rs03(void)
 
 static void destroy(Method *method)
 {  RS03Widgets *wl = (RS03Widgets*)method->widgetList;
+   RS03CksumClosure *csc = (RS03CksumClosure*)method->ckSumClosure;
+
+   if(csc->lay)
+      g_free(csc->lay);
+   g_free(method->ckSumClosure);
 
    if(wl)
    {  if(wl->fixCurve) FreeCurve(wl->fixCurve);

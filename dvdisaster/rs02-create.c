@@ -28,12 +28,12 @@
  ***/
 
 typedef struct
-{  Method *self;
+{  Image *image;
+   Method *self;
    RS02Widgets *wl;
    RS02Layout *lay;
    GaloisTables *gt;
    ReedSolomonTables *rt;
-   ImageInfo *ii;
    EccHeader *eh;
    unsigned char *data;
    unsigned char *parity;
@@ -68,9 +68,9 @@ static void ecc_cleanup(gpointer data)
 
    /*** Clean up */
 
+   if(ec->image) CloseImage(ec->image);
    if(ec->gt) FreeGaloisTables(ec->gt);
    if(ec->rt) FreeReedSolomonTables(ec->rt);
-   if(ec->ii) FreeImageInfo(ec->ii);
    if(ec->eh) g_free(ec->eh);
    if(ec->lay) g_free(ec->lay);
    if(ec->data) g_free(ec->data);
@@ -100,7 +100,7 @@ static void abort_encoding(ecc_closure *ec, int truncate)
 {  RS02Widgets *wl = ec->wl;
 
    if(truncate && ec->lay)
-   {  if(!LargeTruncate(ec->ii->file, (gint64)(2048*ec->lay->dataSectors)))
+   {  if(!LargeTruncate(ec->image->file, (gint64)(2048*ec->lay->dataSectors)))
 	Stop(_("Could not truncate %s: %s\n"),Closure->imageName,strerror(errno));
 
       SetLabelText(GTK_LABEL(wl->encFootline), 
@@ -124,20 +124,10 @@ static void abort_encoding(ecc_closure *ec, int truncate)
  */
 
 static void remove_old_ecc(ecc_closure *ec)
-{  EccHeader *old_eh;
-   LargeFile *tmp;
-
-   tmp = LargeOpen(Closure->imageName, O_RDWR, IMG_PERMS);
-   if(!tmp)  
-     return; /* no image file at all */
-
-   old_eh = FindRS02HeaderInImage(tmp);
-
-   if(old_eh)
-   {  gint64 data_sectors = uchar_to_gint64(old_eh->sectors);
+{  
+   if(ec->image->eccHeader)
+   {  gint64 data_sectors = uchar_to_gint64(ec->image->eccHeader->sectors);
       int answer;
-
-      g_free(old_eh);
 
       answer = ModalWarning(GTK_MESSAGE_WARNING, GTK_BUTTONS_OK_CANCEL, NULL,
 			    _("Image \"%s\" already contains error correction information.\n"
@@ -147,11 +137,9 @@ static void remove_old_ecc(ecc_closure *ec)
       if(!answer)
 	abort_encoding(ec, FALSE);
 
-      if(!tmp || !LargeTruncate(tmp, (gint64)(2048*data_sectors)))
+      if(!TruncateImage(ec->image, (guint64)(2048*data_sectors)))
 	Stop(_("Could not truncate %s: %s\n"),Closure->imageName,strerror(errno));
    }
-
-   LargeClose(tmp);
 }
 
 /*
@@ -162,7 +150,7 @@ static void remove_old_ecc(ecc_closure *ec)
 static void check_image(ecc_closure *ec)
 {  struct MD5Context image_md5;
    RS02Layout *lay = ec->lay;
-   ImageInfo *ii = ec->ii;
+   Image *image = ec->image;
    gint64 sectors;
    guint32 *crcptr;
    int last_percent, percent;
@@ -182,7 +170,7 @@ static void check_image(ecc_closure *ec)
    
    Closure->crcCache = crcptr = g_malloc(sizeof(guint32) * lay->dataSectors);
 
-   if(!LargeSeek(ii->file, 0))
+   if(!LargeSeek(image->file, 0))
      Stop(_("Failed seeking to start of image: %s\n"), strerror(errno));
 
    for(sectors = 0; sectors < lay->dataSectors; sectors++)
@@ -192,19 +180,19 @@ static void check_image(ecc_closure *ec)
       if(Closure->stopActions) /* User hit the Stop button */
 	abort_encoding(ec, FALSE);
 
-      if(sectors < ii->sectors-1) expected = 2048;
+      if(sectors < image->sectorSize-1) expected = 2048;
       else  
       {  memset(buf, 0, 2048);
-	 expected = ii->inLast;
+	 expected = image->inLast;
       }
 
-      n = LargeRead(ii->file, buf, expected);
+      n = LargeRead(image->file, buf, expected);
       if(n != expected)
 	Stop(_("Failed reading sector %lld in image: %s"),sectors,strerror(errno));
 
       /* Look for the dead sector marker */
 
-      err = CheckForMissingSector(buf, sectors, ii->fpValid ? ii->mediumFP : NULL, FINGERPRINT_SECTOR);
+      err = CheckForMissingSector(buf, sectors, image->fpState == FP_PRESENT ? image->imageFP : NULL, FINGERPRINT_SECTOR);
       if(err != SECTOR_PRESENT)
       {    if(err == SECTOR_MISSING)
 	    Stop(_("Image contains unread(able) sectors.\n"
@@ -238,7 +226,7 @@ static void check_image(ecc_closure *ec)
       }
    }
 
-   MD5Final(ii->mediumSum, &image_md5);
+   MD5Final(image->mediumSum, &image_md5);
 }
 
 
@@ -249,31 +237,31 @@ static void check_image(ecc_closure *ec)
 
 static void expand_image(ecc_closure *ec)
 {  RS02Layout *lay = ec->lay;
-   ImageInfo *ii = ec->ii;
+   Image *image = ec->image;
    int last_percent, percent;
    gint64 sectors;
 
    /* If the file does not end at a sector boundary,
       fill it up with zeros. */
 
-   if(ii->inLast != 2048)
-   {  int fill = 2048 - ii->inLast;
+   if(image->inLast != 2048)
+   {  int fill = 2048 - image->inLast;
       int n;
       unsigned char zeros[fill];
 
       memset(zeros, 0, fill);
 
-      if(!LargeSeek(ii->file, ii->size))
+      if(!LargeSeek(image->file, image->file->size))
 	Stop(_("Failed seeking to end of image: %s\n"), strerror(errno));
 
-      n = LargeWrite(ii->file, zeros, fill);
+      n = LargeWrite(image->file, zeros, fill);
       if(n != fill)
 	Stop(_("Failed expanding the image: %s\n"), strerror(errno));
    }
 
    /* Now add the sectors needed for the ecc data */
 
-   if(!LargeSeek(ii->file, 2048*lay->dataSectors))
+   if(!LargeSeek(image->file, 2048*lay->dataSectors))
      Stop(_("Failed seeking to end of image: %s\n"), strerror(errno));
 
    last_percent = 0;
@@ -285,9 +273,9 @@ static void expand_image(ecc_closure *ec)
 	abort_encoding(ec, TRUE);
 
       CreateMissingSector(buf, lay->dataSectors+sectors, 
-			  ii->mediumFP, FINGERPRINT_SECTOR, 
+			  image->imageFP, FINGERPRINT_SECTOR, 
 			  "RS02 generation placeholder");
-      n = LargeWrite(ii->file, buf, 2048);
+      n = LargeWrite(image->file, buf, 2048);
       if(n != 2048)
 	Stop(_("Failed expanding the image: %s\n"), strerror(errno));
 
@@ -315,7 +303,7 @@ static void expand_image(ecc_closure *ec)
 
 static void write_crc(ecc_closure *ec)
 {  RS02Layout *lay = ec->lay;
-   ImageInfo *ii = ec->ii;
+   Image *image = ec->image;
    EccHeader *eh = ec->eh;
    gint64 crc_sector;
    gint64 layer_sector;
@@ -336,7 +324,7 @@ static void write_crc(ecc_closure *ec)
 
    /*** Calculate the CRCs */
 
-   if(!LargeSeek(ii->file, 2048*crc_sector))
+   if(!LargeSeek(image->file, 2048*crc_sector))
      Stop(_("Failed seeking to sector %lld in image: %s"), crc_sector, strerror(errno));
 
    for(layer_sector=0; layer_sector<lay->sectorsPerLayer; layer_sector++)
@@ -357,7 +345,7 @@ static void write_crc(ecc_closure *ec)
 	      *crc_boot_ptr++ = Closure->crcCache[layer_index];
 
             if(crc_idx >= 512)
-	    {  int n = LargeWrite(ii->file, crc_buf, 2048);
+	    {  int n = LargeWrite(image->file, crc_buf, 2048);
 
 	       if(n != 2048)
 		 Stop(_("Failed writing to sector %lld in image: %s"), crc_sector, strerror(errno));
@@ -383,7 +371,7 @@ static void write_crc(ecc_closure *ec)
 #else
 	crc_buf[n] = 0x4c5047;
 #endif
-      n = LargeWrite(ii->file, crc_buf, 2048);
+      n = LargeWrite(image->file, crc_buf, 2048);
 
       if(n != 2048)
 	Stop(_("Failed writing to sector %lld in image: %s"), crc_sector, strerror(errno));
@@ -403,7 +391,7 @@ static void write_crc(ecc_closure *ec)
  */
 
 static void prepare_header(ecc_closure *ec)
-{  ImageInfo *ii = ec->ii;
+{  Image *image = ec->image;
    EccHeader *eh = ec->eh;
    RS02Layout *lay = ec->lay;
 
@@ -411,17 +399,17 @@ static void prepare_header(ecc_closure *ec)
    memcpy(eh->method, "RS02", 4);
    eh->methodFlags[0]  = 0;
    eh->methodFlags[3]  = Closure->releaseFlags;
-   memcpy(eh->mediumFP, ii->mediumFP, 16);
-   memcpy(eh->mediumSum, ii->mediumSum, 16);
+   memcpy(eh->mediumFP, image->imageFP, 16);
+   memcpy(eh->mediumSum, image->mediumSum, 16);
    memcpy(eh->eccSum, ec->eccSum, 16);
-   gint64_to_uchar(eh->sectors, ii->sectors);
+   gint64_to_uchar(eh->sectors, image->sectorSize);
    eh->dataBytes       = lay->ndata;
    eh->eccBytes        = lay->nroots;
 
    eh->creatorVersion  = Closure->version;
    eh->neededVersion   = 6600;
    eh->fpSector        = FINGERPRINT_SECTOR;
-   eh->inLast          = ii->inLast;
+   eh->inLast          = image->inLast;
 
    eh->selfCRC = 0x4c5047;
 
@@ -439,7 +427,7 @@ static void prepare_header(ecc_closure *ec)
 
 static void create_reed_solomon(ecc_closure *ec)
 {  RS02Layout *lay = ec->lay;
-   LargeFile *file = ec->ii->file;
+   Image *image = ec->image;
    int nroots = lay->nroots;
    int ndata  = lay->ndata;
    gint64 b_idx, block_idx[256]; 
@@ -463,7 +451,7 @@ static gint32 *enc_alpha_to;
 
    /*** Adjust image bounds to include the CRC sectors */
 
-   ec->ii->sectors = lay->protectedSectors;
+   image->sectorSize = lay->protectedSectors;
 
    /*** Create table for Galois field math */
 
@@ -508,7 +496,7 @@ static gint32 *enc_alpha_to;
    }
 
    if(out_of_memory || !ec->parity || !ec->data)
-   {  LargeTruncate(ec->ii->file, (gint64)(2048*ec->lay->dataSectors));
+   {  LargeTruncate(image->file, (gint64)(2048*ec->lay->dataSectors));
       Stop(_("Failed allocating memory for I/O cache.\n"
 	     "Cache size is currently %d MB.\n"
 	     "Try reducing it.\n"),
@@ -572,7 +560,7 @@ static gint32 *enc_alpha_to;
          /* Read the next data sectors of this layer. */
 
    	 for(si=0; si<actual_layer_sectors; si++)
-	 {  RS02ReadSector(ec->ii, lay, ec->data+offset, block_idx[layer]);
+	 {  RS02ReadSector(image, lay, ec->data+offset, block_idx[layer]);
 	    block_idx[layer]++;
 	    offset += 2048;
 	 }
@@ -982,10 +970,10 @@ static gint32 *enc_alpha_to;
 	for(si=0; si<actual_layer_sectors; si++, idx+=2048)
 	 {  gint64 s = RS02EccSectorIndex(lay, k, chunk + si);
 
-	    if(!LargeSeek(file, 2048*s))
+	    if(!LargeSeek(image->file, 2048*s))
 	      Stop(_("Failed seeking to sector %lld in image: %s"), s, strerror(errno));
 
-	    if(LargeWrite(file, ec->slice[k]+idx, 2048) != 2048)
+	    if(LargeWrite(image->file, ec->slice[k]+idx, 2048) != 2048)
 	      Stop(_("Failed writing to sector %lld in image: %s"), s, strerror(errno));
 
 	    MD5Update(&ec->md5Ctxt[k], ec->slice[k]+idx, 2048);
@@ -1005,22 +993,38 @@ static gint32 *enc_alpha_to;
 
    /*** Restore image bounds to data portion */
 
-   ec->ii->sectors = lay->dataSectors;
+   image->sectorSize = lay->dataSectors;
 }
 
 /***
  *** Append the parity information to the image
  ***/
 
-void RS02Create(Method *method)
-{  RS02Widgets *wl = (RS02Widgets*)method->widgetList;
+void RS02Create(void)
+{  Method *self = FindMethod("RS02");
+   RS02Widgets *wl = (RS02Widgets*)self->widgetList;
+   Image *image = NULL;
    RS02Layout *lay;
    ecc_closure *ec = g_malloc0(sizeof(ecc_closure));
-   ImageInfo *ii;
+
+   /*** Open image file */
+
+   PrintLog(_("\nOpening %s"), Closure->imageName);
+
+   image = OpenImageFromFile(Closure->imageName, O_RDWR, IMG_PERMS);
+   if(!image)
+   {  PrintLog(": %s.\n", strerror(errno));
+      Stop(_("Image file %s: %s."),Closure->imageName, strerror(errno));
+   }
+   if(image->inLast == 2048)
+        PrintLog(_(": %lld medium sectors.\n"), image->sectorSize);
+   else PrintLog(_(": %lld medium sectors and %d bytes.\n"), 
+		   image->sectorSize-1, image->inLast);
 
    /*** Register the cleanup procedure for GUI mode */
 
-   ec->self = method;
+   ec->image = image;
+   ec->self = self;
    ec->wl = wl;
    ec->eh = g_malloc0(sizeof(EccHeader));
    ec->earlyTermination = TRUE;
@@ -1037,11 +1041,9 @@ void RS02Create(Method *method)
 
    remove_old_ecc(ec);
 
-   /*** Open image file and calculate a suitable redundancy .*/
+   /*** Calculate a suitable redundancy .*/
 
-   ii = ec->ii = OpenImageFile(NULL, WRITEABLE_IMAGE);
-
-   lay = ec->lay = CalcRS02Layout(ii->sectors, 0);
+   lay = ec->lay = CalcRS02Layout(image->sectorSize, 0);
 
    /*** Announce what we are going to do */
 
@@ -1100,7 +1102,7 @@ void RS02Create(Method *method)
 	and write all copies of the header out */
 
    prepare_header(ec);
-   WriteRS02Headers(ec->ii->file, ec->lay, ec->eh);
+   WriteRS02Headers(image->file, ec->lay, ec->eh);
 
    PrintTimeToLog(ec->timer, "for ECC generation.\n");
 

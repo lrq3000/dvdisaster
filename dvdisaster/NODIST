@@ -25,6 +25,7 @@ documentation/screenshots
 icons/CVS
 locale/CVS
 papers
+regtest
 scripts/CVS
 scripts/check.bash
 test-cases
