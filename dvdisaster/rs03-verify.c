@@ -566,12 +566,6 @@ static int check_syndromes(verify_closure *vc)
 	 for(j=0; j<GF_FIELDMAX; j++)
 	   data[j] = vc->eccBlock[j][2048*cache_idx+i];
 
-#if 0 //FIXME remove this
-	 if((ecc_block==3 || ecc_block==89) && (i==7 || i== 109)) 
-	 {  data[129]++;
-	    printf("seeded error\n");
-	 }
-#endif
 	 result = TestErrorSyndromes(vc->rt, data);
 
 	 if(result)
@@ -665,6 +659,7 @@ void RS03Verify(Image *image)
    int syn_error = 0;
    int try_it;
    int missing_sector_explained = 0;
+   int matching_byte_size = TRUE;
 
    /*** Prepare for early termination */
 
@@ -878,6 +873,8 @@ void RS03Verify(Image *image)
    {  //expected_sectors = lay->dataSectors + lay->totalSectors;  /* image + ecc file */
       virtual_expected = GF_FIELDMAX*lay->sectorsPerLayer;      /* for prognosis map */
       expected_image_sectors = lay->dataSectors;                /* just the expected image size */
+      if(eh->inLast != image->inLast)
+	 matching_byte_size = FALSE;
    }
    else 
    {  virtual_expected = expected_image_sectors = lay->totalSectors;
@@ -885,7 +882,7 @@ void RS03Verify(Image *image)
       SetBit(vc->map, lay->eccHeaderPos+1);
    }
 
-   if(expected_image_sectors == image->sectorSize)
+   if(expected_image_sectors == image->sectorSize && matching_byte_size)
    {  if(lay->target == ECC_FILE)
       {  if(Closure->guiMode)
 	 {  if(image->inLast == 2048)
@@ -913,14 +910,36 @@ void RS03Verify(Image *image)
    }
    else
    {  if(Closure->guiMode)
-        SetLabelText(GTK_LABEL(wl->cmpImageSectors), _("<span %s>%lld (%lld expected)</span>"), 
-		     Closure->redMarkup, image->sectorSize, expected_image_sectors);
-      PrintLog(_("* medium sectors   : %lld (%lld expected)\n"),
-	       image->sectorSize, expected_image_sectors);
+      {  if(matching_byte_size)
+	    SetLabelText(GTK_LABEL(wl->cmpImageSectors), _("<span %s>%lld (%lld expected)</span>"), 
+			 Closure->redMarkup, image->sectorSize, expected_image_sectors);
+	 else
+	 {  if(image->inLast < eh->inLast)
+	    {  SetLabelText(GTK_LABEL(wl->cmpImageSectors), 
+			    _("<span %s>%lld sectors but %d bytes too short</span>"), 
+			    Closure->redMarkup, image->sectorSize, eh->inLast-image->inLast);
+	       img_advice = g_strdup_printf(_("<span %s>Image file is %d bytes shorter than expected.</span>"), Closure->redMarkup, eh->inLast-image->inLast);
+	    }
+	    else
+	    {  SetLabelText(GTK_LABEL(wl->cmpImageSectors), 
+			    _("<span %s>%lld sectors but %d bytes too long</span>"), 
+			    Closure->redMarkup, image->sectorSize, image->inLast-eh->inLast);
+	       img_advice = g_strdup_printf(_("<span %s>Image file is %d bytes longer than expected.</span>"), Closure->redMarkup, image->inLast-eh->inLast);
+	    }
+	 }
 
-      if(expected_image_sectors > image->sectorSize)
-	 img_advice = g_strdup_printf(_("<span %s>Image file is %lld sectors shorter than expected.</span>"), Closure->redMarkup, expected_image_sectors - image->sectorSize);
-      else img_advice = g_strdup_printf(_("<span %s>Image file is %lld sectors longer than expected.</span>"), Closure->redMarkup, image->sectorSize - expected_image_sectors);
+	 if(expected_image_sectors > image->sectorSize)
+	      img_advice = g_strdup_printf(_("<span %s>Image file is %lld sectors shorter than expected.</span>"), Closure->redMarkup, expected_image_sectors - image->sectorSize);
+	 if(expected_image_sectors < image->sectorSize)
+	      img_advice = g_strdup_printf(_("<span %s>Image file is %lld sectors longer than expected.</span>"), Closure->redMarkup, image->sectorSize - expected_image_sectors);
+      }
+
+      if(matching_byte_size)
+	 PrintLog(_("* sectors          : %lld (%lld expected)\n"),
+		  image->sectorSize, expected_image_sectors);
+      else
+	 PrintLog(_("* sectors          : %lld sectors + %d of %d bytes in image; %lld sectors in ecc file\n"), 
+		  image->sectorSize-1, image->inLast, eh->inLast, eccfile_sectors);
    }
    
    if(Closure->quickVerify)
@@ -1008,7 +1027,7 @@ void RS03Verify(Image *image)
 	       }
 	    }
 	    
-	    n = LargeRead(image->file, buf, 2048);
+	    n = LargeRead(image->file, buf, expected_read);
 
             if(n != expected_read)
 	    { exitCode = EXIT_CODE_UNEXPECTED_EOF;

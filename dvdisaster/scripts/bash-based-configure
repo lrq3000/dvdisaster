@@ -1,5 +1,5 @@
 #  Bash based configure - library of test functions
-#  Copyright (C) 2004-2010 Carsten Gnörlich
+#  Copyright (C) 2004-2011 Carsten Gnörlich
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -45,6 +45,7 @@
 # REQUIRE_OPENGL	Require the OpenGL library
 # REQUIRE_GLIB2 n m o	Require GLIB2.x and accompanying components >= n.m.o
 # REQUIRE_GTK2 n m o	Require GTK2.x and accompanying components 
+# REQUIRE_SDL n m o	Require the SDL library
 #
 # REQUIRE_LIBRARY	Require specified library
 #
@@ -1431,6 +1432,88 @@ EOF
    echo "CFG_GTK2_CFLAGS = $CFG_GTK2_CFLAGS" >> Makefile.config
    echo "CFG_GTK2_LIBS = $CFG_GTK2_LIBS" >> Makefile.config
    echo "CFG_GTK2_BINDIR = $CFG_GTK2_BINDIR" >> Makefile.config
+   return 1
+}
+
+#
+# Require the SDL includes and libraries.
+# Unlike with the other packages, we don't have to fid out about the includes
+# and libraries by ourselves, but just query sdl-config about them.
+
+function REQUIRE_SDL()
+{  local want_major="$1"
+   local want_minor="$2"
+   local want_micro="$3"
+   local found_version="0.0.0"
+
+   if test -n "$cfg_help_mode"; then
+     return 0
+   fi
+
+   echo -e "\n/* *** REQUIRE_SDL */\n" >>$LOGFILE
+
+   echo "SDL ${want_major}.${want_minor}.${want_micro} is required..."
+
+   # See if sdl-config returns something
+
+   echo -n " sdl-config... "
+   if sdl-config --cflags >>config.tmp 2>&1 && sdl-config --libs >>config.tmp 2>&1 ; then
+        echo "works"
+	rm config.tmp
+   else 
+	echo "failed"
+	echo -e "\nError message(s) from sdl-config were:"
+	cat config.tmp
+	rm config.tmp
+cat <<EOF
+
+Make sure you have sdl installed.
+
+Some Linux distributions (e.g. Debian) distinguish between
+end-user packages of the libraries (e.g. 'libsdl1.2') and
+versions suitable for building programs (e.g. 'libsdl1.2-dev').
+You might have to install the development versions explicitly
+even if you have already SDL applications running on your system.
+EOF
+	  exit 1
+   fi
+
+   # Do a test compile to make sure they did not return some junk
+
+   CFG_SDL_CFLAGS=`sdl-config --cflags`
+   CFG_SDL_LIBS=`sdl-config --libs`
+
+   CFG_CFLAGS="$CFG_CFLAGS $CFG_SDL_CFLAGS"
+   CFG_LIBS="$CFG_LIBS $CFG_SDL_LIBS"
+
+   cat >conftest.c <<EOF
+#include <SDL.h>
+
+CPPABUSE SDL_MAJOR_VERSION.SDL_MINOR_VERSION.SDL_PATCHLEVEL
+EOF
+
+   echo -n " test preprocessing... "
+
+   if try_preprocess; then
+	echo "works"
+	rm -f conftest.c
+ 	found_version=$(grep CPPABUSE ./conftest.out | tr -d "CPABUSE ()")
+	rm -f conftest.out
+        if ! check_version "SDL" "$want_major" "$want_minor" "$want_micro" "$found_version"; then
+          echo -e "\n Did not find a suitable version of SDL."
+          exit 1
+        fi
+   else
+	echo "failed"
+	echo -e "\nThe tail of configure.log might contain hints\nabout the compilation problem."
+	rm -f conftest.c
+	exit 1
+   fi
+
+   # Successfully finished
+
+   echo "CFG_SDL_CFLAGS = $CFG_SDL_CFLAGS" >> Makefile.config
+   echo "CFG_SDL_LIBS = $CFG_SDL_LIBS" >> Makefile.config
    return 1
 }
 

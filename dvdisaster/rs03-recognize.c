@@ -38,22 +38,22 @@ int RS03RecognizeFile(LargeFile *ecc_file, EccHeader **eh)
 
    if(n != sizeof(EccHeader))
    {  g_free(*eh);
-      return FALSE;
+      return ECCFILE_INVALID;
    }
 
    if(strncmp((char*)(*eh)->cookie, "*dvdisaster*", 12))
-     return FALSE;
+     return ECCFILE_DEFECTIVE_HEADER;
 
    if(!strncmp((char*)(*eh)->method, "RS03", 4))
    {
 #ifdef HAVE_BIG_ENDIAN
       SwapEccHeaderBytes(*eh);
 #endif
-      return TRUE;
+      return ECCFILE_PRESENT;
    }
 
    g_free(*eh);
-   return FALSE;
+   return ECCFILE_WRONG_CODEC;
 }
 
 /***

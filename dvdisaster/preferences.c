@@ -110,6 +110,7 @@ typedef struct _prefs_context
    GtkWidget *rawButtonA, *rawButtonB;
    GtkWidget *jumpScaleA, *jumpScaleB;
    GtkWidget *daoButtonA, *daoButtonB;
+   GtkWidget *ignoreISOSizeA, *ignoreISOSizeB;
    GtkWidget *dsmButtonA, *dsmButtonB;
    GtkWidget *recogRS02A, *recogRS02B;
    GtkWidget *recogRS03A, *recogRS03B;
@@ -369,6 +370,7 @@ enum
    TOGGLE_SUFFIX,
    TOGGLE_RECOG_RS02,
    TOGGLE_RECOG_RS03,
+   TOGGLE_SIZEDRIVE,
    TOGGLE_DAO,
    TOGGLE_DSM,
    TOGGLE_RANGE,
@@ -485,6 +487,12 @@ static void toggle_cb(GtkWidget *widget, gpointer data)
 	Closure->reverseCancelOK = state;
 	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->cancelOKA), state);
 	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->cancelOKB), state);
+	break;
+
+      case TOGGLE_SIZEDRIVE:
+	Closure->ignoreIsoSize = state;
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->ignoreISOSizeA), state);
+	activate_toggle_button(GTK_TOGGLE_BUTTON(pc->ignoreISOSizeB), state);
 	break;
 
       case TOGGLE_DAO:
@@ -1630,6 +1638,45 @@ void CreatePreferencesWindow(void)
       vbox2 = gtk_vbox_new(FALSE, 15);
       gtk_container_set_border_width(GTK_CONTAINER(vbox2), 10);
       gtk_container_add(GTK_CONTAINER(frame), vbox2);
+
+      /* Query size from drive */
+
+      lwoh = CreateLabelWithOnlineHelp(_("Ignore ISO/UDF meta data"), _("Ignore image size recorded in ISO/UDF file system"));
+      RegisterPreferencesHelpWindow(lwoh);
+
+      for(i=0; i<2; i++)
+      {  GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
+	 GtkWidget *button = gtk_check_button_new();
+
+	 gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
+	 gtk_box_pack_start(GTK_BOX(hbox), i ? lwoh->normalLabel : lwoh->linkBox, FALSE, FALSE, 0);
+
+	 if(!i) pc->ignoreISOSizeA = button;
+	 else   pc->ignoreISOSizeB = button;
+
+	 activate_toggle_button(GTK_TOGGLE_BUTTON(button), Closure->ignoreIsoSize);
+	 g_signal_connect(G_OBJECT(button), "toggled", G_CALLBACK(toggle_cb), GINT_TO_POINTER(TOGGLE_SIZEDRIVE));
+	 if(!i) gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	 else   AddHelpWidget(lwoh, hbox);
+      }
+
+      AddHelpParagraph(lwoh, 
+		       _("<b>Ignore image size recorded in ISO/UDF filesystem</b>\n\n"
+			 "When reading or scanning optical discs, the overall size of the medium "
+			 "needs to be determined. dvdisaster will always use the image size "
+			 "recorded in the error correction data if such data is present. "
+			 "Otherwise, image size is queried in the following order:\n\n"
+			 "1. Image size recorded in the ISO/UDF file system\n"
+			 "2. Image size reported by the optical drive.\n\n"
+			 "Using this order makes sense as image sizes reported by most drives "
+			 "are unreliable in many cases. However in some rare cases "
+			 "the image size recorded in the ISO/UDF filesystem is wrong. Some "
+			 "Linux live CDs may have this problem. If you read back the ISO "
+			 "image from such CDs and its md5sum does not match the advertised one, "
+			 "try re-reading the image with this option turned on.\n"
+			 "Do <b>not blindly turn this option on</b> as it will most likely "
+			 "create sub optimal or corrupted ISO images, especially if you "
+			 "plan to use the image for error correction data generation."));
 
       /* DAO button */
 

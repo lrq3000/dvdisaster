@@ -1845,9 +1845,14 @@ static unsigned int query_size(Image *image)
    /*** Try getting the size from the ISO/UDF filesystem. */
 
    if(image->isoInfo)
-   {  Verbose("Medium size obtained from ISO/UDF file system: %d sectors\n", 
-	      image->isoInfo->volumeSize);  
-      return image->isoInfo->volumeSize;
+   {  if(Closure->ignoreIsoSize)
+      {  Verbose("Note: NOT examining ISO/UDF filesystem as requested by user option!\n");
+      }
+      else
+      {  Verbose("Medium size obtained from ISO/UDF file system: %d sectors\n", 
+		 image->isoInfo->volumeSize);  
+	 return image->isoInfo->volumeSize;
+      }
    }
    else Verbose("Medium size could NOT be determined from ISO/UDF filesystem.\n");
 
@@ -2661,8 +2666,9 @@ Image* OpenImageFromDevice(char *device)
    /* Examine medium type */
 
    ExamineUDF(image);
+#if 0  // FIXME!!!
    ExamineECC(image);
-
+#endif
    Verbose("# Calling query_size()\n");
    dh->sectors = query_size(image);
    Verbose("# returned: %lld sectors\n", dh->sectors); 

@@ -514,8 +514,33 @@ process_ecc:
 
    PrintLog("\n%s: ", Closure->eccName);
 
-   if(!image || !image->eccFile)
+   if(!image)
    {  PrintLog(_("not present\n"));
+      if(Closure->guiMode)
+	SwitchAndSetFootline(wl->cmpEccNotebook, 0, 
+			     wl->cmpEccEmptyMsg,_("No error correction file present."));
+      goto skip_ecc;
+   }
+
+   if(image && !image->eccFile)
+   {  
+      switch(image->eccFileState)
+      {  case ECCFILE_MISSING:
+	    PrintLog(_("not present\n"));
+	    break;
+	 case ECCFILE_INVALID:
+	    PrintLog(_("invalid\n"));
+	    break;
+	 case ECCFILE_DEFECTIVE_HEADER:
+	    PrintLog(_("defective header (unusable)\n"));
+	    break;
+	 case ECCFILE_WRONG_CODEC:
+	    PrintLog(_("unknown codec (unusable)\n"));
+	    break;
+	 default:
+	    PrintLog(_("unusable\n"));
+	    break;
+      }
       if(Closure->guiMode)
 	SwitchAndSetFootline(wl->cmpEccNotebook, 0, 
 			     wl->cmpEccEmptyMsg,_("No error correction file present."));

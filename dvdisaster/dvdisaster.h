@@ -176,6 +176,7 @@ typedef struct _GlobalClosure
    int quickVerify;     /* do only non time-consuming verify actions */
    int screenShotMode;  /* screen shot mode */
    int autoSuffix;      /* automatically extend files with suffices .iso/.ecc */
+   int ignoreIsoSize;   /* get size per READ CAPACITY; ignore all ISO/UDF meta data */
    int examineRS02;     /* perform deep search for RS02 structures */
    int examineRS03;     /* perform deep search for RS03 structures */
    int readAndCreate;   /* automatically create .ecc file after reading an image */
@@ -758,9 +759,10 @@ void CreateIconFactory();
 
 enum {IMAGE_NONE, IMAGE_FILE, IMAGE_MEDIUM};
 enum {FP_UNKNOWN, FP_UNREADABLE, FP_PRESENT};
+enum {ECCFILE_PRESENT, ECCFILE_MISSING, ECCFILE_INVALID, ECCFILE_DEFECTIVE_HEADER, ECCFILE_WRONG_CODEC};
 
 typedef struct _Image
-{  int type;  /* file or medium */
+{  int type;                   /* file or medium */
 
    /* physical storage handles */
   
@@ -795,6 +797,7 @@ typedef struct _Image
     */
 
    LargeFile *eccFile;        /* ecc file */
+   int eccFileState;          /* see enum above */
    struct _Method *eccFileMethod;     /* method associated with it */
    EccHeader *eccFileHeader;  /* copy of ecc header in ecc file */
 } Image;

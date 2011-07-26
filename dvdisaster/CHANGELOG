@@ -10,6 +10,8 @@
 	- introduced internal Image object for unified access to
 	  optical media and on disk ISO images; lots of internal
 	  changes and fixes due to that
+	- added --ignore-iso-size option
+	- Jindřich Šesták took over the Czech translation.
 
 0.79.3	21-11-2010
         - Switched Linux SCSI driver default to SG_IO ioctl().
@@ -853,7 +855,7 @@
 	- unrolled the inner codec loop; optimized some C expressions within
 	- code cleanup in the encoder
 
-0.42.0: (no public release)
+0.42.0: 08-09-2004 (no public release)
 	- changed the caching and code generation strategy in the RS encoder
 	- added program version information in the ecc file header
 	- updated the --print option to show the new header information

@@ -28,5 +28,6 @@ papers
 regtest
 scripts/CVS
 scripts/check.bash
+st
 test-cases
 tools/CVS

@@ -498,6 +498,7 @@ void ReadDotfile()
       if(!strcmp(symbol, "examine-rs03"))    { Closure->examineRS03  = atoi(value); continue; }
       if(!strcmp(symbol, "fill-unreadable")) { Closure->fillUnreadable = atoi(value); continue; }
       if(!strcmp(symbol, "ignore-fatal-sense")) { Closure->ignoreFatalSense  = atoi(value); continue; }
+      if(!strcmp(symbol, "ignore-iso-size")) { Closure->ignoreIsoSize  = atoi(value); continue; }
       if(!strcmp(symbol, "internal-attempts"))  { Closure->internalAttempts = atoi(value); continue; }
       if(!strcmp(symbol, "jump"))            { Closure->sectorSkip  = atoi(value); continue; }
       if(!strcmp(symbol, "log-file-enabled")){ Closure->logFileEnabled = atoi(value); continue; }
@@ -599,6 +600,7 @@ static void update_dotfile()
    g_fprintf(dotfile, "examine-rs03:      %d\n", Closure->examineRS03);
    g_fprintf(dotfile, "fill-unreadable:   %d\n", Closure->fillUnreadable);
    g_fprintf(dotfile, "ignore-fatal-sense: %d\n", Closure->ignoreFatalSense);
+   g_fprintf(dotfile, "ignore-iso-size:   %d\n", Closure->ignoreIsoSize);
    g_fprintf(dotfile, "internal-attempts: %d\n", Closure->internalAttempts);
    g_fprintf(dotfile, "jump:              %d\n", Closure->sectorSkip);
    g_fprintf(dotfile, "log-file-enabled:  %d\n", Closure->logFileEnabled);

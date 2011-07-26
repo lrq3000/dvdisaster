@@ -71,6 +71,7 @@ typedef enum
    MODIFIER_EJECT,
    MODIFIER_FILL_UNREADABLE,
    MODIFIER_IGNORE_FATAL_SENSE,
+   MODIFIER_IGNORE_ISO_SIZE,
    MODIFIER_INTERNAL_REREADS,
    MODIFIER_OLD_DS_MARKER,
    MODIFIER_PREFETCH_SECTORS,
@@ -334,6 +335,7 @@ int main(int argc, char *argv[])
 	{"fix", 0, 0, 'f'},
 	{"help", 0, 0, 'h'},
 	{"ignore-fatal-sense", 0, 0, MODIFIER_IGNORE_FATAL_SENSE },
+	{"ignore-iso-size", 0, 0, MODIFIER_IGNORE_ISO_SIZE },
 	{"internal-rereads", 1, 0, MODIFIER_INTERNAL_REREADS },
         {"image", 1, 0, 'i'},
 	{"jump", 1, 0, 'j'},
@@ -509,6 +511,9 @@ int main(int argc, char *argv[])
 	   break;
          case MODIFIER_IGNORE_FATAL_SENSE:
 	   Closure->ignoreFatalSense = TRUE;
+	   break;
+         case MODIFIER_IGNORE_ISO_SIZE:
+	   Closure->ignoreIsoSize = TRUE;
 	   break;
 	 case MODIFIER_INTERNAL_REREADS:
 	    if(optarg)
@@ -959,6 +964,7 @@ int main(int argc, char *argv[])
       PrintCLI(_("  --eject                - eject medium after successful read\n"));
       PrintCLI(_("  --fill-unreadable n    - fill unreadable sectors with byte n\n"));
       PrintCLI(_("  --ignore-fatal-sense   - continue reading after potentially fatal error conditon\n"));
+      PrintCLI(_("  --ignore-iso-size      - ignore image size from ISO/UDF data (dangerous - see man page!)\n"));
       PrintCLI(_("  --internal-rereads n   - drive may attempt n rereads before reporting an error\n"));
       PrintCLI(_("  --old-ds-marker        - mark missing sectors compatible with dvdisaster <= 0.70\n"));
       PrintCLI(_("  --prefetch-sectors n   - prefetch n sectors for RS03 encoding (uses ~nMB)\n"));

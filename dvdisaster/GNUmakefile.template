@@ -433,6 +433,7 @@ clean:
 	@if test -e $(SRCDIR)/regtest; then \
 	  $(MAKE) --no-print-directory -C regtest clean; \
 	fi
+	@if test -e st; then $(MAKE) --no-print-directory -C st clean; fi
 
 BUILD=`grep BUILD $(SRCDIR)/build.h | cut -d ' ' -f 3`
 arch:	archclean time-stamp

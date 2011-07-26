@@ -30,7 +30,7 @@
 
 CrcBuf *RS03GetCrcBuf(Image *image)
 {  RS03CksumClosure *csc;
-   CrcBuf *cb;
+   CrcBuf *cbuf;
    RS03Layout *lay;
    EccHeader *eh;
    LargeFile *file;
@@ -47,13 +47,13 @@ CrcBuf *RS03GetCrcBuf(Image *image)
       csc = (RS03CksumClosure*)image->eccFileMethod->ckSumClosure;
 
       lay = CalcRS03Layout(uchar_to_gint64(eh->sectors), eh, ECC_FILE); 
-      cb = CreateCrcBuf((lay->ndata-1)*lay->sectorsPerLayer);
+      cbuf = CreateCrcBuf((lay->ndata-1)*lay->sectorsPerLayer);
    }
    else 
    {  eh = image->eccHeader;
       csc = (RS03CksumClosure*)image->eccMethod->ckSumClosure;
       lay = CalcRS03Layout(uchar_to_gint64(eh->sectors), eh, ECC_IMAGE); 
-      cb = CreateCrcBuf((lay->ndata-1)*lay->sectorsPerLayer);
+      cbuf = CreateCrcBuf((lay->ndata-1)*lay->sectorsPerLayer);
    }
 
    csc->signatureErrors=0;
@@ -145,15 +145,15 @@ CrcBuf *RS03GetCrcBuf(Image *image)
 	 /* Sort crc into appropriate place if CRC block is valid*/
 
 	 if(crc_valid)
-	 {  cb->crcbuf[block_idx[i]] = crc_buf[i];
-	    SetBit(cb->valid,block_idx[i]);
+	 {  cbuf->crcbuf[block_idx[i]] = crc_buf[i];
+	    SetBit(cbuf->valid,block_idx[i]);
 	 }
 
 	 block_idx[i]++;
       }
    }
 
-   return cb;
+   return cbuf;
 }
 
 /***
@@ -184,9 +184,11 @@ void RS03ReadSectors(LargeFile *file, RS03Layout *lay, unsigned char *buf,
    /* Ignore trailing garbage in the image file */
 
    if(lay->target == ECC_FILE)
-   {  if(file_sector_size > lay->dataSectors)
+   {  if(file_sector_size >= lay->dataSectors)
       {  file_sector_size = lay->dataSectors;
-	 in_last = lay->eh->inLast;
+	 /* zero trailing bytes so ecc won't report errors */
+	 if(in_last > lay->eh->inLast)  
+	    in_last = lay->eh->inLast;
       }
    }
 

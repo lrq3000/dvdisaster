@@ -215,7 +215,7 @@ static void check_for_ecc_data(read_closure *rc)
       {  Method *method = g_ptr_array_index(Closure->methodList, i);
 
          if(   method->recognizeEccFile
-	    && method->recognizeEccFile(rc->ei->file, &eh))
+	    && method->recognizeEccFile(rc->ei->file, &eh) == ECCFILE_PRESENT)
 	 {  rc->eccMethod = method;
 	    strncpy(rc->eccMethodName, method->name, 4);
 	    rc->dataSectors = uchar_to_gint64(rc->ei->eh->sectors);
@@ -1254,7 +1254,7 @@ step_counter:
 
    /*** Finalize on-the-fly checksum calculation */
 
-   if(rc->doMD5sums)
+   if(rc->doMD5sums && rc->eccMethod)
         md5_failure = rc->eccMethod->finalizeCksums(rc->image);
    else ClearCrcCache();  /* deferred until here to avoid race condition */
 
