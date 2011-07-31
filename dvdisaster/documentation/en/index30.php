@@ -39,7 +39,7 @@ storage space amounts to 15% of the original data size
 <li>no guaranteed protection against data loss.</li>
 </ul>
 
-See also the collection of <a href="http://dvdisaster.net/legacy/en/background.html">background information</a>  in the old documentation
+See also the collection of <a href="qa30.php">background information</a>
 to learn more about the functioning of dvdisaster.
 
 

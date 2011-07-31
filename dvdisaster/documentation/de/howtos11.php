@@ -26,6 +26,7 @@ Das Symbol kann je nach verwendetem Symbol-Thema anders aussehen.</td>
 </tr></table>
 <?php end_screen_shot(); ?>
 
+<a name="image"></a>
 <?php begin_screen_shot("Reiterkarte \"Abbild\".","scan-prefs-image.png"); ?>
 <b>Reiterkarte "Abbild".</b> Es ist wichtig, die Methode zum Ermitteln der
 Abbild-Größe korrekt einzustellen. Die Einstellung "ISO/UDF" (grüne Markierung) ist
@@ -50,6 +51,7 @@ diese können Sie später noch <a href="howtos14.php">optimieren</a>.<p>
 
 <pre> </pre>
 
+<a name="read_attempts"></a>
 <?php begin_screen_shot("Reiterkarte \"Leseversuche\".","scan-prefs-read-attempts.png"); ?>
 <b>Reiterkarte "Leseversuche".</b> Es ist wichtig, daß Sie den Vorgaben für
 diese Reiterkarte folgen, da Sie sonst unnötig Zeit verschwenden, ohne die

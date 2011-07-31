@@ -33,8 +33,8 @@ and they have the same aging characteristics.
 <table width=100%><tr><td bgcolor=#000000 width=2><img width=1 height=1 alt=""></td>
 <td>&nbsp;</td>
 <td>This might come at a surprise, but it can not be guaranteed that an
-error correction file remains usable when it is stored on a defective medium.
-See the old documentation for an <a href="http://dvdisaster.net/legacy/en/background20.html">explanation of the technical background</a>.
+error correction file remains usable when it is stored on a defective medium -
+here is a <a href="qa32.php#file">explanation of the technical background</a>.
 </td></tr></table><p>
 
 Therefore it is important to protect error correction files just as if 

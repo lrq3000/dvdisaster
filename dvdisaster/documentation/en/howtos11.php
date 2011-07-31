@@ -26,6 +26,7 @@ due to the symbol theme you are using.</td>
 </tr></table>
 <?php end_screen_shot(); ?>
 
+<a name="image"></a>
 <?php begin_screen_shot("\"Image\" tab.","scan-prefs-image.png"); ?>
 <b>"Image" tab.</b> Selecting the proper method for determining the image size is important.
 The setting "ISO/UDF" (marked green) usually works in any situation. 
@@ -48,6 +49,7 @@ Leave the other settings at the values shown; you can <a href="howtos14.php">opt
 
 <pre> </pre>
 
+<a name="read_attempts"></a>
 <?php begin_screen_shot("\"Read attempts\" tab.","scan-prefs-read-attempts.png"); ?>
 <b>"Read attempts" tab.</b> Adjust the reading attempts settings as shown here.
 Using larger values causes unnecessary reading activity but will not improve

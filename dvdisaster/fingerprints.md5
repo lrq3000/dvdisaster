@@ -9,14 +9,14 @@ ea88568bc8bd964530ead057ab871b12 *scsi-layer.h
 ccd99ea5541f8253864d1115bac6fd38 *udf.h
 6a7edd2814d3ac1ef1588ec00a97cacf *bitmap.c
 89015923c38c8f6000b01a4c57b70826 *build.c
-4e6b6c87fc113f9f7b09d34866eb2a11 *cacheprobe.c
+bb2073dff3dbc13eefccfdb788c84a07 *cacheprobe.c
 cdb6023ca8f1822f1bb9ad58c42477e9 *closure.c
 aa5d77bf3a7ff0ef25900ffe2abc92ab *crc32.c
 1c8776d53eb1ebbaaa3ece2d9b58217f *crcbuf.c
 aab0f4dd4774752006bddf1a0ad528e6 *curve.c
 0a27e75d161731ea27336c1136c6ecdd *debug.c
 a51544c803f62af1fb57db13711bbf56 *ds-marker.c
-b5f9d814c1a3e860ef06a80cf7ddec8c *dvdisaster.c
+7e202aa50933735080f60db87dc1e259 *dvdisaster.c
 014d95d6978d0fbfa13eea7d8106e9cf *ecc-rs01.c
 8acc2a48942fb144582f6573899cf11d *ecc-rs02.c
 eb2db1f63c248259b8e4fed76ee680a0 *ecc-rs03.c

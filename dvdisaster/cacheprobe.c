@@ -77,6 +77,13 @@ printf("Cache line size: %d\n", cl_size);
 #endif
 
 
+#ifdef SYS_MINGW
+int ProbeCacheLineSize()
+{
+  return 64;
+}
+#endif
+
 #ifdef SYS_UNKNOWN
 int ProbeCacheLineSize()
 {

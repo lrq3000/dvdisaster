@@ -49,6 +49,7 @@ dazu gibt es in den <a href="howtos43.php#21h">fortgeschrittenen Einstellungen</
 <p>
 <?php end_screen_shot(); ?>
 
+<a name="reading_attempts"></a>
 <?php begin_screen_shot("Reiterkarte \"Leseversuche\".","fix-prefs-read-attempts.png"); ?>
 <b>Reiterkarte "Leseversuche".</b> Die Stärke des angepaßten Leseverfahrens besteht darin,
 die noch lesbaren Sektoren auf dem Datenträger zu finden und sich nicht mit dem Einlesen

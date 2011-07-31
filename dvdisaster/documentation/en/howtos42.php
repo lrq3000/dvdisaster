@@ -58,6 +58,7 @@ in dvdisasters drop down menu.</td>
 </tr>
 </table>
 
+<a name="select_eccfile"></a>
 <table>
 <tr>
 <td width="200px"align="center">

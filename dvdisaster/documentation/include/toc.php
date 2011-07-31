@@ -299,6 +299,46 @@ subsection("qa20");
   en("Error messages");
   ru("Сообщения об ошибках");
 
+subsection("qa30");
+  de("Hintergrundinformationen");
+  en("Background information");
+  ru("Background information");
+
+subsubsection("qa31");
+  de("Eigenschaften der Fehlerkorrektur");
+  en("Error correction properties");
+  ru("Error correction properties");
+
+subsubsection("qa32");
+  de("Datenrekonstruktion auf Abbild-Ebene");
+  en("Image level data recovery");
+  ru("Image level data recovery");
+
+subsubsection("qa33");
+  de("RS01, RS02 und RS03");
+  en("RS01, RS02 and RS03");
+  ru("RS01, RS02 and RS03");
+
+subsubsection("qa34");
+  de("Lineares Lese-Verfahren");
+  en("Linear reading strategy");
+  ru("Linear reading strategy");
+
+subsubsection("qa35");
+  de("Angepaßtes Lese-Verfahren");
+  en("Adaptive reading strategy");
+  ru("Adaptive reading strategy");
+
+subsubsection("qa36");
+  de("Bemerkungen zu Lesefehlern");
+  en("Remarks on read errors");
+  ru("Remarks on read errors");
+
+subsubsection("qa37");
+  de("Fehlerkorrektur-Datei aufbewahren");
+  en("Hints for storing the error correction files");
+  ru("Hints for storing the error correction files");
+
 # Feedback
 
 section("feedback");

@@ -79,6 +79,7 @@ mehr lange dauern wird bis die ersten Bereiche unlesbar werden.
 
 <b>Beispiele für defekte Datenträger</b><p>
 
+<a name="defective"></a>
 <?php begin_screen_shot("Defekte CD","defective-cd.png"); ?>
 <b>Defekte CD.</b> Die roten Sektoren
 in der Spirale verdeutlichen, daß der Datenträger im Außenbereich große unlesbare

@@ -83,7 +83,7 @@ Diese Datei müssen Sie dann auf einem anderen Datenträger speichern, d.h. Sie 
 zusätzliche Vorkehrungen treffen, um Ihre Fehlerkorrektur-Dateien  
 <a href="howtos24.php">zu archivieren</a>.<p>
 
-In der <a href="http://dvdisaster.net/legacy/de/background30.html">alten Dokumentation</a>
+In den <a href="qa33.php#table">Hintergrundinformationen</a>
 finden Sie weitere Informationen zu den Vor- und Nachteilen der beiden Methoden. 
 
 <pre> </pre>

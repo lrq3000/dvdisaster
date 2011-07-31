@@ -21,6 +21,11 @@ $news_counter = 0;
 
 news_headline("Новости dvdisaster");
 
+news_item("28.07.2011", "Documentation added", "
+The temporarily lost <a href=\"qa30.php\">background information</a> 
+from the 0.70 documentation has been updated and made online again.
+", 19, "2011-07-28T00:00:00Z", "2011-07-28T00:00:00Z");
+
 news_item("21.11.2010", "dvdisaster 0.79.3 released", "
 For GNU/Linux, the SG_IO driver is used by default
 for accessing optical drives. This resolves the problem
@@ -58,42 +63,6 @@ it is not recommended for doing productive work. See the
 what has been changed and how you can participate in testing.
 ", 14, "2010-02-07T00:00:00Z", "2010-02-07T00:00:00Z");
 
-news_item("01.10.2009", "Assessment of potential vulnerabilities in the windows version
-of the GTK library", "
-The Windows versions of dvdisaster 0.70.x/0.72.x are shipped with an outdated
-GTK library containing vulnerabilities in its image processing routines.
-To exploit the vulnerability, manipulated images need to be loaded from
-an external source. Since dvdisaster does not contain/use such functions,
-these vulnerabilities are not considered to be a threat.<p>
-
-It is not recommended to replace GTK in the 0.70.x/0.72.x versions of
-dvdisaster as some interfaces have been changed in newer GTK versions.
-Replacing GTK will likely cause severe malfunction.<p>
-
-The windows version of dvdisaster 0.73.1 will have updated interfaces
-and will be shipped with a current version of GTK.<p>
-
-Many thanks to all users who brought this issue to my attention.
-", 13, "2009-10-01T00:00:00Z", "2009-10-01T00:00:00Z");
-
-news_item("10.08.2009", "Project represention on SourceForge may be outdated", "
-Due to the recent functionality changes on SourceForge we are unable
-to upload the News, Downloads and CVS contents in time. Please refer
-to the respective sections on this site (http://dvdisaster.net) instead.
-", 12, "2009-08-10T00:00:00Z", "2009-08-10T00:00:00Z");
-
-news_item("08.08.2009", "dvdisaster 0.72.1 released", "
-Pablo Almeida provided a Portuguese translation for the screen text.
-Added workaround to avoid Win XP freezing on certain CD-RW/drive pairs.<p>
-<i>Update: The workaround is not complete. If the problem persists please
-try version 0.79.x.</i>
-", 11, "2009-08-08T00:00:00Z", "2010-02-06T00:00:00Z");
-
-news_item("04.07.2009", "выпущен dvdisaster 0.72", "
-Это первая стабильная версия ветки 0.72.
-Игорь Горбунов завершил перевод онлайн-документации на русский язык.
-Устранены некоторые незначительные ошибки в первом кандидате на выпуск.<p>
-", 10, "2009-07-04T00:00:00Z", "2009-07-04T00:00:00Z");
 
 news_finalize();
 

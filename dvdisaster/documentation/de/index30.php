@@ -41,7 +41,7 @@ Speicherplatzbedarf 15% der Originaldaten (ca. 700MB für eine volle einschichti
 </ul>
 
 <p>
-Schauen Sie auch in die  <a href="http://dvdisaster.net/legacy/de/background.html">Hintergrundinformationen</a> in der alten Dokumentation, um mehr über die
+Schauen Sie auch in die Sammlung von <a href="qa30.php">Hintergrundinformationen</a> um mehr über die
 Arbeitsweise von dvdisaster zu erfahren.
 
 <!--- do not change below --->

@@ -48,6 +48,7 @@ Some drives might work better using the raw reading mode "21h". See the
 <a href="howtos43.php#21h">advanced settings</a> for more information.<p>
 <?php end_screen_shot(); ?>
 
+<a name="reading_attempts"></a>
 <?php begin_screen_shot("\"Reading attempts\" tab.","fix-prefs-read-attempts.png"); ?>
 <b>"Reading attempts" tab.</b> The strength of the adaptive reading strategy lies in
 finding the still readable sectors and avoiding the lengthy process of trying to read

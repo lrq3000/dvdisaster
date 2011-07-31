@@ -83,7 +83,7 @@ provisions to <a href="howtos24.php">archive</a> your error
 correction files.<p>
 
 More information about the pro and con of these methods
-can be found in the <a href="http://dvdisaster.net/legacy/en/background30.html">old documentation</a>. 
+can be found in the <a href="qa33.php#table">background information</a> section. 
 
 <pre> </pre>
 

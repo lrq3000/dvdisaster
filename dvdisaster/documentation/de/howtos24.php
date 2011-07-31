@@ -29,9 +29,9 @@ Dagegen ist nichts einzuwenden, aber Sie müssen sich dabei bewußt sein, daß s
 <td>&nbsp;</td>
 <td>Es mag überraschend klingen, aber es kann nicht sichergestellt werden,
 daß eine Fehlerkorrektur-Datei funktionsfähig bleibt, wenn sie auf einem beschädigten
-Datenträger gespeichert ist.
-Die <a href="http://dvdisaster.net/legacy/de/background20.html">technischen Hintergründe</a>
-sind in der alten Dokumentation zu dvdisaster erklärt.
+Datenträger gespeichert ist - hier werden die
+<a href="qa32.php#file">technischen Hintergründe</a>
+erklärt.
 </td></tr></table><p>
 
 Deshalb ist es wichtig, die Fehlerkorrektur-Dateien genauso wie die übrigen Daten zu schützen. 
