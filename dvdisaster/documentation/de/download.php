@@ -18,11 +18,17 @@ $show_all=$_GET["showall"];
 
 <h3>dvdisaster herunterladen</h3>
 
-dvdisaster unterstützt die Betriebssysteme Darwin/Mac OS X, FreeBSD, GNU/Linux, NetBSD und Windows in den <a href="download10.php">aktuellen Versionen</a>.
+<table width="100%">
+<tr>
+<td>dvdisaster unterstützt die Betriebssysteme Darwin/Mac OS X, FreeBSD, GNU/Linux, NetBSD und Windows in den <a href="download10.php">aktuellen Versionen</a>.
 Es wird Ihnen 
 als <a href="http://www.germany.fsfeurope.org/documents/freesoftware.de.html">freie Software</a> 
-unter der <a href="http://dvdisaster.cvs.sourceforge.net/dvdisaster/dvdisaster/COPYING?view=markup">GNU General Public License v2</a><a href="#gpl3"><sup>*)</sup></a> zur 
-Verfügung gestellt.<p>
+unter der <a href="http://www.gnu.org/licenses/gpl-3.0.txt">GNU General Public License v3</a>  zur 
+Verfügung gestellt.</td>
+<td width="127px" valign="top"><img src="../images/gplv3-127x51.png" width="127px"></td>
+</tr>
+</table>
+<p>
 
 Laden Sie sich bitte entweder den Quellkode oder eine Binärversion 
 aus der folgenden Liste herunter. Die Pakete können mit
@@ -294,12 +300,6 @@ betrachtet werden. Einige interessante Dateien darin sind:
 <li><a href="http://dvdisaster.cvs.sourceforge.net/dvdisaster/dvdisaster/INSTALL?view=markup">INSTALL</a> - Installationshinweise (in Englisch);</li>
 <li><a href="http://dvdisaster.cvs.sourceforge.net/dvdisaster/dvdisaster/README?view=markup">README</a> - eine Übersicht zum Quellkodearchiv (in Englisch).</li>
 </ul>
-
-<pre> </pre>
-
-<?php
-footnote("*","gpl3","dvdisaster wird zu einem späteren Zeitpunkt zur GNU General Public License Version 3 wechseln.");
-?>
 
 <!--- do not change below --->
 

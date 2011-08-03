@@ -12,6 +12,7 @@
 	  changes and fixes due to that
 	- added --ignore-iso-size option
 	- Jindřich Šesták took over the Czech translation.
+	- fixed Windows console font handling (thanks to Jindřich Šesták)
 
 0.79.3	21-11-2010
         - Switched Linux SCSI driver default to SG_IO ioctl().

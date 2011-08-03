@@ -25,13 +25,20 @@ $script_lang = substr($script_dir, strlen($script_dir)-2, 2);
 # Needed to exatract some meaningful title text from the toc.php
 
 $toc_title_mode = 0;
-$toc_title_content = "RBG";
+$toc_title_content = "unset title";
 
 # Load the appropriate localization file
 
 require("dict_" . $script_lang . ".php");
 
 # Locale wrappers for toc.php stubs
+
+function cs($msg) 
+{  global $toc_title_mode; 
+
+   if($toc_title_mode == 1) toc_title($msg, "cs"); 
+   else                     toc_link($msg, "cs"); 
+};
 
 function de($msg) 
 {  global $toc_title_mode; 
@@ -133,7 +140,8 @@ function begin_page()
    {  echo "  </td>\n";
       echo "  <td align=\"right\">\n";
       echo "     <font size=\"+3\">&nbsp;</font><a href=\"http://dvdisaster.net/$script_lang/\">$trans_to_internet</a>\n";
-      lang_link("", "de", 0); # TODO: This is a quick hack
+      lang_link("", "cs", 0); # TODO: This is a quick hack
+      lang_link("", "de", 0); # 
       lang_link("", "en", 0); # to produce all locales for
       lang_link("", "ru", 0); # Windows. Do it better!
    }
@@ -155,10 +163,10 @@ function begin_page()
       echo "  <tr>\n";
       echo "    <td align=\"left\"><a href=\"$project_at_hoster\">$trans_to_hoster</a></td>\n";
       echo "    <td align=\"right\">\n";
-#      lang_link("&#268;esky", "cs");
+      lang_link("&#268;esky", "cs", 1);
       lang_link("Deutsch", "de", 1);
       lang_link("English", "en", 1);
-      lang_link("Russian", "ru", 0);
+      lang_link("Русский", "ru", 0);
       echo "    </td>\n";
       echo "  </tr>\n";
       echo "  <tr bgcolor=\"#000000\">\n";

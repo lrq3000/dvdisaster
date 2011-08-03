@@ -18,7 +18,8 @@ begin_page();
 <h3>Das dvdisaster-Projekt</h3>
 
 
-CD-, DVD- und BD-Datenträger behalten ihre Daten nur eine endlich lange Zeit (normalerweise
+Optische Datenträger (also CD,DVD,BD) behalten ihre Daten nur 
+eine endlich lange Zeit (normalerweise
 viele Jahre). Danach beginnt typischerweise ein langsamer Datenverlust, 
 indem von außen nach innen immer mehr Lesefehler auftreten.<p>
 

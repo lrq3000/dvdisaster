@@ -16,7 +16,8 @@ begin_page();
 
 <h3>The dvdisaster project:</h3>
 
-CD, DVD and BD media keep their data only for a finite time (typically for many years).
+Optical media (CD,DVD,BD) keep their data only for a 
+finite time (typically for many years).
 After that time, data loss develops slowly with read errors 
 growing from the outer media region towards the inside.<p>
 

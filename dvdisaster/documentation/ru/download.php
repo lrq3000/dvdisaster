@@ -18,11 +18,16 @@ $show_all=$_GET["showall"];
 
 <h3>Скачать dvdisaster</h3>
 
-dvdisaster имеется для <a href="download10.php">последних версий</a>
+<table width="100%">
+<tr>
+<td>dvdisaster имеется для <a href="download10.php">последних версий</a>
 операционных систем FreeBSD, GNU/Linux, Mac OS X(Darwin), NetBSD 
 и Windows. Он предоставляется как
 <a href="http://www.germany.fsfeurope.org/documents/freesoftware.en.html">свободное программное обеспечение</a> 
-под лицензией <a href="http://dvdisaster.cvs.sourceforge.net/dvdisaster/dvdisaster/COPYING?view=markup">GNU General Public License v2</a><a href="#gpl3"><sup>*)</sup></a>.<p>
+под лицензией <a href="http://www.gnu.org/licenses/gpl-3.0.txt">GNU General Public License v3</a>.</td>
+<td width="127px" valign="top"><img src="../images/gplv3-127x51.png" width="127px"></td>
+</tr>
+</table><p>
 
 Скачивать исходные тексты или двоичную версию можно из приведенного ниже списка.
 <a href="download20.php">Цифровая подпись</a> предоставляется для подтверждения того, что
