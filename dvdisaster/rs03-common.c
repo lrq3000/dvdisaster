@@ -235,18 +235,18 @@ void RS03ReadSectors(LargeFile *file, RS03Layout *lay, unsigned char *buf,
 
    if(stop_sector >= file_sector_size)
    {  unsigned char *bufptr = buf;
-      gint64 expected_sectors;
       char *volume_label = NULL;
-
-      if(lay->target == ECC_FILE)
-	 expected_sectors = lay->dataSectors;
-      else 
-	 expected_sectors = lay->totalSectors;
+      guint64 expected_sectors;
 
 #if 0  //FIXME
       if(rc->image->isoInfo && rc->image->isoInfo->volumeLabel[0])
       rc->volumeLabel = g_strdup(rc->image->isoInfo->volumeLabel);
 #endif
+
+      if(lay->target == ECC_FILE)
+	 expected_sectors = lay->dataSectors;
+      else 
+	 expected_sectors = lay->totalSectors;
 
       for(n=start_sector; n<=stop_sector; n++)
       {  

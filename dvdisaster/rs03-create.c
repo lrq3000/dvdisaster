@@ -40,8 +40,6 @@ typedef struct
    Image *image;
    RS03Widgets *wl;
    RS03Layout *lay;
-   ImageInfo *ii;
-   EccInfo *ei;
    EccHeader *eh;
    GaloisTables *gt;           /* common lookup tables for RS encoders */
    ReedSolomonTables *rt;
@@ -131,8 +129,6 @@ static void ecc_cleanup(gpointer data)
    if(ec->image) CloseImage(ec->image);
    if(ec->lock) g_mutex_free(ec->lock);
    if(ec->ioCond) g_cond_free(ec->ioCond);
-   if(ec->ii) FreeImageInfo(ec->ii);
-   if(ec->ei) FreeEccInfo(ec->ei);
    if(ec->eh) g_free(ec->eh);
    if(ec->rt) FreeReedSolomonTables(ec->rt);
    if(ec->gt) FreeGaloisTables(ec->gt);
@@ -176,7 +172,7 @@ static void abort_encoding(ecc_closure *ec, int truncate)
    if(truncate && ec->lay)
    {  if(Closure->eccTarget == ECC_FILE)
 	 LargeUnlink(Closure->eccName);
-      else if(!LargeTruncate(ec->ii->file, (gint64)(2048*ec->lay->dataSectors)))
+      else if(!LargeTruncate(ec->image->file, (gint64)(2048*ec->lay->dataSectors)))
 	Stop(_("Could not truncate %s: %s\n"),Closure->imageName,strerror(errno));
 
       SetLabelText(GTK_LABEL(wl->encFootline), 
@@ -234,8 +230,11 @@ static void remove_old_ecc(ecc_closure *ec)
       if(!answer)
 	abort_encoding(ec, FALSE);
 
-      if(!LargeTruncate(ec->image->file, (gint64)(2048*data_sectors)))  // fixme
+      if(!LargeTruncate(ec->image->file, (gint64)(2048*data_sectors)))
 	Stop(_("Could not truncate %s: %s\n"),Closure->imageName,strerror(errno));
+
+      ec->image->sectorSize = data_sectors;
+      ec->image->inLast = 2048;
    }
 }
 
@@ -244,24 +243,24 @@ static void remove_old_ecc(ecc_closure *ec)
  */
 
 static void prepare_header(ecc_closure *ec)
-{  ImageInfo *ii = ec->ii;
-   EccHeader *eh = ec->eh;
+{  EccHeader *eh = ec->eh;
    RS03Layout *lay = ec->lay;
+   Image *image = ec->image;
 
    memcpy(eh->cookie, "*dvdisaster*", 12);
    memcpy(eh->method, "RS03", 4);
    eh->methodFlags[0]  = Closure->eccTarget == ECC_FILE ? MFLAG_ECC_FILE : 0;
    eh->methodFlags[3]  = Closure->releaseFlags;
-   memcpy(eh->mediumFP, ii->mediumFP, 16);
-   memcpy(eh->mediumSum, ii->mediumSum, 16);
-   gint64_to_uchar(eh->sectors, ii->sectors);
+   memcpy(eh->mediumFP, image->imageFP, 16);
+   memcpy(eh->mediumSum, image->mediumSum, 16);
+   gint64_to_uchar(eh->sectors, lay->dataSectors);
    eh->dataBytes       = lay->ndata;
    eh->eccBytes        = lay->nroots;
 
    eh->creatorVersion  = Closure->version;
    eh->neededVersion   = 7900;
    eh->fpSector        = FINGERPRINT_SECTOR;
-   eh->inLast          = ii->inLast;
+   eh->inLast          = image->inLast;
    eh->sectorsPerLayer = lay->sectorsPerLayer;
 
    eh->selfCRC = 0x4c5047;
@@ -281,8 +280,7 @@ static void prepare_header(ecc_closure *ec)
 
 static void expand_image(ecc_closure *ec)
 {  RS03Layout *lay = ec->lay;
-   ImageInfo *ii = ec->ii;
-   EccInfo *ei = ec->ei;
+   Image *image = ec->image;
    int last_percent, percent, n;
    gint64 sectors,ecc_padding;
    LargeFile *ecc_out;
@@ -291,12 +289,12 @@ static void expand_image(ecc_closure *ec)
    /* Output file depends on ecc target */
 
    if(Closure->eccTarget == ECC_FILE)
-   {    ecc_out = ei->file;
+   {    ecc_out = image->eccFile;
         failed_write = _("Failed expanding the ecc file: %s\n");
 	progress_msg = _("Preparing ecc file: %3d%%");
    }
    else
-   {    ecc_out = ii->file;
+   {    ecc_out = image->file;
         failed_write = _("Failed expanding the image: %s\n");
 	progress_msg = _("Preparing image: %3d%%");
    }
@@ -304,17 +302,17 @@ static void expand_image(ecc_closure *ec)
    /* If the image file does not end at a sector boundary,
       fill it up with zeros. */
 
-   if(Closure->eccTarget == ECC_IMAGE && ii->inLast != 2048)
-   {  int fill = 2048 - ii->inLast;
+   if(Closure->eccTarget == ECC_IMAGE && image->inLast != 2048)
+   {  int fill = 2048 - image->inLast;
       int n;
       unsigned char zeros[fill];
 
       memset(zeros, 0, fill);
 
-      if(!LargeSeek(ii->file, ii->size))
+      if(!LargeSeek(image->file, image->file->size))
 	Stop(_("Failed seeking to end of image: %s\n"), strerror(errno));
 
-      n = LargeWrite(ii->file, zeros, fill);
+      n = LargeWrite(image->file, zeros, fill);
       if(n != fill)
 	Stop(_(failed_write), strerror(errno));
    }
@@ -322,7 +320,7 @@ static void expand_image(ecc_closure *ec)
    /* Seek to end of file if augmenting an image */
 
    if(Closure->eccTarget == ECC_IMAGE)
-      if(!LargeSeek(ii->file, 2048*lay->dataSectors))
+      if(!LargeSeek(image->file, 2048*lay->dataSectors))
 	 Stop(_("Failed seeking to end of image: %s\n"), strerror(errno));
 
    /* Space for the ecc header */
@@ -331,6 +329,10 @@ static void expand_image(ecc_closure *ec)
    n = LargeWrite(ecc_out, ec->eh, 4096);
    if(n != 4096)
       Stop(_(failed_write), strerror(errno));
+   if(Closure->eccTarget == ECC_IMAGE)
+   {  image->file->size += 4096;
+      image->sectorSize += 2;
+   }
 
    /* Padding sectors for the data section */
 
@@ -338,11 +340,15 @@ static void expand_image(ecc_closure *ec)
    {  unsigned char pad_sector[2048];
       int n;
 
-      CreatePaddingSector(pad_sector, lay->dataSectors+sectors+2, ii->mediumFP, FINGERPRINT_SECTOR);
+      CreatePaddingSector(pad_sector, lay->dataSectors+sectors+2, image->imageFP, FINGERPRINT_SECTOR);
 
       n = LargeWrite(ecc_out, pad_sector, 2048);
       if(n != 2048)
 	Stop(_(failed_write), strerror(errno));
+      if(Closure->eccTarget == ECC_IMAGE)
+      {  image->file->size += 2048;
+	 image->sectorSize ++;
+      }
    }
 
    /* Padding sectors for the CRC section */
@@ -351,7 +357,7 @@ static void expand_image(ecc_closure *ec)
    {  unsigned char pad_sector[2048];
       int n;
 
-      CreateMissingSector(pad_sector, lay->firstCrcPos+sectors, ii->mediumFP, FINGERPRINT_SECTOR, 
+      CreateMissingSector(pad_sector, lay->firstCrcPos+sectors, image->imageFP, FINGERPRINT_SECTOR, 
 		"CRC padding by expand_image()");
 
       n = LargeWrite(ecc_out, pad_sector, 2048);
@@ -370,7 +376,7 @@ static void expand_image(ecc_closure *ec)
       if(Closure->stopActions) /* User hit the Stop button */
 	abort_encoding(ec, TRUE);
 
-      CreateMissingSector(dead_sector, lay->firstEccPos+sectors, ii->mediumFP, FINGERPRINT_SECTOR, 
+      CreateMissingSector(dead_sector, lay->firstEccPos+sectors, image->imageFP, FINGERPRINT_SECTOR, 
 		"ECC padding by expand_image()");
 
       n = LargeWrite(ecc_out, dead_sector, 2048);
@@ -401,9 +407,9 @@ static void expand_image(ecc_closure *ec)
  */
 
 static void prepare_crc_block(ecc_closure *ec, CrcBlock *cb)
-{  ImageInfo *ii = ec->ii;
-   RS03Layout *lay = ec->lay;
-   
+{  RS03Layout *lay = ec->lay;
+   Image *image = ec->image;
+
    memcpy(cb->cookie, "*dvdisaster*", 12);
    memcpy(cb->method, "RS03", 4);
    cb->methodFlags[0]  = Closure->eccTarget == ECC_FILE ? MFLAG_ECC_FILE : 0; 
@@ -411,10 +417,10 @@ static void prepare_crc_block(ecc_closure *ec, CrcBlock *cb)
    cb->creatorVersion  = Closure->version;
    cb->neededVersion   = 7300;
    cb->fpSector        = FINGERPRINT_SECTOR;
-   memcpy(cb->mediumFP, ii->mediumFP, 16);
-   memcpy(cb->mediumSum, ii->mediumSum, 16);
-   cb->dataSectors     = ii->sectors;   
-   cb->inLast          = ii->inLast;
+   memcpy(cb->mediumFP, image->imageFP, 16);
+   memcpy(cb->mediumSum, image->mediumSum, 16);
+   cb->dataSectors     = lay->dataSectors;   
+   cb->inLast          = image->inLast;
    cb->dataBytes       = lay->ndata;
    cb->eccBytes        = lay->nroots;
    cb->sectorsPerLayer = lay->sectorsPerLayer;
@@ -476,12 +482,13 @@ static void read_next_chunk(ecc_closure *ec, guint64 chunk)
       /* Read the next data sectors of this layer.
 	 Note that the last layer is made from CRC sums. */
 
-      RS03ReadSectors(ec->ii->file, lay, ec->ioData[layer], 
+      RS03ReadSectors(ec->image->file, lay, ec->ioData[layer], 
 		      layer, ec->ioChunk, ec->ioLayerSectors, RS03_READ_DATA);
 
       err = CheckForMissingSectors(ec->ioData[layer], first_sec, 
 				   lay->eh->mediumFP, lay->eh->fpSector, 
 				   ec->ioLayerSectors, &error_sec);
+
       if(err != SECTOR_PRESENT)
       {   /* Remove partial ecc data */
 	  if(Closure->eccTarget == ECC_FILE)
@@ -490,7 +497,7 @@ static void read_next_chunk(ecc_closure *ec, guint64 chunk)
 	     LargeUnlink(Closure->eccName);
 	  }
 	  else
-	  {  LargeTruncate(ec->writeHandle, (gint64)(2048*ec->ii->sectors));
+	  {  LargeTruncate(ec->writeHandle, (gint64)(2048*lay->dataSectors));
 	  }
 
 	  ec->abortImmediately = TRUE;
@@ -546,7 +553,7 @@ static void read_next_chunk(ecc_closure *ec, guint64 chunk)
       if(ec->ioChunk+ec->ioLayerSectors < lay->sectorsPerLayer)
       {  unsigned char buf[2048];
 
-	 RS03ReadSectors(ec->ii->file, lay, buf, layer, ec->ioChunk+ec->ioLayerSectors, 1, RS03_READ_DATA);
+	 RS03ReadSectors(ec->image->file, lay, buf, layer, ec->ioChunk+ec->ioLayerSectors, 1, RS03_READ_DATA);
 	 ec->ioCrc[(ec->ioLayerSectors-1)*512+layer] = Crc32(buf, 2048);
       }
    } /* all layers from chunk finished */
@@ -1057,15 +1064,12 @@ void RS03Create(void)
    RS03Widgets *wl = (RS03Widgets*)method->widgetList;
    RS03Layout *lay;
    ecc_closure *ec = g_malloc0(sizeof(ecc_closure));
-   ImageInfo *ii;
-   EccInfo *ei;
    gdouble elapsed,mbs;
    gulong ignore;
    gint64 ecc_sectors;
 
    /*** Register the cleanup procedure for GUI mode */
 
-   ec->image = image;
    ec->self = method;
    ec->wl = wl;
    ec->eh = g_malloc0(sizeof(EccHeader));
@@ -1078,21 +1082,37 @@ void RS03Create(void)
 		  _("<big>Augmenting the image with error correction data.</big>\n<i>%s</i>"), 
 		  _("- checking image -"));
 
+   /*** Open image file and calculate a suitable redundancy .*/
+
+   PrintLog(_("\nOpening %s"), Closure->imageName);
+
+   if(Closure->eccTarget == ECC_IMAGE)   /* augmented image */
+      image = OpenImageFromFile(Closure->imageName, O_RDWR, IMG_PERMS);
+   else                                  /* error correction file */
+      image = OpenImageFromFile(Closure->imageName, O_RDONLY, IMG_PERMS);
+ 
+   if(!image)
+   {  PrintLog(": %s.\n", strerror(errno));
+      Stop(_("Image file %s: %s."),Closure->imageName, strerror(errno));
+   }
+
+   ec->image = image;
+
+   if(image->inLast == 2048)
+        PrintLog(_(": %lld medium sectors.\n"), image->sectorSize);
+   else PrintLog(_(": %lld medium sectors and %d bytes.\n"), 
+		   image->sectorSize-1, image->inLast);
+
+   if(Closure->eccTarget == ECC_FILE)   /* need to open ecc file too */
+      image->eccFile = LargeOpen(Closure->eccName, O_RDWR | O_CREAT, IMG_PERMS);
+
    /*** If the image already contains error correction information, remove it. */
 
    remove_old_ecc(ec);
 
-   /*** Open image file and calculate a suitable redundancy .*/
+   /*** Calculate the RS03 layout */
 
-   if(Closure->eccTarget == ECC_IMAGE)   /* augmented image */
-   {  ii = ec->ii = OpenImageFile(NULL, WRITEABLE_IMAGE);
-   }
-   else                     /* error correction file */
-   {  ii = ec->ii = OpenImageFile(NULL, READABLE_IMAGE);
-      ei = ec->ei = OpenEccFile(WRITEABLE_ECC);
-   }
-
-   lay = ec->lay = CalcRS03Layout(ii->sectors, 0, Closure->eccTarget);
+   lay = ec->lay = CalcRS03Layout(image->sectorSize, 0, Closure->eccTarget);
    lay->eh = ec->eh;
 
    /*** Announce what we are going to do */

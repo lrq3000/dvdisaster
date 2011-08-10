@@ -61,8 +61,8 @@ d6d0e7e8894e623481b9304b462fafe2 *rs01-window.c
 4a6fe7e8cbd588020dde814861ec403b *rs02-recognize.c
 e86df96e8f052ca596bc8117348c96bd *rs02-verify.c
 7a76a6f0a95b8a3401cb943640e02c45 *rs02-window.c
-cae1af2fd407deb992db80f3166bd14a *rs03-common.c
-5aab6520d35733caf0ff569cd9c5ed39 *rs03-create.c
+c662181fefb787c9324d7b26af21d583 *rs03-common.c
+1116e38f86bfbad01ef3c825cf7c372a *rs03-create.c
 c84a92e156a44b74be7992b4031b3e59 *rs03-fix.c
 f17d10b112f3920fa32436777b759ca8 *rs03-preferences.c
 4351add229974318fdad231319644a93 *rs03-recognize.c
