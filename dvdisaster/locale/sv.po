@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-02 14:51+0200\n"
+"POT-Creation-Date: 2011-08-10 21:42+0200\n"
 "PO-Revision-Date: 2006-06-14 23:48+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -77,7 +77,7 @@ msgstr ""
 #: debug.c:107 debug.c:198 debug.c:246 debug.c:372 debug.c:697 debug.c:797
 #: debug.c:1124 debug.c:1132 debug.c:1239 rs01-common.c:171 rs02-common.c:239
 #: rs02-create.c:329 rs02-create.c:975 rs02-fix.c:387 rs02-verify.c:394
-#: rs03-common.c:72 rs03-common.c:284 rs03-create.c:574 rs03-create.c:599
+#: rs03-common.c:72 rs03-common.c:284 rs03-create.c:581 rs03-create.c:606
 #: rs03-recognize.c:282 rs03s-create.c:89 rs03s-create.c:983
 #: rs03s-create.c:1009
 #, c-format
@@ -86,7 +86,7 @@ msgstr "Misslyckades med att söka fram till sektor %lld i avbild: %s"
 
 #: debug.c:115 debug.c:203 debug.c:251 debug.c:377 debug.c:535 debug.c:657
 #: debug.c:702 debug.c:1136 debug.c:1243 debug.c:1283 rs02-create.c:352
-#: rs02-create.c:378 rs02-create.c:978 rs03-create.c:579 rs03-create.c:603
+#: rs02-create.c:378 rs02-create.c:978 rs03-create.c:586 rs03-create.c:610
 #: rs03s-create.c:986 rs03s-create.c:1012 udf.c:828 udf.c:886 udf.c:943
 #: udf.c:956 udf.c:961 udf.c:964 udf.c:967 udf.c:970 udf.c:973 udf.c:976
 #, c-format
@@ -194,7 +194,7 @@ msgstr "Kapar avbild till %lld sektorer.\n"
 
 #: debug.c:567 read-linear.c:1358 rs01-fix.c:213 rs01-fix.c:235 rs01-fix.c:251
 #: rs01-fix.c:285 rs02-create.c:105 rs02-create.c:142 rs02-fix.c:245
-#: rs02-fix.c:264 rs02-fix.c:277 rs03-create.c:180 rs03-create.c:238
+#: rs02-fix.c:264 rs02-fix.c:277 rs03-create.c:176 rs03-create.c:234
 #: rs03-fix.c:273 rs03-fix.c:294 rs03-fix.c:309 rs03s-create.c:184
 #: rs03s-create.c:230
 #, c-format
@@ -438,6 +438,7 @@ msgstr ""
 "Använd -m utan parametrar för en lista på metoder.\n"
 
 #: dvdisaster.c:734 file.c:40 rs01-create.c:237 rs02-create.c:1013
+#: rs03-create.c:1087
 #, c-format
 msgid ""
 "\n"
@@ -447,11 +448,13 @@ msgstr ""
 "Öppnar %s"
 
 #: dvdisaster.c:741 file.c:71 rs01-create.c:245 rs02-create.c:1021
+#: rs03-create.c:1102
 #, c-format
 msgid ": %lld medium sectors.\n"
 msgstr ": %lld mediumsektorer.\n"
 
 #: dvdisaster.c:742 file.c:72 rs01-create.c:246 rs02-create.c:1022
+#: rs03-create.c:1103
 #, c-format
 msgid ": %lld medium sectors and %d bytes.\n"
 msgstr ": %lld mediumsektorer och %d byte.\n"
@@ -3106,7 +3109,7 @@ msgid "Redundancy %d out of useful range [8..100]."
 msgstr "Redundans %d utanför användbart intervall [8..100]."
 
 #: rs01-create.c:125 rs01-fix.c:77 rs02-create.c:59 rs02-fix.c:55
-#: rs03-create.c:118 rs03-fix.c:55 rs03s-create.c:137
+#: rs03-create.c:116 rs03-fix.c:55 rs03s-create.c:137
 #, c-format
 msgid "<span %s>Aborted by unrecoverable error.</span>"
 msgstr "<span %s>Avbröts av ej återhämtningsbara fel.</span>"
@@ -3120,7 +3123,7 @@ msgstr "Skapandet av felkorrigeringsfil avbröts"
 msgid "Encoding with Method RS01: %d roots, %4.1f%% redundancy."
 msgstr "Kodar med Metod RS01: %d rötter, %4.1f%% redundans."
 
-#: rs01-create.c:216 rs03-create.c:1111
+#: rs01-create.c:216 rs03-create.c:1131
 #, c-format
 msgid ""
 "<big>Creating the error correction file.</big>\n"
@@ -3129,12 +3132,12 @@ msgstr ""
 "<big>Skapar felkorrigeringsfilen.</big>\n"
 "<i>%s</i>"
 
-#: rs01-create.c:228 rs03-create.c:214
+#: rs01-create.c:228 rs03-create.c:210
 #, c-format
 msgid "<span %s>Aborted to keep existing ecc file.</span>"
 msgstr ""
 
-#: rs01-create.c:242 rs02-create.c:1018
+#: rs01-create.c:242 rs02-create.c:1018 rs03-create.c:1096
 #, c-format
 msgid "Image file %s: %s."
 msgstr ""
@@ -3176,7 +3179,7 @@ msgid ""
 msgstr ""
 
 #: rs01-create.c:536 rs01-create.c:660 rs01-create.c:954 rs02-create.c:948
-#: rs03-create.c:937 rs03s-create.c:973
+#: rs03-create.c:944 rs03s-create.c:973
 #, c-format
 msgid "Ecc generation: %3d.%1d%%"
 msgstr "Generering av ecc: %3d.%1d%%"
@@ -3184,7 +3187,7 @@ msgstr "Generering av ecc: %3d.%1d%%"
 #: rs01-create.c:678 rs01-fix.c:203 rs01-fix.c:225 rs01-fix.c:270
 #: rs01-fix.c:300 rs01-fix.c:317 rs01-fix.c:370 rs01-verify.c:424
 #: rs01-verify.c:827 rs02-create.c:113 rs02-fix.c:238 rs02-fix.c:257
-#: rs02-fix.c:344 rs02-verify.c:711 rs03-create.c:188 rs03-fix.c:264
+#: rs02-fix.c:344 rs02-verify.c:711 rs03-create.c:184 rs03-fix.c:264
 #: rs03-fix.c:285 rs03-fix.c:362 rs03s-create.c:192 rs03-verify.c:535
 #: rs03-verify.c:981
 #, c-format
@@ -3209,12 +3212,12 @@ msgstr ""
 "Kan inte skriva ecc-huvud:\n"
 "%s"
 
-#: rs01-create.c:990 rs02-create.c:1110 rs03-create.c:1164 rs03s-create.c:1128
+#: rs01-create.c:990 rs02-create.c:1110 rs03-create.c:1184 rs03s-create.c:1128
 #, c-format
 msgid "Ecc generation: 100.0%%\n"
 msgstr "Generering av ecc: 100.0%%\n"
 
-#: rs01-create.c:991 rs03-create.c:1171
+#: rs01-create.c:991 rs03-create.c:1191
 #, c-format
 msgid ""
 "Error correction file \"%s\" created.\n"
@@ -3223,7 +3226,7 @@ msgstr ""
 "Felkorrigeringsfil \"%s\" skapad.\n"
 "Tänk på att lagra filen på ett pålitligt medium.\n"
 
-#: rs01-create.c:999 rs03-create.c:1197
+#: rs01-create.c:999 rs03-create.c:1217
 msgid ""
 "The error correction file has been successfully created.\n"
 "Make sure to keep this file on a reliable medium."
@@ -3984,12 +3987,12 @@ msgstr "Misslyckades med att söka till ecc-huvud på %lld: %s\n"
 msgid "Failed writing ecc header at %lld: %s\n"
 msgstr "Misslyckades med att skriva ecc-huvud vid %lld: %s\n"
 
-#: rs02-create.c:108 rs03-create.c:183 rs03s-create.c:187
+#: rs02-create.c:108 rs03-create.c:179 rs03s-create.c:187
 #, c-format
 msgid "<span %s>Aborted by user request!</span> (partial ecc data removed from image)"
 msgstr "<span %s>Avbröts på användarens begäran!</span> (ej komplett ecc-data borttagen från avbild)"
 
-#: rs02-create.c:134 rs03-create.c:230 rs03s-create.c:222
+#: rs02-create.c:134 rs03-create.c:226 rs03s-create.c:222
 #, c-format
 msgid ""
 "Image \"%s\" already contains error correction information.\n"
@@ -4028,23 +4031,23 @@ msgstr ""
 msgid "Preparing image (checksums, adding space): %3d%%"
 msgstr ""
 
-#: rs02-create.c:256 rs02-create.c:266 rs02-fix.c:94 rs03-create.c:315
-#: rs03-create.c:326 rs03-fix.c:97 rs03s-create.c:308 rs03s-create.c:319
+#: rs02-create.c:256 rs02-create.c:266 rs02-fix.c:94 rs03-create.c:313
+#: rs03-create.c:324 rs03-fix.c:97 rs03s-create.c:308 rs03s-create.c:319
 #, c-format
 msgid "Failed seeking to end of image: %s\n"
 msgstr "Misslyckades med att söka till slutet av avbild: %s\n"
 
-#: rs02-create.c:260 rs02-create.c:281 rs02-fix.c:107 rs03-create.c:300
+#: rs02-create.c:260 rs02-create.c:281 rs02-fix.c:107 rs03-create.c:298
 #: rs03-fix.c:111
 #, c-format
 msgid "Failed expanding the image: %s\n"
 msgstr "Misslyckades med att expandera avbilden: %s\n"
 
-#: rs02-create.c:1034 rs03-create.c:1074 rs03s-create.c:1041
+#: rs02-create.c:1034 rs03-create.c:1078 rs03s-create.c:1041
 msgid "Error correction data creation aborted"
 msgstr "Skapandet av felkorrigeringsdata avbröts"
 
-#: rs02-create.c:1038 rs02-create.c:1056 rs03-create.c:1078 rs03-create.c:1107
+#: rs02-create.c:1038 rs02-create.c:1056 rs03-create.c:1082 rs03-create.c:1127
 #: rs03s-create.c:1045 rs03s-create.c:1074
 #, c-format
 msgid ""
@@ -4054,7 +4057,7 @@ msgstr ""
 "<big>Utvidgar avbilden med felkorrigeringsdata.</big>\n"
 "<i>%s</i>"
 
-#: rs02-create.c:1039 rs03-create.c:1079 rs03s-create.c:1046
+#: rs02-create.c:1039 rs03-create.c:1083 rs03s-create.c:1046
 msgid "- checking image -"
 msgstr "- kontrollerar avbild -"
 
@@ -4081,7 +4084,7 @@ msgid ""
 "not an option, please create a separate error correction file."
 msgstr ""
 
-#: rs02-create.c:1079 rs03-create.c:1143 rs03s-create.c:1105
+#: rs02-create.c:1079 rs03-create.c:1163 rs03s-create.c:1105
 #, c-format
 msgid ""
 "Using redundancies below 20%%%% may not give\n"
@@ -4090,7 +4093,7 @@ msgstr ""
 "Användning av redundans under 20%%%% kanske inte ger\n"
 "förväntat skydd mot förlorat data.\n"
 
-#: rs02-create.c:1111 rs02-create.c:1120 rs03-create.c:1166 rs03-create.c:1191
+#: rs02-create.c:1111 rs02-create.c:1120 rs03-create.c:1186 rs03-create.c:1211
 #, c-format
 msgid ""
 "Image has been augmented with error correction data.\n"
@@ -4544,22 +4547,22 @@ msgstr ""
 msgid "Redundancy %d out of useful range [8..170]."
 msgstr ""
 
-#: rs03-create.c:295
+#: rs03-create.c:293
 #, c-format
 msgid "Failed expanding the ecc file: %s\n"
 msgstr ""
 
-#: rs03-create.c:296
+#: rs03-create.c:294
 #, c-format
 msgid "Preparing ecc file: %3d%%"
 msgstr ""
 
-#: rs03-create.c:301
+#: rs03-create.c:299
 #, c-format
 msgid "Preparing image: %3d%%"
 msgstr ""
 
-#: rs03-create.c:498
+#: rs03-create.c:505
 #, c-format
 msgid ""
 "Incomplete image\n"
@@ -4571,7 +4574,7 @@ msgid ""
 "Exiting and removing partial error correction data."
 msgstr ""
 
-#: rs03-create.c:506
+#: rs03-create.c:513
 msgid ""
 "\n"
 "This image was probably mastered from defective source(s).\n"
@@ -4579,50 +4582,50 @@ msgid ""
 "\n"
 msgstr ""
 
-#: rs03-create.c:729
+#: rs03-create.c:736
 msgid "CPU bound"
 msgstr ""
 
-#: rs03-create.c:733
+#: rs03-create.c:740
 msgid "I/O bound"
 msgstr ""
 
-#: rs03-create.c:931
+#: rs03-create.c:938
 #, c-format
 msgid "%5.2fMB/s current"
 msgstr ""
 
-#: rs03-create.c:975
+#: rs03-create.c:982
 #, c-format
 msgid "%d threads with 128bit intrinsics"
 msgstr ""
 
-#: rs03-create.c:978 rs03-preferences.c:291 rs03-preferences.c:806
+#: rs03-create.c:985 rs03-preferences.c:291 rs03-preferences.c:806
 #: rs03-preferences.c:812 rs03-preferences.c:813
 #, c-format
 msgid "%d threads"
 msgstr ""
 
-#: rs03-create.c:1102 rs03s-create.c:1070
+#: rs03-create.c:1122 rs03s-create.c:1070
 #, c-format
 msgid "Encoding with Method RS03: %lld MB data, %lld MB ecc (%d roots; %4.1f%% redundancy)."
 msgstr ""
 
-#: rs03-create.c:1117
+#: rs03-create.c:1137
 #, c-format
 msgid ""
 "Augmenting image with Method RS03 [%d threads]:\n"
 "%lld MB data, %lld MB ecc (%d roots; %4.1f%% redundancy)."
 msgstr ""
 
-#: rs03-create.c:1122
+#: rs03-create.c:1142
 #, c-format
 msgid ""
 "Creating the error correction file with Method RS03 [%d threads]:\n"
 "%lld MB data, %lld MB ecc (%d roots; %4.1f%% redundancy)."
 msgstr ""
 
-#: rs03-create.c:1133 rs03s-create.c:1095
+#: rs03-create.c:1153 rs03s-create.c:1095
 #, c-format
 msgid ""
 "Not enough space on medium left for error correction data.\n"
@@ -4631,17 +4634,17 @@ msgid ""
 "an option, please create a separate error correction file."
 msgstr ""
 
-#: rs03-create.c:1177
+#: rs03-create.c:1197
 #, c-format
 msgid "Avg performance: %5.2fs (%5.2fMB/s) total\n"
 msgstr ""
 
-#: rs03-create.c:1180
+#: rs03-create.c:1200
 #, c-format
 msgid "%5.2fMB/s average"
 msgstr ""
 
-#: rs03-create.c:1182
+#: rs03-create.c:1202
 #, c-format
 msgid "%d times CPU bound; %d times I/O bound"
 msgstr ""
