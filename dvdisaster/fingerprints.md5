@@ -14,7 +14,7 @@ da46d14e4ec9ed31ce6742dc9dba7b09 *closure.c
 43e5ec2cab2652854efcdf62b55260f3 *crc32.c
 d6c675a5d340a4dd2c24b291cd760c8c *crcbuf.c
 0c4226fae6826f2c8bcbad39806db734 *curve.c
-126c19802421c09dc00699a5716ba921 *debug.c
+05298e583dade90fb3fb6adfa1e5e285 *debug.c
 168231ae2bcd7aa8c5fa1ae87a70bf88 *ds-marker.c
 d8fefd672f8baaf78969453a893dead7 *dvdisaster.c
 fc71a20a3c5341c79803d57fffeca55c *ecc-rs01.c

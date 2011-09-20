@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-10 21:42+0200\n"
+"POT-Creation-Date: 2011-09-17 14:13+0200\n"
 "PO-Revision-Date: 2006-06-14 23:48+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -53,7 +53,7 @@ msgstr "Misslyckades med att hoppa över ecc-huvuet: %s"
 msgid "Error reading CRC information: %s"
 msgstr "Fel vid läsning av CRC-information: %s"
 
-#: debug.c:53 debug.c:455 debug.c:1083 debug.c:1160
+#: debug.c:53 debug.c:433 debug.c:1061 debug.c:1138
 msgid "2nd argument is missing"
 msgstr "andra argumentet saknas"
 
@@ -65,7 +65,7 @@ msgstr ""
 "Antal rötter måste vara 8..100;\n"
 "antalet raderingar måste vara > 0 och mindre än antalet rötter.\n"
 
-#: debug.c:75 debug.c:168
+#: debug.c:75 debug.c:164
 #, c-format
 msgid ""
 "\n"
@@ -74,8 +74,8 @@ msgstr ""
 "\n"
 "Genererar slumpmässigt korrigerbara raderingar (för %d rötter, max raderingar = %d).\n"
 
-#: debug.c:107 debug.c:198 debug.c:246 debug.c:372 debug.c:697 debug.c:797
-#: debug.c:1124 debug.c:1132 debug.c:1239 rs01-common.c:171 rs02-common.c:239
+#: debug.c:107 debug.c:194 debug.c:242 debug.c:356 debug.c:675 debug.c:775
+#: debug.c:1102 debug.c:1110 debug.c:1217 rs01-common.c:171 rs02-common.c:239
 #: rs02-create.c:329 rs02-create.c:975 rs02-fix.c:387 rs02-verify.c:394
 #: rs03-common.c:72 rs03-common.c:284 rs03-create.c:581 rs03-create.c:606
 #: rs03-recognize.c:282 rs03s-create.c:89 rs03s-create.c:983
@@ -84,8 +84,8 @@ msgstr ""
 msgid "Failed seeking to sector %lld in image: %s"
 msgstr "Misslyckades med att söka fram till sektor %lld i avbild: %s"
 
-#: debug.c:115 debug.c:203 debug.c:251 debug.c:377 debug.c:535 debug.c:657
-#: debug.c:702 debug.c:1136 debug.c:1243 debug.c:1283 rs02-create.c:352
+#: debug.c:115 debug.c:199 debug.c:247 debug.c:361 debug.c:513 debug.c:635
+#: debug.c:680 debug.c:1114 debug.c:1221 debug.c:1261 rs02-create.c:352
 #: rs02-create.c:378 rs02-create.c:978 rs03-create.c:586 rs03-create.c:610
 #: rs03s-create.c:986 rs03s-create.c:1012 udf.c:828 udf.c:886 udf.c:943
 #: udf.c:956 udf.c:961 udf.c:964 udf.c:967 udf.c:970 udf.c:973 udf.c:976
@@ -93,12 +93,12 @@ msgstr "Misslyckades med att söka fram till sektor %lld i avbild: %s"
 msgid "Failed writing to sector %lld in image: %s"
 msgstr "Misslyckades med att skriva till sektor %lld i avbild: %s"
 
-#: debug.c:123 debug.c:257 debug.c:383 debug.c:661 debug.c:709 debug.c:1257
+#: debug.c:123 debug.c:253 debug.c:367 debug.c:639 debug.c:687 debug.c:1235
 #, c-format
 msgid "Progress: %3d%%"
 msgstr "Förlopp: %3d%%"
 
-#: debug.c:128 debug.c:262 debug.c:388
+#: debug.c:128 debug.c:258 debug.c:372
 #, c-format
 msgid ""
 "Progress: 100%%\n"
@@ -109,90 +109,83 @@ msgstr ""
 "Återhämta avbilden med flaggan --fix före något ytterligare en --random-errors körs.\n"
 "Annars kommer du ackumulera >= %d raderingar/ECC-block och avbilden kommer att gå förlorad.\n"
 
-#: debug.c:159 debug.c:300
+#: debug.c:159 debug.c:293
 #, c-format
 msgid "Number of erasures must be > 0 and <= %d\n"
 msgstr "Antal raderingar måste vara > 0 och <= %d\n"
 
-#: debug.c:312 raw-sector-cache.c:35 raw-sector-cache.c:202
-#: raw-sector-cache.c:336 scsi-freebsd.c:114 scsi-linux.c:101
-#: scsi-netbsd.c:112
-#, c-format
-msgid "Could not open %s: %s"
-msgstr "Kunde inte öppna %s: %s"
-
-#: debug.c:316
+#: debug.c:299
 #, c-format
 msgid ""
 "\n"
 "RS03 error correction file with %d roots.\n"
 msgstr ""
 
-#: debug.c:317
+#: debug.c:300
 #, c-format
 msgid ""
 "\n"
 "RS03 augmented image with %d roots.\n"
 msgstr ""
 
-#: debug.c:318
+#: debug.c:301
 #, c-format
 msgid "Generating at most %d random correctable erasures.\n"
 msgstr ""
 
-#: debug.c:462 debug.c:1089
+#: debug.c:440 debug.c:1067
 msgid "3rd argument is missing"
 msgstr "tredje argumentet saknas"
 
-#: debug.c:469 debug.c:790 debug.c:836 debug.c:897
+#: debug.c:447 debug.c:768 debug.c:814 debug.c:875
 #, c-format
 msgid "Sector must be in range [0..%lld]\n"
 msgstr "Sektor måste vara inom intervallet [0..%lld]\n"
 
-#: debug.c:472
+#: debug.c:450
 msgid "Byte position must be in range [0..2047]"
 msgstr "Byteposition måste vara inom intervallet [0..2047]"
 
-#: debug.c:475
+#: debug.c:453
 msgid "Byte value must be in range [0..255]"
 msgstr "Bytevärde måste vara inom intervallet [0..255]"
 
-#: debug.c:477
+#: debug.c:455
 #, c-format
 msgid "Setting byte %d in sector %lld to value %d.\n"
 msgstr "Ställer in byte %d i sektor %lld till värdet %d.\n"
 
-#: debug.c:484 debug.c:523 rs02-create.c:175 rs02-verify.c:691
+#: debug.c:462 debug.c:501 rs02-create.c:175 rs02-verify.c:691
 #: rs03-verify.c:960
 #, c-format
 msgid "Failed seeking to start of image: %s\n"
 msgstr "Misslyckades med att söka fram till början av avbild: %s\n"
 
-#: debug.c:487
+#: debug.c:465
 msgid "Could not write the new byte value"
 msgstr "Kunde inte skriva det nya bytevärdet"
 
-#: debug.c:516 read-adaptive.c:542
+#: debug.c:494 read-adaptive.c:542
 #, c-format
 msgid "Sectors must be in range [0..%lld].\n"
 msgstr "Sektorer måste vara inom intervallet [0..%lld].\n"
 
-#: debug.c:518
+#: debug.c:496
 #, c-format
 msgid "Erasing sectors [%lld,%lld]\n"
 msgstr "Raderar sektorer [%lld,%lld]\n"
 
-#: debug.c:560
+#: debug.c:538
 #, c-format
 msgid "New length must be in range [0..%lld].\n"
 msgstr "Ny längd måste vara inom intervallet [0..%lld].\n"
 
-#: debug.c:562
+#: debug.c:540
 #, c-format
 msgid "Truncating image to %lld sectors.\n"
 msgstr "Kapar avbild till %lld sektorer.\n"
 
-#: debug.c:567 read-linear.c:1358 rs01-fix.c:213 rs01-fix.c:235 rs01-fix.c:251
+#: debug.c:545 read-linear.c:1358 rs01-fix.c:213 rs01-fix.c:235 rs01-fix.c:251
 #: rs01-fix.c:285 rs02-create.c:105 rs02-create.c:142 rs02-fix.c:245
 #: rs02-fix.c:264 rs02-fix.c:277 rs03-create.c:176 rs03-create.c:234
 #: rs03-fix.c:273 rs03-fix.c:294 rs03-fix.c:309 rs03s-create.c:184
@@ -201,7 +194,7 @@ msgstr "Kapar avbild till %lld sektorer.\n"
 msgid "Could not truncate %s: %s\n"
 msgstr "Kunde inte kapa %s: %s\n"
 
-#: debug.c:593 debug.c:1104 debug.c:1112 debug.c:1169 debug.c:1174 file.c:60
+#: debug.c:571 debug.c:1082 debug.c:1090 debug.c:1147 debug.c:1152 file.c:60
 #: file.c:129 file.c:149 raw-editor.c:363 read-adaptive.c:1169
 #: read-adaptive.c:1201 read-linear.c:313 read-linear.c:315 read-linear.c:346
 #: read-linear.c:348 rs01-create.c:251
@@ -213,7 +206,7 @@ msgstr ""
 "Kan inte öppna %s:\n"
 "%s"
 
-#: debug.c:597
+#: debug.c:575
 #, c-format
 msgid ""
 "\n"
@@ -232,7 +225,7 @@ msgstr ""
 "dvdisaster --debug %s %lld --random-seed %d\n"
 "\n"
 
-#: debug.c:669 file.c:108 read-adaptive.c:152 read-linear.c:112
+#: debug.c:647 file.c:108 read-adaptive.c:152 read-linear.c:112
 #: read-linear.c:115
 #, c-format
 msgid ""
@@ -242,11 +235,11 @@ msgstr ""
 "Fel vid stängning av avbildsfil:\n"
 "%s"
 
-#: debug.c:683
+#: debug.c:661
 msgid "Replacing the \"unreadable sector\" markers with zeros.\n"
 msgstr "Ersätter markeringarna för \"oläsbar sektor\" med nollor.\n"
 
-#: debug.c:690
+#: debug.c:668
 #, c-format
 msgid ""
 "Could not read image sector %lld:\n"
@@ -255,12 +248,12 @@ msgstr ""
 "Kunde inte läsa sektor %lld i avbild:\n"
 "%s\n"
 
-#: debug.c:714
+#: debug.c:692
 #, c-format
 msgid "%lld \"unreadable sector\" markers replaced.\n"
 msgstr "%lld \"oläsbar sektor\"-markeringar ersatta.\n"
 
-#: debug.c:792 debug.c:839 debug.c:900
+#: debug.c:770 debug.c:817 debug.c:878
 #, c-format
 msgid ""
 "Contents of sector %lld:\n"
@@ -269,37 +262,37 @@ msgstr ""
 "Innehåll av sektor %lld:\n"
 "\n"
 
-#: debug.c:801 debug.c:1128 debug.c:1197 debug.c:1201 debug.c:1279
+#: debug.c:779 debug.c:1106 debug.c:1175 debug.c:1179 debug.c:1257
 #: rs01-common.c:187 rs02-common.c:244 rs02-create.c:192 rs02-fix.c:390
 #: rs03-common.c:289 rs03-recognize.c:287 rs03s-create.c:101
 #, c-format
 msgid "Failed reading sector %lld in image: %s"
 msgstr "Misslyckades med att läsa sektor %lld i avbild: %s"
 
-#: debug.c:850
+#: debug.c:828
 #, c-format
 msgid "Failed reading sector %lld: %s"
 msgstr ""
 
-#: debug.c:887
+#: debug.c:865
 msgid "Raw reading only possible on CD media\n"
 msgstr ""
 
-#: debug.c:1095
+#: debug.c:1073
 msgid "4th argument is missing"
 msgstr ""
 
-#: debug.c:1108
+#: debug.c:1086
 #, c-format
 msgid "Source sector must be in range [0..%lld]\n"
 msgstr ""
 
-#: debug.c:1116
+#: debug.c:1094
 #, c-format
 msgid "Destination sector must be in range [0..%lld]\n"
 msgstr ""
 
-#: debug.c:1120
+#: debug.c:1098
 #, c-format
 msgid "Copying sector %lld from %s to sector %lld in %s.\n"
 msgstr ""
@@ -2520,6 +2513,12 @@ msgstr ""
 #: raw-editor.c:1119
 msgid "button|Smart L-EC"
 msgstr ""
+
+#: raw-sector-cache.c:35 raw-sector-cache.c:202 raw-sector-cache.c:336
+#: scsi-freebsd.c:114 scsi-linux.c:101 scsi-netbsd.c:112
+#, c-format
+msgid "Could not open %s: %s"
+msgstr "Kunde inte öppna %s: %s"
 
 #: raw-sector-cache.c:60 raw-sector-cache.c:124 raw-sector-cache.c:130
 #: raw-sector-cache.c:134 raw-sector-cache.c:162 raw-sector-cache.c:260

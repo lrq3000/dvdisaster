@@ -11,7 +11,11 @@
 	  optical media and on disk ISO images; lots of internal
 	  changes and fixes due to that
 	- added --ignore-iso-size option
-	- Jindřich Šesták took over the Czech translation.
+	- Jindřich Šesták took over the Czech translation,
+	  provided up-to-date HTML documents and manual pages,
+	  made all (!) language versions of the manual validate
+	  cleanly, and fixed several other issues in the HTML/PHP
+	  sources.
 
 0.79.3	21-11-2010
         - Switched Linux SCSI driver default to SG_IO ioctl().
