@@ -12,9 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Systemanforderungen</h3>
+<h3 class="top">Systemanforderungen</h3>
 
 <ul>
  <li>x86-, PowerPC- oder Sparc-Prozessor;</li>
@@ -22,7 +22,7 @@ begin_page();
  <li>ausreichend Festplattenplatz zum Abspeichern eines ISO-Abbildes der bearbeiteten Datenträger.</li>
 </ul>
 
-<h3>Unterstützte Betriebssysteme</h3>
+<h3 class="top">Unterstützte Betriebssysteme</h3>
 
 Die folgende Tabelle enthält Informationen zu den unterstützten
 Betriebssystemen. Die angegebenen Versionen wurde zum Entwickeln
@@ -80,7 +80,7 @@ späteren Versionen bis einschließlich Windows 7 gegeben.<br>
 Windows-"Edition" ab. Bei einigen ergeben zusätzliche Prozessorkerne mit
 dvdisaster keine Verbesserung der Gechwindigkeit.
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

@@ -12,9 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Tips zum Aufbewahren der Fehlerkorrektur-Datei</h3>
+<h3 class="top">Tips zum Aufbewahren der Fehlerkorrektur-Datei</h3>
 
 Zur Zeit gibt es kaum Wechselspeichersysteme, 
 die eine wirtschaftliche Alternative zu CD/DVD/BD-Formaten darstellen.
@@ -60,13 +60,13 @@ jeweils auf dem nächsten Datenträger ablegen.<p>
 <pre> </pre>
 <table width="50%"><tr><td><hr></td></tr></table>
 
-<font size="-1">
+<span class="fs">
 <a name="footnote1"><sup>*)</sup></a> 
 Oder Sie verwenden anstelle von Fehlerkorrektur-Dateien ein mit RS02 oder
-RS03 <a href="howtos30.php"> erweitertes Abbild.
-</font>
+RS03 <a href="howtos30.php"> erweitertes Abbild.</a>
+</span>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

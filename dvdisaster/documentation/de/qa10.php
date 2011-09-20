@@ -12,9 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3><a name="top">Technische Fragen</a></h3>
+<h3 class="top"><a name="top">Technische Fragen</a></h3>
 
 <a href="#nls">2.1 In welchen Übersetzungen ist das Programm verfügbar?</a><p>
 <a href="#media">2.2 Welche Datenträger-Typen werden unterstützt?</a><p>
@@ -33,7 +33,7 @@ dvdisaster beinhaltet Bildschirmtexte in den folgenden Sprachen:<p>
 <tr><td></td><td>Portugiesisch</td><td>--</td><td>vollständig</td></tr>
 <tr><td></td><td>Russisch</td><td>--</td><td>vollständig</td></tr>
 <tr><td></td><td>Schwedisch</td><td>--</td><td>vollständig</td></tr>
-<tr><td></td><td>Tschechisch</td><td>--</td><td>bis Version 0.66</td></tr>
+<tr><td></td><td>Tschechisch</td><td>--</td><td>vollständig</td></tr>
 </table><p>
 
 Übersetzer/-innen für andere Sprachen sind willkommen!<p>
@@ -52,7 +52,7 @@ fehlt eventuell noch: <p>
 
 <tt>export OUTPUT_CHARSET=iso-8859-1</tt> (X11, XTerm)
 
-<div align=right><a href="#top">&uarr;</a></div>
+<div class="talignr"><a href="#top">&uarr;</a></div>
 
 
 
@@ -113,7 +113,7 @@ Erfahrungen vor.</li>
 <b>Nicht verwendbare Typen</b> (kein Einlesen des Abbildes möglich):<p> 
 BD-ROM (gepreßte BDs), DVD-ROM (gepreßte DVDs) sowie Audio-CD und Video-CD.
 
-<div align=right><a href="#top">&uarr;</a></div><p>
+<div class="talignr"><a href="#top">&uarr;</a></div><p>
 
 
 <b><a name="filesystem">2.3 Welche Dateisysteme werden unterstützt?</a></b><p>
@@ -124,9 +124,9 @@ Daher ist es unerheblich, mit welchem Dateisystem der Datenträger formatiert wu
 Weil dvdisaster die Struktur der Dateisysteme nicht kennt bzw. nutzt,
 kann es keine logischen Fehler darin beheben und insbesondere keine
 verlorengegangenen oder gelöschten Dateien wiederherstellen.
-<div align=right><a href="#top">&uarr;</a></div><p>
+<div class="talignr"><a href="#top">&uarr;</a></div><p>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

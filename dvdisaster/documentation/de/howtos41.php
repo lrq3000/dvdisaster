@@ -15,10 +15,10 @@ begin_page();
 howto_headline("Datenträger-Abbild rekonstruieren", "Grundeinstellungen", "images/fix-icon.png");
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
 <?php begin_screen_shot("Einstellungsdialog aufrufen.","global-prefs-invoke.png"); ?>
-<table><tr><td valign="top"><img src="../images/prefs-icon.png" valign="bottom"></td>
+<table><tr><td class="valignt"><img src="../images/prefs-icon.png" alt="Bedienelement: Eigenschaften (Auswahlknopf)" class="valignb"></td>
 <td>Die nachfolgend besprochenen Reiterkarten finden Sie
 im Einstellungsdialog. Das zum Aufruf verwendete Symbol ist
 in dem Bildschirmfoto grün markiert (Anklicken vergrößert das Bild).
@@ -78,7 +78,7 @@ keine Auswirkungen auf das Einlesen von Datenträgern.
 
 <a href="howtos42.php">Abbild einlesen und Daten wiederherstellen...</a>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

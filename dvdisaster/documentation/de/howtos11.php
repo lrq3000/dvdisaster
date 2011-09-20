@@ -15,10 +15,10 @@ begin_page();
 howto_headline("Datenträger überprüfen", "Grundeinstellungen", "images/scan-icon.png");
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
 <?php begin_screen_shot("Einstellungsdialog aufrufen.","global-prefs-invoke.png"); ?>
-<table><tr><td valign="top"><img src="../images/prefs-icon.png" valign="bottom"></td>
+<table><tr><td class="valignt"><img src="../images/prefs-icon.png" alt="Bedienelement: Einstellungen (Aufruf-Knopf)" class="valignb"></td>
 <td>Die nachfolgend besprochenen Reiterkarten finden Sie
 im Einstellungsdialog. Das zum Aufruf verwendete Symbol ist
 in dem Bildschirmfoto grün markiert (Anklicken vergrößert das Bild).
@@ -93,7 +93,7 @@ keine Auswirkungen auf die Überprüfung von Datenträgern.
 
 <a href="howtos12.php">Überprüfung durchführen...</a>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

@@ -12,9 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Ein paar Hintergründe zu Lesefehlern</h3>
+<h3 class="top">Ein paar Hintergründe zu Lesefehlern</h3>
 
 Optische Medien verfügen über einen eigenen Fehlerkorrektur-Kode, der kleinere
 Material- und Brennfehler ausgleicht und so die gespeicherten Daten
@@ -91,7 +91,7 @@ Schalten Sie den Rechner über Nacht aus und versuchen Sie es am nächsten Morge
 Hardware und Datenträger ziemlich ungesund.<p></li>
 </ul>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

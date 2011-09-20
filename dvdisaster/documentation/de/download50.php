@@ -12,9 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Zusätzliche Papiere</h3>
+<h3 class="top">Zusätzliche Papiere</h3>
 
 Die Online-Dokumentation, die Sie gerade lesen, ist auch
 in den dvdisaster-Programmpaketen selbst enthalten. Sie brauchen
@@ -37,7 +37,7 @@ Das RS03-Dokument setzt Kenntnisse im Bereich Kodierungstheorie voraus
 und ist nicht als Benutzerdokumentation gedacht.
 
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

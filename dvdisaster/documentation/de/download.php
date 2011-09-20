@@ -14,9 +14,9 @@ begin_page();
 $show_all=$_GET["showall"];
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>dvdisaster herunterladen</h3>
+<h3 class="top">dvdisaster herunterladen</h3>
 
 <table width="100%">
 <tr>
@@ -25,7 +25,7 @@ Es wird Ihnen
 als <a href="http://www.germany.fsfeurope.org/documents/freesoftware.de.html">freie Software</a> 
 unter der <a href="http://www.gnu.org/licenses/gpl-3.0.txt">GNU General Public License v3</a>  zur 
 Verfügung gestellt.</td>
-<td width="127px" valign="top"><img src="../images/gplv3-127x51.png" width="127px"></td>
+<td class="w127x" valign="top"><img src="../images/gplv3-127x51.png" alt="GPLv3-Logo" width="127"></td>
 </tr>
 </table>
 <p>
@@ -64,7 +64,7 @@ ist <a href="download40.php"><?php echo $cooked_version ?></a>.
 
 <table class="download" cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.72</b></td><td align="right">07-Nov-2010</td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2" class="hsep"></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Quellkode für alle Betriebssysteme:&nbsp;</td>
@@ -76,7 +76,7 @@ ist <a href="download40.php"><?php echo $cooked_version ?></a>.
 if($mode == "www");
     echo "<tr><td align=\"right\">MD5-Prüfsumme:&nbsp;</td><td>312bceef3bf9c0754cf633ed3b12eb71</td></tr>";
 ?>
-    <tr><td colspan="2"><img width=1 height=3</td></tr>
+    <tr><td colspan="2" class="esep"></td></tr>
 
     <tr><td align="right">Binärversion für Mac OS X 10.5 / x86:&nbsp;</td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.2.app.zip">dvdisaster-0.72.2.app.zip</a>&nbsp;--&nbsp;bitte erst den <a href="download30.php#mac">Hinweis</a> lesen</td></tr>
@@ -87,7 +87,7 @@ if($mode == "www");
 if($mode == "www");
     echo "<tr><td align=\"right\">MD5-Prüfsumme:&nbsp;</td><td>52243c1fafb9d2e496b6eb318c3e534f</td></tr>";
 ?>
-    <tr><td colspan="2"><img width=1 height=3</td></tr>
+    <tr><td colspan="2" class="esep"></td></tr>
 
     <tr><td align="right">Binärversion für Windows:&nbsp;</td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.2-setup.exe">dvdisaster-0.72.2-setup.exe</a></td></tr>
@@ -117,7 +117,7 @@ if($mode == "www");
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.1.tar.bz2.gpg">dvdisaster-0.72.1.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">MD5-Prüfsumme:&nbsp;</td>
         <td>4da96566bc003be93d9dfb0109b4aa1d</td></tr>
-    <tr><td colspan="2"><img width=1 height=3</td></tr>
+    <tr><td colspan="2" class="esep"></td></tr>
 
     <tr><td align="right">Binärversion für Mac OS X 10.5 / x86:&nbsp;</td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.1.app.zip">dvdisaster-0.72.1.app.zip</a>&nbsp;--&nbsp;bitte erst den <a href="download30.php#mac">Hinweis</a> lesen</td></tr>
@@ -125,7 +125,7 @@ if($mode == "www");
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.1.app.zip.gpg">dvdisaster-0.72.1.app.zip.gpg</a></td></tr>
     <tr><td align="right">MD5-Prüfsumme:&nbsp;</td>
         <td>924b5677f69473b6b87991e01779a541</td></tr>
-    <tr><td colspan="2"><img width=1 height=3</td></tr>
+    <tr><td colspan="2" class="esep"></td></tr>
 
     <tr><td align="right">Binärversion für Windows:&nbsp;</td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.1-setup.exe">dvdisaster-0.72.1-setup.exe</a></td></tr>
@@ -142,7 +142,7 @@ if($mode == "www");
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.tar.bz2.gpg">dvdisaster-0.72.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">MD5-Prüfsumme:&nbsp;</td>
         <td>efa35607d91412a7ff185722f270fb8a</td></tr>
-    <tr><td colspan="2"><img width=1 height=3</td></tr>
+    <tr><td colspan="2" class="esep"></td></tr>
 
     <tr><td align="right">Binärversion für Mac OS X 10.5 / x86:&nbsp;</td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.app.zip">dvdisaster-0.72.app.zip</a>&nbsp;--&nbsp;bitte erst den <a href="download30.php#mac">Hinweis</a> lesen</td></tr>
@@ -150,7 +150,7 @@ if($mode == "www");
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.app.zip.gpg">dvdisaster-0.72.app.zip.gpg</a></td></tr>
     <tr><td align="right">MD5-Prüfsumme:&nbsp;</td>
         <td>1f28385b2b6d64b664fd416eb4c85e80</td></tr>
-    <tr><td colspan="2"><img width=1 height=3</td></tr>
+    <tr><td colspan="2" class="esep"></td></tr>
 
     <tr><td align="right">Binärversion für Windows:&nbsp;</td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72-setup.exe">dvdisaster-0.72-setup.exe</a></td></tr>
@@ -163,7 +163,7 @@ if($mode == "www");
 ?>
   </table>
 </td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2" class="hsep"></td></tr>
 <tr><td colspan="2">
 Grundlegende Neuerungen in dieser Version:<p>
 <ul>
@@ -225,7 +225,7 @@ zu bekommen.
 
 <table class="download" cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.70</b></td><td align="right">04-Mär-2008</td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2" class="hsep"></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Quellkode für alle Betriebssysteme:&nbsp;</td>
@@ -234,7 +234,7 @@ zu bekommen.
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.70.6.tar.bz2.gpg">dvdisaster-0.70.6.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">MD5-Prüfsumme:&nbsp;</td>
         <td>c6d2215d7dd582475b19593dfa4fbdc2</td></tr>
-    <tr><td colspan="2"><img width=1 height=3</td></tr>
+    <tr><td colspan="2" class="esep"></td></tr>
 
     <tr><td align="right">Binärversion für Windows:&nbsp;</td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.70.6-setup.exe">dvdisaster-0.70.6-setup.exe</a></td></tr>
@@ -244,7 +244,7 @@ zu bekommen.
         <td>82f74bebd08ab7ae783ddc5dd0bba731</td></tr>
   </table>
 </td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2" class="hsep"></td></tr>
 <tr><td colspan="2">
 Das RS02-Fehlerkorrektur-Verfahren
 wird in der graphischen Benutzeroberfläche vollständig unterstützt.
@@ -301,7 +301,7 @@ betrachtet werden. Einige interessante Dateien darin sind:
 <li><a href="http://dvdisaster.cvs.sourceforge.net/dvdisaster/dvdisaster/README?view=markup">README</a> - eine Übersicht zum Quellkodearchiv (in Englisch).</li>
 </ul>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

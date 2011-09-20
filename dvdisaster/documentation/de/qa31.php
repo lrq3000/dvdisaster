@@ -12,9 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Technische Eigenschaften der Fehlerkorrektur</h3>
+<h3 class="top">Technische Eigenschaften der Fehlerkorrektur</h3>
 
 Diese Seite skizziert die Grundideen hinter dvdisaster, damit Sie abschätzen können,
 ob es Ihren Anforderungen zur Datensicherung genügt. Im Zweifelsfall sollten Sie
@@ -68,7 +68,7 @@ Fehlerkorrekturkodes überschritten wird.
 <pre> </pre>
 <table width="50%"><tr><td><hr></td></tr></table>
 
-<font size="-1">
+<span class="fs">
 <a name="footnote1"><sup>*)</sup></a> Die angegebene Grenze 
 von 32 korrigierbaren Defekten pro ECC-Bereich ist die Grundeinstellung.
 Sie können hier andere Werte <a href="howtos22.php#ecc">einstellen</a>
@@ -76,9 +76,9 @@ und so die Leistungsfähigkeit der Fehlerkorrektur anpassen.
 Wenn die <a href="howtos30.php">Fehlerkorrektur-Daten auf dem Datenträger selbst untergebracht</a>
 werden, hängt die Anzahl der korrigierbaren Fehler von der Restkapazität des
 Datenträgers ab.
-</font>
+</span>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

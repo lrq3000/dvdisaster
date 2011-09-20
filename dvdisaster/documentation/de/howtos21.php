@@ -17,9 +17,9 @@ $answer=$_GET["answer"];
 howto_headline("Fehlerkorrektur-Daten erstellen", "Entscheidungshilfe", "images/create-icon.png");
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Entscheidungshilfe</h3>
+<h3 class="top">Entscheidungshilfe</h3>
 
 Fehlerkorrektur-Daten können entweder in einer eigenständigen Fehlerkorrektur-Datei 
 oder direkt auf dem Datenträger abgelegt werden.
@@ -88,7 +88,7 @@ finden Sie weitere Informationen zu den Vor- und Nachteilen der beiden Methoden.
 
 <pre> </pre>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 footnote("*","footnote","An dieser Stelle noch einmal der Hinweis: Fehlerkorrektur-Daten müssen erstellt werden, bevor der Datenträger kaputt geht. Von defekten Datenträgern können keine Fehlerkorrektur-Daten mehr erstellt und damit sehr wahrscheinlich auch keine unlesbaren Sektoren wiederhergestellt werden.");

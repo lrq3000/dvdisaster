@@ -15,10 +15,10 @@ begin_page();
 howto_headline("Fehlerkorrektur-Datei erstellen", "Grundeinstellungen", "images/create-icon.png");
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
 <?php begin_screen_shot("Einstellungsdialog aufrufen.","global-prefs-invoke.png"); ?>
-<table><tr><td valign="top"><img src="../images/prefs-icon.png" valign="bottom"></td>
+<table><tr><td class="valignt"><img src="../images/prefs-icon.png" alt="Bedienelement: Einstellungen (Aufruf-Knopf)" class="valignb"></td>
 <td>Die nachfolgend besprochenen Reiterkarten finden Sie
 im Einstellungsdialog. Das zum Aufruf verwendete Symbol ist
 in dem Bildschirmfoto grün markiert (Anklicken vergrößert das Bild).
@@ -32,7 +32,7 @@ Das Symbol kann je nach verwendetem Symbol-Thema anders aussehen.</td>
 
 <table width="100%" cellspacing="5">
 <tr>
-<td><img src="../images/good-image.png"></td>
+<td><img src="../images/good-image.png" alt="Symbol: Vollständiges Abbild"></td>
 <td>Wenn Sie bereits ein ISO-Abbild des Datenträgers vorliegen haben, 
 dann können sie die nächsten beiden Reiterkarten überspringen und gleich 
 mit den <a href="#ecc">Einstellungen zur Fehlerkorrektur-Datei beginnen</a>.
@@ -113,7 +113,7 @@ keine Auswirkungen auf die erstellten Fehlerkorrektur-Dateien.
 
 <a href="howtos23.php">Fehlerkorrektur-Datei erzeugen...</a>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

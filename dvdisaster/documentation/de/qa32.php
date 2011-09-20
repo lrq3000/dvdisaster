@@ -12,9 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Datenrekonstruktion auf Abbild-Ebene</h3>
+<h3 class="top">Datenrekonstruktion auf Abbild-Ebene</h3>
 
 Eine Datenträger-Rekonstruktion mit fehlerkorrigierenden Kodes findet in
 zwei Schritten statt:
@@ -125,7 +125,7 @@ Fehlerkorrektur-Dateien schadhaft wird, ist nicht mehr
 sichergestellt, daß sich die Fehlerkorrektur-Dateien noch vollständig lesen
 lassen.<p>
 
-<table width=100%><tr><td bgcolor=#000000 width=2><img width=1 height=1 alt=""></td><td>
+<table width="100%"><tr><td class="vsep"></td><td>
 Deshalb ist es unverzichtbar, auch Fehlerkorrektur-Dateien auf der
 Abbild-Ebene zu schützen: Die 
 <a href="qa37.php">Datenträger mit Fehlerkorrektur-Dateien</a> 
@@ -150,7 +150,7 @@ Fehlerkorrektur-Dateien darin.
 <pre> </pre>
 <table width="50%"><tr><td><hr></td></tr></table>
 
-<font size="-1">
+<span class="fs">
 <a name="footnote1"><sup>*)</sup></a> Mit dem neuen RS03-Kodierer
 erzeugte Fehlerkorrektur-Dateien haben genau diese Eigenschaften,
 d.h. sie sind robust gegen Beschädigungen soweit wie die
@@ -159,9 +159,9 @@ genügend Rechenleistung und schnelle Festplattenzugriffe zur Verfügung
 stehen um die Dateien entsprechend aufzubauen. Zur Zeit der Entwicklung
 von RS01 war dies noch nicht der Fall. Aber auch für RS03-Fehlerkorrektur-Dateien
 gelten die oben erwähnten Nachteile des Lesens auf Dateisystem-Ebene!
-</font>
+</span>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

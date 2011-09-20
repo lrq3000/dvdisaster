@@ -14,9 +14,9 @@ require("../include/screenshot.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3><b>Das lineare Lese-Verfahren</b></h3>
+<h3 class="top"><b>Das lineare Lese-Verfahren</b></h3>
 <p>
 
 In dvdisaster sind zwei verschiedene Leseverfahren enthalten.<p>
@@ -111,7 +111,7 @@ Festplatte abgelegt, was je nach Betriebssystem und verwendeter Hardware kleine
 Verzögerungen und damit Unregelmäßigkeiten in der Lesekurve bewirkt.<p>
 
 <b>Lesefehler.</b>
-Lesefehler werden <a href="howtos13.php#defective">rot in der Spirale markiert</a> bzw. in der Kommandozeile ausgegeben</a>.
+Lesefehler werden <a href="howtos13.php#defective">rot in der Spirale markiert</a> bzw. in der Kommandozeile ausgegeben.
 An diesen Stellen konnte der Datenträger im momentanen Durchlauf nicht vollständig gelesen werden:
 <ul>
 <li>Es ist damit wahrscheinlich, daß der Datenträger defekt ist. </li>
@@ -119,7 +119,7 @@ An diesen Stellen konnte der Datenträger im momentanen Durchlauf nicht vollstä
 <a href="howtos40.php"> rekonstruiert</a> und auf einen neuen Datenträger geschrieben werden.</li>
 </ul>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

@@ -16,7 +16,7 @@ begin_page();
 howto_headline("Datenträger überprüfen", "Ergebnisse bewerten", "images/scan-icon.png");
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
 <?php begin_screen_shot("Übersicht","defective-cd.png"); ?>
 <b>Übersicht.</b> dvdisaster stellt die Ergebnisse der Überprüfung in mehreren 
@@ -55,7 +55,7 @@ der Kurve sind normal; ebenfalls sind kleine Einbrüche wie der bei ca. 250M kei
 Grund zur Beunruhigung.
 <?php end_screen_shot(); ?>
 
-<!--- do not change below --->
+<!-- do not change below -->
 <?php begin_screen_shot("Gute zweischichtige DVD","good-dvd9.png"); ?>
 <b>Die Lesekurve muß nicht immer gerade ansteigen</b>: Bei mehrschichtigen
 Datenträgern kann die Lesekurve auch symmetrisch ansteigen und wieder abfallen.

@@ -12,9 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3><a name="top">Allgemeine Fragen und Antworten</a></h3>
+<h3 class="top"><a name="top">Allgemeine Fragen und Antworten</a></h3>
 
 <a href="#pronounce">1.1 Wie spricht man "dvdisaster" aus?</a><p>
 <a href="#pipo">1.2 Was sind Qualitäts-Analysen und warum werden nicht mehr unterstützt?</a><p>
@@ -26,7 +26,7 @@ begin_page();
 <b><a name="pronounce">1.1 Wie spricht man "dvdisaster" aus?</a></b><p>
 Da der Wortstamm <i>disaster</i> aus dem Englischen kommt, 
 spricht man es etwa wie "diwidisaster" aus. 
-<div align=right><a href="#top">&uarr;</a></div>
+<div class="talignr"><a href="#top">&uarr;</a></div>
 
 
 <b><a name="pipo">1.2 Was sind Qualitäts-Analysen und warum werden nicht mehr unterstützt?</a></b><p>
@@ -48,14 +48,14 @@ Software verfügbar zu sein. Daher müssen wir abwarten bis die Hersteller einse
 daß sich ihre Produkte umso besser verkaufen, je mehr freie Software für ihre
 Laufwerke verfügbar ist. <p>
 
-<div align=right><a href="#top">&uarr;</a></div><p>
+<div class="talignr"><a href="#top">&uarr;</a></div><p>
 
 <b><a name="compat">1.3 Ist dvdisaster mit nachfolgenden Versionen kompatibel?</a></b><p>
 Ja, denn dvdisaster ist für eine Datenarchivierung über viele Jahre vorgesehen. 
 Sie können beim Umstieg auf eine neuere Version von dvdisaster die Abbild- und
 Fehlerkorrekturdateien von Vorgängerversionen weiter verwenden und brauchen
 diese <i>nicht</i> neu zu erzeugen.<p>
-<div align=right><a href="#top">&uarr;</a></div><p>
+<div class="talignr"><a href="#top">&uarr;</a></div><p>
 
 <b><a name="eccpos">1.4 Bei erweiterten Abbildern liegen die Fehlerkorrektur-Daten am Ende des Datenträgers. Ist das eine schlechte Wahl?</a></b><p>
 Nein. Zunächst eine kleine Begriffsbestimmung:
@@ -102,7 +102,7 @@ Punkt (1) erneut um zu sehen daß sich dadurch für die Fehlerkorrektur
 nichts verbessert.)
 </li>
 </ol>
-<div align=right><a href="#top">&uarr;</a></div><p>
+<div class="talignr"><a href="#top">&uarr;</a></div><p>
 
 <b><a name="recovery">1.5 Was sind die Unterschiede zwischen Fehlerkorrektur auf Datei- und Abbild-Ebene?</a></b><p>
 
@@ -119,7 +119,7 @@ abgebildet. Ein weiterer rot markierter Sektor wird benötigt,
 um die Struktur des "Fotos"-Verzeichnisses abzuspeichern.
 <p>
 
-<table width="100%"><tr><td align="center"><img src="images/metadata1.png"></td></tr></table><p>
+<table width="100%"><tr><td align="center"><img src="images/metadata1.png" alt="Beziehung zwischen dem Dateisystem und den Datenträger-Sektoren"></td></tr></table><p>
 
 <b>Nachteile der Fehlerkorrektur auf Dateisystem-Ebene bei optischen Datenträgern.</b><br>
 Nehmen wir jetzt eine Dateisystem-basierte Fehlerkorrektur an. 
@@ -137,7 +137,7 @@ Möglichkeit mehr festzustellen wie die grünen und blauen Sektoren
 den Dateien zugeordnet sind. Daher haben wir einen kompletten Datenverlust
 obwohl alle zu den Dateien gehörenden Sektoren noch lesbar sind.<p>
 
-<table width="100%"><tr><td align="center"><img src="images/metadata2.png"></td></tr></table><p>
+<table width="100%"><tr><td align="center"><img src="images/metadata2.png" alt="Unlesbare Sektoren mit Metadaten ergeben vollständigen Datenverlust"></td></tr></table><p>
 
 <p>Bitte beachten Sie daß sich das Problem nicht lösen läßt indem man
 die Datei "schutz.par" auf einem anderen Datenträger speichert.
@@ -156,7 +156,7 @@ ISO-Abbildes, d.h. sowohl Dateien als auch Meta-Daten (z.B. Verzeichnisse)
 werden wiederhergestellt. Abbildung 1.5.3 verdeutlicht den Bereich des
 Abbild-basierten Schutzes.
 
-<table width="100%"><tr><td align="center"><img src="images/metadata3.png"></td></tr></table><p>
+<table width="100%"><tr><td align="center"><img src="images/metadata2.png" alt="Schutz auf der Abbild-Ebene"></td></tr></table><p>
 
 Weder das Lesen des beschädigten ISO-Abbildes noch die Anwendung
 der Fehlerkorrektur benötigen Informationen aus dem Dateisystem.
@@ -167,7 +167,7 @@ keine kritischen Einzelsektoren, die zum kompletten Ausfall der
 Fehlerkorrektur führen können.
 
 <table width="30%" cellpadding="0">
-<tr bgcolor="#000000"><td><img width=1 height=1 alt=""></td></tr>
+<tr><td class="hsep"></td></tr>
 </table>
 <a name="note1"><sup>1)</sup>
 Das ist nicht als Angriff gegen das PAR/PAR2-Projekt gemeint. 
@@ -175,9 +175,9 @@ Carsten ist einfach der Meinung daß ein Schutz auf Datei-Ebene
 auf optischen Datenträgern nicht funktioniert :-)</a>
 
 
-<div align=right><a href="#top">&uarr;</a></div><p>
+<div class="talignr"><a href="#top">&uarr;</a></div><p>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

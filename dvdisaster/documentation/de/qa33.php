@@ -12,9 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Übersicht über die RS01-, RS02 und RS03-Fehlerkorrektur-Verfahren</h3>
+<h3 class="top">Übersicht über die RS01-, RS02 und RS03-Fehlerkorrektur-Verfahren</h3>
 
 dvdisaster verfügt über drei Fehlerkorrektur-Verfahren. RS01 und RS02
 sind die bisherigen und erprobten Verfahren, während sich RS03 
@@ -79,8 +79,8 @@ mit Fehlerkorrektur-Daten (RS02, RS03) zusammen:<p>
 
 <table width="100%" border="1" cellspacing="0" cellpadding="5">
 <tr>
-<td width="50%"><i>Fehlerkorrektur-Dateien</i></td>
-<td width="50%"><i>Fehlerkorrektur-Daten im Abbild</i></td>
+<td class="w50p"><i>Fehlerkorrektur-Dateien</i></td>
+<td class="w50p"><i>Fehlerkorrektur-Daten im Abbild</i></td>
 </tr>
 <tr valign="top">
 <td> Redundanz kann beliebig groß gewählt werden</td>
@@ -127,7 +127,7 @@ katalogisiert oder geschützt werden</td></tr>
 </table><p>
 
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

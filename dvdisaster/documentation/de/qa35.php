@@ -14,9 +14,9 @@ require("../include/screenshot.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Das angepaßte Lese-Verfahren</h3>
+<h3 class="top">Das angepaßte Lese-Verfahren</h3>
 <p>
 
 dvdisaster enthält zwei verschiedene Leseverfahren.<p>
@@ -107,7 +107,7 @@ Lesefähigkeit des Laufwerks. Günstiger ist es typischerweise, früher mit den 
 Lesen aufzuhören und die letzten Sektoren mit dem <a href="qa34.php">linearen Leseverfahren</a>
 zu vervollständigen.
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

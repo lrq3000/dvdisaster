@@ -13,9 +13,9 @@ require("../include/screenshot.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Beispiele für die Fehlerkorrektur</h3>
+<h3 class="top">Beispiele für die Fehlerkorrektur</h3>
 
 <?php begin_screen_shot("Einlesen eines beschädigten Datenträgers.","recover-linear.png"); ?>
    <b>Einlesen beschädigter Datenträger.</b> Der hier bearbeitete Datenträger
@@ -52,7 +52,7 @@ verloren.<p>
 <a href="index20.php">Warum Qualitäts-Analysen nicht ausreichen...</a>
 
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

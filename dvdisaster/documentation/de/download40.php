@@ -14,9 +14,9 @@ begin_page();
 $show_all=$_GET["showall"];
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Alpha-/Entwicklerversionen</h3>
+<h3 class="top">Alpha-/Entwicklerversionen</h3>
 
 <b>Helfen Sie beim Testen!</b> Hier finden Sie experimentelle 
 dvdisaster-Versionen, die auf dem Weg zur nächsten "stabilen" Version
@@ -74,7 +74,7 @@ Versionen.<p>
 
 <table class="download" cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.79</b></td><td align="right">21-Nov-2010</td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2" class="hsep"></td></tr>
 <tr><td colspan="2">
   <table>
 <?php    
@@ -94,7 +94,7 @@ Versionen.<p>
 ?>
   </table>
 </td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2" class="hsep"></td></tr>
 <tr><td colspan="2">
 
 <b>Alle Plattformen:</b> Diese Versionen enthalten umfangreiche Änderungen an
@@ -147,7 +147,7 @@ graphische Benutzeroberfläche und die Übersetzungen der Bildschirmtexte
 wie erwartet angezeigt werden.
 </td></tr></table><p>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

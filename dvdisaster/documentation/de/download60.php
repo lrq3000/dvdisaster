@@ -12,9 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Lassen Sie sich nicht über den Tisch ziehen: Das Kleingedruckte (und andere Sachen).</h3>
+<h3 class="top">Lassen Sie sich nicht über den Tisch ziehen: Das Kleingedruckte (und andere Sachen).</h3>
 
  Das dvdisaster-Projekt stellt Ihnen diese Software
 als <a href="http://www.gnu.org/philosophy/free-sw.de.html">freie Software</a>
@@ -70,7 +70,7 @@ Seien Sie mißtrauisch wenn die Unterschriften und Prüfsummen fehlen,
 ungültig sind oder nicht mit denen auf den oben genannten Internetseiten
 übereinstimmen.<p>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.
