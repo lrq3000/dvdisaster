@@ -12,9 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>The RS01, RS02 and RS03 methods</h3>
+<h3 class="top">The RS01, RS02 and RS03 methods</h3>
 
 dvdisaster contains three error correction methods.
 RS01 and RS02 are the existing and proven methods while RS03 is still
@@ -76,8 +76,8 @@ error correction files (RS01, RS03) and augmented images (RS02, RS03):<p>
 
 <table width="100%" border="1" cellspacing="0" cellpadding="5">
 <tr>
-<td width="50%"><i>Error correction files</i></td>
-<td width="50%"><i>Image augmented with error correction data</i></td>
+<td class="w50p"><i>Error correction files</i></td>
+<td class="w50p"><i>Image augmented with error correction data</i></td>
 </tr>
 <tr valign="top">
 <td> 
@@ -123,7 +123,7 @@ needs not to be cataloged or explicitly protected.</td></tr>
 </tr>
 </table><p>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

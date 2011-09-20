@@ -17,9 +17,9 @@ $answer=$_GET["answer"];
 howto_headline("Creating error correction data", "Decision help", "images/create-icon.png");
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Decision help</h3>
+<h3 class="top">Decision help</h3>
 
 Error correction data can be either created in form of a separate error
 correction file or it can be placed directly onto the medium.
@@ -87,7 +87,7 @@ can be found in the <a href="qa33.php#table">background information</a> section.
 
 <pre> </pre>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 footnote("*","footnote","Let's repeat again for clarity: Error correction data must be created before the medium becomes defective. It is not possible to create error correction data from defective media; in that case unreadable sectors can not be recovered.");

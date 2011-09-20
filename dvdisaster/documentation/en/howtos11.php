@@ -15,10 +15,10 @@ begin_page();
 howto_headline("Scanning media for errors", "Basic settings", "images/scan-icon.png");
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
 <?php begin_screen_shot("Opening the configuration dialog.","global-prefs-invoke.png"); ?>
-<table><tr><td valign="top"><img src="../images/prefs-icon.png" valign="bottom"></td>
+<table><tr><td class="valignt"><img src="../images/prefs-icon.png" alt="dvdisaster UI: Preferences (button)" class="valignb"></td>
 <td>The following tabs are found in the configuration dialog.
 Open the dialog by selecting the symbol marked green in the screen shot
 (click the image to expand it). The symbol may look different
@@ -87,7 +87,7 @@ but these have no further effects on the scanning process.
 
 <a href="howtos12.php">Performing the scan...</a>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

@@ -1,6 +1,8 @@
 <?php
-# dvdisaster: Czech homepage translation
-# Copyright (C) 2006 Luboš Staněk
+# dvdisaster: English homepage translation
+# Copyright (C) 2004-2011 Carsten Gnörlich
+#
+# UTF-8 trigger: äöüß 
 #
 # Include our PHP sub routines, then call begin_page()
 # to start the HTML page, insert the header, 
@@ -10,125 +12,13 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Oprava dat na úrovni obrazu</h3>
-
-Obnova média pomocí opravných dat probíhá ve dvou krocích:
-
-<ol>
-<li>Nejprve se načte co nejvíce dat z poškozeného média.<p></p></li>
-<li>Pak se dosud chybějící data obnoví s pomocí kódu pro opravu chyb.</li>
-</ol>
-
-Množství čitelných dat (krok 1) nezávisí jenom na čtecích schopnostech
-mechaniky, ale také na jaké logické úrovni se proces čtení provádí.
-Tato stránka pojednává o logických úrovních a vysvětluje, proč program
-dvdisaster používá čtení na úrovni obrazu.<p>
-
-<b>Logické úrovně média</b><p>
-
-CD a DVD média jsou organizována v <i>datových sektorech</i> obsahujících po 2048 bajtech.
-Posloupné čtení a ukládání těchto sektorů vytvoří <i>obraz</i> média.<p>
-
-Ale práce s jednotlivými sektory je z hlediska uživatele nepraktická.
-Proto média obsahují <i>souborové systémy</i>, které kombinují datové
-sektory do <i>souborů</i>. To vyžaduje přesnou evidenci, ze kterých
-datových sektorů jsou soubory složeny a dalších atributů, jako jsou
-názvy souborů a přístupová oprávnění. Pro tuto evidenci jsou na médiu
-některé datové sektory rezervovány a vyplněny odpovídajícími datovými
-strukturami.<p>
-
-Ve výsledku média obsahují různé <i>logické úrovně</i>:
-Pohled na médium jako posloupnost datových sektorů znamená práci na úrovni
-<i>obrazu</i>. Avšak pohled na médium jako kolekci souborů je perspektiva
-<i>úrovně souborů (souborového systému)</i>.<p>
-
-Tyto dvě úrovně mají různé vlastnosti ohledně obnovy dat:<p>
-
-<a name="file"> </a>
-<b>Nedostatky při čtení média na úrovni souborů</b><p>
-
-Čtení poškozeného média na <b>souborové úrovni</b> znamená pokus
-o načtení co možná nejvíce dat z každého souboru.<p>
-
-Problém však nastane, když jsou poškozeny sektory, které mají v souborovém
-systému evidenční funkci. Seznam souborů na médiu může být zkrácen.
-Nebo není organizace datových sektorů na soubory kompletní. Proto mohou
-být soubory nebo jejich části ztraceny, i když by byly odpovídající datové
-sektory hardwarově čitelné. To je velmi špatné, protože dokonce malé
-čitelné části poškozených souborů jsou pro kód oprav chyb cenné.<p>
-
-Extrémně ošklivý případ nastane, když jsou data oprav chyb také uložena
-v souborech. Pak jsou vyžadována data oprav chyb k opravě souborového
-systému, ale poškozený souborový systém brání přístupu k datům oprav chyb.
-Znamená to úplnou ztrátu dat a vyzvihuje některé sporné otázky
-o <a href="#eccfile">nakládání se soubory oprav chyb</a>
-(o tom více později).<p>
-
-Avšak situace se značně zlepší při použití přístupu na základě obrazu:<p>
-
-<a name="image"> </a>
-<b>Výhody čtení na úrovni obrazu</b><p>
-
-Čtení na úrovni obrazu používá přímou komunikaci s hardwarem mechaniky
-pro přístup k datovým sektorům.<p>
-
-Počet čitelných sektorů závisí jenom na čtecích schopnostech mechaniky,
-ale nezávisí na stavu souborového systému. Chyba čtení v jednom sektoru
-neblokuje přístup k dalším datovým sektorům. Protože jsou obnoveny
-<i>všechny</i> sektory, které jsou dosud čitelné hardwarem, poskytuje
-tato metoda nejlepší základ pro opravu chyb.<p>
-
-Obraz obsahuje všechny datové sektory média. Je-li obraz úplně obnoven,
-souborový systém na něm uložený je také zcela opraven. Ochrana na úrovni
-obrazu je proto mnohem širší, než oprava chyb na úrovni souborů.<p>
-
-Program dvdisaster pracuje výhradně na úrovni obrazu, aby využil výhod
-těchto vlastností. Nová <a href="background30.html">metoda RS02</a>
-dokonce umožňuje uložení dat oprav chyb na stejné médium. To je možné,
-protože čtení informací o opravě chyb na úrovni obrazu nemůže být
-blokováno chybami na jiných místech média (poškozené sektory v opravných
-datech zmenší kapacitu oprav chyb, ale neučiní obnovu nemožnou).<p>
-
-<a href="background30.html">Metoda RS01</a> chrání média na úrovni obrazu
-také, ale ukládá data oprav chyb do souborů. Následující sekce naznačuje
-některá z toho plynoucí úskalí.<p>
-
-<a name="eccfile"> </a>
-<b>Důsledky pro ukládání souboru oprav chyb</b><p>
-
-Opravná data, která vytváří program dvdisaster, chrání média na úrovni
-obrazu. Jak jsou ale chráněny <i>soubory</i> oprav chyb?<p>
- 
-Vzhledem k tomu, že soubory oprav chyb jsou čteny na souborové úrovni,
-jsou předmětem problémů zmíněných výše. Pokud se médium obsahující soubory
-oprav chyb poškodí, nemusí být možné je zpřístupnit nebo načíst úplně.
-<p>
-
-<table width=100%><tr><td bgcolor=#000000 width=2><img width=1 height=1 alt=""></td><td>
-Z toho důvodu je důležité chránit soubory oprav chyb na úrovni obrazu také:
-<a href="background70.html">Média obsahující soubory oprav chyb</a> musí být
-rovněž chráněna programem dvdisaster.
-</td></tr></table><p>
-
-Protože se předpokládá ochrana na úrovni obrazu, soubory oprav chyb
-neobsahují <i>žádnou další ochranu proti poškození</i>! To by beztak
-moc nepomohlo: Soubory oprav chyb by mohly být vytvářeny způsobem, který
-by jim umožnil poskytovat omezenou kapacitu opravy chyb i v případě
-jejich poškození. Ale i kdyby byla takováto vnitřní ochrana navržena,
-soubory oprav chyb by byly stále chráněny jen na úrovni souborového
-systému se všemi jeho nevýhodami prodiskutovanými výše!<p>
-
-Navíc, výpočetní čas a redundanci použitou pro vnitřní ochranu je lépe
-spotřebovat na úrovni obrazu: Oprava chyb Reed-Solomon pracuje nejlépe,
-když se opravné informace rozprostírají přes velká množství dat.
-Je lepší chránit obraz média jako celek, než chránit jednotlivé soubory
-v jeho rámci.<p></li>
-
-<!--- do not change below --->
-
-<?php
+<h3 class="top">Oprava chyb na úrovni bitové kopie</h3>Oprava disku pomocí opravných kódů probíhá ve dvou krocích:<ol>
+<li>Nejdříve je z poškozeného disku načteno co nejvíce čitelných dat.<p></li>
+<li>Chybějící data, která nemohla být přečtena jsou poté opravena pomocí opravných kódů.</li>
+</ol>Množství čitelných dat (krok 1) nezávisí jen na čtecích schopnostech mechaniky, ale také na tom na jaké logické úrovni proces čtení probíhá. Tato stránka popisuje jednotlivé logické úrovně a vysvětluje, proč dvdisaster používá čtení na úrovni bitové kopie.<p><b>Logické úrovně disku</b><p>Optické disky jsou rozděleny na <i>datové sektory</i> o velikosti 2048 bajtů. Postupné čtení a ukládání těchto sektorů vede k vytvoření <i>bitové kopie</i> disku.<p>Z uživatelského hlediska je ale práce s jednotlivými sektory nepraktická. Disky proto obsahují <i>systémy souborů</i>, které datové sektory prezentují jako <i>soubory</i>. To vyžaduje vedení přesných záznamů o tom, z kterých datových sektorů se jednotlivé soubory skládají, i o dalších atributech jako jsou názvy souborů a přístupová práva. Pro uložení těchto údajů je na disku vyhrazeno několik datových sektorů, do kterých jsou zapsány odpovídající datové struktury.<p>V důsledku toho obsahují disky různé <i>logické úrovně</i>: Pohlížet na disk jako na sled datových sektorů znamená pracovat na <i>úrovni bitové kopie</i>. Pohled na disk jako na sadu souborů je pak perspektiva <i>úrovně (systému) souborů</i>.<p>Pokud jde o opravu chyb, mají tyto dvě úrovně rozdílné vlastnosti:<p><a name="file"> </a> <b>Nevýhody čtení disku na úrovni souborů</b><p>Čtení poškozeného disku na <b>úrovni souborů</b> znamená pokusit se přečíst co nejvíce dat z jednotlivých souborů.<p>Problém nastane, pokud byly poškozeny sektory sloužící k uchovávání informací souborového systému. Seznam souborů na disku pak může být neúplný. Nebo nemusí být kompletní přiřazení sektorů k souborům. Mohou tak být ztraceny i soubory (nebo jejich části) i přesto, že jsou samotné datové sektory daných souborů čitelné. To je špatné, protože, i malé čitelné části poškozených souborů jsou pro kód opravy chyb cenné.<p>Extrémně špatný případ pak nastává, pokud jsou i data pro opravu chyb uložena jako soubory. Data pro opravu chyb jsou pak vyžadována pro opravu systému souborů, ale poškozený systém souborů zabraňuje v přístupu k těmto datům. To znamená kompletní ztrátu data a vznáší některé otázky týkající se <a href="#eccfile">práce se soubory pro opravu chyb</a> (o tom podrobně později).<p>Podobný problém nastává, pokud jsou soubory rozšířeny o PAR2 data pro opravu chyb a pak jsou všechny uloženy na stejném disku. Pokud jsou poškozeny sektory s údaji souborového systému, stanou se všechny soubory a tím také data pro opravu chyb nepřístupnými a jsou tím pádem ztraceny.<p>Situace se ale významně zlepší pokud je použit přístup na úrovni bitové kopie:<p><a name="image"> </a> <b>Výhody čtení na úrovni bitové kopie</b><p>Čtení na úrovni bitové kopie používá přímou komunikaci s mechanikou pro přístup k datovým sektorům.<p>Počet čitelných sektorů závisí pouze na schopnostech čtení mechaniky a je nezávislý na stavu souborového systému. Poškození jednoho sektoru neblokuje přístup k ostatním datovým sektorům. Protože jsou získány <i>všechny</i> sektory které byla mechanika schopna přečíst, poskytuje tato metoda pro opravu chyb nejlepší podmínky.<p>Bitová kopie obsahuje všechny datové sektory disku. Pokud je bitová kopie opravena, je opraven i v ní obsažený souborový systém. Ochrana na úrovni bitové kopie má proto mnohem širší záběr než ochrana na úrovni souborů.<p>Pro využití těchto předností pracuje dvdisaster výhradně na úrovni bitové kopie. <a href="qa33.php">Metoda RS02</a> dokonce umožňuje uchovávání dat pro opravu chyb na stejném disku. To je možné díky tomu, že čtení dat pro opravu chyb na úrovni bitové kopie není ovlivněno poškozením jiných částí disku (poškozené sektory s daty pro opravu chyb sníží kapacitu opravy chyb, ale opravu zcela neznemožní).<p><a href="qa33.php">Metoda RS01</a> také chrání disk na úrovni bitové kopie, ale data pro opravu chyb jsou uložena v samostatných souborech. Následující sekce upozorňuje na některá z toho vyplývající úskalí.<p><a name="eccfile"> </a> <b>Důsledky pro uchovávání souborů pro opravu chyb</b><p>Data pro opravu chyb vytvořená dvdisaster chrání disky na úrovni bitové kopie. Ale jak jsou chráněny <i>soubory</i> pro opravu chyb?<p>Protože soubory pro opravu chyb jsou čteny na úrovni souborů, platí pro ně výše uvedené nevýhody. Pokud je disk se soubory pro opravu chyb poškozen, může k nim být znemožněn přístup, nebo nemusí být zcela čitelné.<p><table width="100%"><tr><td class="vsep"></td><td>Je proto třeba soubory pro opravu chyb také chránit na úrovni bitové kopie: <a href="qa37.php">Disk obsahující soubory pro opravu chyb</a> musí být také chráněn prostřednictvím dvdisaster.</td></tr></table><p>Protože je předpokládána ochrana na úrovni bitové kopie, neobsahují soubory pro opravu chyb RS01 <i>žádnou dodatečnou ochranu před poškozením</i>! Ta by stejně příliš nepomohla: Soubory pro opravu chyb by mohly být navrženy tak, aby i v poškozeném stavu umožňovaly opravu chyb (i když se sníženou kapacitou)<sup><a href="#footnote1">*)</a></sup>. Ale ať už by takováto ochrana byla navržena jakkoliv, stále by se jednalo o ochranu na úrovni souborů, se všemi výše diskutovanými nevýhodami!<p>Výpočetní čas a redundanci jinak použitou pro vnitřní ochranu je lepší využít na úrovni bitové kopie: Oprava chyb Reed-Solomon pracuje nejlépe, pokud jsou informace pro opravu chyb rozloženy ve větším množství dat. Je lepší chránit celý obraz, než každý v něm obsažený soubor samostatně.<p><pre> </pre>
+<table width="50%"><tr><td><hr></td></tr></table><span class="fs"> <a name="footnote1"><sup>*)</sup></a> Soubory pro opravu chyb vytvořené pomocí nového kodeku RS03 mají přesně tyto vlastnosti, dokud ještě vystačí kapacita opravy, jsou odolné proti poškození. To bylo umožněno díky dostupnosti dostatečného výpočetního výkonu a dostatečně rychlému přístupu k datům na pevném disku. V době vývoje RS01 ještě tyto zdroje nebyly k dispozici. Ale i RS03 soubory pro opravu chyb stále neodstraňují nevýhody čtení na úrovni souborů! </span> <!-- do not change below --> <?php
 # end_page() adds the footer line and closes the HTML properly.
 
 end_page();

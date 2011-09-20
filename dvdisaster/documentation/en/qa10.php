@@ -12,9 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3><a name="top">Technical Questions</a></h3>
+<h3 class="top"><a name="top">Technical Questions</a></h3>
 
 <a href="#nls">2.1 Which translations of the program are available?</a><p>
 <a href="#media">2.2 Which media types are supported?</a><p>
@@ -27,7 +27,7 @@ begin_page();
 The current version of dvdisaster contains screen texts in the following languages:<p>
 
 <table>
-<tr><td>&nbsp;&nbsp;&nbsp;</td><td>Czech</td><td>--</td><td>upto version 0.66</td></tr>
+<tr><td>&nbsp;&nbsp;&nbsp;</td><td>Czech</td><td>--</td><td>complete</td></tr>
 <tr><td></td><td>English</td><td>--</td><td>complete</td></tr>
 <tr><td>&nbsp;&nbsp;&nbsp;</td><td>German</td><td>--</td><td>complete</td></tr>
 <tr><td>&nbsp;&nbsp;&nbsp;</td><td>Italian</td><td>--</td><td>upto version 0.65</td></tr>
@@ -51,7 +51,7 @@ try the following:<p>
 
 <tt>export OUTPUT_CHARSET=iso-8859-1</tt> (X11, XTerm)
 
-<div align=right><a href="#top">&uarr;</a></div>
+<div class="talignr"><a href="#top">&uarr;</a></div>
 
 
 <b><a name="media">2.2 Which media types are supported?</a></b><p>
@@ -105,7 +105,7 @@ on the two-layered type (the 50GB variety) have been reported yet.
 <b>Not usable types</b> (image can not be extracted):<p>
 BD-ROM (pressed BDs), DVD-ROM (pressed DVDs), CD-Audio and CD-Video.
 
-<div align=right><a href="#top">&uarr;</a></div><p>
+<div class="talignr"><a href="#top">&uarr;</a></div><p>
 
 
 <b><a name="filesystem">2.3 Which file systems are supported?</a></b><p>
@@ -117,9 +117,9 @@ That means it does not matter with which file system the medium has been formatt
 Since dvdisaster neither knows nor uses the file system structure,
 it can not repair logical errors at the file system level.
 It can not recover lost or deleted files.
-<div align=right><a href="#top">&uarr;</a></div><p>
+<div class="talignr"><a href="#top">&uarr;</a></div><p>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

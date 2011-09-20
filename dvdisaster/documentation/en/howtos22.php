@@ -15,10 +15,10 @@ begin_page();
 howto_headline("Creating error correction files", "Basic settings", "images/create-icon.png");
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
 <?php begin_screen_shot("Opening the configuration dialog.","global-prefs-invoke.png"); ?>
-<table><tr><td valign="top"><img src="../images/prefs-icon.png" valign="bottom"></td>
+<table><tr><td class="valignt"><img src="../images/prefs-icon.png" alt="dvdisaster UI: Preferences (button)" class="valignb"></td>
 <td>The following tabs are found in the configuration dialog.
 Open the dialog by selecting the symbol marked green in the screen shot
 (click the image to expand it). The symbol may look different
@@ -32,7 +32,7 @@ due to the symbol theme you are using.</td>
 
 <table width="100%" cellspacing="5">
 <tr>
-<td><img src="../images/good-image.png"></td>
+<td><img src="../images/good-image.png" alt="Icon: Complete image"></td>
 <td>If you already have an ISO image available you can skip
 the next two tabs and proceed with the <a href="#ecc">error correction settings</a>.
 But make sure that you really have an ISO type image; other formats like ".nrg"
@@ -118,7 +118,7 @@ but these have no further effects on the error correction data creation.
 
 <a href="howtos23.php">Creating the error correction data...</a>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

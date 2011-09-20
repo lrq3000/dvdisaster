@@ -1,6 +1,8 @@
 <?php
-# dvdisaster: Czech homepage translation
-# Copyright (C) 2006 Luboš Staněk
+# dvdisaster: English homepage translation
+# Copyright (C) 2004-2011 Carsten Gnörlich
+#
+# UTF-8 trigger: äöüß 
 #
 # Include our PHP sub routines, then call begin_page()
 # to start the HTML page, insert the header, 
@@ -10,33 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-   <h3>Tiráž</h3>
-
-   Carsten Gnörlich <br>
-   Beerenkamp 23 <br>
-   59514 Welver / Germany<br>
-   Tel.: +49 2384 941174<pre> </pre>
-   E-Mail: carsten@dvdisaster.de<br>
-   Internet: www.dvdisaster.de
-
-   <pre> </pre>
-
-   Odpovědný za obsah webových stránek podle § 10 MDStV: <p>
-   Carsten Gnörlich (viz výše uvedená adresa).
-
-   <pre> </pre>
-
-   Tato tiráž zahrnuje webové stránky pod<br>
-   <a href="http://www.dvdisaster.com">www.dvdisaster.com</a>, &nbsp;
-   <a href="http://www.dvdisaster.de">www.dvdisaster.de</a>, &nbsp;
-   <a href="http://www.dvdisaster.org">www.dvdisaster.org</a><br>
-   a v subdoméně <a href="http://dvdisaster.berlios.de">dvdisaster.berlios.de</a>.
-
-<!--- do not change below --->
-
-<?php
+<h3 class="top">Kontakt</h3>Carsten Gnörlich <br> Beerenkamp 23 <br> 59514 Welver / Germany<br> Tel.: +49 2384 941174<pre> </pre>EMail: carsten@dvdisaster.org<br> Internet: www.dvdisaster.org<pre> </pre>Odpovědnost za obsah stránky:<p>Carsten Gnörlich (viz výše uvedená adresa).<pre> </pre>Tento kontakt se týká stránek v doménách<br><a href="http://dvdisaster.com">dvdisaster.com</a>,   <a href="http://dvdisaster.de">dvdisaster.de</a>,   <a href="http://dvdisaster.net">dvdisaster.net</a>,   <a href="http://dvdisaster.org">dvdisaster.org</a>.<br> <!-- do not change below --> <?php
 # end_page() adds the footer line and closes the HTML properly.
 
 end_page();

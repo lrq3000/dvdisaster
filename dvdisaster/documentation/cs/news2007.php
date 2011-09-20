@@ -1,24 +1,24 @@
 <?php
-# dvdisaster: Czech homepage translation
+# dvdisaster: English homepage translation
+# Copyright (C) 2004-2011 Carsten Gnörlich
+#
+# UTF-8 trigger: äöüß 
 #
 # Include our PHP sub routines, then call begin_page()
 # to start the HTML page, insert the header, 
 # navigation and news if appropriate.
 
-require("../include/dvdisaster.php");
-begin_page();
-?>
+if($news_flash == 0) 
+{  require("../include/dvdisaster.php");
+   begin_page();
+}
 
-<!--- Insert actual page content below --->
+$news_counter = 0;
 
-<h1>Placeholder page</h1>
+news_headline("Archiv novinek za rok 2007");
 
-This page has not yet been translated.
+news_item("28.10.2007", "Začala práce na nové dokumentaci", "Začala práce na přepsání dokumentace pro nadcházející verzi 0.72. Buďte prosím trpěliví, nová dokumentace bude doufám užitečnější než ta současná, ale její vytvoření bude nějaký ten týden trvat.", 1, "2007-10-28T00:00:00Z", "2007-10-28T00:00:00Z");
 
-<!--- do not change below --->
-
-<?php
-# end_page() adds the footer line and closes the HTML properly.
-
-end_page();
+if($news_flash == 0) 
+   end_page();
 ?>

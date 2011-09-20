@@ -1,105 +1,36 @@
 <?php
-# dvdisaster: Czech homepage translation
-# Copyright (C) 2006 Luboš Staněk
+# dvdisaster: English homepage translation
+# Copyright (C) 2004-2011 Carsten Gnörlich
+#
+# UTF-8 trigger: äöüß 
 #
 # Include our PHP sub routines, then call begin_page()
 # to start the HTML page, insert the header, 
 # navigation and news if appropriate.
 
 require("../include/dvdisaster.php");
+require("../include/screenshot.php");
+
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Adaptivní strategie čtení</h3>
-
-Program dvdisaster obsahuje dvě rozdílné
-<a href="example82.html#read">strategie čtení</a>.<p>
-
-<b>Adaptivní strategie čtení je doporučena pro:</b><p>
-<ul>
-<li>vytěžení dat z poškozeného média
-</li>
+<h3 class="top">Adaptivní strategie čtení</h3>dvdisaster podporuje dvě rozdílné strategie čtení.<p><b>Adaptivní strategie čtení je doporučena pro:</b><p><ul>
+<li><a href="howtos42.php">extrakci dat</a> z poškozených disků</li>
+</ul><b><a href="qa34.php">Lineární strategie čtení</a> je doporučena pro:</b><p><ul>
+<li><a href="howtos23.php">vytváření bitových kopií</a> z nepoškozených disků, například pro vytvoření souborů pro opravu chyb</li>
+<li><a href="howtos12.php">kontrolu</a> rychlosti čtení a čitelnosti disků</li>
 </ul>
 
-<b><a href="background40.html">Lineární strategie čtení</a> je doporučena pro:</b><p>
-<ul>
-<li>načtení obrazů z nepoškozených médií, t.j. pro tvorbu souboru oprav chyb</li>
-<li>skenování média na rychlost a chyby čtení</li>
-</ul>
-
-<pre> </pre>
-
-<b>Vlastnosti adaptivní strategie čtení.</b><p>
-
-Adaptivní strategie čtení používá přístup "rozděl a panuj" pro umístění
-stále nečitelných částí poškozeného média. Strategie je založena na článku
-publikovaném Haraldem Bögeholzem v c't-Magazin z 16/2005, kde byl publikován spolu
-s programem <i>h2cdimage</i>:
-
-<ol>
-<li> 
-Na začátku je médium považováno za jeden nenačtený úsek. Čtení začíná v sektoru
-nula.<p>
-</li>
-<li>
-Proces čtení pokračuje sekvenčně, dokud není buď dosaženo konce aktuálního úseku
-nebo nedojde k chybě čtení.<p>
-</li>
-<li>
-Proces čtení je ukončen, pokud je načteno buď (3a) dostatek sektorů pro úspěšnou
-opravu chyb nebo (3b) nezůstaly nečitelné úseky přesahující danou velikost.
-<p>
-</li>
-<li>
-Jinak se určí nejdelší zbývající úsek. Čtení pokračuje od středu (t.j. druhé polovina)
-tohoto úseku; první polovina tohoto úseku je zachována pro pozdější průchod čtení.
-</li>
+<pre> </pre><b>Vlastnosti adaptivní strategie čtení.</b><p>Adaptivní strategie čtení používá při hledání čitelných částí poškozeného disku přístup &quot;rozděl a panuj&quot;. Strategie je inspirována článkem publikovaným Harald Bögeholz v magazínu c&#39;t 16/2005, který byl publikován společně s programem <i>h2cdimage</i>:<ol>
+<li>Na začátku je disk považován za jeden nepřečtený rozsah. Čtení začne od sektoru nula.<p></li>
+<li>Čtení pokračuje dokud není dosaženo konce aktuálního rozsahu nebo nedojde k chybě čtení.<p></li>
+<li>Čtení je přerušeno pokud (3a) je načteno dostatečné množství sektorů potřebné k provedení opravy chyb nebo (3b) již nejsou k dispozici žádné nečitelné rozsahy přesahující zadanou hraniční velikost.<p></li>
+<li>V opačném případě je vyhledán největší dosud nepřečtený rozsah. Čtení pokračuje od poloviny (tedy v druhé polovině) tohoto rozsahu; čtení první poloviny tohoto rozsahu je odloženo a bude provedeno v některém z následujících průchodů čtení.</li>
 </ol>
 
-Kritérium ukončení (3a) je zvláště efektivní: Čtení skončí, jakmile bylo nashromážděno
-dostatek sektorů pro úspěšnou opravu obrazu s použitím souboru oprav chyb.
-Tak se dá zkrátit čas čtení až o 90 procent v porovnání s pokusem o úplné
-načtení, ale funguje jen tehdy, je-li dostupný soubor oprav chyb.<p>
-
-<center><img src="images/bg-adaptive.png" alt="Adaptivní strategie čtení" title="Adaptivní strategie čtení"><br>
-Částečný snímek obrazovky: adaptivní strategie čtení</center>
-
-<pre> </pre>
-
-<a name="configure"></a>
-<b>Konfigurace</b><p>
-
-<b>Soubor oprav chyb.</b> 
-Adaptivní čtení pracuje nejlépe, když je dostupný soubor oprav chyb. 
-Samozřejmě, že soubor oprav chyb musel být <a href="example20.html">vytvořen</a>
-v době, kdy bylo médium ještě plně čitelné. Pro použití souboru oprav chyb
-v průběhu adaptivního čtení
-<a href="example30.html">zadejte jeho název</a> před spuštěním procesu čtení.<p>
-
-<b>Omezení rozsahu adaptivního čtení.</b> Čtení může být
-<a href="example82.html#read">omezeno</a> na část média.
-
-Omezování se nedoporučuje při použití souboru oprav chyb, protože limit může
-zabránit načtení sektorů, které jsou potřeba pro úspěšnou opravu chyb
-Pokud není dostupný soubor oprav chyb, může být omezení rozsahu čtení užitečné
-v průběhu násobných pokusů o čtení.<p>
-
-<b>Časné ukončení čtení.</b>
-Pokud není dostupný soubor oprav chyb, adaptivní čtení skončí, když nezbyly žádné
-nepřečtené úseky <a href="example82.html#read">větší než zvolená velikost</a>.<p>
-
-Hodnota pro ukončení by měla být menší než 128.
-Jinak musí laserová optika provádět mnoho vystavovacích pohybů v průběhu
-konečné fáze čtení. To negativně ovlivňuje jak očekávanou životnost mechaniky,
-tak i její schopnosti čtení. Lepším postupem je zastavení adaptivního čtení
-dříve, a poté se pokusit načíst zbývající sektory dalšími průběhy
-<a href="background40.html">lineárního čtení</a>.
-
-<!--- do not change below --->
-
-<?php
+<?php begin_screen_shot("Probíhající adaptivní čtení","adaptive-progress.png"); ?>Podmínka ukončení (3a) je zvláště efektivní: Čtení je přerušeno v okamžiku kdy je načten dostatek dat pro úspěšnou obnovu bitové kopie s využitím souboru pro opravu chyb. To může ve srovnání s pokusem o úplné přečtení zkrátit dobu čtení až o 90 procent, funguje ovšem pouze pokud je k dispozici soubor pro opravu chyb.<p><?php end_screen_shot(); ?><p><pre> </pre><a name="configure"></a> <b>Nastavení</b><p><b>Soubor pro opravu chyb.</b> Adaptivní čtení pracuje nejlépe pokud jsou k dispozici data pro opravu chyb. Data pro opravu chyb musela být samozřejmě <a href="howtos21.php">vytvořena</a> v době, kdy byl disk stále zcela čitelný. Pro použití souboru pro opravu chyb během adaptivního čtení, <a href="howtos42.php#select_eccfile">zadejte jeho název</a> před spuštěním čtení.<p><b>Omezení rozsahu čtení.</b> Čtení může být <a href="howtos11.php#image">omezeno</a> na určitou část disku. Pokud jsou k dispozici data pro opravu chyb, není použití této možnosti doporučeno, protože může bránit v načtení sektorů, které jsou vyžadovány k provedení opravy. Pokud nejsou data pro opravu chyb k dispozici, může být omezení rozsahu čtení užitečné při opakovaných pokusech čtení.<p><b>Včasné ukončení čtení.</b> Pokud nejsou k dispozici data pro opravu chyb, bude adaptivní čtení ukončeno pokud již nezbývají žádné rozsahy <a href="howtos41.php#reading_attempts">větší než je zadaná hraniční velikost</a>.<p>Zadaná hraniční velikost by neměla být nižší než 128. V opačném případě by na konci čtení musela hlavička laseru provádět velké množství změn polohy. To snižuje jak životnost mechaniky, tak její schopnost přesného čtení. Lepším přístupem je ukončit adaptivní čtení dříve a ve čtení zbývajících sektorů pokračovat pomocí <a href="qa34.php">lineárního čtení</a>.<!-- do not change below --> <?php
 # end_page() adds the footer line and closes the HTML properly.
 
 end_page();

@@ -1,6 +1,8 @@
 <?php
-# dvdisaster: Czech homepage translation
-# Copyright (C) 2006 Luboš Staněk
+# dvdisaster: English homepage translation
+# Copyright (C) 2004-2011 Carsten Gnörlich
+#
+# UTF-8 trigger: äöüß 
 #
 # Include our PHP sub routines, then call begin_page()
 # to start the HTML page, insert the header, 
@@ -10,73 +12,10 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Technické vlastnosti opravy chyb</h3>
-
-Tato stránka vysvětluje základní myšlenky v pozadí programu dvdisaster,
-abyste sami mohli zjistit, zda vyhovuje vašim požadavkům na zabezpečení dat.
-Pokud máte pochybnosti, neměli byste program dvdisaster používat nebo
-nasadit další strategie zálohování dat.<p>
-
-<b>Metoda opravy chyb.</b> &nbsp; Program dvdisaster používá kódování
-<a href="http://en.wikipedia.org/wiki/Reed-Solomon_error_correction">Reed-Solomon</a>
-(odkaz na anglický text) spolu s algoritmem opravy chyb optimalizovaným pro zpracování výmazů.
-Tato implementace si vzala hodně inspirace a programového kódu z vynikající
-<a href="http://www.ka9q.net/code/fec/">knihovny kódu Reed-Solomon</a> napsané
-<a href="http://www.ka9q.net/">Philem Karnem</a>.
-
-<p>
-
-Při použití <a href="example83.html#redundancy">standardního nastavení</a>
-je 223 sektorů média zkombinováno do jednoho bloku opravného kódu ("ECC").
-Chyby čtení média jsou považovány za "výmazy"; z toho vyplývá, že je možné
-maximálně opravit 32 vadných sektorů<sup><a href="#footnote1" title="Poznámka k nastavení hranice oprav">*)</a></sup>
-média na blok ECC.<p>
-
-Těchto 223 sektorů je zvoleno tak, aby byly rovnoměrně rozmístěny po celé ploše média.
-Tím je umožněno, aby mohly být opraveny velké souvislé oblasti vadných sektorů
-dříve, než je dosažena hranice 32 defektů na blok ECC<sup><a href="#footnote1" title="Poznámka k nastavení hranice oprav">*)</a></sup>.
-Tento druh vzoru chyb je zvláště obvyklý pro stárnoucí médium, kde začíná
-degenerovat vnější okrajová oblast, a pro škrábance podél datové spirály.<p>
-
-Na druhé straně se předpokládá, že hvězdicovité nebo příčné škrábance opraví sama
-mechanika CD/DVD. Pokud ne, tak v těchto případech pracuje použitá strategie oprav
-chyb spíše neutrálně (není zvlášť dobrá ani mimořádně špatná).<p>
-
-<b>Hranice opravy chyb.</b> &nbsp; V nejhorším případě stačí 33
-vadných sektorů<sup><a href="#footnote1" title="Poznámka k nastavení hranice oprav">*)</a></sup>, aby zabránily
-úplné obnově dat. Avšak k dosažení tohoto efektu by musely být chyby
-rozloženy na médiu podobným způsobem, jako jsou umístěny v samotném bloku ECC
-- takový vzorek je velmi nepravděpodobný.<br>
-Pokusné testy ukázaly, že na stárnoucím médiu může být okolo 10% počtu všech sektorů
-vadných, než je dosažena hranice 33 defektů na blok ECC<sup><a href="#footnote1" title="Poznámka k nastavení hranice oprav">*)</a></sup>.<br>
-<a href="index10.html">Škrábance</a> způsobí dosažení této hranice dříve, 
-takže se doporučuje vizuálně kontrolovat média v pravidelných intervalech.
-Média s chybami čtení způsobenými poškrábáním by měla být nahrazena okamžitě.<p>
-
-<b>Hardwarová omezení.</b> &nbsp; Většina mechanik nerozpozná médium, je-li poškozena
-zaváděcí oblast (lead-in) před prvním sektorem (blízko středového otvoru). V takových
-případech nebude program dvdisaster schopen obnovit žádný obsah z média.<p>
-
-<i>Není vhodné</i> vylepšovat spolehlivost médií nízké kvality použitím programu
-dvdisaster. Levná média se mohou zkazit během několika dní do takové míry, která
-přesáhne schopnosti kódu pro opravu chyb.<p>
-
-<pre> </pre>
-<table width="50%"><tr><td><hr></td></tr></table>
-
-<font size="-1">
-<a name="footnote1"><sup>*)</sup></a> 
-Tato hranice 32 opravitelných chyb na blok ECC je dána standardním nastavením.
-Je možné <a href="example83.html#redundancy">zvolit jiné hodnoty</a>
-pro vyšší nebo nižší schopnosti opravy chyb.
-</font>
-<p>
-
-<!--- do not change below --->
-
-<?php
+<h3 class="top">Technické parametry opravy chyb</h3>Tato stránka vysvětluje základní myšlenky stojící za návrhem ochrany dat pomocí dvdisaster, abyste se mohli rozhodnout, zda odpovídá vašim požadavkům na zabezpečení dat. Pokud máte pochybnosti, neměli byste používat dvdisaster, nebo byste měli nasadit dodatečné strategie zálohy dat.<p><b>Metoda opravy chyb.</b> dvdisaster využívá <a href="http://en.wikipedia.org/wiki/Reed-Solomon_error_correction">Reed-Solomon</a> kód spolu s algoritmem opravy chyb optimalizovaným pro ošetření výmazů. Implementace čerpá většinu inspirace a programového kódu z vynikající <a href="http://www.ka9q.net/code/fec/">Reed-Solomon knihovny</a> kterou vytvořil <a href="http://www.ka9q.net/">Phil Karn</a>.<p>Při použití <a href="howtos22.php#ecc">výchozího nastavení</a> <a href="howtos20.php">souboru pro opravu chyb</a> je 223 sektorů disku zkombinováno do jednoho bloku kódu pro opravu chyb (ECC). Chyby čtení jsou považovány za &quot;výmazy&quot;; s pomocí jednoho ECC bloku je proto možné opravit maximálně 32 poškozených sektorů disku <sup><a href="#footnote1">*)</a></sup>.<p>Poloha každého z těchto 223 sektorů je volena tak, aby byly na povrchu disku rovnoměrně rozptýleny. Před dosažením limitu 32 chyb na ECC blok<sup><a href="#footnote1">*)</a></sup> je tak možno opravit i rozsáhlé spojité oblasti poškozených sektorů. Tento typ poškození je běžný u stárnoucích disků u kterých dochází k degeneraci vnější části disku a u škrábanců souběžných s datovou spirálou.<p>U radiálních nebo diagonálních škrábanců je předpokládáno, že je bude CD/DVD mechanika schopna opravit sama. Pokud ne, použitá strategie opravy chyb se v tomto případě chová neutrálně (ani mimořádně dobře ani mimořádně špatně).<p><b>Omezení opravy chyb.</b>   V nejhorším případě stačí k zabránění úplné obnovy dat 33 poškozených sektorů<sup><a href="#footnote1">*)</a></sup>. Aby však bylo tohoto efektu dosaženo, musely by chyby být po povrchu disku rozmístěny tak, aby se všechny vyskytovaly v jednom ECC bloku - takové rozmístění je velmi nepravděpodobné.<br> Testy ukázaly, že u stárnoucích disků bylo ve většině případů limitu 33 chyb na ECC blok<sup><a href="#footnote1">*)</a></sup> dosaženo až při poškození 10% z celkového počtu sektorů. <br> Škrábance mohou způsobit, že bude této hranice dosaženo dříve, je proto doporučeno, provádět pravidelně vizuální kontroly disků. Disky s chybami čtení způsobenými škrábanci, by měly být okamžitě vyměněny.<p><b>Hardwarová omezení.</b>   Většina mechanik nerozpozná disk, pokud je poškozena zaváděcí oblast před prvním sektorem (u středového otvoru). Obnova dat v takovém případě není možná.<p>Je <i>nemožné</i> použitím dvdisaster zlepšit spolehlivost nekvalitních disků. Levné disky mohou během pár dní degradovat do stavu, který přesáhne schopnosti kódu pro opravu chyb.<p><pre> </pre>
+<table width="50%"><tr><td><hr></td></tr></table><span class="fs"> <a name="footnote1"><sup>*)</sup></a> Limit 32 opravitelných chyb na ECC blok je výchozím nastavením Je možné <a href="howtos22.php#ecc">zvolit jiné hodnoty</a> pro zvýšení nebo snížení schopnosti opravy chyb. Pokud <a href="howtos30.php">jsou data pro opravu chyb umístěna přímo na disk</a>, závisí počet opravitelných sektorů na množství volného místa na disku. </span> <!-- do not change below --> <?php
 # end_page() adds the footer line and closes the HTML properly.
 
 end_page();

@@ -12,9 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3><a name="top">General questions and answers</a></h3>
+<h3 class="top"><a name="top">General questions and answers</a></h3>
 
 <a href="#pronounce">1.1 How is "dvdisaster" pronounced?</a><p>
 <a href="#pipo">1.2 What are quality scans and why don't you support more?</a><p>
@@ -28,7 +28,7 @@ begin_page();
 Since the word stems from the english language, simply spell "dv" before
 saying "disaster". Perhaps "dee-vee-disaster" is a suitable
 phonetic circumscription.
-<div align=right><a href="#top">&uarr;</a></div>
+<div class="talignr"><a href="#top">&uarr;</a></div>
 
 <b><a name="pipo">1.2 What are quality scans and why don't you support more?</a></b><p>
 Optical media have a built-in error correction which is similar to 
@@ -49,7 +49,7 @@ for use in free software. So we must patiently wait until manufacturers
 understand that having free software available for a drive 
 will sell more drives. <p>
 
-<div align=right><a href="#top">&uarr;</a></div>
+<div class="talignr"><a href="#top">&uarr;</a></div>
 
 <b><a name="compat">1.3 Is dvdisaster compatible with future releases?</a></b><p>
 Yes, dvdisaster files are intended for an archival time of many years.
@@ -57,7 +57,7 @@ When upgrading to a newer version of dvdisaster you can continue using
 images and error correction data created from previous versions.
 There is <i>no</i> need to recreate them again.
 
-<div align=right><a href="#top">&uarr;</a></div><p>
+<div class="talignr"><a href="#top">&uarr;</a></div><p>
 
 <b><a name="eccpos">1.4 Augmented images have the error correction data appended at the end of the medium. Isn't that a bad choice?</a></b><p>
 No. First a bit of terminology:
@@ -104,7 +104,7 @@ point (1) again to see that nothing changes with respect to the error
 correction.) 
 </li>
 </ol>
-<div align=right><a href="#top">&uarr;</a></div><p>
+<div class="talignr"><a href="#top">&uarr;</a></div><p>
 
 
 <b><a name="recovery">1.5 What's the difference between image based and file based data recovery?</a></b><p>
@@ -120,7 +120,7 @@ Note how these files are mapped onto physical sectors
 and that an additional meta data sector  (red square) is needed
 for storing the "Pics" directory structure.<p>
 
-<table width="100%"><tr><td align="center"><img src="images/metadata1.png"></td></tr></table><p>
+<table width="100%"><tr><td align="center"><img src="images/metadata1.png" alt="Relation between file system and sectors on media"></td></tr></table><p>
 
 <b>Shortcoming of file based recovery on optical media.</b><br>
 Now let's assume that we are working with file based error correction.
@@ -137,7 +137,7 @@ to files anymore when the directory is lost. So we have
 a complete data loss although all sectors comprising the files
 are still physically readable.<p>
 
-<table width="100%"><tr><td align="center"><img src="images/metadata2.png"></td></tr></table><p>
+<table width="100%"><tr><td align="center"><img src="images/metadata2.png" alt="Losing metadata sector produces complete data loss"></td></tr></table><p>
 
 <p>Please note that moving "protect.par" to a separate medium does not
 rectify the problem - the directory block is still not recoverable as
@@ -153,7 +153,7 @@ Since the dvdisaster error correction data protects <i>all sectors</i> in the
 ISO image, file contents as well as meta data sectors (e.g. directories)
 can be restored. See fig. 1.5.3 for the different range of protection.
 
-<table width="100%"><tr><td align="center"><img src="images/metadata3.png"></td></tr></table><p>
+<table width="100%"><tr><td align="center"><img src="images/metadata2.png" alt="Image level protection"></td></tr></table><p>
 
 In addition, neither reading the damaged ISO image nor applying the
 error correction requires any information from the file system 
@@ -163,7 +163,7 @@ to recover the still readable sectors from it. Therefore
 there are no "single sectors of failure" as in the file based approach.
 
 <table width="30%" cellpadding="0">
-<tr bgcolor="#000000"><td><img width=1 height=1 alt=""></td></tr>
+<tr><td class="hsep"></td></tr>
 </table>
 <a name="note1"><sup>1)</sup>
 No offense intended against the PAR/PAR2 project. 
@@ -171,9 +171,9 @@ Carsten is just confident that file based protection does not work
 on optical media :-)</a>
 
 
-<div align=right><a href="#top">&uarr;</a></div><p>
+<div class="talignr"><a href="#top">&uarr;</a></div><p>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

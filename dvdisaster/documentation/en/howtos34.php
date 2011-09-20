@@ -31,7 +31,7 @@ To do so activate the button beneath "Use at most ... sectors" and enter
 the maximum image size in units of sectors (1 sector = 2KB).
 <?php end_screen_shot(); ?>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

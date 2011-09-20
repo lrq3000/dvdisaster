@@ -19,49 +19,19 @@ $news_counter = 0;
 # you must only use the news_*() functions below to create content.
 # Do not insert plain HTML!
 
-news_headline("dvdisaster News");
+news_headline("dvdisaster - novinky");
 
-news_item("28.07.2011", "Documentation added", "
-The temporarily lost <a href=\"qa30.php\">background information</a> 
-from the 0.70 documentation has been updated and made online again.
-", 19, "2011-07-28T00:00:00Z", "2011-07-28T00:00:00Z");
+news_item("28.07.2011", "Přidána dokumentace", "Dočasně ztracené <a href=\"qa30.php\">technické informace</a> z dokumentace pro verzi 0.70 byly aktualizovány a znovu publikovány.", 19, "2011-07-28T00:00:00Z", "2011-07-28T00:00:00Z");
 
-news_item("21.11.2010", "dvdisaster 0.79.3 released", "
-For GNU/Linux, the SG_IO driver is used by default
-for accessing optical drives. This resolves the problem
-with system freezes on parallel SCSI adapters which were
-caused by the old CDROM_SEND_PACKET driver.
-The RS03 codec now contains Altivec optimizations
-on PowerPC platforms.
-", 18, "2010-11-21T00:00:00Z", "2010-11-21T00:00:00Z");
+news_item("21.11.2010", "Vydán dvdisaster 0.79.3", "V GNU/Linux je pro přístup k optickým mechanikám jako výchozí použit ovladač SG_IO. Díky tomu byl vyřešen problém se zamrzáním systémů s paralelními SCSI adaptéry, který byl způsobován ovladačem CDROM_SEND_PACKET. RS03 kodek nyní obsahuje Altivec optimalizace pro platformu PowerPC.", 18, "2010-11-21T00:00:00Z", "2010-11-21T00:00:00Z");
 
-news_item("07.11.2010", "Added Windows and Mac OS X versions for 0.72.2", "
-Windows and Mac OS X versions of 0.72.2 are now available.
-They were built using the updated development environment of 0.79.x.
-This results in shipping with newer versions of the GTK+ libraries
-and might yield slightly different visuals and behaviour.
-", 17, "2010-11-07T00:00:00Z", "2010-11-07T00:00:00Z");
+news_item("07.11.2010", "Přidána Windows a Mac OS X verze pro 0.72.2", "Jsou k dispozici Windows a Mac OS X verze 0.72.2. Byly sestaveny pomocí aktualizovaného vývojového prostředí pro 0.79.x. Program je tak dodáván s aktualizovanými verzemi GTK+ knihoven a může tak mít odlišný vzhled a chování.", 17, "2010-11-07T00:00:00Z", "2010-11-07T00:00:00Z");
 
-news_item("31.10.2010", "dvdisaster 0.72.2 released", "
-This version introduces a workaround which prevents parallel SCSI
-adapters from freezing under Linux. 
-Improved upward compatibility with dvdisaster 0.79.x.
-", 16, "2010-10-31T00:00:00Z", "2010-10-31T00:00:00Z");
+news_item("31.10.2010", "Vydán dvdisaster 0.72.2", "Tato verze přináší alternativní řešení chyby kvůli které v Linuxu docházelo k zamrzání paralelních SCSI adaptérů. Vylepšena kompatibilita s 0.79.x.", 16, "2010-10-31T00:00:00Z", "2010-10-31T00:00:00Z");
 
-news_item("28.02.2010", "dvdisaster 0.79.2 released", "
- Mac OS X binaries are available again as the Mac OS X development environment 
- has been updated for this version.
- RS03 codec development progresses,
-but is still far from being finished.
-", 15, "2010-02-28T00:00:00Z", "2010-02-28T00:00:00Z");
+news_item("28.02.2010", "Vydán dvdisaster 0.79.2", "Opět jsou k dispozici binární soubory pro Mac OS X protože vývojové prostředí pro Mac OS X bylo pro tuto verzi aktualizováno. Vývoj RS03 kodeku pokračuje, stále má ale daleko k dokončení.", 15, "2010-02-28T00:00:00Z", "2010-02-28T00:00:00Z");
 
-news_item("07.02.2010", "Started new development branch 0.79", "
-The first version of the new development branch (0.79.1) has just
-been released. This release is meant for testing new functions;
-it is not recommended for doing productive work. See the
-<a href=\"download40.php\">download page</a> for information on
-what has been changed and how you can participate in testing.
-", 14, "2010-02-07T00:00:00Z", "2010-02-07T00:00:00Z");
+news_item("07.02.2010", "Spuštěna nová vývojová větev 0.79", "Byla vydána první verze nové vývojové větve (0.79.1). Tato verze je určena k testování nových funkcí; nelze ji doporučit k běžnému použití. Pro informace o změnách a účasti na testování si prohlédněte <a href=\"download40.php\">stránku ke stažení</a>.", 14, "2010-02-07T00:00:00Z", "2010-02-07T00:00:00Z");
 
 news_finalize();
 

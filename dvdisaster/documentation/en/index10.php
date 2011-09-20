@@ -13,9 +13,9 @@ require("../include/screenshot.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Examples of the error correction</h3>
+<h3 class="top">Examples of the error correction</h3>
 
 <?php begin_screen_shot("Reading the defective medium.", "recover-linear.png"); ?>
    <b>Recovery of aged media.</b> The medium processed here has become
@@ -48,7 +48,7 @@ your data is probably lost.<p>
 
 <a href="index20.php">Why quality scans won't suffice...</a>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

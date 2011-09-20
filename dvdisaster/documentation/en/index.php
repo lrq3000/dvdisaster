@@ -1,8 +1,8 @@
 <?php
 # dvdisaster: English homepage translation
-# Copyright (C) 2004-2011 Carsten Gnörlich
+# Copyright (C) 2004-2011 Carsten GnÃ¶rlich
 #
-# UTF-8 trigger: äöüß 
+# UTF-8 trigger: Ã¤Ã¶Ã¼ÃŸ 
 #
 # Include our PHP sub routines, then call begin_page()
 # to start the HTML page, insert the header, 
@@ -12,9 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content here --->
+<!-- Insert actual page content here -->
 
-<h3>The dvdisaster project:</h3>
+<h3 class="top">The dvdisaster project:</h3>
 
 Optical media (CD,DVD,BD) keep their data only for a 
 finite time (typically for many years).
@@ -41,7 +41,7 @@ The maximum error correction capacity is user-selectable.<p>
 <li>dvdisaster can not make defective media readable again.
 Contents of a defective medium can <i>not</i> be recovered without the
 error correction data.<p></li> 
-<li><img src="images/exclude_from_search_terms.png" align="middle"><br>
+<li><img src="images/exclude_from_search_terms.png" alt="" class="valignm"><br>
 Such functions are outside the scope of dvdisaster's internal design and goals.</li>
 </ul>
 

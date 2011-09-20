@@ -1,6 +1,8 @@
 <?php
-# dvdisaster: Czech homepage translation
-# Copyright (C) 2006 Luboš Staněk
+# dvdisaster: English homepage translation
+# Copyright (C) 2004-2011 Carsten Gnörlich
+#
+# UTF-8 trigger: äöüß 
 #
 # Include our PHP sub routines, then call begin_page()
 # to start the HTML page, insert the header, 
@@ -10,152 +12,33 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Chybová hlášení</h3>
-
-<a href="#tao">3.1 "Varování: 2 sektor(y) chybí na konci disku".</a><p>
-<a href="#block">3.2 Program se zablokuje ihned po spuštění.</a><p>
-<a href="#crc">3.3 Co znamená "Chyba CRC, sektor: n"?</a><p>
-<a href="#plusrw">3.4 Chyby čtení nebo nesprávná velikost obrazu s médii -RW/+RW?</a><p>
-<a href="#dvdrom">3.5 Mnou vypálená média jsou detekována jako "DVD-ROM" a odmítnuta.</a><p>
-<a href="#freebsd">3.6 Žádné mechaniky se neobjeví ve FreeBSD.</a><p>
-
-<pre> </pre><hr><pre> </pre>
-
-<b><a name="tao">3.1 "Varování: 2 sektor(y) chybí na konci disku"</a></b><p>
-Toto upozornění se objevuje u médií CD zapsaných v režimu "TAO" (stopa najednou).
-Některé mechaniky hlásí velikost obrazu, která je o 2 sektory delší než je konec
-takového média, a tak vytváří 2 klamné chyby čtení na konci média, které v tomto
-případě <i>neznamenají</i> ztrátu dat.<p>
-
-Vzhledem k tomu, že nelze z média určit režim zápisu, program dvdisaster předpokládá
-CD v režimu "TAO", pokud jsou přesně dva poslední sektory nečitelné, a zkrátí podle
-toho obraz. Rozhodnutí, zda je to v pořádku, zůstává na vás. Můžete nastavit program
-dvdisaster, aby ošetřil tyto sektory jako skutečné chyby čtení pomocí volby
-<a href="example90.html#dao">--dao</a> nebo 
-na <a href="example82.html#image">záložce možností čtení/skenování</a>.<p>
-
-Abyste sy vyhnuli těmto problémům, zvažte použití režimu "DAO / Disk najednou"
-(někdy také nazývaný "SAO / Sezení najednou") pro zápis médií s jedním sezením.
-<div align=right><a href="#top">&uarr;</a></div>
-
-
-<b><a name="block">3.2 Program se zablokuje ihned po spuštění</a></b><p>
-Ve starých verzích Linuxu (jádro 2.4.x) se program občas zablokuje
-ihned po spuštění a před vykonáním jakékoli akce.
-Nelze jej ukončit použitím Ctrl-C nebo "kill -9".<p>
-
-Vysuňte médium, aby se mohl program ukončit. Vložte médium znovu
-a počkejte, až mechanika médium rozpozná a zastaví se.
-Opětovné spuštění programu dvdisaster by nyní mělo fungovat.
-<div align=right><a href="#top">&uarr;</a></div>
-
-<b><a name="crc">3.3 Co znamená "Chyba CRC, sektor: n"?</a></b><p>
-Odpovídající sektor je čitelný, ale kontrolní součet jeho obsahu
-neodpovídá hodnotě zaznamenané v souboru oprav chyb. Některé možné příčiny jsou:<p>
-
-<ul>
-<li>Obraz byl připojen s oprávněními pro zápis a byl tedy změněn
-(typický důkaz: chyby CRC v sektoru 64 a v sektorech 200 až 400).</li>
-<li>Počítač má nějaké problémy s hardwarem, zvláště, když
-komunikuje se zařízeními pro hromadné ukládání dat.</li>
-</ul>
-
-
-Pokud máte podezření na technické problémy, zkuste znovu načíst další verzi obrazu
-a vytvořit soubor oprav chyb, a pak je <a href="example50.html">znovu porovnejte</a>.
-Pokud chyba zmizí nebo se objeví na jiném místě, váš počítač může mít vadnou paměť,
-zlomenou kabeláž mechanik nebo chybné nastavení frekvence CPU/systému.
-<div align=right><a href="#top">&uarr;</a></div>
-
-
-<b><a name="plusrw">3.4 Chyby čtení nebo nesprávná velikost obrazu s médii -RW/+RW?</a></b><p>
-
-Některé mechaniky hlásí nesprávnou velikost obrazu u médií -RW/+RW. Dvě
-obvyklé příčiny jsou:<p>
-
-<table>
-<tr><td valign="top">Problém:</td>
-<td>Mechanika hlásí velikost největšího obrazu, který kdy byl zapsán na médium,
-ale ne velikost aktuálního obrazu.
-</td></tr>
-<tr><td valign="top">Symptomy:</td>
-<td>Po vymazání média je zapsáno se souborem o velikosti asi 100 MB.
-Avšak zpět načtený obraz je několik GB velký a obsahuje zbývající nebo
-starší obrazy.
-</td></tr>
+<h3 class="top">Chybová hlášení</h3><a href="#tao">3.1 &quot;Varování: na konci disku chybí 2 sektory&quot;.</a><p><a href="#block">3.2 Program zatuhne ihned po spuštění.</a><p><a href="#crc">3.3 Co znamená &quot;Chyba CRC, sektor: n&quot;?</a><p><a href="#rw">3.4 Chyby čtení a špatná velikost bitové kopie s disky -RW/+RW/-RAM</a><p><a href="#dvdrom">3.5 Vypálený disk je detekován jako &quot;DVD-ROM&quot; a je odmítnut.</a><p><a href="#freebsd">3.6 Pod FreeBSD nejsou k dispozici žádné mechaniky.</a><p><a href="#v40error">3.7 &quot;Soubor ECC byl vytvořen ve verzi 0.40.7.&quot;</a><p><hr><p><b><a name="tao">3.1 &quot;Varování: na konci disku chybí 2 sektory&quot;.</a></b><p>Toto varování se objevuje u CD disků zapsaných v režimu &quot;TAO&quot; (track at once). Některé mechaniky u takovýchto disků hlásí o 2 sektory větší velikost, což má za následek 2 chyby čtení na konci disku, které ale <i>neznamenají</i> poškození dat.<p>Protože použitý režim zápisu nelze z disku poznat, předpokládá dvdisaster, že jde o &quot;TAO&quot; CD, pokud jsou na konci disku přesně dva nečitelné sektory a bitovou kopii odpovídajícím způsobem zkrátí. Je na vás abyste rozhodli, zda je to tak správně. dvdisaster můžete přinutit považovat tyto sektory za chyby čtení použitím volby --dao nebo nastavením příslušné volby v nastavení čtení/kontroly.<p>Pokud chcete podobným problémům předejít, používejte režim &quot;DAO / Disc at once&quot; (někdy také nazývaný &quot;SAO / Session at once&quot;).<div class="talignr"><a href="#top">↑</a></div><b><a name="block">3.2 Program zatuhne ihned po spuštění.</a></b><p>Při použití starých verzích jádra Linuxu (2.4.x) program občas zatuhne ihned po spuštění, ještě před tím, než jsou provedeny jakékoliv akce. Nemůže pak být ukončen ani pomocí Ctrl-C nebo &quot;kill -9&quot;.<p>Pokud chcete program ukončit, vysuňte nejdříve disky z mechanik. Znovu načtěte disk a počkejte na dokončení jeho rozpoznání a zpomalení otáček mechaniky. Po opětovném spuštění by pak již dvdisaster měl fungovat.<div class="talignr"><a href="#top">↑</a></div><b><a name="crc">3.3 Co znamená &quot;Chyba CRC, sektor: n&quot;?</a></b><p>Daný sektor se podařilo přečíst, ale jeho kontrolní součet neodpovídá hodnotě uložené v souboru pro opravu chyb. Možné příčiny jsou:<p><ul>
+<li>Bitová kopie byla načtena s možností zápisu a byla proto změněna (typické příznaky: chyby CRC sektoru 64 a v sektorech 200 až 400).</li>
+<li>Máte problémy s hardwarem, zvláště pak při komunikaci s úložnými zařízeními.</li>
+</ul>Pokud máte podezření na technické problémy, zkuste znovu vytvořit bitovou kopii a soubor pro opravu chyb a <a href="howtos50.php">znovu proveďte ověření</a>. Pokud chyba zmizí, nebo se objeví na jiném místě, může to být v důsledku vadné paměti, poškozeného kabelu mechaniky, nebo špatným nastavením frekvence procesoru/čipsetu.<div class="talignr"><a href="#top">↑</a></div><b><a name="rw">3.4 Chyby čtení a špatná velikost bitové kopie s disky -RW/+RW/-RAM</a></b><p>Některé mechaniky u disků -RW/+RW/-RAM hlásí chybnou velikost bitové kopie. Dva časté případy jsou:<p><table>
+<tr><td class="valignt">Problém:</td>
+<td>Mechanika hlásí velikost největší bitové kopie, jaký byl kdy na disk vypálen, ne velikost aktuální bitové kopie.</td></tr>
+<tr><td class="valignt">Příznaky:</td>
+<td>Po smazání je na disk vypálen soubor velikosti 100MB. Bitová kopie vytvořená z tohoto disku má ale velikost několik GB a obsahuje zbytky dříve vypálených bitových kopií.</td></tr>
 <tr><td><pre> </pre></td><td></td></tr>
-<tr><td valign="top">Problém:</td>
-<td>Mechanika hlásí maximální možnou kapacitu média (typicky 2295104 sektorů)
-namísto počtu aktuálně využitých sektorů.
-</td></tr>
-<tr><td valign="top">Symptomy:</td>
-<td>Pokud se načítá za určitým bodem média, objevují se jen chyby čtení,
-ale všechny soubory na médiu jsou stále čitelné a kompletní.
-</td></tr>
-</table>
-<p></p>
-
-Možná náprava:<p>
-
-<table width=100%><tr><td bgcolor=#000000 width=2><img width=1 height=1 alt=""></td><td>
-Aktivujte volbu <a href="example81.html#iso">Použít informace ze souborového
-systému ISO/UDF</a>, aby byla velikost obrazu určena z informací souborového
-systému ISO/UDF.
-</td></tr></table>
-<p></p>
-
-Pokud jsou požadované sektory ISO/UDF nečitelné, když se pokoušíte obnovit
-poškozené médium, lze použít dvě dočasná řešení:
-
-<ul>
-<li>Spusťte funkci <a href="example50.html">"Porovnat"</a> jen se zadaným
-souborem oprav chyb. Všimněte si dole ve výstupu správné velikosti obrazu
-a příslušně <a href="example82.html#read">omezte rozsah čtení</a>.
-</li>
-<li>Jednoduše načtěte obraz s nesprávnou (větší) velikostí.
-Když spustíte funkci <a href="example40.html#repair">"Opravit"</a>,
-odpovězte "OK" na otázku, zda má být obraz zkrácen.
-</li>
+<tr><td class="valignt">Problém:</td>
+<td>Mechanika hlásí místo velikosti aktuální bitové kopie velikost maximální kapacity disku (obvykle 2295104 sektorů).</td></tr>
+<tr><td class="valignt">Příznaky:</td>
+<td>Po dosažení určitého bodu jsou již při čtení hlášeny pouze chyby čtení, ale všechny soubory jsou čitelné a kompletní.</td></tr>
+</table><p>Možné řešení:<p><table width="100%"><tr><td class="vsep"></td><td>Aktivujte možnost určení velikosti bitové kopie ze systému souborů ISO/UDF nebo z ECC/RS02 dat.</td></tr></table><p>Pokud nejsou potřebné sektory ISO/UDF čitelné a používáte soubor pro opravu chyb existují dvě možnosti řešení:<ul>
+<li>Spusťte funkci <a href="howtos50.php">&quot;Ověření&quot;</a> a vyberte pouze soubor pro opravu chyb. Poznamenejte si uvedenou správnou velikost bitové kopie a omezte podle ní rozsah čtení.</li>
+<li>Načtěte bitovou kopii s nesprávnou (větší) velikostí. Při vyvolání funkce <a href="howtos40.php#repair">&quot;Opravy&quot;</a> odpovězte&quot;OK&quot; při dotazu zda má být bitová kopie zkrácena.</li>
 </ul>
 
-<div align=right><a href="#top">&uarr;</a></div>
+<div class="talignr"><a href="#top">↑</a></div><b><a name="dvdrom">3.5 Vypálený disk je detekován jako &quot;DVD-ROM&quot; a je odmítnut.</a></b><p>Book type disku byl nastaven na &quot;DVD-ROM&quot;. Pro zpracování takových disků pomocí dvdisaster je většinou potřeba mechanika schopná takovéto disky zapisovat.<p>Např. dvouvrstvá DVD+R s chybným booktype budou přijata pouze při čtení ve vypalovačce, která je schopná takové disky vypálit.<p>Zkuste v tomto případě použít jinou mechaniku.<div class="talignr"><a href="#top">↑</a></div><b><a name="freebsd">3.6 Pod FreeBSD nejsou k dispozici žádné mechaniky.</a></b><p><ul>
+<li>FreeBSD může ke zprovoznění ATAPI mechanik (téměř všechny současné modely) v dvdisaster vyžadovat <a href="download10.php#freebsd">překompilování jádra</a>.<li>Pro dané zařízení (např. /dev/pass0) jsou potřebná oprávnění jak pro čtení, tak pro zápis.</ul>
 
-<b><a name="dvdrom">3.5 Mnou vypálená média jsou detekována jako "DVD-ROM" a odmítnuta.</a></b><p>
-
-To se může stát kvůli následujícím příčinám:
- 
-<ol>
-<li>Formát média (book type) nebyl správně nastaven na "DVD-ROM".<br>
-V takovém případě musí mechanika podporovat jiný způsob zjištění skutečného
-typu média. Pouze pak program dvdisaster akceptuje médium a ohlásí jej
-jako "DVD-ROM (podvržený formát disku)".<p>
-
-Některé mechaniky však nepodporují zjištění podvržených formátů disku.
-
-<li>Některé mechaniky nedokážou rozlišit DVD+R9 (dvě vrstvy) od DVD-ROM.
-</li>
-</ol>
-
-V těchto případech zkuste jinou mechaniku pro čtení obrazů.
-
-<div align=right><a href="#top">&uarr;</a></div>
+<div class="talignr"><a href="#top">↑</a></div><b><a name="v40error">3.7 &quot;Soubor ECC byl vytvořen ve verzi 0.40.7.&quot;</a></b><p><a href="http://sourceforge.net/cvs/?group_id=157550">CVS verze</a> dvdisaster označují ECC soubory speciálním příznakem. To způsobuje do verze dvdisaster 0.65 chybné zobrazení výše uvedeného chybového hlášení. Používejte CVS verze pouze s dvdisaster 0.66 nebo novějšími.<div class="talignr"><a href="#top">↑</a></div>
 
 
-<b><a name="freebsd">3.6 Žádné mechaniky se neobjeví ve FreeBSD.</a></b><p>
-
-<ul>
-<li>FreeBSD může vyžadovat <a href="download20.html#freebsd">rekompilaci jádra</a>,
-aby byly mechaniky ATAPI (téměř všechny současné modely) použitelné pro program
-dvdisaster.
-<li>Musíte mít oprávnění ke čtení a zápisu na odpovídající zařízení
-(t.j. /dev/pass0).
-</ul>
-
-<div align=right><a href="#top">&uarr;</a></div>
-
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

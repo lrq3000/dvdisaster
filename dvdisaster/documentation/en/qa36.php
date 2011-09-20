@@ -12,9 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Remarks on read errors</h3>
+<h3 class="top">Remarks on read errors</h3>
 
 Optical media have their own error correction code which protects the data
 against small manufacturing errors and inaccuracies during writing.
@@ -95,7 +95,7 @@ But note: "Cold" refers to normal living room conditions - putting hardware
 or media into the fridge can be very unhealthy for them.<p></li>
 </ul>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

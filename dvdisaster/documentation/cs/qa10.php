@@ -1,6 +1,8 @@
 <?php
-# dvdisaster: Czech homepage translation
-# Copyright (C) 2006 Luboš Staněk
+# dvdisaster: English homepage translation
+# Copyright (C) 2004-2011 Carsten Gnörlich
+#
+# UTF-8 trigger: äöüß 
 #
 # Include our PHP sub routines, then call begin_page()
 # to start the HTML page, insert the header, 
@@ -10,143 +12,30 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3><a name="top">Technické otázky</a></h3>
-
-<a href="#nls">2.1 Jaké lokalizace programu jsou k dispozici?</a><p>
-<a href="#media">2.2 Jaké typy médií jsou podporovány?</a><p>
-<a href="#filesystem">2.3 Které souborové systémy jsou podporovány?</a><p>
-<a href="#aspi">2.4 Co znamená "SPTI" a "ASPI"?</a><p>
-
-<pre> </pre><hr><pre> </pre>
-
-<b><a name="nls">2.1 Jaké lokalizace programu jsou k dispozici?</a></b><p>
-
-Aktuální verze programu dvdisaster obsahuje programová hlášení v následujících jazycích:<p>
-
-<table>
-<tr><td>&nbsp;&nbsp;&nbsp;</td><td>Čeština</td><td>--</td><td>kompletní</td></tr>
-<tr><td></td><td>Angličtina</td><td>--</td><td>kompletní</td></tr>
-<tr><td>&nbsp;&nbsp;&nbsp;</td><td>Němčina</td><td>--</td><td>kompletní</td></tr>
-<tr><td>&nbsp;&nbsp;&nbsp;</td><td>Italština</td><td>--</td><td>kompletní</td></tr>
-</table>
-<p></p>
-
-Překladatelé pro další jazyky jsou vítáni!<p>
-
-Program dvdisaster získává automaticky nastavení jazyka od operačního systému.
-Pokud místní jazyk ještě není podporován, použijí se hlášení v angličtině. 
-Jiný jazyk lze zvolit použitím proměnné prostředí.<p>
-
-Příklad pro shell bash a německý jazyk:
-
-<pre>export LANG=de_DE</pre>
-
-Pokud nejsou speciální znaky jako německé přehlásky zobrazeny správně,
-zkuste následující:<p>
-
-<tt>export OUTPUT_CHARSET=iso-8859-1</tt> (X11, XTerm)
-<div align=right><a href="#top">&uarr;</a></div>
-
-
-<b><a name="media">2.2 Jaké typy médií jsou podporovány?</a></b><p>
-
-Program dvdisaster podporuje (pře-)zapisovatelná CD a DVD média. <br>
-Média obsahující více sezení nebo ochranu proti kopírování <i>nelze</i> použít.<p>
-
-Použitelná média podle typu:<p>
-
-<b>DVD-R, DVD+R</b><p>
-
-<ul>
-<li>Nejsou známa žádná další omezení.</li>
-</ul>
-
-<b>DVD+R9 (dvě vrstvy)</b>
-<ul>
-<li>Mechanika musí být schopna <a href="qa20.php#dvdrom">identifikovat typ média</a>.</li>
-</ul>
-
-<b>DVD-RW, DVD+RW</b><p>
-
-<ul>
-<li>Některé mechaniky hlásí chybné <a href="qa20.php#plusrw">velikosti obrazů</a>.<br>
-Pomoc: aktivujte možnost <a href="example81.html#iso">"Použít informace ze souborového systému ISO/UDF"</a>.
-</li></ul>
-
-<b>CD-R, CD-RW</b><p>
-
-<ul>
- <li>Pouze datová CD jsou podporována.</li>
-</ul>
-
-<b>Nepoužitelné typy</b> (obraz nelze načíst):<p>
-CD-Audio a CD-Video stejně jako DVD-ROM a DVD-RAM.
-
-<div align=right><a href="#top">&uarr;</a></div><p>
-
-
-<b><a name="filesystem">2.3 Které souborové systémy jsou podporovány?</a></b><p>
-
-Program dvdisaster pracuje výhradně na <a href="background20.html">úrovni obrazu</a>,
-který je čten po sektorech.
-To znamená, že není podstatné, s jakým souborovým systémem bylo médium naformátováno.<p>
-
-Vzhledem k tomu, že program dvdisaster ani nezná ani nepoužívá strukturu souborového
-systému, nemůže opravovat logické chyby na jeho úrovni.
-Není schopen obnovit ztracené nebo smazané soubory.
-<div align=right><a href="#top">&uarr;</a></div><p>
-
-
-<b><a name="aspi">2.4 Co znamená "SPTI" a "ASPI"?</a></b><p>
-
-Windows 98 a ME používají ovladače nazývané "ASPI" k přístupu na mechaniky CD/DVD.
-Windows NT a jejich následovníci poskytují obdobné funkce prostřednictvím
-rozhraní nazvaného "SPTI", ale stále umožňují instalaci dodatečných
-ovladačů ASPI.<p>
-
-<i>&gt;&nbsp; Pro a Proti instalace ASPI pod Windows NT/2000/XP:</i><p>
-
-<table>
-<tr valign=top><td>+</td><td>Nejsou potřeba oprávnění administrátora pro přístup na mechaniky.</td></tr>
-<tr valign=top><td>-</td><td>ASPI se nemapuje dobře do písmenného systému mechanik Windows.</td></tr>
-<tr valign=top><td>-</td><td>Některé programy pro zápis na CD/DVD si instalují
-své vlastní ovladače ASPI. Instalace dalšího ovladače ASPI může vadit
-již existujícímu softwaru.</td></tr>
-</table>
-<p></p>
-
-<i>&gt;&nbsp; Jaké verze ASPI jsou doporučeny pro použití s programem dvdisaster?</i><p>
-
-Společnost Adaptec poskytuje své ovladače ASPI zdarma pro stažení.
-Někdy mají verze 4.72.* obtíže při zjišťování mechanik pod
-Windows 2000/XP. Obvykle v takových případech pomůže návrat
-ke starší verzi 4.60.<p>
-
-<i>&gt;&nbsp; Písmena mechanik jsou pod ASPI špatně!</i><p>
-
-Ovladače ASPI používají svůj vlastní systém identifikace mechanik, která
-nepodporuje schéma písmen mechanik Windows.<br>
-Aby zajistil jednotný přístup k SPTI a ASPI,
-tak program dvdisaster zkouší odhadnout mapování mechanik ASPI na písmena
-mechanik. To však nefunguje ve všech konfiguracích.<p>
-
-Funkce <a href="example90.html#list">--list</a> zobrazí
-aktuální mapování písmen mechanik.<p>
-
-<i>&gt;&nbsp; Jak zvolit mezi SPTI a ASPI?</i><p>
-
-Program dvdisaster si automaticky vybere mezi SPTI a ASPI, 
-s přikloněním ve prospěch SPTI, pokud jsou dostupné oba ovladače.
-Použití ASPI může být vynuceno; viz podrobnosti k popisu funkce
-<a href="example90.html#list">--list</a>.
-
-<div align=right><a href="#top">&uarr;</a></div><p>
-
-<!--- do not change below --->
-
-<?php
+<h3 class="top"><a name="top">Technické otázky</a></h3><a href="#nls">2.1 Do kterých jazyků byl již program přeložen?</a><p><a href="#media">2.2 Které typy disků jsou podporovány?</a><p><a href="#filesystem">2.3 Které souborové systémy jsou podporovány?</a><p><hr><p><b><a name="nls">2.1 Do kterých jazyků byl již program přeložen?</a></b><p>Aktuální verze dvdisaster obsahuje překlad uživatelského rozhraní do následujících jazyků:<p><table>
+<tr><td>   </td><td>Czech</td><td>--</td><td>kompletní</td></tr>
+<tr><td></td><td>English</td><td>--</td><td>kompletní</td></tr>
+<tr><td>   </td><td>German</td><td>--</td><td>kompletní</td></tr>
+<tr><td>   </td><td>Italian</td><td>--</td><td>do verze 0.65</td></tr>
+<tr><td></td><td>Portuguese</td><td>--</td><td>kompletní</td></tr>
+<tr><td>   </td><td>Russian</td><td>--</td><td>kompletní</td></tr>
+<tr><td>   </td><td>Swedish</td><td>--</td><td>do verze 0.70</td></tr>
+</table><p>Překlady do dalších jazyků jsou vítány!<p>dvdisaster automaticky detekuje jazyková nastavení operačního systému. Pokud lokální jazyk není podporován, bude použita angličtina. Jiný jazyk může být vybrán pomocí nastavení systémových proměnných.<p>Příklad pro příkazový bash a němčinu:<pre>export LANG=de_DE</pre>Pokud nejsou správně zobrazeny speciální znaky jako např. německé přehlasované hlásky, zkuste následující:<p><tt>export OUTPUT_CHARSET=iso-8859-1</tt> (X11, XTerm)<div class="talignr"><a href="#top">↑</a></div><b><a name="media">2.2 Které typy disků jsou podporovány?</a></b><p>dvdisaster podporuje zapisovatelné disky CD, DVD a BD. <br>Disky obsahující více sekcí nebo ochranu proti kopírování <i>nemohou</i> být používány.<p>Použitelné typy disků:<p><b>CD-R, CD-RW</b><p><ul>
+ <li>Podporována pouze datová CD.</li>
+</ul><b>DVD-R, DVD+R</b><p><ul>
+<li>Žádná další známá omezení.</li>
+</ul><b>DVD-R DL, DVD+R DL (dvouvrstvá)</b><ul>
+<li>Mechanika musí být schopna <a href="qa20.php#dvdrom">rozeznat typ disku</a>. To je většinou případ pouze mechanik které jsou také schopny vypalovat dvouvrstvé disky.</li>
+</ul><b>DVD-RW, DVD+RW</b><p><ul>
+<li>Některé mechaniky hlásí špatnou <a href="qa20.php#rw">velikost</a>.<br>Lze obejít zjištěním velikosti ze systému souborů ISO/UDF nebo údajů ECC/RS02 dat.</li></ul><b>DVD-RAM</b><p><ul>
+<li>Použitelné pouze při zápisu ISO/UDF jako u DVD-R/-RW;</li>
+<li>Nepoužitelné při použití jako vyjímatelný disk (paketový zápis).</li>
+<li>Podobně jako uvedeno výše problém s rozpoznáním <a href="qa20.php#rw">velikosti bitové kopie</a>.</li>
+</ul><b>BD-R, BD-RW</b><p><ul>
+<li>Žádná známá omezení, ale bylo provedeno jen minimum testů dvouvrstvých disků (50GB).</li>
+</ul><b>Nepoužitelné typy</b> (nelze vytvořit bitovou kopii):<p>BD-ROM (originální BD), DVD-ROM (originální DVD), CD-Audio a CD-Video.<div class="talignr"><a href="#top">↑</a></div><p><b><a name="filesystem">2.3 Které souborové systémy jsou podporovány?</a></b><p>dvdisaster pracuje výhradně na úrovni bitových kopií, ke kterým je přistupováno sektor po sektoru. Nezáleží proto na tom, jaký systém souborů byl u disku použit.<p>Protože dvdisaster nezná, ani nepoužívá strukturu systému souborů, nemůže opravit logické chyby na úrovni systému souborů. Nemůže proto obnovit ztracené nebo smazané soubory.<div class="talignr"><a href="#top">↑</a></div><p><!-- do not change below --> <?php
 # end_page() adds the footer line and closes the HTML properly.
 
 end_page();

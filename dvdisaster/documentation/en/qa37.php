@@ -12,9 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Hints for storing the error correction files</h3>
+<h3 class="top">Hints for storing the error correction files</h3>
 
 Currently there are few exchangeable media technologies
 which can be a cost-effective alternative to the various CD/DVD/BD formats.
@@ -55,13 +55,13 @@ on the succeeding medium within a series.<p>
 <pre> </pre>
 <table width="50%"><tr><td><hr></td></tr></table>
 
-<font size="-1">
+<span class="fs">
 <a name="footnote1"><sup>*)</sup></a> 
 You might also choose an <a href="howtos30.php">augmented image</a> using RS02
 or RS03 instead of creating an error correction file.
-</font>
+</span>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

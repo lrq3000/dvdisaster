@@ -12,9 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Hardware requirements</h3>
+<h3 class="top">Hardware requirements</h3>
 
 <ul>
  <li>x86, PowerPC or Sparc processor;</li>
@@ -77,7 +77,7 @@ support currently provides no significant improvements over the 32bit version.<b
 Windows 2000 SP3 and earlier versions are not supported.<br>
 <sup>4)</sup>Support for multicore processors varies. On some editions using additional
 cores for dvdisaster does not result in more performance.
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

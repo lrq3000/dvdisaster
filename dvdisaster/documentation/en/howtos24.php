@@ -15,8 +15,8 @@ begin_page();
 howto_headline("Creating error correction files", "Archival", "images/create-icon.png");
 ?>
 
-<!--- Insert actual page content below --->
-<h3>Tips for archival of error correction files</h3>
+<!-- Insert actual page content below -->
+<h3 class="top">Tips for archival of error correction files</h3>
 
 CD/DVD/BD are currently among the most cost-effective exchangeable
 mass storage media. Therefore you are probably considering them 
@@ -30,7 +30,7 @@ has also gone defective. After all both media have been written at the same time
 and they have the same aging characteristics.
 <p>
 
-<table width=100%><tr><td bgcolor=#000000 width=2><img width=1 height=1 alt=""></td>
+<table width="100%"><tr><td class="vsep"></td>
 <td>&nbsp;</td>
 <td>This might come at a surprise, but it can not be guaranteed that an
 error correction file remains usable when it is stored on a defective medium -
@@ -71,7 +71,7 @@ with the most recent one ;-)
 </li>
 </ol>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 

@@ -16,7 +16,7 @@ begin_page();
 howto_headline("Scanning media for errors", "Interpreting results", "images/scan-icon.png");
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
 <?php begin_screen_shot("Overview","defective-cd.png"); ?>
 <b>Overview.</b> dvdisaster provides several information about the scanning results:

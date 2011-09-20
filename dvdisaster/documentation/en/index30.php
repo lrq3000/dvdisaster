@@ -12,9 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Advantages of using dvdisaster:</h3>
+<h3 class="top">Advantages of using dvdisaster:</h3>
 
 <ul>
 <li><b>Protects</b> against aging and accidental medium damage (within certain limits).<p></li>
@@ -43,7 +43,7 @@ See also the collection of <a href="qa30.php">background information</a>
 to learn more about the functioning of dvdisaster.
 
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

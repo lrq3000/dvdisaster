@@ -1,6 +1,8 @@
 <?php
-# dvdisaster: Czech homepage translation
-# Copyright (C) 2006 Luboš Staněk
+# dvdisaster: English homepage translation
+# Copyright (C) 2004-2011 Carsten Gnörlich
+#
+# UTF-8 trigger: äöüß 
 #
 # Include our PHP sub routines, then call begin_page()
 # to start the HTML page, insert the header, 
@@ -10,96 +12,55 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Metody RS01 a RS02</h3>
+<h3 class="top">Metody RS01, RS02 a RS03</h3>dvdisaster nabízí tři metody opravy chyb. RS01 a RS02 jsou současné a vyzkoušené metody, RS03 je stále ještě vyvíjena.<p><b>Porovnání metod.</b> Všechny metody používají opravu chyb <a href="qa31.php">Reed-Solomon</a>. Počítají informace pro opravu chyb pro bitové kopie ISO, které pak slouží k opravě nečitelných sektorů, pokud dojde k poškození disku.<p>Metody se liší způsobem ukládání informací pro opravu chyb:<p><ul>
+<li><a name="file"> </a>RS01 vytváří <b>soubory pro opravu chyb</b>, které jsou ukládány odděleně od bitové kopie ke které náleží. Protože ochrana dat na <a href="qa32.php#file">úrovni souborů</a> je obtížná, musí být soubory pro opravu chyb uloženy na disku, který je také chráněn prostřednictvím dvdisaster.<p></li>
 
-Program dvdisaster obsahuje dvě metody opravy chyb pojmenované RS01 a RS02.
-RS01 je existující a vyzkoušená metoda, zatímco RS02 je stále ve vývoji.
-RS02 je v současnosti dostupná pouze na příkazové řádce a bude plně
-integrována do grafického uživatelského rozhraní ve verzi 0.70.<p>
-
-<b>Srovnání obou metod.</b>
-
-RS01 a RS02 vytváří stejnou opravu chyb
-<a href="background10.html">Reed-Solomon</a>.
-Vypočítávají pro obrazy CD/DVD opravné informace, které jsou použity
-k obnově nečitelných sektorů, jakmile se později disk poškodí.<p>
-
-Metody se liší ve způsobu, jak je opravná informace ukládána:<p>
-
-<ul>
-<li>
-<a name="file"> </a>
-RS01 vytváří <b>soubory oprav chyb</b>, které jsou uloženy odděleně
-od obrazů, ke kterým patří. Vzhledem k tomu, že je ochrana dat na
-<a href="background20.html#file">úrovni souborů</a> obtížná,
-musí být soubory oprav chyb uloženy na média, která jsou také chráněna
-proti ztrátě dat programem dvdisaster.<p></li>
-
-<li>
-<a name="image"> </a>
-Metoda RS02 se použije tak, že se nejprve vytvoří obraz na pevném disku
-za použití softwaru pro vypalování CD/DVD. Než se obraz zapíše na médium,
-programem dvdisaster <b>rozšíří obraz</b> o opravná data.
-Takže jsou data, která se mají chránit, a informace opravy chyb umístěna
-na stejné médium. Poškozené sektory v opravných informacích snižují
-kapacitu opravy dat, ale nečiní opravu nemožnou - druhé médium pro
-uložení nebo ochranu opravných informací není požadováno.<p></li>
-</ul>
-
-
-<a name="table"> </a>
-<b>Porovnání ukládání opravných dat.</b><p>
-
-<table width="100%" border="1" cellspacing="0" cellpadding="5">
+<li><a name="image"> </a>Pro aplikaci metody RS02 je nejdříve na pevném disku s pomocí programu pro vypalování CD/DVD vytvořena bitová kopie. Před vypálením na disk je tato bitová kopie pomocí dvdisaster <b>rozšířena</b> o data pro opravu chyb. Chráněná data a informace pro opravu chyb jsou tak uloženy na stejném disku. Poškozené sektory v oblasti obsahující informace pro opravu chyb snižují kapacitu opravy chyb, ale opravu neznemožňují - není vyžadován dodatečný disk pro uchovávání nebo ochranu informací pro opravu.<p></li>
+</ul>RS03 je vylepšením verzí RS01 a RS02. S jeho pomocí lze vytvářet jak soubory pro opravu chyb, tak rozšířené bitové kopie:<ul>
+<li>RS03 umí práci rozložit na několik jader procesoru a na moderních procesorech je tak mnohem rychlejší než RS01/RS02.</li>
+<li>RS03 <b>soubory pro opravu chyb</b> jsou - na rozdíl od RS01 - odolné vůči poškození. To by vás však nemělo svádět k nedbalému zacházení s vašimi soubory pro opravu chyb - nevýhody <a href="qa32.php#file">čtení na úrovni souborového systému</a> jsou stále platné.</li>
+<li>RS03 <b>rozšířené bitové kopie</b> nevyžadují takzvané hlavní bloky obsahující důležité informace. Díky tomu je RS03 více robustní, ale také více omezující: Rozšířená bitová kopie musí zcela zaplnit cílový disk, kdežto u RS02 bylo možné si zvolit libovolnou velikost rozšířené bitové kopie.</li>
+</ul>Změny umožňující paralelizaci výpočtů a zvýšení robustnosti způsobily snížení prostorové efektivnosti RS03, RS03 data pro opravu chyb tak mají o něco nižší kapacitu opravy chyb, než jejich stejně velké ekvivalenty používající RS01/RS02.<p><a name="table"> </a> <b>Porovnání způsobu uložení opravy chyb.</b><p>Následující tabulky shrnuje rozdíly mezi soubory pro opravu chyb (RS01, RS03) a rozšířenými bitovými kopiemi (RS02, RS03):<p><table width="100%" border="1" cellspacing="0" cellpadding="5">
 <tr>
-<td width="50%"><i>Soubory oprav chyb</i></td>
-<td width="50%"><i>Obrazy rozšířené o opravná data</i></td>
+<td class="w50p"><i>Soubory pro opravu chyb</i></td>
+<td class="w50p"><i>Bitová kopie rozšířená o data pro opravu chyb</i></td>
 </tr>
 <tr valign="top">
-<td> 
-lze použít jakoukoli možnou redundanci</td>
-<td>redundance je omezena volným prostorem na médiu<br>
-(= kapacita média - velikost obrazu dat)</td>
+<td>může být zvolena libovolná redundance</td>
+<td>redundance je vymezena volným místem na disku<br> (= kapacita disku - velikost dat)</td>
 </tr>
 
 <tr valign="top">
-<td>je efektivní již při 15% redundance;
-médium může být zcela zaplněno daty</td>
-<td>vyžaduje nejméně 20%-30% redundance;
-použitelná kapacita média je odpovídajícím způsobem zmenšena</td> 
+<td>efektivní už při 15% redundanci, protože u souborů pro opravu chyb se předpokládá, že nejsou poškozeny</td>
+<td>vyžaduje větší redundanci (doporučeno: 20-30%) pro kompenzaci případného poškození dat pro opravu chyb</td> 
 </tr>
 
 <tr valign="top">
-<td>může být vytvořen pro již existující média</td>
-<td>lze použít pouze před zápisem nového média, protože
-obraz musí být předem rozšířen o informace opravy chyb</td>
+<td>disk může být zcela zaplněn uživatelskými daty</td>
+<td>využitelný prostor na disku je zmenšen o velikost dat pro opravu chyb</td> 
 </tr>
 
 <tr valign="top">
-<td>oddělené ukládání souboru oprav chyb a uživatelských dat
-posiluje ochranu dat</td>
-<td>společný úložný prostor pro uživatelská i opravná data
-může snížit kapacitu opravy chyb</td>
+<td>mohou být vytvořeny dodatečně pro již existující disk</td>
+<td>použitelné pouze při vytváření disku, protože bitová kopie musí být o data pro opravu chyb rozšířena před vypálením</td>
 </tr>
 
 <tr valign="top">
-<td>Musí se zachovávat přiřazení souborů oprav chyb k médiím.
-Soubory oprav chyb musí být chráněny proti poškození.</td>
-<td>Snadné řešení s jedním médiem; informace opravy chyb se
-nemusí katalogizovat nebo výlučně chránit.</td></tr>
+<td>uložení dat pro opravu chyb odděleně od dat zvyšuje ochranu dat</td>
+<td>uložení data pro opravu chyb společně s uživatelskými daty může snížit kapacitu opravy chyb</td>
+</tr>
 
 <tr valign="top">
-<td>žádné problémy s kompatibilitou v přehrávacích zařízeních</td>
-<td>média s rozšířenými obrazy se nemusí přehrávat správně ve
-všech zařízeních</td>
+<td>Musí být veden přehled o příslušnosti dat pro opravu chyb k disku. Soubory pro opravu chyb musí být chráněny proti poškození.</td>
+<td>Jednoduché řešení na jednom disku; informace pro opravu chyb není nutné zvlášť evidovat ani chránit.</td></tr>
+
+<tr valign="top">
+<td>žádné problémy s kompatibilitou</td>
+<td>disky s bitovou kopií rozšířenou o data pro opravu chyb nemusí být v některých mechanikách správně přehrána</td>
 </tr>
-</table><p>
-
-<!--- do not change below --->
-
-<?php
+</table><p><!-- do not change below --> <?php
 # end_page() adds the footer line and closes the HTML properly.
 
 end_page();

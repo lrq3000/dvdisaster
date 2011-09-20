@@ -12,9 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Image level data recovery</h3>
+<h3 class="top">Image level data recovery</h3>
 
 Media recovery with error correcting codes takes place in two steps:
 
@@ -111,7 +111,7 @@ to the problems discussed above. If the medium containing the error correction
 files becomes damaged it may not be possible to access or read them completely.
 <p>
 
-<table width=100%><tr><td bgcolor=#000000 width=2><img width=1 height=1 alt=""></td><td>
+<table width="100%"><tr><td class="vsep"></td><td>
 Therefore it is important to protect error correction files at the image level 
 as well:
 <a href="qa37.php">Media containing error correction files</a>
@@ -133,12 +133,12 @@ is better spent at the image level: The Reed-Solomon error correction works
 best when error correction information
 is spread over huge amounts of data. 
 It is better to protect the image as a whole
-than individually protecting each file within.<p></li>
+than individually protecting each file within.<p>
 
 <pre> </pre>
 <table width="50%"><tr><td><hr></td></tr></table>
 
-<font size="-1">
+<span class="fs">
 <a name="footnote1"><sup>*)</sup></a> Error correction files created
 with the new RS03 codec have exactly these properties, e.g. they
 are robust against damage as long as there is enough error correction
@@ -148,8 +148,8 @@ a suitable file format. At the time RS01 was developed these resources
 were not yet available. But it must be stressed that even for
 RS03 error correction files the disadvantages of reading at the
 file level hold!
-</font>
-<!--- do not change below --->
+</span>
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

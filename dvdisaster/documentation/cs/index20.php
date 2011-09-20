@@ -1,6 +1,8 @@
 <?php
-# dvdisaster: Czech homepage translation
-# Copyright (C) 2006 Luboš Staněk
+# dvdisaster: English homepage translation
+# Copyright (C) 2004-2011 Carsten Gnörlich
+#
+# UTF-8 trigger: äöüß 
 #
 # Include our PHP sub routines, then call begin_page()
 # to start the HTML page, insert the header, 
@@ -10,36 +12,18 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Program dvdisaster doplňuje PI/PO skeny</h3>
-
-PI/PO skeny jsou cenným nástrojem pro měření a optimalizaci
-kvality vypálených médií.<p>
-
-Přesto <b>nejsou</b> PI/PO skeny spolehlivým prostředkem <b>předpovědi
-životnosti</b> DVD média!
-
-<ul>
-<li> PI/PO skeny nepodávají žádnou informaci o tom, kolik dalších
-škrábanců nebo týdnů stárnutí médium ještě vydrží, než začne vykazovat
-první nečitelný sektor.<p></p></li>
-
-<li>Kopírování média jen kvůli špatným hodnotám PI/PO se často
-ukazuje jako předčasné - někdy takováto média zůstanou čitelná
-mnohem déle, než se očekávalo.<p></p></li>
-
-<li>Bez použití dodatečných nástrojů, jako je dvdisaster, ale není
-možné odkládat zálohu média, až se objeví první chyby čtení - to by
-rozhodně vedlo ke ztrátě dat.</li>
+<h3 class="top">dvdisaster jako doplněk kontrol kvality</h3><a href="qa.php#pipo">Kontrola kvality</a>, např. zjištění C2 chyb nebo PI/PO chyb, je užitečná ke zjištění kvality vypálení disku.<p>Ale kontrola kvality <b>není</b> spolehlivým způsobem <b>odhadnutí životnosti</b> optického disku. <br>Předpokládejme, že hledáme nejlepší okamžik pro zkopírování opotřebovaného disku na nový:<ul>
+<li>Příliš brzy: kopírování disku z důvodu špatných výsledků kontroly kvality není ekonomické. Takové disky někdy zůstanou čitelné mnohem déle než se dalo předpokládat.<p></li>
+<li>Příliš pozdě: Když už kontrola kvality odhalí nečitelné sektory, došlo již ke ztrátě některých dat.<p></li>
+<li>Těsně před selháním disku: Ideální stav, ale jak ho zjistit?</ul>Můžeme to ale provést pomocí dvdisaster:<ul>
+<li>Pro disk <a href="howtos20.php">vytvoříme data por opravu chyb</a>.<p></li>
+<li>Pravidelně <a href="howtos10.php">disk kontrolujeme</a>. Disk používáme dokud se neobjeví první chyby.<p></li>
+<li>Chyby <a href="howtos40.php">opravíme</a> <a href="howtos40.php">pomocí dat pro opravu chyb</a>. Opravenou bitovou kopii zapíšeme na nový disk.</li>
 </ul>
 
-<a href="index30.php">Přehled pro a proti programu dvdisaster...</a>
-
-
-<!--- do not change below --->
-
-<?php
+<p><a href="index30.php">Přednosti a nevýhody dvdisaster...</a> <!-- do not change below --> <?php
 # end_page() adds the footer line and closes the HTML properly.
 
 end_page();
