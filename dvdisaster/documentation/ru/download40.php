@@ -14,9 +14,9 @@ begin_page();
 $show_all=$_GET["showall"];
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Альфа-версии (для разработчиков)</h3>
+<h3 class="top">Альфа-версии (для разработчиков)</h3>
 
 <b>Помогите нам с тестированием!</b> На этой странице находятся экспериментальные версии dvdisaster,
 создаваемые на пути к следующему стабильному выпуску.<p>
@@ -70,7 +70,7 @@ for the graphical user interface. <i>[in progress]</i></li>
 
 <table class="download" cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.79</b></td><td align="right">21 Nov 2010</td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2" class="hsep"></td></tr>
 <tr><td colspan="2">
   <table>
 <?php
@@ -90,7 +90,7 @@ for the graphical user interface. <i>[in progress]</i></li>
 ?>
   </table>
 </td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2" class="hsep"></td></tr>
 <tr><td colspan="2">
 
 <b>All platforms:</b> These releases contain major internal changes compared
@@ -139,7 +139,7 @@ supplied libraries have been updated. Please test whether the graphical
 user interface and localization still work as expected.
 </td></tr></table><p>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

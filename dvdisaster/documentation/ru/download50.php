@@ -12,9 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Additional resources</h3>
+<h3 class="top">Additional resources</h3>
 
 The online documentation which you are currently reading is included
 in the dvdisaster program packages. You do not need to download
@@ -35,7 +35,7 @@ is available now for discussion. The specification is not final.<p>
 Reading the RS03 document requires knowledge in the area of
 coding theory. It is not meant as end user documentation.
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

@@ -12,9 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Системные требования</h3>
+<h3 class="top">Системные требования</h3>
 
 <ul>
  <li>Процессоры: x86, PowerPC или Sparc;<p></li>
@@ -31,13 +31,12 @@ begin_page();
  <li><b>Linux</b> с ядром <b>2.6.7</b> или новее.<p>
  </li>
  <li><b>Mac OS X</b> версия 10.4 (Tiger) или новее,<br> 
-      на платформах x86 и PowerPC.<p>
+      на платформах x86 и PowerPC.<p></li>
  <li><b>NetBSD</b> версия 3.1 или новее.<p></li> 
  <li><b>Windows 2000</b>, <b>Windows XP</b>, <b>Windows Vista (R).</b></li>
- </li>
 </ul>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

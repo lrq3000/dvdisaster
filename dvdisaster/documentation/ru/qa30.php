@@ -12,9 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Background information</h3>
+<h3 class="top">Background information</h3>
 
 The information in this sub section is not required for operating dvdisaster.
 However it is helpful on understanding how dvdisaster works and may help
@@ -30,7 +30,7 @@ you getting the most out of the program according to your needs.
 <li><a href="qa37.php">Hints for storing the error correction files</a><p></li>
 </ol>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

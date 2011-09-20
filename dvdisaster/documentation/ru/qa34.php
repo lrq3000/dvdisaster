@@ -13,9 +13,9 @@ require("../include/screenshot.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>The linear reading strategy</h3>
+<h3 class="top">The linear reading strategy</h3>
 
 dvdisaster contains two different reading strategies.<p>
 
@@ -116,7 +116,7 @@ read at these places during the current reading pass:
 to a new medium.</li>
 </ul>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

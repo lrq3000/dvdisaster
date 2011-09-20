@@ -12,9 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Make sure you're not getting ripped off: The small print (and other things).</h3>
+<h3 class="top">Make sure you're not getting ripped off: The small print (and other things).</h3>
 
 The dvdisaster project provides this software 
 as <a href="http://www.gnu.org/philosophy/free-sw.html">free software</a> 
@@ -65,7 +65,7 @@ See the <a href="download.php#download">download page</a> for examples. <p>
 Be very cautious if signatures and checksums are missing, invalid or
 not matching those published at the sites mentioned above.<p>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

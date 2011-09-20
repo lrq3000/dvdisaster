@@ -12,9 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Цифровая подпись</h3>
+<h3 class="top">Цифровая подпись</h3>
 
 Выложенные для скачивания пакеты dvdisaster снабжены цифровой подписью с помощью
 <a href="http://www.gnupg.org/gnupg.html">GnuPG</a>, поэтому вы можете проверить
@@ -23,15 +23,14 @@ begin_page();
 
 Подпись была сделана с помощью следующего <a href="../pubkey.asc">открытого ключа</a>:
 
-<a href="../pubkey.asc">
 <pre>
 pub   1024D/F5F6C46C 2003-08-22
       Key fingerprint = 12B3 1535 AF90 3ADE 9E73  BA7E 5A59 0EFE F5F6 C46C
 uid                  dvdisaster (pkg signing key #1)
 sub   1024g/091AD320 2003-08-22
-</pre></a>
+</pre>
 
-Пишите на <img src="../images/email.png" align="top"> и вы получите
+Пишите на <img src="../images/email.png" alt="email shown as png image" class="valigntt"> и вы получите
 отпечаток ключа непосредственно от разработчиков. 
 В тему письма вставьте строку "GPG finger print".
 
@@ -43,7 +42,7 @@ checksum as the original. However MD5 checksums are sufficient for a quick
 check whether the download has finished completely and without transmission
 errors.
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

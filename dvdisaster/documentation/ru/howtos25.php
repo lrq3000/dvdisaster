@@ -39,7 +39,7 @@ dvdisaster попытается извлечь носитель после пр�
 
 
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

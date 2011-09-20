@@ -12,9 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Выходные данные</h3>
+<h3 class="top">Выходные данные</h3>
 
 Carsten Gnörlich <br>
 Beerenkamp 23 <br>
@@ -36,7 +36,7 @@ Carsten Gnörlich (адрес смотри выше).
 <a href="http://dvdisaster.net">dvdisaster.net</a>, &nbsp;
 <a href="http://dvdisaster.org">dvdisaster.org</a>.
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

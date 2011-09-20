@@ -14,9 +14,9 @@ require("../include/screenshot.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>The adaptive reading strategy</h3>
+<h3 class="top">The adaptive reading strategy</h3>
 
 dvdisaster contains two different reading strategies.<p>
 
@@ -26,7 +26,7 @@ dvdisaster contains two different reading strategies.<p>
 </li>
 </ul>
 
-<b>The <a href="qa34.php"">linear reading strategy</a> is recommended for:</b><p>
+<b>The <a href="qa34.php">linear reading strategy</a> is recommended for:</b><p>
 <ul>
 <li><a href="howtos23.php">creating images</a> from undamaged media, e.g. to generate the error correction file</li>
 <li><a href="howtos12.php">scanning the medium</a> for reading speed and read errors</li>
@@ -106,7 +106,7 @@ of the drive and its reading capability. A better approach is to stop adaptive
 reading earlier and then try reading the remaining sectors with an additional
 <a href="qa34.php">linear reading</a> pass.
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

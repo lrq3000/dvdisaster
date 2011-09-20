@@ -21,7 +21,7 @@ function download_version($version, $show_separator, $src_md5, $mac_md5, $win_md
 
   if($src_md5 != "hidden")
     echo "<tr><td align=\"right\">$trans_md5&nbsp;</td><td>$src_md5</td></tr>\n";
-  echo "    <tr><td colspan=\"2\"><img width=1 height=3</td></tr>\n";
+  echo "    <tr><td colspan=\"2\" class=\"esep\"></td></tr>\n";
 
   if($mac_md5 != "none")
   {  echo "    <tr><td align=\"right\">$trans_macbinary&nbsp;</td>\n";
@@ -31,7 +31,7 @@ function download_version($version, $show_separator, $src_md5, $mac_md5, $win_md
 
      if($mac_md5 != "hidden")
        echo "<tr><td align=\"right\">$trans_md5&nbsp;</td><td>$mac_md5</td></tr>\n";
-     echo "    <tr><td colspan=\"2\"><img width=1 height=3</td></tr>\n";
+     echo "    <tr><td colspan=\"2\" class=\"esep\"></td></tr>\n";
   }
 
   if($win_md5 != "none")

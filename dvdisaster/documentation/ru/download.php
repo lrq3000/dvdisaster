@@ -14,9 +14,9 @@ begin_page();
 $show_all=$_GET["showall"];
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Скачать dvdisaster</h3>
+<h3 class="top">Скачать dvdisaster</h3>
 
 <table width="100%">
 <tr>
@@ -25,7 +25,7 @@ $show_all=$_GET["showall"];
 и Windows. Он предоставляется как
 <a href="http://www.germany.fsfeurope.org/documents/freesoftware.en.html">свободное программное обеспечение</a> 
 под лицензией <a href="http://www.gnu.org/licenses/gpl-3.0.txt">GNU General Public License v3</a>.</td>
-<td width="127px" valign="top"><img src="../images/gplv3-127x51.png" width="127px"></td>
+<td class="w127x" valign="top"><img src="../images/gplv3-127x51.png" alt="GPLv3 logo" width="127"></td>
 </tr>
 </table><p>
 
@@ -62,7 +62,7 @@ if(!strcmp($have_experimental, "yes"))
 
 <table class="download" cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.72</b></td><td align="right">07 Nov 2010</td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2" class="hsep"></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Исходные тексты для всех операционных систем:&nbsp;</td>
@@ -74,7 +74,7 @@ if(!strcmp($have_experimental, "yes"))
 if($mode == "www");
     echo "<tr><td align=\"right\">MD5 checksum:&nbsp;</td><td>312bceef3bf9c0754cf633ed3b12eb71</td></tr>";
 ?>
-    <tr><td colspan="2"><img width=1 height=3</td></tr>
+    <tr><td colspan="2" class="esep"></td></tr>
 
     <tr><td align="right">Двоичная версия для Mac OS X 10.5 / x86:&nbsp;</td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.2.app.zip">dvdisaster-0.72.2.app.zip</a>&nbsp;--&nbsp;сначала прочитайте эти <a href="download30.php#mac">советы</a></td></tr>
@@ -85,7 +85,7 @@ if($mode == "www");
 if($mode == "www");
     echo "<tr><td align=\"right\">MD5 checksum:&nbsp;</td><td>52243c1fafb9d2e496b6eb318c3e534f</td></tr>";
 ?>
-    <tr><td colspan="2"><img width=1 height=3</td></tr>
+    <tr><td colspan="2" class="esep"></td></tr>
 
     <tr><td align="right">Двоичная версия для Windows:&nbsp;</td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.2-setup.exe">dvdisaster-0.72.2-setup.exe</a></td></tr>
@@ -115,7 +115,7 @@ if($mode == "www");
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.1.tar.bz2.gpg">dvdisaster-0.72.1.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">MD5 checksum:&nbsp;</td>
         <td>4da96566bc003be93d9dfb0109b4aa1d</td></tr>
-    <tr><td colspan="2"><img width=1 height=3</td></tr>
+    <tr><td colspan="2" class="esep"></td></tr>
 
     <tr><td align="right">Двоичная версия для Mac OS X 10.5 / x86:&nbsp;</td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.1.app.zip">dvdisaster-0.72.1.app.zip</a>&nbsp;--&nbsp;сначала прочитайте эти <a href="download30.php#mac">советы</a></td></tr>
@@ -123,7 +123,7 @@ if($mode == "www");
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.1.app.zip.gpg">dvdisaster-0.72.1.app.zip.gpg</a></td></tr>
     <tr><td align="right">MD5 checksum:&nbsp;</td>
         <td>924b5677f69473b6b87991e01779a541</td></tr>
-    <tr><td colspan="2"><img width=1 height=3</td></tr>
+    <tr><td colspan="2" class="esep"></td></tr>
 
     <tr><td align="right">Двоичная версия для Windows:&nbsp;</td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.1-setup.exe">dvdisaster-0.72.1-setup.exe</a></td></tr>
@@ -140,7 +140,7 @@ if($mode == "www");
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.tar.bz2.gpg">dvdisaster-0.72.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">MD5 checksum:&nbsp;</td>
         <td>efa35607d91412a7ff185722f270fb8a</td></tr>
-    <tr><td colspan="2"><img width=1 height=3</td></tr>
+    <tr><td colspan="2" class="esep"></td></tr>
 
     <tr><td align="right">Двоичная версия для Mac OS X 10.5 / x86:&nbsp;</td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.app.zip">dvdisaster-0.72.app.zip</a>&nbsp;--&nbsp;сначала прочитайте эти <a href="download30.php#mac">советы</a></td></tr>
@@ -148,7 +148,7 @@ if($mode == "www");
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.app.zip.gpg">dvdisaster-0.72.app.zip.gpg</a></td></tr>
     <tr><td align="right">MD5 checksum:&nbsp;</td>
         <td>1f28385b2b6d64b664fd416eb4c85e80</td></tr>
-    <tr><td colspan="2"><img width=1 height=3</td></tr>
+    <tr><td colspan="2" class="esep"></td></tr>
 
     <tr><td align="right">Двоичная версия для Windows:&nbsp;</td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72-setup.exe">dvdisaster-0.72-setup.exe</a></td></tr>
@@ -162,7 +162,7 @@ if($mode == "www");
 ?>
   </table>
 </td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2" class="hsep"></td></tr>
 <tr><td colspan="2">
 Наиболее важные изменения в этой версии:<p>
 <ul>
@@ -220,7 +220,7 @@ please try getting dvdisaster via
 
 <table class="download" cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.70</b></td><td align="right">04 марта 2008</td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2" class="hsep"></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Исходный текст для всех операционных систем:&nbsp;</td>
@@ -229,7 +229,7 @@ please try getting dvdisaster via
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.70.6.tar.bz2.gpg">dvdisaster-0.70.6.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">MD5 checksum:&nbsp;</td>
         <td>c6d2215d7dd582475b19593dfa4fbdc2</td></tr>
-    <tr><td colspan="2"><img width=1 height=3</td></tr>
+    <tr><td colspan="2" class="esep"></td></tr>
 
     <tr><td align="right">Двоичный пакет для Windows:&nbsp;</td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.70.6-setup.exe">dvdisaster-0.70.6-setup.exe</a></td></tr>
@@ -240,7 +240,7 @@ please try getting dvdisaster via
 
   </table>
 </td></tr>
-<tr bgcolor="#000000"><td colspan="2"><img width=1 height=1 alt=""></td></tr>
+<tr><td colspan="2" class="hsep"></td></tr>
 <tr><td colspan="2">
 Метод коррекции ошибок RS02
 полностью поддерживается в графическом интерфейсе. Образы, созданные
@@ -295,7 +295,7 @@ please try getting dvdisaster via
 <li><a href="http://dvdisaster.cvs.sourceforge.net/dvdisaster/dvdisaster/README?view=markup">README</a> - план развития из архива исходных текстов.</li>
 </ul>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

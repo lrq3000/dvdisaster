@@ -12,9 +12,9 @@ require("../include/dvdisaster.php");
 begin_page();
 ?>
 
-<!--- Insert actual page content below --->
+<!-- Insert actual page content below -->
 
-<h3>Technical properties of the error correction</h3>
+<h3 class="top">Technical properties of the error correction</h3>
 
 This page outlines the basic ideas behind dvdisaster
 so that you can see for yourself whether
@@ -74,16 +74,16 @@ the capabilities of the error correction code. <p>
 <pre> </pre>
 <table width="50%"><tr><td><hr></td></tr></table>
 
-<font size="-1">
+<span class="fs">
 <a name="footnote1"><sup>*)</sup></a> 
 The given threshold of 32 correctable errors per ECC block is the standard setting.
 It is possible to <a href="howtos22.php#ecc">select other values</a>
 for higher or lower error correction capabilities. When 
 <a href="howtos30.php">error correction data is put directly on the medium</a>, the number of correctable
 errors depends on the free space on the medium.
-</font>
+</span>
 
-<!--- do not change below --->
+<!-- do not change below -->
 
 <?php
 # end_page() adds the footer line and closes the HTML properly.

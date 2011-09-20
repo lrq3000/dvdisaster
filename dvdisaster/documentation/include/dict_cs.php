@@ -6,25 +6,25 @@
 
 # English dictionary for some phrases used in dvdisaster.php
 
-$trans_version="verze";
+$trans_version="Verze";
 
-$trans_to_internet="Na Internetovou verzi";
+$trans_to_internet="Online verze";
 $trans_to_hoster="Přehled (na SourceForge.net)";
 
 $trans_back="Zpět";
-$trans_screen_shot="Screen shot";
+$trans_screen_shot="Snímek obrazovky";
 
 $trans_contents="Obsah";
-$trans_news="News";
-$trans_atom_title="dvdisaster news";
-$trans_hosting="Hostováno pod";
+$trans_news="Novinky";
+$trans_atom_title="dvdisaster - novinky";
+$trans_hosting="Hostováno na";
 
-$trans_fdl="Doslovné kopírování a distribuce celého tohoto článku jsou pro jakékoli médium povoleny za předpokladu, že tato poznámka zůstane zachována.";
-$trans_copyright="Autorská práva 2004-2011 Carsten Gnörlich, k překladu 2006 Luboš Staněk.";
+$trans_fdl="Kopírování a distribuce neupravené verze tohoto článku v libovolné formě je povolena za předpokladu, že bude zachována tato poznámka..";
+$trans_copyright="Copyright 2004-2011 Carsten Gnörlich.";
 
-$trans_sourcecode="Source code for all operating systems:";
-$trans_signature="Digital signature:";
-$trans_md5="MD5 checksum:";
-$trans_macbinary="Binary for Mac OS X 10.5 / x86:";
-$trans_winbinary="Binary for Windows:";
+$trans_sourcecode="Zdrojový kód (všechny operační systémy):";
+$trans_signature="Digitální podpis";
+$trans_md5="Kontrolní součet MD5:";
+$trans_macbinary="Binární soubor pro Mac OS X 10.5 / x86:";
+$trans_winbinary="Binární soubor pro Windows:";
 ?>
