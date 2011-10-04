@@ -8,10 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-07 16:44+0100\n"
+"POT-Creation-Date: 2011-09-27 19:20+0200\n"
 "PO-Revision-Date: 2006-03-16 20:40+0100\n"
 "Last-Translator: Luboš Staněk <lubek@users.sourceforge.net>\n"
 "Language-Team: čeština <cs@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -683,14 +684,14 @@ msgstr "O aplikaci dvdisaster"
 
 #: help-dialogs.c:726
 msgid ""
-"Modified version Copyright 2010 (please fill in - [directions])\n"
-"Copyright 2004-2010 Carsten Gnoerlich"
+"Modified version Copyright 2011 (please fill in - [directions])\n"
+"Copyright 2004-2011 Carsten Gnoerlich"
 msgstr ""
 
 #: help-dialogs.c:730
-msgid "Copyright 2004-2010 Carsten Gnoerlich"
+msgid "Copyright 2004-2011 Carsten Gnoerlich"
 msgstr ""
-"Copyright 2004-2010 Carsten Gnörlich\n"
+"Copyright 2004-2011 Carsten Gnörlich\n"
 "Česká lokalizace 2006 Luboš Staněk"
 
 #: help-dialogs.c:737
@@ -1214,8 +1215,8 @@ msgstr ""
 
 #: misc.c:205
 #, c-format
-msgid "dvdisaster-%s%sCopyright 2004-2010 Carsten Gnoerlich.\n"
-msgstr "dvdisaster-%s%sCopyright 2004-2010 Carsten Gnörlich.\n"
+msgid "dvdisaster-%s%sCopyright 2004-2011 Carsten Gnoerlich.\n"
+msgstr "dvdisaster-%s%sCopyright 2004-2011 Carsten Gnörlich.\n"
 
 #: misc.c:212
 msgid ""

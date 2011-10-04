@@ -21,6 +21,13 @@ $news_counter = 0;
 
 news_headline("dvdisaster News");
 
+news_item("03.10.2011", "dvdisaster 0.72.3 released", "
+The \"Verify\" function hangs when working on RS01 error
+correction files which are larger than 2GB (the error correction
+files are correctly generated though).
+Volodymyr Bychkoviak discovered the problem and sent in
+a bug fix.");
+
 news_item("31.10.2010", "dvdisaster 0.72.2 released", "
 This version introduces a workaround which prevents parallel SCSI
 adapters from freezing under Linux. RS03 images from 0.79.x

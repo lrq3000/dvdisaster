@@ -7,10 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-07 16:44+0100\n"
+"POT-Creation-Date: 2011-09-27 19:20+0200\n"
 "PO-Revision-Date: 2006-06-14 23:48+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -684,13 +685,13 @@ msgstr "Om dvdisaster"
 
 #: help-dialogs.c:726
 msgid ""
-"Modified version Copyright 2010 (please fill in - [directions])\n"
-"Copyright 2004-2010 Carsten Gnoerlich"
+"Modified version Copyright 2011 (please fill in - [directions])\n"
+"Copyright 2004-2011 Carsten Gnoerlich"
 msgstr ""
 
 #: help-dialogs.c:730
-msgid "Copyright 2004-2010 Carsten Gnoerlich"
-msgstr "Copyright 2004-2010 Carsten Gnörlich"
+msgid "Copyright 2004-2011 Carsten Gnoerlich"
+msgstr "Copyright 2004-2011 Carsten Gnörlich"
 
 #: help-dialogs.c:737
 msgid ""
@@ -1215,8 +1216,8 @@ msgstr ""
 
 #: misc.c:205
 #, c-format
-msgid "dvdisaster-%s%sCopyright 2004-2010 Carsten Gnoerlich.\n"
-msgstr "dvdisaster-%s%sCopyright 2004-2010 Carsten Gnörlich.\n"
+msgid "dvdisaster-%s%sCopyright 2004-2011 Carsten Gnoerlich.\n"
+msgstr "dvdisaster-%s%sCopyright 2004-2011 Carsten Gnörlich.\n"
 
 #: misc.c:212
 msgid ""

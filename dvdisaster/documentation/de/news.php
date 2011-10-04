@@ -21,6 +21,13 @@ $news_counter = 0;
 
 news_headline("Neues über dvdisaster");
 
+news_item("05.10.2011", "dvdisaster 0.72.3 veröffentlicht", "
+Die \"Vergleichen\"-Funktion hing bei der Verarbeitung von 
+RS01-Fehlerkorrektur-Dateien, die größer als 2GB sind (die
+Fehlerkorrektur-Dateien selbst werden korrekt erzeugt).
+Volodymyr Bychkoviak fand das Problem und schickte eine
+Korrektur. ");
+
 news_item("31.10.2010", "dvdisaster 0.72.2 veröffentlicht", "
 Diese Version führt einen Workaround ein um zu verhindern
 daß parallele SCSI-Kontroller unter Linux nicht

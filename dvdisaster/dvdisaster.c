@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2010 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2011 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -60,7 +60,7 @@ void FixEcc(void)
 }
 
 /*
- * Verfiy the image against ecc data 
+ * Verify the image against ecc data 
  */
 
 void Verify(void)
@@ -194,72 +194,30 @@ int main(int argc, char *argv[])
 #ifdef WITH_NLS_YES
 #ifdef SYS_MINGW
     if(!g_getenv("LANG"))  /* Unix style setting has precedence */
-    {  LANGID lang_id;
+    {  OSVERSIONINFO os_version_info;
+       gchar *unix_locale = g_win32_getlocale();
+       int os_major = 0;
+       int codepage = 0;
+       char codepage_name[32];
 
-       /* Try to get locale from Windows
-	  and set the respective environment variables. */
+       memset(&os_version_info, 0, sizeof(OSVERSIONINFO));
+       os_version_info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 
-       lang_id = GetUserDefaultLangID(); 
-       PrintLog("GetUserDefaultLangID = %x; Primary: %d, Sub: %d\n",
-		lang_id, PRIMARYLANGID(lang_id), SUBLANGID(lang_id));
+       if(!GetVersionEx(&os_version_info))
+	  os_major = 0;
 
-       switch(PRIMARYLANGID(lang_id))
-       {  case LANG_CZECH:
-	     g_setenv("LANG", "cs_CZ", 1);
+       os_major = os_version_info.dwMajorVersion;
 #ifdef WIN_CONSOLE
-	     g_setenv("OUTPUT_CHARSET", "CP852", 1);
+       if(os_major >= 6) /* Vista or newer */
+	  codepage   = GetACP();
+       else codepage = GetOEMCP(); 
 #else
-	     g_setenv("OUTPUT_CHARSET", "CP1250", 1);
+       codepage = GetACP();
 #endif
-	     break;
-
-          case LANG_GERMAN:
-	     g_setenv("LANG", "de_DE", 1);
-#ifdef WIN_CONSOLE
-	     g_setenv("OUTPUT_CHARSET", "CP850", 1);
-#else
-	     g_setenv("OUTPUT_CHARSET", "CP1252", 1);
-#endif
-	     break;
-
-          case LANG_ITALIAN:
-	     g_setenv("LANG", "it_IT", 1);
-#ifdef WIN_CONSOLE
-	     g_setenv("OUTPUT_CHARSET", "CP850", 1);
-#else
-	     g_setenv("OUTPUT_CHARSET", "CP1252", 1);
-#endif
-	     break;
-
-          case LANG_PORTUGUESE:
-	    if(SUBLANGID(lang_id) == SUBLANG_PORTUGUESE_BRAZILIAN)
-	    {  g_setenv("LANG", "pt_BR", 1);
-#ifdef WIN_CONSOLE
-	       g_setenv("OUTPUT_CHARSET", "CP860", 1);
-#else
-	       g_setenv("OUTPUT_CHARSET", "CP1251", 1);
-#endif
-	    }
-            break;
-
-          case LANG_RUSSIAN:
-	     g_setenv("LANG", "ru_RU", 1);
-#ifdef WIN_CONSOLE
-	     g_setenv("OUTPUT_CHARSET", "CP855", 1);
-#else
-	     g_setenv("OUTPUT_CHARSET", "CP1251", 1);
-#endif
-	     break;
-
-          case LANG_SWEDISH:
-	     g_setenv("LANG", "sv_SV", 1);
-#ifdef WIN_CONSOLE
-	     g_setenv("OUTPUT_CHARSET", "CP850", 1);
-#else
-	     g_setenv("OUTPUT_CHARSET", "CP1252", 1);
-#endif
-	     break;
-       }
+       snprintf(codepage_name, 32, "CP%d", codepage);
+       g_setenv("OUTPUT_CHARSET", codepage_name, 1);
+       g_setenv("LANG", unix_locale, 1);
+       PrintLog("WinOSmajor %d, codepage %s, unix_locale %s\n", os_major, codepage_name, unix_locale); 
     }
 #endif /* SYS_MINGW */
 
