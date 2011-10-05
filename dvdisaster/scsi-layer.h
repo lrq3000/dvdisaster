@@ -42,7 +42,7 @@
 #undef VERSION
 #include <CoreFoundation/CoreFoundation.h>
 #include <IOKit/IOKitLib.h>
-#include <IOKit/scsi-commands/SCSITaskLib.h>
+#include <IOKit/scsi/SCSITaskLib.h>
 #include <IOKit/storage/IODVDTypes.h>
 #include <mach/mach.h>
 #include <string.h>

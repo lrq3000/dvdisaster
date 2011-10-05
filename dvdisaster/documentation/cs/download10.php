@@ -29,7 +29,7 @@ begin_page();
 </tr>
 <tr>
 <td>GNU/Linux</td>
-<td>Debian Lenny (5.0.3)<br>kernel 2.6.26</td>
+<td>Debian Squeeze (6.0.2)<br>kernel 2.6.32</td>
 <td align="center">ano</td>
 <td align="center">ano</td>
 </tr>

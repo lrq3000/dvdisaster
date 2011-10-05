@@ -21,6 +21,13 @@ $news_counter = 0;
 
 news_headline("Новости dvdisaster");
 
+news_item("05.10.2011", "dvdisaster 0.72.3 released", "
+The \"Verify\" function hangs when working on RS01 error
+correction files which are larger than 2GB (the error correction
+files are correctly generated though).
+Volodymyr Bychkoviak discovered the problem and sent in
+a bug fix.", 20, "2011-10-05T00:00:00Z", "2011-10-05T00:00:00Z");
+
 news_item("28.07.2011", "Documentation added", "
 The temporarily lost <a href=\"qa30.php\">background information</a> 
 from the 0.70 documentation has been updated and made online again.

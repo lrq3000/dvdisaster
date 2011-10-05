@@ -21,6 +21,14 @@ $news_counter = 0;
 
 news_headline("Neues über dvdisaster");
 
+news_item("05.10.2011", "dvdisaster 0.72.3 veröffentlicht", "
+Die \"Vergleichen\"-Funktion hing bei der Verarbeitung von 
+RS01-Fehlerkorrektur-Dateien, die größer als 2GB sind (die
+Fehlerkorrektur-Dateien selbst werden korrekt erzeugt).
+Volodymyr Bychkoviak fand das Problem und schickte eine
+Korrektur.
+", 20, "2011-10-05T01:00:00Z", "2011-10-05T01:00:00Z");
+
 news_item("28.07.2011", "Dokumentation ergänzt", "
 Die zwischenzeitlich verlorengegangenen <a href=\"qa30.php\">Hintergrundinformationen</a> aus der Dokumentation von Version 0.70 wurden überarbeitet und wieder
 online gestellt.

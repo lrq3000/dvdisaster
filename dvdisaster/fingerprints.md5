@@ -5,7 +5,7 @@ df9d88776eb3f77a93ef596b148193be *md5.h
 cf0e0fcab9623148798a1a735a94fca6 *rs01-includes.h
 c95110907ee704f9f79f3d6d86bf8d49 *rs02-includes.h
 a45890bc7ffe9391567a95df47c4b3d4 *rs03-includes.h
-a26b71c3f3cb7491803d580da8ac6f78 *scsi-layer.h
+7e210b2bcc0df67542499f9e4e1ee97f *scsi-layer.h
 c80861eb0694f6abc5728e81afcddf37 *udf.h
 f4464ac624ffa4b09a3f68f0f228eb84 *bitmap.c
 9c654ce49a32fe5f3bf050a62b177490 *build.c

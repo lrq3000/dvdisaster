@@ -21,6 +21,13 @@ $news_counter = 0;
 
 news_headline("dvdisaster - novinky");
 
+news_item("05.10.2011", "dvdisaster 0.72.3 released", "
+The \"Verify\" function hangs when working on RS01 error
+correction files which are larger than 2GB (the error correction
+files are correctly generated though).
+Volodymyr Bychkoviak discovered the problem and sent in
+a bug fix.", 20, "2011-10-05T00:00:00Z", "2011-10-05T00:00:00Z");
+
 news_item("28.07.2011", "Přidána dokumentace", "Dočasně ztracené <a href=\"qa30.php\">technické informace</a> z dokumentace pro verzi 0.70 byly aktualizovány a znovu publikovány.", 19, "2011-07-28T00:00:00Z", "2011-07-28T00:00:00Z");
 
 news_item("21.11.2010", "Vydán dvdisaster 0.79.3", "V GNU/Linux je pro přístup k optickým mechanikám jako výchozí použit ovladač SG_IO. Díky tomu byl vyřešen problém se zamrzáním systémů s paralelními SCSI adaptéry, který byl způsobován ovladačem CDROM_SEND_PACKET. RS03 kodek nyní obsahuje Altivec optimalizace pro platformu PowerPC.", 18, "2010-11-21T00:00:00Z", "2010-11-21T00:00:00Z");

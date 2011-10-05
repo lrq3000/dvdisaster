@@ -40,7 +40,7 @@ The dvdisaster project recommends GNU/Linux.<p>
 </tr>
 <tr>
 <td>GNU/Linux</td>
-<td>Debian Lenny (5.0.3)<br>Kernel 2.6.26</td>
+<td>Debian Squeeze (6.0.2)<br>Kernel 2.6.32</td>
 <td align="center">yes</td>
 <td align="center">yes</td>
 </tr>
@@ -58,7 +58,7 @@ The dvdisaster project recommends GNU/Linux.<p>
 </tr>
 <tr>
 <td>Mac OS X</td>
-<td>10.5 (Leopard)</td>
+<td>10.6 (Snow Leopard)</td>
 <td align="center">yes</td>
 <td align="center">no<sup>2)</sup></td>
 </tr>
@@ -71,8 +71,7 @@ The dvdisaster project recommends GNU/Linux.<p>
 </table><p>
 
 <sup>1)</sup>FreeBSD: using ATAPI drives requires loading the <i>atapicam</i> kernel module -- see INSTALL doc<br>
-<sup>2)</sup>Due to unresolved problems with the build system. However 64bit
-support currently provides no significant improvements over the 32bit version.<br>
+<sup>2)</sup>64bit Support not planned.<br>
 <sup>3)</sup>Later Versions up to Windows 7 have been reported to work.
 Windows 2000 SP3 and earlier versions are not supported.<br>
 <sup>4)</sup>Support for multicore processors varies. On some editions using additional

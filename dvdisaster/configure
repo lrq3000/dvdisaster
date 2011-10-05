@@ -41,7 +41,7 @@ esac
 # Last stable version (used only in WWW pages)
 
 DEFINE_VAR HAVE_EXPERIMENTAL "yes"
-DEFINE_VAR STABLE_VERSION "0.72.2"
+DEFINE_VAR STABLE_VERSION "0.72.3"
 
 # Check for some essential tools.
 

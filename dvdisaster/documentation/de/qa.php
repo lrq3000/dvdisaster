@@ -20,7 +20,7 @@ begin_page();
 <a href="#pipo">1.2 Was sind Qualitäts-Analysen und warum werden nicht mehr unterstützt?</a><p>
 <a href="#compat">1.3 Ist dvdisaster mit nachfolgenden Versionen kompatibel?</a><p>
 <a href="#eccpos">1.4 Bei erweiterten Abbildern liegen die Fehlerkorrektur-Daten am Ende des Datenträgers. Ist das eine schlechte Wahl?</a><p>
-<a href="#recovery">1.5 Was sind die Unterschiede zwischen Fehlerkorrektur auf Datei- und Abbild-Ebene?</a>
+<a href="#recovery">1.5 Was sind die Unterschiede zwischen Fehlerkorrektur auf Datei- und Abbild-Ebene?</a><p>
 <hr><p>
 
 <b><a name="pronounce">1.1 Wie spricht man "dvdisaster" aus?</a></b><p>
@@ -173,7 +173,6 @@ Fehlerkorrektur führen können.
 Das ist nicht als Angriff gegen das PAR/PAR2-Projekt gemeint. 
 Carsten ist einfach der Meinung daß ein Schutz auf Datei-Ebene
 auf optischen Datenträgern nicht funktioniert :-)</a>
-
 
 <div class="talignr"><a href="#top">&uarr;</a></div><p>
 
