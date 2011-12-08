@@ -482,7 +482,7 @@ static void read_next_chunk(ecc_closure *ec, guint64 chunk)
       /* Read the next data sectors of this layer.
 	 Note that the last layer is made from CRC sums. */
 
-      RS03ReadSectors(ec->image->file, lay, ec->ioData[layer], 
+      RS03ReadSectors(ec->image, lay, ec->ioData[layer], 
 		      layer, ec->ioChunk, ec->ioLayerSectors, RS03_READ_DATA);
 
       err = CheckForMissingSectors(ec->ioData[layer], first_sec, 
@@ -519,8 +519,6 @@ static void read_next_chunk(ecc_closure *ec, guint64 chunk)
 	 /* Read the next sector */
 
 	 offset=s*2048;
-	 //	 RS03ReadSector(ec->ii, lay, ec->ioData[layer]+offset, layer, ec->ioChunk+s, RS03_READ_DATA);
-
 
 	 /* CRC32 part */
 #if 1
@@ -553,7 +551,7 @@ static void read_next_chunk(ecc_closure *ec, guint64 chunk)
       if(ec->ioChunk+ec->ioLayerSectors < lay->sectorsPerLayer)
       {  unsigned char buf[2048];
 
-	 RS03ReadSectors(ec->image->file, lay, buf, layer, ec->ioChunk+ec->ioLayerSectors, 1, RS03_READ_DATA);
+	 RS03ReadSectors(ec->image, lay, buf, layer, ec->ioChunk+ec->ioLayerSectors, 1, RS03_READ_DATA);
 	 ec->ioCrc[(ec->ioLayerSectors-1)*512+layer] = Crc32(buf, 2048);
       }
    } /* all layers from chunk finished */

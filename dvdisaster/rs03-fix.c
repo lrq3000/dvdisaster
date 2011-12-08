@@ -34,10 +34,9 @@ typedef struct
    RS03Layout *lay;
    GaloisTables *gt;
    ReedSolomonTables *rt;
+   Image *image;
    int earlyTermination;
    char *msg;
-   ImageInfo *ii;
-   LargeFile *eccFile;
    unsigned char *imgBlock[255];
    gint64 *eccIdx[255];
 } fix_closure;
@@ -60,7 +59,7 @@ static void fix_cleanup(gpointer data)
    /** Clean up */
 
    if(fc->msg) g_free(fc->msg);
-   if(fc->ii) FreeImageInfo(fc->ii);
+   if(fc->image) CloseImage(fc->image);
 
    for(i=0; i<255; i++)
    {  if(fc->imgBlock[i])
@@ -70,12 +69,7 @@ static void fix_cleanup(gpointer data)
 	 g_free(fc->eccIdx[i]); 
    }
 
-   if(fc->lay) 
-   {  if(fc->lay->target == ECC_FILE && fc->eccFile)
-	 LargeClose(fc->eccFile);
-      g_free(fc->lay);
-   }
-
+   if(fc->lay) g_free(fc->lay);
    if(fc->gt) FreeGaloisTables(fc->gt);
    if(fc->rt) FreeReedSolomonTables(fc->rt);
 
@@ -89,24 +83,24 @@ static void fix_cleanup(gpointer data)
  * Expand a truncated image 
  */
 
-static void expand_image(ImageInfo *ii, gint64 new_size)
+static void expand_image(Image *image, gint64 new_size)
 {  int last_percent, percent;
    gint64 sectors, new_sectors;
 
-   if(!LargeSeek(ii->file, ii->size))
+   if(!LargeSeek(image->file, image->file->size))
      Stop(_("Failed seeking to end of image: %s\n"), strerror(errno));
 
    last_percent = 0;
-   new_sectors = new_size - ii->sectors;
+   new_sectors = new_size - image->sectorSize;
    for(sectors = 0; sectors < new_sectors; sectors++)
    {  unsigned char buf[2048];
       int n;
 
-      CreateMissingSector(buf, ii->sectors+sectors, 
-			  ii->mediumFP, FINGERPRINT_SECTOR, 
+      CreateMissingSector(buf, image->sectorSize+sectors, 
+			  image->imageFP, FINGERPRINT_SECTOR, 
 			  "RS03 fix placeholder");
 
-      n = LargeWrite(ii->file, buf, 2048);
+      n = LargeWrite(image->file, buf, 2048);
       if(n != 2048)
 	Stop(_("Failed expanding the image: %s\n"), strerror(errno));
 
@@ -136,8 +130,6 @@ void RS03Fix(Image *image)
    RS03Widgets *wl = (RS03Widgets*)self->widgetList;
    RS03Layout *lay;
    fix_closure *fc = g_malloc0(sizeof(fix_closure)); 
-   ImageInfo *ii = NULL;
-   LargeFile *eccfile;
    EccHeader *eh;
 #ifdef HAVE_BIG_ENDIAN
    EccHeader *eh_swapped;
@@ -172,6 +164,7 @@ void RS03Fix(Image *image)
 
    /*** Register the cleanup procedure for GUI mode */
 
+   fc->image = image;
    fc->wl = wl;
    fc->earlyTermination = TRUE;
    RegisterCleanup(_("Repairing of image aborted"), fix_cleanup, fc);
@@ -187,20 +180,13 @@ void RS03Fix(Image *image)
 		  _("<big>Repairing the image.</big>\n<i>%s</i>"),
 		  _("Opening files..."));
 
-   ii  = fc->ii = OpenImageFile(eh, WRITEABLE_IMAGE);
-
    /* Calculate the layout and optinally open thee ecc file */
 
    if(eh->methodFlags[0] & MFLAG_ECC_FILE)
    {  lay = fc->lay = CalcRS03Layout(uchar_to_gint64(eh->sectors), eh, ECC_FILE); 
-      eccfile = fc->eccFile = LargeOpen(Closure->eccName, O_RDWR, IMG_PERMS);
-
-      if(!eccfile)  /* Failing here is unlikely since caller could open it */
-	 Stop("Could not open %s: %s",Closure->eccName, strerror(errno));
    }
    else 
    {  lay = fc->lay = CalcRS03Layout(uchar_to_gint64(eh->sectors), eh, ECC_IMAGE); 
-      eccfile = ii->file;
    }
 
    ndata  = lay->ndata;
@@ -219,8 +205,8 @@ void RS03Fix(Image *image)
         expected_sectors = lay->dataSectors;
    else expected_sectors = lay->totalSectors;
 
-   if(ii->sectors < expected_sectors)
-     expand_image(ii, expected_sectors);
+   if(image->sectorSize < expected_sectors)
+     expand_image(image, expected_sectors);
 
    /*** Announce what we are going to do */
 
@@ -244,8 +230,8 @@ void RS03Fix(Image *image)
 
    /*** Truncate an image with trailing garbage */
 
-   if(ii->sectors > expected_sectors)
-   { gint64 diff = ii->sectors - expected_sectors;
+   if(image->sectorSize > expected_sectors)
+   { gint64 diff = image->sectorSize - expected_sectors;
      char *trans = _("The image file is %lld sectors longer as noted in the\n"
 		     "ecc data. This might simply be zero padding, but could\n"
 		     "also mean that the image was manipulated after appending\n"
@@ -267,9 +253,9 @@ void RS03Fix(Image *image)
 	   goto terminate;
 	}
 
-        ii->sectors -= diff;
+        image->sectorSize -= diff;
 
-        if(!LargeTruncate(ii->file, (gint64)(2048*ii->sectors)))
+        if(!LargeTruncate(image->file, (gint64)(2048*image->sectorSize)))
 	  Stop(_("Could not truncate %s: %s\n"),Closure->imageName,strerror(errno));
      }
      
@@ -288,9 +274,9 @@ void RS03Fix(Image *image)
 	  goto terminate;
        }
 
-       ii->sectors -= diff;
+       image->sectorSize -= diff;
 
-       if(!LargeTruncate(ii->file, (gint64)(2048*ii->sectors)))
+       if(!LargeTruncate(image->file, (gint64)(2048*image->sectorSize)))
 	 Stop(_("Could not truncate %s: %s\n"),Closure->imageName,strerror(errno));
 
        PrintLog(_("Image has been truncated by %lld sectors.\n"), diff);
@@ -303,9 +289,9 @@ void RS03Fix(Image *image)
 		_("Add the --truncate option to the program call\n"
 		  "to have the superfluous sectors removed."));
 
-         ii->sectors -= diff;
+         image->sectorSize -= diff;
 
-	 if(!LargeTruncate(ii->file, (gint64)(2048*ii->sectors)))
+	 if(!LargeTruncate(image->file, (gint64)(2048*image->sectorSize)))
 	   Stop(_("Could not truncate %s: %s\n"),Closure->imageName,strerror(errno));
 
 	 PrintLog(_("Image has been truncated by %lld sectors.\n"), diff);
@@ -343,7 +329,7 @@ void RS03Fix(Image *image)
    /*** CRC sums for the first ecc block are stored in the last CRC sector.
 	Error handling is done later when this sector is actually used. */
 
-   RS03ReadSectors(eccfile, lay, 
+   RS03ReadSectors(image, lay, 
 		   (unsigned char*)last_crc_sector2, 
 		   lay->ndata-1, lay->sectorsPerLayer-1, 1, RS03_READ_CRC);
 
@@ -376,13 +362,13 @@ void RS03Fix(Image *image)
 
         for(i=0; i<ndata-1; i++)
         {  
-	   RS03ReadSectors(ii->file, lay, fc->imgBlock[i], i, ecc_idx, 
+	   RS03ReadSectors(image, lay, fc->imgBlock[i], i, ecc_idx, 
 			   cache_size, RS03_READ_DATA);
 	}
 
 	/* Read from the CRC layer */
 
-	RS03ReadSectors(eccfile, lay, fc->imgBlock[ndata-1], ndata-1, ecc_idx,
+	RS03ReadSectors(image, lay, fc->imgBlock[ndata-1], ndata-1, ecc_idx,
 			cache_size, RS03_READ_CRC);
 
 	/* Keep a copy of the last CRC sector for the next pass */
@@ -393,7 +379,7 @@ void RS03Fix(Image *image)
 
         for(i=0; i<nroots; i++)
         {  
-	   RS03ReadSectors(eccfile, lay, fc->imgBlock[i+ndata], i+ndata, ecc_idx,
+	   RS03ReadSectors(image, lay, fc->imgBlock[i+ndata], i+ndata, ecc_idx,
 			   cache_size, RS03_READ_ECC);
 
 	   /* Remember virtual (= augmented image sectors) in ecc file case */
@@ -778,11 +764,11 @@ void RS03Fix(Image *image)
 	   if(   lay->target == ECC_IMAGE 
 	      || sec < lay->dataSectors)
 	   {
-	      if(!LargeSeek(ii->file, (gint64)(2048*sec)))
+	      if(!LargeSeek(image->file, (gint64)(2048*sec)))
 		 Stop(_("Failed seeking to sector %lld in image [%s]: %s"),
 		      sec, "FW", strerror(errno));
 
-	      n = LargeWrite(ii->file, cache_offset+fc->imgBlock[i], length);
+	      n = LargeWrite(image->file, cache_offset+fc->imgBlock[i], length);
 	      if(n != length)
 		 Stop(_("could not write medium sector %lld:\n%s"), sec, strerror(errno));
 	   }
@@ -798,11 +784,11 @@ void RS03Fix(Image *image)
 	      if(sec >= first_crc_pos)
 	      {  gint64 real_sec = 2+sec-first_crc_pos;
 
-		 if(!LargeSeek(eccfile, (gint64)(2048*real_sec)))
+		 if(!LargeSeek(image->eccFile, (gint64)(2048*real_sec)))
 		 Stop(_("Failed seeking to sector %lld in ecc file [%s]: %s"),
 		      real_sec, "FW", strerror(errno));
 
-		 n = LargeWrite(eccfile, cache_offset+fc->imgBlock[i], 2048);
+		 n = LargeWrite(image->eccFile, cache_offset+fc->imgBlock[i], 2048);
 		 if(n != 2048)
 		    Stop(_("could not write ecc file sector %lld:\n%s"),
 			 real_sec, strerror(errno));

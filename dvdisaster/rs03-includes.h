@@ -169,7 +169,7 @@ typedef struct _RS03Layout
 #define RS03_READ_ECC     0x04
 
 CrcBuf *RS03GetCrcBuf(Image *image);
-void RS03ReadSectors(LargeFile*, RS03Layout*, unsigned char*, gint64, gint64, gint64, int);
+void RS03ReadSectors(Image*, RS03Layout*, unsigned char*, gint64, gint64, gint64, int);
 
 gint64 RS03SectorIndex(RS03Layout*, gint64, gint64);
 RS03Layout *CalcRS03Layout(gint64, EccHeader*, int);

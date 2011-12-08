@@ -477,7 +477,6 @@ static int prognosis(verify_closure *vc, gint64 missing, gint64 expected)
 static int check_syndromes(verify_closure *vc)
 {  RS03Layout *lay = vc->lay;
    Image *image = vc->image;
-   LargeFile *eccfile; 
    gint64 layer_idx[255];
    gint64 li,ecc_block;
    gint64 cache_idx = Closure->prefetchSectors;
@@ -510,10 +509,6 @@ static int check_syndromes(verify_closure *vc)
 	 return 0;
       }
    }
-
-   /* Determine source file for ecc data */
-
-   eccfile = lay->target == ECC_FILE ? image->eccFile : image->file;
 
    /* Init Reed-Solomon tables */
 
@@ -548,10 +543,10 @@ static int check_syndromes(verify_closure *vc)
 
 	 for(layer=0; layer<GF_FIELDMAX; layer++)
 	   if(layer < lay->ndata-1)
-	     RS03ReadSectors(image->file, vc->lay, vc->eccBlock[layer], 
+	     RS03ReadSectors(image, vc->lay, vc->eccBlock[layer], 
 			    layer, ecc_block, num_sectors, RS03_READ_DATA);
 	   else
-	     RS03ReadSectors(eccfile, vc->lay, vc->eccBlock[layer], 
+	     RS03ReadSectors(image, vc->lay, vc->eccBlock[layer], 
 			    layer, ecc_block, num_sectors, RS03_READ_CRC | RS03_READ_ECC);
       }
 

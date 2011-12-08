@@ -60,7 +60,7 @@ Image *LoadPNG(char *name)
       
    fprintf(stdout,"Loading %s ... ", name);
 
-   /* stat ppm file */
+   /* stat png file */
 
    if(stat(name, &mystat) == -1)
    {  fprintf(stdout, "COULD NOT STAT %s!\n", name);

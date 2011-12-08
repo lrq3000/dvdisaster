@@ -20,7 +20,7 @@
  *  along with pngpack. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define VERSION "0.20"
+#define VERSION "0.21"
 
 #include <getopt.h>
 #include <sys/stat.h>
@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
    /*** Perform the action */
    
    if(mode != MODE_NONE && mode != MODE_HELP)
-      fprintf(stdout, "pngpack-0.20 *** Copyright 2005-2010 Carsten Gnoerlich.\n"
+      fprintf(stdout, "pngpack-0.21 *** Copyright 2005-2011 Carsten Gnoerlich.\n"
 	      "This software comes with  ABSOLUTELY NO WARRANTY.  This\n"
 	      "is free software and you are welcome to redistribute it\n"
 	      "under the conditions of the GNU GENERAL PUBLIC LICENSE.\n"  

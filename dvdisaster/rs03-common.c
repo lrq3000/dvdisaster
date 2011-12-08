@@ -161,9 +161,10 @@ CrcBuf *RS03GetCrcBuf(Image *image)
  *** Read one or more image sectors from the .iso file.
  ***/
 
-void RS03ReadSectors(LargeFile *file, RS03Layout *lay, unsigned char *buf, 
+void RS03ReadSectors(Image *image, RS03Layout *lay, unsigned char *buf, 
 		     gint64 layer, gint64 layer_sector, gint64 how_many, int flags)
-{  gint64 start_sector=0;
+{  LargeFile *target_file = NULL;
+   gint64 start_sector=0;
    gint64 stop_sector=0;
    gint64 byte_size = how_many * 2048;
    gint64 file_sector_size;
@@ -178,8 +179,8 @@ void RS03ReadSectors(LargeFile *file, RS03Layout *lay, unsigned char *buf,
 
    /* "Image" file size may not be a multiple of 2048 */
    
-   in_last = file->size % 2048;
-   file_sector_size = file->size/2048;
+   in_last = image->file->size % 2048;
+   file_sector_size = image->file->size/2048;
    if(in_last) file_sector_size++;
 
    /* Ignore trailing garbage in the image file */
@@ -205,6 +206,7 @@ void RS03ReadSectors(LargeFile *file, RS03Layout *lay, unsigned char *buf,
       if(stop_sector >= (layer+1)*lay->sectorsPerLayer)
 	Stop("RS03ReadSectors: range %lld..%lld crosses layer boundary\n",
 	     start_sector, stop_sector);
+      target_file = image->file;
    }
 
    /* Read out of the crc layer */
@@ -215,6 +217,10 @@ void RS03ReadSectors(LargeFile *file, RS03Layout *lay, unsigned char *buf,
 
       start_sector = lay->firstCrcPos + layer_sector;
       stop_sector  = start_sector + how_many - 1;
+
+      if(lay->target == ECC_IMAGE)
+	   target_file = image->file;
+      else target_file = image->eccFile;
    }
 
    /*** Read out of the ecc layers */
@@ -225,6 +231,10 @@ void RS03ReadSectors(LargeFile *file, RS03Layout *lay, unsigned char *buf,
 
       start_sector = lay->firstEccPos + (layer-lay->ndata)*lay->sectorsPerLayer + layer_sector;
       stop_sector  = start_sector + how_many - 1;
+
+      if(lay->target == ECC_IMAGE)
+	   target_file = image->file;
+      else target_file = image->eccFile;
    }
 
 
@@ -280,11 +290,11 @@ void RS03ReadSectors(LargeFile *file, RS03Layout *lay, unsigned char *buf,
 
    /* All sectors are consecutively readable in image case */
 
-   if(!LargeSeek(file, (gint64)(2048*start_sector)))
+   if(!LargeSeek(target_file, (gint64)(2048*start_sector)))
       Stop(_("Failed seeking to sector %lld in image: %s"),
 	   start_sector, strerror(errno));
 
-   n = LargeRead(file, buf, byte_size);
+   n = LargeRead(target_file, buf, byte_size);
    if(n != byte_size)
       Stop(_("Failed reading sector %lld in image: %s"),
 	   start_sector, strerror(errno));

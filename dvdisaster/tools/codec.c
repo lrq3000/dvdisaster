@@ -152,6 +152,7 @@ static int tilecmp(tile *a, tile *b)
 {  unsigned int i,j;
 
    if(a->width != b->width || a->height != b->height) return 1;
+   if(a->background != b->background) return 1;
 
    for(j=0; j<a->height; j++)
      for(i=0; i<a->width; i++)
@@ -287,31 +288,6 @@ static void create_tiles(Image *pi)
      }
 
    fprintf(stdout, "  %d new tiles, %d reused tiles\n",n_tiles,r_tiles);
-
-#if 0
-   lastx = lasty = 0;
-   for(x=0; x<oc_n; x++)
-   {  tile *t;
-      opcode *oc;
-      int i,j;
-
-      oc = &oc_list[x];
-      t  = tile_db[oc->n];
-      lastx += oc->x;
-      lasty += oc->y;
-
-      for(i=0; i<t->width; i++) 
-	for(j=0; j<t->height; j++)
-	  if(t->image[i][j] != pi->tile_background)
-#if 1
-	    PIXEL(pi, i+lastx, j+lasty) = clr[cidx];
-#else
-      	    PIXEL(pi, i+lastx, j+lasty) = t->image[i][j]; 
-#endif
-
-      cidx = (cidx+1)%5;
-   } 
-#endif 
 
    free(wt);
    free(t);

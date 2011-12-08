@@ -4,7 +4,7 @@ df9d88776eb3f77a93ef596b148193be *md5.h
 32793872b38209645f1beb2d187b0914 *read-linear.h
 cf0e0fcab9623148798a1a735a94fca6 *rs01-includes.h
 c95110907ee704f9f79f3d6d86bf8d49 *rs02-includes.h
-a45890bc7ffe9391567a95df47c4b3d4 *rs03-includes.h
+687c410d8be7751d4f456da9c33ca816 *rs03-includes.h
 7e210b2bcc0df67542499f9e4e1ee97f *scsi-layer.h
 c80861eb0694f6abc5728e81afcddf37 *udf.h
 f4464ac624ffa4b09a3f68f0f228eb84 *bitmap.c
@@ -61,14 +61,14 @@ d6d0e7e8894e623481b9304b462fafe2 *rs01-window.c
 4a6fe7e8cbd588020dde814861ec403b *rs02-recognize.c
 e86df96e8f052ca596bc8117348c96bd *rs02-verify.c
 7a76a6f0a95b8a3401cb943640e02c45 *rs02-window.c
-c662181fefb787c9324d7b26af21d583 *rs03-common.c
-1116e38f86bfbad01ef3c825cf7c372a *rs03-create.c
-c84a92e156a44b74be7992b4031b3e59 *rs03-fix.c
+3409337c24023dbfc5e6e2b0cfda5bb0 *rs03-common.c
+a681383dd2535307d4c2bb05c384a367 *rs03-create.c
+a1e1322f791963dc340b2c1cc07c119d *rs03-fix.c
 f17d10b112f3920fa32436777b759ca8 *rs03-preferences.c
 4351add229974318fdad231319644a93 *rs03-recognize.c
 c29aeca407adfa3019fd9706fe4aecba *rs03s-create.c
 8a1cd88d90ef4e87c07ede3058935375 *rs03s-window.c
-2171b588589634eb04e6fcfa91db2ee2 *rs03-verify.c
+eeaf84b5d55d774d07f68db7f021a365 *rs03-verify.c
 bdf7a15620e67e36b9cd58021cd01473 *rs03-window.c
 d4ed618ecab1e6d2ca30919f00580690 *rs-decoder.c
 943ca86175fcbf0796612270d301c2e7 *rs-encoder-altivec.c
