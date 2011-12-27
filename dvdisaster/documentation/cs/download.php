@@ -20,10 +20,10 @@ $show_all=$_GET["showall"];
 
 <!--
 <table width="100%">
-<tr>
-<td>dvdisaster je k dispozici pro <a href="download10.php">aktuální verze</a> operačních systémů FreeBSD, GNU/Linux, Mac OS X(Darwin), NetBSD a Windows. Je poskytován jako <a href="http://www.germany.fsfeurope.org/documents/freesoftware.en.html">volný software</a> pod <a href="http://www.gnu.org/licenses/gpl-3.0.txt">GNU General Public License v3</a>.</td>
-<td class="w127x" valign="top"><img src="../images/gplv3-127x51.png" alt="Logo GPLv3" width="127"></td>
-</tr>
+  <tr>
+    <td>dvdisaster je k dispozici pro <a href="download10.php">aktuální verze</a> operačních systémů FreeBSD, GNU/Linux, Mac OS X(Darwin), NetBSD a Windows. Je poskytován jako <a href="http://www.germany.fsfeurope.org/documents/freesoftware.en.html">volný software</a> pod <a href="http://www.gnu.org/licenses/gpl-3.0.txt">GNU General Public License v3</a>.</td>
+    <td class="w127x" valign="top"><img src="../images/gplv3-127x51.png" alt="Logo GPLv3" width="127"></td>
+  </tr>
 </table>
 -->
 
@@ -40,7 +40,7 @@ if(!strcmp($have_experimental, "yes"))
 { ?><b>Alpha (nestabilní) verze</b> - nová a experimentální pro zkušené uživatele!<p>Uvítáme uživatele testující budoucí verze dvdisaster, ale testující by si měli uvědomit, že mohou obsahovat chyby a mít problémy s kompatibilitou. Aktuální nestabilní verze je <a href="download40.php"><?php echo $cooked_version?></a>.<p><?php
 }
 ?> <b>Stabilní verze</b> - doporučeno pro nové a nezkušené uživatele.<p><a name="download"></a><table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.72</b></td><td align="right">05-Oct-2011</td></tr>
+<tr><td><b>dvdisaster-0.72</b></td><td align="right">2011-10-05</td></tr>
 <tr><td colspan="2" class="hsep"></td></tr>
 <tr><td colspan="2"><table>
     <tr><td align="right">  Zdrojový kód (všechny operační systémy): </td>
@@ -88,7 +88,6 @@ if($mode == "www");
 
    <tr><td colspan="2"></td></tr>
    <tr><td></td><td>Verze 0.72.2</td></tr>
-
     <tr><td align="right">  Zdrojový kód (všechny operační systémy): </td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.2.tar.bz2">dvdisaster-0.72.2.tar.bz2</a></td></tr>
     <tr><td align="right">Digitální podpis </td>
@@ -180,10 +179,9 @@ if($mode == "www");
 <li>Ruský překlad od Igor Gorbounov</li>
 <li>... a spousta malých změn a oprav.</li>
 </ul><b>Opravy</b> (malé změny po verzi 0.72; výše uvedené soubory byly aktualizovány):<p>
-<b>0.72 pl3</b> Fixed a problem with the "Verify" function when
- working with RS01 error correction files larger than 2GB.
-Thanks to Volodymyr Bychkoviak for reporting the problem and
-sending a fix. (05-Okt-2011)<p>
+<b>0.72 pl3</b> Opraven problém s funkcí &quot;Ověřit&quot; při práci se soubory
+pro opravu chyb RS01 většími než 2GB. Poděkování za nahlášení chyby a zaslání
+opravy patří Volodymyru Bychkoviakovi. (2011-10-05)<p>
 
 <b>0.72 pl2</b> Tato verze přináší alternativní řešení chyby kvůli které v Linuxu docházelo k zamrzání paralelních SCSI adaptérů. Byla vylepšena kompatibilita s verzemi 0.79.x.<br> Verze pro Windows a Mac OS X jsou nyní sestavovány ve vývojovém prostředí pro dvdisaster 0.79.x a jsou tak dodávány s novějšími verzemi knihoven grafického sady nástrojů GTK+. Tato aktualizace si vyžádala určité změny v interních skriptech, takže došlo ke změně kontrolního součtu balíčku zdrojových kódů (balíček vydaný 31. října měl kontrolní součet md5 86110e212aa1bf336a52ba89d3daa93d a je stále platný pro Linux, FreeBSD a NetBSD).(2010-07-11)<p><b>0.72 pl1</b> Pablo Almeida vytvořil portugalský překlad programu. Přidána funkce která má předejít zamrzání Win XP u některých kombinací CD-RW/mechanik.(2009-08-08)<p><i>Aktualizace: tato funkce nefunguje vždy. Do <a href="download40.php">verze 0.79.x</a> byla přidána vylepšená verze, bohužel však nemůže být jednoduše použita ve stabilní verzi.</i> (06-Feb-2010)<p><b>0.72</b> První stabilní verze větve 0.72. Igor Gorbounov dokončil ruskou online dokumentaci. Byly opraveny některé chyby nalezené v první RC verzi.<p>Novější verze Windows nemusí při užití určitých jazykových nastavení použít správný jazyk zobrazení. Jde o složitější problém a bude proto vyřešen až v některé z verzí 0.73.x. (2009-07-04)<p><b>0.72-rc1</b> První RC. (2009-04-11)</td></tr></table><p>Pokud se vám nepodaří stáhnout dvdisaster pomocí výše uvedených odkazů, zkuste ho získat přímo na stránkách <a href="http://sourceforge.net/projects/dvdisaster/files">SourceForge</a>.<pre> </pre><b>Předešlá verze</b> - aktualizace na verzi 0.72 doporučena.<p><table class="download" cellpadding="0" cellspacing="5">
 <tr><td><b>dvdisaster-0.70</b></td><td align="right">2008-03-04</td></tr>

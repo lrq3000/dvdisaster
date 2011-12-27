@@ -156,7 +156,7 @@ ISO-Abbildes, d.h. sowohl Dateien als auch Meta-Daten (z.B. Verzeichnisse)
 werden wiederhergestellt. Abbildung 1.5.3 verdeutlicht den Bereich des
 Abbild-basierten Schutzes.
 
-<table width="100%"><tr><td align="center"><img src="images/metadata2.png" alt="Schutz auf der Abbild-Ebene"></td></tr></table><p>
+<table width="100%"><tr><td align="center"><img src="images/metadata3.png" alt="Schutz auf der Abbild-Ebene"></td></tr></table><p>
 
 Weder das Lesen des beschädigten ISO-Abbildes noch die Anwendung
 der Fehlerkorrektur benötigen Informationen aus dem Dateisystem.

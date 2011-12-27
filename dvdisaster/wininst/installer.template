@@ -81,7 +81,7 @@ Source: "documentation\en\*"; DestDir: "{app}\documentation\local"; Languages: p
 
 [Icons]
 Name: "{group}\dvdisaster"; Filename: "{app}\dvdisaster-win.exe"; WorkingDir: "{app}"
-Name: "{group}\U�ivatelsk� p��ru�ka"; Filename: "{app}\documentation\local\index.html"; Languages: cs
++Name: "{group}\Uživatelská příručka"; Filename: "{app}\documentation\local\index.html"; Languages: cs
 Name: "{group}\Handbuch"; Filename: "{app}\documentation\local\index.html"; Languages: de
 Name: "{group}\Manual"; Filename: "{app}\documentation\local\index.html"; Languages: en
 Name: "{group}\Manual"; Filename: "{app}\documentation\local\index.html"; Languages: ru

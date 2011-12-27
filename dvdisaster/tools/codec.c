@@ -348,7 +348,7 @@ void SavePPK(char *name)
    unsigned int i; 
    int bzerror;
 
-   fprintf(stdout, "Compressing pingpack archive...");
+   fprintf(stdout, "Compressing pngpack archive...");
    fflush(stdout);
 
    file = fopen(name, "wb");

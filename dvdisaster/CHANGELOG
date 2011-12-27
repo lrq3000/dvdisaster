@@ -20,6 +20,8 @@
 	  Gtk+ 2.24
 	- fixed bug in pngpack; thanks to Jindřich Šesták for
 	  noting this!
+	- added remaining patches from Jindřich for Czech 
+	  online manual. Big Thanks!
 
 0.79.3	21-11-2010
         - Switched Linux SCSI driver default to SG_IO ioctl().

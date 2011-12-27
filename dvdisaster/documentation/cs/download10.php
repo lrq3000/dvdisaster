@@ -47,7 +47,7 @@ begin_page();
 </tr>
 <tr>
 <td>Mac OS X</td>
-<td>10.5 (Leopard)</td>
+<td>10.6 (Snow Leopard)</td>
 <td align="center">ano</td>
 <td align="center">ne<sup>2)</sup></td>
 </tr>
@@ -57,7 +57,7 @@ begin_page();
 <td align="center">ano</td>
 <td align="center">ne<sup>2)</sup></td>
 </tr>
-</table><p><sup>1)</sup>FreeBSD: použití ATAPI vyžaduje načtení jaderného modulu <i>atapicam</i> -- podrobnosti v souboru INSTALL<br> <sup>2)</sup>Nevyřešené problémy s vývojovým prostředím. Podpora 64bitů však zatím neposkytuje v porovnání s 32bitovou verzí žádná zřetelná vylepšení.<br> <sup>3)</sup>Byla nahlášena funkčnost i v novějších verzích včetně Windows 7. Windows 2000 SP3 a starší nejsou podporovány.<br> <sup>4)</sup>Podpora vícejádrových procesorů není stabilní. V některých verzích se při použití více jader neprojeví žádné zvýšení výkonu dvdisaster.<!-- do not change below --> <?php
+</table><p><sup>1)</sup>FreeBSD: použití ATAPI vyžaduje načtení jaderného modulu <i>atapicam</i> -- podrobnosti v souboru INSTALL<br> <sup>2)</sup>Podpora pro 64bitů není plánována.<br> <sup>3)</sup>Byla potvrzena funkčnost v novějších verzích včetně Windows 7. Windows 2000 SP3 a starší nejsou podporovány.<br> <sup>4)</sup>Podpora vícejádrových procesorů není stabilní. V některých verzích se při použití více jader neprojeví žádné zvýšení výkonu dvdisaster.<!-- do not change below --> <?php
 # end_page() adds the footer line and closes the HTML properly.
 
 end_page();

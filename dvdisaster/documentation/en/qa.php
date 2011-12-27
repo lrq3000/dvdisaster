@@ -153,7 +153,7 @@ Since the dvdisaster error correction data protects <i>all sectors</i> in the
 ISO image, file contents as well as meta data sectors (e.g. directories)
 can be restored. See fig. 1.5.3 for the different range of protection.
 
-<table width="100%"><tr><td align="center"><img src="images/metadata2.png" alt="Image level protection"></td></tr></table><p>
+<table width="100%"><tr><td align="center"><img src="images/metadata3.png" alt="Image level protection"></td></tr></table><p>
 
 In addition, neither reading the damaged ISO image nor applying the
 error correction requires any information from the file system 

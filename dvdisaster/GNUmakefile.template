@@ -6,7 +6,7 @@
 
 PO_LOCALES = pt_BR cs de it ru sv
 MAN_LOCALES = cs de it
-DOC_LOCALES = de en ru
+DOC_LOCALES = cs de en ru
 
 # Search for TAGS: online-docs
 # Don't forget edit NODIST for new doc locales

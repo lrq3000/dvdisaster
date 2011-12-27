@@ -622,7 +622,7 @@ msgstr "  --ignore-fatal-sense   - pokračovat ve čtení i po potenciálně neo
 
 #: dvdisaster.c:898
 msgid "  --ignore-iso-size      - ignore image size from ISO/UDF data (dangerous - see man page!)\n"
-msgstr ""
+msgstr "  --ignore-iso-size      - ignoruje údaj o velikosti bitové kopie z ISO/UDF (nebezpečné - čtěte manuál!)\n"
 
 #: dvdisaster.c:899
 msgid "  --internal-rereads n   - drive may attempt n rereads before reporting an error\n"
@@ -791,11 +791,11 @@ msgstr "Vícevláknový Reed-Solomon kodek pro soubory pro opravu chyb a rozší
 
 #: ecc-rs03s.c:40
 msgid "Single threaded RS codec (RSS3)"
-msgstr ""
+msgstr "Jednovláknový RS kodek (RSS3)"
 
 #: ecc-rs03s.c:41
 msgid "Single threaded Reed-Solomon codec for error correction files and augmented images"
-msgstr ""
+msgstr "Jednovláknový Reed-Solomon kodek pro soubory pro opravu chyb a rozšířené bitové kopie"
 
 #: file.c:48
 msgid ": not present.\n"
@@ -1011,13 +1011,15 @@ msgstr ""
 #: image.c:152 image.c:153
 #, c-format
 msgid "Image file %s not present or permission denied.\n"
-msgstr ""
+msgstr "Bitová kopie %s neexistuje nebo byl zamítnut přístup.\n"
 
 #: image.c:160 image.c:161
 msgid ""
 "\n"
 "Error correction file type unknown.\n"
 msgstr ""
+"\n"
+"Neznámý typ opravného souboru.\n"
 
 #: image.c:168 image.c:170
 msgid ""
@@ -1025,6 +1027,9 @@ msgid ""
 "No error correction file present.\n"
 "No error correction data recognized in image.\n"
 msgstr ""
+"\n"
+"Není k dispozici soubor pro opravu chyb.\n"
+"V bitové kopii nebyla rozpoznána žádná data pro opravu chyb.\n"
 
 #: large-io.c:251
 #, c-format
@@ -1744,11 +1749,11 @@ msgstr "Vlastnosti bitové kopie"
 
 #: preferences.c:1645
 msgid "Ignore ISO/UDF meta data"
-msgstr ""
+msgstr "Ignorovat ISO/UDF meta data"
 
 #: preferences.c:1645
 msgid "Ignore image size recorded in ISO/UDF file system"
-msgstr ""
+msgstr "Ignorovat údaj o velikosti bitové kopie v systému souborů ISO/UDF"
 
 #: preferences.c:1665
 msgid ""
@@ -1762,6 +1767,15 @@ msgid ""
 "Using this order makes sense as image sizes reported by most drives are unreliable in many cases. However in some rare cases the image size recorded in the ISO/UDF filesystem is wrong. Some Linux live CDs may have this problem. If you read back the ISO image from such CDs and its md5sum does not match the advertised one, try re-reading the image with this option turned on.\n"
 "Do <b>not blindly turn this option on</b> as it will most likely create sub optimal or corrupted ISO images, especially if you plan to use the image for error correction data generation."
 msgstr ""
+"<b>Ignorovat údaj o velikosti bitové kopie v systému souborů ISO/UDF</b>\n"
+"\n"
+"Při čtení nebo kontrole optických disků musí být zjištěna celková velikost disku. Pokud jsou k dispozici, dvdisaster vždy použije velikost uloženou v datech pro opravu chyb. V ostatních případech je velikost zjišťována v tomto pořadí:\n"
+"\n"
+"1. Velikost bitové kopie uložená v systému souborů ISO/UDF\n"
+"2. Velikost bitové kopie poskytnutá mechanikou.\n"
+"\n"
+"Toto pořadí dává největší smysl, protože velikosti hlášené mechanikami nemusí být správné. Ve vzácných případech může být ale chybný údaj zaznamenaný v systému souborů ISO/UDF. Tento problém může nastat například u Linuxových live CD. Pokud vytváříte bitovou kopii ISO z takovýchto CD a kontrolní součet md5 se neshoduje s uvedeným, zkuste bitovou kopii vytvořit znovu po zapnutí této volby.\n"
+"<b>Nezapínejte tuto volbu bezdůvodně</b>, zvláště pokud chcete vytvořenou bitovou kopii použít k vytvoření dat pro opravu chyb, při použití s běžnými disky může vést k vytvoření neoptimálních nebo poškozených bitových kopií."
 
 #: preferences.c:1684
 msgid "DAO mode"
@@ -2872,7 +2886,7 @@ msgstr "Opravitelné: %2d.%1d%% (chybějící: %lld; nyní načítáno [%lld..%l
 #: read-adaptive.c:446
 #, c-format
 msgid "Stopping when unreadable intervals < %d."
-msgstr "Zastaveno po nečitelných úsecích < %d."
+msgstr "Bude zastaveno při nečitelných úsecích < %d."
 
 #: read-adaptive.c:448 read-adaptive.c:454
 #, c-format
@@ -3757,7 +3771,7 @@ msgstr "Sektory bitové kopie se nepodařilo úplně obnovit (%lld opraveno; <sp
 
 #: rs01-fix.c:779 rs02-fix.c:824 rs03-fix.c:860
 msgid "Good! All sectors are already present."
-msgstr "V pořádku! Všechny sektory jsou již existují."
+msgstr "V pořádku! Všechny sektory již existují."
 
 #: rs01-fix.c:783 rs02-fix.c:828 rs03-fix.c:865
 msgid "Good! All sectors are repaired."
@@ -3918,7 +3932,7 @@ msgid ""
 "* suspicious image : all sectors present, but %lld CRC errors\n"
 "- image md5sum     : %s\n"
 msgstr ""
-"* podezřelá bitová kopie  : všechny sektory existují, ale zjištěno %lld chyb CRC\n"
+"* podezřelá bitová kopie : všechny sektory existují, ale zjištěno %lld chyb CRC\n"
 "- md5 součet bitové kopie: %s\n"
 
 #: rs01-verify.c:492
@@ -3946,19 +3960,19 @@ msgstr "Žádný soubor pro opravu chyb není dostupný."
 
 #: rs01-verify.c:533
 msgid "invalid\n"
-msgstr ""
+msgstr "neplatné\n"
 
 #: rs01-verify.c:536
 msgid "defective header (unusable)\n"
-msgstr ""
+msgstr "poškozená hlavička (nepoužitelné)\n"
 
 #: rs01-verify.c:539
 msgid "unknown codec (unusable)\n"
-msgstr ""
+msgstr "neznámý kodek (nepoužitelné)\n"
 
 #: rs01-verify.c:542
 msgid "unusable\n"
-msgstr ""
+msgstr "nepoužitelné\n"
 
 #: rs01-verify.c:579 rs02-verify.c:917
 msgid "created by dvdisaster"
@@ -5214,6 +5228,8 @@ msgid ""
 "Augmenting image with Method RS03s:\n"
 "%lld MB data, %lld MB ecc (%d roots; %4.1f%% redundancy)."
 msgstr ""
+"Rozšíření bitové kopie metodou RS03:\n"
+" %lld MB dat, %lld MB ecc (%d bází; %4.1f%% redundance)"
 
 #: rs03s-create.c:1084
 #, c-format
@@ -5221,6 +5237,8 @@ msgid ""
 "Creating the error correction file with Method RS03s:\n"
 "%lld MB data, %lld MB ecc (%d roots; %4.1f%% redundancy)."
 msgstr ""
+"Vytvoření souboru pro opravu chyb metodou RS03:\n"
+"%lld MB dat, %lld MB ecc (%d bází; %4.1f%% redundance)."
 
 #: rs03-verify.c:191
 msgid "Error correction properties"
@@ -5417,32 +5435,32 @@ msgstr "<span %s>%lld (%lld očekáváno)</span>"
 #: rs03-verify.c:915
 #, c-format
 msgid "<span %s>%lld sectors but %d bytes too short</span>"
-msgstr ""
+msgstr "<span %s>%lld sektorů ale %d bajtů chybí</span>"
 
 #: rs03-verify.c:917
 #, c-format
 msgid "<span %s>Image file is %d bytes shorter than expected.</span>"
-msgstr ""
+msgstr "<span %s>Soubor obrazu je o %d bajtů kratší než očekáváno.</span>"
 
 #: rs03-verify.c:921
 #, c-format
 msgid "<span %s>%lld sectors but %d bytes too long</span>"
-msgstr ""
+msgstr "<span %s>%lld sektorů ale %d bajtů přebývá</span>"
 
 #: rs03-verify.c:923
 #, c-format
 msgid "<span %s>Image file is %d bytes longer than expected.</span>"
-msgstr ""
+msgstr "<span %s>Soubor obrazu je o %d bajtů delší než očekáváno.</span>"
 
 #: rs03-verify.c:934
 #, c-format
 msgid "* sectors          : %lld (%lld expected)\n"
-msgstr ""
+msgstr "* sektory          : %lld (očekáváno %lld)\n"
 
 #: rs03-verify.c:937
 #, c-format
 msgid "* sectors          : %lld sectors + %d of %d bytes in image; %lld sectors in ecc file\n"
-msgstr ""
+msgstr "* sektory          : %lld sektorů + %d z %d bajtů v bitové kopii; %lld sektorů v ecc souboru\n"
 
 #: rs03-verify.c:959
 #, c-format
