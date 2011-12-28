@@ -225,7 +225,7 @@ html: mount-php version.php
 	  mkdir $(SRCDIR)/documentation/wget-tmp; \
 	fi
 	@cd $(SRCDIR)/documentation/wget-tmp; \
-	  wget -r -p -l 0 -nH --cut-dirs=1 --html-extension --convert-links -q http://localhost/dvdisaster/index.html
+	  wget -r -p -l 0 -nH --cut-dirs=1 --html-extension --convert-links http://localhost/dvdisaster/index.html >$(SRCDIR)/documentation/wget-tmp/wget.log 2>&1
 	@$(SRCDIR)/scripts/convert-wgetted.bash $(SRCDIR)
 	@rm -rf $(SRCDIR)/documentation/wget-tmp
 	@echo "done."
@@ -442,11 +442,11 @@ arch:	archclean time-stamp
 # TAG: online-docs
 www: html
 	@cd documentation ; \
-	tar cjf ../../www.tar.bz2 pubkey.asc include/dvdisaster.css de/*.html en/*.html ru/*.html de/feed en/feed ru/feed
+	tar cjf ../../www.tar.bz2 pubkey.asc include/dvdisaster.css cs/*.html de/*.html en/*.html ru/*.html cs/feed de/feed en/feed ru/feed
 
 www-images: html
 	@cd documentation ; \
-	tar cjf ../../www.tar.bz2 pubkey.asc include/dvdisaster.css de/*.html en/*.html ru/*.html images/*.png de/images/*.png de/thumbnails/*.png en/images/*.png en/thumbnails/*.png ru/images/*.png ru/thumbnails/*.png de/feed en/feed ru/feed
+	tar cjf ../../www.tar.bz2 pubkey.asc include/dvdisaster.css cs/*.html de/*.html en/*.html ru/*.html images/*.png de/images/*.png de/thumbnails/*.png cs/images/*.png cs/thumbnails/*.png en/images/*.png en/thumbnails/*.png ru/images/*.png ru/thumbnails/*.png cs/feed de/feed en/feed ru/feed
 
 INSTALL: documentation/install.template
 	@sed "s/@@PKGNAME/$(PKGNAME)/" <documentation/install.template >INSTALL
