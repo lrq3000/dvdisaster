@@ -1,4 +1,4 @@
-; -- installer.iss --
+﻿; -- installer.iss --
 ; Inno Setup script template for creating the dvdisaster setup.exe
 
 [Setup]
