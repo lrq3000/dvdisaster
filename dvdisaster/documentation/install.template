@@ -9,8 +9,7 @@ Contents
 1.2 Gtk+ and localozation support
 
 2. Operating system specific issues
-2.1 Windows
-2.1.1 Getting the GNU environment for Windows
+2.1 (removed)
 2.2 (removed)
 2.3 FreeBSD
 2.3.1 Loading the atapicam kernel module by hand
@@ -52,7 +51,6 @@ also. The additional packages are usually suffixed with "-devel" or "-dev".
 Depending on your operating system you will also need:
 
 - The gettext library			http://www.gnu.org/software/gettext/
-- The iconv library (only for Windows)	http://www.gnu.org/software/libiconv/
 - The pkgconfig tool			http://www.freedesktop.org/software/pkgconfig/releases
 - The GTK+ library version 2.2 or better,    http://www.gtk.org
   including all auxiliary libraries.
@@ -63,33 +61,11 @@ Again, the freeware Unices should have suitable packages on their distribution m
 2. Operating system specific issues
 ===================================
 
-2.1 Windows
------------
-
-2.1.1 Getting the GNU environment for Windows
-
-For Windows the GNU tools are available in the MingW framework: 
-See http://www.mingw.org.
-Building under Cygwin is not supported.
-
-The Gtk+ project offers pre-compiled Windows versions of their libraries;
-see http://www.gimp.org/~tml/gimp/win32/downloads.html for details.
-You'll need both the normal and "-devel" versions of the libraries. 
-
+2.1 (removed)
+-------------
 
 2.2 (removed)
 -------------
-
-dvdisaster was ported by Julian Einwag to Darwin, 
-the Unix foundation of Mac OS X. 
-
-Currently dvdisaster needs to be built and run as an X11 application under Mac OS X;
-see http://developer.apple.com/opensource/tools/runningX11.html for more information.
-
-An Aqua compatible version of the Gtk+ library is under development, but not
-yet stable. As soon as this changes, dvdisaster will be able to run under
-Mac OS X without using X11.
-
 
 2.3 FreeBSD
 -----------
@@ -97,7 +73,7 @@ Mac OS X without using X11.
 2.3.1 Loading the atapicam kernel module by hand (tested on FreeBSD 7.1)
 
 FreeBSD does not pre-install an uniform CD-ROM driver for SCSI and ATAPI drives 
-(as is the case in Linux and Windows). Therefore dvdisaster can not
+(as is the case in Linux). Therefore dvdisaster can not
 use any ATAPI drives in an out-of-the-box FreeBSD installation. 
 
 To manually load the required kernel module, do:
