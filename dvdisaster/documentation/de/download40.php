@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: German homepage translation
-# Copyright (C) 2004-2011 Carsten Gnörlich
+# Copyright (C) 2004-2012 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -35,8 +35,6 @@ ist die <a href="download.php">stabile Version 0.72</a> gedacht.
 
 <h3>Geplante Änderungen in der neuen Version</h3>
 
-Allgemein:
-
 <ul>
 <li> Einbauen mehrerer kleinerer Erweiterungen, die während des langen
 0.72er-Entwicklungszyklus liegengeblieben sind. <i>[noch nicht angefangen]</i></li>
@@ -44,24 +42,7 @@ Allgemein:
 <li> Aufräumen der Kodebasis und Vorbereitung für Multithreading und
 Mehrkernprozessoren. <i>[in Bearbeitung]</i></li>
 <li> Entwicklung des Multithreading-fähigen RS03-Kodierers <i>[in Bearbeitung]</i></li>
-<li> Dokumentation von RS03. <i>[noch nicht angefangen]</i></li>
-</ul>
-
-Windows:
-
-<ul>
-<li> Aktualisierung des GTK+-Toolkits und der übrigen Entwicklungsumgebung. <i>[fertig]</i></li>
-<li> Erhöhen der Systemvoraussetzungen auf Windows 2000 oder neuer (ältere
-Windows-Versionen werden von der Entwicklungsumgebung nicht mehr unterstützt). 
-Damit wird auch die Unterstützung von ASPI-Treibern und das Aufteilen von 
-Dateien in 2G-Segmente überflüssig. <i>[fertig]</i></li>
-</ul>
-
-MacOS:
-
-<ul>
-<li> Aktualisierung des GTK+-Toolkits und weitere Workarounds für die
-Benutzeroberfläche. <i>[in Bearbeitung]</i></li>
+<li> Dokumentation der Benutzung von RS03. <i>[noch nicht angefangen]</i></li>
 </ul>
 
 <hr>
@@ -78,7 +59,7 @@ Versionen.<p>
 <tr><td colspan="2">
   <table>
 <?php    
-    download_version("0.79.3", 0, "764977ab3d492a1ea9e346bfa9975e90", "1678bea3f81164ee4982398ce2227664",  "bff4788342d02aaa5d82ce7b78de5b04");
+    download_version("0.79.3", "764977ab3d492a1ea9e346bfa9975e90");
 
     if($show_all == 0)
     {  echo "    <tr><td colspan=\"2\"><a href=\"download40.php?showall=1#download\">Ältere Veröffentlichungen des 0.79er-Versionszweiges anzeigen</a></td></tr>\n";
@@ -87,9 +68,9 @@ Versionen.<p>
     {  echo "    <tr><td colspan=\"2\"><a href=\"download40.php?showall=0#download\">Ältere Veröffentlichungen des 0.79er-Versionszweiges verbergen</a></td></tr>\n";
        echo "    <tr><td colspan=\"2\"> </td></tr>\n";
 
-       download_version("0.79.2", 1, "378ed135c2faf0eaf643125d1f7726c6", "f673e41b5ddc31a6ecb48a5f053de885", "0b4c0b46e827c7f796416473511ab036");
+       download_version("0.79.2", "378ed135c2faf0eaf643125d1f7726c6");
 
-       download_version("0.79.1", 1, "ba6d0178dc03119080e07ef0a2967c38", "none", "b4c62833a2447097950b563e4a7b2065");
+       download_version("0.79.1", "ba6d0178dc03119080e07ef0a2967c38");
     }
 ?>
   </table>
@@ -115,10 +96,6 @@ beigesteuert.</li>
 
 <b>0.79.2</b> (28-Feb-2010)<br>
 <ul>
-<li>Für Mac OS X ist wieder ein Binärpaket verfügbar. Die Entwicklungsumgebung
-wurde auf einen aktuellen Stand gebracht; dies hat einige Probleme mit der
-graphischen Darstellung behoben.
-</li>
 <li>
 Die Entwicklung von RS03 schreitet weiter voran,
 ist aber noch längst nicht abgeschlossen. 
@@ -130,8 +107,7 @@ ist aber noch längst nicht abgeschlossen.
 <li>Die SCSI-Schicht enthält eine Umgehungslösung für fehlerhafte Chipsätze,
 die in neueren Laufwerken verbaut sein können. Das Ausführen einer Lese- oder
 "Prüfen"-Operation kann bei diesen Laufwerken dazu führen daß das System
-einfriert. Das Problem ist besonders ausgeprägt bei Windows XP, kann aber
-auch bei anderen Betriebssystemen auftreten. Bitte testen Sie ob die
+einfriert. Bitte testen Sie ob die
 betroffenen Laufwerke nun korrekt arbeiten, und ob keine Fehlfunktionen
 bei Laufwerken auftreten, deren Verhalten vorher in Ordnung war.</li> 
 <li>Eine Referenz-Implementierung
@@ -141,10 +117,6 @@ Kodierer mit seiner <a href="download50.php">Spezifikation</a> vergleichen
 können. Seien Sie vorsichtig und verwenden Sie ihn nicht für produktives
 Arbeiten. Die endgültige Version wird mit dvdisaster 0.80 veröffentlicht.</li>
 </ul>
-<b>Windows:</b> Die gesamte Entwicklungsumgebung einschließlich der mitgelieferten
-Programmbibliotheken wurde erneuert. Bitte probieren Sie aus ob die
-graphische Benutzeroberfläche und die Übersetzungen der Bildschirmtexte
-wie erwartet angezeigt werden.
 </td></tr></table><p>
 
 <!-- do not change below -->

@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: German homepage translation
-# Copyright (C) 2004-2011 Carsten Gnörlich
+# Copyright (C) 2004-2012 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -19,6 +19,7 @@ begin_page();
 <a href="#nls">2.1 In welchen Übersetzungen ist das Programm verfügbar?</a><p>
 <a href="#media">2.2 Welche Datenträger-Typen werden unterstützt?</a><p>
 <a href="#filesystem">2.3 Welche Dateisysteme werden unterstützt?</a><p>
+<!--- <a href="#unsupported">2.4 Warum werden Mac OS X und Windows nicht mehr unterstützt?</a><p> --->
 
 <hr><p>
 
@@ -112,7 +113,6 @@ Erfahrungen vor.</li>
 
 <b>Nicht verwendbare Typen</b> (kein Einlesen des Abbildes möglich):<p> 
 BD-ROM (gepreßte BDs), DVD-ROM (gepreßte DVDs) sowie Audio-CD und Video-CD.
-
 <div class="talignr"><a href="#top">&uarr;</a></div><p>
 
 
@@ -125,6 +125,12 @@ Weil dvdisaster die Struktur der Dateisysteme nicht kennt bzw. nutzt,
 kann es keine logischen Fehler darin beheben und insbesondere keine
 verlorengegangenen oder gelöschten Dateien wiederherstellen.
 <div class="talignr"><a href="#top">&uarr;</a></div><p>
+
+
+<!--- <b><a name="unsupported">2.4 Warum werden Mac OS X und Windows  nicht mehr unterstützt?</a></b><p> --->
+
+<div class="talignr"><a href="#top">&uarr;</a></div><p>
+
 
 <!-- do not change below -->
 

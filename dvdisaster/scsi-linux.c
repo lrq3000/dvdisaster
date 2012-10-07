@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -94,8 +94,10 @@ DeviceHandle* OpenDevice(char *device)
 {  DeviceHandle *dh; 
 
    dh = g_malloc0(sizeof(DeviceHandle));
-   dh->fd = open(device, O_RDWR | O_NONBLOCK);
 
+   dh->senseSize = sizeof(Sense);
+
+   dh->fd = open(device, O_RDWR | O_NONBLOCK);
    if(dh->fd < 0)
    {  g_free(dh);
       Stop(_("Could not open %s: %s"),device, strerror(errno));

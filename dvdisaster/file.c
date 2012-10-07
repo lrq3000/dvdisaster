@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -28,9 +28,9 @@
 
 ImageInfo* OpenImageFile(EccHeader *eh, int mode)
 {  ImageInfo *ii = NULL;
-   gint64 img_size;
+   guint64 img_size;
    int n,file_flags;
-   gint64 fp_sector;
+   guint64 fp_sector;
    unsigned char buf[2048];
    struct MD5Context md5ctxt;
 
@@ -64,7 +64,7 @@ ImageInfo* OpenImageFile(EccHeader *eh, int mode)
    }
 
    ii->size = img_size;
-   CalcSectors(img_size, &ii->sectors, &ii->inLast);
+   CalcSectors(img_size, (guint64*)&ii->sectors, &ii->inLast);
 
    if(!(mode & PRINT_MODE))
    { if(ii->inLast == 2048)
@@ -122,7 +122,7 @@ EccInfo* OpenEccFile(int mode)
    /*** Sanity check for ecc file reads */
 
    if(!(mode & WRITEABLE_ECC))
-   {  gint64 ecc_size;
+   {  guint64 ecc_size;
 
       if(!LargeStat(Closure->eccName, &ecc_size))
       {  if(!(mode & PRINT_MODE))

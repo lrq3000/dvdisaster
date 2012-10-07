@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: English homepage translation
-# Copyright (C) 2004-2011 Carsten Gnörlich
+# Copyright (C) 2004-2012 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -14,7 +14,14 @@ begin_page();
 
 <!-- Insert actual page content below -->
 
-<h3 class="top"><a name="top">Technické otázky</a></h3><a href="#nls">2.1 Do kterých jazyků byl již program přeložen?</a><p><a href="#media">2.2 Které typy disků jsou podporovány?</a><p><a href="#filesystem">2.3 Které souborové systémy jsou podporovány?</a><p><hr><p><b><a name="nls">2.1 Do kterých jazyků byl již program přeložen?</a></b><p>Aktuální verze dvdisaster obsahuje překlad uživatelského rozhraní do následujících jazyků:<p><table>
+<h3 class="top"><a name="top">Technické otázky</a></h3>
+
+<a href="#nls">2.1 Do kterých jazyků byl již program přeložen?</a><p>
+<a href="#media">2.2 Které typy disků jsou podporovány?</a><p>
+<a href="#filesystem">2.3 Které souborové systémy jsou podporovány?</a><p>
+<!--- <a href="#unsupported">2.4 Why are Mac OS X and Windows no longer supported?</a><p> --->
+
+<hr><p><b><a name="nls">2.1 Do kterých jazyků byl již program přeložen?</a></b><p>Aktuální verze dvdisaster obsahuje překlad uživatelského rozhraní do následujících jazyků:<p><table>
 <tr><td>   </td><td>Czech</td><td>--</td><td>kompletní</td></tr>
 <tr><td></td><td>English</td><td>--</td><td>kompletní</td></tr>
 <tr><td>   </td><td>German</td><td>--</td><td>kompletní</td></tr>
@@ -35,7 +42,14 @@ begin_page();
 <li>Podobně jako uvedeno výše problém s rozpoznáním <a href="qa20.php#rw">velikosti bitové kopie</a>.</li>
 </ul><b>BD-R, BD-RW</b><p><ul>
 <li>Žádná známá omezení, ale bylo provedeno jen minimum testů dvouvrstvých disků (50GB).</li>
-</ul><b>Nepoužitelné typy</b> (nelze vytvořit bitovou kopii):<p>BD-ROM (originální BD), DVD-ROM (originální DVD), CD-Audio a CD-Video.<div class="talignr"><a href="#top">↑</a></div><p><b><a name="filesystem">2.3 Které souborové systémy jsou podporovány?</a></b><p>dvdisaster pracuje výhradně na úrovni bitových kopií, ke kterým je přistupováno sektor po sektoru. Nezáleží proto na tom, jaký systém souborů byl u disku použit.<p>Protože dvdisaster nezná, ani nepoužívá strukturu systému souborů, nemůže opravit logické chyby na úrovni systému souborů. Nemůže proto obnovit ztracené nebo smazané soubory.<div class="talignr"><a href="#top">↑</a></div><p><!-- do not change below --> <?php
+</ul><b>Nepoužitelné typy</b> (nelze vytvořit bitovou kopii):<p>BD-ROM (originální BD), DVD-ROM (originální DVD), CD-Audio a CD-Video.<div class="talignr"><a href="#top">↑</a></div><p><b><a name="filesystem">2.3 Které souborové systémy jsou podporovány?</a></b><p>dvdisaster pracuje výhradně na úrovni bitových kopií, ke kterým je přistupováno sektor po sektoru. Nezáleží proto na tom, jaký systém souborů byl u disku použit.<p>Protože dvdisaster nezná, ani nepoužívá strukturu systému souborů, nemůže opravit logické chyby na úrovni systému souborů. Nemůže proto obnovit ztracené nebo smazané soubory.<div class="talignr"><a href="#top">↑</a></div><p>
+
+<!--- <b><a name="unsupported">2.4 Why are Mac OS X and Windows no longer supported?</a></b><p> --->
+
+<div class="talignr"><a href="#top">&uarr;</a></div><p>
+
+
+<!-- do not change below --> <?php
 # end_page() adds the footer line and closes the HTML properly.
 
 end_page();

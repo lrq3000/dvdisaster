@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -41,9 +41,12 @@ static gboolean expose_cb(GtkWidget *widget, GdkEventExpose *event, gpointer dat
 {  GtkWidget *box = (GtkWidget*)data;
 
    if(!Closure->drawGC)
-   {  GdkColor *bg = &widget->style->bg[0];
+   {  MudflapRegister(widget, sizeof(GtkWidget), "welcome-window:expose_cb");
+      MudflapRegister(widget->style, sizeof(GtkStyle), "welcome-window:expose_cb");
 
+      GdkColor *bg = &widget->style->bg[0];
       GdkColormap *cmap = gdk_colormap_get_system();
+
       Closure->drawGC = gdk_gc_new(widget->window);
 
       memcpy(Closure->background, bg, sizeof(GdkColor));
@@ -98,6 +101,9 @@ static gboolean expose_cb(GtkWidget *widget, GdkEventExpose *event, gpointer dat
 
 	 gtk_widget_show_all(box);
       }
+
+      MudflapUnregister(widget->style, sizeof(GtkStyle));
+      MudflapUnregister(widget, sizeof(GtkWidget));
    }
 
    Closure->dotFileVersion = Closure->version;
@@ -118,6 +124,7 @@ void CreateWelcomePage(GtkNotebook *notebook)
    align = gtk_alignment_new(0.5, 0.5, 0.0, 0.0);
    ignore = gtk_label_new("welcome_tab");
    box = show_msg ? gtk_vbox_new(FALSE, 0) : gtk_hbox_new(FALSE, 10);
+
    g_signal_connect(G_OBJECT(align), "expose_event", G_CALLBACK(expose_cb), box);
    gtk_notebook_append_page(notebook, align, ignore);
 

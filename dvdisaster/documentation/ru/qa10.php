@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: Russian homepage translation
-# Copyright (C) 2007-2011 Igor Gorbounov
+# Copyright (C) 2007-2012 Igor Gorbounov
 #
 # UTF-8 trigger: äöüß 
 #
@@ -19,6 +19,7 @@ begin_page();
 <a href="#nls">2.1 На какие языки переведена программа?</a><p>
 <a href="#media">2.2 Какие типы носителей поддерживаются?</a><p>
 <a href="#filesystem">2.3 Какие файловые системы поддерживаются?</a><p>
+<!--- <a href="#unsupported">2.4 Why are Mac OS X and Windows no longer supported?</a><p> --->
 
 <hr><p>
 
@@ -110,6 +111,11 @@ dvdisaster работает исключительно на уровне обр�
 он не может исправлять логические ошибки на уровне файловой системы.
 Он не может восстанавливать потерянные или удаленные файлы.
 <div class="talignr"><a href="#top">&uarr;</a></div><p>
+
+<!--- <b><a name="unsupported">2.4 Why are Mac OS X and Windows no longer supported?</a></b><p> --->
+
+<div class="talignr"><a href="#top">&uarr;</a></div><p>
+
 
 <!-- do not change below -->
 

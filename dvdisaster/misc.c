@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -144,7 +144,6 @@ static void clamp_gstring(GString *string)
 {  gchar *ptr;
    int cut;
 
-
    if(string->len < MAX_LOG_WIN_SIZE)
       return;
 
@@ -203,8 +202,7 @@ static void print_greetings(FILE *where)
    if(greetings_shown) return;
 
    greetings_shown = 1;
-   g_fprintf(where, _("dvdisaster-%s%sCopyright 2004-2011 Carsten Gnoerlich.\n"),
-	     VERSION, strstr(VERSION,"pl") ? " " : "  ");
+   g_fprintf(where, "%s\n%s.\n", Closure->versionString, _("Copyright 2004-2012 Carsten Gnoerlich"));
    /* TRANSLATORS: Excluding all kinds of warranty might be harmful under your
       legislature. If in doubt, just translate the following like "This is free
       software; please refer to the conditions of the GNU GENERAL PUBLIC LICENSE
@@ -736,8 +734,10 @@ GtkWidget* CreateMessage(char *format, GtkMessageType type, ...)
 				   type,
 				   GTK_BUTTONS_CLOSE,
 				   utf8, NULL);
+   MudflapRegister(dialog, sizeof(GtkMessageDialog), "misc:CreateMessage");
 
    gtk_label_set_line_wrap(GTK_LABEL(((struct _GtkMessageDialog*)dialog)->label), FALSE);
+   MudflapUnregister(dialog, sizeof(GtkMessageDialog));
    g_signal_connect_swapped(dialog, "response", G_CALLBACK(gtk_widget_destroy), dialog);
    gtk_widget_show(dialog);
    g_free(text);
@@ -748,7 +748,7 @@ GtkWidget* CreateMessage(char *format, GtkMessageType type, ...)
 
 /*
  * Label convenience functions.
- + Sets the label text from another thread.
+ * Sets the label text from another thread.
  */
 
 typedef struct

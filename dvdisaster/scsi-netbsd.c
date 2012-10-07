@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -105,6 +105,7 @@ DeviceHandle* OpenDevice(char *device)
 {  DeviceHandle *dh; 
 
    dh = g_malloc0(sizeof(DeviceHandle));
+   dh->senseSize = sizeof(Sense);
    dh->fd = open(device, O_RDWR | O_NONBLOCK);
 
    if(dh->fd < 0)
@@ -141,6 +142,7 @@ void CloseDevice(DeviceHandle *dh)
 
 int SendPacket(DeviceHandle *dh, unsigned char *cmd, int cdb_size, unsigned char *buf, int size, Sense *sense, int data_mode)
 {  struct scsireq sc;
+   int sense_len;
    int rc;
 
    /* prepare the scsi request */
@@ -170,7 +172,11 @@ int SendPacket(DeviceHandle *dh, unsigned char *cmd, int cdb_size, unsigned char
    /* Send the request and save the sense data. */
 
    rc = ioctl(dh->fd, SCIOCCOMMAND, &sc);
-   memcpy(sense, sc.sense, sc.senselen_used);
+
+   sense_len = sc.senselen_used;
+   if(sense_len > dh->senseSize)
+      sense_len = dh->senseSize;
+   memcpy(sense, sc.sense, sense_len);
 
    /* See what we've got back */
 

@@ -11,7 +11,7 @@ Contents
 2. Operating system specific issues
 2.1 Windows
 2.1.1 Getting the GNU environment for Windows
-2.2 Mac OS X / Darwin
+2.2 (removed)
 2.3 FreeBSD
 2.3.1 Loading the atapicam kernel module by hand
 2.3.2 (Optionally) loading the atapicam kernel module permanently
@@ -77,8 +77,8 @@ see http://www.gimp.org/~tml/gimp/win32/downloads.html for details.
 You'll need both the normal and "-devel" versions of the libraries. 
 
 
-2.2 Mac OS X / Darwin
----------------------
+2.2 (removed)
+-------------
 
 dvdisaster was ported by Julian Einwag to Darwin, 
 the Unix foundation of Mac OS X. 

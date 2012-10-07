@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -148,12 +148,17 @@ static gboolean expose_cb(GtkWidget *widget, GdkEventExpose *event, gpointer dat
    SetText(wl->cmpLayout, _("Missing sectors"), &w, &h);
    size = wl->cmpSpiral->diameter + 20 + 3*(10+h);  /* approx. size of spiral + labels */
 
+   MudflapRegister(a, sizeof(GtkAllocation), "rs01-verify:expose_cb");
    wl->cmpSpiral->mx = a->width / 2;
    wl->cmpSpiral->my = (wl->cmpSpiral->diameter + a->height - size)/2;
-   //   wl->cmpSpiral->my = wl->cmpSpiral->diameter/2 + 20;
+   MudflapUnregister(a, sizeof(GtkAllocation));
 
+   MudflapRegister(event, sizeof(GdkEventExpose), "rs01-verify:expose_cb");
    if(event->count) /* Exposure compression */
-     return TRUE;
+   {  MudflapUnregister(event, sizeof(GdkEventExpose));
+      return TRUE;
+   }
+   MudflapUnregister(event, sizeof(GdkEventExpose));
 
    /* Redraw the spiral */
 
@@ -344,19 +349,28 @@ void CreateRS01VerifyWindow(Method *self, GtkWidget *parent)
  *** Verify the prefix.* files
  ***/
 
+typedef struct
+{  Image *image;
+} verify_closure;
+
 static void cleanup(gpointer data)
-{  
+{  verify_closure *vc = (verify_closure*)data;
+  
    Closure->cleanupProc = NULL;
 
    if(Closure->guiMode)
       AllowActions(TRUE);
+
+   if(vc->image) CloseImage(vc->image);
+   g_free(vc);
 
    if(Closure->guiMode)
      g_thread_exit(0);
 }
 
 void RS01Verify(Image *image)
-{  Method *self = FindMethod("RS01");
+{  verify_closure *vc = g_malloc0(sizeof(verify_closure));
+   Method *self = FindMethod("RS01");
    RS01Widgets *wl = (RS01Widgets*)self->widgetList;
    char idigest[33],edigest[33]; 
    gint64 excess_sectors = 0;
@@ -375,7 +389,7 @@ void RS01Verify(Image *image)
 
    /*** Prepare for early termination */
 
-   RegisterCleanup(_("Comparison aborted"), cleanup, NULL);
+   RegisterCleanup(_("Comparison aborted"), cleanup, vc);
 
    /*** Examine the .iso file */
 
@@ -384,6 +398,7 @@ void RS01Verify(Image *image)
 		  _("Comparing image and error correction files."),
 		  _("- Checking image file -"));
 
+   vc->image = image;
    if(image && image->eccFile)  
    {  if(Closure->guiMode)
          SetLabelText(GTK_LABEL(wl->cmpChkSumErrors), "0");
@@ -862,5 +877,5 @@ skip_ecc:
    /*** Close and clean up */
 
 terminate:
-   cleanup(NULL);
+   cleanup(vc);
 }

@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: German homepage translation
-# Copyright (C) 2004-2011 Carsten Gnörlich
+# Copyright (C) 2004-2012 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -22,19 +22,34 @@ sich diese Seiten also nicht zusätzlich herunterzuladen.<p>
 
 Folgende zusätzliche Papiere sind verfügbar:<p>
 
-<b>Spezifikation für RS03</b><p>
+<b>Spezifikation für RS01 und RS03</b><p>
+
+Dieses Dokument enthält die 
+<a href="http://dvdisaster.net/papers/codecs.pdf">Spezifikation 
+der RS01- und RS03-Kodierer (codecs.pdf)</a>,
+um deren Eigenschaften diskutieren zu können. <p>
+
+Die Erstellung der Spezifikation von RS02 ist in Vorbereitung. <p>
 
 Mit RS03 wird in zukünftigen dvdisaster-Versionen ein neues
 Kodierungsverfahren eingeführt, das seine Berechnungen auf mehrere
 Prozessorkerne verteilen kann. Dies ist mit den momentanen 
-Verfahren RS01 und RS02 aufgrund deren inneren Aufbaus nicht möglich. <p>
+Verfahren RS01 und RS02 aufgrund deren inneren Aufbaus nicht möglich. 
+Die Spezifikation von RS03 kann sich noch in einigen Details ändern.
+<p>
 
-Eine <a href="http://dvdisaster.net/papers/rs03.pdf">Vorschau der RS03-Spezifikation (rs03.pdf)</a>
-ist ab sofort verfügbar, um die Eigenschaften des neuen Kodierers
-diskutieren zu können. Die Spezifikation ist noch nicht endgültig.<p>
+Das Dokument setzt Kenntnisse im Bereich Kodierungstheorie voraus
+und ist nicht als Benutzerdokumentation gedacht.<p>
 
-Das RS03-Dokument setzt Kenntnisse im Bereich Kodierungstheorie voraus
-und ist nicht als Benutzerdokumentation gedacht.
+<hr>
+
+<table>
+<tr><td>
+<a href="http://pdfreaders.org/"><img src="http://pdfreaders.org/graphics/pdfreaders-lang-neutral.png" alt="pdfreaders.org" /></a></td>
+<td>Programme zum Lesen des PDF-Dokuments sind auf <a href="http://pdfreaders.org">PDFreaders.org</a> erhältlich.</td>
+</tr>
+</table>
+
 
 
 <!-- do not change below -->

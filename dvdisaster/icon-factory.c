@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -48,10 +48,19 @@ void CreateIconFactory()
 
    create_icon(ifact, "dvdisaster-open-ecc",   dvdisaster_open_ecc);
    create_icon(ifact, "dvdisaster-open-img",   dvdisaster_open_img);
+   create_icon(ifact, "dvdisaster-cd",         dvdisaster_cd);
 
    create_icon(ifact, "dvdisaster-read",   dvdisaster_read);
    Closure->windowIcon = create_icon(ifact, "dvdisaster-create", dvdisaster_create);
    create_icon(ifact, "dvdisaster-scan",   dvdisaster_scan);
    create_icon(ifact, "dvdisaster-fix",    dvdisaster_fix);
    create_icon(ifact, "dvdisaster-verify", dvdisaster_verify);
+
+   /*** Stock GTK icons to defeat theming */
+
+   create_icon(ifact, "dvdisaster-gtk-help", dvdisaster_gtk_help);
+   create_icon(ifact, "dvdisaster-gtk-index", dvdisaster_gtk_index);
+   create_icon(ifact, "dvdisaster-gtk-preferences", dvdisaster_gtk_preferences);
+   create_icon(ifact, "dvdisaster-gtk-quit", dvdisaster_gtk_quit);
+   create_icon(ifact, "dvdisaster-gtk-stop", dvdisaster_gtk_stop);
 }

@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -322,8 +322,12 @@ static void redraw_curve(RS01Widgets *wl)
 static gboolean expose_cb(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {  RS01Widgets *wl = (RS01Widgets*)data; 
 
+   MudflapRegister(event, sizeof(GdkEventExpose), "rs01-window:expose_cb");
    if(event->count) /* Exposure compression */
-     return TRUE;
+   {  MudflapUnregister(event, sizeof(GdkEventExpose));
+      return TRUE;
+   }
+   MudflapUnregister(event, sizeof(GdkEventExpose));
 
    update_geometry(wl);
    redraw_curve(wl);

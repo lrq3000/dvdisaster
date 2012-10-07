@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: English homepage translation
-# Copyright (C) 2004-2011 Carsten Gnörlich
+# Copyright (C) 2004-2012 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -20,6 +20,10 @@ $news_counter = 0;
 # Do not insert plain HTML!
 
 news_headline("dvdisaster - novinky");
+
+news_item("07.04.2012", "dvdisaster 0.72.4 released", "
+Updated to work with recent versions of GNU/Linux, FreeBSD and NetBSD.
+", 21, "2012-04-07T01:00:00Z", "2012-04-07T01:00:00Z");
 
 news_item("05.10.2011", "Vydán dvdisaster 0.72.3", "Funkce \"Ověřit\" se zacyklí při práci s RS01 soubory pro opravu chyb pokud jsou větší než 2GB (samotné soubory jsou ale vytvořeny správně). Volodymyr Bychkoviak tuto chybu odhalil a zaslal opravu.", 20, "2011-10-05T00:00:00Z", "2011-10-05T00:00:00Z");
 

@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -413,7 +413,7 @@ void ShowGPL()
 char *find_file(char *file, size_t *size, char *lang)
 {  char *path;
    char lang_suffix[3];
-   gint64 stat_size;
+   guint64 stat_size;
 
    lang_suffix[0] = lang_suffix[2] = 0;
 
@@ -521,8 +521,10 @@ GtkWidget* ShowTextfile(char *title, char *explanation, char *file,
    g_signal_connect_swapped(dialog, "response", G_CALLBACK(gtk_widget_destroy), dialog);
 
    vbox = gtk_vbox_new(FALSE, 0);
+   MudflapRegister(dialog, sizeof(GtkDialog), "help-dialogs:ShowTextFile");
    gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), vbox, TRUE, TRUE, 0);
    gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
+   MudflapUnregister(dialog, sizeof(GtkDialog));
 
    lab = gtk_label_new(NULL);
    utf = g_locale_to_utf8(explanation, -1, NULL, NULL, NULL);
@@ -571,7 +573,9 @@ static void show_modifying(void)
 }
 
 static gint about_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
-{  GtkWidget *lab = GTK_BIN(widget)->child;
+{  MudflapRegister(widget, sizeof(GtkBin), "help-dialogs:about_cb");
+   MudflapRegister(event, sizeof(GdkEvent), "help-dialogs:about_cb");
+   GtkWidget *lab = GTK_BIN(widget)->child;
    char *label = (char*)data;
    char text[strlen(label)+80];
    char *utf;
@@ -601,6 +605,8 @@ static gint about_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
       default: break;
    }
 
+   MudflapUnregister(widget, sizeof(GtkBin));
+   MudflapUnregister(event, sizeof(GdkEvent));
    return FALSE;
 }
 
@@ -707,6 +713,7 @@ void AboutDialog()
    about = gtk_dialog_new_with_buttons(_utf("windowtitle|About dvdisaster"), 
 				       Closure->window, GTK_DIALOG_DESTROY_WITH_PARENT,
 				       GTK_STOCK_CLOSE, GTK_RESPONSE_ACCEPT, NULL);
+   MudflapRegister(about, sizeof(GtkDialog), "help-dialogs:AboutDialog");
 
    g_signal_connect_swapped(about, "response", G_CALLBACK(gtk_widget_destroy), about);
 
@@ -724,11 +731,11 @@ void AboutDialog()
 
 #ifdef MODIFIED_SOURCE
    AboutTextWithLink(vbox, 
-		     _("Modified version Copyright 2011 (please fill in - [directions])\n"
-		       "Copyright 2004-2011 Carsten Gnoerlich"),
+		     _("Modified version Copyright 2012 (please fill in - [directions])\n"
+		       "Copyright 2004-2012 Carsten Gnoerlich"),
 		     "MODIFYING");
 #else
-   AboutText(vbox, _("Copyright 2004-2011 Carsten Gnoerlich"));
+   AboutText(vbox, _("Copyright 2004-2012 Carsten Gnoerlich"));
 #endif
 
    sep = gtk_hseparator_new();
@@ -762,15 +769,12 @@ void AboutDialog()
    }
 
    AboutText(vbox, _("\ne-mail: carsten@dvdisaster.org   -or-   cgnoerlich@fsfe.org")); 
-
-#ifdef SYS_DARWIN
-   AboutText(vbox, _("\nDarwin port (Mac OS X): Julian Einwag &lt;julian@einwag.de&gt;")); 
-#endif
 #ifdef SYS_NETBSD
    AboutText(vbox, _("\nNetBSD port: Sergey Svishchev &lt;svs@ropnet.ru&gt;")); 
 #endif
 #endif
    /* Show it */
 
+   MudflapUnregister(about, sizeof(GtkDialog));
    gtk_widget_show_all(about);
 }

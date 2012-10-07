@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -66,7 +66,7 @@ static void init_defective_sector_file(char *path, RawBuffer *rb, LargeFile **fi
 
 static void open_defective_sector_file(RawBuffer *rb, char *path, LargeFile **file, 
 				       DefectiveSectorHeader *dsh)
-{   gint64 length;
+{   guint64 length;
     int n;
 
     *file = LargeOpen(path, O_RDWR, IMG_PERMS);
@@ -179,7 +179,7 @@ int SaveDefectiveSector(RawBuffer *rb, int can_c2_scan)
    DefectiveSectorHeader *dsh = alloca(sizeof(DefectiveSectorHeader));
    unsigned char *cache_sectors = NULL;
    char *filename;
-   gint64 length,offset;
+   guint64 length,offset;
    int count=0;
    int i,j,idx;
 

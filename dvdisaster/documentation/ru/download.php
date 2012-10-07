@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: Russian homepage translation
-# Copyright (C) 2007-2011 Igor Gorbounov
+# Copyright (C) 2007-2012 Igor Gorbounov
 #
 # UTF-8 trigger: äöüß 
 #
@@ -69,17 +69,28 @@ if(!strcmp($have_experimental, "yes"))
 <a name="download"></a>
 
 <table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.72</b></td><td align="right">05 Oct 2011</td></tr>
+<tr><td><b>dvdisaster-0.72</b></td><td align="right">07 Apr 2012</td></tr>
 <tr><td colspan="2" class="hsep"></td></tr>
 <tr><td colspan="2">
   <table>
+    <tr><td align="right">&nbsp;&nbsp;Исходные тексты для всех операционных систем:&nbsp;</td>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.4.tar.bz2">dvdisaster-0.72.4.tar.bz2</a></td></tr>
+    <tr><td align="right">Цифровая подпись:&nbsp;</td>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.4.tar.bz2.gpg">dvdisaster-0.72.4.tar.bz2.gpg</a></td></tr>
+
+<?php
+if($mode == "www")
+    echo "<tr><td align=\"right\">MD5 checksum:&nbsp;</td><td>ad5e1d3758c536472c0ec36e3fc521fe</td></tr>";
+?>
+    <tr><td><pre> </pre></td><td></td></tr>
+
     <tr><td align="right">&nbsp;&nbsp;Исходные тексты для всех операционных систем:&nbsp;</td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.3.tar.bz2">dvdisaster-0.72.3.tar.bz2</a></td></tr>
     <tr><td align="right">Цифровая подпись:&nbsp;</td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.3.tar.bz2.gpg">dvdisaster-0.72.3.tar.bz2.gpg</a></td></tr>
 
 <?php
-if($mode == "www");
+if($mode == "www")
     echo "<tr><td align=\"right\">MD5 checksum:&nbsp;</td><td>4eb09c1aa3cdbc1dafdb075148fb471d</td></tr>";
 ?>
     <tr><td colspan="2" class="esep"></td></tr>
@@ -90,7 +101,7 @@ if($mode == "www");
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.3.app.zip.gpg">dvdisaster-0.72.3.app.zip.gpg</a></td></tr>
 
 <?php
-if($mode == "www");
+if($mode == "www")
     echo "<tr><td align=\"right\">MD5 checksum:&nbsp;</td><td>38389bbbeb0d259a3f0a8df89b363f72</td></tr>";
 ?>
     <tr><td colspan="2" class="esep"></td></tr>
@@ -100,7 +111,7 @@ if($mode == "www");
     <tr><td align="right">Цифровая подпись:&nbsp;</td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.3-setup.exe.gpg">dvdisaster-0.72.3-setup.exe.gpg</a></td></tr>
 <?php
-if($mode == "www");
+if($mode == "www")
     echo "<tr><td align=\"right\">MD5 checksum:&nbsp;</td><td>b6861ba1e8de6d91a2da5342a14870e0</td></tr>";
 ?>
     <tr><td colspan="2"> </td></tr>
@@ -212,6 +223,9 @@ if($mode == "www");
 </ul>
 
 <b>Исправления</b> (небольшие изменения после версии 0.72; вышеприведенные файлы были обновлены):<p>
+
+<b>0.72 pl4</b> Updated for new versions and programming libraries of
+GNU/Linux, FreeBSD and NetBSD. (07-Apr-2012)<p>
 
 <b>0.72 pl3</b> Fixed a problem with the "Verify" function when
  working with RS01 error correction files larger than 2GB.

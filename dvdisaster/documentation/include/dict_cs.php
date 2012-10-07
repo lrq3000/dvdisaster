@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: English homepage dictionary
-# Copyright (C) 2004-2011 Carsten Gnörlich
+# Copyright (C) 2004-2012 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 
@@ -20,7 +20,7 @@ $trans_atom_title="dvdisaster - novinky";
 $trans_hosting="Hostováno na";
 
 $trans_fdl="Kopírování a distribuce neupravené verze tohoto článku v libovolné formě je povolena za předpokladu, že bude zachována tato poznámka..";
-$trans_copyright="Copyright 2004-2011 Carsten Gnörlich.";
+$trans_copyright="Copyright 2004-2012 Carsten Gnörlich.";
 
 $trans_sourcecode="Zdrojový kód (všechny operační systémy):";
 $trans_signature="Digitální podpis";

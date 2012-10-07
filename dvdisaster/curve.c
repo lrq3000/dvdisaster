@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -33,6 +33,7 @@
 Curve* CreateCurve(GtkWidget *widget, char *left_label, char *left_format, int n_values, int bottom_format)
 {  Curve *curve = g_malloc0(sizeof(Curve));
 
+   MudflapRegister(widget, sizeof(GtkWidget), "curve:CreateCurve");
    curve->widget     = widget;
    curve->layout     = gtk_widget_create_pango_layout(widget, NULL);
    curve->leftLabel  = g_strdup(left_label); 
@@ -60,6 +61,7 @@ Curve* CreateCurve(GtkWidget *widget, char *left_label, char *left_format, int n
 
 void FreeCurve(Curve *curve)
 {
+   MudflapUnregister(curve->widget, sizeof(GtkWidget));
    g_object_unref(curve->layout);
    g_free(curve->leftLabel);
    if(curve->leftLogLabel)

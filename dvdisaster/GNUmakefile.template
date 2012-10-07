@@ -42,7 +42,13 @@ GTK_BINDIR   = $(CFG_GTK2_BINDIR)
 EFENCE_LFLAGS = $(CFG_EFENCE_LFLAGS)
 EFENCE_LIBS   = $(CFG_EFENCE_LIBS)
 
+MUDFLAP_CFLAGS = $(CFG_MUDFLAP_CFLAGS)
+MUDFLAP_LFLAGS = $(CFG_MUDFLAP_LFLAGS)
+MUDFLAP_LIBS   = $(CFG_MUDFLAP_LIBS)
+
+
 SYS_OPTIONS  = $(CFG_SYS_OPTIONS)
+SYS_NAME     = $(CFG_SYS_NAME)
 HAVE_OPTIONS = $(CFG_HAVE_OPTIONS)
 WITH_OPTIONS = $(CFG_WITH_OPTIONS)
 OTHER_OPTIONS = $(CFG_OTHER_OPTIONS) -DVERSION=\"$(VERSION)\"
@@ -51,10 +57,10 @@ SSE2_OPTIONS = $(CFG_SSE2_OPTIONS)
 ALTIVEC_OPTIONS = $(CFG_ALTIVEC_OPTIONS)
 
 LOCATIONS = -DSRCDIR=\"$(SRCDIR)\" -DBINDIR=\"$(BINDIR)\" -DDOCDIR=\"$(DOCSUBDIR)\" -DLOCALEDIR=\"$(LOCALEDIR)\"
-COPTS = $(CFLAGS) $(LOCATIONS) $(SYS_OPTIONS) $(HAVE_OPTIONS) $(WITH_OPTIONS) $(OTHER_OPTIONS) $(INTL_INCL) $(CAM_INCL) $(GTK_CFLAGS)
-LOPTS = $(LDFLAGS) $(INTL_LFLAGS) $(CAM_LFLAGS) $(EFENCE_LFLAGS)
+COPTS = $(CFLAGS) $(LOCATIONS) $(SYS_OPTIONS) $(SYS_NAME) $(HAVE_OPTIONS) $(WITH_OPTIONS) $(OTHER_OPTIONS) $(INTL_INCL) $(CAM_INCL) $(GTK_CFLAGS) $(MUDFLAP_CFLAGS)
+LOPTS = $(LDFLAGS) $(INTL_LFLAGS) $(CAM_LFLAGS) $(EFENCE_LFLAGS) $(MUDFLAP_LFLAGS)
 
-LIBS = $(INTL_LIBS) $(CAM_LIBS) $(GTK_LIBS) $(EFENCE_LIBS) -lm
+LIBS = $(INTL_LIBS) $(CAM_LIBS) $(GTK_LIBS) $(EFENCE_LIBS) $(MUDFLAP_LIBS) -lm
 
 CFILES = $(CFG_CFILES)
 OFILES = $(CFG_OFILES)
@@ -102,6 +108,12 @@ inlined-icons.h: icons/read.png icons/create.png icons/scan.png icons/fix.png ic
 	@gdk-pixbuf-csource --raw --name=dvdisaster_verify   icons/verify.png   >>inlined-icons.h
 	@gdk-pixbuf-csource --raw --name=dvdisaster_open_ecc icons/open-ecc.png >>inlined-icons.h
 	@gdk-pixbuf-csource --raw --name=dvdisaster_open_img icons/open-img.png >>inlined-icons.h
+	@gdk-pixbuf-csource --raw --name=dvdisaster_cd icons/cd.png >>inlined-icons.h
+	@gdk-pixbuf-csource --raw --name=dvdisaster_gtk_help icons/gtk-help.png >>inlined-icons.h
+	@gdk-pixbuf-csource --raw --name=dvdisaster_gtk_index icons/gtk-index.png >>inlined-icons.h
+	@gdk-pixbuf-csource --raw --name=dvdisaster_gtk_preferences icons/gtk-preferences.png >>inlined-icons.h
+	@gdk-pixbuf-csource --raw --name=dvdisaster_gtk_quit icons/gtk-quit.png >>inlined-icons.h
+	@gdk-pixbuf-csource --raw --name=dvdisaster_gtk_stop icons/gtk-stop.png >>inlined-icons.h
 
 help-dialogs.o: help-dialogs.c simple-md5sum
 	@if test -e fingerprints.md5; \
@@ -134,7 +146,7 @@ locale:
 	@$(MAKE) --no-print-directory -C locale
 
 simple-md5sum: md5.c
-	@$(CC) $(COPTS) -DSIMPLE_MD5SUM md5.c -o simple-md5sum
+	@$(CC) $(COPTS) $(MUDFLAP_CFLAGS) -DSIMPLE_MD5SUM md5.c $(MUDFLAP_LFLAGS) $(MUDFLAP_LIBS) -o simple-md5sum
 
 # Stuff needed to generate or prepare the documentation
 # TAG: online-docs
@@ -266,7 +278,6 @@ help:
 	@echo "archclean - remove all files which are rebuildable in an development setup"
 	@echo "arch      - distclean and tar the source directory (dirty)"
 	@echo "srcdist   - produce the source distribution tarball (polished)"
-	@echo "macdist   - produce application bundle for Mac OS X"
 	@echo "windist   - produce the binary setup.exe for Windows"
 
 # Build configuration printing
@@ -296,8 +307,12 @@ show:
 	@echo "GTK_BINDIR   = " $(GTK_BINDIR)
 	@echo "EFENCE_LFLAGS= " $(EFENCE_LFLAGS)
 	@echo "EFENCE_LIBS  = " $(EFENCE_LIBS)
+	@echo "MUDFLAP_CFLAGS= " $(MUDFLAP_CFLAGS)
+	@echo "MUDFLAP_LFLAGS= " $(MUDFLAP_LFLAGS)
+	@echo "MUDFLAP_LIBS  = " $(MUDFLAP_LIBS)
 	@echo
 	@echo "SYS_OPTIONS  = " $(SYS_OPTIONS)
+	@echo "SYS_NAME     = " $(SYS_NAME)
 	@echo "EXE_SUFFIX   = " $(EXE_SUFFIX)
 	@echo "HAVE_OPTIONS = " $(HAVE_OPTIONS)
 	@echo "WITH_OPTIONS = " $(WITH_OPTIONS)
@@ -316,7 +331,7 @@ show:
 
 .PHONY : install uninstall clean distclean arch
 .PHONY : www www-images php php-images
-.PHONY : srcdist macdist windist
+.PHONY : srcdist windist
 
 install: dvdisaster images
 	@echo "Installing package..."
@@ -406,13 +421,12 @@ distclean: clean
 	@echo -e "\t@echo" >>GNUmakefile
 	@if test -e tools/Makefile.config; then $(MAKE) --no-print-directory -C tools distclean; fi
 
-clean:
+clean: simple-md5sum
 	@echo "Removing rebuildable files"
-	@rm -rf *.o medium.* dvdisaster simple-md5sum *.exe *.zip .dvdisaster core core.* *.core *.stackdump
+	@rm -rf *.o medium.* dvdisaster *.exe *.zip .dvdisaster core core.* *.core *.stackdump
 	@rm -f inlined-icons.h help-dialogs.h
 	@rm -f wininst/installer.iss wininst/signature
 	@if test -e win-build-dir; then rm -rf win-build-dir; fi
-	@rm -rf macinst/.dvdisaster.app macinst/dvdisaster.app macinst/dvdisaster.app.zip macinst/dvdisaster.bundle
 	@find . -name \*\~ -print | xargs rm -f;
 	@find . -name \*.mo -print | xargs rm -f;
 	@find . -name \#\*\# -print | xargs rm -f;
@@ -424,9 +438,10 @@ clean:
 	@if test -e $(PKGNAME); then rm -rf $(PKGNAME); fi
 	@if test -e ~/.dvdisaster-original-author; then \
 	  mv build.h build.saved ;\
-	  md5sum -b *.h *.c >fingerprints.md5 ;\
+	  ./simple-md5sum -b *.h *.c >fingerprints.md5 ;\
 	  mv build.saved build.h; \
 	fi
+	@rm -f simple-md5sum
 	@if test -e $(SRCDIR)/papers; then \
 	  $(MAKE) --no-print-directory -C papers clean; \
 	fi
@@ -518,12 +533,3 @@ windist: dvdisaster pack-images prepare-dist
 	@sed 's/dvdisaster-%version%/$(PKGNAME)/' <wininst/installer.template >wininst/installer.iss
 	@iscc wininst/installer.iss
 
-macdist: 
-	@if test $(JHBUILD_PREFIX)x == "x"; then \
-	  echo "Building the app bundle only works in a jhbuild shell."; \
-	  exit 1; \
-	fi
-	@rm -rf macinst/dvdisaster.app macinst/.dvdisaster.app
-	@sed 's!%srcdir%!$(SRCDIR)!' <macinst/dvdisaster.bundle.template >macinst/dvdisaster.bundle
-	@ige-mac-bundler macinst/dvdisaster.bundle
-	@(cd macinst; zip -r dvdisaster.app.zip dvdisaster.app) 

@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -1475,7 +1475,8 @@ static void try_c2_scan(DeviceHandle *dh)
 
    ret = SendPacket(dh, cdb, 12, rb->workBuf->buf, CD_RAW_C2_SECTOR_SIZE, sense, DATA_READ);
 
-   Verbose("C2 scan probing: %s\n", 
+   Verbose("C2 scan probing: %d (%s); Sense: %s\n",
+	   ret, !ret ? "good" : "failed",
 	   GetSenseString(sense->sense_key, sense->asc, sense->ascq, 0));
 
    if(!ret || sense->sense_key != 5)  /* good status or error != illegal request means C2 works */
@@ -1515,8 +1516,8 @@ static int read_mode_page(DeviceHandle *dh, AlignedBuffer *ab, int *parameter_li
    ret  = SendPacket(dh, cdb, 10, buf, 252, &sense, DATA_READ);
 
    if(ret<0) 
-   {  FreeAlignedBuffer(ab);
-      Verbose("\nRead mode page 01h failed: %s\n", 
+   {  Verbose("\nRead mode page 01h failed: %d (%s); Sense: %s\n", 
+	      ret, !ret ? "good" : "failed",
 	      GetSenseString(sense.sense_key, sense.asc, sense.ascq, 0));
       return FALSE;
    }
@@ -2711,6 +2712,7 @@ Image* OpenImageFromDevice(char *device)
    if(dh->mainType == DVD && query_copyright(dh))
    {  CloseImage(image);
       Stop(_("This software does not support encrypted media.\n"));
+      return NULL;
    }
 
    /* Create the bitmap of simulated defects */
@@ -2731,6 +2733,8 @@ int SendReadCDB(char *device, unsigned char *buf, unsigned char *cdb, int cdb_le
    int i,status;
 
    dh = OpenDevice(device);
+   if(!dh) return 0;
+
    InquireDevice(dh, 0);
 
    PrintLog("Sending cdb to device: %s, %s\n", device, dh->devinfo);

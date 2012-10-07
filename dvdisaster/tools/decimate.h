@@ -1,5 +1,5 @@
 /*  pngpack: lossless image compression for a series of screen shots
- *  Copyright (C) 2005-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2005-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org

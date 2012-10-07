@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -107,6 +107,13 @@ DeviceHandle* OpenDevice(char *device)
 
    dh = g_malloc0(sizeof(DeviceHandle));
 
+   /* Make sure we do not overrun any memory due
+      to differently sized sense structures */
+
+   dh->senseSize = sizeof(Sense);
+   if(dh->senseSize > sizeof(struct scsi_sense_data))
+      dh->senseSize = sizeof(struct scsi_sense_data);
+
    dh->camdev = cam_open_pass(device, O_RDWR, NULL);
 
    if(!dh->camdev)
@@ -174,7 +181,6 @@ int SendPacket(DeviceHandle *dh, unsigned char *cmd, int cdb_size, unsigned char
 	Stop("illegal data_mode: %d", data_mode);
    }
 
-
    cam_fill_csio(&ccb->csio, 1, NULL, flags, CAM_TAG_ACTION_NONE,//MSG_SIMPLE_Q_TAG,
 		 buf, size, sizeof(struct scsi_sense_data), cdb_size, 
 		 120*1000);  /* 120 secs timeout */
@@ -191,7 +197,7 @@ int SendPacket(DeviceHandle *dh, unsigned char *cmd, int cdb_size, unsigned char
 
    /* Extract sense data */
 
-   memcpy(sense, &(ccb->csio.sense_data), sizeof(struct scsi_sense_data));
+   memcpy(sense, &(ccb->csio.sense_data), dh->senseSize);
 
    if((ccb->ccb_h.status & CAM_STATUS_MASK) == CAM_REQ_CMP)
      return 0;
@@ -201,8 +207,6 @@ int SendPacket(DeviceHandle *dh, unsigned char *cmd, int cdb_size, unsigned char
    status = ccb->csio.scsi_status;
 
    return -1;
-
-   
 }
 
 #endif /* SYS_FREEBSD */

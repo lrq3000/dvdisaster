@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -795,7 +795,7 @@ void FreeIsoHeader(IsoHeader *ih)
 
 void AddFile(IsoHeader *ih, char *name, guint64 size)
 {  static int n;
-   char iso[20], joliet[strlen(name+3)];
+   char iso[20], joliet[strlen(name)+3];
 
    n++;
    sprintf(iso,"RAN_%04d.DAT;1", n);

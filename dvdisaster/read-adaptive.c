@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -1089,8 +1089,8 @@ void fill_correctable_gap(read_closure *rc, gint64 correctable)
 
 void ReadMediumAdaptive(gpointer data)
 {  read_closure *rc;
-   gint64 s;
-   gint64 image_file_size;
+   guint64 s;
+   guint64 image_file_size;
    int status,i,n;
 
    /*** Initialize the read closure. */

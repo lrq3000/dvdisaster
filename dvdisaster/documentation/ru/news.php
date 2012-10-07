@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: Russian homepage translation
-# Copyright (C) 2007-2011 Igor Gorbounov
+# Copyright (C) 2007-2012 Igor Gorbounov
 #
 # UTF-8 trigger: äöüß 
 #
@@ -20,6 +20,10 @@ $news_counter = 0;
 # Do not insert plain HTML!
 
 news_headline("Новости dvdisaster");
+
+news_item("07.04.2012", "dvdisaster 0.72.4 released", "
+Updated to work with recent versions of GNU/Linux, FreeBSD and NetBSD.
+", 21, "2012-04-07T01:00:00Z", "2012-04-07T01:00:00Z");
 
 news_item("05.10.2011", "dvdisaster 0.72.3 released", "
 The \"Verify\" function hangs when working on RS01 error

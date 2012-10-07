@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -208,8 +208,8 @@ static void free_recognize_context(recognize_context *rc)
 int RS03RecognizeImage(Image *image)
 {  recognize_context *rc = g_malloc0(sizeof(recognize_context));
    LargeFile *ecc_file = image->file;
-   gint64 file_size;
-   gint64 layer_size;
+   guint64 file_size;
+   guint64 layer_size;
    int ecc_block,ndata,nroots;
    int i;
 
@@ -232,21 +232,25 @@ int RS03RecognizeImage(Image *image)
    image->eccHeader = FindRS03HeaderInImage(image); 
   
    if(image->eccHeader) 
-   {  //printf("quick resolved\n");   // FIXME
+   {  free_recognize_context(rc);
       return TRUE;
    }
 
    /* No exhaustive search unless explicitly okayed by user */
 
    if(!Closure->examineRS03)
-     return FALSE;
+   {  free_recognize_context(rc);
+      return FALSE;
+   }
 
    /* Ugly case. Experimentally try the RS-Code. */
 
    Verbose("RS03RecognizeImage(): No EH\n");
 
    if(!LargeStat(Closure->imageName, &file_size))
+   {  free_recognize_context(rc);
       return FALSE;
+   }
 
    file_size /= 2048;
 

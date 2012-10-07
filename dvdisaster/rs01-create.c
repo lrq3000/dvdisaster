@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  The Reed-Solomon error correction draws a lot of inspiration - and even code -
  *  from Phil Karn's excellent Reed-Solomon library: http://www.ka9q.net/code/fec/
@@ -36,9 +36,9 @@
  * d) "nm"     -> choose redundancy so that .ecc file does not exceed n megabytes
  */
 
-static gint64 ecc_file_size(gint64 sectors, int nr)
+static guint64 ecc_file_size(guint64 sectors, int nr)
 {  int nd = GF_FIELDMAX - nr;
-   gint64 bytesize; 
+   guint64 bytesize; 
 
    bytesize = 4096 + 4*sectors + 2048*nr*((sectors+nd-1)/nd);
 
@@ -50,7 +50,7 @@ static int calculate_redundancy(char *image_name)
    char last = 0; 
    double p;
    int ignore;
-   gint64 fs,sectors,filesize;
+   guint64 fs,sectors,filesize;
 
    if(Closure->redundancy) /* get last char of redundancy parameter */
    {  int len = strlen(Closure->redundancy);
@@ -164,8 +164,8 @@ void RS01Create(void)
    struct MD5Context md5Ctxt;
    EccHeader *eh;
    Image *image;
-   gint64 block_idx[256];  /* must be >= ndata */
-   gint64 s,si,n;
+   guint64 block_idx[256];  /* must be >= ndata */
+   guint64 s,si,n;
    int i;
    int percent = 0,max_percent,progress = 0, last_percent = -1;
    guint64 n_parity_blocks,n_layer_sectors;
@@ -237,6 +237,7 @@ void RS01Create(void)
    PrintLog(_("\nOpening %s"), Closure->imageName);
 
    image = OpenImageFromFile(Closure->imageName, O_RDONLY, IMG_PERMS);
+   ec->image = image;
    if(!image)
    {  PrintLog(": %s.\n", strerror(errno));
       Stop(_("Image file %s: %s."),Closure->imageName, strerror(errno));

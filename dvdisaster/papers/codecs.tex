@@ -7,46 +7,62 @@
 \usepackage{anysize}	% Makros zum Einstellen der Seitenränder
 %\usepackage{makeidx}	% Makros zum Erstellen des Indexes
 \usepackage{url}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{listings}
 
 \marginsize{30mm}{20mm}{20mm}{20mm}  % Seitenränder links, rechts, oben, unten
 \parindent0em		% Keine amerikanische Einrückung am Anfang von Paragraphen
 
 
-\pagestyle{headings}	% leerer Seitenstil (keine Seitennummern usw.)
+\pagestyle{fancy}	% Seitenstil
 %\makeindex		% wird für Erstellung von Stichwortverzeichnissen benötigt
 
 % Ende der Voreinstellungen
 \input{misc}
 
+\newcommand{\paperversion}{{\em first draft}}
+
+\fancyhead{}
+\fancyhead[LE,RO]{page \thepage\ of \pageref{LastPage}}
+\fancyhead[LO,RE]{\nouppercase{\rightmark}}
+\renewcommand{\sectionmark}[1]{\markboth{#1}{#1}}
+\renewcommand{\subsectionmark}[1]{}
+
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyfoot{}
+\fancyfoot[LE,RO]{dvdisaster codec specification}
+\fancyfoot[LO]{created: \today}
+\fancyfoot[RE]{\paperversion}
+
 \begin{document}
 
-\title{The dvdisaster RS03 Reed-Solomon Codec specification}
+\title{The dvdisaster Reed-Solomon Codec specification}
 \author{Carsten Gnörlich\\carsten@dvdisaster.org}
-\date{Version 1.00}
+\date{\today}
 \maketitle
+\thispagestyle{empty}
 \begin{center}
-{\em first draft}
+\paperversion
 \end{center}
 %\warning{5mm}{\LARGE State: Incomplete/Evolving}
 
 \bigskip
 
 \begin{abstract}
-This paper describes the data format of the dvdisaster RS03 Reed-Solomon codec.
-The codec creates Reed-Solomon parity data to protect data stored on optical media.
-Parity data can either be stored in a separate file or be integrated with the .iso
-image on the same medium. While these features were already present in the preceeding
-codecs RS01 and RS02, the new RS03 codec will be fully multi-threadable.
-It can therefore take full advantage of multicore processor systems and is expected
-to become the default codec soon after its introduction in dvdisaster 0.80
-(see \url{http://dvdisaster.org} for an overview of the dvdisaster project). 
+This paper describes the data formats of the dvdisaster Reed-Solomon codecs
+which are currently called RS01, RS02 and RS03.
+The codecs create Reed-Solomon parity data to protect data stored on optical media.
+Depending on the codec, parity data can either be stored in a separate file 
+or be integrated with the .iso image on the same medium. 
+See \url{http://dvdisaster.org}  for an overview of the dvdisaster project. 
 \end{abstract}
 
 \bigskip
 
 {\bf Target audience.} This paper is primarily intended as a working base for the
 dvdisaster developers and, when the final version has been crafted, as an implementation
-guide for third party developers who wish to create and process dvdisaster RS03 data.
+guide for third party developers who wish to create and process dvdisaster error correction data.
 It is {\bf neither intended nor suitable} as end-user documentation; for usage information
 please refer to the online documentation at \url{http://dvdisaster.org}.
 
@@ -60,7 +76,7 @@ of programming in C is also assumed.
 \vfill
 \begin{center}
 {\em 
-Copyright 2008-2010 Carsten Gnörlich.
+Copyright 2008-2012 Carsten Gnörlich.
 Verbatim copying and distribution of this entire article is permitted in any medium, 
 provided this notice is preserved.}
 \end{center}
@@ -71,12 +87,18 @@ provided this notice is preserved.}
 
 \input{changelog}
 
-% History
+% Table of Contents
 
+\tableofcontents
+\newpage
 
 % Reed-Solomon encoding details
 
-\input{rs03-layout}
+\input{rs03}
+
+\input{rs02}
+
+\input{rs01}
 
 % Header formats
 
@@ -87,5 +109,4 @@ provided this notice is preserved.}
 \input{crc-block}
 
 \input{rs-params}
-
 \end{document}

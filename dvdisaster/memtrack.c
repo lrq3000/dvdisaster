@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -22,7 +22,7 @@
 
 #define _GNU_SOURCE
 
-#if !defined(SYS_FREEBSD) && !defined(SYS_DARWIN)   /* FreeBSD declares malloc() in stdlib.h */
+#if !defined(SYS_FREEBSD)   /* FreeBSD declares malloc() in stdlib.h */
  #include <malloc.h>
 #endif
 #include <stdio.h>
@@ -31,7 +31,6 @@
 
 #include <glib.h>
 #include <glib/gprintf.h>
-#include <glib/gstrfuncs.h>
 
 /*
  * We're not pulling in dvdisaster.h on purpose...
@@ -157,6 +156,16 @@ static void print_ptr(memchunk *mc, int size)
       strbuf[j] = ptr[j];
    } 
 
+#ifdef HAVE_64BIT
+   if(j) 
+   {  strbuf[j]=0;
+      g_printf("Address 0x%llx (\"%s\"), %d bytes, from %s, line %d\n",
+	       (unsigned long long)mc->ptr,strbuf,mc->size,mc->file,mc->line);
+   }
+   else 
+     g_printf("Address 0x%llx (binary data), %d bytes, from %s, line %d\n",
+	      (unsigned long long)mc->ptr,mc->size,mc->file,mc->line);
+#else /* hopefully 32BIT */
    if(j) 
    {  strbuf[j]=0;
       g_printf("Address 0x%lx (\"%s\"), %d bytes, from %s, line %d\n",
@@ -165,6 +174,7 @@ static void print_ptr(memchunk *mc, int size)
    else 
      g_printf("Address 0x%lx (binary data), %d bytes, from %s, line %d\n",
 	      (unsigned long)mc->ptr,mc->size,mc->file,mc->line);
+#endif
 }
 
 static void print_ptrs(char *msg)

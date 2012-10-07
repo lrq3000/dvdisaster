@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -38,6 +38,23 @@ int ProbeCacheLineSize()
 }
 #endif
 
+#ifdef SYS_FREEBSD
+#include <sys/param.h>
+
+int ProbeCacheLineSize()
+{  int cl_size = CACHE_LINE_SIZE;
+
+  /* Doing this at compile time may backfire,
+     but let's just hope for the best. */
+
+   if(cl_size < 16)
+     cl_size = 64;
+
+printf("Cache line size: %d\n", cl_size);
+   return cl_size;
+}
+#endif
+
 #ifdef SYS_NETBSD
 #include <param.h>
 
@@ -54,29 +71,6 @@ printf("Cache line size: %d\n", cl_size);
    return cl_size;
 }
 #endif
-
-
-
-#ifdef SYS_DARWIN
-
-#include <sys/sysctl.h>
-
-int ProbeCacheLineSize()
-{  int mib[2], cl_size;
-   size_t len;
-
-   mib[0] = CTL_HW;
-   mib[1] = HW_CACHELINE;
-   len = sizeof(cl_size);
-
-   if (sysctl(mib, 2, &cl_size, &len, NULL, 0) || (cl_size < 16))
-     cl_size = 64;
-
-printf("Cache line size: %d\n", cl_size);
-   return cl_size;
-}
-#endif
-
 
 #ifdef SYS_MINGW
 int ProbeCacheLineSize()

@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -293,13 +293,13 @@ void CloseImage(Image *image)
 
      case IMAGE_MEDIUM:
        CloseDevice(image->dh);
-       if(image->isoInfo)
-	 FreeIsoInfo(image->isoInfo);
-       if(image->eccHeader)
-	 g_free(image->eccHeader);
        break;
   }
 
+  if(image->eccHeader)
+     g_free(image->eccHeader);
+  if(image->isoInfo)
+     FreeIsoInfo(image->isoInfo);
   if(image->eccFile)
     LargeClose(image->eccFile);
   if(image->eccFileHeader)

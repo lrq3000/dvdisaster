@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -379,7 +379,7 @@ static void random_error3(Image *image, char *arg)
 
 void RandomError(char *arg)
 {  Image *image;
-   Method *method;
+   Method *method = NULL;
    char buf[5];
 
    image = OpenImageFromFile(Closure->imageName, O_RDWR, IMG_PERMS);
@@ -558,7 +558,7 @@ void RandomImage(char *image_name, char *n_sectors, int mark)
    IsoHeader *ih;
    gint64 sectors,s = 0;
    int percent, last_percent = 0;
-   guint32 invert;
+   guint32 size,invert;
 
    sectors = atoi(n_sectors);
    if(sectors < 64) sectors = 64;
@@ -593,16 +593,10 @@ void RandomImage(char *image_name, char *n_sectors, int mark)
 	Otherwise some writing software will not recognize the image. */
 
    ih = InitIsoHeader();
-   for(s=25; s<sectors; s+=524288)
-   {  int size = 524288;
-      char name[40];
-
-      if(s+size >= sectors) 
-        size = sectors-s;
-      
-      sprintf(name, "random%02d.data", (int)(s/524288)+1);
-      AddFile(ih, name, 2048*size);
-   }
+   size = sectors-s;
+   if(size>=2048*1024)
+      size=2048*1024-1;
+   AddFile(ih, "random.data", 2048*size);
    WriteIsoHeader(ih, image);
    FreeIsoHeader(ih);
 
@@ -1051,7 +1045,7 @@ Bitmap* SimulateDefects(gint64 size)
 void CopySector(char *arg)
 {  LargeFile *from, *to;
    char *from_path, *to_path;
-   gint64 from_sector, to_sector, sectors;
+   guint64 from_sector, to_sector, sectors;
    unsigned char buf[2048];
    char *cpos = NULL;
 
@@ -1127,9 +1121,9 @@ void CopySector(char *arg)
 void MergeImages(char *arg, int mode)
 {  LargeFile *left, *right;
    char *left_path, *right_path;
-   gint64 left_sectors, right_sectors,min_sectors,s;
+   guint64 left_sectors, right_sectors,min_sectors,s;
    int percent,last_percent = 0;
-   gint64 left_missing, right_missing, mismatch;
+   guint64 left_missing, right_missing, mismatch;
    char *cpos = NULL;
 
    /*** Evaluate arguments */
@@ -1185,35 +1179,7 @@ void MergeImages(char *arg, int mode)
 	 {  if(!mode) PrintLog("< Sector %lld missing\n", s);
 	    else
 	    {  PrintLog("< Sector %lld missing; copied from %s.\n", s, right_path);
-#if 0   /* Remove this */
-	       int dbl = FALSE;
-	       {  LargeFile *file;
-		  gint64 si;
-		  unsigned char buf[2048];
-
-		  file = LargeOpen(right_path, O_RDONLY, IMG_PERMS);
-		  for(si=0; si<right_sectors; si++)
-		  {  LargeRead(file, buf, 2048);
-		     if(s!=si && !memcmp(right_buf, buf, 2048))
-		     {  PrintLog("... double sector in %s at %lld\n", right_path, si);
-			dbl = TRUE;
-		     }
-		  }
-		  LargeClose(file);
-
-		  file = LargeOpen(left_path, O_RDONLY, IMG_PERMS);
-		  for(si=0; si<left_sectors; si++)
-		  {  LargeRead(file, buf, 2048);
-		     if(s!=si && !memcmp(right_buf, buf, 2048))
-		     {  PrintLog("... double sector in %s at %lld\n", left_path, si);
-			dbl = TRUE;
-		     }
-		  }
-		  LargeClose(file);
-	       }
-	       if(dbl) { PrintLog("NOT copying sector\n"); continue; }
-#endif
-	       if(!LargeSeek(left, (gint64)(2048*s)))
+	       if(!LargeSeek(left, (2048*s)))
 		  Stop(_("Failed seeking to sector %lld in image: %s"),
 		       s, strerror(errno));
 

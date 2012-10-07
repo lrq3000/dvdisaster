@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: German homepage translation
-# Copyright (C) 2004-2011 Carsten Gnörlich
+# Copyright (C) 2004-2012 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -20,6 +20,10 @@ $news_counter = 0;
 # Do not insert plain HTML!
 
 news_headline("Neues über dvdisaster");
+
+news_item("07.04.2012", "dvdisaster 0.72.4 veröffentlicht", "
+Anpassung an aktuelle Versionen von GNU/Linux, FreeBSD und NetBSD.
+", 21, "2012-04-07T01:00:00Z", "2012-04-07T01:00:00Z");
 
 news_item("05.10.2011", "dvdisaster 0.72.3 veröffentlicht", "
 Die \"Vergleichen\"-Funktion hing bei der Verarbeitung von 

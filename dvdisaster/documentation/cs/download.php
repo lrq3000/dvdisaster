@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: English homepage translation
-# Copyright (C) 2004-2011 Carsten Gnörlich
+# Copyright (C) 2004-2012 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -40,16 +40,28 @@ if(!strcmp($have_experimental, "yes"))
 { ?><b>Alpha (nestabilní) verze</b> - nová a experimentální pro zkušené uživatele!<p>Uvítáme uživatele testující budoucí verze dvdisaster, ale testující by si měli uvědomit, že mohou obsahovat chyby a mít problémy s kompatibilitou. Aktuální nestabilní verze je <a href="download40.php"><?php echo $cooked_version?></a>.<p><?php
 }
 ?> <b>Stabilní verze</b> - doporučeno pro nové a nezkušené uživatele.<p><a name="download"></a><table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.72</b></td><td align="right">2011-10-05</td></tr>
+<tr><td><b>dvdisaster-0.72</b></td><td align="right">2012-07-04</td></tr>
 <tr><td colspan="2" class="hsep"></td></tr>
 <tr><td colspan="2"><table>
+    <tr><td align="right">  Zdrojový kód (všechny operační systémy): </td>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.4.tar.bz2">dvdisaster-0.72.4.tar.bz2</a></td></tr>
+    <tr><td align="right">Digitální podpis </td>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.4.tar.bz2.gpg">dvdisaster-0.72.4.tar.bz2.gpg</a></td></tr>
+
+<?php
+if($mode == "www")
+    echo "<tr><td align=\"right\">Kontrolní součet MD5:&nbsp;</td><td>ad5e1d3758c536472c0ec36e3fc521fe</td></tr>";
+?>
+    <tr><td><pre> </pre></td><td></td></tr>
+
+
     <tr><td align="right">  Zdrojový kód (všechny operační systémy): </td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.3.tar.bz2">dvdisaster-0.72.3.tar.bz2</a></td></tr>
     <tr><td align="right">Digitální podpis </td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.3.tar.bz2.gpg">dvdisaster-0.72.3.tar.bz2.gpg</a></td></tr>
 
 <?php
-if($mode == "www");
+if($mode == "www")
     echo "<tr><td align=\"right\">Kontrolní součet MD5:&nbsp;</td><td>4eb09c1aa3cdbc1dafdb075148fb471d</td></tr>";
 ?>
     <tr><td colspan="2" class="esep"></td></tr>
@@ -60,7 +72,7 @@ if($mode == "www");
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.3.app.zip.gpg">dvdisaster-0.72.3.app.zip.gpg</a></td></tr>
 
 <?php
-if($mode == "www");
+if($mode == "www")
     echo "<tr><td align=\"right\">Kontrolní součet MD5:&nbsp;</td><td>38389bbbeb0d259a3f0a8df89b363f72</td></tr>";
 ?>
     <tr><td colspan="2" class="esep"></td></tr>
@@ -71,7 +83,7 @@ if($mode == "www");
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.3-setup.exe.gpg">dvdisaster-0.72.3-setup.exe.gpg</a></td></tr>
 
 <?php
-if($mode == "www");
+if($mode == "www")
     echo "<tr><td align=\"right\">Kontrolní součet MD5:&nbsp;</td><td>b6861ba1e8de6d91a2da5342a14870e0</td></tr>";
 ?>
     <tr><td colspan="2"></td></tr>
@@ -179,6 +191,9 @@ if($mode == "www");
 <li>Ruský překlad od Igor Gorbounov</li>
 <li>... a spousta malých změn a oprav.</li>
 </ul><b>Opravy</b> (malé změny po verzi 0.72; výše uvedené soubory byly aktualizovány):<p>
+<b>0.72 pl4</b> Updated for new versions and programming libraries of
+GNU/Linux, FreeBSD and NetBSD. (07-Apr-2012)<p>
+
 <b>0.72 pl3</b> Opraven problém s funkcí &quot;Ověřit&quot; při práci se soubory
 pro opravu chyb RS01 většími než 2GB. Poděkování za nahlášení chyby a zaslání
 opravy patří Volodymyru Bychkoviakovi. (2011-10-05)<p>

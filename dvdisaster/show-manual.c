@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -22,7 +22,7 @@
 
 #include "dvdisaster.h"
 
-#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_DARWIN) || defined(SYS_NETBSD)
+#if defined(SYS_LINUX) || defined(SYS_FREEBSD)  || defined(SYS_NETBSD)
 #include <sys/wait.h>
 #endif
 
@@ -35,7 +35,7 @@
  *** Ask user to specify his browser
  ***/
 
-#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_DARWIN) || defined(SYS_NETBSD)
+#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_NETBSD)
 
 #define SEARCH_BUTTON 1
 
@@ -174,7 +174,7 @@ static void msg_destroy_cb(GtkWidget *widget, gpointer data)
    bi->msg = NULL; 
 }
 
-#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_DARWIN) || defined(SYS_NETBSD)
+#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_NETBSD)
 
 /* 
  * The following list of browsers and html wrappers
@@ -274,7 +274,7 @@ static gboolean browser_timeout_func(gpointer data)
  * Invoke the browser
  */
 
-#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_DARWIN) || defined(SYS_NETBSD)
+#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_NETBSD)
 static void try_browser(browser_info *bi)
 {  pid_t pid;
 
@@ -315,7 +315,7 @@ static void try_browser(browser_info *bi)
 
 void ShowHTML(char *target)
 {  browser_info *bi = g_malloc0(sizeof(browser_info));
-   gint64 ignore;
+   guint64 ignore;
    const char *lang;
    char *path = NULL;
    int http_url;
@@ -376,8 +376,8 @@ void ShowHTML(char *target)
    if(!http_url && !LargeStat(bi->url, &ignore))
    {  
       CreateMessage(_("Documentation file\n%s\nnot found.\n"), GTK_MESSAGE_ERROR, bi->url);
-      g_free(bi);
       g_free(bi->url);
+      g_free(bi);
       return;
    }
 
@@ -394,7 +394,7 @@ void ShowHTML(char *target)
    g_timeout_add(1000, browser_timeout_func, (gpointer)bi);
 #endif
 
-#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_DARWIN) || defined(SYS_NETBSD)
+#if defined(SYS_LINUX) || defined(SYS_FREEBSD) || defined(SYS_NETBSD)
    /* Try the first browser */
 
    browser_index = 0;

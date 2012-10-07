@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: German homepage translation
-# Copyright (C) 2004-2011 Carsten Gnörlich
+# Copyright (C) 2004-2012 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -23,61 +23,43 @@ begin_page();
 </ul>
 
 <h3 class="top">Unterstützte Betriebssysteme</h3>
-
 Die folgende Tabelle enthält Informationen zu den unterstützten
 Betriebssystemen. Die angegebenen Versionen wurde zum Entwickeln
 und Testen der momentanen dvdisaster-Version verwendet. 
 Es ist wahrscheinlich, daß etwas ältere oder neuere Betriebssystem-Versionen
 ebenfalls verwendet werden können.<p>
 
-Das dvdisaster-Projekt empfiehlt GNU/Linux.<p>
-
 <table border="1">
 <tr>
 <td>Betriebssystem</td>
 <td>Version</td>
-<td>32bit-Version</td>
-<td>64bit-Version</td>
 </tr>
 <tr>
 <td>GNU/Linux</td>
-<td>Debian Squeeze (6.0.2)<br>Kernel 2.6.32</td>
-<td align="center">ja</td>
-<td align="center">ja</td>
+<td>Debian Squeeze (6.0.4) <br> Kernel 2.6.32</td>
 </tr>
 <tr>
 <td>FreeBSD<sup>1)</sup></td>
-<td>8.0</td>
-<td align="center">ja</td>
-<td align="center">ja</td>
+<td>9.0</td>
 </tr>
 <tr>
 <td>NetBSD</td>
-<td>5.02</td>
-<td align="center">ja</td>
-<td align="center">ja</td>
-</tr>
-<tr>
-<td>Mac OS X</td>
-<td>10.6 (Snow Leopard)</td>
-<td align="center">ja</td>
-<td align="center">nein<sup>2)</sup></td>
-</tr>
-<tr>
-<td>Windows<sup>4)</sup></td>
-<td>Windows 2000 SP4<sup>3)</sup></td>
-<td align="center">ja</td>
-<td align="center">nein<sup>2)</sup></td>
+<td>5.1.2</td>
 </tr>
 </table><p>
 
 <sup>1)</sup>FreeBSD: für ATAPI-Laufwerke muß das Kernelmodul <i>atapicam</i> geladen sein -- siehe das INSTALL-Dokument<br>
-<sup>2)</sup>64bit-Unterstützung nicht geplant.<br>
-<sup>3)</sup>Nutzer haben positive Rückmeldungen über den Einsatz mit
-späteren Versionen bis einschließlich Windows 7 gegeben.<br>
-<sup>4)</sup>Die Unterstützung von Mehrkernprozessoren hängt von der jeweiligen
-Windows-"Edition" ab. Bei einigen ergeben zusätzliche Prozessorkerne mit
-dvdisaster keine Verbesserung der Gechwindigkeit.
+
+<h3 class="top">Nicht unterstützte Betriebssysteme</h3>
+
+<ul>
+<li> Die Unterstützung von Mac OS X wurde eingestellt und ist auch
+zukünftig nicht mehr geplant.</li>
+<li> Windows wird nur noch im Versionszweig 0.72.x unterstützt.
+Eine Unterstützung in 0.79.x und zukünftigen Versionen ist nicht mehr geplant.</li>
+</ul>
+
+Siehe auch den <a href="qa10.php#unsupported">entsprechenden Eintrag in den Fragen und Antworten</a>.
 
 <!-- do not change below -->
 

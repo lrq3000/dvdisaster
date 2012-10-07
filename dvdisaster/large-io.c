@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -45,7 +45,7 @@
 
 /* The original windows ftruncate has off_size (32bit) */
 
-int large_ftruncate(int fd, gint64 size)
+int large_ftruncate(int fd, guint64 size)
 {  gint32 handle;
 
    if((handle=_get_osfhandle(fd)) == -1)
@@ -84,7 +84,7 @@ static gchar* os_path(char *path_in)
  * Large stat replacement (queries only file size)
  */
 
-int LargeStat(char *path, gint64 *length_return)
+int LargeStat(char *path, guint64 *length_return)
 {  struct stat mystat;
    gchar *cp_path = os_path(path);
 
@@ -142,7 +142,9 @@ LargeFile* LargeOpen(char *name, int flags, mode_t mode)
 #endif
 
    cp_path = os_path(name);
-   if(!cp_path) return FALSE;
+   if(!cp_path) 
+   {  g_free(lf); return FALSE;
+   }
 
    /* Do not try to open directories etc. */
 
@@ -169,7 +171,7 @@ LargeFile* LargeOpen(char *name, int flags, mode_t mode)
  * Note: Seeking beyond the end of a split file is undefined.
  */
 
-int LargeSeek(LargeFile *lf, gint64 pos)
+int LargeSeek(LargeFile *lf, off_t pos)
 {  
    lf->offset = pos;
    if(lseek(lf->fileHandle, pos, SEEK_SET) != pos)
@@ -295,7 +297,7 @@ int LargeClose(LargeFile *lf)
  * Large file truncation
  */
 
-int LargeTruncate(LargeFile *lf, gint64 length)
+int LargeTruncate(LargeFile *lf, off_t length)
 {  int result;
 
    result = (large_ftruncate(lf->fileHandle, length) == 0);

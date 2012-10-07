@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -55,7 +55,7 @@ static void action_cb(GtkWidget *widget, gpointer data)
       if(action != ACTION_CREATE_CONT)
       {  g_mutex_lock(Closure->logLock);
 	 g_string_truncate(Closure->logString, 0);
-         g_string_printf(Closure->logString, _("dvdisaster-%s log\n"), Closure->cookedVersion);
+         g_string_printf(Closure->logString, _("log: %s\n"), Closure->versionString);
 	 g_mutex_unlock(Closure->logLock);
 	 Closure->logFileStamped = FALSE;
       }
@@ -309,7 +309,7 @@ static GtkWidget* create_action_bar(GtkNotebook *notebook)
 
    /*** Stop */
 
-   wid = create_button(_("button|Stop"), "gtk-stop");
+   wid = create_button(_("button|Stop"), "dvdisaster-gtk-stop");
    g_signal_connect(G_OBJECT(wid), "clicked", G_CALLBACK(action_cb), (gpointer)ACTION_STOP);
    gtk_box_pack_end(GTK_BOX(vbox), wid, FALSE, FALSE, 0);
    AttachTooltip(wid, _("tooltip|Abort action"), _("Aborts an ongoing action."));
@@ -531,7 +531,7 @@ void CreateMainWindow(int *argc, char ***argv)
     box = gtk_hbox_new(FALSE, 0);
     gtk_container_add(GTK_CONTAINER(button), box);
 
-    icon = gtk_image_new_from_stock(GTK_STOCK_INDEX, GTK_ICON_SIZE_SMALL_TOOLBAR);
+    icon = gtk_image_new_from_stock("dvdisaster-gtk-index", GTK_ICON_SIZE_SMALL_TOOLBAR);
 
     gtk_box_pack_start(GTK_BOX(box), icon, FALSE, FALSE, 2);
 

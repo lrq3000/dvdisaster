@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: English homepage translation
-# Copyright (C) 2004-2011 Carsten Gnörlich
+# Copyright (C) 2004-2012 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -19,6 +19,7 @@ begin_page();
 <a href="#nls">2.1 Which translations of the program are available?</a><p>
 <a href="#media">2.2 Which media types are supported?</a><p>
 <a href="#filesystem">2.3 Which file systems are supported?</a><p>
+<!--- <a href="#unsupported">2.4 Why are Mac OS X and Windows no longer supported?</a><p> --->
 
 <hr><p>
 
@@ -118,6 +119,11 @@ Since dvdisaster neither knows nor uses the file system structure,
 it can not repair logical errors at the file system level.
 It can not recover lost or deleted files.
 <div class="talignr"><a href="#top">&uarr;</a></div><p>
+
+<!--- <b><a name="unsupported">2.4 Why are Mac OS X and Windows no longer supported?</a></b><p> --->
+
+<div class="talignr"><a href="#top">&uarr;</a></div><p>
+
 
 <!-- do not change below -->
 

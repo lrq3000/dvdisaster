@@ -1,9 +1,11 @@
-.PHONY : all rs03 clean
+.PHONY : all codecs clean
 
-all: rs03
+all: codecs
 
 clean:
-	@rm -f *~ *.aux *.log *.bak *.dvi *.ps *.pdf
+	@rm -f *~ *.aux *.log *.bak *.out *.toc *.dvi *.ps *.pdf
 
-rs03:
-	latex rs03
+codecs:
+	latex codecs
+	dvips codecs.dvi
+	ps2pdf codecs.ps

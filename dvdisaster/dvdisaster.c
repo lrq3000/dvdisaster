@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -102,7 +102,7 @@ int main(int argc, char *argv[])
    char src_locale_path[strlen(SRCDIR)+10];
   #endif
  #endif /* WITH_EMBEDDED_SRC_PATH_YES */
-#if defined(SYS_MINGW) || defined(SYS_DARWIN)
+#if defined(SYS_MINGW)
    char *bin_locale_path = NULL;
  #endif
 #endif
@@ -201,7 +201,7 @@ int main(int argc, char *argv[])
     }
 #endif
 
-#if defined(SYS_MINGW) || defined(SYS_DARWIN)
+#if defined(SYS_MINGW)
     /* Try the directory where our executable comes from.
        This is only possible under Windows and Mac OS, 
        and should cover all cases. */
@@ -412,8 +412,8 @@ int main(int argc, char *argv[])
 	   Closure->cacheMB = atoi(optarg);
 	   if(Closure->cacheMB <   8) 
 	     Stop(_("--cache-size must at least be 8MB; 16MB or higher is recommended.")); 
-	   if(Closure->cacheMB > 8192) 
-	     Stop(_("--cache-size maximum is 8192MB.")); 
+	   if(Closure->cacheMB > MAX_OLD_CACHE_SIZE) 
+	      Stop(_("--cache-size maximum is %dMB."), MAX_OLD_CACHE_SIZE); 
 	   break;
          case MODIFIER_CDUMP:
 	   Closure->debugCDump = TRUE;
@@ -483,8 +483,9 @@ int main(int argc, char *argv[])
          case MODIFIER_PREFETCH_SECTORS:
  	    Closure->prefetchSectors = atoi(optarg);
 	    if(   Closure->prefetchSectors < 32
-	       || Closure->prefetchSectors > 8096)
-	      Stop(_("--prefetch-sectors must be in range 32...8096"));
+	       || Closure->prefetchSectors > MAX_PREFETCH_CACHE_SIZE)
+	      Stop(_("--prefetch-sectors must be in range 32...%s"),
+		    MAX_PREFETCH_CACHE_SIZE);
 	    break;
 
          case MODIFIER_RANDOM_SEED:
@@ -543,11 +544,10 @@ int main(int argc, char *argv[])
 	   Closure->driveSpeed = -atoi(optarg);
 	   break;
          case MODIFIER_VERSION:
-	   PrintCLI(_("\ndvdisaster version %s build %d\n\n"), 
-		    Closure->cookedVersion, buildCount);
-	   FreeClosure();
-	   exit(EXIT_SUCCESS); 
-	   break;
+	    PrintCLI("\n%s\n\n", Closure->versionString);
+	    FreeClosure();
+	    exit(EXIT_SUCCESS); 
+	    break;
          case MODE_BYTESET:
 	   mode = MODE_BYTESET;
 	   debug_arg = g_strdup(optarg);

@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: Russian homepage translation
-# Copyright (C) 2007-2011 Igor Gorbounov
+# Copyright (C) 2007-2012 Igor Gorbounov
 #
 # UTF-8 trigger: äöüß 
 #
@@ -33,8 +33,6 @@ is for.
 
 <h3>Planned changes in the new version</h3>
 
-All platforms:
-
 <ul>
 <li> Implement some small additions which have been put on hold
 during the 0.72 development cycle. <i>[not yet started]</i></li>
@@ -45,22 +43,6 @@ processors. <i>[in progress]</i></li>
 <li> Document RS03 usage. <i>[not yet started]</i></li>
 </ul>
 
-Windows:
-
-<ul>
-<li> Update the GTK+ toolkit and development system. <i>[completed]</i></li>
-<li> Raise system requirements to Windows 2000 or newer (older
-Windows releases are no longer supported by the development tools).
-This makes support for ASPI drivers and splitting files into 2G
-segments obsolete. <i>[completed]</i></li>
-</ul>
-
-MacOS:
-
-<ul>
-<li> Update the GTK+ toolkit and provide more workarounds
-for the graphical user interface. <i>[in progress]</i></li>
-</ul>
 <hr>
 
 <h3>Загрузки</h3>
@@ -74,7 +56,7 @@ for the graphical user interface. <i>[in progress]</i></li>
 <tr><td colspan="2">
   <table>
 <?php
-    download_version("0.79.3", 0, "764977ab3d492a1ea9e346bfa9975e90", "1678bea3f81164ee4982398ce2227664",  "bff4788342d02aaa5d82ce7b78de5b04");
+    download_version("0.79.3", "764977ab3d492a1ea9e346bfa9975e90");
 
    if($show_all == 0) 
    {  echo "    <tr><td colspan=\"2\"><a href=\"download40.php?showall=1#download\">Show older releases in the 0.79 version branch</a></td></tr>\n";
@@ -83,9 +65,9 @@ for the graphical user interface. <i>[in progress]</i></li>
    {  echo "    <tr><td colspan=\"2\"><a href=\"download40.php?showall=0#download\">Hide older releases in the 0.79 version branch</a></td></tr>\n";
       echo "    <tr><td colspan=\"2\"> </td></tr>\n";
 
-      download_version("0.79.2", 1, "378ed135c2faf0eaf643125d1f7726c6", "f673e41b5ddc31a6ecb48a5f053de885", "0b4c0b46e827c7f796416473511ab036");
+      download_version("0.79.2", "378ed135c2faf0eaf643125d1f7726c6");
 
-      download_version("0.79.1", 1, "ba6d0178dc03119080e07ef0a2967c38", "none", "b4c62833a2447097950b563e4a7b2065");
+      download_version("0.79.1", "ba6d0178dc03119080e07ef0a2967c38");
    }
 ?>
   </table>
@@ -110,10 +92,6 @@ compatibility.</li>
 
 <b>0.79.2</b> (28-Feb-2010)<br>
 <ul>
-<li>A binary package for Mac OS X is available now. The Mac OS X
-development environment has been updated; this removed some glitches
-in the graphical user interface.
-</li>
 <li>
 Development of the RS03 codec makes progress, but is far from being
 finished yet.
@@ -124,8 +102,7 @@ finished yet.
 <ul>
 <li>The SCSI layer contains a workaround for buggy chipsets found in recent
 drives. Starting a read or scan operation would case a system freeze with
-such drives. The problem seems to be especially visible under Windows XP, 
-but other OS might expose similar failures. 
+such drives. 
 Please test if these drives are working
 now, and also report if some drives stopped working which were okay previously.</li> 
 <li>A reference implementation of the RS03 codec is
@@ -134,9 +111,6 @@ compare it against its <a href="download50.php">specification</a>.
 Take care and do not use it for productive work. The final version will
 be released with version 0.80.</li>
 </ul>
-<b>Windows:</b> All components of the development environment and the
-supplied libraries have been updated. Please test whether the graphical
-user interface and localization still work as expected.
 </td></tr></table><p>
 
 <!-- do not change below -->

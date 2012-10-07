@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -31,6 +31,19 @@
   #define verbose(format,args...)
 #endif
 
+//#undef HAVE_MMAP
+#ifdef HAVE_MMAP
+  #include <sys/mman.h>
+
+#ifdef SYS_LINUX
+  #define MMAP_FLAGS (MAP_SHARED | MAP_POPULATE | MAP_NORESERVE) 
+#endif
+
+#ifdef SYS_FREEBSD
+  #define MMAP_FLAGS (MAP_SHARED | MAP_PREFAULT_READ) 
+#endif
+#endif
+
 /***
  *** Local data package used during encoding
  ***/
@@ -44,10 +57,15 @@ typedef struct
    GaloisTables *gt;           /* common lookup tables for RS encoders */
    ReedSolomonTables *rt;
 
+   guint32 pageSize;           /* needed for memory mapping */
    unsigned char **ioData;     /* shared buffers between IO and RS threads */
    guint32 *ioCrc;             /* only an alias pointer into data! */
+   unsigned char **ioMmapBase; /* mmap() works on multiples of page sizes */
+   guint64 *ioMmapSize;        /* so the mmap area might differ from sector range */
    unsigned char **encoderData;/* shared buffers between IO and RS threads */
    guint32 *encoderCrc;        /* only an alias pointer into data! */
+   unsigned char **encoderMmapBase;
+   guint64 *encoderMmapSize;
    unsigned char *paritybase;
    unsigned char *parity;
    unsigned char **slice;
@@ -133,12 +151,36 @@ static void ecc_cleanup(gpointer data)
    if(ec->rt) FreeReedSolomonTables(ec->rt);
    if(ec->gt) FreeGaloisTables(ec->gt);
    if(ec->writeHandle) LargeClose(ec->writeHandle);
-   if(ec->lay) g_free(ec->lay);
    if(ec->paritybase) g_free(ec->paritybase);
    if(ec->msg) g_free(ec->msg);
    if(ec->avgTimer) g_timer_destroy(ec->avgTimer);
    if(ec->contTimer) g_timer_destroy(ec->contTimer);
    if(ec->firstCrc) g_free(ec->firstCrc);
+
+#ifdef HAVE_MMAP
+   for(i=0; i<ec->lay->ndata-1; i++)
+   {  if(ec->ioMmapBase && ec->ioMmapBase[i])
+      {  if(munmap(ec->ioMmapBase[i], ec->ioMmapSize[i]) == -1)
+	    Stop("munmap() failed: %s\n", strerror(errno));
+	 ec->ioData[i] = NULL;
+	 ec->ioMmapBase[i] = NULL;
+      }
+
+      if(ec->encoderMmapBase && ec->encoderMmapBase[i])
+      {  if(munmap(ec->encoderMmapBase[i], ec->encoderMmapSize[i]) == -1)
+	    Stop("munmap() failed: %s\n", strerror(errno));
+	 ec->encoderData[i] = NULL;
+	 ec->encoderMmapBase[i] = NULL;
+      }
+   }
+
+   g_free(ec->ioMmapBase);
+   g_free(ec->ioMmapSize);
+   g_free(ec->encoderMmapBase);
+   g_free(ec->encoderMmapSize);
+#endif
+
+   if(ec->lay) g_free(ec->lay);
 
    for(i=0; i<256; i++)
    {  if(ec->slice && ec->slice[i])
@@ -196,7 +238,7 @@ static void abort_encoding(ecc_closure *ec, int truncate)
  */
 
 static void remove_old_ecc(ecc_closure *ec)
-{  gint64 ignore;
+{  guint64 ignore;
 
    /* Handle error correction file case first */
 
@@ -446,14 +488,16 @@ static void prepare_crc_block(ecc_closure *ec, CrcBlock *cb)
 static void flip_buffers(ecc_closure *ec)
 {  unsigned char **dtmp;
    guint32 *ctmp;
+   guint64 *etmp;
 
    ctmp = ec->ioCrc;  ec->ioCrc  = ec->encoderCrc;  ec->encoderCrc  = ctmp;
    dtmp = ec->ioData; ec->ioData = ec->encoderData; ec->encoderData = dtmp;
+   dtmp = ec->ioMmapBase; ec->ioMmapBase = ec->encoderMmapBase; ec->encoderMmapBase = dtmp;
+   etmp = ec->ioMmapSize; ec->ioMmapSize = ec->encoderMmapSize; ec->encoderMmapSize = etmp;
 }
 
 static void read_next_chunk(ecc_closure *ec, guint64 chunk)
 {  RS03Layout *lay = ec->lay;
-   gint64 s;
    int layer;
 
    /* The last chunk may contain fewer sectors. */
@@ -461,7 +505,8 @@ static void read_next_chunk(ecc_closure *ec, guint64 chunk)
    ec->ioChunk = chunk;
    if(ec->ioChunk+ec->chunkSize < lay->sectorsPerLayer)
       ec->ioLayerSectors = ec->chunkSize;
-   else {ec->ioLayerSectors = lay->sectorsPerLayer-ec->ioChunk;
+   else 
+   {  ec->ioLayerSectors = lay->sectorsPerLayer-ec->ioChunk;
       verbose("NOTE: actual_layer_sectors %d\n", ec->ioLayerSectors);
    }
 
@@ -470,10 +515,13 @@ static void read_next_chunk(ecc_closure *ec, guint64 chunk)
    /* Read the next layers of the current chunk. */
 
    for(layer=0; layer<lay->ndata-1; layer++) /* exclude CRC layer */
-   {  gint64 offset = 0;
-      gint64 first_sec = layer*lay->sectorsPerLayer+ec->ioChunk;
-      gint64 error_sec;
+   {  guint64 first_sec = layer*lay->sectorsPerLayer+ec->ioChunk;
+      guint64 error_sec;
       int err;
+#ifdef HAVE_MMAP
+      int shift;
+      guint64 page_offset;
+#endif
 
       if(Closure->stopActions) /* User hit the Stop button */
       {  ec->abortImmediately = TRUE;
@@ -482,8 +530,59 @@ static void read_next_chunk(ecc_closure *ec, guint64 chunk)
       /* Read the next data sectors of this layer.
 	 Note that the last layer is made from CRC sums. */
 
+#ifdef HAVE_MMAP
+      if(ec->ioMmapBase[layer])
+      {  if(munmap(ec->ioMmapBase[layer], ec->ioMmapSize[layer]) == -1)
+	    Stop("munmap() failed: %s\n", strerror(errno));
+	 ec->ioMmapBase[layer] = NULL;
+	 ec->ioData[layer] = NULL;
+      }
+
+      /* There is a padding area between the last data sector and the
+	 CRC layer. In the augmented image case, these padding sectors
+	 are actually present in the image, but when creating ecc files
+	 these sectors do not exist. Therefore we cannot use memory mapping
+	 and need to switch to normal IO when reading beyond the image
+	 in the ecc file case (RS03ReadSectors will produce the
+	 padding sectors in memory). */
+
+      if(Closure->eccTarget == ECC_FILE
+	 && RS03SectorIndex(lay, layer, ec->ioChunk+ec->ioLayerSectors) 
+	     >= lay->dataSectors)
+      {  guint64 n_sectors = ec->ioLayerSectors;
+
+	 if(!ec->ioData[layer])
+	    ec->ioData[layer] = g_malloc(ec->chunkBytes+2048);
+
+	 if(ec->ioChunk+ec->ioLayerSectors < lay->sectorsPerLayer)
+	    n_sectors++;
+
+	 RS03ReadSectors(ec->image, lay, ec->ioData[layer], 
+			 layer, ec->ioChunk, n_sectors, RS03_READ_DATA);
+      }
+      else /* can use memory mapping */
+      {
+	 page_offset = 2048*RS03SectorIndex(lay, layer, ec->ioChunk);
+	 shift = page_offset % ec->pageSize;
+	 page_offset -= shift;
+
+	 if(ec->ioLayerSectors == ec->chunkSize)
+	      ec->ioMmapSize[layer] = 2048*ec->ioLayerSectors + 2048 + shift;
+	 else ec->ioMmapSize[layer] = 2048*ec->ioLayerSectors + shift;
+
+	 ec->ioMmapBase[layer] = mmap(NULL, ec->ioMmapSize[layer],
+				      PROT_READ, MMAP_FLAGS,
+				      ec->image->file->fileHandle, 
+				      page_offset);
+	 if(ec->ioMmapBase[layer] == MAP_FAILED)
+	    Stop(_("Failed mmap()ing layer %d: %s\n"), layer, strerror(errno));
+
+	 ec->ioData[layer] = ec->ioMmapBase[layer]+shift;
+      }
+#else  /* NO MMAP */
       RS03ReadSectors(ec->image, lay, ec->ioData[layer], 
 		      layer, ec->ioChunk, ec->ioLayerSectors, RS03_READ_DATA);
+#endif /* HAVE_MMAP */
 
       err = CheckForMissingSectors(ec->ioData[layer], first_sec, 
 				   lay->eh->mediumFP, lay->eh->fpSector, 
@@ -514,54 +613,18 @@ static void read_next_chunk(ecc_closure *ec, guint64 chunk)
 		 "Perform a \"Verify\" action for more information.\n\n"));
       }
 
-      for(s=0; s<ec->ioLayerSectors; s++)
-      {  
-	 /* Read the next sector */
-
-	 offset=s*2048;
-
-	 /* CRC32 part */
-#if 1
-	 if(ec->ioChunk || s)
-	 {  if(s) /* fixme: prove correctness */
-	       ec->ioCrc[512*(s-1)+layer] = Crc32(ec->ioData[layer]+offset, 2048);
-	 }
-	 else /* store CRC for the first ecc block in ecc header */
-	 {  ec->firstCrc[layer] = Crc32(ec->ioData[layer]+offset, 2048);
-	 }
-
-	 /* The first CRC is wrapped to the last layer:
-	    At ecc block 0, CRC sums are stored in first_crc
-	    rather than being written to ec->crc.
-	    For subsequent ecc blocks, their CRC32 sums are
-	    written to the previous ec->crc position.
-	    This leaves the last slot in ec->crc blank,
-	    which is filled in here from the cached results
-	    in first_ecc[]. */ 
-
-	 if(ec->ioChunk+s == lay->sectorsPerLayer-1)
-	 {  ec->ioCrc[512*s+layer] = ec->firstCrc[layer];
-	 }
-#endif
-      }
-
       /* One sector more to chain back the CRC sums
-         (unless we are already in the last chunk) */
+         (unless we are already in the last chunk).
+         Additional space is provided in the ec->ioData buffer. */
 
+#ifndef HAVE_MMAP
       if(ec->ioChunk+ec->ioLayerSectors < lay->sectorsPerLayer)
-      {  unsigned char buf[2048];
-
-	 RS03ReadSectors(ec->image, lay, buf, layer, ec->ioChunk+ec->ioLayerSectors, 1, RS03_READ_DATA);
-	 ec->ioCrc[(ec->ioLayerSectors-1)*512+layer] = Crc32(buf, 2048);
+      {  
+	 RS03ReadSectors(ec->image, lay, ec->ioData[layer]+ec->chunkBytes, 
+			 layer, ec->ioChunk+ec->ioLayerSectors, 1, RS03_READ_DATA);
       }
+#endif /* Don't HAVE_MMAP */
    } /* all layers from chunk finished */
-
-   /* Add and prepare the CrcBlock structure */
-
-#if 1
-   for(s=0; s<ec->ioLayerSectors; s++)
-      prepare_crc_block(ec, (CrcBlock*)&ec->ioCrc[512*s]);  
-#endif
 }
 
 static void flush_crc(ecc_closure *ec, LargeFile *file_out)
@@ -572,14 +635,14 @@ static void flush_crc(ecc_closure *ec, LargeFile *file_out)
    /* Write out the CRC layer */
       
    verbose("IO: writing CRC layer\n");
-   crc_sect = 2048*(ec->ioChunk+lay->firstCrcPos);
+   crc_sect = 2048*(ec->encoderChunk+lay->firstCrcPos);
    if(!LargeSeek(file_out, crc_sect))
    {  ec->abortImmediately = TRUE;
 
       Stop(_("Failed seeking to sector %lld in image: %s"), crc_sect, strerror(errno));
    }
-   for(i=0; i<ec->ioLayerSectors; i++)
-      if(LargeWrite(file_out, ec->ioCrc+512*i, 2048) != 2048)
+   for(i=0; i<ec->encoderLayerSectors; i++)
+      if(LargeWrite(file_out, ec->encoderCrc+512*i, 2048) != 2048)
       {  ec->abortImmediately = TRUE;
 	 Stop(_("Failed writing to sector %lld in image: %s"), crc_sect, strerror(errno));
       }
@@ -631,14 +694,26 @@ static gpointer io_thread(ecc_closure *ec)
    ec->paritybase = g_malloc(n_parity_bytes+16);      /* output buffer */
    ec->parity     = ec->paritybase + (16- ((unsigned long)ec->paritybase & 15));
 
-   /*** Create buffer for the ndata input layers */
+   /*** Create buffer for the ndata input layers 
+        Space is provided for one more sector so that
+        we can read the additional sector needed for
+        chaining the CRCs. */
 
    ec->ioData      = g_malloc0(256*sizeof(unsigned char*));
    ec->encoderData = g_malloc0(256*sizeof(unsigned char*));
+#ifdef HAVE_MMAP  /* allocate CRC layer only */
+   ec->ioMmapBase      = g_malloc0(256*sizeof(unsigned char*));
+   ec->encoderMmapBase = g_malloc0(256*sizeof(unsigned char*));
+   ec->ioMmapSize      = g_malloc0(256*sizeof(guint64));
+   ec->encoderMmapSize = g_malloc0(256*sizeof(guint64));
+   ec->ioData[ndata-1]      = g_malloc(ec->chunkBytes);
+   ec->encoderData[ndata-1] = g_malloc(ec->chunkBytes);
+#else
    for(i=0; i<ndata; i++)
-   {  ec->ioData[i] = g_malloc(ec->chunkBytes);
-      ec->encoderData[i] = g_malloc(ec->chunkBytes);
+   {  ec->ioData[i] = g_malloc(ec->chunkBytes+2048);
+      ec->encoderData[i] = g_malloc(ec->chunkBytes+2048);
    }
+#endif /* HAVE_MMAP*/
 
    ec->ioCrc      = (guint32*)ec->ioData[ndata-1]; /* CRC layer */
    ec->encoderCrc = (guint32*)ec->encoderData[ndata-1]; 
@@ -669,19 +744,21 @@ static gpointer io_thread(ecc_closure *ec)
    for(chunk=0; chunk<lay->sectorsPerLayer; chunk+=ec->chunkSize) 
    {  int cpu_bound = 0;
 
-      verbose("Starting IO processing for chunk %d\n", ec->chunk);
+      verbose("Starting IO processing for chunk %d\n", chunk);
 
       /* preload first chunk */
 
       if(needs_preload)
       {  read_next_chunk(ec, chunk);
-	 flush_crc(ec, file_out);
+	 //	 flush_crc(ec, file_out);  // FIXME
 	 needs_preload = 0;
 	 verbose("IO: first chunk loaded\n");
 	 continue;
       }
 
       /* Broadcast read to the worker threads */
+      if(parity_available)
+         flush_crc(ec, file_out);
 
       flip_buffers(ec);
 
@@ -697,7 +774,9 @@ static gpointer io_thread(ecc_closure *ec)
       /* Write out parity from last run */
 
       if(parity_available)
+      {  //flush_crc(ec, file_out);
 	 flush_parity(ec, file_out);
+      }
 
       g_mutex_lock(ec->lock);
       ec->slicesFree = TRUE;  /* we have saved the slices; go ahead */
@@ -707,7 +786,7 @@ static gpointer io_thread(ecc_closure *ec)
       /* Read the next chunk while encoders are working */
 
       read_next_chunk(ec, chunk);
-      flush_crc(ec, file_out);
+      //      flush_crc(ec, file_out);  // FIXME
 
       /* Remember the current portion for writing it out */
 
@@ -743,6 +822,7 @@ static gpointer io_thread(ecc_closure *ec)
 
    /* Broadcast read to the worker threads */
 
+   flush_crc(ec, file_out);
    flush_parity(ec, file_out);
    flip_buffers(ec);
 
@@ -771,6 +851,7 @@ static gpointer io_thread(ecc_closure *ec)
    ec->flushLayerSectors = ec->encoderLayerSectors;
    ec->flushChunk        = ec->encoderChunk;
 
+   flush_crc(ec, file_out);
    flush_parity(ec, file_out);
 
    verbose("IO: finished\n"); fflush(stdout);
@@ -852,18 +933,27 @@ static gpointer encoder_thread(ecc_closure *ec)
       {  unsigned char *data   = ec->encoderData[layer] + 2048*layer_offset;
 	 unsigned char *parity = ec->parity + 2048*nroots_aligned*layer_offset;
 
-	 /* CRC32 part:
-	    layer ndata-2 has already been prepared by the IO thread,
-	    layer ndata-1 is the CRC layer itself */
-#if 0
-	 if(layer < ndata-2) 
-	 {  if(ec->encoderChunk || layer_offset)
-	    {  if(layer_offset) /* fixme: prove correctness */
-		ec->crc[512*layer_offset+layer] = Crc32(data+2048, 2048);
+	 /* Calculate the CRC32 layer (ndata-1) */
+#if 1
+	 if(layer < ndata-1) 
+	 {  /* The first ecc block CRC needs to be cached for wrap-around */
+
+	    if(!ec->encoderChunk && !layer_offset)
+	    {  ec->firstCrc[layer] = Crc32(data, 2048);
 	    }
-	    else /* store CRC for the first ecc block in ecc header */
-	      ec->crcInHeader[layer] = Crc32(data, 2048);
+
+	    /* Chain back CRC sums from next sector into current one */
+
+	    if(ec->encoderChunk+layer_offset < ec->lay->sectorsPerLayer-1)
+	    {  ec->encoderCrc[512*layer_offset+layer] = Crc32(data+2048, 2048);
+	    }
+	    else /* wrap-around: fill in CRCs from first ecc block */
+	    {  ec->encoderCrc[512*layer_offset+layer] = ec->firstCrc[layer];
+	    }
 	 }
+
+	 if(layer == ndata-1)
+	    prepare_crc_block(ec, (CrcBlock*)&ec->encoderCrc[512*layer_offset]);
 #endif
 
 	 /* Reed-Solomon part */       
@@ -1004,13 +1094,15 @@ static void create_reed_solomon(ecc_closure *ec)
    ec->chunkBytes  = 2048*Closure->prefetchSectors;
    ec->chunkSize   = Closure->prefetchSectors;
 
+   ec->pageSize = sysconf(_SC_PAGE_SIZE);
+
    /*** Allocate stuff shared by all threads */
 
    ec->lock          = g_mutex_new();
    ec->ioCond        = g_cond_new();
    ec->sectorsToEncode = ndata*ec->lay->sectorsPerLayer;
    if(Closure->eccTarget == ECC_FILE)
-      ec->writeHandle   = LargeOpen(Closure->eccName, O_RDWR, IMG_PERMS);
+      ec->writeHandle   = LargeOpen(Closure->eccName, O_RDWR | O_CREAT, IMG_PERMS);
    else
       ec->writeHandle   = LargeOpen(Closure->imageName, O_RDWR, IMG_PERMS);
    ec->lastPercent   = -1;
@@ -1101,12 +1193,14 @@ void RS03Create(void)
    else PrintLog(_(": %lld medium sectors and %d bytes.\n"), 
 		   image->sectorSize-1, image->inLast);
 
-   if(Closure->eccTarget == ECC_FILE)   /* need to open ecc file too */
-      image->eccFile = LargeOpen(Closure->eccName, O_RDWR | O_CREAT, IMG_PERMS);
-
    /*** If the image already contains error correction information, remove it. */
 
    remove_old_ecc(ec);
+
+   /*** Need to open ecc file too */ 
+
+   if(Closure->eccTarget == ECC_FILE)
+      image->eccFile = LargeOpen(Closure->eccName, O_RDWR | O_CREAT, IMG_PERMS);
 
    /*** Calculate the RS03 layout */
 
@@ -1183,8 +1277,8 @@ void RS03Create(void)
    if(Closure->eccTarget == ECC_IMAGE)
      PrintLog(_("Image has been augmented with error correction data.\n"
 		"New image size is %lld MB (%lld sectors).\n"),
-	      (lay->dataSectors+lay->dataPadding+ecc_sectors)/512,
-	      lay->dataSectors+lay->dataPadding+ecc_sectors);
+	      (lay->totalSectors)/512,
+	      lay->totalSectors);
    else
      PrintLog(_("Error correction file \"%s\" created.\n"
 		"Make sure to keep this file on a reliable medium.\n"),
@@ -1208,8 +1302,8 @@ void RS03Create(void)
 	SetLabelText(GTK_LABEL(wl->encFootline),
 		     _("Image has been augmented with error correction data.\n"
 		       "New image size is %lld MB (%lld sectors).\n"),
-		     (lay->dataSectors + ecc_sectors)/512,
-		     lay->dataSectors+ecc_sectors);
+		     (lay->totalSectors)/512,
+		     lay->totalSectors);
       else
 	SetLabelText(GTK_LABEL(wl->encFootline), 
 		     _("The error correction file has been successfully created.\n"

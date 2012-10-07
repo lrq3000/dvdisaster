@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -157,11 +157,13 @@ int CheckForMissingSector(unsigned char *buf, guint64 sector,
 
    /* See if it is our dead sector marker */
 
-   if(strcmp((char*)buf, 
+   if(strncmp((char*)buf, 
 	     "dvdisaster dead sector marker\n"
 	     "This sector could not be read from the image.\n"
-	     "Its contents have been substituted by the dvdisaster read routine.\n")
-      || strcmp((char*)buf+2046-34, "dvdisaster dead sector end marker\n"))
+	     "Its contents have been substituted by the dvdisaster read routine.\n",
+	     143)
+      || strncmp((char*)buf+2046-34, "dvdisaster dead sector end marker\n", 34))
+
       return SECTOR_PRESENT;
 
    /* New style missing sector marker? */

@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -272,7 +272,7 @@ static void check_for_ecc_data(read_closure *rc)
 
 static void determine_mode(read_closure *rc)
 {  guint8 medium_fp[16], image_fp[16];
-   gint64 image_size;
+   guint64 image_size;
    unsigned char *buf = rc->alignedBuf[0]->buf;
    int unknown_fingerprint = FALSE;
 

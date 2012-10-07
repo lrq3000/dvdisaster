@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -221,7 +221,8 @@ static int send_spti_packet(HANDLE fd, unsigned char *cmd, int cdb_size, char *b
 			    &ss, sizeof(SCSI_PASS_THROUGH_DIRECT_WITH_BUFFER),
 			    &returned, FALSE);
 
-   memcpy(sense, ss.SenseBuf, 24);  /* Hmm. What a kludge. */
+   memcpy(sense, ss.SenseBuf, 24);  /* Hmm. What a kludge. sizeof(Sense)==64 */
+                                    /* but the first bytes should suffice. */
 
    if(!success || ss.spt.ScsiStatus) return -1;
    return 0;

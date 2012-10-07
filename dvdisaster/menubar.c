@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -252,7 +252,8 @@ GtkWidget *CreateMenuBar(GtkWidget *parent)
  */
 
 static gint tooltip_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
-{  
+{  MudflapRegister(event, sizeof(GdkEvent), "menubar:tooltip_cb");
+
    switch(event->type)
    {  case GDK_ENTER_NOTIFY: 
 	gtk_label_set_text(Closure->status, (gchar*)data);
@@ -264,6 +265,8 @@ static gint tooltip_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
       default:
         break;
    }
+
+   MudflapUnregister(event, sizeof(GdkEvent));
 
    return FALSE;   /* don't intercept the default button callbacks! */
 }
@@ -464,7 +467,7 @@ GtkWidget *CreateToolBar(GtkWidget *parent)
    gtk_widget_set_events(ebox, GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK);
    gtk_box_pack_start(GTK_BOX(box), ebox, FALSE, FALSE, 0);
    AttachTooltip(ebox, _("tooltip|Drive selection"), _("Use the nearby drop-down list to select the input drive."));
-   icon = gtk_image_new_from_stock(GTK_STOCK_CDROM, GTK_ICON_SIZE_LARGE_TOOLBAR);
+   icon = gtk_image_new_from_stock("dvdisaster-cd", GTK_ICON_SIZE_LARGE_TOOLBAR);
    gtk_container_add(GTK_CONTAINER(ebox), icon);
 
    Closure->driveCombo = combo_box = gtk_combo_box_new_text();
@@ -548,7 +551,7 @@ GtkWidget *CreateToolBar(GtkWidget *parent)
 
    /*** Preferences button */
 
-   icon = gtk_image_new_from_stock(GTK_STOCK_PREFERENCES, GTK_ICON_SIZE_LARGE_TOOLBAR);
+   icon = gtk_image_new_from_stock("dvdisaster-gtk-preferences", GTK_ICON_SIZE_LARGE_TOOLBAR);
    Closure->prefsButton = prefs = gtk_button_new();
    gtk_button_set_relief(GTK_BUTTON(prefs), GTK_RELIEF_NONE);
    gtk_container_add(GTK_CONTAINER(prefs), icon);
@@ -558,7 +561,7 @@ GtkWidget *CreateToolBar(GtkWidget *parent)
 
    /*** Help button */
 
-   icon = gtk_image_new_from_stock(GTK_STOCK_HELP, GTK_ICON_SIZE_LARGE_TOOLBAR);
+   icon = gtk_image_new_from_stock("dvdisaster-gtk-help", GTK_ICON_SIZE_LARGE_TOOLBAR);
    Closure->helpButton = help = gtk_button_new();
    gtk_button_set_relief(GTK_BUTTON(help), GTK_RELIEF_NONE);
    gtk_container_add(GTK_CONTAINER(help), icon);
@@ -568,7 +571,7 @@ GtkWidget *CreateToolBar(GtkWidget *parent)
 
    /*** Quit button */
 
-   icon = gtk_image_new_from_stock(GTK_STOCK_QUIT, GTK_ICON_SIZE_LARGE_TOOLBAR);
+   icon = gtk_image_new_from_stock("dvdisaster-gtk-quit", GTK_ICON_SIZE_LARGE_TOOLBAR);
    quit = gtk_button_new();
    gtk_button_set_relief(GTK_BUTTON(quit), GTK_RELIEF_NONE);
    gtk_container_add(GTK_CONTAINER(quit), icon);

@@ -1,6 +1,6 @@
 <?php
 #  dvdisaster homepage: Screen shot helper routines
-#  Copyright (C) 2007-2011 Carsten Gnörlich
+#  Copyright (C) 2007-2012 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #

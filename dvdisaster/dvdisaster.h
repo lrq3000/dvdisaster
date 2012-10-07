@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -38,11 +38,9 @@
 
 #define _GNU_SOURCE
 
-//#include <glib.h>
-
-#include <gtk/gtk.h>
+#include <glib.h>
 #include <glib/gprintf.h>
-#include <glib/gstrfuncs.h>
+#include <gtk/gtk.h>
 
 #include <ctype.h>
 #include <errno.h>
@@ -109,7 +107,9 @@
 
 /* Maximum number of parallel encoder/decoder threads */
 
-#define MAX_CODEC_THREADS 32             /* not including IO and GUI */
+#define MAX_CODEC_THREADS 1024           /* not including IO and GUI */
+#define MAX_OLD_CACHE_SIZE  8096         /* old cache for RS01/RS02  */
+#define MAX_PREFETCH_CACHE_SIZE (512*1024)   /* upto 0.5TB RS03  */
 
 /* SCSI driver selection on Linux */
 
@@ -129,6 +129,7 @@
 typedef struct _GlobalClosure
 {  int version;         /* Integer number representing current program version */
    char *cookedVersion; /* version string formatted for GUI use */
+   char *versionString; /* more detailed version string */
    gint8 releaseFlags;  /* flags marking release status */
    char *device;        /* currently selected device to read from */
    GPtrArray *deviceNames;  /* List of drive names */
@@ -332,9 +333,9 @@ extern int exitCode;            /* value to use on exit() */
 
 typedef struct _LargeFile
 {  int fileHandle;
-   gint64 offset;
+   guint64 offset;
    char *path;
-   gint64 size;
+   guint64 size;
 } LargeFile;
 
 /***
@@ -818,13 +819,13 @@ void CloseImage(Image*);
  ***/
 
 LargeFile *LargeOpen(char*, int, mode_t);
-int LargeSeek(LargeFile*, gint64);
+int LargeSeek(LargeFile*, off_t);
 int LargeEOF(LargeFile*);
 ssize_t LargeRead(LargeFile*, void*, size_t);
 ssize_t LargeWrite(LargeFile*, void*, size_t);
 int LargeClose(LargeFile*);
-int LargeTruncate(LargeFile*, gint64);
-int LargeStat(char*, gint64*);
+int LargeTruncate(LargeFile*, off_t);
+int LargeStat(char*, guint64*);
 int LargeUnlink(char*);
 
 int DirStat(char*);
@@ -1061,6 +1062,50 @@ void LockLabelSize(GtkLabel*, char*, ...);
 
 int ConfirmImageDeletion(char *);
 int ConfirmEccDeletion(char *);
+
+/***
+ *** mudflap-wrapper.c
+ ***/
+
+#ifdef WITH_MUDFLAP_YES
+#define __NO_STRING_INLINES
+#undef gettext
+#define gettext(msgid) gettext_ext(msgid)
+#define g_ptr_array_new() g_ptr_array_new_ext()
+
+#define g_string_sized_new(size) g_string_sized_new_ext(size)
+#define g_string_truncate(string, size) g_string_truncate_ext(string, size)
+#define g_string_free(string, free_seg) g_string_free_ext(string, free_seg)
+#define g_string_append(base, new) g_string_append_ext(base,new)
+
+extern char* gettext_ext(const char*);
+extern GPtrArray *g_ptr_array_new_ext();
+
+extern GString* g_string_sized_new_ext(gsize);
+extern GString* g_string_truncate(GString*, gsize);
+extern gchar* g_string_free_ext(GString*, gboolean);
+extern void g_string_append_ext(GString*, const char*);
+
+/*
+ * Generic pointer registration
+ *
+ * In some case, e.g. widgets, tracking the struct
+ * and all its contents is not feasible.
+ * For those case we provide a means of temporarily 
+ * registering and de-registering pointers in the
+ * respective code regions. These will simply avoid
+ * the mudflap triggers, but of course not enable
+ * us to do some real pointer validity checking. 
+ */
+
+#define MudflapRegister(ptr, size, location)  __mf_register(ptr, size, __MF_TYPE_GUESS, location) 
+#define MudflapUnregister(ptr, size)  __mf_unregister(ptr, size, __MF_TYPE_GUESS) 
+
+#else 
+#define MudflapRegister(ptr, size, location)
+#define MudflapUnregister(ptr, size)
+#endif
+
 
 /***
  *** preferences.c

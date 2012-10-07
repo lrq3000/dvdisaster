@@ -1,9 +1,13 @@
 ###
-### CVS users: 0.79.4 will compile, but is not useful for anything yet
+### CVS users: 0.79.5 will compile, but is not useful for anything yet
 ###            several functions are currently broken/misbehaving
 ###
 
-0.79.4
+0.79.4 07-10-2012 (not released)
+       ## 0.79.4 is a technical release in order to freeze
+       ## and archive some parts of the source code.
+       ## Do not use for anything prodictive. 
+       ## The next useful release will be 0.79.5.
         - changed sources for clean compile on gcc 4.4.3
 	- added #include <zlib.h> for libpng 1.5 compatibility
 	  (thanks to Thomas Klausner for hinting at this!)
@@ -16,12 +20,19 @@
 	  made all (!) language versions of the manual validate
 	  cleanly, and fixed several other issues in the HTML/PHP
 	  sources.
-	- updated Mac OS X build environment to Mac OS X 10.6 and
-	  Gtk+ 2.24
 	- fixed bug in pngpack; thanks to Jindřich Šesták for
 	  noting this!
 	- added remaining patches from Jindřich for Czech 
 	  online manual. Big Thanks!
+	- more comprehensive and unified version information 
+	  for banner, --version, log window and log file to
+	  aid in working on bug reports
+	- hardcoded icons to defeat theming
+	- changed glib.h include for compatibility with glib 2.32
+	- removed Darwin / Mac OS X support
+	- synced with dvdisaster 0.72.4 fixes
+	- completed RS01 and RS03 specification in the
+	  papers subdir
 
 0.79.3	21-11-2010
         - Switched Linux SCSI driver default to SG_IO ioctl().
@@ -86,6 +97,16 @@
 	  for suggesting this!)
 	- removed ASPI driver and ASPI/SPTI splitting logic
 	- removed 2GB file splitting
+
+0.72 (pl4) 07-04-2012
+        - fixed crash in scsi layer for FreeBSD
+	- fixed double free when reading mode page 1 fails
+	- fixed DMA misalignment when reading mode page 1
+	- changed #includes for glibc for compatibility with 2.32
+	- dropped Darwin/Mac OS X support
+	- removed dependency on installed md5sum command
+	- changed libpng test in configure to utilize pkg-config
+	- fixed some minor flaws for NetBSD
 
 0.72 (pl3) 05-10-2011
         - Volodymyr Bychkoviak found a problem when verifying 

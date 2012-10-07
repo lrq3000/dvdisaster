@@ -1,5 +1,5 @@
 #  Bash based configure - library of test functions
-#  Copyright (C) 2004-2011 Carsten Gnörlich
+#  Copyright (C) 2004-2012 Carsten Gnörlich
 #
 #  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
 #  Project homepage: http://www.dvdisaster.org
@@ -48,7 +48,9 @@
 # REQUIRE_GLIB2 n m o	Require GLIB2.x and accompanying components >= n.m.o
 # REQUIRE_GTK2 n m o	Require GTK2.x and accompanying components 
 # REQUIRE_SDL n m o	Require the SDL library
+# REQUIRE_PNG           Require the PNG library
 #
+# REQUIRE_INCLUDE	Require specified include file
 # REQUIRE_LIBRARY	Require specified library
 #
 # CHECK_INCLUDE		Check for include file, but don't exit on negative test
@@ -65,7 +67,8 @@
 # FINALIZE_HELP		Finish --help output (optional, but user friendly)
 #
 # WITH_OPTION name default  adds -DWITH_OPTION_VALUE for -with-option=value args
-#			    to CFG_WITH_OPTIONS,
+#			    to CFG_WITH_OPTIONS
+# WITH_MUDFLAP [single|multi] uses libmudflap
 
 CONFIGURE_VERSION="0.56"
 
@@ -92,8 +95,10 @@ case "$cfg_uname" in
         if test $CFG_USE_CYGWIN = "no"; then
 	     cfg_system=cygwin-mingw 
              CFG_SYS_CFLAGS="-mms-bitfields -mno-cygwin"
+	     CFG_SYS_NAME="-DSYS_NAME=\\\"Cygwin-Mingw \\\""
 	else cfg_system=cygwin-std 
              CFG_SYS_OPTIONS="-DSYS_CYGWIN"
+	     CFG_SYS_NAME="-DSYS_NAME=\\\"Cygwin\\\""
         fi
 
 	function add_linker_flags()
@@ -103,6 +108,7 @@ case "$cfg_uname" in
 
   MINGW*) cfg_system=mingw-std 
         CFG_SYS_OPTIONS="-DSYS_MINGW"
+	CFG_SYS_NAME="-DSYS_NAME=\\\"Mingw\\\""
         CFG_EXE_SUFFIX=".exe"
         CFG_SYS_CFLAGS="-mms-bitfields"
 #	CFG_SYS_LDFLAGS="-mwindows"
@@ -113,6 +119,7 @@ case "$cfg_uname" in
 
   Linux*) cfg_system=linux-std 
         CFG_SYS_OPTIONS="-DSYS_LINUX"
+	CFG_SYS_NAME="-DSYS_NAME=\\\"Linux\\\""
         CFG_EXE_SUFFIX=""
 	function add_linker_flags()
         {  lflags_return="-L$1 -Wl,-rpath,$1 $2"
@@ -121,23 +128,16 @@ case "$cfg_uname" in
 
   FreeBSD*) cfg_system=freebsd-std
         CFG_SYS_OPTIONS="-DSYS_FREEBSD"
+	CFG_SYS_NAME="-DSYS_NAME=\\\"FreeBSD\\\""
         CFG_EXE_SUFFIX=""
 	function add_linker_flags()
 	{  lflags_return="-L$1 -Wl,-rpath,$1 $2"
 	}
 	;;
 
-  Darwin*) cfg_system=darwin
-        CFG_SYS_OPTIONS="-DSYS_DARWIN"
-        CFG_EXE_SUFFIX=""
-	CFG_SYS_LDFLAGS="-framework IOKit -framework CoreFoundation"
-	function add_linker_flags()
-	{  lflags_return="-L$1 $2"
-	}
-	;;
-
   NetBSD*) cfg_system=netbsd
         CFG_SYS_OPTIONS="-DSYS_NETBSD"
+	CFG_SYS_NAME="-DSYS_NAME=\\\"NetBSD\\\""
         CFG_EXE_SUFFIX=""
 	CFG_SYS_LDFLAGS="-lutil"
 	function add_linker_flags()
@@ -147,6 +147,7 @@ case "$cfg_uname" in
 
   *) cfg_system=unknown-system
         CFG_SYS_OPTIONS="-DSYS_UNKNOWN"
+	CFG_SYS_NAME="-DSYS_NAME=\\\"Unknown\\\""
         CFG_EXE_SUFFIX=""
 	function add_linker_flags()
 	{  lflags_return="-L$1 $2"
@@ -364,8 +365,8 @@ function WITH_OPTION()
    # first check number of arguments and deal with help mode
 
    if test -z "$cooked_name" || test -z "$default"; then 
-      echo "WITH_OPTION needs at last two arguments"
-      return cooked_name
+      echo "WITH_OPTION $option_name needs at last two arguments"
+      exit 1
    fi
 
    if test -n "$cfg_help_mode"; then
@@ -399,6 +400,75 @@ function WITH_OPTION()
    else
 	echo "$cfg_user_arg (user supplied)"
 	CFG_WITH_OPTIONS="$CFG_WITH_OPTIONS -Dwith_${cooked_name}_$cfg_user_arg"
+   fi
+
+   export "cfg_with_$cooked_name"
+   return 0
+}
+
+# Special case for libmudflap
+
+function WITH_MUDFLAP()
+{  local thread_mode=$1
+
+   # first deal with help mode
+
+   if test -z "$thread_mode"; then 
+      echo "WITH_MUDFLAP needs one argument"
+      exit 1
+   fi
+
+   if test -n "$cfg_help_mode"; then
+      echo " --with-mudflap=[no | yes]"
+      return 0
+   fi
+
+   # now start the real processing
+   # if $cfg_with_$cooked_name is unset, we set it to "no".
+
+   echo -n " with mudflap: "
+
+   case $thread_mode in
+     single) LIBVER=mudflap;;
+     multi)  LIBVER=mudflapth;;
+   esac
+
+   eval "cfg_user_arg=\$cfg_with_mudflap"
+
+   if test -z "$cfg_user_arg" || test "$cfg_user_arg" == "no"; then
+	echo "no"
+	CFG_WITH_OPTIONS="$CFG_WITH_OPTIONS -Dwith_mudflap_no"
+	eval "cfg_with_mudflap=no"
+   else
+        local cflags_save=$CFG_CFLAGS
+   	local lflags_save=$CFG_LDFLAGS
+   	local libs_save=$CFG_LIBS
+
+	CFG_CFLAGS="$CFG_CFLAGS -f$LIBVER"
+   	CFG_LDFLAGS="$CFG_LDFLAGS -f$LIBVER"
+   	CFG_LIBS="$CFG_LIBS -l$LIBVER"
+
+	echo "int main() { return 0; }" >conftest.c
+   	if ! try_compile; then
+ 	  echo "$cfg_user_arg (user supplied, but seems not to work)"
+	  CFG_CFLAGS=$cflags_save
+   	  CFG_LDFLAGS=$ldflags_save
+   	  CFG_LIBS=$libs_save
+	  CFG_WITH_OPTIONS="$CFG_WITH_OPTIONS -Dwith_mudflap_no"
+	  eval "cfg_with_mudflap=no"
+	  return 0
+	fi	
+
+	CFG_CFLAGS=$cflags_save
+   	CFG_LDFLAGS=$ldflags_save
+   	CFG_LIBS=$libs_save
+
+	echo "CFG_MUDFLAP_CFLAGS=-f$LIBVER"  >> Makefile.config 
+   	echo "CFG_MUDFLAP_LFLAGS=-f$LIBVER" >> Makefile.config
+   	echo "CFG_MUDFLAP_LIBS=-l$LIBVER" >> Makefile.config
+
+	echo "$cfg_user_arg (user supplied)"
+	CFG_WITH_OPTIONS="$CFG_WITH_OPTIONS -Dwith_mudflap_$cfg_user_arg"
    fi
 
    export "cfg_with_$cooked_name"
@@ -1374,7 +1444,7 @@ function REQUIRE_GTK2()
 	echo -e "\nError message(s) from pkg-config were:"
 	cat config.tmp
 	rm config.tmp
-cat <<EOF
+ 	cat <<EOF
 
 Make sure you have the following packages installed:
 - pkg-config (sometimes, the obvious is overlooked ;-)
@@ -1597,6 +1667,55 @@ function REQUIRE_LIBRARY
       echo "--$3-libraries=DIR"
       exit 1
    fi
+}
+
+# Require the libpng library
+# using the pkg-config mechanism
+
+function REQUIRE_PNG
+{ 
+   if test -n "$cfg_help_mode"; then
+     return 0
+   fi
+
+   echo -n "libpng is required... "
+
+   echo -e "\n/* *** REQUIRE_PNG */\n" >>$LOGFILE
+
+   # See whether pkg-config works
+
+   if pkg-config --cflags libpng >>config.tmp 2>&1 && pkg-config --libs libpng >>config.tmp 2>&1 ; then
+	rm config.tmp
+   else 
+	echo "pkg-config failed"
+	echo -e "\nError message(s) from pkg-config were:"
+	cat config.tmp
+	rm config.tmp
+   fi
+
+   # Do a test compile
+
+   CFG_PNG_CFLAGS=`pkg-config --cflags libpng`
+   CFG_PNG_LIBS=`pkg-config --libs libpng`
+
+   CFG_CFLAGS="$CFG_CFLAGS $CFG_PNG_CFLAGS"
+   CFG_LIBS="$CFG_LIBS $CFG_PNG_LIBS"
+
+   cat >conftest.c <<EOF
+#include <zlib.h>
+#include <png.h>
+int main() { png_sig_cmp(NULL,0,0); return 0;}
+EOF
+
+   if try_compile; then
+     echo "OK"
+   else
+     echo "FAILED"
+     exit 1
+   fi
+
+   echo "CFG_PNG_CFLAGS = $CFG_PNG_CFLAGS" >> Makefile.config
+   echo "CFG_PNG_LIBS = $CFG_PNG_LIBS" >> Makefile.config
 }
 
 # Check for a specific function,
@@ -2004,6 +2123,7 @@ function CREATE_MAKEFILES()
    echo "CFLAGS = $CFG_CFLAGS" >>Makefile.config
    echo "LDFLAGS = $CFG_LDFLAGS" >>Makefile.config
    echo "CFG_SYS_OPTIONS  = $CFG_SYS_OPTIONS" >> Makefile.config
+   echo "CFG_SYS_NAME     = $CFG_SYS_NAME" >> Makefile.config
    echo "CFG_EXE_SUFFIX   = $CFG_EXE_SUFFIX" >> Makefile.config
    echo "CFG_HAVE_OPTIONS = $CFG_HAVE_OPTIONS" >> Makefile.config
    echo "CFG_WITH_OPTIONS = $CFG_WITH_OPTIONS" | sed -e "$SED_UPCASE" >> Makefile.config

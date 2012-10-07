@@ -1,9 +1,25 @@
 <?php
 
 # dvdisaster: Download layout functions
-# Copyright (C) 2011 Carsten Gnörlich
+# Copyright (C) 2011-2012 Carsten Gnörlich
 
-function download_version($version, $show_separator, $src_md5, $mac_md5, $win_md5)
+function download_version($version, $src_md5)
+{  global $trans_sourcecode;
+   global $trans_signature;
+   global $trans_md5;
+   global $trans_version;
+
+  echo "    <tr><td align=\"right\">&nbsp;&nbsp;$trans_sourcecode&nbsp;</td>\n";
+  echo "        <td><a href=\"http://dvdisaster.net/downloads/dvdisaster-$version.tar.bz2\">dvdisaster-$version.tar.bz2</a></td></tr>\n";
+  echo "    <tr><td align=\"right\">$trans_signature&nbsp;</td>\n";
+  echo "        <td><a href=\"http://dvdisaster.net/downloads/dvdisaster-$version.tar.bz2.gpg\">dvdisaster-$version.tar.bz2.gpg</a></td></tr>\n";
+
+  if($src_md5 != "hidden")
+    echo "<tr><td align=\"right\">$trans_md5&nbsp;</td><td>$src_md5</td></tr>\n";
+  echo "    <tr><td colspan=\"2\" class=\"esep\"></td></tr>\n";
+}
+
+function download_old($version, $show_separator, $src_md5, $mac_md5, $win_md5)
 {  global $trans_sourcecode;
    global $trans_signature;
    global $trans_md5;

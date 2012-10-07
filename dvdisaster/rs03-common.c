@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -355,7 +355,7 @@ RS03Layout *CalcRS03Layout(gint64 data_sectors, EccHeader *eh, int target)
    /* We are going to create an error correction file */
 
    if(target == ECC_FILE)
-   {  gint64 filesize;
+   {  guint64 filesize;
       int n_roots = 0;
       char last = 0;
 
@@ -371,7 +371,7 @@ RS03Layout *CalcRS03Layout(gint64 data_sectors, EccHeader *eh, int target)
 	 if(!LargeStat(Closure->imageName, &filesize))
 	    Stop(_("Image file %s not present."),Closure->imageName);
 
-	 CalcSectors(filesize, (gint64*)&lay->dataSectors, &lay->inLast);
+	 CalcSectors(filesize, &lay->dataSectors, &lay->inLast);
 
 	 /* Calculate wanted redundancy from Closure->redundancy */
 

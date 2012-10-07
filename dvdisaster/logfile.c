@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2011 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2012 Carsten Gnoerlich.
  *
  *  Email: carsten@dvdisaster.org  -or-  cgnoerlich@fsfe.org
  *  Project homepage: http://www.dvdisaster.org
@@ -50,8 +50,8 @@ void LogTimeStamp()
       return;
 
    time(&now);
-   PrintLogFile("*\n* dvdisaster-%s logging started at %s*\n",
-		Closure->cookedVersion, ctime(&now));
+   PrintLogFile("*\n* %s\n* logging started at %s*\n",
+		Closure->versionString, ctime(&now));
 }
 
 
