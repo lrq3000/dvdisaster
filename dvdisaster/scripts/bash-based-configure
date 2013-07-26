@@ -62,8 +62,8 @@
 #
 # CHECK_ENDIAN		Test whether system is little or big endian
 # CHECK_BITNESS		Test whether system is 32bit or 64bit
-# CHECK_SSE2		Test whether when can compile for SSE2 extensions
-# CHECK_ALTIVEC		Test whether when can compile for AltiVec extensions
+# CHECK_SSE2		Test whether we can compile for SSE2 extensions
+# CHECK_ALTIVEC		Test whether we can compile for AltiVec extensions
 # FINALIZE_HELP		Finish --help output (optional, but user friendly)
 #
 # WITH_OPTION name default  adds -DWITH_OPTION_VALUE for -with-option=value args
@@ -1994,7 +1994,8 @@ function CHECK_SSE2()
 	no)  echo " no (user supplied)"
 	        ;;
 	yes) echo " yes (user supplied)"
-	        CFG_SSE2_OPTIONS="-msse2 -DHAVE_SSE2"
+	        CFG_HAVE_OPTIONS="$CFG_HAVE_OPTIONS -DHAVE_SSE2"
+	        CFG_SSE2_OPTIONS="-msse2"
 	        ;;
         *) echo -e " $cfg_with_sse2 (illegal value)\n"
 	   echo "Please use one of the following values:"
@@ -2021,7 +2022,8 @@ EOF
    CFG_CFLAGS="-msse2 $CFG_CFLAGS"
    if try_compile; then
       echo " yes"
-      CFG_SSE2_OPTIONS="-msse2 -DHAVE_SSE2"
+      CFG_HAVE_OPTIONS="$CFG_HAVE_OPTIONS -DHAVE_SSE2"
+      CFG_SSE2_OPTIONS="-msse2"
    else
       echo " no"
    fi
@@ -2051,7 +2053,8 @@ function CHECK_ALTIVEC()
        no)  echo " no (user supplied)"
                ;;
        yes) echo " yes (user supplied)"
-               CFG_ALTIVEC_OPTIONS="-maltivec -DHAVE_ALTIVEC"
+               CFG_HAVE_OPTIONS="$CFG_HAVE_OPTIONS -DHAVE_ALTIVEC"
+               CFG_ALTIVEC_OPTIONS="-maltivec"
                ;;
         *) echo -e " $cfg_with_altivec (illegal value)\n"
           echo "Please use one of the following values:"
@@ -2078,7 +2081,8 @@ EOF
    CFG_CFLAGS="-maltivec $CFG_CFLAGS"
    if try_compile; then
       echo " yes"
-      CFG_ALTIVEC_OPTIONS="-maltivec -DHAVE_ALTIVEC"
+      CFG_HAVE_OPTIONS="$CFG_HAVE_OPTIONS -DHAVE_ALTIVEC"
+      CFG_ALTIVEC_OPTIONS="-maltivec"
    else
       echo " no"
    fi
