@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: Russian homepage translation
-# Copyright (C) 2007-2012 Igor Gorbounov
+# Copyright (C) 2007-2013 Igor Gorbounov
 #
 # UTF-8 trigger: äöüß 
 #
@@ -20,6 +20,11 @@ $news_counter = 0;
 # Do not insert plain HTML!
 
 news_headline("Новости dvdisaster");
+
+news_item("11.10.2013", "dvdisaster 0.72.5 released", "
+Minor bug fix for GNU/Linux and FreeBSD for systems with more
+than 9 drives attached.
+", 22, "2013-10-11T01:00:00Z", "2013-10-11T01:00:00Z");
 
 news_item("07.04.2012", "dvdisaster 0.72.4 released", "
 Updated to work with recent versions of GNU/Linux, FreeBSD and NetBSD.

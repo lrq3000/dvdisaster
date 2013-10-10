@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: German homepage translation
-# Copyright (C) 2004-2012 Carsten Gnörlich
+# Copyright (C) 2004-2013 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -17,9 +17,9 @@ begin_page();
 <h3 class="top">Impressum</h3>
 
 Carsten Gnörlich <br>
-Beerenkamp 23 <br>
-59514 Welver / Deutschland<br>
-Tel.: +49 2384 941174<pre> </pre>
+Karl-von-Hahn-Str. 125  <br>
+72250 Freudenstadt  / Deutschland<br>
+Tel.: +49 172 566 1442  &nbsp; (kein Support, nur für Anfragen im Rahmen des Telemediengesetzes!)<pre> </pre>
 E-Mail: carsten@dvdisaster.org<br>
 Internet: www.dvdisaster.org
 

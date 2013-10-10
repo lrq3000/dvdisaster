@@ -9,14 +9,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.70.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-01 16:47+0200\n"
+"POT-Creation-Date: 2012-04-18 20:38+0200\n"
 "PO-Revision-Date: 2010-07-23 08:11+0300\n"
 "Last-Translator: Igor Gorbounov <igor.gorbounov@gmail.com>\n"
 "Language-Team: Russian\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: closure.c:539
@@ -758,15 +758,15 @@ msgstr "О программе dvdisaster"
 
 #: help-dialogs.c:726
 msgid ""
-"Modified version Copyright 2012 (please fill in - [directions])\n"
-"Copyright 2004-2012 Carsten Gnoerlich"
+"Modified version Copyright 2013 (please fill in - [directions])\n"
+"Copyright 2004-2013 Carsten Gnoerlich"
 msgstr ""
-"Измененнная версия Copyright 2012 (пожалуйста, заполните - [инструкции])\n"
-"Copyright 2004-2012 Carsten Gnoerlich"
+"Измененнная версия Copyright 2013 (пожалуйста, заполните - [инструкции])\n"
+"Copyright 2004-2013 Carsten Gnoerlich"
 
 #: help-dialogs.c:730
-msgid "Copyright 2004-2012 Carsten Gnoerlich"
-msgstr "Copyright 2004-2012 Carsten Gnoerlich"
+msgid "Copyright 2004-2013 Carsten Gnoerlich"
+msgstr "Copyright 2004-2013 Carsten Gnoerlich"
 
 #: help-dialogs.c:737
 msgid ""
@@ -1046,7 +1046,7 @@ msgstr "Тип носителя:"
 msgid "Book type:"
 msgstr "Формат (book type):"
 
-#: medium-info.c:308 scsi-layer.c:2678
+#: medium-info.c:308 scsi-layer.c:2680
 msgid "Manuf.-ID:"
 msgstr "Изгот.-ID:"
 
@@ -1300,8 +1300,8 @@ msgstr ""
 
 #: misc.c:205
 #, c-format
-msgid "dvdisaster-%s%sCopyright 2004-2012 Carsten Gnoerlich.\n"
-msgstr "dvdisaster-%s%sCopyright 2004-2012 Carsten Gnoerlich.\n"
+msgid "dvdisaster-%s%sCopyright 2004-2013 Carsten Gnoerlich.\n"
+msgstr "dvdisaster-%s%sCopyright 2004-2013 Carsten Gnoerlich.\n"
 
 #: misc.c:212
 msgid ""
@@ -2573,36 +2573,6 @@ msgstr " [Создание нового буферного файла %s]\n"
 msgid " [Appended %d/%d sectors to cache file %s; LBA=%lld, ssize=%d, %d sectors]\n"
 msgstr " [Добавлено %d/%d секторов к буферному файлу %s; LBA=%lld, размер с.=%d, %d секторов]\n"
 
-#: read-adaptive-window.c:79
-msgid "Adaptive reading:"
-msgstr "Адаптивное чтение:"
-
-#: read-adaptive-window.c:107
-msgid "Sectors processed"
-msgstr "Обработанные сектора"
-
-#: read-adaptive-window.c:110 scsi-layer.c:1730
-msgid "readable"
-msgstr "можно прочитать"
-
-#: read-adaptive-window.c:114
-msgid "correctable"
-msgstr "можно исправить"
-
-#: read-adaptive-window.c:118
-msgid "missing"
-msgstr "отсутствует"
-
-#: read-adaptive-window.c:128
-#, c-format
-msgid "Readable: %d.%d%% / %d.%d%% required"
-msgstr "Можно прочитать: %d.%d%% / %d.%d%% требуется"
-
-#: read-adaptive-window.c:135
-#, c-format
-msgid "Total recoverable: %d.%d%%"
-msgstr "Всего можно восстановить: %d.%d%%"
-
 #: read-adaptive.c:143 read-adaptive.c:1336
 msgid "Aborted by unrecoverable error."
 msgstr "Прервано из-за неисправимой ошибки."
@@ -2865,44 +2835,35 @@ msgstr ""
 "%s\n"
 "%2d.%1d%% образа прочитано (%lld секторов).\n"
 
-#: read-linear-window.c:94
+#: read-adaptive-window.c:79
+msgid "Adaptive reading:"
+msgstr "Адаптивное чтение:"
+
+#: read-adaptive-window.c:107
+msgid "Sectors processed"
+msgstr "Обработанные сектора"
+
+#: read-adaptive-window.c:110 scsi-layer.c:1730
+msgid "readable"
+msgstr "можно прочитать"
+
+#: read-adaptive-window.c:114
+msgid "correctable"
+msgstr "можно исправить"
+
+#: read-adaptive-window.c:118
+msgid "missing"
+msgstr "отсутствует"
+
+#: read-adaptive-window.c:128
 #, c-format
-msgid "Current Speed: %d.%dx"
-msgstr "Текущая скорость: %d.%dx"
+msgid "Readable: %d.%d%% / %d.%d%% required"
+msgstr "Можно прочитать: %d.%d%% / %d.%d%% требуется"
 
-#: read-linear-window.c:101 read-linear.c:550
+#: read-adaptive-window.c:135
 #, c-format
-msgid "Unreadable / skipped sectors: %lld"
-msgstr "Нечитаемые / пропущенные сектора: %lld"
-
-#: read-linear-window.c:243 read-linear-window.c:312
-msgid "Already present"
-msgstr "Уже есть"
-
-#: read-linear-window.c:277 read-linear-window.c:319 rs01-verify.c:123
-#: rs02-verify.c:118
-msgid "Sectors with CRC errors"
-msgstr "Сектора с CRC-ошибками"
-
-#: read-linear-window.c:300
-msgid "Medium state"
-msgstr "Состояние носителя"
-
-#: read-linear-window.c:308
-msgid "Not touched this time"
-msgstr "В этот раз не затронут"
-
-#: read-linear-window.c:315
-msgid "Successfully read"
-msgstr "Успешно прочитано"
-
-#: read-linear-window.c:322
-msgid "Unreadable / skipped"
-msgstr "Нечитаемый / пропущенный"
-
-#: read-linear-window.c:404
-msgid "Speed"
-msgstr "Скорость"
+msgid "Total recoverable: %d.%d%%"
+msgstr "Всего можно восстановить: %d.%d%%"
 
 #: read-linear.c:105
 #, c-format
@@ -2979,6 +2940,11 @@ msgstr "готово.\n"
 #, c-format
 msgid "Waiting %d seconds for drive to spin up...\n"
 msgstr "Задержка на %d секунд для раскручивания привода...\n"
+
+#: read-linear.c:550 read-linear-window.c:101
+#, c-format
+msgid "Unreadable / skipped sectors: %lld"
+msgstr "Нечитаемые / пропущенные сектора: %lld"
 
 #: read-linear.c:630
 #, c-format
@@ -3128,6 +3094,40 @@ msgstr ""
 "Это нормально, если CD записан в режиме TAO (track at once).\n"
 "Образ будет соответственно укорочен. Подробнее см. в руководстве.\n"
 "Используйте параметр --dao для отключения укорачивания образов.\n"
+
+#: read-linear-window.c:94
+#, c-format
+msgid "Current Speed: %d.%dx"
+msgstr "Текущая скорость: %d.%dx"
+
+#: read-linear-window.c:243 read-linear-window.c:312
+msgid "Already present"
+msgstr "Уже есть"
+
+#: read-linear-window.c:277 read-linear-window.c:319 rs01-verify.c:123
+#: rs02-verify.c:118
+msgid "Sectors with CRC errors"
+msgstr "Сектора с CRC-ошибками"
+
+#: read-linear-window.c:300
+msgid "Medium state"
+msgstr "Состояние носителя"
+
+#: read-linear-window.c:308
+msgid "Not touched this time"
+msgstr "В этот раз не затронут"
+
+#: read-linear-window.c:315
+msgid "Successfully read"
+msgstr "Успешно прочитано"
+
+#: read-linear-window.c:322
+msgid "Unreadable / skipped"
+msgstr "Нечитаемый / пропущенный"
+
+#: read-linear-window.c:404
+msgid "Speed"
+msgstr "Скорость"
 
 #: recover-raw.c:63
 #, c-format
@@ -4917,12 +4917,12 @@ msgstr "Сектор %lld, попытка %d: %s\n"
 msgid "Sector %lld, try %d: success\n"
 msgstr "Сектор %lld, попытка %d: успешно\n"
 
-#: scsi-layer.c:2574 scsi-layer.c:2727
+#: scsi-layer.c:2576 scsi-layer.c:2731
 #, c-format
 msgid "Device %s: no medium present\n"
 msgstr "Устройство %s: нет носителя\n"
 
-#: scsi-layer.c:2575 scsi-layer.c:2728
+#: scsi-layer.c:2577 scsi-layer.c:2732
 #, c-format
 msgid ""
 "Device %s does not become ready:\n"
@@ -4933,7 +4933,7 @@ msgstr ""
 "%s\n"
 "\n"
 
-#: scsi-layer.c:2580
+#: scsi-layer.c:2582
 #, c-format
 msgid ""
 "\n"
@@ -4942,7 +4942,7 @@ msgstr ""
 "\n"
 "Устройство: %s, %s\n"
 
-#: scsi-layer.c:2584
+#: scsi-layer.c:2586
 #, c-format
 msgid ""
 "\n"
@@ -4951,52 +4951,52 @@ msgstr ""
 "\n"
 "Устройство: %s (%s), %s\n"
 
-#: scsi-layer.c:2592
+#: scsi-layer.c:2594
 msgid "Drive failed to report media type."
 msgstr "Не удалось получить от привода сообщение о типе носителя."
 
-#: scsi-layer.c:2603 scsi-layer.c:2690
+#: scsi-layer.c:2605 scsi-layer.c:2692
 #, c-format
 msgid "This software does not support \"%s\" type media."
 msgstr "Эта программа не поддерживает \"%s\" тип носителя."
 
-#: scsi-layer.c:2611
+#: scsi-layer.c:2613
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr "Эта программа не поддерживает многосессионные (%d сессиий) носители."
 
-#: scsi-layer.c:2634 scsi-layer.c:2643
+#: scsi-layer.c:2636 scsi-layer.c:2645
 msgid "Using READ CD"
 msgstr "Используется READ CD"
 
-#: scsi-layer.c:2635
+#: scsi-layer.c:2637
 msgid ", RAW reading"
 msgstr ", чтение \"RAW\""
 
-#: scsi-layer.c:2638
+#: scsi-layer.c:2640
 #, c-format
 msgid ", Mode page 1 ERP = %02xh"
 msgstr ", Mode page 1 ERP = %02xh"
 
-#: scsi-layer.c:2641
+#: scsi-layer.c:2643
 msgid ", C2 scanning"
 msgstr ", поиск ошибок C2"
 
-#: scsi-layer.c:2648
+#: scsi-layer.c:2650
 msgid "Using READ(10).\n"
 msgstr "Используется READ(10).\n"
 
-#: scsi-layer.c:2667
+#: scsi-layer.c:2669
 #, c-format
 msgid "Medium: %s, %lld sectors%s"
 msgstr "Носитель: %s, %lld секторов%s"
 
-#: scsi-layer.c:2671
+#: scsi-layer.c:2673
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s created %s"
 msgstr "Носитель \"%s\": %s, %lld секторов%s создан %s"
 
-#: scsi-layer.c:2697
+#: scsi-layer.c:2699
 msgid "This software does not support encrypted media.\n"
 msgstr "Эта программа не поддерживает шифрованные носители.\n"
 

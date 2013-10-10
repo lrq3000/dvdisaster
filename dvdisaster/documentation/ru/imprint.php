@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: Russian homepage translation
-# Copyright (C) 2007-2012 Igor Gorbounov
+# Copyright (C) 2007-2013 Igor Gorbounov
 #
 # UTF-8 trigger: äöüß 
 #
@@ -17,9 +17,9 @@ begin_page();
 <h3 class="top">Выходные данные</h3>
 
 Carsten Gnörlich <br>
-Beerenkamp 23 <br>
-59514 Welver / Germany<br>
-Tel.: +49 2384 941174<pre> </pre>
+Karl-von-Hahn-Str. 125  <br>
+72250 Freudenstadt  / Deutschland<br>
+Tel.: +49 172 566 1442<pre> </pre>
 E-Mail: carsten@dvdisaster.org<br>
 Internet: www.dvdisaster.org
 

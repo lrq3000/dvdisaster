@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: German homepage translation
-# Copyright (C) 2004-2012 Carsten Gnörlich
+# Copyright (C) 2004-2013 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -21,10 +21,14 @@ $news_counter = 0;
 
 news_headline("Neues über dvdisaster");
 
+news_item("11.10.2013", "dvdisaster 0.72.5 veröffentlicht", "
+Kleine Fehlerkorrektur für GNU/Linux und FreeBSD für den Fall
+daß mehr als 9 Laufwerke vorhanden sind.
+", 22, "2013-10-11T01:00:00Z", "2013-10-11T01:00:00Z");
+
 news_item("07.04.2012", "dvdisaster 0.72.4 veröffentlicht", "
 Anpassung an aktuelle Versionen von GNU/Linux, FreeBSD und NetBSD.
 ", 21, "2012-04-07T01:00:00Z", "2012-04-07T01:00:00Z");
-
 
 news_item("05.10.2011", "dvdisaster 0.72.3 veröffentlicht", "
 Die \"Vergleichen\"-Funktion hing bei der Verarbeitung von 

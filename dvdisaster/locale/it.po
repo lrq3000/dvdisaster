@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.52.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-01 16:47+0200\n"
+"POT-Creation-Date: 2012-04-18 20:38+0200\n"
 "PO-Revision-Date: 2005-01-01 14:24+0100\n"
 "Last-Translator: Andrea Polverini <polve@polve.com>\n"
 "Language-Team: Italian <>\n"
+"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: closure.c:539
@@ -682,13 +682,13 @@ msgstr "Info su dvdisaster"
 
 #: help-dialogs.c:726
 msgid ""
-"Modified version Copyright 2012 (please fill in - [directions])\n"
-"Copyright 2004-2012 Carsten Gnoerlich"
+"Modified version Copyright 2013 (please fill in - [directions])\n"
+"Copyright 2004-2013 Carsten Gnoerlich"
 msgstr ""
 
 #: help-dialogs.c:730
-msgid "Copyright 2004-2012 Carsten Gnoerlich"
-msgstr "Copyright 2004-2012 Carsten Gnörlich"
+msgid "Copyright 2004-2013 Carsten Gnoerlich"
+msgstr "Copyright 2004-2013 Carsten Gnörlich"
 
 #: help-dialogs.c:737
 msgid ""
@@ -948,7 +948,7 @@ msgstr ""
 msgid "Book type:"
 msgstr ""
 
-#: medium-info.c:308 scsi-layer.c:2678
+#: medium-info.c:308 scsi-layer.c:2680
 msgid "Manuf.-ID:"
 msgstr ""
 
@@ -1202,8 +1202,8 @@ msgstr ""
 
 #: misc.c:205
 #, c-format
-msgid "dvdisaster-%s%sCopyright 2004-2012 Carsten Gnoerlich.\n"
-msgstr "dvdisaster-%s%sCopyright 2004-2012 Carsten Gnörlich.\n"
+msgid "dvdisaster-%s%sCopyright 2004-2013 Carsten Gnoerlich.\n"
+msgstr "dvdisaster-%s%sCopyright 2004-2013 Carsten Gnörlich.\n"
 
 #: misc.c:212
 msgid ""
@@ -2292,36 +2292,6 @@ msgstr ""
 msgid " [Appended %d/%d sectors to cache file %s; LBA=%lld, ssize=%d, %d sectors]\n"
 msgstr ""
 
-#: read-adaptive-window.c:79
-msgid "Adaptive reading:"
-msgstr "Modo di lettura adattivo:"
-
-#: read-adaptive-window.c:107
-msgid "Sectors processed"
-msgstr "Settori processati"
-
-#: read-adaptive-window.c:110 scsi-layer.c:1730
-msgid "readable"
-msgstr "Leggibile"
-
-#: read-adaptive-window.c:114
-msgid "correctable"
-msgstr "Correggibili"
-
-#: read-adaptive-window.c:118
-msgid "missing"
-msgstr "Mancanti"
-
-#: read-adaptive-window.c:128
-#, c-format
-msgid "Readable: %d.%d%% / %d.%d%% required"
-msgstr ""
-
-#: read-adaptive-window.c:135
-#, c-format
-msgid "Total recoverable: %d.%d%%"
-msgstr "Totale recuperabile: %d.%d%%"
-
 #: read-adaptive.c:143 read-adaptive.c:1336
 msgid "Aborted by unrecoverable error."
 msgstr "Interrotto da un errore irrecuperabile."
@@ -2579,44 +2549,35 @@ msgstr ""
 "%s\n"
 "%2d.%1d%% dell'immagine è stata letta (%lld settori).\n"
 
-#: read-linear-window.c:94
+#: read-adaptive-window.c:79
+msgid "Adaptive reading:"
+msgstr "Modo di lettura adattivo:"
+
+#: read-adaptive-window.c:107
+msgid "Sectors processed"
+msgstr "Settori processati"
+
+#: read-adaptive-window.c:110 scsi-layer.c:1730
+msgid "readable"
+msgstr "Leggibile"
+
+#: read-adaptive-window.c:114
+msgid "correctable"
+msgstr "Correggibili"
+
+#: read-adaptive-window.c:118
+msgid "missing"
+msgstr "Mancanti"
+
+#: read-adaptive-window.c:128
 #, c-format
-msgid "Current Speed: %d.%dx"
-msgstr "Velocità corrente: %d.%dx"
+msgid "Readable: %d.%d%% / %d.%d%% required"
+msgstr ""
 
-#: read-linear-window.c:101 read-linear.c:550
+#: read-adaptive-window.c:135
 #, c-format
-msgid "Unreadable / skipped sectors: %lld"
-msgstr "Settori illeggibili / saltati: %lld"
-
-#: read-linear-window.c:243 read-linear-window.c:312
-msgid "Already present"
-msgstr "Già presente"
-
-#: read-linear-window.c:277 read-linear-window.c:319 rs01-verify.c:123
-#: rs02-verify.c:118
-msgid "Sectors with CRC errors"
-msgstr "Settori con errori CRC"
-
-#: read-linear-window.c:300
-msgid "Medium state"
-msgstr "Stato del supporto"
-
-#: read-linear-window.c:308
-msgid "Not touched this time"
-msgstr "Non toccato questa volta"
-
-#: read-linear-window.c:315
-msgid "Successfully read"
-msgstr "letto con successo"
-
-#: read-linear-window.c:322
-msgid "Unreadable / skipped"
-msgstr "Illeggibili / Saltati"
-
-#: read-linear-window.c:404
-msgid "Speed"
-msgstr "Velocità"
+msgid "Total recoverable: %d.%d%%"
+msgstr "Totale recuperabile: %d.%d%%"
 
 #: read-linear.c:105
 #, c-format
@@ -2693,6 +2654,11 @@ msgstr "compiuto.\n"
 #, c-format
 msgid "Waiting %d seconds for drive to spin up...\n"
 msgstr "Attendere %d secondi per far avviare il drive...\n"
+
+#: read-linear.c:550 read-linear-window.c:101
+#, c-format
+msgid "Unreadable / skipped sectors: %lld"
+msgstr "Settori illeggibili / saltati: %lld"
 
 #: read-linear.c:630
 #, c-format
@@ -2838,6 +2804,40 @@ msgstr ""
 "Questo è corretto se il disco è stato scritto in modalità TAO (track at once).\n"
 "L'imagine sarà aggiustata di conseguenza.Leggere il manuale per i dettagli.\n"
 "Usare l'opzione --dao per disabilitare l'aggiustamento dell'immagine.\n"
+
+#: read-linear-window.c:94
+#, c-format
+msgid "Current Speed: %d.%dx"
+msgstr "Velocità corrente: %d.%dx"
+
+#: read-linear-window.c:243 read-linear-window.c:312
+msgid "Already present"
+msgstr "Già presente"
+
+#: read-linear-window.c:277 read-linear-window.c:319 rs01-verify.c:123
+#: rs02-verify.c:118
+msgid "Sectors with CRC errors"
+msgstr "Settori con errori CRC"
+
+#: read-linear-window.c:300
+msgid "Medium state"
+msgstr "Stato del supporto"
+
+#: read-linear-window.c:308
+msgid "Not touched this time"
+msgstr "Non toccato questa volta"
+
+#: read-linear-window.c:315
+msgid "Successfully read"
+msgstr "letto con successo"
+
+#: read-linear-window.c:322
+msgid "Unreadable / skipped"
+msgstr "Illeggibili / Saltati"
+
+#: read-linear-window.c:404
+msgid "Speed"
+msgstr "Velocità"
 
 #: recover-raw.c:63
 #, c-format
@@ -4508,12 +4508,12 @@ msgstr ""
 msgid "Sector %lld, try %d: success\n"
 msgstr ""
 
-#: scsi-layer.c:2574 scsi-layer.c:2727
+#: scsi-layer.c:2576 scsi-layer.c:2731
 #, c-format
 msgid "Device %s: no medium present\n"
 msgstr ""
 
-#: scsi-layer.c:2575 scsi-layer.c:2728
+#: scsi-layer.c:2577 scsi-layer.c:2732
 #, c-format
 msgid ""
 "Device %s does not become ready:\n"
@@ -4521,7 +4521,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: scsi-layer.c:2580
+#: scsi-layer.c:2582
 #, c-format
 msgid ""
 "\n"
@@ -4530,7 +4530,7 @@ msgstr ""
 "\n"
 "Periferica: %s, %s\n"
 
-#: scsi-layer.c:2584
+#: scsi-layer.c:2586
 #, c-format
 msgid ""
 "\n"
@@ -4539,52 +4539,52 @@ msgstr ""
 "\n"
 "Periferica: %s (%s), %s\n"
 
-#: scsi-layer.c:2592
+#: scsi-layer.c:2594
 msgid "Drive failed to report media type."
 msgstr ""
 
-#: scsi-layer.c:2603 scsi-layer.c:2690
+#: scsi-layer.c:2605 scsi-layer.c:2692
 #, c-format
 msgid "This software does not support \"%s\" type media."
 msgstr ""
 
-#: scsi-layer.c:2611
+#: scsi-layer.c:2613
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr ""
 
-#: scsi-layer.c:2634 scsi-layer.c:2643
+#: scsi-layer.c:2636 scsi-layer.c:2645
 msgid "Using READ CD"
 msgstr ""
 
-#: scsi-layer.c:2635
+#: scsi-layer.c:2637
 msgid ", RAW reading"
 msgstr ""
 
-#: scsi-layer.c:2638
+#: scsi-layer.c:2640
 #, c-format
 msgid ", Mode page 1 ERP = %02xh"
 msgstr ""
 
-#: scsi-layer.c:2641
+#: scsi-layer.c:2643
 msgid ", C2 scanning"
 msgstr ""
 
-#: scsi-layer.c:2648
+#: scsi-layer.c:2650
 msgid "Using READ(10).\n"
 msgstr ""
 
-#: scsi-layer.c:2667
+#: scsi-layer.c:2669
 #, c-format
 msgid "Medium: %s, %lld sectors%s"
 msgstr "Supporto: %s, %lld settori%s"
 
-#: scsi-layer.c:2671
+#: scsi-layer.c:2673
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s created %s"
 msgstr "Supporto \"%s\": %s, %lld settori%s creato %s"
 
-#: scsi-layer.c:2697
+#: scsi-layer.c:2699
 msgid "This software does not support encrypted media.\n"
 msgstr ""
 

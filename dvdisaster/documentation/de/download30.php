@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: German homepage translation
-# Copyright (C) 2004-2012 Carsten Gnörlich
+# Copyright (C) 2004-2013 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -21,34 +21,6 @@ dvdisaster verwendet den üblichen
 aus dem Quellkode. In dem Quellkode-Paket ist eine Datei
 <tt>INSTALL</tt> mit weiteren Information enthalten.
 <pre> </pre>
-
-<a name="mac"></a>
-<h3>Installieren der Binärversion für Mac OS X</h3>
-
-Das ZIP-Archiv enthält ein "application bundle" für Mac OS X 10.5
-und x86-Prozessoren.
-Packen Sie das Archiv an einer beliebigen Stelle aus und klicken Sie
-dann auf "dvdisaster.app" um das Programm zu starten.
-dvdisaster ist auch unter Mac OS X 10.4 und mit 
-PowerPC-Prozessoren lauffähig; für diese Fälle müssen Sie es allerdings
-selbst aus dem Quellkode bauen.<p>
-
-<i>Bitte beachten Sie daß die Benutzeroberfläche an einigen Stellen noch
-hakt.</i> Die Benutzeroberflächen-Bibliothek GTK+ befindet sich für Mac
-OS X noch in einem frühen Entwicklungsstadium. Die 
-Benutzeroberfläche kann kurzzeitig ruckeln oder einfrieren und es gibt
-unter Umständen Graphikfehler in der Ausgabe. Sie können diese Effekte
-minimieren indem Sie möglichst nicht mit dem dvdisaster-Fenster spielen
-während darin eine Aktion abläuft. Vermeiden Sie es inbesondere die
-Fenstergröße zu verändern oder das Fenster in das Dock zu schicken.<p>
-
-Im Verlauf des 0.73er Entwicklungszweiges werden möglicherweise Workarounds
-gefunden um diese Effekte zu minimieren; ansonsten heißt es abwarten
-bis verbesserte Versionen von GTK+ erscheinen.<p>
-
-Die Entwicklung einer GTK-losen dvdisaster-Version ist nicht geplant.
-Das Programm müßte für Quartz komplett neu geschrieben werden.
-Für die Windows-Version gilt übrigens sinngemäß das Gleiche ;-)
 
 <pre> </pre>
 

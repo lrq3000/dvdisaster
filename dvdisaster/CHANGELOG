@@ -1,4 +1,10 @@
-0.72 (pl4)
+0.72 (pl5) 11-10-2013
+	- optical drives would only be detected for /dev/pass[0-9]
+	  on FreeBSD. Fixed to work with arbitrary /dev/pass
+	  numbers. Thanks to Bill Eisele for reporting this.
+	  A similar problem was found and fixed for Linux.
+
+0.72 (pl4) 07-04-2012
         - fixed crash in scsi layer for FreeBSD
 	- fixed double free when reading mode page 1 fails
 	- fixed DMA misalignment when reading mode page 1
@@ -14,7 +20,6 @@
 	- Backported improved Windows locale detection from 0.79 branch.
 	- made package compile under OS X 10.6; updated OS X toolchain
 	  to Gtk 2.24.
-
 
 0.72 (pl-2) 31-10-2010
         - fixed and documented -n command line options for RS02.

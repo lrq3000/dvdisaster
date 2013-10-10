@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: German homepage translation
-# Copyright (C) 2004-2012 Carsten Gnörlich
+# Copyright (C) 2004-2013 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -35,8 +35,6 @@ ist die <a href="download.php">stabile Version 0.72</a> gedacht.
 
 <h3>Geplante Änderungen in der neuen Version</h3>
 
-Allgemein:
-
 <ul>
 <li> Einbauen mehrerer kleinerer Erweiterungen, die während des langen
 0.72er-Entwicklungszyklus liegengeblieben sind. <i>[noch nicht angefangen]</i></li>
@@ -45,23 +43,6 @@ Allgemein:
 Mehrkernprozessoren. <i>[in Bearbeitung]</i></li>
 <li> Entwicklung des Multithreading-fähigen RS03-Kodierers <i>[in Bearbeitung]</i></li>
 <li> Dokumentation von RS03. <i>[noch nicht angefangen]</i></li>
-</ul>
-
-Windows:
-
-<ul>
-<li> Aktualisierung des GTK+-Toolkits und der übrigen Entwicklungsumgebung. <i>[fertig]</i></li>
-<li> Erhöhen der Systemvoraussetzungen auf Windows 2000 oder neuer (ältere
-Windows-Versionen werden von der Entwicklungsumgebung nicht mehr unterstützt). 
-Damit wird auch die Unterstützung von ASPI-Treibern und das Aufteilen von 
-Dateien in 2G-Segmente überflüssig. <i>[fertig]</i></li>
-</ul>
-
-MacOS:
-
-<ul>
-<li> Aktualisierung des GTK+-Toolkits und weitere Workarounds für die
-Benutzeroberfläche. <i>[in Bearbeitung]</i></li>
 </ul>
 
 <hr>

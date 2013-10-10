@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: Russian homepage translation
-# Copyright (C) 2007-2012 Igor Gorbounov
+# Copyright (C) 2007-2013 Igor Gorbounov
 #
 # UTF-8 trigger: äöüß 
 #
@@ -22,7 +22,7 @@ $show_all=$_GET["showall"];
 <table width="100%">
 <tr>
 <td>dvdisaster имеется для <a href="download10.php">последних версий</a>
-операционных систем FreeBSD, GNU/Linux, Mac OS X(Darwin), NetBSD 
+операционных систем FreeBSD, GNU/Linux, NetBSD 
 и Windows. Он предоставляется как
 <a href="http://www.germany.fsfeurope.org/documents/freesoftware.en.html">свободное программное обеспечение</a> 
 под лицензией <a href="http://www.gnu.org/licenses/gpl-3.0.txt">GNU General Public License v3</a>.</td>
@@ -32,7 +32,7 @@ $show_all=$_GET["showall"];
 -->
 
 dvdisaster имеется для <a href="download10.php">последних версий</a>
-операционных систем FreeBSD, GNU/Linux, Mac OS X(Darwin), NetBSD 
+операционных систем FreeBSD, GNU/Linux, NetBSD 
 и Windows. Он предоставляется как
 <a href="http://www.germany.fsfeurope.org/documents/freesoftware.en.html">свободное программное обеспечение</a> 
 под лицензией <a href="http://www.gnu.org/licenses/gpl-2.0.txt">GNU General Public License v2</a>.
@@ -43,9 +43,6 @@ dvdisaster имеется для <a href="download10.php">последних в�
 
 <ul>
 <li>В пакете с исходными текстами имеется файл <tt>INSTALL</tt>, содержащий дальнейшие инструкции для сборки.</li>
-<li>Для Mac OS X предоставлен ZIP-архив, который устанавливается путем его распаковывания
-в любое место. Обратите внимание на 
-<a href="download30.php#mac">специальные советы для Mac OS X</a>.</li>
 <li>Для <a href="download30.php#win">установки</a> двоичной версии для Windows
 запустите загруженную программу на выполнение и действуйте в соответствии с диалогом.</li>
 </ul>
@@ -69,51 +66,18 @@ if(!strcmp($have_experimental, "yes"))
 <a name="download"></a>
 
 <table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.72</b></td><td align="right">07 Apr 2012</td></tr>
+<tr><td><b>dvdisaster-0.72</b></td><td align="right">11 Oct 2013</td></tr>
 <tr><td colspan="2" class="hsep"></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Исходные тексты для всех операционных систем:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.4.tar.bz2">dvdisaster-0.72.4.tar.bz2</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.5.tar.bz2">dvdisaster-0.72.5.tar.bz2</a></td></tr>
     <tr><td align="right">Цифровая подпись:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.4.tar.bz2.gpg">dvdisaster-0.72.4.tar.bz2.gpg</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.5.tar.bz2.gpg">dvdisaster-0.72.5.tar.bz2.gpg</a></td></tr>
 
 <?php
 if($mode == "www")
-    echo "<tr><td align=\"right\">MD5 checksum:&nbsp;</td><td>4eb09c1aa3cdbc1dafdb075148fb471d</td></tr>";
-?>
-    <tr><td><pre> </pre></td><td></td></tr>
-
-
-    <tr><td align="right">&nbsp;&nbsp;Исходные тексты для всех операционных систем:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.3.tar.bz2">dvdisaster-0.72.3.tar.bz2</a></td></tr>
-    <tr><td align="right">Цифровая подпись:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.3.tar.bz2.gpg">dvdisaster-0.72.3.tar.bz2.gpg</a></td></tr>
-
-<?php
-if($mode == "www")
-    echo "<tr><td align=\"right\">MD5 checksum:&nbsp;</td><td>4eb09c1aa3cdbc1dafdb075148fb471d</td></tr>";
-?>
-    <tr><td colspan="2" class="esep"></td></tr>
-
-    <tr><td align="right">Двоичная версия для Mac OS X 10.6 / x86:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.3.app.zip">dvdisaster-0.72.3.app.zip</a>&nbsp;--&nbsp;сначала прочитайте эти <a href="download30.php#mac">советы</a></td></tr>
-    <tr><td align="right">Цифровая подпись:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.3.app.zip.gpg">dvdisaster-0.72.3.app.zip.gpg</a></td></tr>
-
-<?php
-if($mode == "www")
-    echo "<tr><td align=\"right\">MD5 checksum:&nbsp;</td><td>38389bbbeb0d259a3f0a8df89b363f72</td></tr>";
-?>
-    <tr><td colspan="2" class="esep"></td></tr>
-
-    <tr><td align="right">Двоичная версия для Windows:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.3-setup.exe">dvdisaster-0.72.3-setup.exe</a></td></tr>
-    <tr><td align="right">Цифровая подпись:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.3-setup.exe.gpg">dvdisaster-0.72.3-setup.exe.gpg</a></td></tr>
-<?php
-if($mode == "www")
-    echo "<tr><td align=\"right\">MD5 checksum:&nbsp;</td><td>b6861ba1e8de6d91a2da5342a14870e0</td></tr>";
+    echo "<tr><td align=\"right\">MD5 checksum:&nbsp;</td><td>ad5e1d3758c536472c0ec36e3fc521fe</td></tr>";
 ?>
     <tr><td colspan="2"> </td></tr>
 
@@ -127,6 +91,38 @@ if($mode == "www")
 ?> 
     <tr><td colspan="2"><a href="download.php?showall=0#download">Hide older releases in the 0.72 version branch</a></td></tr>
 
+    <tr><td colspan="2"> </td></tr>
+    <tr><td></td><td>Version 0.72.4</td></tr>
+    <tr><td align="right">&nbsp;&nbsp;Исходные тексты для всех операционных систем:&nbsp;</td>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.4.tar.bz2">dvdisaster-0.72.4.tar.bz2</a></td></tr>
+    <tr><td align="right">Цифровая подпись:&nbsp;</td>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.4.tar.bz2.gpg">dvdisaster-0.72.4.tar.bz2.gpg</a></td></tr>
+    <tr><td align="right">MD5 checksum:&nbsp;</td><td>ad5e1d3758c536472c0ec36e3fc521fe</td></tr>
+
+    <tr><td colspan="2"> </td></tr>
+    <tr><td></td><td>Version 0.72.3</td></tr>
+    <tr><td align="right">&nbsp;&nbsp;Исходные тексты для всех операционных систем:&nbsp;</td>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.3.tar.bz2">dvdisaster-0.72.3.tar.bz2</a></td></tr>
+    <tr><td align="right">Цифровая подпись:&nbsp;</td>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.3.tar.bz2.gpg">dvdisaster-0.72.3.tar.bz2.gpg</a></td></tr>
+
+    <tr><td align="right">MD5 checksum:&nbsp;</td><td>4eb09c1aa3cdbc1dafdb075148fb471d</td></tr>
+    <tr><td colspan="2" class="esep"></td></tr>
+
+    <tr><td align="right">Двоичная версия для Mac OS X 10.6 / x86:&nbsp;</td>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.3.app.zip">dvdisaster-0.72.3.app.zip</a></td></tr>
+    <tr><td align="right">Цифровая подпись:&nbsp;</td>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.3.app.zip.gpg">dvdisaster-0.72.3.app.zip.gpg</a></td></tr>
+
+    <tr><td align="right">MD5 checksum:&nbsp;</td><td>38389bbbeb0d259a3f0a8df89b363f72</td></tr>
+    <tr><td colspan="2" class="esep"></td></tr>
+
+    <tr><td align="right">Двоичная версия для Windows:&nbsp;</td>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.3-setup.exe">dvdisaster-0.72.3-setup.exe</a></td></tr>
+    <tr><td align="right">Цифровая подпись:&nbsp;</td>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.3-setup.exe.gpg">dvdisaster-0.72.3-setup.exe.gpg</a></td></tr>
+    <tr><td align="right">MD5 checksum:&nbsp;</td><td>b6861ba1e8de6d91a2da5342a14870e0</td></tr>
+
    <tr><td colspan="2"> </td></tr>
    <tr><td></td><td>Version 0.72.2</td></tr>
     <tr><td align="right">&nbsp;&nbsp;Исходные тексты для всех операционных систем:&nbsp;</td>
@@ -138,7 +134,7 @@ if($mode == "www")
     <tr><td colspan="2" class="esep"></td></tr>
 
     <tr><td align="right">Двоичная версия для Mac OS X 10.5 / x86:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.2.app.zip">dvdisaster-0.72.2.app.zip</a>&nbsp;--&nbsp;сначала прочитайте эти <a href="download30.php#mac">советы</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.2.app.zip">dvdisaster-0.72.2.app.zip</a></td></tr>
     <tr><td align="right">Цифровая подпись:&nbsp;</td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.2.app.zip.gpg">dvdisaster-0.72.2.app.zip.gpg</a></td></tr>
 
@@ -162,7 +158,7 @@ if($mode == "www")
     <tr><td colspan="2" class="esep"></td></tr>
 
     <tr><td align="right">Двоичная версия для Mac OS X 10.5 / x86:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.1.app.zip">dvdisaster-0.72.1.app.zip</a>&nbsp;--&nbsp;сначала прочитайте эти <a href="download30.php#mac">советы</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.1.app.zip">dvdisaster-0.72.1.app.zip</a></td></tr>
     <tr><td align="right">Цифровая подпись:&nbsp;</td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.1.app.zip.gpg">dvdisaster-0.72.1.app.zip.gpg</a></td></tr>
     <tr><td align="right">MD5 checksum:&nbsp;</td>
@@ -187,7 +183,7 @@ if($mode == "www")
     <tr><td colspan="2" class="esep"></td></tr>
 
     <tr><td align="right">Двоичная версия для Mac OS X 10.5 / x86:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.app.zip">dvdisaster-0.72.app.zip</a>&nbsp;--&nbsp;сначала прочитайте эти <a href="download30.php#mac">советы</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.app.zip">dvdisaster-0.72.app.zip</a></td></tr>
     <tr><td align="right">Цифровая подпись:&nbsp;</td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.app.zip.gpg">dvdisaster-0.72.app.zip.gpg</a></td></tr>
     <tr><td align="right">MD5 checksum:&nbsp;</td>
@@ -224,6 +220,10 @@ if($mode == "www")
 </ul>
 
 <b>Исправления</b> (небольшие изменения после версии 0.72; вышеприведенные файлы были обновлены):<p>
+
+<b>0.72 pl5</b> Fixes a problem which may result in CD/DVD/BD drives being not detected
+if more than 10 devices are connected to a GNU/Linux or FreeBSD system. Thanks
+to Bill Eisele for reporting this. (11-Oct-2013)<p>
 
 <b>0.72 pl4</b> Updated for new versions and programming libraries of
 GNU/Linux, FreeBSD and NetBSD. (07-Apr-2012)<p>

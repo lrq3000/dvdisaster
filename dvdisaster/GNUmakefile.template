@@ -189,6 +189,7 @@ version.php:
 	@echo "\$$version=\"$(VERSION)\";" >>$(SRCDIR)/documentation/include/version.php
 	@echo "\$$pkgname=\"$(PKGNAME)\";" >>$(SRCDIR)/documentation/include/version.php
 	@echo "\$$cooked_version=\""$(CFG_FULL_VERSION)"\";" >>$(SRCDIR)/documentation/include/version.php
+	@echo "\$$cooked_version=\"0.79 (devel-3)\";" >>$(SRCDIR)/documentation/include/version.php
 	@if test -e help-dialogs.h && grep UNMODIFIED help-dialogs.h >/dev/null; \
 	then echo "\$$modified_source=0;" >>$(SRCDIR)/documentation/include/version.php; \
 	else echo "\$$modified_source=1;" >>$(SRCDIR)/documentation/include/version.php; \
@@ -430,7 +431,7 @@ arch:	archclean time-stamp
 # TAG: online-docs
 www:   version.php
 	@cd documentation ; \
-	tar cjf ../../www.tar.bz2 pubkey.asc index.html include/dvdisaster.css de/*.html en/*.html ru/*.html
+	tar cjf ../../www.tar.bz2 pubkey.asc index.html include/dvdisaster.css cs/*.html de/*.html en/*.html ru/*.html
 
 www-images: thumbnails version.php
 	@cd documentation ; \
@@ -442,7 +443,7 @@ INSTALL: documentation/install.template
 srcdist: INSTALL localhtml lock-images clean distclean 
 	@rm -f documentation/MAKE_SRCDIST
 	@cd .. ; tar -c -j -X $(PKGNAME)/NODIST -f $(PKGNAME).tar.bz2 $(PKGNAME)
-	@cd .. ; gpg --default-key 091ad320 --detach-sign --output $(PKGNAME).tar.bz2.gpg --armor $(PKGNAME).tar.bz2 
+	@cd .. ; gpg --homedir .gnupg --default-key 091ad320 --detach-sign --output $(PKGNAME).tar.bz2.gpg --armor $(PKGNAME).tar.bz2 
 	@rm -f documentation/images-*.pngpack
 
 prepare-dist:

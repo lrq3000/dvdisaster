@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-01 16:47+0200\n"
+"POT-Creation-Date: 2012-04-18 20:38+0200\n"
 "PO-Revision-Date: 2006-03-16 20:40+0100\n"
 "Last-Translator: Luboš Staněk <lubek@users.sourceforge.net>\n"
 "Language-Team: čeština <cs@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "X-Generator: KBabel 1.11.1\n"
 "Plural-Forms:  nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
@@ -684,14 +684,14 @@ msgstr "O aplikaci dvdisaster"
 
 #: help-dialogs.c:726
 msgid ""
-"Modified version Copyright 2012 (please fill in - [directions])\n"
-"Copyright 2004-2012 Carsten Gnoerlich"
+"Modified version Copyright 2013 (please fill in - [directions])\n"
+"Copyright 2004-2013 Carsten Gnoerlich"
 msgstr ""
 
 #: help-dialogs.c:730
-msgid "Copyright 2004-2012 Carsten Gnoerlich"
+msgid "Copyright 2004-2013 Carsten Gnoerlich"
 msgstr ""
-"Copyright 2004-2012 Carsten Gnörlich\n"
+"Copyright 2004-2013 Carsten Gnörlich\n"
 "Česká lokalizace 2006 Luboš Staněk"
 
 #: help-dialogs.c:737
@@ -955,7 +955,7 @@ msgstr ""
 msgid "Book type:"
 msgstr ""
 
-#: medium-info.c:308 scsi-layer.c:2678
+#: medium-info.c:308 scsi-layer.c:2680
 msgid "Manuf.-ID:"
 msgstr ""
 
@@ -1209,8 +1209,8 @@ msgstr ""
 
 #: misc.c:205
 #, c-format
-msgid "dvdisaster-%s%sCopyright 2004-2012 Carsten Gnoerlich.\n"
-msgstr "dvdisaster-%s%sCopyright 2004-2012 Carsten Gnörlich.\n"
+msgid "dvdisaster-%s%sCopyright 2004-2013 Carsten Gnoerlich.\n"
+msgstr "dvdisaster-%s%sCopyright 2004-2013 Carsten Gnörlich.\n"
 
 #: misc.c:212
 msgid ""
@@ -2299,36 +2299,6 @@ msgstr ""
 msgid " [Appended %d/%d sectors to cache file %s; LBA=%lld, ssize=%d, %d sectors]\n"
 msgstr ""
 
-#: read-adaptive-window.c:79
-msgid "Adaptive reading:"
-msgstr "Adaptivní čtení:"
-
-#: read-adaptive-window.c:107
-msgid "Sectors processed"
-msgstr "Sektorů zpracováno"
-
-#: read-adaptive-window.c:110 scsi-layer.c:1730
-msgid "readable"
-msgstr "čitelný"
-
-#: read-adaptive-window.c:114
-msgid "correctable"
-msgstr "opravitelný"
-
-#: read-adaptive-window.c:118
-msgid "missing"
-msgstr "chybějící"
-
-#: read-adaptive-window.c:128
-#, c-format
-msgid "Readable: %d.%d%% / %d.%d%% required"
-msgstr ""
-
-#: read-adaptive-window.c:135
-#, c-format
-msgid "Total recoverable: %d.%d%%"
-msgstr "Celkem opravitelných: %d.%d%%"
-
 #: read-adaptive.c:143 read-adaptive.c:1336
 msgid "Aborted by unrecoverable error."
 msgstr "Zrušeno kvůli neopravitelné chybě."
@@ -2584,44 +2554,35 @@ msgstr ""
 "%s\n"
 "%2d.%1d%% obrazu bylo načteno (%lld sektorů).\n"
 
-#: read-linear-window.c:94
+#: read-adaptive-window.c:79
+msgid "Adaptive reading:"
+msgstr "Adaptivní čtení:"
+
+#: read-adaptive-window.c:107
+msgid "Sectors processed"
+msgstr "Sektorů zpracováno"
+
+#: read-adaptive-window.c:110 scsi-layer.c:1730
+msgid "readable"
+msgstr "čitelný"
+
+#: read-adaptive-window.c:114
+msgid "correctable"
+msgstr "opravitelný"
+
+#: read-adaptive-window.c:118
+msgid "missing"
+msgstr "chybějící"
+
+#: read-adaptive-window.c:128
 #, c-format
-msgid "Current Speed: %d.%dx"
-msgstr "Aktuální rychlost: %d.%dx"
+msgid "Readable: %d.%d%% / %d.%d%% required"
+msgstr ""
 
-#: read-linear-window.c:101 read-linear.c:550
+#: read-adaptive-window.c:135
 #, c-format
-msgid "Unreadable / skipped sectors: %lld"
-msgstr "Nečitelných / přeskočených sektorů: %lld"
-
-#: read-linear-window.c:243 read-linear-window.c:312
-msgid "Already present"
-msgstr "Již přítomen"
-
-#: read-linear-window.c:277 read-linear-window.c:319 rs01-verify.c:123
-#: rs02-verify.c:118
-msgid "Sectors with CRC errors"
-msgstr "Sektory s chybami CRC"
-
-#: read-linear-window.c:300
-msgid "Medium state"
-msgstr "Stav média"
-
-#: read-linear-window.c:308
-msgid "Not touched this time"
-msgstr "Tentokrát nedotčen"
-
-#: read-linear-window.c:315
-msgid "Successfully read"
-msgstr "Úspěšně načteno"
-
-#: read-linear-window.c:322
-msgid "Unreadable / skipped"
-msgstr "Nečitelné / přeskočeno"
-
-#: read-linear-window.c:404
-msgid "Speed"
-msgstr "Rychlost"
+msgid "Total recoverable: %d.%d%%"
+msgstr "Celkem opravitelných: %d.%d%%"
 
 #: read-linear.c:105
 #, c-format
@@ -2698,6 +2659,11 @@ msgstr "hotovo.\n"
 #, c-format
 msgid "Waiting %d seconds for drive to spin up...\n"
 msgstr "Čekám %d sekund na roztočení disku...\n"
+
+#: read-linear.c:550 read-linear-window.c:101
+#, c-format
+msgid "Unreadable / skipped sectors: %lld"
+msgstr "Nečitelných / přeskočených sektorů: %lld"
 
 #: read-linear.c:630
 #, c-format
@@ -2843,6 +2809,40 @@ msgstr ""
 "To je v pořádku, pokud bylo CD zapsáno v režimu TAO (stopa najednou).\n"
 "Obraz bude podle toho zkrácen. Další podrobnosti najdete v příručce.\n"
 "Použijte volbu --dao pro zákaz zkrácení obrazu.\n"
+
+#: read-linear-window.c:94
+#, c-format
+msgid "Current Speed: %d.%dx"
+msgstr "Aktuální rychlost: %d.%dx"
+
+#: read-linear-window.c:243 read-linear-window.c:312
+msgid "Already present"
+msgstr "Již přítomen"
+
+#: read-linear-window.c:277 read-linear-window.c:319 rs01-verify.c:123
+#: rs02-verify.c:118
+msgid "Sectors with CRC errors"
+msgstr "Sektory s chybami CRC"
+
+#: read-linear-window.c:300
+msgid "Medium state"
+msgstr "Stav média"
+
+#: read-linear-window.c:308
+msgid "Not touched this time"
+msgstr "Tentokrát nedotčen"
+
+#: read-linear-window.c:315
+msgid "Successfully read"
+msgstr "Úspěšně načteno"
+
+#: read-linear-window.c:322
+msgid "Unreadable / skipped"
+msgstr "Nečitelné / přeskočeno"
+
+#: read-linear-window.c:404
+msgid "Speed"
+msgstr "Rychlost"
 
 #: recover-raw.c:63
 #, c-format
@@ -4512,12 +4512,12 @@ msgstr ""
 msgid "Sector %lld, try %d: success\n"
 msgstr ""
 
-#: scsi-layer.c:2574 scsi-layer.c:2727
+#: scsi-layer.c:2576 scsi-layer.c:2731
 #, c-format
 msgid "Device %s: no medium present\n"
 msgstr ""
 
-#: scsi-layer.c:2575 scsi-layer.c:2728
+#: scsi-layer.c:2577 scsi-layer.c:2732
 #, c-format
 msgid ""
 "Device %s does not become ready:\n"
@@ -4525,7 +4525,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: scsi-layer.c:2580
+#: scsi-layer.c:2582
 #, c-format
 msgid ""
 "\n"
@@ -4534,7 +4534,7 @@ msgstr ""
 "\n"
 "Zařízení: %s, %s\n"
 
-#: scsi-layer.c:2584
+#: scsi-layer.c:2586
 #, c-format
 msgid ""
 "\n"
@@ -4543,52 +4543,52 @@ msgstr ""
 "\n"
 "Zařízení: %s (%s), %s\n"
 
-#: scsi-layer.c:2592
+#: scsi-layer.c:2594
 msgid "Drive failed to report media type."
 msgstr ""
 
-#: scsi-layer.c:2603 scsi-layer.c:2690
+#: scsi-layer.c:2605 scsi-layer.c:2692
 #, c-format
 msgid "This software does not support \"%s\" type media."
 msgstr ""
 
-#: scsi-layer.c:2611
+#: scsi-layer.c:2613
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr ""
 
-#: scsi-layer.c:2634 scsi-layer.c:2643
+#: scsi-layer.c:2636 scsi-layer.c:2645
 msgid "Using READ CD"
 msgstr ""
 
-#: scsi-layer.c:2635
+#: scsi-layer.c:2637
 msgid ", RAW reading"
 msgstr ""
 
-#: scsi-layer.c:2638
+#: scsi-layer.c:2640
 #, c-format
 msgid ", Mode page 1 ERP = %02xh"
 msgstr ""
 
-#: scsi-layer.c:2641
+#: scsi-layer.c:2643
 msgid ", C2 scanning"
 msgstr ""
 
-#: scsi-layer.c:2648
+#: scsi-layer.c:2650
 msgid "Using READ(10).\n"
 msgstr ""
 
-#: scsi-layer.c:2667
+#: scsi-layer.c:2669
 #, c-format
 msgid "Medium: %s, %lld sectors%s"
 msgstr "Médium: %s, %lld sektorů%s"
 
-#: scsi-layer.c:2671
+#: scsi-layer.c:2673
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s created %s"
 msgstr "Médium \"%s\": %s, %lld sektorů%s vytvořeno %s"
 
-#: scsi-layer.c:2697
+#: scsi-layer.c:2699
 msgid "This software does not support encrypted media.\n"
 msgstr ""
 

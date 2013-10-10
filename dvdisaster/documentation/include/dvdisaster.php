@@ -1,7 +1,7 @@
 <?php
 
 # dvdisaster: Homepage layout functions
-# Copyright (C) 2007-2012 Carsten Gnörlich
+# Copyright (C) 2007-2013 Carsten Gnörlich
 
 require("version.php");
 

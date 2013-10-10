@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: German homepage translation
-# Copyright (C) 2004-2012 Carsten Gnörlich
+# Copyright (C) 2004-2013 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -59,13 +59,13 @@ Das dvdisaster-Projekt empfiehlt GNU/Linux.<p>
 </tr>
 <tr>
 <td>Mac OS X</td>
-<td>10.6 (Snow Leopard)</td>
+<td>10.6 (Snow Leopard)<sup>3)</td>
 <td align="center">ja</td>
 <td align="center">nein<sup>2)</sup></td>
 </tr>
 <tr>
-<td>Windows<sup>4)</sup></td>
-<td>Windows 2000 SP4<sup>3)</sup></td>
+<td>Windows</td>
+<td>Windows 2000 SP4<sup>4)</sup></td>
 <td align="center">ja</td>
 <td align="center">nein<sup>2)</sup></td>
 </tr>
@@ -73,11 +73,8 @@ Das dvdisaster-Projekt empfiehlt GNU/Linux.<p>
 
 <sup>1)</sup>FreeBSD: für ATAPI-Laufwerke muß das Kernelmodul <i>atapicam</i> geladen sein -- siehe das INSTALL-Dokument<br>
 <sup>2)</sup>64bit-Unterstützung nicht geplant.<br>
-<sup>3)</sup>Nutzer haben positive Rückmeldungen über den Einsatz mit
-späteren Versionen bis einschließlich Windows 7 gegeben.<br>
-<sup>4)</sup>Die Unterstützung von Mehrkernprozessoren hängt von der jeweiligen
-Windows-"Edition" ab. Bei einigen ergeben zusätzliche Prozessorkerne mit
-dvdisaster keine Verbesserung der Gechwindigkeit.
+<sup>3)</sup>10.7 und neuere Betriebssystem-Versionen werden nicht unterstützt. Die Mac OS X-Version wird nicht mehr weiterentwickelt.<br>
+<sup>4)</sup>Nutzer haben positive Rückmeldungen über den Einsatz mit späteren Versionen bis einschließlich Windows 7 gegeben. Windows 2000 SP3 und frühere Versionen werden nicht unterstützt.
 
 <!-- do not change below -->
 

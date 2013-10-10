@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: Russian homepage translation
-# Copyright (C) 2007-2012 Igor Gorbounov
+# Copyright (C) 2007-2013 Igor Gorbounov
 #
 # UTF-8 trigger: äöüß 
 #
@@ -33,8 +33,6 @@ is for.
 
 <h3>Planned changes in the new version</h3>
 
-All platforms:
-
 <ul>
 <li> Implement some small additions which have been put on hold
 during the 0.72 development cycle. <i>[not yet started]</i></li>
@@ -45,22 +43,6 @@ processors. <i>[in progress]</i></li>
 <li> Document RS03 usage. <i>[not yet started]</i></li>
 </ul>
 
-Windows:
-
-<ul>
-<li> Update the GTK+ toolkit and development system. <i>[completed]</i></li>
-<li> Raise system requirements to Windows 2000 or newer (older
-Windows releases are no longer supported by the development tools).
-This makes support for ASPI drivers and splitting files into 2G
-segments obsolete. <i>[completed]</i></li>
-</ul>
-
-MacOS:
-
-<ul>
-<li> Update the GTK+ toolkit and provide more workarounds
-for the graphical user interface. <i>[in progress]</i></li>
-</ul>
 <hr>
 
 <h3>Загрузки</h3>

@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: English homepage translation
-# Copyright (C) 2004-2012 Carsten Gnörlich
+# Copyright (C) 2004-2013 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -58,13 +58,13 @@ The dvdisaster project recommends GNU/Linux.<p>
 </tr>
 <tr>
 <td>Mac OS X</td>
-<td>10.6 (Snow Leopard)</td>
+<td>10.6 (Snow Leopard)<sup>3)</sup></td>
 <td align="center">yes</td>
 <td align="center">no<sup>2)</sup></td>
 </tr>
 <tr>
-<td>Windows<sup>4)</sup></td>
-<td>Windows 2000 SP4<sup>3)</sup></td>
+<td>Windows</td>
+<td>Windows 2000 SP4<sup>4)</sup></td>
 <td align="center">yes</td>
 <td align="center">no<sup>2)</sup></td>
 </tr>
@@ -72,10 +72,9 @@ The dvdisaster project recommends GNU/Linux.<p>
 
 <sup>1)</sup>FreeBSD: using ATAPI drives requires loading the <i>atapicam</i> kernel module -- see INSTALL doc<br>
 <sup>2)</sup>64bit Support not planned.<br>
-<sup>3)</sup>Later Versions up to Windows 7 have been reported to work.
+<sup>3)</sup>10.7 and later versions are not supported. Development of the Mac OS X version has been ceased.<br>
+<sup>4)</sup>Later Versions up to Windows 7 have been reported to work.
 Windows 2000 SP3 and earlier versions are not supported.<br>
-<sup>4)</sup>Support for multicore processors varies. On some editions using additional
-cores for dvdisaster does not result in more performance.
 <!-- do not change below -->
 
 <?php

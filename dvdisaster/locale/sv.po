@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-01 16:47+0200\n"
+"POT-Creation-Date: 2012-04-18 20:38+0200\n"
 "PO-Revision-Date: 2006-06-14 23:48+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sv\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: closure.c:539
@@ -685,13 +685,13 @@ msgstr "Om dvdisaster"
 
 #: help-dialogs.c:726
 msgid ""
-"Modified version Copyright 2012 (please fill in - [directions])\n"
-"Copyright 2004-2012 Carsten Gnoerlich"
+"Modified version Copyright 2013 (please fill in - [directions])\n"
+"Copyright 2004-2013 Carsten Gnoerlich"
 msgstr ""
 
 #: help-dialogs.c:730
-msgid "Copyright 2004-2012 Carsten Gnoerlich"
-msgstr "Copyright 2004-2012 Carsten Gnörlich"
+msgid "Copyright 2004-2013 Carsten Gnoerlich"
+msgstr "Copyright 2004-2013 Carsten Gnörlich"
 
 #: help-dialogs.c:737
 msgid ""
@@ -956,7 +956,7 @@ msgstr ""
 msgid "Book type:"
 msgstr ""
 
-#: medium-info.c:308 scsi-layer.c:2678
+#: medium-info.c:308 scsi-layer.c:2680
 msgid "Manuf.-ID:"
 msgstr ""
 
@@ -1210,8 +1210,8 @@ msgstr ""
 
 #: misc.c:205
 #, c-format
-msgid "dvdisaster-%s%sCopyright 2004-2012 Carsten Gnoerlich.\n"
-msgstr "dvdisaster-%s%sCopyright 2004-2012 Carsten Gnörlich.\n"
+msgid "dvdisaster-%s%sCopyright 2004-2013 Carsten Gnoerlich.\n"
+msgstr "dvdisaster-%s%sCopyright 2004-2013 Carsten Gnörlich.\n"
 
 #: misc.c:212
 msgid ""
@@ -2301,36 +2301,6 @@ msgstr ""
 msgid " [Appended %d/%d sectors to cache file %s; LBA=%lld, ssize=%d, %d sectors]\n"
 msgstr ""
 
-#: read-adaptive-window.c:79
-msgid "Adaptive reading:"
-msgstr "Adaptiv läsning:"
-
-#: read-adaptive-window.c:107
-msgid "Sectors processed"
-msgstr "Sektorer behandlade"
-
-#: read-adaptive-window.c:110 scsi-layer.c:1730
-msgid "readable"
-msgstr "läsbar"
-
-#: read-adaptive-window.c:114
-msgid "correctable"
-msgstr "korrigerbar"
-
-#: read-adaptive-window.c:118
-msgid "missing"
-msgstr "saknas"
-
-#: read-adaptive-window.c:128
-#, c-format
-msgid "Readable: %d.%d%% / %d.%d%% required"
-msgstr ""
-
-#: read-adaptive-window.c:135
-#, c-format
-msgid "Total recoverable: %d.%d%%"
-msgstr "Totalt återhämtningsbara: %d.%d%%"
-
 #: read-adaptive.c:143 read-adaptive.c:1336
 msgid "Aborted by unrecoverable error."
 msgstr "Avbruten av ej återhämtningsbart fel."
@@ -2586,44 +2556,35 @@ msgstr ""
 "%s\n"
 "%2d.%1d%% av avbilden har lästs (%lld sektorer).\n"
 
-#: read-linear-window.c:94
+#: read-adaptive-window.c:79
+msgid "Adaptive reading:"
+msgstr "Adaptiv läsning:"
+
+#: read-adaptive-window.c:107
+msgid "Sectors processed"
+msgstr "Sektorer behandlade"
+
+#: read-adaptive-window.c:110 scsi-layer.c:1730
+msgid "readable"
+msgstr "läsbar"
+
+#: read-adaptive-window.c:114
+msgid "correctable"
+msgstr "korrigerbar"
+
+#: read-adaptive-window.c:118
+msgid "missing"
+msgstr "saknas"
+
+#: read-adaptive-window.c:128
 #, c-format
-msgid "Current Speed: %d.%dx"
-msgstr "Aktuell hastighet: %d.%dx"
+msgid "Readable: %d.%d%% / %d.%d%% required"
+msgstr ""
 
-#: read-linear-window.c:101 read-linear.c:550
+#: read-adaptive-window.c:135
 #, c-format
-msgid "Unreadable / skipped sectors: %lld"
-msgstr "Oläsbara / överhoppade sektorer: %lld"
-
-#: read-linear-window.c:243 read-linear-window.c:312
-msgid "Already present"
-msgstr "Finns redan"
-
-#: read-linear-window.c:277 read-linear-window.c:319 rs01-verify.c:123
-#: rs02-verify.c:118
-msgid "Sectors with CRC errors"
-msgstr "Sektorer med CRC-fel"
-
-#: read-linear-window.c:300
-msgid "Medium state"
-msgstr "Mediastatus"
-
-#: read-linear-window.c:308
-msgid "Not touched this time"
-msgstr "Rörs inte denna gång"
-
-#: read-linear-window.c:315
-msgid "Successfully read"
-msgstr "Läsning lyckades"
-
-#: read-linear-window.c:322
-msgid "Unreadable / skipped"
-msgstr "Oläsbar / överhoppad"
-
-#: read-linear-window.c:404
-msgid "Speed"
-msgstr "Hastighet"
+msgid "Total recoverable: %d.%d%%"
+msgstr "Totalt återhämtningsbara: %d.%d%%"
 
 #: read-linear.c:105
 #, c-format
@@ -2700,6 +2661,11 @@ msgstr "klar.\n"
 #, c-format
 msgid "Waiting %d seconds for drive to spin up...\n"
 msgstr "Väntar %d sekunder på att enheten ska varva upp...\n"
+
+#: read-linear.c:550 read-linear-window.c:101
+#, c-format
+msgid "Unreadable / skipped sectors: %lld"
+msgstr "Oläsbara / överhoppade sektorer: %lld"
 
 #: read-linear.c:630
 #, c-format
@@ -2845,6 +2811,40 @@ msgstr ""
 "Detta är okej om cd-skivan skrevs i TAO-läget (track at once).\n"
 "Avbilden kommer att kapas enligt det. Se manualen för detaljer.\n"
 "Använd flaggan --dao för att inaktivera kapning av avbild.\n"
+
+#: read-linear-window.c:94
+#, c-format
+msgid "Current Speed: %d.%dx"
+msgstr "Aktuell hastighet: %d.%dx"
+
+#: read-linear-window.c:243 read-linear-window.c:312
+msgid "Already present"
+msgstr "Finns redan"
+
+#: read-linear-window.c:277 read-linear-window.c:319 rs01-verify.c:123
+#: rs02-verify.c:118
+msgid "Sectors with CRC errors"
+msgstr "Sektorer med CRC-fel"
+
+#: read-linear-window.c:300
+msgid "Medium state"
+msgstr "Mediastatus"
+
+#: read-linear-window.c:308
+msgid "Not touched this time"
+msgstr "Rörs inte denna gång"
+
+#: read-linear-window.c:315
+msgid "Successfully read"
+msgstr "Läsning lyckades"
+
+#: read-linear-window.c:322
+msgid "Unreadable / skipped"
+msgstr "Oläsbar / överhoppad"
+
+#: read-linear-window.c:404
+msgid "Speed"
+msgstr "Hastighet"
 
 #: recover-raw.c:63
 #, c-format
@@ -4527,12 +4527,12 @@ msgstr ""
 msgid "Sector %lld, try %d: success\n"
 msgstr ""
 
-#: scsi-layer.c:2574 scsi-layer.c:2727
+#: scsi-layer.c:2576 scsi-layer.c:2731
 #, c-format
 msgid "Device %s: no medium present\n"
 msgstr ""
 
-#: scsi-layer.c:2575 scsi-layer.c:2728
+#: scsi-layer.c:2577 scsi-layer.c:2732
 #, c-format
 msgid ""
 "Device %s does not become ready:\n"
@@ -4540,7 +4540,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: scsi-layer.c:2580
+#: scsi-layer.c:2582
 #, c-format
 msgid ""
 "\n"
@@ -4549,7 +4549,7 @@ msgstr ""
 "\n"
 "Enhet: %s, %s\n"
 
-#: scsi-layer.c:2584
+#: scsi-layer.c:2586
 #, c-format
 msgid ""
 "\n"
@@ -4558,52 +4558,52 @@ msgstr ""
 "\n"
 "Enhet: %s (%s), %s\n"
 
-#: scsi-layer.c:2592
+#: scsi-layer.c:2594
 msgid "Drive failed to report media type."
 msgstr ""
 
-#: scsi-layer.c:2603 scsi-layer.c:2690
+#: scsi-layer.c:2605 scsi-layer.c:2692
 #, c-format
 msgid "This software does not support \"%s\" type media."
 msgstr ""
 
-#: scsi-layer.c:2611
+#: scsi-layer.c:2613
 #, c-format
 msgid "This software does not support multisession (%d sessions) media."
 msgstr ""
 
-#: scsi-layer.c:2634 scsi-layer.c:2643
+#: scsi-layer.c:2636 scsi-layer.c:2645
 msgid "Using READ CD"
 msgstr ""
 
-#: scsi-layer.c:2635
+#: scsi-layer.c:2637
 msgid ", RAW reading"
 msgstr ""
 
-#: scsi-layer.c:2638
+#: scsi-layer.c:2640
 #, c-format
 msgid ", Mode page 1 ERP = %02xh"
 msgstr ""
 
-#: scsi-layer.c:2641
+#: scsi-layer.c:2643
 msgid ", C2 scanning"
 msgstr ""
 
-#: scsi-layer.c:2648
+#: scsi-layer.c:2650
 msgid "Using READ(10).\n"
 msgstr ""
 
-#: scsi-layer.c:2667
+#: scsi-layer.c:2669
 #, c-format
 msgid "Medium: %s, %lld sectors%s"
 msgstr "Medium: %s, %lld sektorer%s"
 
-#: scsi-layer.c:2671
+#: scsi-layer.c:2673
 #, c-format
 msgid "Medium \"%s\": %s, %lld sectors%s created %s"
 msgstr "Medium \"%s\": %s, %lld sektorer%s skapade %s"
 
-#: scsi-layer.c:2697
+#: scsi-layer.c:2699
 msgid "This software does not support encrypted media.\n"
 msgstr ""
 

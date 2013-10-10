@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2012 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2013 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -51,8 +51,10 @@ char* DefaultDevice()
 
    while((dev = g_dir_read_name(dir)))
    {  
-     if(   (strlen(dev) == 3 && (!strncmp(dev,"hd",2) || !strncmp(dev,"sd",2) || !strncmp(dev,"sr", 2)))
-	|| (strlen(dev) == 4 && !strncmp(dev,"scd",3)) )
+      if(   (strlen(dev) == 3 && (!strncmp(dev,"hd",2) || !strncmp(dev,"sd",2)))
+	|| !strncmp(dev,"sr", 2)
+	|| !strncmp(dev,"scd",3) 
+	)
      { char buf[80];
 
        sprintf(buf,"/dev/%s", dev); 
