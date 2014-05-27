@@ -21,7 +21,7 @@ fi
 
 PACKAGE dvdisaster 0.72
 
-REL_MICRO=5
+REL_MICRO=6
 REL_STATUS=patch
 #REL_STATUS=devel
 #REL_STATUS=rc
@@ -41,7 +41,7 @@ esac
 # Last stable version (used only in WWW pages)
 
 DEFINE_VAR HAVE_EXPERIMENTAL "yes"
-DEFINE_VAR STABLE_VERSION "0.72.5"
+DEFINE_VAR STABLE_VERSION "0.72.6"
 
 # Check for some essential tools.
 

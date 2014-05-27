@@ -188,6 +188,7 @@ version.php:
 	@echo "<?php" >$(SRCDIR)/documentation/include/version.php
 	@echo "\$$version=\"$(VERSION)\";" >>$(SRCDIR)/documentation/include/version.php
 	@echo "\$$pkgname=\"$(PKGNAME)\";" >>$(SRCDIR)/documentation/include/version.php
+	@echo "\$$doc_dir=\"$(SRCDIR)/documentation\";" >>$(SRCDIR)/documentation/include/version.php
 	@echo "\$$cooked_version=\""$(CFG_FULL_VERSION)"\";" >>$(SRCDIR)/documentation/include/version.php
 	@echo "\$$cooked_version=\"0.79 (devel-3)\";" >>$(SRCDIR)/documentation/include/version.php
 	@if test -e help-dialogs.h && grep UNMODIFIED help-dialogs.h >/dev/null; \
@@ -431,11 +432,11 @@ arch:	archclean time-stamp
 # TAG: online-docs
 www:   version.php
 	@cd documentation ; \
-	tar cjf ../../www.tar.bz2 pubkey.asc index.html include/dvdisaster.css cs/*.html de/*.html en/*.html ru/*.html
+	tar cjf ../../www.tar.bz2 pubkey.asc index.html include/dvdisaster.css cs/*.html de/*.html en/*.html ru/*.html cs/feed de/feed en/feed ru/feed
 
 www-images: thumbnails version.php
 	@cd documentation ; \
-	tar cjf ../../www.tar.bz2 pubkey.asc index.html include/dvdisaster.css  de/*.html en/*.html ru/*.html images/*.png de/images/*.png de/thumbnails/*.png en/images/*.png en/thumbnails/*.png ru/images/*.png ru/thumbnails/*.png
+	tar cjf ../../www.tar.bz2 pubkey.asc index.html include/dvdisaster.css  de/*.html en/*.html ru/*.html cs/feed de/feed en/feed ru/feed images/*.png de/images/*.png de/thumbnails/*.png en/images/*.png en/thumbnails/*.png ru/images/*.png ru/thumbnails/*.png
 
 INSTALL: documentation/install.template
 	@sed "s/@@PKGNAME/$(PKGNAME)/" <documentation/install.template >INSTALL

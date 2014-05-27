@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: German homepage translation
-# Copyright (C) 2004-2013 Carsten Gnörlich
+# Copyright (C) 2004-2014 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -67,18 +67,22 @@ ist <a href="download40.php"><?php echo $cooked_version ?></a>.
 <b>Stabile Version</b> - zum Einstieg empfohlen<p> 
 <a name="download"></a>
 
+Hinweis: <b>Bitte verwenden Sie weiterhin Version 0.72.3 für Windows</b>.
+Eine Unterstützung von Mac OS X sowie von neueren dvdisaster-Versionen für
+Windows wird zur Zeit nicht angeboten.
+
 <table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.72</b></td><td align="right">11-Okt-2013</td></tr>
+<tr><td><b>dvdisaster-0.72</b></td><td align="right">28-Mai-2014</td></tr>
 <tr><td colspan="2" class="hsep"></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Quellkode für alle Betriebssysteme:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.5.tar.bz2">dvdisaster-0.72.5.tar.bz2</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.6.tar.bz2">dvdisaster-0.72.6.tar.bz2</a></td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.5.tar.bz2.gpg">dvdisaster-0.72.5.tar.bz2.gpg</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.6.tar.bz2.gpg">dvdisaster-0.72.6.tar.bz2.gpg</a></td></tr>
 <?php
 if($mode == "www")
-    echo "<tr><td align=\"right\">MD5-Prüfsumme:&nbsp;</td><td>ad5e1d3758c536472c0ec36e3fc521fe</td></tr>";
+    echo "<tr><td align=\"right\">MD5-Prüfsumme:&nbsp;</td><td>73699996b76aebf83b42ce0a35746616</td></tr>";
 ?>
     <tr><td></td><td></td></tr>
 
@@ -92,15 +96,20 @@ if($mode == "www")
 ?> 
    <tr><td colspan="2"><a href="download.php?showall=0#download">Ältere Veröffentlichungen des 0.72er-Versionszweiges verbergen</a></td></tr>
 
-   <tr><td colspan="2"> </td></tr>
-   <tr><td></td><td>Version 0.72.4</td></tr>
+    <tr><td colspan="2"> </td></tr>
+    <tr><td align="right">&nbsp;&nbsp;Quellkode für alle Betriebssysteme:&nbsp;</td>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.5.tar.bz2">dvdisaster-0.72.5.tar.bz2</a></td></tr>
+    <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.5.tar.bz2.gpg">dvdisaster-0.72.5.tar.bz2.gpg</a></td></tr>
+    <tr><td align="right">MD5-Prüfsumme:&nbsp;</td><td>73699996b76aebf83b42ce0a35746616</td></tr>
 
+    <tr><td colspan="2"> </td></tr>
+    <tr><td></td><td>Version 0.72.4</td></tr>
     <tr><td align="right">&nbsp;&nbsp;Quellkode für alle Betriebssysteme:&nbsp;</td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.4.tar.bz2">dvdisaster-0.72.4.tar.bz2</a></td></tr>
     <tr><td align="right">Digitale Unterschrift:&nbsp;</td>
         <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.4.tar.bz2.gpg">dvdisaster-0.72.4.tar.bz2.gpg</a></td></tr>
     <tr><td align="right">MD5-Prüfsumme:&nbsp;</td><td>ad5e1d3758c536472c0ec36e3fc521fe</td></tr>
-    <tr><td colspan="2"> </td></tr>
 
     <tr><td colspan="2"> </td></tr>
     <tr><td></td><td>Version 0.72.3</td></tr>
@@ -224,6 +233,11 @@ Grundlegende Neuerungen in dieser Version:<p>
 
 <b>Patches</b> (kleine Änderungen nach Version 0.72; die obigen Dateien wurden erneuert):<p>
 
+<b>0.72 pl6</b> Kleine Fehlerkorrektur im Quellkode, um die Größe zukünftiger
+optischer Speichermedien korrekt zu behandeln. Für momentan
+verfügbare Speichermedien ist die Aktualisierung nicht notwendig.
+(28-Mai-2014)<p>
+
 <b>0.72 pl5</b> Behebt einen Fehler, durch den CD/DVD/BD-Laufwerke unter FreeBSD und Linux 
 unter Umständen nicht erkannt wurden, wenn an den Computer mehr als 10 
 Laufwerke angeschlossen sind. Danke an Bill Eisele für die Problembeschreibung. (11-Oct-2013)<p>
@@ -267,11 +281,6 @@ erfolgen. (04-Jul-2009)<p>
  
 <b>0.72-rc1</b> Erster Kandidat für die stabile Version. (11-Apr-2009)
 </td></tr></table><p>
-
-Falls kein Herunterladen über die obigen Links möglich ist,
-versuchen Sie bitte dvdisaster über
-<a href="http://sourceforge.net/projects/dvdisaster/files">SourceForge</a> 
-zu bekommen.
 
 <pre> </pre>
 

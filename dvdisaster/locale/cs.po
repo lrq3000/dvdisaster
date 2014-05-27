@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-18 20:38+0200\n"
+"POT-Creation-Date: 2013-11-24 14:04+0100\n"
 "PO-Revision-Date: 2006-03-16 20:40+0100\n"
 "Last-Translator: Luboš Staněk <lubek@users.sourceforge.net>\n"
 "Language-Team: čeština <cs@li.org>\n"
@@ -684,14 +684,14 @@ msgstr "O aplikaci dvdisaster"
 
 #: help-dialogs.c:726
 msgid ""
-"Modified version Copyright 2013 (please fill in - [directions])\n"
-"Copyright 2004-2013 Carsten Gnoerlich"
+"Modified version Copyright 2014 (please fill in - [directions])\n"
+"Copyright 2004-2014 Carsten Gnoerlich"
 msgstr ""
 
 #: help-dialogs.c:730
-msgid "Copyright 2004-2013 Carsten Gnoerlich"
+msgid "Copyright 2004-2014 Carsten Gnoerlich"
 msgstr ""
-"Copyright 2004-2013 Carsten Gnörlich\n"
+"Copyright 2004-2014 Carsten Gnörlich\n"
 "Česká lokalizace 2006 Luboš Staněk"
 
 #: help-dialogs.c:737
@@ -1209,8 +1209,8 @@ msgstr ""
 
 #: misc.c:205
 #, c-format
-msgid "dvdisaster-%s%sCopyright 2004-2013 Carsten Gnoerlich.\n"
-msgstr "dvdisaster-%s%sCopyright 2004-2013 Carsten Gnörlich.\n"
+msgid "dvdisaster-%s%sCopyright 2004-2014 Carsten Gnoerlich.\n"
+msgstr "dvdisaster-%s%sCopyright 2004-2014 Carsten Gnörlich.\n"
 
 #: misc.c:212
 msgid ""
@@ -2258,7 +2258,7 @@ msgid "button|Smart L-EC"
 msgstr ""
 
 #: raw-sector-cache.c:34 raw-sector-cache.c:201 raw-sector-cache.c:335
-#: rs01-verify.c:538 scsi-freebsd.c:120 scsi-linux.c:105 scsi-netbsd.c:112
+#: rs01-verify.c:538 scsi-freebsd.c:120 scsi-linux.c:107 scsi-netbsd.c:112
 #, c-format
 msgid "Could not open %s: %s"
 msgstr "Nelze otevřít %s: %s"
@@ -4221,7 +4221,7 @@ msgstr ""
 "Nelze získat přístup k /dev kvůli zařízením\n"
 "Nebudou předvybrány žádné mechaniky.\n"
 
-#: scsi-freebsd.c:97 scsi-linux.c:85
+#: scsi-freebsd.c:97 scsi-linux.c:87
 msgid ""
 "No CD/DVD drives found in /dev.\n"
 "No drives will be pre-selected.\n"

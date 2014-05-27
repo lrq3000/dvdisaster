@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.70.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-18 20:38+0200\n"
+"POT-Creation-Date: 2013-11-24 14:04+0100\n"
 "PO-Revision-Date: 2010-07-23 08:11+0300\n"
 "Last-Translator: Igor Gorbounov <igor.gorbounov@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -758,15 +758,15 @@ msgstr "О программе dvdisaster"
 
 #: help-dialogs.c:726
 msgid ""
-"Modified version Copyright 2013 (please fill in - [directions])\n"
-"Copyright 2004-2013 Carsten Gnoerlich"
+"Modified version Copyright 2014 (please fill in - [directions])\n"
+"Copyright 2004-2014 Carsten Gnoerlich"
 msgstr ""
-"Измененнная версия Copyright 2013 (пожалуйста, заполните - [инструкции])\n"
-"Copyright 2004-2013 Carsten Gnoerlich"
+"Измененнная версия Copyright 2014 (пожалуйста, заполните - [инструкции])\n"
+"Copyright 2004-2014 Carsten Gnoerlich"
 
 #: help-dialogs.c:730
-msgid "Copyright 2004-2013 Carsten Gnoerlich"
-msgstr "Copyright 2004-2013 Carsten Gnoerlich"
+msgid "Copyright 2004-2014 Carsten Gnoerlich"
+msgstr "Copyright 2004-2014 Carsten Gnoerlich"
 
 #: help-dialogs.c:737
 msgid ""
@@ -1300,8 +1300,8 @@ msgstr ""
 
 #: misc.c:205
 #, c-format
-msgid "dvdisaster-%s%sCopyright 2004-2013 Carsten Gnoerlich.\n"
-msgstr "dvdisaster-%s%sCopyright 2004-2013 Carsten Gnoerlich.\n"
+msgid "dvdisaster-%s%sCopyright 2004-2014 Carsten Gnoerlich.\n"
+msgstr "dvdisaster-%s%sCopyright 2004-2014 Carsten Gnoerlich.\n"
 
 #: misc.c:212
 msgid ""
@@ -2532,7 +2532,7 @@ msgid "button|Smart L-EC"
 msgstr "Интеллектуальный L-EC"
 
 #: raw-sector-cache.c:34 raw-sector-cache.c:201 raw-sector-cache.c:335
-#: rs01-verify.c:538 scsi-freebsd.c:120 scsi-linux.c:105 scsi-netbsd.c:112
+#: rs01-verify.c:538 scsi-freebsd.c:120 scsi-linux.c:107 scsi-netbsd.c:112
 #, c-format
 msgid "Could not open %s: %s"
 msgstr "Не удалось открыть %s: %s"
@@ -4614,7 +4614,7 @@ msgstr ""
 "Не удается получить доступ к устройствам в /dev\n"
 "Не будет предустановленных приводов.\n"
 
-#: scsi-freebsd.c:97 scsi-linux.c:85
+#: scsi-freebsd.c:97 scsi-linux.c:87
 msgid ""
 "No CD/DVD drives found in /dev.\n"
 "No drives will be pre-selected.\n"

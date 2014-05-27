@@ -1,3 +1,7 @@
+0.72 (pl6) 28-05-2014
+        - fixed wrong forward declaration of CurrentMediumSize()
+	  in several source files.
+
 0.72 (pl5) 11-10-2013
 	- optical drives would only be detected for /dev/pass[0-9]
 	  on FreeBSD. Fixed to work with arbitrary /dev/pass

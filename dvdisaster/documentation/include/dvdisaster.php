@@ -1,7 +1,7 @@
 <?php
 
 # dvdisaster: Homepage layout functions
-# Copyright (C) 2007-2013 Carsten Gnörlich
+# Copyright (C) 2007-2014 Carsten Gnörlich
 
 require("version.php");
 
@@ -162,7 +162,8 @@ function begin_page()
    if(strcmp($mode, "local"))
    {  
       echo "  <tr>\n";
-      echo "    <td align=\"left\"><a href=\"$project_at_hoster\">$trans_to_hoster</a></td>\n";
+#      echo "    <td align=\"left\"><a href=\"$project_at_hoster\">$trans_to_hoster</a></td>\n";
+      echo "    <td> </td>\n";
       echo "    <td align=\"right\">\n";
       lang_link("&#268;esky", "cs", 1);
       lang_link("Deutsch", "de", 1);
@@ -514,19 +515,6 @@ function end_page()
 ?>
 
  </tr>
-
-<!--
- <tr valign="bottom">
-   <td style="background-color:#f0f0f0;">
-<?php 
-   $old_lang = strcmp($script_lang, "ru") ? $script_lang : "en";
-   echo "      <table cellpadding=\"10\"><tr><td><a href=\"http://dvdisaster.net/legacy/$old_lang/index.html\"><span class=\"fs\">$trans_old_version</span></a></td></tr></table>\n"; 
-?>
-   </td>
-   <td></td>
-   <td></td>
- </tr>
--->
 </table> <!-- end of main body table -->
 
 <?php

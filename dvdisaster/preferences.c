@@ -1,5 +1,5 @@
 /*  dvdisaster: Additional error correction for optical media.
- *  Copyright (C) 2004-2013 Carsten Gnoerlich.
+ *  Copyright (C) 2004-2014 Carsten Gnoerlich.
  *  Project home page: http://www.dvdisaster.com
  *  Email: carsten@dvdisaster.com  -or-  cgnoerlich@fsfe.org
  *
@@ -21,7 +21,7 @@
 
 #include "dvdisaster.h"
 
-extern int CurrentMediumSize(int);  /* from scsi-layer.h */
+extern gint64 CurrentMediumSize(int);  /* from scsi-layer.h */
 
 /***
  *** debugging workaround

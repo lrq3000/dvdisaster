@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: Online doc table of contents (all languages)
-# Copyright (C) 2007-2013 The dvdisaster translation team
+# Copyright (C) 2007-2014 The dvdisaster translation team
 #
 # UTF-8 trigger: äöüß 
 
@@ -13,6 +13,12 @@ section("news");
   de("Neuigkeiten");
   en("News");
   ru("Новости");
+
+subsection("news2010");
+  cs("2010");
+  de("2010");
+  en("2010");
+  ru("2010");
 
 subsection("news2009");
   cs("2009");

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dvdisaster 0.72.rc2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-18 20:38+0200\n"
+"POT-Creation-Date: 2013-11-24 14:04+0100\n"
 "PO-Revision-Date: 2010-06-09 11:13+0200\n"
 "Last-Translator: cg <cg@dvdisaster.org>\n"
 "Language-Team: Portuguese\n"
@@ -775,15 +775,15 @@ msgstr "windowtitle|Sobre o dvdisaster"
 
 #: help-dialogs.c:726
 msgid ""
-"Modified version Copyright 2013 (please fill in - [directions])\n"
-"Copyright 2004-2013 Carsten Gnoerlich"
+"Modified version Copyright 2014 (please fill in - [directions])\n"
+"Copyright 2004-2014 Carsten Gnoerlich"
 msgstr ""
-"Versão modificada Copyright 2013 (por favor, preencha - [instruções])\n"
-"Copyright 2004-2013 Carsten Gnoerlich"
+"Versão modificada Copyright 2014 (por favor, preencha - [instruções])\n"
+"Copyright 2004-2014 Carsten Gnoerlich"
 
 #: help-dialogs.c:730
-msgid "Copyright 2004-2013 Carsten Gnoerlich"
-msgstr "Copyright 2004-2013 Carsten Gnoerlich"
+msgid "Copyright 2004-2014 Carsten Gnoerlich"
+msgstr "Copyright 2004-2014 Carsten Gnoerlich"
 
 #: help-dialogs.c:737
 msgid ""
@@ -1317,8 +1317,8 @@ msgstr ""
 
 #: misc.c:205
 #, c-format
-msgid "dvdisaster-%s%sCopyright 2004-2013 Carsten Gnoerlich.\n"
-msgstr "dvdisaster-%s%sCopyright 2004-2013 Carsten Gnoerlich.\n"
+msgid "dvdisaster-%s%sCopyright 2004-2014 Carsten Gnoerlich.\n"
+msgstr "dvdisaster-%s%sCopyright 2004-2014 Carsten Gnoerlich.\n"
 
 #: misc.c:212
 msgid ""
@@ -2546,7 +2546,7 @@ msgid "button|Smart L-EC"
 msgstr "Smart L-EC"
 
 #: raw-sector-cache.c:34 raw-sector-cache.c:201 raw-sector-cache.c:335
-#: rs01-verify.c:538 scsi-freebsd.c:120 scsi-linux.c:105 scsi-netbsd.c:112
+#: rs01-verify.c:538 scsi-freebsd.c:120 scsi-linux.c:107 scsi-netbsd.c:112
 #, c-format
 msgid "Could not open %s: %s"
 msgstr "Impossível abrir %s: %s"
@@ -4626,7 +4626,7 @@ msgstr ""
 "Impossível acessar /dev para buscar dispositivos\n"
 "Nenhum drive será pré-selecionado.\n"
 
-#: scsi-freebsd.c:97 scsi-linux.c:85
+#: scsi-freebsd.c:97 scsi-linux.c:87
 msgid ""
 "No CD/DVD drives found in /dev.\n"
 "No drives will be pre-selected.\n"

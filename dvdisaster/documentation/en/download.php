@@ -1,6 +1,6 @@
 <?php
 # dvdisaster: English homepage translation
-# Copyright (C) 2004-2013 Carsten Gnörlich
+# Copyright (C) 2004-2014 Carsten Gnörlich
 #
 # UTF-8 trigger: äöüß 
 #
@@ -64,19 +64,22 @@ The current unstable release is
 <b>Stable version</b> - recommended for getting started.<p>
 <a name="download"></a>
 
+Note:  <b>Please continue using version 0.72.3 for Windows</b>. Support of Mac OS X
+and of newer dvdisaster versions for Windows is currently not provided. 
+
 <table class="download" cellpadding="0" cellspacing="5">
-<tr><td><b>dvdisaster-0.72</b></td><td align="right">11-Oct-2013</td></tr>
+<tr><td><b>dvdisaster-0.72</b></td><td align="right">28-May-2014</td></tr>
 <tr><td colspan="2" class="hsep"></td></tr>
 <tr><td colspan="2">
   <table>
     <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.5.tar.bz2">dvdisaster-0.72.5.tar.bz2</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.6.tar.bz2">dvdisaster-0.72.6.tar.bz2</a></td></tr>
     <tr><td align="right">Digital signature:&nbsp;</td>
-        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.5.tar.bz2.gpg">dvdisaster-0.72.5.tar.bz2.gpg</a></td></tr>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.6.tar.bz2.gpg">dvdisaster-0.72.6.tar.bz2.gpg</a></td></tr>
 
 <?php
 if($mode == "www")
-    echo "<tr><td align=\"right\">MD5 checksum:&nbsp;</td><td>ad5e1d3758c536472c0ec36e3fc521fe</td></tr>";
+    echo "<tr><td align=\"right\">MD5 checksum:&nbsp;</td><td>73699996b76aebf83b42ce0a35746616</td></tr>";
 ?>
     <tr><td></td><td></td></tr>
 
@@ -89,6 +92,14 @@ if($mode == "www")
   else {
 ?> 
    <tr><td colspan="2"><a href="download.php?showall=0#download">Hide older releases in the 0.72 version branch</a></td></tr>
+
+    <tr><td colspan="2"> </td></tr>
+    <tr><td></td><td>Version 0.72.5</td></tr>
+    <tr><td align="right">&nbsp;&nbsp;Source code for all operating systems:&nbsp;</td>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.5.tar.bz2">dvdisaster-0.72.5.tar.bz2</a></td></tr>
+    <tr><td align="right">Digital signature:&nbsp;</td>
+        <td><a href="http://dvdisaster.net/downloads/dvdisaster-0.72.5.tar.bz2.gpg">dvdisaster-0.72.5.tar.bz2.gpg</a></td></tr>
+    <tr><td align="right">MD5 checksum:&nbsp;</td><td>73699996b76aebf83b42ce0a35746616</td></tr>
 
     <tr><td colspan="2"> </td></tr>
     <tr><td></td><td>Version 0.72.4</td></tr>
@@ -218,6 +229,12 @@ Most important changes in this version:<p>
 
 <b>Patches</b> (small changes after version 0.72; files above have been updated):<p>
 
+<b>0.72 pl6</b> Minor fix in the source code to make sure that the size
+of future optical media is treated correctly. For
+currently available media sizes the update is not
+required.
+(28-May-2014)<p>
+
 <b>0.72 pl5</b> Fixes a problem which may result in CD/DVD/BD drives being not detected
 if more than 10 devices are connected to a GNU/Linux or FreeBSD system. Thanks
 to Bill Eisele for reporting this. (11-Oct-2013)<p>
@@ -258,10 +275,6 @@ and will be addressed in the upcoming 0.73.x releases. (04-Jul-2009)
  
 <b>0.72-rc1</b> First release candidate. (11-Apr-2009)
 </td></tr></table><p>
-
-If the links above fail to download 
-please try getting dvdisaster via
-<a href="http://sourceforge.net/projects/dvdisaster/files">SourceForge</a>.
 
 <pre> </pre>
 
