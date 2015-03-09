@@ -9,6 +9,10 @@ You can check a mirror of the official website here:
 
 http://htmlpreview.github.io/?https://github.com/lrq3000/dvdisaster/blob/stable/dvdisaster/documentation/en/index.html
 
+Or this one (no images):
+
+https://cdn.rawgit.com/lrq3000/dvdisaster/stable/dvdisaster/documentation/en/index.html
+
 **Archival with data loss protection**<p>
 
 dvdisaster stores data on CD/DVD/BD ([supported media](qa10.html#media))
